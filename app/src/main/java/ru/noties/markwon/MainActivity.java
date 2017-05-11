@@ -1,26 +1,26 @@
 package ru.noties.markwon;
 
-import android.graphics.drawable.Drawable;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
-import android.text.style.StrikethroughSpan;
 import android.widget.TextView;
 
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
-import ru.noties.debug.AndroidLogDebugOutput;
-import ru.noties.debug.Debug;
-import ru.noties.markwon.spans.DrawableSpanUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity {
+import ru.noties.debug.AndroidLogDebugOutput;
+import ru.noties.debug.Debug;
+import ru.noties.markwon.renderer.*;
+import ru.noties.markwon.spans.DrawableSpanUtils;
+
+public class MainActivity extends Activity {
 
     static {
         Debug.init(new AndroidLogDebugOutput(true));
@@ -62,21 +62,28 @@ public class MainActivity extends AppCompatActivity {
                             .extensions(Arrays.asList(StrikethroughExtension.create()))
                             .build();
                     final Node node = parser.parse(md);
-                    final CharSequence text = new SpannableRenderer()._render(node/*, new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.setText(textView.getText());
-                            final Drawable drawable = null;
-                            drawable.setCallback(textView);
-                        }
-                    }*/);
+
+                    final CharSequence text = new ru.noties.markwon.renderer.SpannableRenderer().render(
+                            SpannableConfiguration.create(MainActivity.this),
+                            node
+                    );
+
+//                    final CharSequence text = new SpannableRenderer()._render(node/*, new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            textView.setText(textView.getText());
+//                            final Drawable drawable = null;
+//                            drawable.setCallback(textView);
+//                        }
+//                    }*/);
                     final long end = SystemClock.uptimeMillis();
                     Debug.i("Rendered: %d ms, length: %d", end - start, text.length());
+//                    Debug.i(text);
                     textView.post(new Runnable() {
                         @Override
                         public void run() {
                             // NB! LinkMovementMethod forces frequent updates...
-//                            textView.setMovementMethod(LinkMovementMethod.getInstance());
+                            textView.setMovementMethod(LinkMovementMethod.getInstance());
                             textView.setText(text);
                             DrawableSpanUtils.scheduleDrawables(textView);
                         }

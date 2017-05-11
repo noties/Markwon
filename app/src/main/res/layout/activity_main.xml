@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/activity_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dip"
-            tools:context="ru.noties.markwon.MainActivity"
-            tools:text="yo\nman"/>
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dip"
+        android:textSize="18sp"
+        android:lineSpacingExtra="2dip"
+        android:textColor="@color/colorPrimaryDark"
+        tools:context="ru.noties.markwon.MainActivity"
+        tools:text="yo\nman" />
 
 </ScrollView>

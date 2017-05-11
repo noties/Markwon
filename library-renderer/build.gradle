@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
 
@@ -6,7 +6,6 @@ android {
     buildToolsVersion BUILD_TOOLS
 
     defaultConfig {
-        applicationId "ru.noties.markwon"
         minSdkVersion MIN_SDK
         targetSdkVersion TARGET_SDK
         versionCode 1
@@ -15,6 +14,13 @@ android {
 }
 
 dependencies {
-    compile project(':library-renderer')
+
+    compile project(':library-spans')
+
+    compile SUPPORT_ANNOTATIONS
+    compile COMMON_MARK
+    compile COMMON_MARK_STRIKETHROUGHT
+
+    // todo, debugging only
     compile 'ru.noties:debug:3.0.0@jar'
 }
