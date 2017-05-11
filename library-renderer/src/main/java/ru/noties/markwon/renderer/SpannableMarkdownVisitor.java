@@ -16,7 +16,6 @@ import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
 import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.Image;
 import org.commonmark.node.ListBlock;
 import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
@@ -33,6 +32,8 @@ import ru.noties.markwon.spans.BulletListItemSpan;
 import ru.noties.markwon.spans.CodeSpan;
 import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.HeadingSpan;
+import ru.noties.markwon.spans.OrderedListItemSpan;
+import ru.noties.markwon.spans.SimpleLeadingMarginSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
@@ -54,13 +55,13 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Text text) {
-        Debug.i(text);
+//        Debug.i(text);
         builder.append(text.getLiteral());
     }
 
     @Override
     public void visit(StrongEmphasis strongEmphasis) {
-        Debug.i(strongEmphasis);
+//        Debug.i(strongEmphasis);
         final int length = builder.length();
         visitChildren(strongEmphasis);
         setSpan(length, new StrongEmphasisSpan());
@@ -68,7 +69,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Emphasis emphasis) {
-        Debug.i(emphasis);
+//        Debug.i(emphasis);
         final int length = builder.length();
         visitChildren(emphasis);
         setSpan(length, new EmphasisSpan());
@@ -77,7 +78,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(BlockQuote blockQuote) {
 
-        Debug.i(blockQuote);
+//        Debug.i(blockQuote);
 
         newLine();
         if (blockQuoteIndent != 0) {
@@ -106,7 +107,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(Code code) {
 
-        Debug.i(code);
+//        Debug.i(code);
 
         final int length = builder.length();
 
@@ -125,7 +126,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
 
-        Debug.i(fencedCodeBlock);
+//        Debug.i(fencedCodeBlock);
 
         newLine();
 
@@ -141,33 +142,35 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         builder.append('\n');
     }
 
-    @Override
-    public void visit(Image image) {
-
-        Debug.i(image);
-
-        final int length = builder.length();
-
-        visitChildren(image);
-
-        if (length == builder.length()) {
-            // nothing is added, and we need at least one symbol
-            builder.append(' ');
-        }
-
-
-////            final int length = builder.length();
-//        final TestDrawable drawable = new TestDrawable();
-//        final DrawableSpan span = new DrawableSpan(drawable);
-//        builder.append("  ");
-//        builder.setSpan(span, length, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
+//    @Override
+//    public void visit(Image image) {
+//
+//        Debug.i(image);
+//
+////        final int length = builder.length();
+//
+//        visitChildren(image);
+//
+////        if (length == builder.length()) {
+////            // nothing is added, and we need at least one symbol
+////            builder.append(' ');
+////        }
+//    }
 
     @Override
     public void visit(BulletList bulletList) {
-        Debug.i(bulletList);
+        visitList(bulletList);
+    }
+
+    @Override
+    public void visit(OrderedList orderedList) {
+        visitList(orderedList);
+    }
+
+    private void visitList(Node node) {
+        Debug.i(node);
         newLine();
-        visitChildren(bulletList);
+        visitChildren(node);
         newLine();
         if (listLevel == 0 && blockQuoteIndent == 0) {
             builder.append('\n');
@@ -180,16 +183,67 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         Debug.i(listItem);
 
         final int length = builder.length();
+
         blockQuoteIndent += 1;
         listLevel += 1;
-        visitChildren(listItem);
+
         // todo, can be a bullet list & ordered list (with leading numbers... looks like we need to `draw` numbers...
-        setSpan(length, new BulletListItemSpan(
-                configuration.getBulletListConfig(),
-                blockQuoteIndent,
-                listLevel - 1,
-                length
-        ));
+
+        final Node parent = listItem.getParent();
+        if (parent instanceof OrderedList) {
+
+//            // let's build ordered number
+//            final StringBuilder lead = new StringBuilder();
+//            Node p = parent;
+//            while (p != null && p instanceof OrderedList) {
+//                lead.insert(0, ((OrderedList) p).getDelimiter());
+//                lead.insert(0, ((OrderedList) p).getStartNumber());
+//                p = p.getParent();
+//                if (p instanceof ListItem) {
+//                    p = p.getParent();
+//                }
+//            }
+//
+//            builder.append(lead)
+//                    .append('\u00a0');
+//
+//            blockQuoteIndent -= 1;
+
+            final int start = ((OrderedList) parent).getStartNumber();
+
+            visitChildren(listItem);
+
+            setSpan(length, new OrderedListItemSpan(
+                    configuration.getOrderedListConfig(),
+                    String.valueOf(start) + "." + '\u00a0',
+                    blockQuoteIndent,
+                    length
+            ));
+
+//            blockQuoteIndent += 1;
+
+//            if (listLevel != 1) {
+//                setSpan(length, new SimpleLeadingMarginSpan(32));
+//            }
+
+            // after we have visited the children increment start number
+            final OrderedList orderedList = (OrderedList) parent;
+            orderedList.setStartNumber(orderedList.getStartNumber() + 1);
+
+        } else {
+
+            visitChildren(listItem);
+
+            // if we are inside orderedList increase the margin?
+
+            setSpan(length, new BulletListItemSpan(
+                    configuration.getBulletListConfig(),
+                    blockQuoteIndent,
+                    listLevel - 1,
+                    length
+            ));
+        }
+
         blockQuoteIndent -= 1;
         listLevel -= 1;
 
@@ -199,7 +253,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(ThematicBreak thematicBreak) {
 
-        Debug.i(thematicBreak);
+//        Debug.i(thematicBreak);
 
         newLine();
 
@@ -212,26 +266,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     @Override
-    public void visit(OrderedList orderedList) {
-
-        Debug.i(orderedList);
-
-        newLine();
-
-//        Debug.i(orderedList, orderedList.getDelimiter(), orderedList.getStartNumber());
-        // todo, ordering numbers
-        super.visit(orderedList);
-
-        newLine();
-        if (listLevel == 0 && blockQuoteIndent == 0) {
-            builder.append('\n');
-        }
-    }
-
-    @Override
     public void visit(Heading heading) {
 
-        Debug.i(heading);
+//        Debug.i(heading);
 
         newLine();
 
@@ -264,7 +301,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(CustomNode customNode) {
 
-        Debug.i(customNode);
+//        Debug.i(customNode);
 
         if (customNode instanceof Strikethrough) {
             final int length = builder.length();
@@ -280,7 +317,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final boolean inTightList = isInTightList(paragraph);
 
-        Debug.i(paragraph, inTightList, listLevel);
+//        Debug.i(paragraph, inTightList, listLevel);
 
         if (!inTightList) {
             newLine();
@@ -325,5 +362,24 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             }
         }
         return false;
+    }
+
+    private static String dump(Node node) {
+        final StringBuilder builder = new StringBuilder();
+        node.accept(new DumpVisitor(builder));
+        return builder.toString();
+    }
+
+    private static class DumpVisitor extends AbstractVisitor {
+        private final StringBuilder builder;
+
+        DumpVisitor(StringBuilder builder) {
+            this.builder = builder;
+        }
+
+        @Override
+        public void visit(Text text) {
+            builder.append(text.getLiteral());
+        }
     }
 }

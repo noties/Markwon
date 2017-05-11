@@ -7,6 +7,7 @@ import ru.noties.markwon.spans.BlockQuoteSpan;
 import ru.noties.markwon.spans.BulletListItemSpan;
 import ru.noties.markwon.spans.CodeSpan;
 import ru.noties.markwon.spans.HeadingSpan;
+import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
 public class SpannableConfiguration {
@@ -25,6 +26,7 @@ public class SpannableConfiguration {
     private final BulletListItemSpan.Config bulletListConfig;
     private final HeadingSpan.Config headingConfig;
     private final ThematicBreakSpan.Config thematicConfig;
+    private final OrderedListItemSpan.Config orderedListConfig;
 
     private SpannableConfiguration(Builder builder) {
         this.blockQuoteConfig = builder.blockQuoteConfig;
@@ -32,6 +34,7 @@ public class SpannableConfiguration {
         this.bulletListConfig = builder.bulletListConfig;
         this.headingConfig = builder.headingConfig;
         this.thematicConfig = builder.thematicConfig;
+        this.orderedListConfig = builder.orderedListConfig;
     }
 
     public BlockQuoteSpan.Config getBlockQuoteConfig() {
@@ -54,6 +57,10 @@ public class SpannableConfiguration {
         return thematicConfig;
     }
 
+    public OrderedListItemSpan.Config getOrderedListConfig() {
+        return orderedListConfig;
+    }
+
     public static class Builder {
 
         private final Context context;
@@ -62,6 +69,7 @@ public class SpannableConfiguration {
         private BulletListItemSpan.Config bulletListConfig;
         private HeadingSpan.Config headingConfig;
         private ThematicBreakSpan.Config thematicConfig;
+        private OrderedListItemSpan.Config orderedListConfig;
 
         public Builder(Context context) {
             this.context = context;
@@ -92,11 +100,17 @@ public class SpannableConfiguration {
             return this;
         }
 
+        public Builder setOrderedListConfig(@NonNull OrderedListItemSpan.Config orderedListConfig) {
+            this.orderedListConfig = orderedListConfig;
+            return this;
+        }
+
         // todo, change to something more reliable
+        // todo, must mention that bullet/ordered/quote must have the same margin (or maybe we can just enforce it?)
         public SpannableConfiguration build() {
             if (blockQuoteConfig == null) {
                 blockQuoteConfig = new BlockQuoteSpan.Config(
-                        px(16),
+                        px(24),
                         0,
                         0
                 );
@@ -107,13 +121,16 @@ public class SpannableConfiguration {
                         .build();
             }
             if (bulletListConfig == null) {
-                bulletListConfig = new BulletListItemSpan.Config(0, px(16), px(1));
+                bulletListConfig = new BulletListItemSpan.Config(px(24), 0, px(8), px(1));
             }
             if (headingConfig == null) {
                 headingConfig = new HeadingSpan.Config(px(1), 0);
             }
             if (thematicConfig == null) {
                 thematicConfig = new ThematicBreakSpan.Config(0, px(2));
+            }
+            if (orderedListConfig == null) {
+                orderedListConfig = new OrderedListItemSpan.Config(px(24), 0);
             }
             return new SpannableConfiguration(this);
         }

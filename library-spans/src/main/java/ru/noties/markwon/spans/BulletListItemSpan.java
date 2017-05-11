@@ -17,14 +17,20 @@ public class BulletListItemSpan implements LeadingMarginSpan {
 
     public static class Config {
 
-        final int bulletColor; // by default uses text color
         final int marginWidth;
+        final int bulletColor; // by default uses text color
+        final int bulletSide;
         final int bulletStrokeWidth;
 
         // from 0 but it makes sense to provide something wider
-        public Config(@ColorInt int bulletColor, @IntRange(from = 0) int marginWidth, int bulletStrokeWidth) {
-            this.bulletColor = bulletColor;
+        public Config(
+                @IntRange(from = 0) int marginWidth,
+                @ColorInt int bulletColor,
+                @IntRange(from = 0) int bulletSide,
+                @IntRange(from = 0) int bulletStrokeWidth) {
             this.marginWidth = marginWidth;
+            this.bulletColor = bulletColor;
+            this.bulletSide = bulletSide;
             this.bulletStrokeWidth = bulletStrokeWidth;
         }
     }
@@ -58,7 +64,7 @@ public class BulletListItemSpan implements LeadingMarginSpan {
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
-        // if there was a line break, we don't need to draw it
+        // if there was a line break, we don't need to draw anything
         if (this.start != start) {
             return;
         }
@@ -88,7 +94,14 @@ public class BulletListItemSpan implements LeadingMarginSpan {
             final int width = config.marginWidth;
             final int height = bottom - top;
 
-            final int side = Math.min(config.marginWidth, height) / 2;
+            final int min = Math.min(config.marginWidth, height) / 2;
+            final int side;
+            if (config.bulletSide == 0
+                    || config.bulletSide > min) {
+                side = min;
+            } else {
+                side = config.bulletSide;
+            }
 
             final int marginLeft = (width - side) / 2;
             final int marginTop = (height - side) / 2;
