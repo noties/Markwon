@@ -14,14 +14,7 @@ import android.text.style.MetricAffectingSpan;
 
 public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 
-    // the thing is.. we cannot use replacementSpan, because it won't let us create multiline code..
-    // and we want new lines when we do not fit the width
-    // plus it complicates the copying
-
-    // replacement span is great because we can have additional paddings & can actually get a hold
-    // of Canvas to draw background, but it implies a lot of manual text handling
-
-    // also, we can reuse Rect instance as long as we apply our dimensions in each draw call
+    private static final int DEF_COLOR_ALPHA = 25;
 
     @SuppressWarnings("WeakerAccess")
     public static class Config {
@@ -87,17 +80,14 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
     }
 
     private final Config config;
-    private final Rect rect = new Rect();
-    private final Paint paint = new Paint();
+    private final Rect rect = ObjectsPool.rect();
+    private final Paint paint = ObjectsPool.paint();
 
     private final boolean multiline;
 
     public CodeSpan(@NonNull Config config, boolean multiline) {
         this.config = config;
         this.multiline = multiline;
-
-        paint.setStyle(Paint.Style.FILL);
-        paint.setTypeface(config.typeface);
     }
 
     @Override
@@ -111,7 +101,7 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
         if (!multiline) {
             final int color;
             if (config.backgroundColor == 0) {
-                color = applyAlpha(ds.getColor(), 25);
+                color = ColorUtils.applyAlpha(ds.getColor(), DEF_COLOR_ALPHA);
             } else {
                 color = config.backgroundColor;
             }
@@ -141,167 +131,16 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 
             final int color;
             if (config.backgroundColor == 0) {
-                color = applyAlpha(p.getColor(), 25);
+                color = ColorUtils.applyAlpha(p.getColor(), DEF_COLOR_ALPHA);
             } else {
                 color = config.backgroundColor;
             }
+            paint.setStyle(Paint.Style.FILL);
             paint.setColor(color);
 
             rect.set(x, top, c.getWidth(), bottom);
 
             c.drawRect(rect, paint);
         }
-
-//        paint.setTextSize(p.getTextSize());
-//
-//        final int left = (int) (x + .5F);
-//
-//        final int right;
-//        if (multiline) {
-//            right = c.getWidth();
-//        } else {
-//            final int width = (config.paddingHorizontal * 2) + (int) (paint.measureText(text, start, end) + .5F);
-//            right = left + width;
-//        }
-//
-//        rect.set(left, top, right, bottom);
-//
-//        // okay, draw background first
-//        drawBackground(c);
-
-        // then, if any, draw borders
-//        drawBorders(c, this.start == start, this.end == end);
-
-//        final int color;
-//        if (config.textColor == 0) {
-//            color = p.getColor();
-//        } else {
-//            color = config.textColor;
-//        }
-//        paint.setColor(color);
-//
-//        // draw text
-//        // y center position
-//        final int b = bottom - ((bottom - top) / 2) - (int) ((paint.descent() + paint.ascent()) / 2);
-//        canvas.drawText(text, start, end, x + config.paddingHorizontal, b, paint);
     }
-
-    private static int applyAlpha(int color, int alpha) {
-        return (color & 0x00FFFFFF) | (alpha << 24);
-    }
-
-
-//    @Override
-//    public int getSize(
-//            @NonNull Paint p,
-//            CharSequence text,
-//            @IntRange(from = 0) int start,
-//            @IntRange(from = 0) int end,
-//            @Nullable Paint.FontMetricsInt fm
-//    ) {
-//
-//        paint.setTextSize(p.getTextSize());
-//
-//        final int width = (config.paddingHorizontal * 2) + (int) (paint.measureText(text, start, end) + .5F);
-//
-//        if (fm != null) {
-//            // we add a padding top & bottom
-//            final float ratio = .62F; // golden ratio, there is no much point of moving this to config... it seems a bit `specific`...
-//            fm.ascent = fm.ascent - (config.paddingVertical);
-//            fm.descent = (int) (-fm.ascent * ratio);
-//            fm.top = fm.ascent;
-//            fm.bottom = fm.descent;
-//        }
-//
-//        return width;
-//    }
-
-//    @Override
-//    public void draw(
-//            @NonNull Canvas canvas,
-//            CharSequence text,
-//            @IntRange(from = 0) int start,
-//            @IntRange(from = 0) int end,
-//            float x,
-//            int top,
-//            int y,
-//            int bottom,
-//            @NonNull Paint p
-//    ) {
-//
-//        paint.setTextSize(p.getTextSize());
-//
-//        final int left = (int) (x + .5F);
-//
-//        final int right;
-//        if (multiline) {
-//            right = canvas.getWidth();
-//        } else {
-//            final int width = (config.paddingHorizontal * 2) + (int) (paint.measureText(text, start, end) + .5F);
-//            right = left + width;
-//        }
-//
-//        rect.set(left, top, right, bottom);
-//
-//        // okay, draw background first
-//        drawBackground(canvas);
-//
-//        // then, if any, draw borders
-//        drawBorders(canvas, this.start == start, this.end == end);
-//
-//        final int color;
-//        if (config.textColor == 0) {
-//            color = p.getColor();
-//        } else {
-//            color = config.textColor;
-//        }
-//        paint.setColor(color);
-//
-//        // draw text
-//        // y center position
-//        final int b = bottom - ((bottom - top) / 2) - (int) ((paint.descent() + paint.ascent()) / 2);
-//        canvas.drawText(text, start, end, x + config.paddingHorizontal, b, paint);
-//    }
-
-//    private void drawBackground(Canvas canvas) {
-//        final int color = config.backgroundColor;
-//        if (color != 0) {
-//            paint.setColor(color);
-//            canvas.drawRect(rect, paint);
-//        }
-//    }
-//
-//    private void drawBorders(Canvas canvas, boolean top, boolean bottom) {
-//
-//        final int color = config.borderColor;
-//        final int width = config.borderWidth;
-//        if (color == 0
-//                || width == 0) {
-//            return;
-//        }
-//
-//        paint.setColor(color);
-//
-//        // left and right are always drawn
-//
-//        // LEFT
-//        borderRect.set(rect.left, rect.top, rect.left + width, rect.bottom);
-//        canvas.drawRect(borderRect, paint);
-//
-//        // RIGHT
-//        borderRect.set(rect.right - width, rect.top, rect.right, rect.bottom);
-//        canvas.drawRect(borderRect, paint);
-//
-//        // TOP
-//        if (top) {
-//            borderRect.set(rect.left, rect.top, rect.right, rect.top + width);
-//            canvas.drawRect(borderRect, paint);
-//        }
-//
-//        // BOTTOM
-//        if (bottom) {
-//            borderRect.set(rect.left, rect.bottom - width, rect.right, rect.bottom);
-//            canvas.drawRect(borderRect, paint);
-//        }
-//    }
 }

@@ -18,10 +18,12 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
             2.F, 1.5F, 1.17F, 1.F, .83F, .67F,
     };
 
+    private static final int DEF_BREAK_COLOR_ALPHA = 127;
+
     public static class Config {
 
         final int breakHeight; // by default stroke width
-        final int breakColor; // by default -> textColor
+        final int breakColor; // by default -> textColor with 0.5 alpha
 
         public Config(@IntRange(from = 0) int breakHeight, @ColorInt int breakColor) {
             this.breakHeight = breakHeight;
@@ -30,8 +32,8 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
     }
 
     private final Config config;
-    private final Rect rect = new Rect();
-    private final Paint paint = new Paint();
+    private final Rect rect = ObjectsPool.rect();
+    private final Paint paint = ObjectsPool.paint();
     private final int level;
     private final int end;
 
@@ -39,8 +41,6 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
         this.config = config;
         this.level = level - 1;
         this.end = end;
-
-        paint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
                 final int color;
                 final int breakHeight;
                 if (config.breakColor == 0) {
-                    color = p.getColor();
+                    color = ColorUtils.applyAlpha(p.getColor(), DEF_BREAK_COLOR_ALPHA);
                 } else {
                     color = config.breakColor;
                 }
@@ -86,6 +86,7 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
                 } else {
                     breakHeight = config.breakHeight;
                 }
+                paint.setStyle(Paint.Style.FILL);
                 paint.setColor(color);
 
                 rect.set(x, bottom - breakHeight, c.getWidth(), bottom);

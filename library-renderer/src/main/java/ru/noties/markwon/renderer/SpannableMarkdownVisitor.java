@@ -194,10 +194,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         newLine();
 
-        // todo, new lines...
         final int length = builder.length();
         builder.append(' '); // without space it won't render
-        builder.setSpan(new ThematicBreakSpan(), length, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        setSpan(length, new ThematicBreakSpan(configuration.getThematicConfig()));
 
         newLine();
     }

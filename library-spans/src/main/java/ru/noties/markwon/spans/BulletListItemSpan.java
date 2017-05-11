@@ -30,10 +30,10 @@ public class BulletListItemSpan implements LeadingMarginSpan {
     }
 
     private final Config config;
-    private final Paint paint = new Paint();
 
-    private RectF circle;
-    private Rect rectangle;
+    private final Paint paint = ObjectsPool.paint();
+    private final RectF circle = ObjectsPool.rectF();
+    private final Rect rectangle = ObjectsPool.rect();
 
     private final int blockIndent;
     private final int level;
@@ -101,11 +101,6 @@ public class BulletListItemSpan implements LeadingMarginSpan {
             if (level == 0
                     || level == 1) {
 
-                // ensure we have circle rectF
-                if (circle == null) {
-                    circle = new RectF();
-                }
-
                 circle.set(l, t, r, b);
 
                 final Paint.Style style = level == 0
@@ -115,11 +110,6 @@ public class BulletListItemSpan implements LeadingMarginSpan {
 
                 c.drawOval(circle, paint);
             } else {
-
-                // ensure rectangle
-                if (rectangle == null) {
-                    rectangle = new Rect();
-                }
 
                 rectangle.set(l, t, r, b);
 

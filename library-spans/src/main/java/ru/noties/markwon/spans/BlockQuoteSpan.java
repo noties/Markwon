@@ -11,15 +11,17 @@ import android.text.style.LeadingMarginSpan;
 
 public class BlockQuoteSpan implements LeadingMarginSpan {
 
+    private static final int DEF_COLOR_ALPHA = 50;
+
     @SuppressWarnings("WeakerAccess")
     public static class Config {
 
         final int totalWidth;
-        final int quoteWidth;
-        final int quoteColor; // by default textColor with 0.1 alpha
+        final int quoteWidth; // by default 1/4 of width
+        final int quoteColor; // by default textColor with 0.2 alpha
 
         public Config(
-                @IntRange(from = 0) int totalWidth,
+                @IntRange(from = 1) int totalWidth,
                 @IntRange(from = 0) int quoteWidth,
                 @ColorInt int quoteColor) {
             this.totalWidth = totalWidth;
@@ -29,16 +31,13 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
     }
 
     private final Config config;
-    private final Rect rect = new Rect();
-    private final Paint paint = new Paint();
+    private final Rect rect = ObjectsPool.rect();
+    private final Paint paint = ObjectsPool.paint();
     private final int indent;
 
     public BlockQuoteSpan(@NonNull Config config, int indent) {
         this.config = config;
         this.indent = indent;
-
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(config.quoteColor);
     }
 
     @Override
@@ -61,13 +60,25 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
             boolean first,
             Layout layout) {
 
-        final int save = c.save();
-        try {
-            final int left = config.totalWidth * (indent - 1);
-            rect.set(left, top, left + config.quoteWidth, bottom);
-            c.drawRect(rect, paint);
-        } finally {
-            c.restoreToCount(save);
+        final int width;
+        if (config.quoteWidth == 0) {
+            width = (int) (config.totalWidth / 4.F + .5F);
+        } else {
+            width = config.quoteWidth;
         }
+
+        final int color;
+        if (config.quoteColor != 0) {
+            color = config.quoteColor;
+        } else {
+            color = ColorUtils.applyAlpha(p.getColor(), DEF_COLOR_ALPHA);
+        }
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(color);
+
+        final int left = config.totalWidth * (indent - 1);
+        rect.set(left, top, left + width, bottom);
+
+        c.drawRect(rect, paint);
     }
 }
