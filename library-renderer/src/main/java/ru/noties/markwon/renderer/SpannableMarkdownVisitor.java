@@ -33,7 +33,6 @@ import ru.noties.markwon.spans.CodeSpan;
 import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.HeadingSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
-import ru.noties.markwon.spans.SimpleLeadingMarginSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
@@ -192,23 +191,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final Node parent = listItem.getParent();
         if (parent instanceof OrderedList) {
 
-//            // let's build ordered number
-//            final StringBuilder lead = new StringBuilder();
-//            Node p = parent;
-//            while (p != null && p instanceof OrderedList) {
-//                lead.insert(0, ((OrderedList) p).getDelimiter());
-//                lead.insert(0, ((OrderedList) p).getStartNumber());
-//                p = p.getParent();
-//                if (p instanceof ListItem) {
-//                    p = p.getParent();
-//                }
-//            }
-//
-//            builder.append(lead)
-//                    .append('\u00a0');
-//
-//            blockQuoteIndent -= 1;
-
             final int start = ((OrderedList) parent).getStartNumber();
 
             visitChildren(listItem);
@@ -220,12 +202,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                     length
             ));
 
-//            blockQuoteIndent += 1;
-
-//            if (listLevel != 1) {
-//                setSpan(length, new SimpleLeadingMarginSpan(32));
-//            }
-
             // after we have visited the children increment start number
             final OrderedList orderedList = (OrderedList) parent;
             orderedList.setStartNumber(orderedList.getStartNumber() + 1);
@@ -233,8 +209,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         } else {
 
             visitChildren(listItem);
-
-            // if we are inside orderedList increase the margin?
 
             setSpan(length, new BulletListItemSpan(
                     configuration.getBulletListConfig(),
@@ -364,22 +338,22 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         return false;
     }
 
-    private static String dump(Node node) {
-        final StringBuilder builder = new StringBuilder();
-        node.accept(new DumpVisitor(builder));
-        return builder.toString();
-    }
-
-    private static class DumpVisitor extends AbstractVisitor {
-        private final StringBuilder builder;
-
-        DumpVisitor(StringBuilder builder) {
-            this.builder = builder;
-        }
-
-        @Override
-        public void visit(Text text) {
-            builder.append(text.getLiteral());
-        }
-    }
+//    private static String dump(Node node) {
+//        final StringBuilder builder = new StringBuilder();
+//        node.accept(new DumpVisitor(builder));
+//        return builder.toString();
+//    }
+//
+//    private static class DumpVisitor extends AbstractVisitor {
+//        private final StringBuilder builder;
+//
+//        DumpVisitor(StringBuilder builder) {
+//            this.builder = builder;
+//        }
+//
+//        @Override
+//        public void visit(Text text) {
+//            builder.append(text.getLiteral());
+//        }
+//    }
 }
