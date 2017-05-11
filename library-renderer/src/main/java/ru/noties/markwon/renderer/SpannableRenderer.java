@@ -13,6 +13,7 @@ public class SpannableRenderer {
     // * LinkDrawableSpan, that draws link whilst image is still loading (it must be clickable...)
     // * Common interface for images (in markdown & inline-html)
     // * util method to properly copy markdown (with lists/links, etc)
+    // * util to apply empty line height
 
     public CharSequence render(@NonNull SpannableConfiguration configuration, @Nullable Node node) {
         final CharSequence out;

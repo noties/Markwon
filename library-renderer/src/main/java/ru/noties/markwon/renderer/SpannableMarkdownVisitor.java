@@ -38,8 +38,6 @@ import ru.noties.markwon.spans.ThematicBreakSpan;
 
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
-    // http://spec.commonmark.org/0.18/#html-blocks
-
     private final SpannableConfiguration configuration;
     private final SpannableStringBuilder builder;
 
@@ -79,7 +77,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(BlockQuote blockQuote) {
 
+        Debug.i(blockQuote);
+
         newLine();
+        if (blockQuoteIndent != 0) {
+            builder.append('\n');
+        }
 
         final int length = builder.length();
 
@@ -95,6 +98,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         blockQuoteIndent -= 1;
 
         newLine();
+        if (blockQuoteIndent == 0) {
+            builder.append('\n');
+        }
     }
 
     @Override
@@ -132,6 +138,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         ));
 
         newLine();
+        builder.append('\n');
     }
 
     @Override
@@ -162,6 +169,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
         visitChildren(bulletList);
         newLine();
+        if (listLevel == 0 && blockQuoteIndent == 0) {
+            builder.append('\n');
+        }
     }
 
     @Override
@@ -180,7 +190,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                 listLevel - 1,
                 length
         ));
-//        builder.setSpan(new BulletListItemSpan(blockQuoteIndent, listLevel > 1, length), length, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         blockQuoteIndent -= 1;
         listLevel -= 1;
 
@@ -199,6 +208,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         setSpan(length, new ThematicBreakSpan(configuration.getThematicConfig()));
 
         newLine();
+        builder.append('\n');
     }
 
     @Override
@@ -213,6 +223,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         super.visit(orderedList);
 
         newLine();
+        if (listLevel == 0 && blockQuoteIndent == 0) {
+            builder.append('\n');
+        }
     }
 
     @Override
@@ -231,6 +244,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         );
 
         newLine();
+
+        // after heading we add another line anyway (no additional checks)
+        builder.append('\n');
     }
 
     @Override
@@ -264,7 +280,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final boolean inTightList = isInTightList(paragraph);
 
-        Debug.i(paragraph, inTightList);
+        Debug.i(paragraph, inTightList, listLevel);
 
         if (!inTightList) {
             newLine();
@@ -274,6 +290,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (!inTightList) {
             newLine();
+
+            if (blockQuoteIndent == 0) {
+                builder.append('\n');
+            }
         }
     }
 
