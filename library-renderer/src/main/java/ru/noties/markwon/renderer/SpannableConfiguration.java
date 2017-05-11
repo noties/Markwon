@@ -107,6 +107,7 @@ public class SpannableConfiguration {
 
         // todo, change to something more reliable
         // todo, must mention that bullet/ordered/quote must have the same margin (or maybe we can just enforce it?)
+        // actually it does make sense to have `blockQuote` & `list` margins (if they are different)
         public SpannableConfiguration build() {
             if (blockQuoteConfig == null) {
                 blockQuoteConfig = new BlockQuoteSpan.Config(

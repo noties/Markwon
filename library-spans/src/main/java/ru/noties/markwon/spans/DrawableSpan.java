@@ -18,7 +18,7 @@ public class DrawableSpan extends ReplacementSpan {
 
     public static final int ALIGN_BOTTOM = 0;
     public static final int ALIGN_BASELINE = 1;
-    public static final int ALIGN_CENTER = 2;
+    public static final int ALIGN_CENTER = 2; // will only center if drawable height is less than text line height
 
     private final Drawable drawable;
     private final int alignment;
@@ -79,7 +79,7 @@ public class DrawableSpan extends ReplacementSpan {
         try {
             final int translationY;
             if (ALIGN_CENTER == alignment) {
-                translationY = (int) (b / 2.F + .5F);
+                translationY = b - ((bottom - top - drawable.getBounds().height()) / 2);
             } else if (ALIGN_BASELINE == alignment) {
                 translationY = b - paint.getFontMetricsInt().descent;
             } else {

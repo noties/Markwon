@@ -1,8 +1,11 @@
 package ru.noties.markwon;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
@@ -18,6 +21,7 @@ import java.util.Scanner;
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.renderer.*;
+import ru.noties.markwon.spans.DrawableSpan;
 import ru.noties.markwon.spans.DrawableSpanUtils;
 
 public class MainActivity extends Activity {
@@ -32,6 +36,21 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final TextView textView = (TextView) findViewById(R.id.activity_main);
+
+//        final Drawable drawable = getDrawable(R.mipmap.ic_launcher);
+////        drawable.setBounds(0, 0, 16, 16);
+//        final SpannableStringBuilder builder = new SpannableStringBuilder();
+//        for (int i = 0; i < 10; i++) {
+//            builder.append("text here and icon: \u00a0");
+//            //noinspection WrongConstant
+//            builder.setSpan(new DrawableSpan(drawable, i % 3), builder.length() - 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            builder.append('\n');
+//        }
+//        textView.setText(builder);
+//
+//        if (true) {
+//            return;
+//        }
 
         new Thread(new Runnable() {
             @Override
