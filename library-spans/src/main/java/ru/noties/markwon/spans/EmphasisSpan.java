@@ -7,11 +7,11 @@ public class EmphasisSpan extends MetricAffectingSpan {
 
     @Override
     public void updateMeasureState(TextPaint p) {
-        p.setTextSkewX(-0.25f);
+        p.setTextSkewX(-0.25F);
     }
 
     @Override
     public void updateDrawState(TextPaint tp) {
-        tp.setTextSkewX(-0.25f);
+        tp.setTextSkewX(-0.25F);
     }
 }

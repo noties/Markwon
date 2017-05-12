@@ -3,6 +3,7 @@ package ru.noties.markwon.renderer;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.BlockQuoteSpan;
 import ru.noties.markwon.spans.BulletListItemSpan;
 import ru.noties.markwon.spans.CodeSpan;
@@ -27,6 +28,7 @@ public class SpannableConfiguration {
     private final HeadingSpan.Config headingConfig;
     private final ThematicBreakSpan.Config thematicConfig;
     private final OrderedListItemSpan.Config orderedListConfig;
+    private final AsyncDrawable.Loader asyncDrawableLoader;
 
     private SpannableConfiguration(Builder builder) {
         this.blockQuoteConfig = builder.blockQuoteConfig;
@@ -35,6 +37,7 @@ public class SpannableConfiguration {
         this.headingConfig = builder.headingConfig;
         this.thematicConfig = builder.thematicConfig;
         this.orderedListConfig = builder.orderedListConfig;
+        this.asyncDrawableLoader = builder.asyncDrawableLoader;
     }
 
     public BlockQuoteSpan.Config getBlockQuoteConfig() {
@@ -61,6 +64,10 @@ public class SpannableConfiguration {
         return orderedListConfig;
     }
 
+    public AsyncDrawable.Loader getAsyncDrawableLoader() {
+        return asyncDrawableLoader;
+    }
+
     public static class Builder {
 
         private final Context context;
@@ -70,6 +77,7 @@ public class SpannableConfiguration {
         private HeadingSpan.Config headingConfig;
         private ThematicBreakSpan.Config thematicConfig;
         private OrderedListItemSpan.Config orderedListConfig;
+        private AsyncDrawable.Loader asyncDrawableLoader;
 
         public Builder(Context context) {
             this.context = context;
@@ -105,9 +113,15 @@ public class SpannableConfiguration {
             return this;
         }
 
+        public Builder setAsyncDrawableLoader(AsyncDrawable.Loader asyncDrawableLoader) {
+            this.asyncDrawableLoader = asyncDrawableLoader;
+            return this;
+        }
+
         // todo, change to something more reliable
         // todo, must mention that bullet/ordered/quote must have the same margin (or maybe we can just enforce it?)
         // actually it does make sense to have `blockQuote` & `list` margins (if they are different)
+        // todo, maybe move defaults to configuration classes?
         public SpannableConfiguration build() {
             if (blockQuoteConfig == null) {
                 blockQuoteConfig = new BlockQuoteSpan.Config(
@@ -133,6 +147,9 @@ public class SpannableConfiguration {
             if (orderedListConfig == null) {
                 orderedListConfig = new OrderedListItemSpan.Config(px(24), 0);
             }
+            if (asyncDrawableLoader == null) {
+                asyncDrawableLoader = new AsyncDrawableLoaderNoOp();
+            }
             return new SpannableConfiguration(this);
         }
 
@@ -140,4 +157,5 @@ public class SpannableConfiguration {
             return (int) (context.getResources().getDisplayMetrics().density * dp + .5F);
         }
     }
+
 }

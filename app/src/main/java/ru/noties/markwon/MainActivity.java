@@ -1,13 +1,18 @@
 package ru.noties.markwon;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
+import android.support.annotation.NonNull;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.node.Node;
@@ -15,13 +20,16 @@ import org.commonmark.parser.Parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.renderer.*;
-import ru.noties.markwon.spans.DrawableSpan;
+import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.CodeSpan;
 import ru.noties.markwon.spans.DrawableSpanUtils;
 
 public class MainActivity extends Activity {
@@ -29,6 +37,8 @@ public class MainActivity extends Activity {
     static {
         Debug.init(new AndroidLogDebugOutput(true));
     }
+
+    private List<Target> targets = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +53,7 @@ public class MainActivity extends Activity {
 //        for (int i = 0; i < 10; i++) {
 //            builder.append("text here and icon: \u00a0");
 //            //noinspection WrongConstant
-//            builder.setSpan(new DrawableSpan(drawable, i % 3), builder.length() - 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            builder.setSpan(new AsyncDrawableSpan(drawable, i % 3), builder.length() - 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //            builder.append('\n');
 //        }
 //        textView.setText(builder);
@@ -52,6 +62,15 @@ public class MainActivity extends Activity {
 //            return;
 //        }
 
+        final Picasso picasso = new Picasso.Builder(this)
+                .listener(new Picasso.Listener() {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                        Debug.i(exception, uri);
+                    }
+                })
+                .build();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -59,7 +78,7 @@ public class MainActivity extends Activity {
                 Scanner scanner = null;
                 String md = null;
                 try {
-                    stream = getAssets().open("test.md");
+                    stream = getAssets().open("scrollable.md");
                     scanner = new Scanner(stream).useDelimiter("\\A");
                     if (scanner.hasNext()) {
                         md = scanner.next();
@@ -82,8 +101,53 @@ public class MainActivity extends Activity {
                             .build();
                     final Node node = parser.parse(md);
 
+                    final SpannableConfiguration configuration = SpannableConfiguration.builder(MainActivity.this)
+                            .setAsyncDrawableLoader(new AsyncDrawable.Loader() {
+                                @Override
+                                public void load(@NonNull String destination, @NonNull final AsyncDrawable drawable) {
+                                    Debug.i(destination);
+                                    final Target target = new Target() {
+                                        @Override
+                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                            Debug.i();
+                                            final Drawable d = new BitmapDrawable(getResources(), bitmap);
+                                            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                                            drawable.setResult(d);
+//                                            textView.setText(textView.getText());
+                                        }
+
+                                        @Override
+                                        public void onBitmapFailed(Drawable errorDrawable) {
+                                            Debug.i();
+                                        }
+
+                                        @Override
+                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                            Debug.i();
+                                        }
+                                    };
+                                    targets.add(target);
+
+                                            picasso.load(destination)
+                                            .tag(destination)
+                                            .into(target);
+
+                                }
+
+                                @Override
+                                public void cancel(@NonNull String destination) {
+                                    Debug.i(destination);
+                                    picasso
+                                            .cancelTag(destination);
+                                }
+                            })
+                            .setCodeConfig(CodeSpan.Config.builder().setTextSize(
+                                    (int) (getResources().getDisplayMetrics().density * 14 + .5F)
+                            ).setMultilineMargin((int) (getResources().getDisplayMetrics().density * 8 + .5F)).build())
+                            .build();
+
                     final CharSequence text = new ru.noties.markwon.renderer.SpannableRenderer().render(
-                            SpannableConfiguration.create(MainActivity.this),
+                            configuration,
                             node
                     );
 

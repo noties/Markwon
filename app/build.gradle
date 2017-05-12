@@ -17,4 +17,5 @@ android {
 dependencies {
     compile project(':library-renderer')
     compile 'ru.noties:debug:3.0.0@jar'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

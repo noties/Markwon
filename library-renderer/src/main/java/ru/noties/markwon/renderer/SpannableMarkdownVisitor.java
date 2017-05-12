@@ -3,7 +3,9 @@ package ru.noties.markwon.renderer;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
+import android.text.style.URLSpan;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.node.AbstractVisitor;
@@ -16,6 +18,8 @@ import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
 import org.commonmark.node.HtmlBlock;
+import org.commonmark.node.Image;
+import org.commonmark.node.Link;
 import org.commonmark.node.ListBlock;
 import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
@@ -27,6 +31,8 @@ import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
 import ru.noties.debug.Debug;
+import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.AsyncDrawableSpan;
 import ru.noties.markwon.spans.BlockQuoteSpan;
 import ru.noties.markwon.spans.BulletListItemSpan;
 import ru.noties.markwon.spans.CodeSpan;
@@ -131,7 +137,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
 
+        builder.append('\u00a0').append('\n');
         builder.append(fencedCodeBlock.getLiteral());
+        builder.append('\u00a0').append('\n');
         setSpan(length, new CodeSpan(
                 configuration.getCodeConfig(),
                 true
@@ -140,21 +148,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
         builder.append('\n');
     }
-
-//    @Override
-//    public void visit(Image image) {
-//
-//        Debug.i(image);
-//
-////        final int length = builder.length();
-//
-//        visitChildren(image);
-//
-////        if (length == builder.length()) {
-////            // nothing is added, and we need at least one symbol
-////            builder.append(' ');
-////        }
-//    }
 
     @Override
     public void visit(BulletList bulletList) {
@@ -167,7 +160,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     private void visitList(Node node) {
-        Debug.i(node);
+//        Debug.i(node);
         newLine();
         visitChildren(node);
         newLine();
@@ -179,7 +172,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(ListItem listItem) {
 
-        Debug.i(listItem);
+//        Debug.i(listItem);
 
         final int length = builder.length();
 
@@ -309,10 +302,34 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     @Override
+    public void visit(Image image) {
+
+        final int length = builder.length();
+
+        visitChildren(image);
+
+        // if image has no link, create it (to open in external app)
+
+        // we must check if anything _was_ added, as we need at least one char to render
+        if (length == builder.length()) {
+            builder.append(' '); // breakable space
+        }
+
+        setSpan(length, new AsyncDrawableSpan(new AsyncDrawable(image.getDestination(), configuration.getAsyncDrawableLoader())));
+    }
+
+    @Override
     public void visit(HtmlBlock htmlBlock) {
         // http://spec.commonmark.org/0.18/#html-blocks
         Debug.i(htmlBlock, htmlBlock.getLiteral());
         super.visit(htmlBlock);
+    }
+
+    @Override
+    public void visit(Link link) {
+        final int length = builder.length();
+        visitChildren(link);
+        setSpan(length, new URLSpan(link.getDestination()));
     }
 
     private void setSpan(int start, @NonNull Object span) {

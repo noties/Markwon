@@ -49,7 +49,7 @@
 //import ru.noties.debug.Debug;
 //import ru.noties.markwon.spans.BlockQuoteSpan;
 //import ru.noties.markwon.spans.CodeSpan;
-//import ru.noties.markwon.spans.DrawableSpan;
+//import ru.noties.markwon.spans.AsyncDrawableSpan;
 //import ru.noties.markwon.spans.EmphasisSpan;
 //import ru.noties.markwon.spans.BulletListItemSpan;
 //import ru.noties.markwon.spans.StrongEmphasisSpan;
@@ -367,7 +367,7 @@
 //
 ////            final int length = builder.length();
 //            final TestDrawable drawable = new TestDrawable();
-//            final DrawableSpan span = new DrawableSpan(drawable);
+//            final AsyncDrawableSpan span = new AsyncDrawableSpan(drawable);
 //            builder.append("  ");
 //            builder.setSpan(span, length, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        }

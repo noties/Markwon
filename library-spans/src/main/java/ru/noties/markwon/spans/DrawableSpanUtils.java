@@ -33,11 +33,11 @@ public class DrawableSpanUtils {
         if (spans != null
                 && spans.length > 0) {
 
-            final List<Drawable> list = new ArrayList<>(2);
+            final List<AsyncDrawable> list = new ArrayList<>(2);
 
             for (Object span: spans) {
-                if (span instanceof DrawableSpan) {
-                    list.add(((DrawableSpan) span).getDrawable());
+                if (span instanceof AsyncDrawableSpan) {
+                    list.add(((AsyncDrawableSpan) span).getDrawable());
                 }
             }
 
@@ -53,14 +53,14 @@ public class DrawableSpanUtils {
                     public void onViewDetachedFromWindow(View v) {
                         // remove callbacks...
                         textView.removeOnAttachStateChangeListener(this);
-                        for (Drawable drawable: list) {
-                            drawable.setCallback(null);
+                        for (AsyncDrawable drawable: list) {
+                            drawable.setCallback2(null);
                         }
                     }
                 });
 
-                for (Drawable drawable: list) {
-                    drawable.setCallback(new DrawableCallbackImpl(textView, drawable.getBounds()));
+                for (AsyncDrawable drawable: list) {
+                    drawable.setCallback2(new DrawableCallbackImpl(textView, drawable.getBounds()));
                 }
             }
         }
