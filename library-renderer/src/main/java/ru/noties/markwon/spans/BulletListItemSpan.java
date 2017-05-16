@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.text.Layout;
@@ -12,30 +11,7 @@ import android.text.style.LeadingMarginSpan;
 
 public class BulletListItemSpan implements LeadingMarginSpan {
 
-    // todo, there are 3 types of bullets: filled circle, stroke circle & filled rectangle
-    // also, there are ordered lists
-
-    public static class Config {
-
-        final int marginWidth;
-        final int bulletColor; // by default uses text color
-        final int bulletSide;
-        final int bulletStrokeWidth;
-
-        // from 0 but it makes sense to provide something wider
-        public Config(
-                @IntRange(from = 0) int marginWidth,
-                @ColorInt int bulletColor,
-                @IntRange(from = 0) int bulletSide,
-                @IntRange(from = 0) int bulletStrokeWidth) {
-            this.marginWidth = marginWidth;
-            this.bulletColor = bulletColor;
-            this.bulletSide = bulletSide;
-            this.bulletStrokeWidth = bulletStrokeWidth;
-        }
-    }
-
-    private final Config config;
+    private SpannableTheme theme;
 
     private final Paint paint = ObjectsPool.paint();
     private final RectF circle = ObjectsPool.rectF();
@@ -46,11 +22,11 @@ public class BulletListItemSpan implements LeadingMarginSpan {
     private final int start;
 
     public BulletListItemSpan(
-            @NonNull Config config,
+            @NonNull SpannableTheme theme,
             @IntRange(from = 0) int blockIndent,
             @IntRange(from = 0) int level,
             @IntRange(from = 0) int start) {
-        this.config = config;
+        this.theme = theme;
         this.blockIndent = blockIndent;
         this.level = level;
         this.start = start;
@@ -58,7 +34,7 @@ public class BulletListItemSpan implements LeadingMarginSpan {
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return config.marginWidth;
+        return theme.getBlockMargin();
     }
 
     @Override
@@ -69,39 +45,17 @@ public class BulletListItemSpan implements LeadingMarginSpan {
             return;
         }
 
-        final int color;
-        final float stroke;
+        paint.set(p);
 
-        if (config.bulletColor == 0) {
-            color = p.getColor();
-        } else {
-            color = config.bulletColor;
-        }
-
-        if (config.bulletStrokeWidth == 0) {
-            stroke = p.getStrokeWidth();
-        } else {
-            stroke = config.bulletStrokeWidth;
-        }
-
-        paint.setColor(color);
-        paint.setStrokeWidth(stroke);
+        theme.applyListItemStyle(paint);
 
         final int save = c.save();
         try {
 
-            // by default we use half of margin width, but if height is less than width, we calculate from it
-            final int width = config.marginWidth;
+            final int width = theme.getBlockMargin();
             final int height = bottom - top;
 
-            final int min = Math.min(config.marginWidth, height) / 2;
-            final int side;
-            if (config.bulletSide == 0
-                    || config.bulletSide > min) {
-                side = min;
-            } else {
-                side = config.bulletSide;
-            }
+            final int side = theme.getBulletWidth(bottom - top);
 
             final int marginLeft = (width - side) / 2;
             final int marginTop = (height - side) / 2;

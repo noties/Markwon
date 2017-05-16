@@ -15,8 +15,6 @@ android {
 
 dependencies {
 
-    compile project(':library-spans')
-
     compile SUPPORT_ANNOTATIONS
     compile COMMON_MARK
     compile COMMON_MARK_STRIKETHROUGHT

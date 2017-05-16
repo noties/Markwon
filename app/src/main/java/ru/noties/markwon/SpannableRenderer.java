@@ -53,8 +53,8 @@
 //import ru.noties.markwon.spans.EmphasisSpan;
 //import ru.noties.markwon.spans.BulletListItemSpan;
 //import ru.noties.markwon.spans.StrongEmphasisSpan;
-//import ru.noties.markwon.spans.SubSpan;
-//import ru.noties.markwon.spans.SupSpan;
+//import ru.noties.markwon.spans.SubScriptSpan;
+//import ru.noties.markwon.spans.SuperScriptSpan;
 //import ru.noties.markwon.spans.ThematicBreakSpan;
 //
 //public class SpannableRenderer implements Renderer {
@@ -263,9 +263,9 @@
 //                    final int end = builder.length();
 //                    // here, additionally, we can render some tags ourselves (sup/sub)
 //                    if ("sup".equals(item.tag)) {
-//                         builder.setSpan(new SupSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                         builder.setSpan(new SuperScriptSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //                    } else if("sub".equals(item.tag)) {
-//                        builder.setSpan(new SubSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        builder.setSpan(new SubScriptSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //                    } else if("del".equals(item.tag)) {
 //                        // weird, but `Html` class does not return a spannable for `<del>o</del>`
 //                        // seems like a bug

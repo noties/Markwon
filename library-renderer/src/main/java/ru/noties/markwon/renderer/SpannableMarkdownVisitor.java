@@ -3,7 +3,6 @@ package ru.noties.markwon.renderer;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
 import android.text.style.URLSpan;
 
@@ -38,6 +37,7 @@ import ru.noties.markwon.spans.BulletListItemSpan;
 import ru.noties.markwon.spans.CodeSpan;
 import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.HeadingSpan;
+import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
@@ -97,7 +97,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         visitChildren(blockQuote);
 
         setSpan(length, new BlockQuoteSpan(
-                configuration.getBlockQuoteConfig(),
+                configuration.theme(),
                 blockQuoteIndent
         ));
 
@@ -123,7 +123,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         builder.append('\u00a0');
 
         setSpan(length, new CodeSpan(
-                configuration.getCodeConfig(),
+                configuration.theme(),
                 false
         ));
     }
@@ -131,17 +131,20 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
 
-//        Debug.i(fencedCodeBlock);
-
         newLine();
 
         final int length = builder.length();
 
+        // empty lines on top & bottom
         builder.append('\u00a0').append('\n');
-        builder.append(fencedCodeBlock.getLiteral());
+        builder.append(
+                configuration.syntaxHighlight()
+                        .highlight(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral())
+        );
         builder.append('\u00a0').append('\n');
+
         setSpan(length, new CodeSpan(
-                configuration.getCodeConfig(),
+                configuration.theme(),
                 true
         ));
 
@@ -189,7 +192,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(listItem);
 
             setSpan(length, new OrderedListItemSpan(
-                    configuration.getOrderedListConfig(),
+                    configuration.theme(),
                     String.valueOf(start) + "." + '\u00a0',
                     blockQuoteIndent,
                     length
@@ -204,7 +207,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(listItem);
 
             setSpan(length, new BulletListItemSpan(
-                    configuration.getBulletListConfig(),
+                    configuration.theme(),
                     blockQuoteIndent,
                     listLevel - 1,
                     length
@@ -226,7 +229,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         builder.append(' '); // without space it won't render
-        setSpan(length, new ThematicBreakSpan(configuration.getThematicConfig()));
+        setSpan(length, new ThematicBreakSpan(configuration.theme()));
 
         newLine();
         builder.append('\n');
@@ -242,7 +245,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final int length = builder.length();
         visitChildren(heading);
         setSpan(length, new HeadingSpan(
-                configuration.getHeadingConfig(),
+                configuration.theme(),
                 heading.getLevel(),
                 builder.length())
         );
@@ -315,7 +318,18 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             builder.append(' '); // breakable space
         }
 
-        setSpan(length, new AsyncDrawableSpan(new AsyncDrawable(image.getDestination(), configuration.getAsyncDrawableLoader())));
+        final Node parent = image.getParent();
+        final boolean link = parent != null && parent instanceof Link;
+
+        setSpan(length, new AsyncDrawableSpan(
+                configuration.theme(),
+                new AsyncDrawable(
+                        image.getDestination(),
+                        configuration.asyncDrawableLoader()
+                ),
+                AsyncDrawableSpan.ALIGN_BOTTOM,
+                link)
+        );
     }
 
     @Override
@@ -329,7 +343,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(Link link) {
         final int length = builder.length();
         visitChildren(link);
-        setSpan(length, new URLSpan(link.getDestination()));
+        setSpan(length, new LinkSpan(configuration.theme(), link.getDestination(), configuration.linkResolver()));
     }
 
     private void setSpan(int start, @NonNull Object span) {

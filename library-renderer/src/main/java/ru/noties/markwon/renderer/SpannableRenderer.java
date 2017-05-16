@@ -14,6 +14,7 @@ public class SpannableRenderer {
     // * Common interface for images (in markdown & inline-html)
     // * util method to properly copy markdown (with lists/links, etc)
     // * util to apply empty line height
+    // * transform relative urls to absolute ones...
 
     public CharSequence render(@NonNull SpannableConfiguration configuration, @Nullable Node node) {
         final CharSequence out;

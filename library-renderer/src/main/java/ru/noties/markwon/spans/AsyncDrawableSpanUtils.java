@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawableSpanUtils {
+public class AsyncDrawableSpanUtils {
 
     // todo, add `unschedule` method (to be used when new text is set, so
     // drawables are removed from callbacks)
@@ -66,7 +66,7 @@ public class DrawableSpanUtils {
         }
     }
 
-    private DrawableSpanUtils() {}
+    private AsyncDrawableSpanUtils() {}
 
     private static class DrawableCallbackImpl implements Drawable.Callback {
 

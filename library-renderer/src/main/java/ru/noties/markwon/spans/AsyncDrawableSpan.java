@@ -3,7 +3,6 @@ package ru.noties.markwon.spans;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -13,23 +12,39 @@ import android.text.style.ReplacementSpan;
 @SuppressWarnings("WeakerAccess")
 public class AsyncDrawableSpan extends ReplacementSpan {
 
-    @IntDef({ ALIGN_BOTTOM, ALIGN_BASELINE, ALIGN_CENTER })
-    @interface Alignment {}
+    @IntDef({ALIGN_BOTTOM, ALIGN_BASELINE, ALIGN_CENTER})
+    @interface Alignment {
+    }
 
     public static final int ALIGN_BOTTOM = 0;
     public static final int ALIGN_BASELINE = 1;
     public static final int ALIGN_CENTER = 2; // will only center if drawable height is less than text line height
 
+    private final SpannableTheme theme;
     private final AsyncDrawable drawable;
     private final int alignment;
+    private final boolean replacementTextIsLink;
 
-    public AsyncDrawableSpan(@NonNull AsyncDrawable drawable) {
-        this(drawable, ALIGN_BOTTOM);
+    public AsyncDrawableSpan(@NonNull SpannableTheme theme, @NonNull AsyncDrawable drawable) {
+        this(theme, drawable, ALIGN_BOTTOM);
     }
 
-    public AsyncDrawableSpan(@NonNull AsyncDrawable drawable, @Alignment int alignment) {
+    public AsyncDrawableSpan(
+            @NonNull SpannableTheme theme,
+            @NonNull AsyncDrawable drawable,
+            @Alignment int alignment) {
+        this(theme, drawable, alignment, false);
+    }
+
+    public AsyncDrawableSpan(
+            @NonNull SpannableTheme theme,
+            @NonNull AsyncDrawable drawable,
+            @Alignment int alignment,
+            boolean replacementTextIsLink) {
+        this.theme = theme;
         this.drawable = drawable;
         this.alignment = alignment;
+        this.replacementTextIsLink = replacementTextIsLink;
 
         // additionally set intrinsic bounds if empty
         final Rect rect = drawable.getBounds();
@@ -66,8 +81,13 @@ public class AsyncDrawableSpan extends ReplacementSpan {
 
         } else {
 
-            size = (int) (paint.measureText(text, start, end) + .5F);
+            // we will apply style here in case if theme modifies textSize or style (affects metrics)
+            if (replacementTextIsLink) {
+                theme.applyLinkStyle(paint);
+            }
 
+            // NB, no specific text handling (no new lines, etc)
+            size = (int) (paint.measureText(text, start, end) + .5F);
         }
 
         return size;
@@ -108,7 +128,15 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             }
         } else {
 
-            final int textY = (int) (bottom - ((bottom - top) / 2) - ((paint.descent() + paint.ascent()) / 2.F + .5F));
+            // will it make sense to have additional background/borders for an image replacement?
+            // let's focus on main functionality and then think of it
+
+            final float textY = CanvasUtils.textCenterY(top, bottom, paint);
+            if (replacementTextIsLink) {
+                theme.applyLinkStyle(paint);
+            }
+
+            // NB, no specific text handling (no new lines, etc)
             canvas.drawText(text, start, end, x, textY, paint);
         }
     }

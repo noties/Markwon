@@ -30,7 +30,7 @@ import ru.noties.debug.Debug;
 import ru.noties.markwon.renderer.*;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.CodeSpan;
-import ru.noties.markwon.spans.DrawableSpanUtils;
+import ru.noties.markwon.spans.AsyncDrawableSpanUtils;
 
 public class MainActivity extends Activity {
 
@@ -101,50 +101,52 @@ public class MainActivity extends Activity {
                             .build();
                     final Node node = parser.parse(md);
 
-                    final SpannableConfiguration configuration = SpannableConfiguration.builder(MainActivity.this)
-                            .setAsyncDrawableLoader(new AsyncDrawable.Loader() {
-                                @Override
-                                public void load(@NonNull String destination, @NonNull final AsyncDrawable drawable) {
-                                    Debug.i(destination);
-                                    final Target target = new Target() {
-                                        @Override
-                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                            Debug.i();
-                                            final Drawable d = new BitmapDrawable(getResources(), bitmap);
-                                            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-                                            drawable.setResult(d);
-//                                            textView.setText(textView.getText());
-                                        }
+//                    final SpannableConfiguration configuration = SpannableConfiguration.builder(MainActivity.this)
+//                            .setAsyncDrawableLoader(new AsyncDrawable.Loader() {
+//                                @Override
+//                                public void load(@NonNull String destination, @NonNull final AsyncDrawable drawable) {
+//                                    Debug.i(destination);
+//                                    final Target target = new Target() {
+//                                        @Override
+//                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                            Debug.i();
+//                                            final Drawable d = new BitmapDrawable(getResources(), bitmap);
+//                                            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+//                                            drawable.setResult(d);
+////                                            textView.setText(textView.getText());
+//                                        }
+//
+//                                        @Override
+//                                        public void onBitmapFailed(Drawable errorDrawable) {
+//                                            Debug.i();
+//                                        }
+//
+//                                        @Override
+//                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                            Debug.i();
+//                                        }
+//                                    };
+//                                    targets.add(target);
+//
+//                                            picasso.load(destination)
+//                                            .tag(destination)
+//                                            .into(target);
+//
+//                                }
+//
+//                                @Override
+//                                public void cancel(@NonNull String destination) {
+//                                    Debug.i(destination);
+//                                    picasso
+//                                            .cancelTag(destination);
+//                                }
+//                            })
+//                            .setCodeConfig(CodeSpan.Config.builder().setTextSize(
+//                                    (int) (getResources().getDisplayMetrics().density * 14 + .5F)
+//                            ).setMultilineMargin((int) (getResources().getDisplayMetrics().density * 8 + .5F)).build())
+//                            .build();
 
-                                        @Override
-                                        public void onBitmapFailed(Drawable errorDrawable) {
-                                            Debug.i();
-                                        }
-
-                                        @Override
-                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                            Debug.i();
-                                        }
-                                    };
-                                    targets.add(target);
-
-                                            picasso.load(destination)
-                                            .tag(destination)
-                                            .into(target);
-
-                                }
-
-                                @Override
-                                public void cancel(@NonNull String destination) {
-                                    Debug.i(destination);
-                                    picasso
-                                            .cancelTag(destination);
-                                }
-                            })
-                            .setCodeConfig(CodeSpan.Config.builder().setTextSize(
-                                    (int) (getResources().getDisplayMetrics().density * 14 + .5F)
-                            ).setMultilineMargin((int) (getResources().getDisplayMetrics().density * 8 + .5F)).build())
-                            .build();
+                    final SpannableConfiguration configuration = SpannableConfiguration.create(MainActivity.this);
 
                     final CharSequence text = new ru.noties.markwon.renderer.SpannableRenderer().render(
                             configuration,
@@ -168,7 +170,7 @@ public class MainActivity extends Activity {
                             // NB! LinkMovementMethod forces frequent updates...
                             textView.setMovementMethod(LinkMovementMethod.getInstance());
                             textView.setText(text);
-                            DrawableSpanUtils.scheduleDrawables(textView);
+                            AsyncDrawableSpanUtils.scheduleDrawables(textView);
                         }
                     });
                 }
