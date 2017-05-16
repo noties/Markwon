@@ -47,20 +47,6 @@ public class MainActivity extends Activity {
 
         final TextView textView = (TextView) findViewById(R.id.activity_main);
 
-//        final Drawable drawable = getDrawable(R.mipmap.ic_launcher);
-////        drawable.setBounds(0, 0, 16, 16);
-//        final SpannableStringBuilder builder = new SpannableStringBuilder();
-//        for (int i = 0; i < 10; i++) {
-//            builder.append("text here and icon: \u00a0");
-//            //noinspection WrongConstant
-//            builder.setSpan(new AsyncDrawableSpan(drawable, i % 3), builder.length() - 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            builder.append('\n');
-//        }
-//        textView.setText(builder);
-//
-//        if (true) {
-//            return;
-//        }
 
         final Picasso picasso = new Picasso.Builder(this)
                 .listener(new Picasso.Listener() {
@@ -78,7 +64,8 @@ public class MainActivity extends Activity {
                 Scanner scanner = null;
                 String md = null;
                 try {
-                    stream = getAssets().open("scrollable.md");
+//                    stream = getAssets().open("scrollable.md");
+                    stream = getAssets().open("test.md");
                     scanner = new Scanner(stream).useDelimiter("\\A");
                     if (scanner.hasNext()) {
                         md = scanner.next();

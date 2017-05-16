@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
-import android.text.style.URLSpan;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.node.AbstractVisitor;
@@ -17,6 +16,7 @@ import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
 import org.commonmark.node.HtmlBlock;
+import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Image;
 import org.commonmark.node.Link;
 import org.commonmark.node.ListBlock;
@@ -29,7 +29,11 @@ import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import ru.noties.debug.Debug;
+import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 import ru.noties.markwon.spans.BlockQuoteSpan;
@@ -42,10 +46,14 @@ import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
+// please do not reuse between different texts (due to the html handling)
 public class SpannableMarkdownVisitor extends AbstractVisitor {
+
+    private static final String HTML_CONTENT = "<%1$s>%2$s</%1$s>";
 
     private final SpannableConfiguration configuration;
     private final SpannableStringBuilder builder;
+    private final Deque<HtmlInlineItem> htmlInlineItems;
 
     private int blockQuoteIndent;
     private int listLevel;
@@ -56,17 +64,16 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     ) {
         this.configuration = configuration;
         this.builder = builder;
+        this.htmlInlineItems = new ArrayDeque<>(2);
     }
 
     @Override
     public void visit(Text text) {
-//        Debug.i(text);
         builder.append(text.getLiteral());
     }
 
     @Override
     public void visit(StrongEmphasis strongEmphasis) {
-//        Debug.i(strongEmphasis);
         final int length = builder.length();
         visitChildren(strongEmphasis);
         setSpan(length, new StrongEmphasisSpan());
@@ -74,7 +81,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Emphasis emphasis) {
-//        Debug.i(emphasis);
         final int length = builder.length();
         visitChildren(emphasis);
         setSpan(length, new EmphasisSpan());
@@ -82,8 +88,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(BlockQuote blockQuote) {
-
-//        Debug.i(blockQuote);
 
         newLine();
         if (blockQuoteIndent != 0) {
@@ -111,8 +115,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Code code) {
-
-//        Debug.i(code);
 
         final int length = builder.length();
 
@@ -163,7 +165,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     private void visitList(Node node) {
-//        Debug.i(node);
         newLine();
         visitChildren(node);
         newLine();
@@ -175,14 +176,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(ListItem listItem) {
 
-//        Debug.i(listItem);
-
         final int length = builder.length();
 
         blockQuoteIndent += 1;
         listLevel += 1;
-
-        // todo, can be a bullet list & ordered list (with leading numbers... looks like we need to `draw` numbers...
 
         final Node parent = listItem.getParent();
         if (parent instanceof OrderedList) {
@@ -223,8 +220,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(ThematicBreak thematicBreak) {
 
-//        Debug.i(thematicBreak);
-
         newLine();
 
         final int length = builder.length();
@@ -237,8 +232,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Heading heading) {
-
-//        Debug.i(heading);
 
         newLine();
 
@@ -258,21 +251,16 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
-        Debug.i(softLineBreak);
         newLine();
     }
 
     @Override
     public void visit(HardLineBreak hardLineBreak) {
-        Debug.i(hardLineBreak);
         newLine();
     }
 
     @Override
     public void visit(CustomNode customNode) {
-
-//        Debug.i(customNode);
-
         if (customNode instanceof Strikethrough) {
             final int length = builder.length();
             visitChildren(customNode);
@@ -286,8 +274,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(Paragraph paragraph) {
 
         final boolean inTightList = isInTightList(paragraph);
-
-//        Debug.i(paragraph, inTightList, listLevel);
 
         if (!inTightList) {
             newLine();
@@ -311,8 +297,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         visitChildren(image);
 
-        // if image has no link, create it (to open in external app)
-
         // we must check if anything _was_ added, as we need at least one char to render
         if (length == builder.length()) {
             builder.append(' '); // breakable space
@@ -321,14 +305,17 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final Node parent = image.getParent();
         final boolean link = parent != null && parent instanceof Link;
 
-        setSpan(length, new AsyncDrawableSpan(
-                configuration.theme(),
-                new AsyncDrawable(
-                        image.getDestination(),
-                        configuration.asyncDrawableLoader()
-                ),
-                AsyncDrawableSpan.ALIGN_BOTTOM,
-                link)
+        setSpan(
+                length,
+                new AsyncDrawableSpan(
+                        configuration.theme(),
+                        new AsyncDrawable(
+                                image.getDestination(),
+                                configuration.asyncDrawableLoader()
+                        ),
+                        AsyncDrawableSpan.ALIGN_BOTTOM,
+                        link
+                )
         );
     }
 
@@ -337,6 +324,46 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         // http://spec.commonmark.org/0.18/#html-blocks
         Debug.i(htmlBlock, htmlBlock.getLiteral());
         super.visit(htmlBlock);
+    }
+
+    @Override
+    public void visit(HtmlInline htmlInline) {
+        final SpannableHtmlParser htmlParser = configuration.htmlParser();
+        final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
+        if (tag != null) {
+            if (tag.opening()) {
+                // push in stack
+                htmlInlineItems.push(new HtmlInlineItem(tag.name(), builder.length()));
+                visitChildren(htmlInline);
+            } else {
+                // pop last item
+                if (htmlInlineItems.size() > 0) {
+                    final HtmlInlineItem item = htmlInlineItems.pop();
+                    final int start = item.start;
+                    final Object span = htmlParser.handleTag(item.tag);
+                    if (span != null) {
+                        setSpan(start, span);
+                    } else {
+                        final String content = builder.subSequence(start, builder.length()).toString();
+                        final String html = String.format(HTML_CONTENT, item.tag, content);
+                        final Object[] spans = htmlParser.htmlSpans(html);
+                        final int length = spans != null
+                                ? spans.length
+                                : 0;
+                        for (int i = 0; i < length; i++) {
+                            setSpan(start, spans[i]);
+                        }
+                    }
+                } else {
+                    throw new IllegalStateException("Unexpected closing html tag: " + tag.name()
+                            + ", at position: " + builder.length());
+                }
+            }
+        } else {
+            // let's add what we have
+            builder.append(htmlInline.getLiteral());
+            visitChildren(htmlInline);
+        }
     }
 
     @Override
@@ -367,6 +394,15 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             }
         }
         return false;
+    }
+
+    private static class HtmlInlineItem {
+        final String tag;
+        final int start;
+        HtmlInlineItem(String tag, int start) {
+            this.tag = tag;
+            this.start = start;
+        }
     }
 
 //    private static String dump(Node node) {

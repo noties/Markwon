@@ -3,6 +3,7 @@ package ru.noties.markwon.renderer;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.SpannableTheme;
@@ -22,12 +23,14 @@ public class SpannableConfiguration {
     private final AsyncDrawable.Loader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkSpan.Resolver linkResolver;
+    private final SpannableHtmlParser htmlParser;
 
     private SpannableConfiguration(Builder builder) {
         this.theme = builder.theme;
         this.asyncDrawableLoader = builder.asyncDrawableLoader;
         this.syntaxHighlight = builder.syntaxHighlight;
         this.linkResolver = builder.linkResolver;
+        this.htmlParser = builder.htmlParser;
     }
 
     public SpannableTheme theme() {
@@ -46,6 +49,10 @@ public class SpannableConfiguration {
         return linkResolver;
     }
 
+    public SpannableHtmlParser htmlParser() {
+        return htmlParser;
+    }
+
     public static class Builder {
 
         private final Context context;
@@ -53,6 +60,7 @@ public class SpannableConfiguration {
         private AsyncDrawable.Loader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
         private LinkSpan.Resolver linkResolver;
+        private SpannableHtmlParser htmlParser;
 
         public Builder(Context context) {
             this.context = context;
@@ -78,6 +86,11 @@ public class SpannableConfiguration {
             return this;
         }
 
+        public Builder htmlParser(SpannableHtmlParser htmlParser) {
+            this.htmlParser = htmlParser;
+            return this;
+        }
+
         public SpannableConfiguration build() {
             if (theme == null) {
                 theme = SpannableTheme.create(context);
@@ -90,6 +103,9 @@ public class SpannableConfiguration {
             }
             if (linkResolver == null) {
                 linkResolver = new LinkResolverDef();
+            }
+            if (htmlParser == null) {
+                htmlParser = SpannableHtmlParser.create(theme);
             }
             return new SpannableConfiguration(this);
         }
