@@ -34,6 +34,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import ru.noties.debug.Debug;
+import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
@@ -47,7 +48,7 @@ import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
-// please do not reuse between different texts (due to the html handling)
+@SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private static final String HTML_CONTENT = "<%1$s>%2$s</%1$s>";
@@ -120,7 +121,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final int length = builder.length();
 
         // NB, in order to provide a _padding_ feeling code is wrapped inside two unbreakable spaces
-        // unfortunately we cannot use this for multiline code as we cannot control there a new line break will be inserted
+        // unfortunately we cannot use this for multiline code as we cannot control where a new line break will be inserted
         builder.append('\u00a0');
         builder.append(code.getLiteral());
         builder.append('\u00a0');
@@ -331,7 +332,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(HtmlInline htmlInline) {
         final SpannableHtmlParser htmlParser = configuration.htmlParser();
         final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
-        Debug.i(tag);
+
         if (tag != null) {
 
             final boolean voidTag = tag.voidTag();

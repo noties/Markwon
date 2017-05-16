@@ -1,8 +1,9 @@
-package ru.noties.markwon.renderer;
+package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+@SuppressWarnings("WeakerAccess")
 public interface SyntaxHighlight {
 
     @NonNull

@@ -4,7 +4,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
-class ObjectsPool {
+abstract class ObjectsPool {
 
     // maybe it's premature optimization, but as all the drawing is done in one thread
     // and we apply needed values before actual drawing it's (I assume) safe to reuse some frequently used objects

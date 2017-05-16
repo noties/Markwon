@@ -3,20 +3,13 @@ package ru.noties.markwon.renderer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
-import android.widget.TextView;
 
 import org.commonmark.node.Node;
 
+import ru.noties.markwon.SpannableConfiguration;
+
 // please note that this class does not implement Renderer in order to return CharSequence (instead of String)
 public class SpannableRenderer {
-
-    public static void scheduleDrawables(@NonNull TextView view) {
-        DrawablesScheduler.schedule(view);
-    }
-
-    public static void unscheduleDrawables(@NonNull TextView view) {
-        DrawablesScheduler.unschedule(view);
-    }
 
     // todo
     // * LinkDrawableSpan, that draws link whilst image is still loading (it must be clickable...)

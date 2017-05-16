@@ -1,4 +1,4 @@
-package ru.noties.markwon.renderer;
+package ru.noties.markwon;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;

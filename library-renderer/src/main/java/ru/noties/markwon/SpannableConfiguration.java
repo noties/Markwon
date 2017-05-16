@@ -1,4 +1,4 @@
-package ru.noties.markwon.renderer;
+package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.SpannableTheme;
 
+@SuppressWarnings("WeakerAccess")
 public class SpannableConfiguration {
 
     // creates default configuration

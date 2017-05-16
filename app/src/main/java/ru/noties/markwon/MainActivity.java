@@ -7,22 +7,18 @@ import android.support.annotation.NonNull;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
-import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
-import ru.noties.markwon.renderer.SpannableConfiguration;
-import ru.noties.markwon.renderer.SpannableRenderer;
 import ru.noties.markwon.spans.AsyncDrawable;
 
 public class MainActivity extends Activity {
+
+    // markdown, mdown, mkdn, mdwn, mkd, md
+    // markdown, mdown, mkdn, mkd, md, text
 
     static {
         Debug.init(new AndroidLogDebugOutput(true));
@@ -75,11 +71,8 @@ public class MainActivity extends Activity {
                 }
 
                 if (md != null) {
+
                     final long start = SystemClock.uptimeMillis();
-                    final Parser parser = new Parser.Builder()
-                            .extensions(Arrays.asList(StrikethroughExtension.create()))
-                            .build();
-                    final Node node = parser.parse(md);
 
                     final SpannableConfiguration configuration = SpannableConfiguration.builder(MainActivity.this)
                             .asyncDrawableLoader(new AsyncDrawable.Loader() {
@@ -95,10 +88,7 @@ public class MainActivity extends Activity {
                             })
                             .build();
 
-                    final CharSequence text = new SpannableRenderer().render(
-                            configuration,
-                            node
-                    );
+                    final CharSequence text = Markwon.markdown(configuration, md);
 
                     final long end = SystemClock.uptimeMillis();
                     Debug.i("Rendered: %d ms, length: %d", end - start, text.length());
@@ -109,8 +99,7 @@ public class MainActivity extends Activity {
                             // NB! LinkMovementMethod forces frequent updates...
                             textView.setMovementMethod(LinkMovementMethod.getInstance());
                             textView.setText(text);
-                            SpannableRenderer.scheduleDrawables(textView);
-//                            AsyncDrawableSpanUtils.scheduleDrawables(textView);
+                            Markwon.scheduleDrawables(textView);
                         }
                     });
                 }

@@ -13,7 +13,7 @@ import org.commonmark.parser.Parser;
 
 import java.util.Collections;
 
-import ru.noties.markwon.renderer.SpannableConfiguration;
+import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.SpannableRenderer;
 
 public class MarkdownTextView extends TextView {

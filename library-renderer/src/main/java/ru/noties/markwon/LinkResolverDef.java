@@ -1,4 +1,4 @@
-package ru.noties.markwon.renderer;
+package ru.noties.markwon;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
