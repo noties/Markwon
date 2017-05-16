@@ -105,7 +105,7 @@ public class SpannableConfiguration {
                 linkResolver = new LinkResolverDef();
             }
             if (htmlParser == null) {
-                htmlParser = SpannableHtmlParser.create(theme);
+                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader);
             }
             return new SpannableConfiguration(this);
         }

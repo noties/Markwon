@@ -7,9 +7,13 @@ import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.SpannableTheme;
 
 @SuppressWarnings("WeakerAccess")
@@ -18,8 +22,8 @@ public class SpannableHtmlParser {
     // we need to handle images independently (in order to parse alt, width, height, etc)
 
     // creates default parser
-    public static SpannableHtmlParser create(@NonNull SpannableTheme theme) {
-        return builderWithDefaults(theme)
+    public static SpannableHtmlParser create(@NonNull SpannableTheme theme, @NonNull AsyncDrawable.Loader loader) {
+        return builderWithDefaults(theme, loader)
                 .build();
     }
 
@@ -27,11 +31,21 @@ public class SpannableHtmlParser {
         return new Builder();
     }
 
-    public static Builder builderWithDefaults(@NonNull SpannableTheme theme) {
+    public static Builder builderWithDefaults(
+            @NonNull SpannableTheme theme,
+            @Nullable AsyncDrawable.Loader asyncDrawableLoader
+    ) {
 
         final BoldProvider boldProvider = new BoldProvider();
         final ItalicsProvider italicsProvider = new ItalicsProvider();
         final StrikeProvider strikeProvider = new StrikeProvider();
+
+        final HtmlParser parser;
+        if (asyncDrawableLoader != null) {
+            parser = DefaultHtmlParser.create(new HtmlImageGetter(asyncDrawableLoader), null);
+        } else {
+            parser = DefaultHtmlParser.create(null, null);
+        }
 
         return new Builder()
                 .customTag("b", boldProvider)
@@ -45,7 +59,8 @@ public class SpannableHtmlParser {
                 .customTag("u", new UnderlineProvider())
                 .customTag("del", strikeProvider)
                 .customTag("s", strikeProvider)
-                .customTag("strike", strikeProvider);
+                .customTag("strike", strikeProvider)
+                .parser(parser);
     }
 
     // for simple tags without arguments
@@ -56,13 +71,16 @@ public class SpannableHtmlParser {
 
     public interface HtmlParser {
         Object[] getSpans(@NonNull String html);
+        Spanned parse(@NonNull String html);
     }
 
     private final Map<String, SpanProvider> customTags;
+    private final Set<String> voidTags;
     private final HtmlParser parser;
 
     private SpannableHtmlParser(Builder builder) {
         this.customTags = builder.customTags;
+        this.voidTags = voidTags();
         this.parser = builder.parser;
     }
 
@@ -79,11 +97,33 @@ public class SpannableHtmlParser {
         if (length < 3) {
             tag = null;
         } else {
+            // okay, we will consider a tag a void one if it's in our void list tag or if it ends with `/>`
             final boolean closing = '<' == html.charAt(0) && '/' == html.charAt(1);
+            final boolean voidTag;
+            if (closing) {
+                voidTag = false;
+            } else {
+                int firstNonChar = -1;
+                for (int i = 1; i < length; i++) {
+                    if (!Character.isLetterOrDigit(html.charAt(i))) {
+                        firstNonChar = i;
+                        break;
+                    }
+                }
+                if (firstNonChar > 1) {
+                    final String name = html.substring(1, firstNonChar);
+                    voidTag = voidTags.contains(name);
+                } else {
+                    voidTag = false;
+                }
+            }
+
+            // todo, we do not strip to void tag name, so it can be possibly ended with `/`
             final String name = closing
                     ? html.substring(2, length - 1)
                     : html.substring(1, length - 1);
-            tag = new Tag(name, !closing);
+
+            tag = new Tag(name, !closing, voidTag);
         }
 
         return tag;
@@ -105,6 +145,20 @@ public class SpannableHtmlParser {
     public Object[] htmlSpans(String html) {
         // todo, additional handling of: image & link
         return parser.getSpans(html);
+    }
+
+    public Spanned html(String html) {
+        return parser.parse(html);
+    }
+
+    private static Set<String> voidTags() {
+        final String[] tags = {
+                "area", "base", "br", "col", "embed", "hr", "img", "input",
+                "keygen", "link", "meta", "param", "source", "track", "wbr"
+        };
+        final Set<String> set = new HashSet<>(tags.length);
+        Collections.addAll(set, tags);
+        return set;
     }
 
     public static class Builder {
@@ -134,10 +188,12 @@ public class SpannableHtmlParser {
 
         private final String name;
         private final boolean opening;
+        private final boolean voidTag;
 
-        public Tag(String name, boolean opening) {
+        public Tag(String name, boolean opening, boolean voidTag) {
             this.name = name;
             this.opening = opening;
+            this.voidTag = voidTag;
         }
 
         public String name() {
@@ -148,11 +204,16 @@ public class SpannableHtmlParser {
             return opening;
         }
 
+        public boolean voidTag() {
+            return voidTag;
+        }
+
         @Override
         public String toString() {
             return "Tag{" +
                     "name='" + name + '\'' +
                     ", opening=" + opening +
+                    ", voidTag=" + voidTag +
                     '}';
         }
     }
@@ -197,7 +258,12 @@ public class SpannableHtmlParser {
 
             @Override
             public Object[] getSpans(@NonNull String html) {
-                return getSpans(Html.fromHtml(html, imageGetter, tagHandler));
+                return getSpans(parse(html));
+            }
+
+            @Override
+            public Spanned parse(@NonNull String html) {
+                return Html.fromHtml(html, imageGetter, tagHandler);
             }
         }
 
@@ -210,7 +276,12 @@ public class SpannableHtmlParser {
 
             @Override
             public Object[] getSpans(@NonNull String html) {
-                return getSpans(Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT, imageGetter, tagHandler));
+                return getSpans(parse(html));
+            }
+
+            @Override
+            public Spanned parse(@NonNull String html) {
+                return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT, imageGetter, tagHandler);
             }
         }
     }

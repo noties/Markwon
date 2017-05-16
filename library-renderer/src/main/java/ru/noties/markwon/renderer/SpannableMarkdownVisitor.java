@@ -3,6 +3,7 @@ package ru.noties.markwon.renderer;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
@@ -330,38 +331,48 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(HtmlInline htmlInline) {
         final SpannableHtmlParser htmlParser = configuration.htmlParser();
         final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
+        Debug.i(tag);
         if (tag != null) {
-            if (tag.opening()) {
+
+            final boolean voidTag = tag.voidTag();
+            if (!voidTag && tag.opening()) {
                 // push in stack
                 htmlInlineItems.push(new HtmlInlineItem(tag.name(), builder.length()));
                 visitChildren(htmlInline);
             } else {
-                // pop last item
-                if (htmlInlineItems.size() > 0) {
-                    final HtmlInlineItem item = htmlInlineItems.pop();
-                    final int start = item.start;
-                    final Object span = htmlParser.handleTag(item.tag);
-                    if (span != null) {
-                        setSpan(start, span);
-                    } else {
-                        final String content = builder.subSequence(start, builder.length()).toString();
-                        final String html = String.format(HTML_CONTENT, item.tag, content);
-                        final Object[] spans = htmlParser.htmlSpans(html);
-                        final int length = spans != null
-                                ? spans.length
-                                : 0;
-                        for (int i = 0; i < length; i++) {
-                            setSpan(start, spans[i]);
+
+                if (!voidTag) {
+                    if (htmlInlineItems.size() > 0) {
+                        final HtmlInlineItem item = htmlInlineItems.pop();
+                        final Object span = htmlParser.handleTag(item.tag);
+                        final int start = item.start;
+                        if (span != null) {
+                            setSpan(item.start, span);
+                        } else {
+                            final String content = builder.subSequence(start, builder.length()).toString();
+                            final String html = String.format(HTML_CONTENT, item.tag, content);
+                            final Object[] spans = htmlParser.htmlSpans(html);
+                            final int length = spans != null
+                                    ? spans.length
+                                    : 0;
+                            for (int i = 0; i < length; i++) {
+                                setSpan(start, spans[i]);
+                            }
                         }
                     }
                 } else {
-                    throw new IllegalStateException("Unexpected closing html tag: " + tag.name()
-                            + ", at position: " + builder.length());
+                    final String content = htmlInline.getLiteral();
+                    if (!TextUtils.isEmpty(content)) {
+                        final Spanned html = htmlParser.html(content);
+                        if (!TextUtils.isEmpty(html)) {
+                            builder.append(html);
+                        }
+                    }
                 }
             }
         } else {
-            // let's add what we have
-            builder.append(htmlInline.getLiteral());
+            // todo, should we append just literal?
+//            builder.append(htmlInline.getLiteral());
             visitChildren(htmlInline);
         }
     }
@@ -399,28 +410,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     private static class HtmlInlineItem {
         final String tag;
         final int start;
+
         HtmlInlineItem(String tag, int start) {
             this.tag = tag;
             this.start = start;
         }
     }
-
-//    private static String dump(Node node) {
-//        final StringBuilder builder = new StringBuilder();
-//        node.accept(new DumpVisitor(builder));
-//        return builder.toString();
-//    }
-//
-//    private static class DumpVisitor extends AbstractVisitor {
-//        private final StringBuilder builder;
-//
-//        DumpVisitor(StringBuilder builder) {
-//            this.builder = builder;
-//        }
-//
-//        @Override
-//        public void visit(Text text) {
-//            builder.append(text.getLiteral());
-//        }
-//    }
 }
