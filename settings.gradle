@@ -1,1 +1,1 @@
-include ':app', ':library-renderer', ':library-view'
+include ':app', ':library-renderer'

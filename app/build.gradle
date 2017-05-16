@@ -18,5 +18,7 @@ dependencies {
     compile project(':library-renderer')
     compile 'ru.noties:debug:3.0.0@jar'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.caverock:androidsvg:1.2.1'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
 }

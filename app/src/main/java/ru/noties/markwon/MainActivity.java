@@ -3,7 +3,6 @@ package ru.noties.markwon;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
@@ -33,15 +32,7 @@ public class MainActivity extends Activity {
 
         final TextView textView = (TextView) findViewById(R.id.activity_main);
 
-//
-//        final Picasso picasso = new Picasso.Builder(this)
-//                .listener(new Picasso.Listener() {
-//                    @Override
-//                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-//                        Debug.i(exception, uri);
-//                    }
-//                })
-//                .build();
+        final AsyncDrawable.Loader loader = new AsyncDrawableLoader(textView);
 
         new Thread(new Runnable() {
             @Override
@@ -75,17 +66,7 @@ public class MainActivity extends Activity {
                     final long start = SystemClock.uptimeMillis();
 
                     final SpannableConfiguration configuration = SpannableConfiguration.builder(MainActivity.this)
-                            .asyncDrawableLoader(new AsyncDrawable.Loader() {
-                                @Override
-                                public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
-                                    Debug.i("destination: %s, drawable: %s", destination, drawable);
-                                }
-
-                                @Override
-                                public void cancel(@NonNull String destination) {
-                                    Debug.i("destination: %s", destination);
-                                }
-                            })
+                            .asyncDrawableLoader(loader)
                             .build();
 
                     final CharSequence text = Markwon.markdown(configuration, md);

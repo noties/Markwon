@@ -1,4 +1,4 @@
-![logo](art/scrollable_big_logo.png)
+![logo](https://github.com/noties/Scrollable/raw/master/art/scrollable_big_logo.png)
 
 [![Maven Central](https://img.shields.io/maven-central/v/ru.noties/scrollable.svg)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22scrollable%22)
 
@@ -11,7 +11,7 @@
 All GIFs here are taken from `sample` application module.
 
 
-<img src="art/scrollable_colorful.gif" width="30%" alt="colorful_sample"/> <img src="art/scrollable_custom_overscroll.gif" width="30%" alt="custom_overscroll_sample"/> <img src="art/scrollable_dialog.gif" width="30%" alt="dialog_sample"/>
+<img src="https://github.com/noties/Scrollable/raw/master/art/scrollable_colorful.gif" width="30%" alt="colorful_sample"/> <img src="https://github.com/noties/Scrollable/raw/master/art/scrollable_custom_overscroll.gif" width="30%" alt="custom_overscroll_sample"/> <img src="https://github.com/noties/Scrollable/raw/master/art/scrollable_dialog.gif" width="30%" alt="dialog_sample"/>
 
 <sup>*Serving suggestion</sup>
 

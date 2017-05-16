@@ -20,6 +20,7 @@ public class AsyncDrawable extends Drawable {
     private final Loader loader;
 
     private Drawable result;
+    private Callback callback;
 
     public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
         this.destination = destination;
@@ -45,6 +46,7 @@ public class AsyncDrawable extends Drawable {
     // yeah
     public void setCallback2(@Nullable Callback callback) {
 
+        this.callback = callback;
         super.setCallback(callback);
 
         // if not null -> means we are attached
@@ -58,7 +60,7 @@ public class AsyncDrawable extends Drawable {
         }
     }
 
-    public void setResult(Drawable result) {
+    public void setResult(@NonNull Drawable result) {
 
         // if we have previous one, detach it
         if (this.result != null) {
@@ -66,7 +68,7 @@ public class AsyncDrawable extends Drawable {
         }
 
         this.result = result;
-        this.result.setCallback(getCallback());
+        this.result.setCallback(callback);
 
         // should we copy the data here? like bounds etc?
         // if we are async and we load some image from some source
