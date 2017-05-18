@@ -8,4 +8,5 @@
 .externalNativeBuild
 gradlew
 gradlew.bat
+/gradle
 **/build
