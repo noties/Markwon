@@ -22,8 +22,7 @@ abstract class DrawablesScheduler {
 
     static void schedule(@NonNull final TextView textView) {
 
-        final List<AsyncDrawable> list = extract(textView);
-        Debug.i(list);
+        final List<Pair> list = extract(textView, true);
         if (list.size() > 0) {
             textView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
@@ -38,24 +37,22 @@ abstract class DrawablesScheduler {
                 }
             });
 
-            for (AsyncDrawable d : list) {
-                Debug.i(d);
-                d.setCallback2(new DrawableCallbackImpl(textView, null, d.getBounds()));
+            for (Pair pair : list) {
+                pair.drawable.setCallback2(new DrawableCallbackImpl(textView, pair.coordinatesProvider, pair.drawable.getBounds()));
             }
         }
     }
 
     // must be called when text manually changed in TextView
     static void unschedule(@NonNull TextView view) {
-        Debug.i();
-        for (AsyncDrawable d : extract(view)) {
-            d.setCallback2(null);
+        for (Pair pair : extract(view, false)) {
+            pair.drawable.setCallback2(null);
         }
     }
 
-    private static List<AsyncDrawable> extract(@NonNull TextView view) {
+    private static List<Pair> extract(@NonNull TextView view, boolean coordinates) {
 
-        final List<AsyncDrawable> list;
+        final List<Pair> list;
 
         final CharSequence cs = view.getText();
         final int length = cs != null
@@ -75,14 +72,20 @@ abstract class DrawablesScheduler {
 
                 for (Object span : spans) {
                     if (span instanceof AsyncDrawableSpan) {
-                        list.add(((AsyncDrawableSpan) span).getDrawable());
+
+                        final AsyncDrawableSpan asyncDrawableSpan = (AsyncDrawableSpan) span;
+                        final CoordinatesProvider provider = coordinates
+                                ? new AsyncDrawableSpanCoordinatesProvider(asyncDrawableSpan)
+                                : null;
+
+                        list.add(new Pair(asyncDrawableSpan.getDrawable(), provider));
                     } else if (span instanceof DynamicDrawableSpan) {
                         // it's really not optimal thing because it stores Drawable in WeakReference...
                         // which is why it will be most likely already de-referenced...
                         final Drawable d = ((DynamicDrawableSpan) span).getDrawable();
                         if (d != null
                                 && d instanceof AsyncDrawable) {
-                            list.add((AsyncDrawable) d);
+                            list.add(new Pair((AsyncDrawable) d, null));
                         }
                     }
                 }
@@ -100,6 +103,7 @@ abstract class DrawablesScheduler {
 
     private interface CoordinatesProvider {
         int getX();
+
         int getY();
     }
 
@@ -138,21 +142,30 @@ abstract class DrawablesScheduler {
                 view.setText(view.getText());
                 previousBounds = new Rect(rect);
             } else {
-//                // if bounds are the same then simple invalidate would do
-//                if (coordinatesProvider != null) {
-//                    final int x = coordinatesProvider.getX();
-//                    final int y = coordinatesProvider.getY();
-//                    view.postInvalidate(
-//                            x + rect.left,
-//                            y + rect.top,
-//                            x + rect.right,
-//                            y + rect.bottom
-//                    );
-//                } else {
-//                    // else all we can do is request full re-draw... maybe system is smart enough not re-draw what is not on screen?
-//                    view.postInvalidate();
-//                }
-                view.postInvalidate();
+
+                // if bounds are the same then simple invalidate would do
+
+                if (coordinatesProvider != null) {
+                    final int x = coordinatesProvider.getX();
+                    final int y = coordinatesProvider.getY();
+                    view.postInvalidate(
+                            x + rect.left,
+                            y + rect.top,
+                            x + rect.right,
+                            y + rect.bottom
+                    );
+                    Debug.i(x + rect.left,
+                            y + rect.top,
+                            x + rect.right,
+                            y + rect.bottom);
+                } else {
+                    Debug.i();
+                    // else all we can do is request full re-draw... maybe system is smart enough not re-draw what is not on screen?
+                    view.postInvalidate();
+//                 we do not need to invalidate if, for example, a gif is playing somewhere out of current viewPort...
+//                 but i do not see...
+                }
+//                view.postInvalidate();
             }
         }
 
@@ -168,11 +181,11 @@ abstract class DrawablesScheduler {
         }
     }
 
-    private static class AsyncDrawableCoordinatesProvider implements CoordinatesProvider {
+    private static class AsyncDrawableSpanCoordinatesProvider implements CoordinatesProvider {
 
         private final AsyncDrawableSpan span;
 
-        private AsyncDrawableCoordinatesProvider(AsyncDrawableSpan span) {
+        private AsyncDrawableSpanCoordinatesProvider(AsyncDrawableSpan span) {
             this.span = span;
         }
 
@@ -184,6 +197,16 @@ abstract class DrawablesScheduler {
         @Override
         public int getY() {
             return span.lastKnownDrawY();
+        }
+    }
+
+    private static class Pair {
+        final AsyncDrawable drawable;
+        final CoordinatesProvider coordinatesProvider;
+
+        Pair(AsyncDrawable drawable, CoordinatesProvider coordinatesProvider) {
+            this.drawable = drawable;
+            this.coordinatesProvider = coordinatesProvider;
         }
     }
 }

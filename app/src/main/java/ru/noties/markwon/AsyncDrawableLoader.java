@@ -1,59 +1,54 @@
 package ru.noties.markwon;
 
-import android.graphics.Picture;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.widget.TextView;
 
 import com.caverock.androidsvg.SVG;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import okhttp3.OkHttpClient;
+import javax.inject.Inject;
+
 import pl.droidsonroids.gif.GifDrawable;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 
+@ActivityScope
 public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
-    private final TextView view;
-    private final Picasso picasso;
-    private final OkHttpClient client;
-    private final ExecutorService executorService;
-    private final Map<String, Future<?>> requests;
+    @Inject
+    Resources resources;
+
+    @Inject
+    Picasso picasso;
+
+    @Inject
+    ExecutorService executorService;
+
+    private final Map<String, Future<?>> requests = new HashMap<>(3);
+    private final CopyOnWriteArrayList<AsyncDrawableTarget> targets = new CopyOnWriteArrayList<>();
 
     // sh*t..
-    public AsyncDrawableLoader(TextView view) {
-        this.view = view;
-        this.picasso = new Picasso.Builder(view.getContext())
-                .listener(new Picasso.Listener() {
-                    @Override
-                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                        Debug.e(exception, picasso, uri);
-                    }
-                })
-                .build();
-        this.client = new OkHttpClient();
-        this.executorService = Executors.newCachedThreadPool();
-        this.requests = new HashMap<>(3);
+    @Inject
+    public AsyncDrawableLoader() {
     }
 
     @Override
     public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
-
-        Debug.i("destination: %s", destination);
 
         if (destination.endsWith(".svg")) {
             // load svg
@@ -61,10 +56,27 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         } else if (destination.endsWith(".gif")) {
             requests.put(destination, loadGif(destination, drawable));
         } else {
+
+            final Drawable error = new ColorDrawable(0xFFff0000);
+            final Drawable placeholder = new ColorDrawable(0xFF00ff00);
+            error.setBounds(0, 0, 100, 100);
+            placeholder.setBounds(0, 0, 50, 50);
+
+            final AsyncDrawableTarget target = new AsyncDrawableTarget(resources, drawable, new AsyncDrawableTarget.DoneListener() {
+                @Override
+                public void onLoadingDone(AsyncDrawableTarget target) {
+                    targets.remove(target);
+                }
+            });
+
+            targets.add(target);
+
             picasso
                     .load(destination)
                     .tag(destination)
-                    .into(new TextViewTarget(view, drawable));
+                    .placeholder(placeholder)
+                    .error(error)
+                    .into(target);
         }
     }
 
@@ -73,7 +85,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         Debug.i("destination: %s", destination);
         picasso.cancelTag(destination);
 
-        final Future<?> future = requests.get(destination);
+        final Future<?> future = requests.remove(destination);
         if (future != null) {
             future.cancel(true);
         }
@@ -84,12 +96,27 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             @Override
             public void run() {
                 try {
+
                     final URL url = new URL(destination);
                     final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     final InputStream inputStream = connection.getInputStream();
+
                     final SVG svg = SVG.getFromInputStream(inputStream);
-                    final Picture picture = svg.renderToPicture();
-                    final Drawable drawable = new PictureDrawable(picture);
+                    final float w = svg.getDocumentWidth();
+                    final float h = svg.getDocumentHeight();
+                    Debug.i("w: %s, h: %s", w, h);
+
+                    final float density = resources.getDisplayMetrics().density;
+                    Debug.i(density);
+
+                    final int width = (int) (w * density + .5F);
+                    final int height = (int) (h * density + .5F);
+                    final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
+                    final Canvas canvas = new Canvas(bitmap);
+                    canvas.scale(density, density);
+                    svg.renderToCanvas(canvas);
+
+                    final Drawable drawable = new BitmapDrawable(resources, bitmap);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     asyncDrawable.setResult(drawable);
 
@@ -105,9 +132,11 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             @Override
             public void run() {
                 try {
+
                     final URL url = new URL(destination);
                     final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     final InputStream inputStream = connection.getInputStream();
+
                     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     final byte[] buffer = new byte[1024 * 8];
                     int read;

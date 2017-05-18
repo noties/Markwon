@@ -3,6 +3,7 @@ package ru.noties.markwon.spans;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -54,7 +55,13 @@ public class AsyncDrawable extends Drawable {
             loader.load(destination, this);
         } else {
             if (result != null) {
+
                 result.setCallback(null);
+
+                // let's additionally stop if it Animatable
+                if (result instanceof Animatable) {
+                    ((Animatable) result).stop();
+                }
             }
             loader.cancel(destination);
         }

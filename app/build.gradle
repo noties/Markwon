@@ -21,4 +21,6 @@ dependencies {
     compile 'com.caverock:androidsvg:1.2.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'com.google.dagger:dagger:2.10'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
 }

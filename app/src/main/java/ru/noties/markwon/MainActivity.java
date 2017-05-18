@@ -1,90 +1,110 @@
 package ru.noties.markwon;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
+import javax.inject.Inject;
 
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
-import ru.noties.markwon.spans.AsyncDrawable;
 
 public class MainActivity extends Activity {
-
-    // markdown, mdown, mkdn, mdwn, mkd, md
-    // markdown, mdown, mkdn, mkd, md, text
 
     static {
         Debug.init(new AndroidLogDebugOutput(true));
     }
 
-//    private List<Target> targets = new ArrayList<>();
+    @Inject
+    MarkdownLoader markdownLoader;
+
+    @Inject
+    MarkdownRenderer markdownRenderer;
+
+    @Inject
+    Themes themes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        App.component(this)
+                .mainActivitySubcomponent()
+                .inject(this);
+
+        themes.apply(this);
+
+        // how can we obtain SpannableConfiguration after theme was applied?
+
         setContentView(R.layout.activity_main);
 
-        final TextView textView = (TextView) findViewById(R.id.activity_main);
 
-        final AsyncDrawable.Loader loader = new AsyncDrawableLoader(textView);
-
-        new Thread(new Runnable() {
+        final AppBarItem.Renderer appBarRenderer
+                = new AppBarItem.Renderer(findViewById(R.id.app_bar), new View.OnClickListener() {
             @Override
-            public void run() {
-                InputStream stream = null;
-                Scanner scanner = null;
-                String md = null;
-                try {
-                    stream = getAssets().open("scrollable.md");
-//                    stream = getAssets().open("test.md");
-                    scanner = new Scanner(stream).useDelimiter("\\A");
-                    if (scanner.hasNext()) {
-                        md = scanner.next();
-                    }
-                } catch (Throwable t) {
-                    Debug.e(t);
-                } finally {
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (IOException e) {
-                        }
-                    }
-                    if (scanner != null) {
-                        scanner.close();
-                    }
-                }
-
-                if (md != null) {
-
-                    final long start = SystemClock.uptimeMillis();
-
-                    final SpannableConfiguration configuration = SpannableConfiguration.builder(MainActivity.this)
-                            .asyncDrawableLoader(loader)
-                            .build();
-
-                    final CharSequence text = Markwon.markdown(configuration, md);
-
-                    final long end = SystemClock.uptimeMillis();
-                    Debug.i("Rendered: %d ms, length: %d", end - start, text.length());
-
-                    textView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // NB! LinkMovementMethod forces frequent updates...
-                            textView.setMovementMethod(LinkMovementMethod.getInstance());
-                            textView.setText(text);
-                            Markwon.scheduleDrawables(textView);
-                        }
-                    });
-                }
+            public void onClick(View v) {
+                themes.toggle();
+                recreate();
             }
-        }).start();
+        });
+
+        final TextView textView = Views.findView(this, R.id.text);
+        final View progress = findViewById(R.id.progress);
+
+        appBarRenderer.render(appBarState());
+
+        markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
+            @Override
+            public void apply(String text) {
+                markdownRenderer.render(MainActivity.this, text, new MarkdownRenderer.MarkdownReadyListener() {
+                    @Override
+                    public void onMarkdownReady(CharSequence markdown) {
+                        Markwon.setText(textView, markdown);
+                        Views.setVisible(progress, false);
+                    }
+                });
+            }
+        });
+    }
+
+    private AppBarItem.State appBarState() {
+
+        final String title;
+        final String subtitle;
+
+        // two possible states: just opened from launcher (no subtitle)
+        // opened to display external resource (subtitle as a path/url/whatever)
+
+        final Uri uri = uri();
+
+        Debug.i(uri);
+
+        if (uri != null) {
+            title = uri.getLastPathSegment();
+            subtitle = uri.toString();
+        } else {
+            title = getString(R.string.app_name);
+            subtitle = null;
+        }
+
+        return new AppBarItem.State(title, subtitle);
+    }
+
+    private Uri uri() {
+        final Intent intent = getIntent();
+        return intent != null
+                ? intent.getData()
+                : null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        markdownLoader.cancel();
+        markdownRenderer.cancel();
     }
 }

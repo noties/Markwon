@@ -1,8 +1,16 @@
 <resources>
 
-    <style name="AppThemeBase" parent="android:Theme.Holo.Light"/>
+    <attr name="ic_app_bar_theme" format="reference"/>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppThemeBase"/>
+    <style name="AppThemeBaseDark" parent="android:Theme.Holo.NoActionBar">
+        <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_light</item>
+    </style>
+
+    <style name="AppThemeBaseLight" parent="android:Theme.Holo.Light">
+        <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_dark</item>
+    </style>
+
+    <style name="AppThemeLight" parent="AppThemeBaseLight" />
+    <style name="AppThemeDark" parent="AppThemeBaseDark" />
 
 </resources>

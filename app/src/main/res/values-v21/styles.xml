@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppThemeBase" parent="android:Theme.Material.Light">
+    <style name="AppThemeBaseDark" parent="android:Theme.Material.NoActionBar">
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_light</item>
+    </style>
+
+    <style name="AppThemeBaseLight" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_dark</item>
     </style>
 
 </resources>
