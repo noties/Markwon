@@ -1,6 +1,8 @@
 # Markwon
 Android library for rendering markdown as system-native Spannables. Based on [commonmark-java][commonmark-java]
 
+**WIP (*work in progress*)**
+
 ---
 
 ## Supported markdown features:
