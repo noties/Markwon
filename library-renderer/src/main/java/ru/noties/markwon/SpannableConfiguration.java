@@ -24,6 +24,7 @@ public class SpannableConfiguration {
     private final AsyncDrawable.Loader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkSpan.Resolver linkResolver;
+    private final UrlProcessor urlProcessor;
     private final SpannableHtmlParser htmlParser;
 
     private SpannableConfiguration(Builder builder) {
@@ -31,6 +32,7 @@ public class SpannableConfiguration {
         this.asyncDrawableLoader = builder.asyncDrawableLoader;
         this.syntaxHighlight = builder.syntaxHighlight;
         this.linkResolver = builder.linkResolver;
+        this.urlProcessor = builder.urlProcessor;
         this.htmlParser = builder.htmlParser;
     }
 
@@ -50,6 +52,10 @@ public class SpannableConfiguration {
         return linkResolver;
     }
 
+    public UrlProcessor urlProcessor() {
+        return urlProcessor;
+    }
+
     public SpannableHtmlParser htmlParser() {
         return htmlParser;
     }
@@ -61,6 +67,7 @@ public class SpannableConfiguration {
         private AsyncDrawable.Loader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
         private LinkSpan.Resolver linkResolver;
+        private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
 
         public Builder(Context context) {
@@ -87,6 +94,11 @@ public class SpannableConfiguration {
             return this;
         }
 
+        public Builder urlProcessor(UrlProcessor urlProcessor) {
+            this.urlProcessor = urlProcessor;
+            return this;
+        }
+
         public Builder htmlParser(SpannableHtmlParser htmlParser) {
             this.htmlParser = htmlParser;
             return this;
@@ -105,8 +117,11 @@ public class SpannableConfiguration {
             if (linkResolver == null) {
                 linkResolver = new LinkResolverDef();
             }
+            if (urlProcessor == null) {
+                urlProcessor = new UrlProcessorNoOp();
+            }
             if (htmlParser == null) {
-                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader);
+                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor);
             }
             return new SpannableConfiguration(this);
         }

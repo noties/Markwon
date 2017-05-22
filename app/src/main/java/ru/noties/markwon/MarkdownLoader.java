@@ -45,9 +45,6 @@ public class MarkdownLoader {
     @Inject
     OkHttpClient client;
 
-    @Inject
-    UrlProvider urlProvider;
-
     private Future<?> task;
 
     @Inject
@@ -130,10 +127,8 @@ public class MarkdownLoader {
 
     private String loadExternalUrl(@NonNull Uri uri) {
 
-        final String url = urlProvider.provide(uri);
-
         final Request request = new Request.Builder()
-                .url(url)
+                .url(uri.toString())
                 .build();
 
         Response response = null;

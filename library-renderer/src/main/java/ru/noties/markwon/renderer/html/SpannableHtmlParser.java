@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ru.noties.debug.Debug;
+import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.SpannableTheme;
 
@@ -22,8 +24,20 @@ public class SpannableHtmlParser {
     // we need to handle images independently (in order to parse alt, width, height, etc)
 
     // creates default parser
-    public static SpannableHtmlParser create(@NonNull SpannableTheme theme, @NonNull AsyncDrawable.Loader loader) {
-        return builderWithDefaults(theme, loader)
+    public static SpannableHtmlParser create(
+            @NonNull SpannableTheme theme,
+            @NonNull AsyncDrawable.Loader loader
+    ) {
+        return builderWithDefaults(theme, loader, null)
+                .build();
+    }
+
+    public static SpannableHtmlParser create(
+            @NonNull SpannableTheme theme,
+            @NonNull AsyncDrawable.Loader loader,
+            @NonNull UrlProcessor urlProcessor
+    ) {
+        return builderWithDefaults(theme, loader, urlProcessor)
                 .build();
     }
 
@@ -33,7 +47,8 @@ public class SpannableHtmlParser {
 
     public static Builder builderWithDefaults(
             @NonNull SpannableTheme theme,
-            @Nullable AsyncDrawable.Loader asyncDrawableLoader
+            @Nullable AsyncDrawable.Loader asyncDrawableLoader,
+            @Nullable UrlProcessor urlProcessor
     ) {
 
         final BoldProvider boldProvider = new BoldProvider();
@@ -42,7 +57,7 @@ public class SpannableHtmlParser {
 
         final HtmlParser parser;
         if (asyncDrawableLoader != null) {
-            parser = DefaultHtmlParser.create(new HtmlImageGetter(asyncDrawableLoader), null);
+            parser = DefaultHtmlParser.create(new HtmlImageGetter(asyncDrawableLoader, urlProcessor), null);
         } else {
             parser = DefaultHtmlParser.create(null, null);
         }
@@ -71,8 +86,11 @@ public class SpannableHtmlParser {
 
     public interface HtmlParser {
         Object[] getSpans(@NonNull String html);
+
         Spanned parse(@NonNull String html);
     }
+
+    private static final String LINK_START = "<a ";
 
     private final Map<String, SpanProvider> customTags;
     private final Set<String> voidTags;
@@ -97,7 +115,7 @@ public class SpannableHtmlParser {
         if (length < 3) {
             tag = null;
         } else {
-            // okay, we will consider a tag a void one if it's in our void list tag or if it ends with `/>`
+            // okay, we will consider a tag a void one if it's in our void list tag
             final boolean closing = '<' == html.charAt(0) && '/' == html.charAt(1);
             final boolean voidTag;
             if (closing) {
@@ -144,10 +162,14 @@ public class SpannableHtmlParser {
     @Nullable
     public Object[] htmlSpans(String html) {
         // todo, additional handling of: image & link
+        Debug.i("html: %s", html);
         return parser.getSpans(html);
     }
 
+    // this is called when we encounter `void` tag
+    // `img` is a void tag
     public Spanned html(String html) {
+        Debug.i("html: %s", html);
         return parser.parse(html);
     }
 

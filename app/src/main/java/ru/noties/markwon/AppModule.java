@@ -55,8 +55,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    UrlProvider urlProvider() {
-        return new UrlProviderImpl();
+    UriProcessor uriProcessor() {
+        return new UriProcessorImpl();
     }
 
     @Provides

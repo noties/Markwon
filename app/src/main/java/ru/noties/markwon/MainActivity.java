@@ -27,6 +27,9 @@ public class MainActivity extends Activity {
     @Inject
     Themes themes;
 
+    @Inject
+    UriProcessor uriProcessor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +41,13 @@ public class MainActivity extends Activity {
         themes.apply(this);
 
         // how can we obtain SpannableConfiguration after theme was applied?
+        // as we inject `themes` we won't be able to inject configuration, as it requires theme set
 
         setContentView(R.layout.activity_main);
 
+        // we process additionally github urls, as if url has in path `blob`, we won't receive
+        // desired file, but instead rendered html
+        checkUri();
 
         final AppBarItem.Renderer appBarRenderer
                 = new AppBarItem.Renderer(findViewById(R.id.app_bar), new View.OnClickListener() {
@@ -59,7 +66,7 @@ public class MainActivity extends Activity {
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override
             public void apply(String text) {
-                markdownRenderer.render(MainActivity.this, text, new MarkdownRenderer.MarkdownReadyListener() {
+                markdownRenderer.render(MainActivity.this, uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
                     @Override
                     public void onMarkdownReady(CharSequence markdown) {
                         Markwon.setText(textView, markdown);
@@ -80,8 +87,6 @@ public class MainActivity extends Activity {
 
         final Uri uri = uri();
 
-        Debug.i(uri);
-
         if (uri != null) {
             title = uri.getLastPathSegment();
             subtitle = uri.toString();
@@ -91,6 +96,13 @@ public class MainActivity extends Activity {
         }
 
         return new AppBarItem.State(title, subtitle);
+    }
+
+    private void checkUri() {
+        final Uri uri = uri();
+        if (uri != null) {
+            getIntent().setData(uriProcessor.process(uri));
+        }
     }
 
     private Uri uri() {

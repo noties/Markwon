@@ -51,7 +51,7 @@ import ru.noties.markwon.spans.ThematicBreakSpan;
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
-    private static final String HTML_CONTENT = "<%1$s>%2$s</%1$s>";
+    private static final String HTML_CONTENT = "<%1$s>%2$s</%3$s>";
 
     private final SpannableConfiguration configuration;
     private final SpannableStringBuilder builder;
@@ -253,7 +253,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
-        newLine();
+        // at first here was a new line, but here should be a space char
+        builder.append(' ');
     }
 
     @Override
@@ -306,13 +307,14 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final Node parent = image.getParent();
         final boolean link = parent != null && parent instanceof Link;
+        final String destination = configuration.urlProcessor().process(image.getDestination());
 
         setSpan(
                 length,
                 new AsyncDrawableSpan(
                         configuration.theme(),
                         new AsyncDrawable(
-                                image.getDestination(),
+                                destination,
                                 configuration.asyncDrawableLoader()
                         ),
                         AsyncDrawableSpan.ALIGN_BOTTOM,
@@ -351,7 +353,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                             setSpan(item.start, span);
                         } else {
                             final String content = builder.subSequence(start, builder.length()).toString();
-                            final String html = String.format(HTML_CONTENT, item.tag, content);
+                            final String html = String.format(HTML_CONTENT, item.tag, content, tag.name());
                             final Object[] spans = htmlParser.htmlSpans(html);
                             final int length = spans != null
                                     ? spans.length
@@ -382,7 +384,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(Link link) {
         final int length = builder.length();
         visitChildren(link);
-        setSpan(length, new LinkSpan(configuration.theme(), link.getDestination(), configuration.linkResolver()));
+        final String destination = configuration.urlProcessor().process(link.getDestination());
+        setSpan(length, new LinkSpan(configuration.theme(), destination, configuration.linkResolver()));
     }
 
     private void setSpan(int start, @NonNull Object span) {
