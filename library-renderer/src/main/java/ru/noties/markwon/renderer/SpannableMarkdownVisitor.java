@@ -33,7 +33,6 @@ import org.commonmark.node.ThematicBreak;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import ru.noties.debug.Debug;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
@@ -50,8 +49,6 @@ import ru.noties.markwon.spans.ThematicBreakSpan;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
-
-    private static final String HTML_CONTENT = "<%1$s>%2$s</%3$s>";
 
     private final SpannableConfiguration configuration;
     private final SpannableStringBuilder builder;
@@ -302,7 +299,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         // we must check if anything _was_ added, as we need at least one char to render
         if (length == builder.length()) {
-            builder.append(' '); // breakable space
+            builder.append('\uFFFC');
         }
 
         final Node parent = image.getParent();
@@ -321,17 +318,23 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                         link
                 )
         );
+
+        // todo, maybe, if image is not inside a link, we should make it clickable, so
+        // user can open it in external viewer?
     }
 
     @Override
     public void visit(HtmlBlock htmlBlock) {
         // http://spec.commonmark.org/0.18/#html-blocks
-        Debug.i(htmlBlock, htmlBlock.getLiteral());
-        super.visit(htmlBlock);
+        final Spanned spanned = configuration.htmlParser().getSpanned(null, htmlBlock.getLiteral());
+        if (!TextUtils.isEmpty(spanned)) {
+            builder.append(spanned);
+        }
     }
 
     @Override
     public void visit(HtmlInline htmlInline) {
+
         final SpannableHtmlParser htmlParser = configuration.htmlParser();
         final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
 
@@ -340,37 +343,25 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             final boolean voidTag = tag.voidTag();
             if (!voidTag && tag.opening()) {
                 // push in stack
-                htmlInlineItems.push(new HtmlInlineItem(tag.name(), builder.length()));
+                htmlInlineItems.push(new HtmlInlineItem(tag, builder.length()));
                 visitChildren(htmlInline);
             } else {
 
                 if (!voidTag) {
                     if (htmlInlineItems.size() > 0) {
                         final HtmlInlineItem item = htmlInlineItems.pop();
-                        final Object span = htmlParser.handleTag(item.tag);
-                        final int start = item.start;
+                        final Object span = htmlParser.getSpanForTag(item.tag);
                         if (span != null) {
                             setSpan(item.start, span);
-                        } else {
-                            final String content = builder.subSequence(start, builder.length()).toString();
-                            final String html = String.format(HTML_CONTENT, item.tag, content, tag.name());
-                            final Object[] spans = htmlParser.htmlSpans(html);
-                            final int length = spans != null
-                                    ? spans.length
-                                    : 0;
-                            for (int i = 0; i < length; i++) {
-                                setSpan(start, spans[i]);
-                            }
                         }
                     }
                 } else {
-                    final String content = htmlInline.getLiteral();
-                    if (!TextUtils.isEmpty(content)) {
-                        final Spanned html = htmlParser.html(content);
-                        if (!TextUtils.isEmpty(html)) {
-                            builder.append(html);
-                        }
+
+                    final Spanned html = htmlParser.getSpanned(tag, htmlInline.getLiteral());
+                    if (!TextUtils.isEmpty(html)) {
+                        builder.append(html);
                     }
+
                 }
             }
         } else {
@@ -412,10 +403,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     private static class HtmlInlineItem {
-        final String tag;
+
+        final SpannableHtmlParser.Tag tag;
         final int start;
 
-        HtmlInlineItem(String tag, int start) {
+        HtmlInlineItem(SpannableHtmlParser.Tag tag, int start) {
             this.tag = tag;
             this.start = start;
         }

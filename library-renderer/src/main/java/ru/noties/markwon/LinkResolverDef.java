@@ -11,7 +11,7 @@ import android.view.View;
 
 import ru.noties.markwon.spans.LinkSpan;
 
-class LinkResolverDef implements LinkSpan.Resolver {
+public class LinkResolverDef implements LinkSpan.Resolver {
     @Override
     public void resolve(View view, @NonNull String link) {
         final Uri uri = Uri.parse(link);

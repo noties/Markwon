@@ -107,6 +107,28 @@ Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet
 ```
 
+### H.T.M.L.
+<b>O</b><i>K<s>A</s><sup>42<sup>43<sub><b>42</b></sub></sup></sup><u>Y</u></i>
+
+<img src="h" /> <img src="h">
+<img src="h" alt="alt text">
+
+<hr>
+
+<hr />
+
+<h1>Hello</h1>
+
+<h2>Hello</h2>
+
+<h3>Hello</h3>
+
+<h4>Hello</h4>
+
+<h5>Hello</h5>
+
+<h6>Hello</h6>
+
 
 [1]: https://github.com
 [github]: https://github.com

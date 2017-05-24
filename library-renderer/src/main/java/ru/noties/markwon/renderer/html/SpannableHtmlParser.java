@@ -7,37 +7,35 @@ import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import ru.noties.debug.Debug;
+import ru.noties.markwon.LinkResolverDef;
 import ru.noties.markwon.UrlProcessor;
+import ru.noties.markwon.UrlProcessorNoOp;
 import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.SpannableTheme;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableHtmlParser {
-
-    // we need to handle images independently (in order to parse alt, width, height, etc)
 
     // creates default parser
     public static SpannableHtmlParser create(
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader
     ) {
-        return builderWithDefaults(theme, loader, null)
+        return builderWithDefaults(theme, loader, null, null)
                 .build();
     }
 
     public static SpannableHtmlParser create(
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
-            @NonNull UrlProcessor urlProcessor
+            @NonNull UrlProcessor urlProcessor,
+            @NonNull LinkSpan.Resolver resolver
     ) {
-        return builderWithDefaults(theme, loader, urlProcessor)
+        return builderWithDefaults(theme, loader, urlProcessor, resolver)
                 .build();
     }
 
@@ -45,151 +43,133 @@ public class SpannableHtmlParser {
         return new Builder();
     }
 
+    public static Builder builderWithDefaults(@NonNull SpannableTheme theme) {
+        return builderWithDefaults(theme, null, null, null);
+    }
+
     public static Builder builderWithDefaults(
             @NonNull SpannableTheme theme,
             @Nullable AsyncDrawable.Loader asyncDrawableLoader,
-            @Nullable UrlProcessor urlProcessor
+            @Nullable UrlProcessor urlProcessor,
+            @Nullable LinkSpan.Resolver resolver
     ) {
+
+        if (urlProcessor == null) {
+            urlProcessor = new UrlProcessorNoOp();
+        }
+
+        if (resolver == null) {
+            resolver = new LinkResolverDef();
+        }
 
         final BoldProvider boldProvider = new BoldProvider();
         final ItalicsProvider italicsProvider = new ItalicsProvider();
         final StrikeProvider strikeProvider = new StrikeProvider();
 
-        final HtmlParser parser;
+        final ImageProvider imageProvider;
         if (asyncDrawableLoader != null) {
-            parser = DefaultHtmlParser.create(new HtmlImageGetter(asyncDrawableLoader, urlProcessor), null);
+            imageProvider = new ImageProviderImpl(theme, asyncDrawableLoader, urlProcessor);
         } else {
-            parser = DefaultHtmlParser.create(null, null);
+            imageProvider = null;
         }
 
         return new Builder()
-                .customTag("b", boldProvider)
-                .customTag("strong", boldProvider)
-                .customTag("i", italicsProvider)
-                .customTag("em", italicsProvider)
-                .customTag("cite", italicsProvider)
-                .customTag("dfn", italicsProvider)
-                .customTag("sup", new SuperScriptProvider(theme))
-                .customTag("sub", new SubScriptProvider(theme))
-                .customTag("u", new UnderlineProvider())
-                .customTag("del", strikeProvider)
-                .customTag("s", strikeProvider)
-                .customTag("strike", strikeProvider)
-                .parser(parser);
+                .simpleTag("b", boldProvider)
+                .simpleTag("strong", boldProvider)
+                .simpleTag("i", italicsProvider)
+                .simpleTag("em", italicsProvider)
+                .simpleTag("cite", italicsProvider)
+                .simpleTag("dfn", italicsProvider)
+                .simpleTag("sup", new SuperScriptProvider(theme))
+                .simpleTag("sub", new SubScriptProvider(theme))
+                .simpleTag("u", new UnderlineProvider())
+                .simpleTag("del", strikeProvider)
+                .simpleTag("s", strikeProvider)
+                .simpleTag("strike", strikeProvider)
+                .simpleTag("a", new LinkProvider(theme, urlProcessor, resolver))
+                .imageProvider(imageProvider);
     }
 
     // for simple tags without arguments
     // <b>, <i>, etc
     public interface SpanProvider {
-        Object provide();
+        Object provide(@NonNull Tag tag);
+    }
+
+    public interface ImageProvider {
+        Spanned provide(@NonNull Tag tag);
     }
 
     public interface HtmlParser {
-        Object[] getSpans(@NonNull String html);
+
+        // returns span for a simple content
+        Object getSpan(@NonNull String html);
 
         Spanned parse(@NonNull String html);
     }
 
-    private static final String LINK_START = "<a ";
-
-    private final Map<String, SpanProvider> customTags;
-    private final Set<String> voidTags;
+    private final Map<String, SpanProvider> simpleTags;
+    private final ImageProvider imageProvider;
     private final HtmlParser parser;
+    private final TagParser tagParser;
 
     private SpannableHtmlParser(Builder builder) {
-        this.customTags = builder.customTags;
-        this.voidTags = voidTags();
+        this.simpleTags = builder.simpleTags;
+        this.imageProvider = builder.imageProvider;
         this.parser = builder.parser;
+        this.tagParser = new TagParser();
     }
 
     @Nullable
     public Tag parseTag(String html) {
-
-        final Tag tag;
-
-        final int length = html != null
-                ? html.length()
-                : 0;
-
-        // absolutely minimum (`<i>`)
-        if (length < 3) {
-            tag = null;
-        } else {
-            // okay, we will consider a tag a void one if it's in our void list tag
-            final boolean closing = '<' == html.charAt(0) && '/' == html.charAt(1);
-            final boolean voidTag;
-            if (closing) {
-                voidTag = false;
-            } else {
-                int firstNonChar = -1;
-                for (int i = 1; i < length; i++) {
-                    if (!Character.isLetterOrDigit(html.charAt(i))) {
-                        firstNonChar = i;
-                        break;
-                    }
-                }
-                if (firstNonChar > 1) {
-                    final String name = html.substring(1, firstNonChar);
-                    voidTag = voidTags.contains(name);
-                } else {
-                    voidTag = false;
-                }
-            }
-
-            // todo, we do not strip to void tag name, so it can be possibly ended with `/`
-            final String name = closing
-                    ? html.substring(2, length - 1)
-                    : html.substring(1, length - 1);
-
-            tag = new Tag(name, !closing, voidTag);
-        }
-
-        return tag;
+        return tagParser.parse(html);
     }
 
     @Nullable
-    public Object handleTag(String tag) {
+    public Object getSpanForTag(@NonNull Tag tag) {
+
+        // check if we have specific handler for tag.name
+
         final Object out;
-        final SpanProvider provider = customTags.get(tag);
+
+        final SpanProvider provider = simpleTags.get(tag.name);
         if (provider != null) {
-            out = provider.provide();
+            out = provider.provide(tag);
         } else {
-            out = null;
+            // let's prepare mock content & extract spans from it
+            // actual content doesn't matter, here it's just `abc`
+            final String mock = tag.raw + "abc" + "</" + tag.name + ">";
+            out = parser.getSpan(mock);
         }
+
         return out;
     }
 
-    @Nullable
-    public Object[] htmlSpans(String html) {
-        // todo, additional handling of: image & link
-        Debug.i("html: %s", html);
-        return parser.getSpans(html);
-    }
-
-    // this is called when we encounter `void` tag
-    // `img` is a void tag
-    public Spanned html(String html) {
-        Debug.i("html: %s", html);
-        return parser.parse(html);
-    }
-
-    private static Set<String> voidTags() {
-        final String[] tags = {
-                "area", "base", "br", "col", "embed", "hr", "img", "input",
-                "keygen", "link", "meta", "param", "source", "track", "wbr"
-        };
-        final Set<String> set = new HashSet<>(tags.length);
-        Collections.addAll(set, tags);
-        return set;
+    // if tag is NULL, then it's HtmlBlock... else just a void tag
+    public Spanned getSpanned(@Nullable Tag tag, String html) {
+        final Spanned spanned;
+        if (tag != null && "img".equals(tag.name) && imageProvider != null) {
+            spanned = imageProvider.provide(tag);
+        } else {
+            spanned = parser.parse(html);
+        }
+        return spanned;
     }
 
     public static class Builder {
 
-        private final Map<String, SpanProvider> customTags = new HashMap<>(3);
+        private final Map<String, SpanProvider> simpleTags = new HashMap<>(3);
+
+        private ImageProvider imageProvider;
         private HtmlParser parser;
 
-        public Builder customTag(@NonNull String tag, @NonNull SpanProvider provider) {
-            customTags.put(tag, provider);
+        public Builder simpleTag(@NonNull String tag, @NonNull SpanProvider provider) {
+            simpleTags.put(tag, provider);
+            return this;
+        }
+
+        public Builder imageProvider(ImageProvider imageProvider) {
+            this.imageProvider = imageProvider;
             return this;
         }
 
@@ -200,7 +180,7 @@ public class SpannableHtmlParser {
 
         public SpannableHtmlParser build() {
             if (parser == null) {
-                parser = DefaultHtmlParser.create(null, null);
+                parser = DefaultHtmlParser.create();
             }
             return new SpannableHtmlParser(this);
         }
@@ -208,18 +188,32 @@ public class SpannableHtmlParser {
 
     public static class Tag {
 
+        private final String raw;
         private final String name;
+        private final Map<String, String> attributes;
+
         private final boolean opening;
         private final boolean voidTag;
 
-        public Tag(String name, boolean opening, boolean voidTag) {
+        public Tag(String raw, String name, @NonNull Map<String, String> attributes, boolean opening, boolean voidTag) {
+            this.raw = raw;
             this.name = name;
+            this.attributes = attributes;
             this.opening = opening;
             this.voidTag = voidTag;
         }
 
+        public String raw() {
+            return raw;
+        }
+
         public String name() {
             return name;
+        }
+
+        @NonNull
+        public Map<String, String> attributes() {
+            return attributes;
         }
 
         public boolean opening() {
@@ -233,7 +227,9 @@ public class SpannableHtmlParser {
         @Override
         public String toString() {
             return "Tag{" +
-                    "name='" + name + '\'' +
+                    "raw='" + raw + '\'' +
+                    ", name='" + name + '\'' +
+                    ", attributes=" + attributes +
                     ", opening=" + opening +
                     ", voidTag=" + voidTag +
                     '}';
@@ -242,25 +238,20 @@ public class SpannableHtmlParser {
 
     public static abstract class DefaultHtmlParser implements HtmlParser {
 
-        public static DefaultHtmlParser create(@Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+        public static DefaultHtmlParser create() {
             final DefaultHtmlParser parser;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                parser = new Parser24(imageGetter, tagHandler);
+                parser = new Parser24();
             } else {
-                parser = new ParserPre24(imageGetter, tagHandler);
+                parser = new ParserPre24();
             }
             return parser;
         }
 
-        final Html.ImageGetter imageGetter;
-        final Html.TagHandler tagHandler;
+        Object getSpan(Spanned spanned) {
 
-        DefaultHtmlParser(Html.ImageGetter imageGetter, Html.TagHandler tagHandler) {
-            this.imageGetter = imageGetter;
-            this.tagHandler = tagHandler;
-        }
+            final Object out;
 
-        Object[] getSpans(Spanned spanned) {
             final Object[] spans;
             final int length = spanned != null ? spanned.length() : 0;
             if (length == 0) {
@@ -268,42 +259,42 @@ public class SpannableHtmlParser {
             } else {
                 spans = spanned.getSpans(0, length, Object.class);
             }
-            return spans;
+
+            if (spans != null
+                    && spans.length > 0) {
+                out = spans[0];
+            } else {
+                out = null;
+            }
+
+            return out;
         }
 
         @SuppressWarnings("deprecation")
         private static class ParserPre24 extends DefaultHtmlParser {
 
-            ParserPre24(Html.ImageGetter imageGetter, Html.TagHandler tagHandler) {
-                super(imageGetter, tagHandler);
-            }
-
             @Override
-            public Object[] getSpans(@NonNull String html) {
-                return getSpans(parse(html));
+            public Object getSpan(@NonNull String html) {
+                return getSpan(parse(html));
             }
 
             @Override
             public Spanned parse(@NonNull String html) {
-                return Html.fromHtml(html, imageGetter, tagHandler);
+                return Html.fromHtml(html, null, null);
             }
         }
 
         @TargetApi(Build.VERSION_CODES.N)
         private static class Parser24 extends DefaultHtmlParser {
 
-            Parser24(Html.ImageGetter imageGetter, Html.TagHandler tagHandler) {
-                super(imageGetter, tagHandler);
-            }
-
             @Override
-            public Object[] getSpans(@NonNull String html) {
-                return getSpans(parse(html));
+            public Object getSpan(@NonNull String html) {
+                return getSpan(parse(html));
             }
 
             @Override
             public Spanned parse(@NonNull String html) {
-                return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT, imageGetter, tagHandler);
+                return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT, null, null);
             }
         }
     }

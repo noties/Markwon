@@ -5,8 +5,6 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,7 +12,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import ru.noties.markwon.il.AsyncDrawableLoader;
+import ru.noties.markwon.spans.AsyncDrawable;
 
 @Module
 class AppModule {
@@ -38,7 +39,10 @@ class AppModule {
     @Provides
     @Singleton
     OkHttpClient client() {
-        return new OkHttpClient();
+        return new OkHttpClient.Builder()
+                .cache(new Cache(app.getCacheDir(), 1024L * 20))
+                .followRedirects(true)
+                .build();
     }
 
     @Singleton
@@ -60,7 +64,14 @@ class AppModule {
     }
 
     @Provides
-    Picasso picasso(Context context) {
-        return Picasso.with(context);
+    AsyncDrawable.Loader asyncDrawableLoader(
+            OkHttpClient client,
+            ExecutorService executorService,
+            Resources resources) {
+        return AsyncDrawableLoader.builder()
+                .client(client)
+                .executorService(executorService)
+                .resources(resources)
+                .build();
     }
 }

@@ -72,13 +72,20 @@ public class MarkdownLoader {
         }
     }
 
+    private boolean isCancelled() {
+        return task == null || task.isCancelled();
+    }
+
     private void deliver(@NonNull final OnMarkdownTextLoaded loaded, final String text) {
-        if (task != null
-                && !task.isCancelled()) {
+        if (!isCancelled()) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    loaded.apply(text);
+                    // as this call is async, we need to check again if we are cancelled
+                    if (!isCancelled()) {
+                        loaded.apply(text);
+                        task = null;
+                    }
                 }
             });
         }

@@ -3,6 +3,7 @@
     package="ru.noties.markwon">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
 
     <application
         android:name=".App"
@@ -38,19 +39,19 @@
                     android:scheme="https" />
 
                 <!--<data-->
-                    <!--android:host="*"-->
-                    <!--android:scheme="http"-->
-                    <!--android:mimeType="text/markdown"/>-->
+                <!--android:host="*"-->
+                <!--android:scheme="http"-->
+                <!--android:mimeType="text/markdown"/>-->
 
                 <!--<data-->
-                    <!--android:host="*"-->
-                    <!--android:scheme="file"-->
-                    <!--android:mimeType="text/markdown"/>-->
+                <!--android:host="*"-->
+                <!--android:scheme="file"-->
+                <!--android:mimeType="text/markdown"/>-->
 
                 <!--<data-->
-                    <!--android:host="*"-->
-                    <!--android:scheme="https"-->
-                    <!--android:mimeType="text/markdown"/>-->
+                <!--android:host="*"-->
+                <!--android:scheme="https"-->
+                <!--android:mimeType="text/markdown"/>-->
 
                 <data android:pathPattern=".*\\.markdown" />
                 <data android:pathPattern=".*\\.mdown" />

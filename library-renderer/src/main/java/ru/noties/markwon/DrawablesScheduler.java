@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 
@@ -22,7 +21,7 @@ abstract class DrawablesScheduler {
 
     static void schedule(@NonNull final TextView textView) {
 
-        final List<Pair> list = extract(textView, true);
+        final List<AsyncDrawable> list = extract(textView);
         if (list.size() > 0) {
             textView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
@@ -37,22 +36,22 @@ abstract class DrawablesScheduler {
                 }
             });
 
-            for (Pair pair : list) {
-                pair.drawable.setCallback2(new DrawableCallbackImpl(textView, pair.coordinatesProvider, pair.drawable.getBounds()));
+            for (AsyncDrawable drawable : list) {
+                drawable.setCallback2(new DrawableCallbackImpl(textView, drawable.getBounds()));
             }
         }
     }
 
     // must be called when text manually changed in TextView
     static void unschedule(@NonNull TextView view) {
-        for (Pair pair : extract(view, false)) {
-            pair.drawable.setCallback2(null);
+        for (AsyncDrawable drawable : extract(view)) {
+            drawable.setCallback2(null);
         }
     }
 
-    private static List<Pair> extract(@NonNull TextView view, boolean coordinates) {
+    private static List<AsyncDrawable> extract(@NonNull TextView view) {
 
-        final List<Pair> list;
+        final List<AsyncDrawable> list;
 
         final CharSequence cs = view.getText();
         final int length = cs != null
@@ -74,18 +73,14 @@ abstract class DrawablesScheduler {
                     if (span instanceof AsyncDrawableSpan) {
 
                         final AsyncDrawableSpan asyncDrawableSpan = (AsyncDrawableSpan) span;
-                        final CoordinatesProvider provider = coordinates
-                                ? new AsyncDrawableSpanCoordinatesProvider(asyncDrawableSpan)
-                                : null;
-
-                        list.add(new Pair(asyncDrawableSpan.getDrawable(), provider));
+                        list.add(asyncDrawableSpan.getDrawable());
                     } else if (span instanceof DynamicDrawableSpan) {
                         // it's really not optimal thing because it stores Drawable in WeakReference...
                         // which is why it will be most likely already de-referenced...
                         final Drawable d = ((DynamicDrawableSpan) span).getDrawable();
                         if (d != null
                                 && d instanceof AsyncDrawable) {
-                            list.add(new Pair((AsyncDrawable) d, null));
+                            list.add((AsyncDrawable) d);
                         }
                     }
                 }
@@ -101,21 +96,13 @@ abstract class DrawablesScheduler {
     private DrawablesScheduler() {
     }
 
-    private interface CoordinatesProvider {
-        int getX();
-
-        int getY();
-    }
-
     private static class DrawableCallbackImpl implements Drawable.Callback {
 
         private final TextView view;
-        private final CoordinatesProvider coordinatesProvider;
         private Rect previousBounds;
 
-        DrawableCallbackImpl(TextView view, CoordinatesProvider provider, Rect initialBounds) {
+        DrawableCallbackImpl(TextView view, Rect initialBounds) {
             this.view = view;
-            this.coordinatesProvider = provider;
             this.previousBounds = new Rect(initialBounds);
         }
 
@@ -134,7 +121,7 @@ abstract class DrawablesScheduler {
 
             final Rect rect = who.getBounds();
 
-            // okay... teh thing is IF we do not change bounds size, normal invalidate would do
+            // okay... the thing is IF we do not change bounds size, normal invalidate would do
             // but if the size has changed, then we need to update the whole layout...
 
             if (!previousBounds.equals(rect)) {
@@ -143,29 +130,7 @@ abstract class DrawablesScheduler {
                 previousBounds = new Rect(rect);
             } else {
 
-                // if bounds are the same then simple invalidate would do
-
-                if (coordinatesProvider != null) {
-                    final int x = coordinatesProvider.getX();
-                    final int y = coordinatesProvider.getY();
-                    view.postInvalidate(
-                            x + rect.left,
-                            y + rect.top,
-                            x + rect.right,
-                            y + rect.bottom
-                    );
-                    Debug.i(x + rect.left,
-                            y + rect.top,
-                            x + rect.right,
-                            y + rect.bottom);
-                } else {
-                    Debug.i();
-                    // else all we can do is request full re-draw... maybe system is smart enough not re-draw what is not on screen?
-                    view.postInvalidate();
-//                 we do not need to invalidate if, for example, a gif is playing somewhere out of current viewPort...
-//                 but i do not see...
-                }
-//                view.postInvalidate();
+                view.postInvalidate();
             }
         }
 
@@ -178,35 +143,6 @@ abstract class DrawablesScheduler {
         @Override
         public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
             view.removeCallbacks(what);
-        }
-    }
-
-    private static class AsyncDrawableSpanCoordinatesProvider implements CoordinatesProvider {
-
-        private final AsyncDrawableSpan span;
-
-        private AsyncDrawableSpanCoordinatesProvider(AsyncDrawableSpan span) {
-            this.span = span;
-        }
-
-        @Override
-        public int getX() {
-            return span.lastKnownDrawX();
-        }
-
-        @Override
-        public int getY() {
-            return span.lastKnownDrawY();
-        }
-    }
-
-    private static class Pair {
-        final AsyncDrawable drawable;
-        final CoordinatesProvider coordinatesProvider;
-
-        Pair(AsyncDrawable drawable, CoordinatesProvider coordinatesProvider) {
-            this.drawable = drawable;
-            this.coordinatesProvider = coordinatesProvider;
         }
     }
 }

@@ -6,7 +6,7 @@
         <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_light</item>
     </style>
 
-    <style name="AppThemeBaseLight" parent="android:Theme.Holo.Light">
+    <style name="AppThemeBaseLight" parent="android:Theme.Holo.Light.NoActionBar">
         <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_dark</item>
     </style>
 

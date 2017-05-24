@@ -9,14 +9,9 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
 
 public class MainActivity extends Activity {
-
-    static {
-        Debug.init(new AndroidLogDebugOutput(true));
-    }
 
     @Inject
     MarkdownLoader markdownLoader;
@@ -110,6 +105,16 @@ public class MainActivity extends Activity {
         return intent != null
                 ? intent.getData()
                 : null;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        try {
+            super.onRestoreInstanceState(savedInstanceState);
+        } catch (Throwable t) {
+            // amazing stuff, we need this because on JB it will crash otherwise with NPE
+            Debug.e(t);
+        }
     }
 
     @Override

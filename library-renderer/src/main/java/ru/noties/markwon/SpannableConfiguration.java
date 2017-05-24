@@ -121,7 +121,7 @@ public class SpannableConfiguration {
                 urlProcessor = new UrlProcessorNoOp();
             }
             if (htmlParser == null) {
-                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor);
+                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor, linkResolver);
             }
             return new SpannableConfiguration(this);
         }

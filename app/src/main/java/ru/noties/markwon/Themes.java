@@ -22,7 +22,7 @@ public class Themes {
 
     public void apply(@NonNull Context context) {
         final boolean dark = preferences.getBoolean(KEY_THEME_DARK, false);
-        // we have only 2 themes and Light one is default, so no need to apply it
+        // we have only 2 themes and Light one is default
         final int theme;
         if (dark) {
             theme = R.style.AppThemeBaseDark;

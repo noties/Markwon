@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@SuppressWarnings("WeakerAccess")
 public class UrlProcessorRelativeToAbsolute implements UrlProcessor {
 
     private final URL base;

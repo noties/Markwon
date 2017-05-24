@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import ru.noties.markwon.renderer.SpannableRenderer;
+import ru.noties.markwon.spans.AsyncDrawable;
 
 @ActivityScope
 public class MarkdownRenderer {
@@ -26,7 +27,7 @@ public class MarkdownRenderer {
     }
 
     @Inject
-    AsyncDrawableLoader loader;
+    AsyncDrawable.Loader loader;
 
     @Inject
     ExecutorService service;
@@ -62,22 +63,19 @@ public class MarkdownRenderer {
                         .urlProcessor(urlProcessor)
                         .build();
 
-                final Parser parser = Parser.builder()
-                        .extensions(Collections.singleton(StrikethroughExtension.create()))
-                        .build();
+                final CharSequence text = Markwon.markdown(configuration, markdown);
 
-                final Node node = parser.parse(markdown);
-                final SpannableRenderer renderer = new SpannableRenderer();
-                final CharSequence text = renderer.render(configuration, node);
-
-//                final CharSequence text = Markwon.markdown(configuration, markdown);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onMarkdownReady(text);
-                    }
-                });
-                task = null;
+                if (!isCancelled()) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isCancelled()) {
+                                listener.onMarkdownReady(text);
+                                task = null;
+                            }
+                        }
+                    });
+                }
             }
         });
     }
@@ -87,5 +85,9 @@ public class MarkdownRenderer {
             task.cancel(true);
             task = null;
         }
+    }
+
+    private boolean isCancelled() {
+        return task == null || task.isCancelled();
     }
 }

@@ -1,5 +1,7 @@
 package ru.noties.markwon.renderer.html;
 
+import android.support.annotation.NonNull;
+
 import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.spans.SubScriptSpan;
 
@@ -12,7 +14,7 @@ class SubScriptProvider implements SpannableHtmlParser.SpanProvider {
     }
 
     @Override
-    public Object provide() {
+    public Object provide(@NonNull SpannableHtmlParser.Tag tag) {
         return new SubScriptSpan(theme);
     }
 }

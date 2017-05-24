@@ -6,10 +6,12 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Views {
 
     @IntDef({View.INVISIBLE, View.GONE})
-    @interface NotVisible {}
+    @interface NotVisible {
+    }
 
     public static <V extends View> V findView(@NonNull View view, @IdRes int id) {
         //noinspection unchecked
@@ -32,5 +34,6 @@ public abstract class Views {
         view.setVisibility(visibility);
     }
 
-    private Views() {}
+    private Views() {
+    }
 }
