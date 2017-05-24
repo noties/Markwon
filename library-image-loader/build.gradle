@@ -19,7 +19,4 @@ dependencies {
     compile ANDROID_SVG
     compile ANDROID_GIF
     compile OK_HTTP
-
-    // todo, debugging only
-    compile 'ru.noties:debug:3.0.0@jar'
 }

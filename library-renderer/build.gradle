@@ -14,11 +14,7 @@ android {
 }
 
 dependencies {
-
     compile SUPPORT_ANNOTATIONS
     compile COMMON_MARK
     compile COMMON_MARK_STRIKETHROUGHT
-
-    // todo, debugging only
-    compile 'ru.noties:debug:3.0.0@jar'
 }

@@ -30,7 +30,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import pl.droidsonroids.gif.GifDrawable;
-import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 
 public class AsyncDrawableLoader implements AsyncDrawable.Loader {
@@ -109,8 +108,6 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                Debug.i(destination, response);
 
                 Drawable result = null;
 
