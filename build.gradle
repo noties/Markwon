@@ -32,6 +32,7 @@ ext {
     final def commonMarkVersion = '0.9.0'
     COMMON_MARK = "com.atlassian.commonmark:commonmark:$commonMarkVersion"
     COMMON_MARK_STRIKETHROUGHT = "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion"
+    COMMON_MARK_TABLE = "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion"
 
     ANDROID_SVG = 'com.caverock:androidsvg:1.2.1'
     ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'

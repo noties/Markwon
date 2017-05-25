@@ -16,7 +16,7 @@ public class SpannableTheme {
 
     // this method should be used if TextView is known beforehand
     // it will correctly measure the `space` char and set it as `codeMultilineMargin`
-    // otherwise this value must be set explicitly (
+    // otherwise this value must be set explicitly
     public static SpannableTheme create(@NonNull TextView textView) {
         return builderWithDefaults(textView.getContext())
                 .codeMultilineMargin((int) (textView.getPaint().measureText("\u00a0") + .5F))

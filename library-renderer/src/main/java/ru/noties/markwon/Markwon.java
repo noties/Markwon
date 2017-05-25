@@ -8,10 +8,11 @@ import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
+import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 import ru.noties.markwon.renderer.SpannableRenderer;
 
@@ -20,7 +21,7 @@ public abstract class Markwon {
 
     public static Parser createParser() {
         return new Parser.Builder()
-                .extensions(Collections.singleton(StrikethroughExtension.create()))
+                .extensions(Arrays.asList(StrikethroughExtension.create(), TablesExtension.create()))
                 .build();
     }
 
@@ -40,6 +41,7 @@ public abstract class Markwon {
     public static void setText(@NonNull TextView view, CharSequence text) {
 
         unscheduleDrawables(view);
+        unscheduleTableRows(view);
 
         // update movement method (for links to be clickable)
         view.setMovementMethod(LinkMovementMethod.getInstance());
@@ -47,6 +49,7 @@ public abstract class Markwon {
 
         // schedule drawables (dynamic drawables that can change bounds/animate will be correctly updated)
         scheduleDrawables(view);
+        scheduleTableRows(view);
     }
 
     // with default configuration
@@ -80,6 +83,14 @@ public abstract class Markwon {
 
     public static void unscheduleDrawables(@NonNull TextView view) {
         DrawablesScheduler.unschedule(view);
+    }
+
+    public static void scheduleTableRows(@NonNull TextView view) {
+        TableRowsScheduler.schedule(view);
+    }
+
+    public static void unscheduleTableRows(@NonNull TextView view) {
+        TableRowsScheduler.unschedule(view);
     }
 
     private Markwon() {

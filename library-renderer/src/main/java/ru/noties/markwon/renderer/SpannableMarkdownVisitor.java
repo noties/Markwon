@@ -7,6 +7,9 @@ import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
+import org.commonmark.ext.gfm.tables.TableBody;
+import org.commonmark.ext.gfm.tables.TableCell;
+import org.commonmark.ext.gfm.tables.TableRow;
 import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
@@ -31,8 +34,11 @@ import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
+import ru.noties.debug.Debug;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
@@ -45,6 +51,7 @@ import ru.noties.markwon.spans.HeadingSpan;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
+import ru.noties.markwon.spans.TableRowSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
 @SuppressWarnings("WeakerAccess")
@@ -259,15 +266,83 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
     }
 
+    private List<TableRowSpan.Cell> pendingTableRow;
+    private boolean tableRowIsHeader;
+    private int tableRows;
+
     @Override
     public void visit(CustomNode customNode) {
+
+//        Log.e(null, String.valueOf(customNode));
+
         if (customNode instanceof Strikethrough) {
+
             final int length = builder.length();
             visitChildren(customNode);
             setSpan(length, new StrikethroughSpan());
-        } else {
+
+        } else if (!handleTableNodes(customNode)) {
             super.visit(customNode);
         }
+    }
+
+    private boolean handleTableNodes(CustomNode node) {
+
+        final boolean handled;
+
+        Debug.i(node);
+
+        if (node instanceof TableBody) {
+            visitChildren(node);
+            tableRows = 0;
+            handled = true;
+            newLine();
+            builder.append('\n');
+        } else if (node instanceof TableRow) {
+
+            final int length = builder.length();
+            visitChildren(node);
+
+            if (pendingTableRow != null) {
+                builder.append(' ');
+
+                final TableRowSpan span = new TableRowSpan(
+                        configuration.theme(),
+                        pendingTableRow,
+                        tableRowIsHeader,
+                        tableRows % 2 == 1
+                );
+
+                setSpan(length, span);
+                newLine();
+                pendingTableRow = null;
+            }
+
+            handled = true;
+        } else if (node instanceof TableCell) {
+
+            final TableCell cell = (TableCell) node;
+            final int length = builder.length();
+            visitChildren(cell);
+            if (pendingTableRow == null) {
+                pendingTableRow = new ArrayList<>(2);
+            }
+            pendingTableRow.add(new TableRowSpan.Cell(
+                    tableCellAlignment(cell.getAlignment()),
+                    builder.subSequence(length, builder.length())
+            ));
+            builder.replace(length, builder.length(), "");
+
+            tableRowIsHeader = cell.isHeader();
+            tableRows = tableRowIsHeader
+                    ? 0
+                    : tableRows + 1;
+
+            handled = true;
+        } else {
+            handled = false;
+        }
+        return handled;
     }
 
     @Override
@@ -400,6 +475,27 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             }
         }
         return false;
+    }
+
+    @TableRowSpan.Alignment
+    private static int tableCellAlignment(TableCell.Alignment alignment) {
+        final int out;
+        if (alignment != null) {
+            switch (alignment) {
+                case CENTER:
+                    out = TableRowSpan.ALIGN_CENTER;
+                    break;
+                case RIGHT:
+                    out = TableRowSpan.ALIGN_RIGHT;
+                    break;
+                default:
+                    out = TableRowSpan.ALIGN_LEFT;
+                    break;
+            }
+        } else {
+            out = TableRowSpan.ALIGN_LEFT;
+        }
+        return out;
     }
 
     private static class HtmlInlineItem {

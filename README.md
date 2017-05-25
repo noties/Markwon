@@ -110,24 +110,19 @@ Lorem ipsum dolor sit amet
 ### H.T.M.L.
 <b>O</b><i>K<s>A</s><sup>42<sup>43<sub><b>42</b></sub></sup></sup><u>Y</u></i>
 
-<img src="h" /> <img src="h">
-<img src="h" alt="alt text">
+### Tables
+Header #1 | Header #2 | Header #3
+---: | :---: | :---
+content | content | content
+long long long skjfs fgjsdfhj sf `dfk df` | sdsd,fklsdfklsdfklsdfkl sdfkl dsfjksdf sjkf jksdfjksdf sjkdf sdfkjsdjkf sdkjfs fkjsf sdkjfs fkjsd fkjsdf skjdf sdkjf skjfs fkjs fkjsdf jskdf sdjkf sjdkf sdkjf skjf sdkjf sdkjf sdfkjsd fkjsd fkjsdf sdkjfsjk dfkjsdf sdkjfs | yeah
 
-<hr>
 
-<hr />
-
-<h1>Hello</h1>
-
-<h2>Hello</h2>
-
-<h3>Hello</h3>
-
-<h4>Hello</h4>
-
-<h5>Hello</h5>
-
-<h6>Hello</h6>
+|head #1| head #2|
+|---|---|
+| content | content |
+| content | content |
+| content | content |
+| content | content |
 
 
 [1]: https://github.com
