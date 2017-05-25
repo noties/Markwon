@@ -2,6 +2,7 @@ package ru.noties.markwon.spans;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.noties.debug.Debug;
 
 public class TableRowSpan extends ReplacementSpan {
 
@@ -66,6 +69,9 @@ public class TableRowSpan extends ReplacementSpan {
     private final boolean header;
     private final boolean odd;
 
+    private final Rect rect = ObjectsPool.rect();
+    private final Paint paint = ObjectsPool.paint();
+
     private int width;
     private int height;
     private Invalidator invalidator;
@@ -106,9 +112,13 @@ public class TableRowSpan extends ReplacementSpan {
                     }
                 }
 
+                // we store actual height
                 height = max;
 
-                fm.ascent = -max;
+                // but apply height with padding
+                final int padding = theme.tableCellPadding() * 2;
+
+                fm.ascent = -(max + padding);
                 fm.descent = 0;
 
                 fm.top = fm.ascent;
@@ -139,13 +149,38 @@ public class TableRowSpan extends ReplacementSpan {
 
         int maxHeight = 0;
 
+        final int padding = theme.tableCellPadding();
+
+        final int size = layouts.size();
+
+        final int w = width / size;
+
+        if (odd) {
+            final int save = canvas.save();
+            try {
+                rect.set(0, 0, width, bottom - top);
+                theme.applyTableOddRowStyle(this.paint);
+                canvas.translate(x, top);
+                canvas.drawRect(rect, this.paint);
+            } finally {
+                canvas.restoreToCount(save);
+            }
+        }
+
+        rect.set(0, 0, w, bottom - top);
+
+        theme.applyTableBorderStyle(this.paint);
+
         StaticLayout layout;
-        for (int i = 0, size = layouts.size(); i < size; i++) {
+        for (int i = 0; i < size; i++) {
             layout = layouts.get(i);
             final int save = canvas.save();
             try {
 
-                canvas.translate(x + (i * layout.getWidth()), top);
+                canvas.translate(x + (i * w), top);
+                canvas.drawRect(rect, this.paint);
+
+                canvas.translate(padding, padding);
                 layout.draw(canvas);
 
                 if (layout.getHeight() > maxHeight) {
@@ -174,7 +209,9 @@ public class TableRowSpan extends ReplacementSpan {
             textPaint.setFakeBoldText(true);
         }
 
-        final int w = width / cells.size();
+        final int columns = cells.size();
+        final int padding = theme.tableCellPadding() * 2;
+        final int w = (width / columns) - padding;
 
         this.layouts.clear();
         Cell cell;

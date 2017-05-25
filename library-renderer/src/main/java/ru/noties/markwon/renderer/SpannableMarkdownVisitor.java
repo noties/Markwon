@@ -306,12 +306,18 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             if (pendingTableRow != null) {
                 builder.append(' ');
 
+                Debug.i("adding a row: %d", tableRows);
+
                 final TableRowSpan span = new TableRowSpan(
                         configuration.theme(),
                         pendingTableRow,
                         tableRowIsHeader,
                         tableRows % 2 == 1
                 );
+
+                tableRows = tableRowIsHeader
+                        ? 0
+                        : tableRows + 1;
 
                 setSpan(length, span);
                 newLine();
@@ -334,9 +340,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             builder.replace(length, builder.length(), "");
 
             tableRowIsHeader = cell.isHeader();
-            tableRows = tableRowIsHeader
-                    ? 0
-                    : tableRows + 1;
 
             handled = true;
         } else {

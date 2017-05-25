@@ -44,7 +44,9 @@ public class SpannableTheme {
                 .blockMargin(px.px(24))
                 .bulletListItemStrokeWidth(px.px(1))
                 .headingBreakHeight(px.px(1))
-                .thematicBreakHeight(px.px(2));
+                .thematicBreakHeight(px.px(2))
+                .tableCellPadding(px.px(4))
+                .tableBorderWidth(px.px(1));
     }
 
     private static int resolve(Context context, @AttrRes int attr) {
@@ -74,6 +76,10 @@ public class SpannableTheme {
     protected static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
     protected static final int THEMATIC_BREAK_DEF_ALPHA = 75;
+
+    protected static final int TABLE_BORDER_DEF_ALPHA = 75;
+
+    protected static final int TABLE_ODD_ROW_DEF_ALPHA = 22;
 
     protected final int linkColor;
 
@@ -127,6 +133,17 @@ public class SpannableTheme {
     // by default paint.strokeWidth
     protected final int thematicBreakHeight;
 
+    // by default 0
+    protected final int tableCellPadding;
+
+    // by default paint.color * TABLE_BORDER_DEF_ALPHA
+    protected final int tableBorderColor;
+
+    protected final int tableBorderWidth;
+
+    // by default paint.color * TABLE_ODD_ROW_DEF_ALPHA
+    protected final int tableOddRowBackgroundColor;
+
     protected SpannableTheme(@NonNull Builder builder) {
         this.linkColor = builder.linkColor;
         this.blockMargin = builder.blockMargin;
@@ -145,6 +162,10 @@ public class SpannableTheme {
         this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
+        this.tableCellPadding = builder.tableCellPadding;
+        this.tableBorderColor = builder.tableBorderColor;
+        this.tableBorderWidth = builder.tableBorderWidth;
+        this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
     }
 
 
@@ -307,6 +328,38 @@ public class SpannableTheme {
         }
     }
 
+    public int tableCellPadding() {
+        return tableCellPadding;
+    }
+
+    public void applyTableBorderStyle(@NonNull Paint paint) {
+
+        final int color;
+        if (tableBorderColor == 0) {
+            color = ColorUtils.applyAlpha(paint.getColor(), TABLE_BORDER_DEF_ALPHA);
+        } else {
+            color = tableBorderColor;
+        }
+
+        if (tableBorderWidth != 0) {
+            paint.setStrokeWidth(tableBorderWidth);
+        }
+
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.STROKE);
+    }
+
+    public void applyTableOddRowStyle(@NonNull Paint paint) {
+        final int color;
+        if (tableOddRowBackgroundColor == 0) {
+            color = ColorUtils.applyAlpha(paint.getColor(), TABLE_ODD_ROW_DEF_ALPHA);
+        } else {
+            color = tableOddRowBackgroundColor;
+        }
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
+    }
+
     public static class Builder {
 
         private int linkColor;
@@ -326,6 +379,10 @@ public class SpannableTheme {
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight;
+        private int tableCellPadding;
+        private int tableBorderColor;
+        private int tableBorderWidth;
+        private int tableOddRowBackgroundColor;
 
         Builder() {
 
@@ -350,6 +407,10 @@ public class SpannableTheme {
             this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
+            this.tableCellPadding = theme.tableCellPadding;
+            this.tableBorderColor = theme.tableBorderColor;
+            this.tableBorderWidth = theme.tableBorderWidth;
+            this.tableOddRowBackgroundColor = theme.tableOddRowBackgroundColor;
         }
 
         public Builder linkColor(int linkColor) {
@@ -434,6 +495,26 @@ public class SpannableTheme {
 
         public Builder thematicBreakHeight(int thematicBreakHeight) {
             this.thematicBreakHeight = thematicBreakHeight;
+            return this;
+        }
+
+        public Builder tableCellPadding(int tableCellPadding) {
+            this.tableCellPadding = tableCellPadding;
+            return this;
+        }
+
+        public Builder tableBorderColor(int tableBorderColor) {
+            this.tableBorderColor = tableBorderColor;
+            return this;
+        }
+
+        public Builder tableBorderWidth(int tableBorderWidth) {
+            this.tableBorderWidth = tableBorderWidth;
+            return this;
+        }
+
+        public Builder tableOddRowBackgroundColor(int tableOddRowBackgroundColor) {
+            this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
             return this;
         }
 
