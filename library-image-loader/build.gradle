@@ -15,7 +15,7 @@ android {
 
 dependencies {
 
-    compile project(':library-renderer')
+    compile project(':library')
     compile ANDROID_SVG
     compile ANDROID_GIF
     compile OK_HTTP

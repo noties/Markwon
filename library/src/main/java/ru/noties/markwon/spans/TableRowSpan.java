@@ -17,8 +17,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.noties.debug.Debug;
-
 public class TableRowSpan extends ReplacementSpan {
 
     public static final int ALIGN_LEFT = 0;
@@ -155,12 +153,15 @@ public class TableRowSpan extends ReplacementSpan {
 
         final int w = width / size;
 
+        // feels like magic...
+        final int heightDiff = (bottom - top - height) / 4;
+
         if (odd) {
             final int save = canvas.save();
             try {
                 rect.set(0, 0, width, bottom - top);
                 theme.applyTableOddRowStyle(this.paint);
-                canvas.translate(x, top);
+                canvas.translate(x, top - heightDiff);
                 canvas.drawRect(rect, this.paint);
             } finally {
                 canvas.restoreToCount(save);
@@ -177,10 +178,10 @@ public class TableRowSpan extends ReplacementSpan {
             final int save = canvas.save();
             try {
 
-                canvas.translate(x + (i * w), top);
+                canvas.translate(x + (i * w), top - heightDiff);
                 canvas.drawRect(rect, this.paint);
 
-                canvas.translate(padding, padding);
+                canvas.translate(padding, padding + heightDiff);
                 layout.draw(canvas);
 
                 if (layout.getHeight() > maxHeight) {
@@ -205,9 +206,7 @@ public class TableRowSpan extends ReplacementSpan {
 
     private void makeNewLayouts() {
 
-        if (header) {
-            textPaint.setFakeBoldText(true);
-        }
+        textPaint.setFakeBoldText(header);
 
         final int columns = cells.size();
         final int padding = theme.tableCellPadding() * 2;

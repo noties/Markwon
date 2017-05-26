@@ -63,30 +63,34 @@ abstract class DrawablesScheduler {
             list = Collections.EMPTY_LIST;
         } else {
 
-            final Object[] spans = ((Spanned) cs).getSpans(0, length, Object.class);
-            if (spans != null
-                    && spans.length > 0) {
+            final List<AsyncDrawable> drawables = new ArrayList<>(2);
 
-                list = new ArrayList<>(2);
+            final Spanned spanned = (Spanned) cs;
+            final AsyncDrawableSpan[] asyncDrawableSpans = spanned.getSpans(0, length, AsyncDrawableSpan.class);
+            if (asyncDrawableSpans != null
+                    && asyncDrawableSpans.length > 0) {
+                for (AsyncDrawableSpan span : asyncDrawableSpans) {
+                    drawables.add(span.getDrawable());
+                }
+            }
 
-                for (Object span : spans) {
-                    if (span instanceof AsyncDrawableSpan) {
-
-                        final AsyncDrawableSpan asyncDrawableSpan = (AsyncDrawableSpan) span;
-                        list.add(asyncDrawableSpan.getDrawable());
-                    } else if (span instanceof DynamicDrawableSpan) {
-                        // it's really not optimal thing because it stores Drawable in WeakReference...
-                        // which is why it will be most likely already de-referenced...
-                        final Drawable d = ((DynamicDrawableSpan) span).getDrawable();
-                        if (d != null
-                                && d instanceof AsyncDrawable) {
-                            list.add((AsyncDrawable) d);
-                        }
+            final DynamicDrawableSpan[] dynamicDrawableSpans = spanned.getSpans(0, length, DynamicDrawableSpan.class);
+            if (dynamicDrawableSpans != null
+                    && dynamicDrawableSpans.length > 0) {
+                for (DynamicDrawableSpan span : dynamicDrawableSpans) {
+                    final Drawable d = span.getDrawable();
+                    if (d != null
+                            && d instanceof AsyncDrawable) {
+                        drawables.add((AsyncDrawable) d);
                     }
                 }
-            } else {
+            }
+
+            if (drawables.size() == 0) {
                 //noinspection unchecked
                 list = Collections.EMPTY_LIST;
+            } else {
+                list = drawables;
             }
         }
 

@@ -16,7 +16,7 @@ android {
 
 dependencies {
 
-    compile project(':library-renderer')
+    compile project(':library')
     compile project(':library-image-loader')
 
     compile 'ru.noties:debug:3.0.0@jar'
