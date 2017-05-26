@@ -1,7 +1,7 @@
 # Markwon
 
-[![Maven Central|markwon](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=maven-central%7Cmarkwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon%22)
-[![Maven Central|markwon-image-loader](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=maven-central%7Cmarkwon-image-loader)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon%22)
+[![maven|markwon](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=maven%7Cmarkwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon%22)
+[![maven|markwon-image-loader](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=maven%7Cmarkwon-image-loader)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon%22)
 
 Android library for rendering markdown as system-native Spannables. Based on [commonmark-java][commonmark-java]
 

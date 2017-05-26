@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import ru.noties.markwon.renderer.R;
 import ru.noties.markwon.spans.TableRowSpan;
 
 abstract class TableRowsScheduler {
@@ -14,24 +15,32 @@ abstract class TableRowsScheduler {
         final Object[] spans = extract(view);
         if (spans != null
                 && spans.length > 0) {
-            view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View v) {
 
-                }
+            if (view.getTag(R.id.markwon_tables_scheduler) == null) {
+                final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
+                    @Override
+                    public void onViewAttachedToWindow(View v) {
 
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-                    unschedule(view);
-                    view.removeOnAttachStateChangeListener(this);
-                }
-            });
+                    }
+
+                    @Override
+                    public void onViewDetachedFromWindow(View v) {
+                        unschedule(view);
+                        view.removeOnAttachStateChangeListener(this);
+                        view.setTag(R.id.markwon_tables_scheduler, null);
+                    }
+                };
+                view.addOnAttachStateChangeListener(listener);
+                view.setTag(R.id.markwon_tables_scheduler, listener);
+            }
+
             final TableRowSpan.Invalidator invalidator = new TableRowSpan.Invalidator() {
                 @Override
                 public void invalidate() {
                     view.setText(view.getText());
                 }
             };
+
             for (Object span : spans) {
                 ((TableRowSpan) span).invalidator(invalidator);
             }

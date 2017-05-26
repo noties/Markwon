@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.noties.markwon.renderer.R;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 
@@ -23,18 +24,24 @@ abstract class DrawablesScheduler {
 
         final List<AsyncDrawable> list = extract(textView);
         if (list.size() > 0) {
-            textView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View v) {
 
-                }
+            if (textView.getTag(R.id.markwon_drawables_scheduler) == null) {
+                final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
+                    @Override
+                    public void onViewAttachedToWindow(View v) {
 
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-                    // we obtain a new list in case text was changed
-                    unschedule(textView);
-                }
-            });
+                    }
+
+                    @Override
+                    public void onViewDetachedFromWindow(View v) {
+                        unschedule(textView);
+                        v.removeOnAttachStateChangeListener(this);
+                        v.setTag(R.id.markwon_drawables_scheduler, null);
+                    }
+                };
+                textView.addOnAttachStateChangeListener(listener);
+                textView.setTag(R.id.markwon_drawables_scheduler, listener);
+            }
 
             for (AsyncDrawable drawable : list) {
                 drawable.setCallback2(new DrawableCallbackImpl(textView, drawable.getBounds()));
