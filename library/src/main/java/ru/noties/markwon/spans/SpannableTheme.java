@@ -5,23 +5,25 @@ import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Dimension;
+import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.TypedValue;
-import android.widget.TextView;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {
-
-    // this method should be used if TextView is known beforehand
-    // it will correctly measure the `space` char and set it as `codeMultilineMargin`
-    // otherwise this value must be set explicitly
-    public static SpannableTheme create(@NonNull TextView textView) {
-        return builderWithDefaults(textView.getContext())
-                .codeMultilineMargin((int) (textView.getPaint().measureText("\u00a0") + .5F))
-                .build();
-    }
+//
+//    // this method should be used if TextView is known beforehand
+//    // it will correctly measure the `space` char and set it as `codeMultilineMargin`
+//    // otherwise this value must be set explicitly
+//    public static SpannableTheme create(@NonNull TextView textView) {
+//        return builderWithDefaults(textView.getContext())
+//                .codeMultilineMargin((int) (textView.getPaint().measureText("\u00a0") + .5F))
+//                .build();
+//    }
 
     // this create default theme (except for `codeMultilineMargin` property)
     public static SpannableTheme create(@NonNull Context context) {
@@ -37,16 +39,16 @@ public class SpannableTheme {
     }
 
     public static Builder builderWithDefaults(@NonNull Context context) {
-        final Px px = new Px(context);
+        final Dip dip = new Dip(context);
         return new Builder()
                 .linkColor(resolve(context, android.R.attr.textColorLink))
-                .codeMultilineMargin(px.px(8))
-                .blockMargin(px.px(24))
-                .bulletListItemStrokeWidth(px.px(1))
-                .headingBreakHeight(px.px(1))
-                .thematicBreakHeight(px.px(2))
-                .tableCellPadding(px.px(4))
-                .tableBorderWidth(px.px(1));
+                .codeMultilineMargin(dip.toPx(8))
+                .blockMargin(dip.toPx(24))
+                .bulletListItemStrokeWidth(dip.toPx(1))
+                .headingBreakHeight(dip.toPx(1))
+                .thematicBreakHeight(dip.toPx(2))
+                .tableCellPadding(dip.toPx(4))
+                .tableBorderWidth(dip.toPx(1));
     }
 
     private static int resolve(Context context, @AttrRes int attr) {
@@ -385,11 +387,9 @@ public class SpannableTheme {
         private int tableOddRowBackgroundColor;
 
         Builder() {
-
         }
 
         Builder(@NonNull SpannableTheme theme) {
-
             this.linkColor = theme.linkColor;
             this.blockMargin = theme.blockMargin;
             this.blockQuoteWidth = theme.blockQuoteWidth;
@@ -413,107 +413,107 @@ public class SpannableTheme {
             this.tableOddRowBackgroundColor = theme.tableOddRowBackgroundColor;
         }
 
-        public Builder linkColor(int linkColor) {
+        public Builder linkColor(@ColorInt int linkColor) {
             this.linkColor = linkColor;
             return this;
         }
 
-        public Builder blockMargin(int blockMargin) {
+        public Builder blockMargin(@Dimension int blockMargin) {
             this.blockMargin = blockMargin;
             return this;
         }
 
-        public Builder blockQuoteWidth(int blockQuoteWidth) {
+        public Builder blockQuoteWidth(@Dimension int blockQuoteWidth) {
             this.blockQuoteWidth = blockQuoteWidth;
             return this;
         }
 
-        public Builder blockQuoteColor(int blockQuoteColor) {
+        public Builder blockQuoteColor(@ColorInt int blockQuoteColor) {
             this.blockQuoteColor = blockQuoteColor;
             return this;
         }
 
-        public Builder listItemColor(int listItemColor) {
+        public Builder listItemColor(@ColorInt int listItemColor) {
             this.listItemColor = listItemColor;
             return this;
         }
 
-        public Builder bulletListItemStrokeWidth(int bulletListItemStrokeWidth) {
+        public Builder bulletListItemStrokeWidth(@Dimension int bulletListItemStrokeWidth) {
             this.bulletListItemStrokeWidth = bulletListItemStrokeWidth;
             return this;
         }
 
-        public Builder bulletWidth(int bulletWidth) {
+        public Builder bulletWidth(@Dimension int bulletWidth) {
             this.bulletWidth = bulletWidth;
             return this;
         }
 
-        public Builder codeTextColor(int codeTextColor) {
+        public Builder codeTextColor(@ColorInt int codeTextColor) {
             this.codeTextColor = codeTextColor;
             return this;
         }
 
-        public Builder codeBackgroundColor(int codeBackgroundColor) {
+        public Builder codeBackgroundColor(@ColorInt int codeBackgroundColor) {
             this.codeBackgroundColor = codeBackgroundColor;
             return this;
         }
 
-        public Builder codeMultilineMargin(int codeMultilineMargin) {
+        public Builder codeMultilineMargin(@Dimension int codeMultilineMargin) {
             this.codeMultilineMargin = codeMultilineMargin;
             return this;
         }
 
-        public Builder codeTypeface(Typeface codeTypeface) {
+        public Builder codeTypeface(@NonNull Typeface codeTypeface) {
             this.codeTypeface = codeTypeface;
             return this;
         }
 
-        public Builder codeTextSize(int codeTextSize) {
+        public Builder codeTextSize(@Dimension int codeTextSize) {
             this.codeTextSize = codeTextSize;
             return this;
         }
 
-        public Builder headingBreakHeight(int headingBreakHeight) {
+        public Builder headingBreakHeight(@Dimension int headingBreakHeight) {
             this.headingBreakHeight = headingBreakHeight;
             return this;
         }
 
-        public Builder headingBreakColor(int headingBreakColor) {
+        public Builder headingBreakColor(@ColorInt int headingBreakColor) {
             this.headingBreakColor = headingBreakColor;
             return this;
         }
 
-        public Builder scriptTextSizeRatio(float scriptTextSizeRatio) {
+        public Builder scriptTextSizeRatio(@FloatRange(from = .0F, to = Float.MAX_VALUE) float scriptTextSizeRatio) {
             this.scriptTextSizeRatio = scriptTextSizeRatio;
             return this;
         }
 
-        public Builder thematicBreakColor(int thematicBreakColor) {
+        public Builder thematicBreakColor(@ColorInt int thematicBreakColor) {
             this.thematicBreakColor = thematicBreakColor;
             return this;
         }
 
-        public Builder thematicBreakHeight(int thematicBreakHeight) {
+        public Builder thematicBreakHeight(@Dimension int thematicBreakHeight) {
             this.thematicBreakHeight = thematicBreakHeight;
             return this;
         }
 
-        public Builder tableCellPadding(int tableCellPadding) {
+        public Builder tableCellPadding(@Dimension int tableCellPadding) {
             this.tableCellPadding = tableCellPadding;
             return this;
         }
 
-        public Builder tableBorderColor(int tableBorderColor) {
+        public Builder tableBorderColor(@ColorInt int tableBorderColor) {
             this.tableBorderColor = tableBorderColor;
             return this;
         }
 
-        public Builder tableBorderWidth(int tableBorderWidth) {
+        public Builder tableBorderWidth(@Dimension int tableBorderWidth) {
             this.tableBorderWidth = tableBorderWidth;
             return this;
         }
 
-        public Builder tableOddRowBackgroundColor(int tableOddRowBackgroundColor) {
+        public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor) {
             this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
             return this;
         }
@@ -523,14 +523,14 @@ public class SpannableTheme {
         }
     }
 
-    private static class Px {
+    private static class Dip {
         private final float density;
 
-        Px(@NonNull Context context) {
+        Dip(@NonNull Context context) {
             this.density = context.getResources().getDisplayMetrics().density;
         }
 
-        int px(int dp) {
+        int toPx(int dp) {
             return (int) (dp * density + .5F);
         }
     }

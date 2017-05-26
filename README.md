@@ -13,6 +13,10 @@ compile 'ru.noties:markwon-image-loader:1.0.0' // optional
 
 ---
 
+**Please note, that this file is created for demonstration purposes. Please refer to `library` module [README][library] instead**
+
+---
+
 ## Supported markdown features:
 * Emphasis (`*`, `_`)
 * Strong emphasis (`**`, `__`)
@@ -167,4 +171,6 @@ long long long skjfs fgjsdfhj sf `dfk df` | sdsd,fklsdfklsdfklsdfkl sdfkl dsfjks
 
 [1]: https://github.com
 [github]: https://github.com
-[commonmark-java]: https://github.com/atlassian/commonmark-java
+
+[commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
+[library]: https://github.com/noties/Markwon/blob/master/README.md

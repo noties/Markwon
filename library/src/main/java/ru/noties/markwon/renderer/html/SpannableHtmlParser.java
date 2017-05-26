@@ -163,7 +163,7 @@ public class SpannableHtmlParser {
         private ImageProvider imageProvider;
         private HtmlParser parser;
 
-        public Builder simpleTag(@NonNull String tag, @NonNull SpanProvider provider) {
+        Builder simpleTag(@NonNull String tag, @NonNull SpanProvider provider) {
             simpleTags.put(tag, provider);
             return this;
         }

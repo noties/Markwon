@@ -70,7 +70,7 @@ public class SpannableConfiguration {
         private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
 
-        public Builder(Context context) {
+        Builder(Context context) {
             this.context = context;
         }
 
