@@ -21,3 +21,7 @@ dependencies {
 
     compile 'ru.noties:debug:3.0.0@jar'
 }
+
+if (project.hasProperty('release')) {
+    apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+}
