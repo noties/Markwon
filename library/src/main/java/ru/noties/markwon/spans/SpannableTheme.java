@@ -44,9 +44,10 @@ public class SpannableTheme {
                 .linkColor(resolve(context, android.R.attr.textColorLink))
                 .codeMultilineMargin(dip.toPx(8))
                 .blockMargin(dip.toPx(24))
+                .blockQuoteWidth(dip.toPx(4))
                 .bulletListItemStrokeWidth(dip.toPx(1))
                 .headingBreakHeight(dip.toPx(1))
-                .thematicBreakHeight(dip.toPx(2))
+                .thematicBreakHeight(dip.toPx(4))
                 .tableCellPadding(dip.toPx(4))
                 .tableBorderWidth(dip.toPx(1));
     }
@@ -62,7 +63,7 @@ public class SpannableTheme {
         }
     }
 
-    protected static final int BLOCK_QUOTE_DEF_COLOR_ALPHA = 50;
+    protected static final int BLOCK_QUOTE_DEF_COLOR_ALPHA = 25;
 
     protected static final int CODE_DEF_BACKGROUND_COLOR_ALPHA = 25;
     protected static final float CODE_DEF_TEXT_SIZE_RATIO = .87F;
@@ -77,7 +78,7 @@ public class SpannableTheme {
 
     protected static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
-    protected static final int THEMATIC_BREAK_DEF_ALPHA = 75;
+    protected static final int THEMATIC_BREAK_DEF_ALPHA = 25;
 
     protected static final int TABLE_BORDER_DEF_ALPHA = 75;
 
