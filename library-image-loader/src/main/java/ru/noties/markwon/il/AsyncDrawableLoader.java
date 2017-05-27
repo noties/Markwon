@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
@@ -73,6 +74,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
     @Override
     public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
+        Log.e("ASYNC", destination);
         // if drawable is not a link -> show loading placeholder...
         requests.put(destination, execute(destination, drawable));
     }

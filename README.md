@@ -19,6 +19,13 @@ compile 'ru.noties:markwon-image-loader:1.0.0' // optional
 
 ---
 
+Demonstration of default styles (the only thing customized is image loader):
+
+![light](./art/markwon_light.gif)
+![dark](./art/markwon_dark.gif)
+
+---
+
 ## Supported markdown features:
 * Emphasis (`*`, `_`)
 * Strong emphasis (`**`, `__`)

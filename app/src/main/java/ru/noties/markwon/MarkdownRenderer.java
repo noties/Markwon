@@ -47,7 +47,7 @@ public class MarkdownRenderer {
 
                 final UrlProcessor urlProcessor;
                 if (uri == null) {
-                    urlProcessor = new UrlProcessorAndroidAssets();
+                    urlProcessor = new UrlProcessorInitialReadme();
                 } else {
                     urlProcessor = new UrlProcessorRelativeToAbsolute(uri.toString());
                 }
