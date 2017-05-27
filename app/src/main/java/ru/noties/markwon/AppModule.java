@@ -42,6 +42,7 @@ class AppModule {
         return new OkHttpClient.Builder()
                 .cache(new Cache(app.getCacheDir(), 1024L * 20))
                 .followRedirects(true)
+                .retryOnConnectionFailure(true)
                 .build();
     }
 

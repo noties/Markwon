@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import ru.noties.debug.Debug;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
@@ -273,8 +272,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(CustomNode customNode) {
 
-//        Log.e(null, String.valueOf(customNode));
-
         if (customNode instanceof Strikethrough) {
 
             final int length = builder.length();
@@ -290,8 +287,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final boolean handled;
 
-        Debug.i(node);
-
         if (node instanceof TableBody) {
             visitChildren(node);
             tableRows = 0;
@@ -305,8 +300,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             if (pendingTableRow != null) {
                 builder.append(' ');
-
-                Debug.i("adding a row: %d", tableRows);
 
                 final TableRowSpan span = new TableRowSpan(
                         configuration.theme(),

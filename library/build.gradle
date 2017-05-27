@@ -18,8 +18,6 @@ dependencies {
     compile COMMON_MARK
     compile COMMON_MARK_STRIKETHROUGHT
     compile COMMON_MARK_TABLE
-
-    compile 'ru.noties:debug:3.0.0@jar'
 }
 
 if (project.hasProperty('release')) {

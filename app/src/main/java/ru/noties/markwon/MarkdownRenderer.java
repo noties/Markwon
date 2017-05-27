@@ -6,17 +6,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-
-import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import ru.noties.markwon.renderer.SpannableRenderer;
 import ru.noties.markwon.spans.AsyncDrawable;
 
 @ActivityScope
@@ -53,7 +47,7 @@ public class MarkdownRenderer {
 
                 final UrlProcessor urlProcessor;
                 if (uri == null) {
-                    urlProcessor = null;
+                    urlProcessor = new UrlProcessorAndroidAssets();
                 } else {
                     urlProcessor = new UrlProcessorRelativeToAbsolute(uri.toString());
                 }

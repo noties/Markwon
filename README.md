@@ -1,3 +1,5 @@
+![logo](./art/markwon_logo.png)
+
 # Markwon
 
 [![maven|markwon](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=maven%7Cmarkwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon%22)
@@ -40,6 +42,9 @@ compile 'ru.noties:markwon-image-loader:1.0.0' // optional
   * other inline html is rendered via (`Html.fromHtml(...)`)
 
 
+---
+
+
 ### Emphasis
 
 *Lorem ipsum dolor sit amet*
@@ -55,6 +60,9 @@ _Lorem ipsum dolor sit amet_
 <dfn>Lorem ipsum dolor sit amet</dfn>
 
 
+---
+
+
 ### Strong emphasis
 
 **Lorem ipsum dolor sit amet**
@@ -64,6 +72,9 @@ __Lorem ipsum dolor sit amet__
 <b>Lorem ipsum dolor sit amet</b>
 
 <strong>Lorem ipsum dolor sit amet</strong>
+
+
+---
 
 
 ### Strike-through
@@ -97,9 +108,7 @@ __Lorem ipsum dolor sit amet__
 
 <a href="https://github.com">click me</a>
 
-
-### Images
-// todo, normal ones & svg & gif
+---
 
 
 ### Thematic break
@@ -114,6 +123,9 @@ ___
 >>> Lorem ipsum dolor sit amet
 
 
+---
+
+
 ### Ordered lists
 1. Lorem ipsum dolor sit amet
 2. Lorem ipsum dolor sit amet
@@ -123,6 +135,9 @@ ___
 3. Lorem ipsum dolor sit amet
 
 
+---
+
+
 ### Non-ordered lists
 * Lorem ipsum dolor sit amet
    * Lorem ipsum dolor sit amet
@@ -130,6 +145,9 @@ ___
 *  * * * Lorem ipsum dolor sit amet
 * * Lorem ipsum dolor sit amet
 * Lorem ipsum dolor sit amet
+
+
+---
 
 
 ### Inline code
@@ -142,6 +160,9 @@ Lorem ipsum dolor sit `amet`
 `Lorem ipsum dolor sit amet`
 
 
+---
+
+
 ### Code block
 ```
 Lorem ipsum dolor sit amet
@@ -149,9 +170,14 @@ Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet
 ```
 
+---
+
 
 ### H.T.M.L.
 <b>O</b><i>K<s>A</s><sup>42<sup>43<sub><b>42</b></sub></sup></sup><u>Y</u></i>
+
+
+---
 
 
 ### Tables
@@ -173,4 +199,4 @@ long long long skjfs fgjsdfhj sf `dfk df` | sdsd,fklsdfklsdfklsdfkl sdfkl dsfjks
 [github]: https://github.com
 
 [commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
-[library]: https://github.com/noties/Markwon/blob/master/README.md
+[library]: https://github.com/noties/Markwon/blob/master/library/README.md

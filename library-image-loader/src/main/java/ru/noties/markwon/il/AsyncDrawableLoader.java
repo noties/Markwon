@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -14,7 +15,11 @@ import android.text.TextUtils;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -45,6 +50,8 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_TYPE_SVG = "image/svg+xml";
     private static final String CONTENT_TYPE_GIF = "image/gif";
+
+    private static final String FILE_ANDROID_ASSETS = "android_asset";
 
     private final OkHttpClient client;
     private final Resources resources;
@@ -97,47 +104,32 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             @Override
             public void run() {
 
-                final Request request = new Request.Builder()
-                        .url(destination)
-                        .tag(destination)
-                        .build();
+                final Item item;
 
-                Response response = null;
-                try {
-                    response = client.newCall(request).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                final Uri uri = Uri.parse(destination);
+                if ("file".equals(uri.getScheme())) {
+                    item = fromFile(uri);
+                } else {
+                    item = fromNetwork(destination);
                 }
 
                 Drawable result = null;
 
-                if (response != null) {
-
-                    final ResponseBody body = response.body();
-                    if (body != null) {
-                        final InputStream inputStream = body.byteStream();
-                        if (inputStream != null) {
-                            final String contentType = response.header(HEADER_CONTENT_TYPE);
-                            try {
-                                // svg can have `image/svg+xml;charset=...`
-                                if (CONTENT_TYPE_SVG.equals(contentType)
-                                        || (!TextUtils.isEmpty(contentType) && contentType.startsWith(CONTENT_TYPE_SVG))) {
-                                    // handle SVG
-                                    result = handleSvg(inputStream);
-                                } else if (CONTENT_TYPE_GIF.equals(contentType)) {
-                                    // handle gif
-                                    result = handleGif(inputStream);
-                                } else {
-                                    result = handleSimple(inputStream);
-                                    // just try to decode whatever it is
-                                }
-                            } finally {
-                                try {
-                                    inputStream.close();
-                                } catch (IOException e) {
-                                    // no op
-                                }
-                            }
+                if (item != null
+                        && item.inputStream != null) {
+                    try {
+                        if (CONTENT_TYPE_SVG.equals(item.type)) {
+                            result = handleSvg(item.inputStream);
+                        } else if (CONTENT_TYPE_GIF.equals(item.type)) {
+                            result = handleGif(item.inputStream);
+                        } else {
+                            result = handleSimple(item.inputStream);
+                        }
+                    } finally {
+                        try {
+                            item.inputStream.close();
+                        } catch (IOException e) {
+                            // no op
                         }
                     }
                 }
@@ -163,6 +155,102 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 requests.remove(destination);
             }
         });
+    }
+
+    private Item fromFile(Uri uri) {
+
+        final List<String> segments = uri.getPathSegments();
+        if (segments == null
+                || segments.size() == 0) {
+            // pointing to file & having no path segments is no use
+            return null;
+        }
+
+        final Item out;
+        final String type;
+        final InputStream inputStream;
+
+        final boolean assets = FILE_ANDROID_ASSETS.equals(segments.get(0));
+        final String lastSegment = uri.getLastPathSegment();
+
+        if (lastSegment.endsWith(".svg")) {
+            type = CONTENT_TYPE_SVG;
+        } else if (lastSegment.endsWith(".gif")) {
+            type = CONTENT_TYPE_GIF;
+        } else {
+            type = null;
+        }
+
+        if (assets) {
+            final StringBuilder path = new StringBuilder();
+            for (int i = 1, size = segments.size(); i < size; i++) {
+                if (i != 1) {
+                    path.append('/');
+                }
+                path.append(segments.get(i));
+            }
+            // load assets
+            InputStream inner = null;
+            try {
+                inner = resources.getAssets().open(path.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            inputStream = inner;
+        } else {
+            InputStream inner = null;
+            try {
+                inner = new BufferedInputStream(new FileInputStream(new File(uri.getPath())));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            inputStream = inner;
+        }
+
+        if (inputStream != null) {
+            out = new Item(type, inputStream);
+        } else {
+            out = null;
+        }
+
+        return out;
+    }
+
+    private Item fromNetwork(String destination) {
+
+        Item out = null;
+
+        final Request request = new Request.Builder()
+                .url(destination)
+                .tag(destination)
+                .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (response != null) {
+            final ResponseBody body = response.body();
+            if (body != null) {
+                final InputStream inputStream = body.byteStream();
+                if (inputStream != null) {
+                    final String type;
+                    final String contentType = response.header(HEADER_CONTENT_TYPE);
+                    if (!TextUtils.isEmpty(contentType)
+                            && contentType.startsWith(CONTENT_TYPE_SVG)) {
+                        type = CONTENT_TYPE_SVG;
+                    } else {
+                        type = contentType;
+                    }
+                    out = new Item(type, inputStream);
+                }
+            }
+        }
+
+        return out;
     }
 
     private Drawable handleSvg(InputStream stream) {
@@ -290,6 +378,16 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 executorService = client.dispatcher().executorService();
             }
             return new AsyncDrawableLoader(this);
+        }
+    }
+
+    private static class Item {
+        final String type;
+        final InputStream inputStream;
+
+        Item(String type, InputStream inputStream) {
+            this.type = type;
+            this.inputStream = inputStream;
         }
     }
 }
