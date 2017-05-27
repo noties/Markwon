@@ -1,5 +1,6 @@
 package ru.noties.markwon.spans;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -230,6 +231,7 @@ public class TableRowSpan extends ReplacementSpan {
         }
     }
 
+    @SuppressLint("SwitchIntDef")
     private static Layout.Alignment alignment(@Alignment int alignment) {
         final Layout.Alignment out;
         switch (alignment) {

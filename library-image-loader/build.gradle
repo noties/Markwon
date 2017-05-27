@@ -11,6 +11,11 @@ android {
         versionCode 1
         versionName version
     }
+
+    lintOptions {
+        // okio....
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {

@@ -20,9 +20,9 @@ import ru.noties.markwon.renderer.SpannableRenderer;
 public abstract class Markwon {
 
     /**
-     * Helper method to obtain a {@link Parser} with registered strike-through & table extensions
+     * Helper method to obtain a Parser with registered strike-through &amp; table extensions
      *
-     * @return a {@link Parser} instance that is supported by this library
+     * @return a Parser instance that is supported by this library
      * @since 1.0.0
      */
     public static Parser createParser() {
@@ -145,7 +145,7 @@ public abstract class Markwon {
     }
 
     /**
-     * De-references previously scheduled {@link ru.noties.markwon.spans.AsyncDrawableSpan}'s
+     * De-references previously scheduled {@link ru.noties.markwon.spans.AsyncDrawableSpan}&#39;s
      *
      * @param view a {@link TextView}
      * @see #scheduleDrawables(TextView)
@@ -165,7 +165,7 @@ public abstract class Markwon {
      * ability for {@link ru.noties.markwon.spans.TableRowSpan} to invalidate
      * `view` when it encounters such a situation (when available width is not known or have changed).
      * Precede this call with {@link #unscheduleTableRows(TextView)} in order to
-     * de-reference previously scheduled {@link ru.noties.markwon.spans.TableRowSpan}'s
+     * de-reference previously scheduled {@link ru.noties.markwon.spans.TableRowSpan}&#39;s
      *
      * @param view a {@link TextView}
      * @see #unscheduleTableRows(TextView)
@@ -176,7 +176,7 @@ public abstract class Markwon {
     }
 
     /**
-     * De-references previously scheduled {@link ru.noties.markwon.spans.TableRowSpan}'s
+     * De-references previously scheduled {@link ru.noties.markwon.spans.TableRowSpan}&#39;s
      *
      * @param view a {@link TextView}
      * @see #scheduleTableRows(TextView)
