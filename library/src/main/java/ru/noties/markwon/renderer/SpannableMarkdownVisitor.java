@@ -63,6 +63,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     private int blockQuoteIndent;
     private int listLevel;
 
+    private List<TableRowSpan.Cell> pendingTableRow;
+    private boolean tableRowIsHeader;
+    private int tableRows;
+
     public SpannableMarkdownVisitor(
             @NonNull SpannableConfiguration configuration,
             @NonNull SpannableStringBuilder builder
@@ -264,10 +268,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(HardLineBreak hardLineBreak) {
         newLine();
     }
-
-    private List<TableRowSpan.Cell> pendingTableRow;
-    private boolean tableRowIsHeader;
-    private int tableRows;
 
     @Override
     public void visit(CustomNode customNode) {
