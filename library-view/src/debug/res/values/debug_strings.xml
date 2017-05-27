@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="debug_markdown">
+        <![CDATA[
+
+            # Hello
+            \n
+            **Bold title, right (layout preview somehow cannot render it)?**
+            \n
+            > Quote
+            \n
+            >> Quote #2
+            \n
+            >>> Quote `#3`
+            \n
+            ---
+            \n
+            ```
+            \n
+            // this is some amazing code block
+            \n
+            ```
+            \n
+            * First
+            \n
+            * Second
+            \n
+            * * Second-First
+            \n
+            * * Second-Second
+            \n
+            * * * Second-Second-First
+            \n
+            * And out of blue - Third
+        ]]>
+    </string>
+
+</resources>

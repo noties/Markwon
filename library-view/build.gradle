@@ -1,0 +1,23 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion TARGET_SDK
+    buildToolsVersion BUILD_TOOLS
+
+    defaultConfig {
+        minSdkVersion MIN_SDK
+        targetSdkVersion TARGET_SDK
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+    compile project(':library')
+    provided SUPPORT_APP_COMPAT
+}
+
+if (project.hasProperty('release')) {
+    apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+}

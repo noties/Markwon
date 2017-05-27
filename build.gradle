@@ -29,6 +29,7 @@ ext {
     // Dependencies
     final def supportVersion = '25.3.1'
     SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
+    SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
 
     final def commonMarkVersion = '0.9.0'
     COMMON_MARK = "com.atlassian.commonmark:commonmark:$commonMarkVersion"

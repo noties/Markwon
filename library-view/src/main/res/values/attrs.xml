@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MarkwonView">
+        <attr name="mv_configurationProvider" format="string" />
+        <attr name="mv_markdown" format="string" />
+    </declare-styleable>
+
+</resources>
