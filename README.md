@@ -45,14 +45,10 @@ compile 'ru.noties:markwon-view:1.0.0' // optional
 
 Taken with default configuration (except for image loading):
 
-<img src="./art/mw_light_01.png" width="30%" />
-<img src="./art/mw_light_02.png" width="30%" />
-<img src="./art/mw_light_03.png" width="30%" />
+<img src="./art/mw_light_01.png" width="33%" /> <img src="./art/mw_light_02.png" width="33%" />
+<img src="./art/mw_light_03.png" width="33%" /> <img src="./art/mw_dark_01.png" width="33%" />
 
-
-By default configuration uses TextView textColor for styling, so changing textColor changes style:
-
-<img src="./art/mw_dark_01.png" width="30%" />
+By default configuration uses TextView textColor for styling, so changing textColor changes style
 
 ---
 
@@ -116,19 +112,6 @@ Please refer to [SpannableConfiguration] document for more info
 Based on [this cheatsheet][cheatsheet]
 
 ---
-
-## Screenshots
-
-Taken with default configuration (except for image loading):
-
-<img src="./art/mw_light_01.png" width="30%" />
-<img src="./art/mw_light_02.png" width="30%" />
-<img src="./art/mw_light_03.png" width="30%" />
-
-
-By default configuration uses TextView textColor for styling, so changing textColor changes style:
-
-<img src="./art/mw_dark_01.png" width="30%" />
 
 ## Headers
 ---
