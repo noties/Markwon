@@ -108,6 +108,8 @@ Markwon.scheduleDrawables(textView);
 Markwon.scheduleTableRows(textView);
 ```
 
+Please refer to [SpannableConfiguration] document for more info
+
 ---
 
 # Demo
@@ -299,6 +301,7 @@ Underscores (`_`)
 [sample-apk]: https://github.com/noties/Markwon/releases/download/v1.0.0/markwon-sample-1.0.0.apk
 [commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
 [cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+[SpannableConfiguration]: ./docs/SpannableConfiguration.md
 
 [arbitrary case-insensitive reference text]: https://www.mozilla.org
 [1]: http://slashdot.org
