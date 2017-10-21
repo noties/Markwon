@@ -9,10 +9,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.style.ReplacementSpan;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 @SuppressWarnings("WeakerAccess")
 public class AsyncDrawableSpan extends ReplacementSpan {
 
     @IntDef({ALIGN_BOTTOM, ALIGN_BASELINE, ALIGN_CENTER})
+    @Retention(RetentionPolicy.SOURCE)
     @interface Alignment {
     }
 
