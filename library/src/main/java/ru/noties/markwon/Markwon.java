@@ -15,6 +15,7 @@ import org.commonmark.parser.Parser;
 import java.util.Arrays;
 
 import ru.noties.markwon.renderer.SpannableRenderer;
+import ru.noties.markwon.tasklist.TaskListExtension;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class Markwon {
@@ -27,7 +28,7 @@ public abstract class Markwon {
      */
     public static Parser createParser() {
         return new Parser.Builder()
-                .extensions(Arrays.asList(StrikethroughExtension.create(), TablesExtension.create()))
+                .extensions(Arrays.asList(StrikethroughExtension.create(), TablesExtension.create(), TaskListExtension.create()))
                 .build();
     }
 

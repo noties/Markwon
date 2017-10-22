@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
@@ -39,9 +40,13 @@ public class SpannableTheme {
     }
 
     public static Builder builderWithDefaults(@NonNull Context context) {
+
+        final int linkColor = resolve(context, android.R.attr.textColorLink);
+        final int backgroundColor = resolve(context, android.R.attr.colorBackground);
+
         final Dip dip = new Dip(context);
         return new Builder()
-                .linkColor(resolve(context, android.R.attr.textColorLink))
+                .linkColor(linkColor)
                 .codeMultilineMargin(dip.toPx(8))
                 .blockMargin(dip.toPx(24))
                 .blockQuoteWidth(dip.toPx(4))
@@ -49,7 +54,8 @@ public class SpannableTheme {
                 .headingBreakHeight(dip.toPx(1))
                 .thematicBreakHeight(dip.toPx(4))
                 .tableCellPadding(dip.toPx(4))
-                .tableBorderWidth(dip.toPx(1));
+                .tableBorderWidth(dip.toPx(1))
+                .taskListDrawable(new TaskListDrawable(linkColor, linkColor, backgroundColor));
     }
 
     private static int resolve(Context context, @AttrRes int attr) {
@@ -147,6 +153,8 @@ public class SpannableTheme {
     // by default paint.color * TABLE_ODD_ROW_DEF_ALPHA
     protected final int tableOddRowBackgroundColor;
 
+    protected final Drawable taskListDrawable;
+
     protected SpannableTheme(@NonNull Builder builder) {
         this.linkColor = builder.linkColor;
         this.blockMargin = builder.blockMargin;
@@ -169,6 +177,7 @@ public class SpannableTheme {
         this.tableBorderColor = builder.tableBorderColor;
         this.tableBorderWidth = builder.tableBorderWidth;
         this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
+        this.taskListDrawable = builder.taskListDrawable;
     }
 
 
@@ -363,6 +372,11 @@ public class SpannableTheme {
         paint.setStyle(Paint.Style.FILL);
     }
 
+    @NonNull
+    public Drawable getTaskListDrawable() {
+        return taskListDrawable;
+    }
+
     public static class Builder {
 
         private int linkColor;
@@ -386,6 +400,7 @@ public class SpannableTheme {
         private int tableBorderColor;
         private int tableBorderWidth;
         private int tableOddRowBackgroundColor;
+        private Drawable taskListDrawable;
 
         Builder() {
         }
@@ -412,6 +427,7 @@ public class SpannableTheme {
             this.tableBorderColor = theme.tableBorderColor;
             this.tableBorderWidth = theme.tableBorderWidth;
             this.tableOddRowBackgroundColor = theme.tableOddRowBackgroundColor;
+            this.taskListDrawable = theme.taskListDrawable;
         }
 
         public Builder linkColor(@ColorInt int linkColor) {
@@ -516,6 +532,11 @@ public class SpannableTheme {
 
         public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor) {
             this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
+            return this;
+        }
+
+        public Builder taskListDrawable(@NonNull Drawable taskListDrawable) {
+            this.taskListDrawable = taskListDrawable;
             return this;
         }
 

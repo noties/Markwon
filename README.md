@@ -6,6 +6,9 @@
 [![markwon-image-loader](https://img.shields.io/maven-central/v/ru.noties/markwon-image-loader.svg?label=markwon-image-loader)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon-image-loader%22)
 [![markwon-view](https://img.shields.io/maven-central/v/ru.noties/markwon-view.svg?label=markwon-view)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon-view%22)
 
+- [ ] one **one** _one_
+- [X] ~~two~~
+
 **Markwon** is a library for Android that renders markdown as system-native Spannables. It gives ability to display markdown in all TextView widgets (**TextView**, **Button**, **Switch**, **CheckBox**, etc), **Notifications**, **Toasts**, etc. <u>**No WebView is required**</u>. Library provides reasonable defaults for display style of markdown but also gives all the means to tweak the appearance if desired. All markdown features are supported (including limited support for inlined HTML code, markdown tables and images).
 
 <sup>*</sup>*This file is displayed by default in the [sample-apk] application. Which is a generic markdown viewer with support to display markdown via `http`, `https` & `file` schemes and 2 themes included: Light & Dark*

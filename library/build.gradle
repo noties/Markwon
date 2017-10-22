@@ -18,6 +18,8 @@ dependencies {
     compile COMMON_MARK
     compile COMMON_MARK_STRIKETHROUGHT
     compile COMMON_MARK_TABLE
+
+    compile project(':library-task-list')
 }
 
 if (project.hasProperty('release')) {

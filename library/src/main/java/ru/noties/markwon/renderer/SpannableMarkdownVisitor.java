@@ -14,6 +14,7 @@ import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
+import org.commonmark.node.CustomBlock;
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
@@ -51,7 +52,10 @@ import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.TableRowSpan;
+import ru.noties.markwon.spans.TaskListSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
+import ru.noties.markwon.tasklist.TaskListBlock;
+import ru.noties.markwon.tasklist.TaskListItem;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
@@ -270,6 +274,19 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     @Override
+    public void visit(CustomBlock customBlock) {
+        if (customBlock instanceof TaskListBlock) {
+            blockQuoteIndent += 1;
+            visitChildren(customBlock);
+            blockQuoteIndent -= 1;
+            newLine();
+            builder.append('\n');
+        } else {
+            super.visit(customBlock);
+        }
+    }
+
+    @Override
     public void visit(CustomNode customNode) {
 
         if (customNode instanceof Strikethrough) {
@@ -279,7 +296,17 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             setSpan(length, new StrikethroughSpan());
 
         } else if (!handleTableNodes(customNode)) {
-            super.visit(customNode);
+
+            if (customNode instanceof TaskListItem) {
+
+                final int length = builder.length();
+                visitChildren(customNode);
+                setSpan(length, new TaskListSpan(configuration.theme(), blockQuoteIndent, length, ((TaskListItem) customNode).done()));
+                newLine();
+
+            } else {
+                super.visit(customNode);
+            }
         }
     }
 
