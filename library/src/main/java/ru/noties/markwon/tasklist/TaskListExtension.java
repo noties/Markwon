@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import org.commonmark.parser.Parser;
 
+/**
+ * @since 1.0.1
+ */
 public class TaskListExtension implements Parser.ParserExtension {
 
     @NonNull

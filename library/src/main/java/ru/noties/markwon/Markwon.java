@@ -22,13 +22,19 @@ public abstract class Markwon {
 
     /**
      * Helper method to obtain a Parser with registered strike-through &amp; table extensions
+     * &amp; task lists (added in 1.0.1)
      *
      * @return a Parser instance that is supported by this library
      * @since 1.0.0
      */
+    @NonNull
     public static Parser createParser() {
         return new Parser.Builder()
-                .extensions(Arrays.asList(StrikethroughExtension.create(), TablesExtension.create(), TaskListExtension.create()))
+                .extensions(Arrays.asList(
+                        StrikethroughExtension.create(),
+                        TablesExtension.create(),
+                        TaskListExtension.create()
+                ))
                 .build();
     }
 
@@ -92,6 +98,7 @@ public abstract class Markwon {
      * @return parsed markdown
      * @since 1.0.0
      */
+    @Nullable
     public static CharSequence markdown(@NonNull Context context, @Nullable String markdown) {
         final CharSequence out;
         if (TextUtils.isEmpty(markdown)) {
@@ -112,6 +119,7 @@ public abstract class Markwon {
      * @see SpannableConfiguration
      * @since 1.0.0
      */
+    @Nullable
     public static CharSequence markdown(@NonNull SpannableConfiguration configuration, @Nullable String markdown) {
         final CharSequence out;
         if (TextUtils.isEmpty(markdown)) {

@@ -18,18 +18,57 @@ import android.util.TypedValue;
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {
 
+    /**
+     * Factory method to obtain an instance of {@link SpannableTheme} with all values as defaults
+     *
+     * @param context Context in order to resolve defaults
+     * @return {@link SpannableTheme} instance
+     * @see #builderWithDefaults(Context)
+     * @since 1.0.0
+     */
+    @NonNull
     public static SpannableTheme create(@NonNull Context context) {
         return builderWithDefaults(context).build();
     }
 
+    /**
+     * Factory method to obtain an instance of {@link Builder}. Please note, that no default
+     * values are set. This might be useful if you require a lot of special styling that differs
+     * a lot with default one
+     *
+     * @return {@link Builder instance}
+     * @see #builderWithDefaults(Context)
+     * @see #builder(SpannableTheme)
+     * @since 1.0.0
+     */
+    @NonNull
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Factory method to create a {@link Builder} instance and initialize it with values
+     * from supplied {@link SpannableTheme}
+     *
+     * @param copyFrom {@link SpannableTheme} to copy values from
+     * @return {@link Builder} instance
+     * @see #builderWithDefaults(Context)
+     * @since 1.0.0
+     */
+    @NonNull
     public static Builder builder(@NonNull SpannableTheme copyFrom) {
         return new Builder(copyFrom);
     }
 
+    /**
+     * Factory method to obtain a {@link Builder} instance initialized with default values taken
+     * from current application theme.
+     *
+     * @param context Context to obtain default styling values (colors, etc)
+     * @return {@link Builder} instance
+     * @since 1.0.0
+     */
+    @NonNull
     public static Builder builderWithDefaults(@NonNull Context context) {
 
         // by default we will be using link color for the checkbox color
@@ -373,6 +412,10 @@ public class SpannableTheme {
         paint.setStyle(Paint.Style.FILL);
     }
 
+    /**
+     * @return a Drawable to be used as a checkbox indication in task lists
+     * @since 1.0.1
+     */
     @Nullable
     public Drawable getTaskListDrawable() {
         return taskListDrawable;
@@ -431,116 +474,149 @@ public class SpannableTheme {
             this.taskListDrawable = theme.taskListDrawable;
         }
 
+        @NonNull
         public Builder linkColor(@ColorInt int linkColor) {
             this.linkColor = linkColor;
             return this;
         }
 
+        @NonNull
         public Builder blockMargin(@Dimension int blockMargin) {
             this.blockMargin = blockMargin;
             return this;
         }
 
+        @NonNull
         public Builder blockQuoteWidth(@Dimension int blockQuoteWidth) {
             this.blockQuoteWidth = blockQuoteWidth;
             return this;
         }
 
+        @NonNull
         public Builder blockQuoteColor(@ColorInt int blockQuoteColor) {
             this.blockQuoteColor = blockQuoteColor;
             return this;
         }
 
+        @NonNull
         public Builder listItemColor(@ColorInt int listItemColor) {
             this.listItemColor = listItemColor;
             return this;
         }
 
+        @NonNull
         public Builder bulletListItemStrokeWidth(@Dimension int bulletListItemStrokeWidth) {
             this.bulletListItemStrokeWidth = bulletListItemStrokeWidth;
             return this;
         }
 
+        @NonNull
         public Builder bulletWidth(@Dimension int bulletWidth) {
             this.bulletWidth = bulletWidth;
             return this;
         }
 
+        @NonNull
         public Builder codeTextColor(@ColorInt int codeTextColor) {
             this.codeTextColor = codeTextColor;
             return this;
         }
 
+        @NonNull
         public Builder codeBackgroundColor(@ColorInt int codeBackgroundColor) {
             this.codeBackgroundColor = codeBackgroundColor;
             return this;
         }
 
+        @NonNull
         public Builder codeMultilineMargin(@Dimension int codeMultilineMargin) {
             this.codeMultilineMargin = codeMultilineMargin;
             return this;
         }
 
+        @NonNull
         public Builder codeTypeface(@NonNull Typeface codeTypeface) {
             this.codeTypeface = codeTypeface;
             return this;
         }
 
+        @NonNull
         public Builder codeTextSize(@Dimension int codeTextSize) {
             this.codeTextSize = codeTextSize;
             return this;
         }
 
+        @NonNull
         public Builder headingBreakHeight(@Dimension int headingBreakHeight) {
             this.headingBreakHeight = headingBreakHeight;
             return this;
         }
 
+        @NonNull
         public Builder headingBreakColor(@ColorInt int headingBreakColor) {
             this.headingBreakColor = headingBreakColor;
             return this;
         }
 
+        @NonNull
         public Builder scriptTextSizeRatio(@FloatRange(from = .0F, to = Float.MAX_VALUE) float scriptTextSizeRatio) {
             this.scriptTextSizeRatio = scriptTextSizeRatio;
             return this;
         }
 
+        @NonNull
         public Builder thematicBreakColor(@ColorInt int thematicBreakColor) {
             this.thematicBreakColor = thematicBreakColor;
             return this;
         }
 
+        @NonNull
         public Builder thematicBreakHeight(@Dimension int thematicBreakHeight) {
             this.thematicBreakHeight = thematicBreakHeight;
             return this;
         }
 
+        @NonNull
         public Builder tableCellPadding(@Dimension int tableCellPadding) {
             this.tableCellPadding = tableCellPadding;
             return this;
         }
 
+        @NonNull
         public Builder tableBorderColor(@ColorInt int tableBorderColor) {
             this.tableBorderColor = tableBorderColor;
             return this;
         }
 
+        @NonNull
         public Builder tableBorderWidth(@Dimension int tableBorderWidth) {
             this.tableBorderWidth = tableBorderWidth;
             return this;
         }
 
+        @NonNull
         public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor) {
             this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
             return this;
         }
 
+        /**
+         * Supplied Drawable must be stateful ({@link Drawable#isStateful()} -> true). If a task
+         * is marked as done, then this drawable will be updated with an {@code int[] { android.R.attr.state_checked }}
+         * as the state, otherwise an empty array will be used. This library provides a ready to be
+         * used Drawable: {@link TaskListDrawable}
+         *
+         * @param taskListDrawable Drawable to be used as the task list indication (checkbox)
+         * @see TaskListDrawable
+         * @since 1.0.1
+         */
+        @NonNull
         public Builder taskListDrawable(@NonNull Drawable taskListDrawable) {
             this.taskListDrawable = taskListDrawable;
             return this;
         }
 
+        @NonNull
         public SpannableTheme build() {
             return new SpannableTheme(this);
         }

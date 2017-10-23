@@ -273,6 +273,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
     }
 
+    /**
+     * @since 1.0.1
+     */
     @Override
     public void visit(CustomBlock customBlock) {
         if (customBlock instanceof TaskListBlock) {
@@ -295,32 +298,31 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(customNode);
             setSpan(length, new StrikethroughSpan());
 
+        } else if (customNode instanceof TaskListItem) {
+
+            // new in 1.0.1
+
+            final TaskListItem listItem = (TaskListItem) customNode;
+
+            final int length = builder.length();
+
+            blockQuoteIndent += listItem.indent();
+
+            visitChildren(customNode);
+
+            setSpan(length, new TaskListSpan(
+                    configuration.theme(),
+                    blockQuoteIndent,
+                    length,
+                    listItem.done()
+            ));
+
+            newLine();
+
+            blockQuoteIndent -= listItem.indent();
+
         } else if (!handleTableNodes(customNode)) {
-
-            if (customNode instanceof TaskListItem) {
-
-                final TaskListItem listItem = (TaskListItem) customNode;
-
-                final int length = builder.length();
-
-                blockQuoteIndent += listItem.indent();
-
-                visitChildren(customNode);
-
-                setSpan(length, new TaskListSpan(
-                        configuration.theme(),
-                        blockQuoteIndent,
-                        length,
-                        listItem.done()
-                ));
-
-                newLine();
-
-                blockQuoteIndent -= listItem.indent();
-
-            } else {
-                super.visit(customNode);
-            }
+            super.visit(customNode);
         }
     }
 

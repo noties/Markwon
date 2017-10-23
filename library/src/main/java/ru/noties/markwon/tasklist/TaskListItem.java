@@ -2,6 +2,9 @@ package ru.noties.markwon.tasklist;
 
 import org.commonmark.node.CustomNode;
 
+/**
+ * @since 1.0.1
+ */
 @SuppressWarnings("WeakerAccess")
 public class TaskListItem extends CustomNode {
 

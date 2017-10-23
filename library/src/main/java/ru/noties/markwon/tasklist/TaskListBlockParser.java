@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @since 1.0.1
+ */
 @SuppressWarnings("WeakerAccess")
 class TaskListBlockParser extends AbstractBlockParser {
 

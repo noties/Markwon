@@ -13,6 +13,9 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/**
+ * @since 1.0.1
+ */
 @SuppressWarnings("WeakerAccess")
 public class TaskListDrawable extends Drawable {
 

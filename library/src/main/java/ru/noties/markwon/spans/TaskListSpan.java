@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
 
+/**
+ * @since 1.0.1
+ */
 public class TaskListSpan implements LeadingMarginSpan {
 
     private final SpannableTheme theme;
