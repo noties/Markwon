@@ -105,6 +105,16 @@ public Builder tableBorderWidth(@Dimension int tableBorderWidth);
 public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor);
 ```
 
+#### Task lists
+
+Task lists are supported but with some limitations. First of all, task list cannot be nested
+(in a list, quote, etc). By default (if used factory method `builderWithDefaults`) TaskListDrawable
+will be used with `linkColor` as the primary color and `windowBackground` as the checkMarkColor.
+
+```java
+public Builder taskListDrawable(@NonNull Drawable taskListDrawable);
+```
+
 
 ### Contents
 

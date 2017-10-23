@@ -11,22 +11,13 @@ import android.support.annotation.Dimension;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.TypedValue;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {
-//
-//    // this method should be used if TextView is known beforehand
-//    // it will correctly measure the `space` char and set it as `codeMultilineMargin`
-//    // otherwise this value must be set explicitly
-//    public static SpannableTheme create(@NonNull TextView textView) {
-//        return builderWithDefaults(textView.getContext())
-//                .codeMultilineMargin((int) (textView.getPaint().measureText("\u00a0") + .5F))
-//                .build();
-//    }
 
-    // this create default theme (except for `codeMultilineMargin` property)
     public static SpannableTheme create(@NonNull Context context) {
         return builderWithDefaults(context).build();
     }
@@ -41,6 +32,8 @@ public class SpannableTheme {
 
     public static Builder builderWithDefaults(@NonNull Context context) {
 
+        // by default we will be using link color for the checkbox color
+        // & window background as a checkMark color
         final int linkColor = resolve(context, android.R.attr.textColorLink);
         final int backgroundColor = resolve(context, android.R.attr.colorBackground);
 
@@ -153,6 +146,8 @@ public class SpannableTheme {
     // by default paint.color * TABLE_ODD_ROW_DEF_ALPHA
     protected final int tableOddRowBackgroundColor;
 
+    // drawable that will be used to render checkbox (should be stateful)
+    // TaskListDrawable can be used
     protected final Drawable taskListDrawable;
 
     protected SpannableTheme(@NonNull Builder builder) {
@@ -252,10 +247,16 @@ public class SpannableTheme {
 
         // custom typeface was set
         if (codeTypeface != null) {
+
             paint.setTypeface(codeTypeface);
+
+            // please note that we won't be calculating textSize
+            // (like we do when no Typeface is provided), if it's some specific typeface
+            // we would confuse users about textSize
             if (codeTextSize != 0) {
                 paint.setTextSize(codeTextSize);
             }
+
         } else {
             paint.setTypeface(Typeface.MONOSPACE);
             final float textSize;
@@ -372,7 +373,7 @@ public class SpannableTheme {
         paint.setStyle(Paint.Style.FILL);
     }
 
-    @NonNull
+    @Nullable
     public Drawable getTaskListDrawable() {
         return taskListDrawable;
     }
@@ -546,6 +547,7 @@ public class SpannableTheme {
     }
 
     private static class Dip {
+
         private final float density;
 
         Dip(@NonNull Context context) {

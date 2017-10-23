@@ -299,10 +299,24 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             if (customNode instanceof TaskListItem) {
 
+                final TaskListItem listItem = (TaskListItem) customNode;
+
                 final int length = builder.length();
+
+                blockQuoteIndent += listItem.indent();
+
                 visitChildren(customNode);
-                setSpan(length, new TaskListSpan(configuration.theme(), blockQuoteIndent, length, ((TaskListItem) customNode).done()));
+
+                setSpan(length, new TaskListSpan(
+                        configuration.theme(),
+                        blockQuoteIndent,
+                        length,
+                        listItem.done()
+                ));
+
                 newLine();
+
+                blockQuoteIndent -= listItem.indent();
 
             } else {
                 super.visit(customNode);

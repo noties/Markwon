@@ -17,20 +17,20 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru.noties.debug.Debug;
-
+@SuppressWarnings("WeakerAccess")
 class TaskListBlockParser extends AbstractBlockParser {
 
     private static final Pattern PATTERN = Pattern.compile("\\s*-\\s+\\[(x|X|\\s)\\]\\s+(.*)");
-//    private static final Pattern PATTERN_2 = Pattern.compile("^\\s*-\\s+\\[(x|X|\\s)\\]\\s+(.*)");
 
     private final TaskListBlock block = new TaskListBlock();
 
-    private final List<String> lines;
+    private final List<Item> items = new ArrayList<>(3);
 
-    TaskListBlockParser(@NonNull String startLine) {
-        this.lines = new ArrayList<>(3);
-        this.lines.add(startLine);
+    private int indent = 0;
+
+    TaskListBlockParser(@NonNull String startLine, int startIndent) {
+        items.add(new Item(startLine, startIndent));
+        indent = startIndent;
     }
 
     @Override
@@ -45,16 +45,18 @@ class TaskListBlockParser extends AbstractBlockParser {
 
         final String line = line(parserState);
 
-//        Debug.i("line: %s, find: %s", line, PATTERN.matcher(line).find());
-        Debug.i("isBlank: %s, line: `%s`", parserState.isBlank(), line);
+        final int currentIndent = parserState.getIndent();
+        if (currentIndent > indent) {
+            indent += 2;
+        } else if (currentIndent < indent && indent > 1) {
+            indent -= 2;
+        }
 
         if (line != null
                 && line.length() > 0
                 && PATTERN.matcher(line).matches()) {
-            Debug.e();
             blockContinue = BlockContinue.atIndex(parserState.getIndex());
         } else {
-            Debug.e();
             blockContinue = BlockContinue.finished();
         }
 
@@ -63,54 +65,29 @@ class TaskListBlockParser extends AbstractBlockParser {
 
     @Override
     public void addLine(CharSequence line) {
-        Debug.i("line: %s", line);
-        if (line != null
-                && line.length() > 0) {
-            lines.add(line.toString());
+        if (length(line) > 0) {
+            items.add(new Item(line.toString(), indent));
         }
     }
 
     @Override
     public void parseInlines(InlineParser inlineParser) {
 
-        Debug.i(lines);
-
         Matcher matcher;
 
-        TaskListItem item;
+        TaskListItem listItem;
 
-        for (String line : lines) {
-
-            matcher = PATTERN.matcher(line);
-
+        for (Item item : items) {
+            matcher = PATTERN.matcher(item.line);
             if (!matcher.matches()) {
                 continue;
             }
-
-            item = new TaskListItem().done(isDone(matcher.group(1)));
-
-            inlineParser.parse(matcher.group(2), item);
-
-            block.appendChild(item);
+            listItem = new TaskListItem()
+                    .done(isDone(matcher.group(1)))
+                    .indent(item.indent / 2);
+            inlineParser.parse(matcher.group(2), listItem);
+            block.appendChild(listItem);
         }
-
-    }
-
-    @Override
-    public boolean isContainer() {
-        return false;
-    }
-
-    @Override
-    public boolean canContain(Block block) {
-        Debug.i("block: %s", block);
-        return false;
-    }
-
-    @Override
-    public void closeBlock() {
-        Debug.e(block);
-        Debug.trace();
     }
 
     static class Factory extends AbstractBlockParserFactory {
@@ -124,8 +101,14 @@ class TaskListBlockParser extends AbstractBlockParser {
                     && line.length() > 0
                     && PATTERN.matcher(line).matches()) {
 
-                return BlockStart.of(new TaskListBlockParser(line))
-                        .atIndex(state.getIndex() + line.length());
+                final int length = line.length();
+                final int index = state.getIndex();
+                final int atIndex = index != 0
+                        ? index + (length - index)
+                        : length;
+
+                return BlockStart.of(new TaskListBlockParser(line, state.getIndent()))
+                        .atIndex(atIndex);
             }
 
             return BlockStart.none();
@@ -140,8 +123,25 @@ class TaskListBlockParser extends AbstractBlockParser {
                 : null;
     }
 
+    private static int length(@Nullable CharSequence text) {
+        return text != null
+                ? text.length()
+                : 0;
+    }
+
     private static boolean isDone(@NonNull String value) {
         return "X".equals(value)
                 || "x".equals(value);
+    }
+
+    private static class Item {
+
+        final String line;
+        final int indent;
+
+        Item(@NonNull String line, int indent) {
+            this.line = line;
+            this.indent = indent;
+        }
     }
 }

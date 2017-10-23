@@ -46,7 +46,7 @@ public class TaskListDrawable extends Drawable {
     protected void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
 
-        // we should exclude stroke with from final bounds (half of the strokeWidth from both sides)
+        // we should exclude stroke with from final bounds (half of the strokeWidth from all sides)
 
         // we should have square shape
         final float min = Math.min(bounds.width(), bounds.height());

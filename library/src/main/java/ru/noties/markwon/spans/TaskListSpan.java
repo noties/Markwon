@@ -23,7 +23,7 @@ public class TaskListSpan implements LeadingMarginSpan {
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin();
+        return theme.getBlockMargin() * blockIndent;
     }
 
     @Override
@@ -33,13 +33,16 @@ public class TaskListSpan implements LeadingMarginSpan {
             return;
         }
 
+        final Drawable drawable = theme.getTaskListDrawable();
+        if (drawable == null) {
+            return;
+        }
+
         final int save = c.save();
         try {
 
             final int width = theme.getBlockMargin();
             final int height = bottom - top;
-
-            final Drawable drawable = theme.getTaskListDrawable();
 
             final int w = (int) (width * .75F + .5F);
             final int h = (int) (height * .75F + .5F);

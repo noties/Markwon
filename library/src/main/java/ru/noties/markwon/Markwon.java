@@ -17,7 +17,7 @@ import java.util.Arrays;
 import ru.noties.markwon.renderer.SpannableRenderer;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Markwon {
 
     /**

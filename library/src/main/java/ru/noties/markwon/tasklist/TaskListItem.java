@@ -2,9 +2,11 @@ package ru.noties.markwon.tasklist;
 
 import org.commonmark.node.CustomNode;
 
+@SuppressWarnings("WeakerAccess")
 public class TaskListItem extends CustomNode {
 
     private boolean done;
+    private int indent;
 
     public boolean done() {
         return done;
@@ -12,6 +14,15 @@ public class TaskListItem extends CustomNode {
 
     public TaskListItem done(boolean done) {
         this.done = done;
+        return this;
+    }
+
+    public int indent() {
+        return indent;
+    }
+
+    public TaskListItem indent(int indent) {
+        this.indent = indent;
         return this;
     }
 }

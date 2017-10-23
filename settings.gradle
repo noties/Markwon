@@ -1,1 +1,1 @@
-include ':app', ':library', ':library-image-loader', ':library-view', ':library-task-list'
+include ':app', ':library', ':library-image-loader', ':library-view'
