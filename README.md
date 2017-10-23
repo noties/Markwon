@@ -38,6 +38,11 @@ compile 'ru.noties:markwon-view:1.0.0' // optional
 * * Underline (`<u>`)
 * * Strike-through (`<s>`, `<strike>`, `<del>`)
   * other inline html is rendered via (`Html.fromHtml(...)`)
+* Task lists:
+
+- [ ] Not _done_
+  - [X] **Done** with `X`
+  - [x] ~~and~~ **or** small `x`
 
 ---
 
