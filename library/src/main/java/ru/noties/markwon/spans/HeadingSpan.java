@@ -16,12 +16,12 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
     private final int level;
-    private final int end;
+    private final int textLength;
 
-    public HeadingSpan(@NonNull SpannableTheme theme, @IntRange(from = 1, to = 6) int level, @IntRange(from = 0) int end) {
+    public HeadingSpan(@NonNull SpannableTheme theme, @IntRange(from = 1, to = 6) int level, @IntRange(from = 0) int textLength) {
         this.theme = theme;
         this.level = level;
-        this.end = end;
+        this.textLength = textLength;
     }
 
     @Override
@@ -50,8 +50,7 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
         if (level == 1
                 || level == 2) {
 
-            if (this.end == end) {
-
+            if ((start + textLength) == end) {
                 paint.set(p);
 
                 theme.applyHeadingBreakStyle(paint);

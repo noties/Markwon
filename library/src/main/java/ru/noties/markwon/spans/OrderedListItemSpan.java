@@ -12,18 +12,15 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
     private final SpannableTheme theme;
     private final String number;
     private final int blockIndent;
-    private final int start;
 
     public OrderedListItemSpan(
             @NonNull SpannableTheme theme,
             @NonNull String number,
-            @IntRange(from = 0) int blockIndent,
-            @IntRange(from = 0) int start
+            @IntRange(from = 0) int blockIndent
     ) {
         this.theme = theme;
         this.number = number;
         this.blockIndent = blockIndent;
-        this.start = start;
     }
 
     @Override
@@ -35,7 +32,7 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
         // if there was a line break, we don't need to draw anything
-        if (this.start != start) {
+        if (!first) {
             return;
         }
 

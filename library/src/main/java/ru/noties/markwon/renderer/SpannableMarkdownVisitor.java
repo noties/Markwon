@@ -204,8 +204,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             setSpan(length, new OrderedListItemSpan(
                     configuration.theme(),
                     String.valueOf(start) + "." + '\u00a0',
-                    blockQuoteIndent,
-                    length
+                    blockQuoteIndent
             ));
 
             // after we have visited the children increment start number
@@ -219,8 +218,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             setSpan(length, new BulletListItemSpan(
                     configuration.theme(),
                     blockQuoteIndent,
-                    listLevel - 1,
-                    length
+                    listLevel - 1
             ));
         }
 
@@ -253,7 +251,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         setSpan(length, new HeadingSpan(
                 configuration.theme(),
                 heading.getLevel(),
-                builder.length())
+                builder.length() - length)
         );
 
         newLine();

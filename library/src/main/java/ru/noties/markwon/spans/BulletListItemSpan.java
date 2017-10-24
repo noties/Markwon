@@ -19,17 +19,14 @@ public class BulletListItemSpan implements LeadingMarginSpan {
 
     private final int blockIndent;
     private final int level;
-    private final int start;
 
     public BulletListItemSpan(
             @NonNull SpannableTheme theme,
             @IntRange(from = 0) int blockIndent,
-            @IntRange(from = 0) int level,
-            @IntRange(from = 0) int start) {
+            @IntRange(from = 0) int level) {
         this.theme = theme;
         this.blockIndent = blockIndent;
         this.level = level;
-        this.start = start;
     }
 
     @Override
@@ -41,7 +38,7 @@ public class BulletListItemSpan implements LeadingMarginSpan {
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
         // if there was a line break, we don't need to draw anything
-        if (this.start != start) {
+        if (!first) {
             return;
         }
 
