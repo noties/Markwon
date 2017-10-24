@@ -32,7 +32,7 @@ public class TaskListSpan implements LeadingMarginSpan {
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
-        if (this.start != start) {
+        if (!first) {
             return;
         }
 
