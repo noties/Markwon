@@ -155,7 +155,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 if (result != null) {
                     final Drawable out;
                     if (height != -1 && width != -1) {
-                        out = AsyncDrawableLoader.this.resize(result, height, width);
+                        out = resize(result, height, width);
                     } else {
                         out = result;
                     }
