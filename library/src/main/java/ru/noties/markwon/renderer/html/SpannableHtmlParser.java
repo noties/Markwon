@@ -10,6 +10,8 @@ import android.text.Spanned;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.noties.markwon.ImageClickResolver;
+import ru.noties.markwon.ImageClickResolverDef;
 import ru.noties.markwon.LinkResolverDef;
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.UrlProcessorNoOp;
@@ -25,7 +27,8 @@ public class SpannableHtmlParser {
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader
     ) {
-        return builderWithDefaults(theme, loader, null, null)
+        return builderWithDefaults(theme, loader, null, null,
+                null)
                 .build();
     }
 
@@ -33,9 +36,10 @@ public class SpannableHtmlParser {
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
             @NonNull UrlProcessor urlProcessor,
-            @NonNull LinkSpan.Resolver resolver
+            @NonNull LinkSpan.Resolver linkResolver,
+            @NonNull ImageClickResolver imageClickResolver
     ) {
-        return builderWithDefaults(theme, loader, urlProcessor, resolver)
+        return builderWithDefaults(theme, loader, urlProcessor, linkResolver, imageClickResolver)
                 .build();
     }
 
@@ -44,22 +48,28 @@ public class SpannableHtmlParser {
     }
 
     public static Builder builderWithDefaults(@NonNull SpannableTheme theme) {
-        return builderWithDefaults(theme, null, null, null);
+        return builderWithDefaults(theme, null, null, null,
+                null);
     }
 
     public static Builder builderWithDefaults(
             @NonNull SpannableTheme theme,
             @Nullable AsyncDrawable.Loader asyncDrawableLoader,
             @Nullable UrlProcessor urlProcessor,
-            @Nullable LinkSpan.Resolver resolver
+            @Nullable LinkSpan.Resolver linkResolver,
+            @Nullable ImageClickResolver imageClickResolver
     ) {
 
         if (urlProcessor == null) {
             urlProcessor = new UrlProcessorNoOp();
         }
 
-        if (resolver == null) {
-            resolver = new LinkResolverDef();
+        if (linkResolver == null) {
+            linkResolver = new LinkResolverDef();
+        }
+
+        if (imageClickResolver == null) {
+            imageClickResolver = new ImageClickResolverDef();
         }
 
         final BoldProvider boldProvider = new BoldProvider();
@@ -68,7 +78,8 @@ public class SpannableHtmlParser {
 
         final ImageProvider imageProvider;
         if (asyncDrawableLoader != null) {
-            imageProvider = new ImageProviderImpl(theme, asyncDrawableLoader, urlProcessor);
+            imageProvider = new ImageProviderImpl(theme, asyncDrawableLoader, urlProcessor,
+                    imageClickResolver);
         } else {
             imageProvider = null;
         }
@@ -86,7 +97,7 @@ public class SpannableHtmlParser {
                 .simpleTag("del", strikeProvider)
                 .simpleTag("s", strikeProvider)
                 .simpleTag("strike", strikeProvider)
-                .simpleTag("a", new LinkProvider(theme, urlProcessor, resolver))
+                .simpleTag("a", new LinkProvider(theme, urlProcessor, linkResolver))
                 .imageProvider(imageProvider);
     }
 

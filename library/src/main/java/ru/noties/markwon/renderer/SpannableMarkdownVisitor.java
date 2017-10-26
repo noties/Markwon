@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.text.style.StrikethroughSpan;
+import android.view.View;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -431,8 +433,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                 )
         );
 
-        // todo, maybe, if image is not inside a link, we should make it clickable, so
-        // user can open it in external viewer?
+        setSpan(length, new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                configuration.imageClickResolver().resolve(view, destination);
+            }
+        });
     }
 
     @Override
