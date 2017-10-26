@@ -111,7 +111,7 @@ public class SpannableConfiguration {
             return this;
         }
 
-        public Builder setImageClickResolver(ImageClickResolver imageClickResolver) {
+        public Builder imageClickResolver(ImageClickResolver imageClickResolver) {
             this.imageClickResolver = imageClickResolver;
             return this;
         }
