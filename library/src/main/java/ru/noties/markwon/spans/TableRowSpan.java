@@ -35,57 +35,57 @@ public class TableRowSpan extends ReplacementSpan {
 
     public static class Cell {
 
-        final int alignment;
-        final CharSequence text;
+        final int mAlignment;
+        final CharSequence mText;
 
         public Cell(@Alignment int alignment, CharSequence text) {
-            this.alignment = alignment;
-            this.text = text;
+            mAlignment = alignment;
+            mText = text;
         }
 
         @Alignment
         public int alignment() {
-            return alignment;
+            return mAlignment;
         }
 
         public CharSequence text() {
-            return text;
+            return mText;
         }
 
         @Override
         public String toString() {
             return "Cell{" +
-                    "alignment=" + alignment +
-                    ", text=" + text +
+                    "mAlignment=" + mAlignment +
+                    ", mText=" + mText +
                     '}';
         }
     }
 
-    private final SpannableTheme theme;
-    private final List<Cell> cells;
-    private final List<StaticLayout> layouts;
-    private final TextPaint textPaint;
-    private final boolean header;
-    private final boolean odd;
+    private final SpannableTheme mTheme;
+    private final List<Cell> mCells;
+    private final List<StaticLayout> mLayouts;
+    private final TextPaint mTextPaint;
+    private final boolean mHeader;
+    private final boolean mOdd;
 
-    private final Rect rect = ObjectsPool.rect();
-    private final Paint paint = ObjectsPool.paint();
+    private final Rect mRect = ObjectsPool.rect();
+    private final Paint mPaint = ObjectsPool.paint();
 
-    private int width;
-    private int height;
-    private Invalidator invalidator;
+    private int mWidth;
+    private int mHeight;
+    private Invalidator mInvalidator;
 
     public TableRowSpan(
             @NonNull SpannableTheme theme,
             @NonNull List<Cell> cells,
             boolean header,
             boolean odd) {
-        this.theme = theme;
-        this.cells = cells;
-        this.layouts = new ArrayList<>(cells.size());
-        this.textPaint = new TextPaint();
-        this.header = header;
-        this.odd = odd;
+        mTheme = theme;
+        mCells = cells;
+        mLayouts = new ArrayList<>(cells.size());
+        mTextPaint = new TextPaint();
+        mHeader = header;
+        mOdd = odd;
     }
 
     @Override
@@ -97,14 +97,14 @@ public class TableRowSpan extends ReplacementSpan {
             @Nullable Paint.FontMetricsInt fm) {
 
         // it's our absolute requirement to have width of the canvas here... because, well, it changes
-        // the way we draw text. So, if we do not know the width of canvas we cannot correctly measure our text
+        // the way we draw mText. So, if we do not know the width of canvas we cannot correctly measure our mText
 
-        if (layouts.size() > 0) {
+        if (mLayouts.size() > 0) {
 
             if (fm != null) {
 
                 int max = 0;
-                for (StaticLayout layout : layouts) {
+                for (StaticLayout layout : mLayouts) {
                     final int height = layout.getHeight();
                     if (height > max) {
                         max = height;
@@ -112,10 +112,10 @@ public class TableRowSpan extends ReplacementSpan {
                 }
 
                 // we store actual height
-                height = max;
+                mHeight = max;
 
                 // but apply height with padding
-                final int padding = theme.tableCellPadding() * 2;
+                final int padding = mTheme.tableCellPadding() * 2;
 
                 fm.ascent = -(max + padding);
                 fm.descent = 0;
@@ -125,7 +125,7 @@ public class TableRowSpan extends ReplacementSpan {
             }
         }
 
-        return width;
+        return mWidth;
     }
 
     @Override
@@ -141,46 +141,46 @@ public class TableRowSpan extends ReplacementSpan {
             @NonNull Paint paint) {
 
         if (recreateLayouts(canvas.getWidth())) {
-            width = canvas.getWidth();
-            textPaint.set(paint);
+            mWidth = canvas.getWidth();
+            mTextPaint.set(paint);
             makeNewLayouts();
         }
 
         int maxHeight = 0;
 
-        final int padding = theme.tableCellPadding();
+        final int padding = mTheme.tableCellPadding();
 
-        final int size = layouts.size();
+        final int size = mLayouts.size();
 
-        final int w = width / size;
+        final int w = mWidth / size;
 
         // feels like magic...
-        final int heightDiff = (bottom - top - height) / 4;
+        final int heightDiff = (bottom - top - mHeight) / 4;
 
-        if (odd) {
+        if (mOdd) {
             final int save = canvas.save();
             try {
-                rect.set(0, 0, width, bottom - top);
-                theme.applyTableOddRowStyle(this.paint);
+                mRect.set(0, 0, mWidth, bottom - top);
+                mTheme.applyTableOddRowStyle(mPaint);
                 canvas.translate(x, top - heightDiff);
-                canvas.drawRect(rect, this.paint);
+                canvas.drawRect(mRect, mPaint);
             } finally {
                 canvas.restoreToCount(save);
             }
         }
 
-        rect.set(0, 0, w, bottom - top);
+        mRect.set(0, 0, w, bottom - top);
 
-        theme.applyTableBorderStyle(this.paint);
+        mTheme.applyTableBorderStyle(mPaint);
 
         StaticLayout layout;
         for (int i = 0; i < size; i++) {
-            layout = layouts.get(i);
+            layout = mLayouts.get(i);
             final int save = canvas.save();
             try {
 
                 canvas.translate(x + (i * w), top - heightDiff);
-                canvas.drawRect(rect, this.paint);
+                canvas.drawRect(mRect, mPaint);
 
                 canvas.translate(padding, padding + heightDiff);
                 layout.draw(canvas);
@@ -194,40 +194,40 @@ public class TableRowSpan extends ReplacementSpan {
             }
         }
 
-        if (height != maxHeight) {
-            if (invalidator != null) {
-                invalidator.invalidate();
+        if (mHeight != maxHeight) {
+            if (mInvalidator != null) {
+                mInvalidator.invalidate();
             }
         }
     }
 
     private boolean recreateLayouts(int newWidth) {
-        return width != newWidth;
+        return mWidth != newWidth;
     }
 
     private void makeNewLayouts() {
 
-        textPaint.setFakeBoldText(header);
+        mTextPaint.setFakeBoldText(mHeader);
 
-        final int columns = cells.size();
-        final int padding = theme.tableCellPadding() * 2;
-        final int w = (width / columns) - padding;
+        final int columns = mCells.size();
+        final int padding = mTheme.tableCellPadding() * 2;
+        final int w = (mWidth / columns) - padding;
 
-        this.layouts.clear();
+        mLayouts.clear();
         Cell cell;
         StaticLayout layout;
-        for (int i = 0, size = cells.size(); i < size; i++) {
-            cell = cells.get(i);
+        for (int i = 0, size = mCells.size(); i < size; i++) {
+            cell = mCells.get(i);
             layout = new StaticLayout(
-                    cell.text,
-                    textPaint,
+                    cell.mText,
+                    mTextPaint,
                     w,
-                    alignment(cell.alignment),
+                    alignment(cell.mAlignment),
                     1.F,
                     .0F,
                     false
             );
-            layouts.add(layout);
+            mLayouts.add(layout);
         }
     }
 
@@ -249,7 +249,7 @@ public class TableRowSpan extends ReplacementSpan {
     }
 
     public TableRowSpan invalidator(Invalidator invalidator) {
-        this.invalidator = invalidator;
+        mInvalidator = invalidator;
         return this;
     }
 }

@@ -7,14 +7,14 @@ import ru.noties.markwon.spans.SubScriptSpan;
 
 class SubScriptProvider implements SpannableHtmlParser.SpanProvider {
 
-    private final SpannableTheme theme;
+    private final SpannableTheme mTheme;
 
     public SubScriptProvider(SpannableTheme theme) {
-        this.theme = theme;
+        mTheme = theme;
     }
 
     @Override
     public Object provide(@NonNull SpannableHtmlParser.Tag tag) {
-        return new SubScriptSpan(theme);
+        return new SubScriptSpan(mTheme);
     }
 }

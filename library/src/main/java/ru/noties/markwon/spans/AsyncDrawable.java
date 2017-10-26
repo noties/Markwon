@@ -17,27 +17,27 @@ public class AsyncDrawable extends Drawable {
         void cancel(@NonNull String destination);
     }
 
-    private final String destination;
-    private final Loader loader;
+    private final String mDestination;
+    private final Loader mLoader;
 
-    private Drawable result;
-    private Callback callback;
+    private Drawable mResult;
+    private Callback mCallback;
 
     public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
-        this.destination = destination;
-        this.loader = loader;
+        mDestination = destination;
+        mLoader = loader;
     }
 
     public String getDestination() {
-        return destination;
+        return mDestination;
     }
 
     public Drawable getResult() {
-        return result;
+        return mResult;
     }
 
     public boolean hasResult() {
-        return result != null;
+        return mResult != null;
     }
 
     public boolean isAttached() {
@@ -47,39 +47,39 @@ public class AsyncDrawable extends Drawable {
     // yeah
     public void setCallback2(@Nullable Callback callback) {
 
-        this.callback = callback;
+        mCallback = callback;
         super.setCallback(callback);
 
         // if not null -> means we are attached
         if (callback != null) {
-            loader.load(destination, this);
+            mLoader.load(mDestination, this);
         } else {
-            if (result != null) {
+            if (mResult != null) {
 
-                result.setCallback(null);
+                mResult.setCallback(null);
 
                 // let's additionally stop if it Animatable
-                if (result instanceof Animatable) {
-                    ((Animatable) result).stop();
+                if (mResult instanceof Animatable) {
+                    ((Animatable) mResult).stop();
                 }
             }
-            loader.cancel(destination);
+            mLoader.cancel(mDestination);
         }
     }
 
     public void setResult(@NonNull Drawable result) {
 
         // if we have previous one, detach it
-        if (this.result != null) {
-            this.result.setCallback(null);
+        if (mResult != null) {
+            mResult.setCallback(null);
         }
 
-        this.result = result;
-        this.result.setCallback(callback);
+        mResult = result;
+        mResult.setCallback(mCallback);
 
         // should we copy the data here? like bounds etc?
         // if we are async and we load some image from some source
-        // thr bounds might change... so we are better off copy `result` bounds to this instance
+        // thr bounds might change... so we are better off copy `mResult` bounds to this instance
         setBounds(result.getBounds());
         invalidateSelf();
     }
@@ -87,7 +87,7 @@ public class AsyncDrawable extends Drawable {
     @Override
     public void draw(@NonNull Canvas canvas) {
         if (hasResult()) {
-            result.draw(canvas);
+            mResult.draw(canvas);
         }
     }
 
@@ -105,7 +105,7 @@ public class AsyncDrawable extends Drawable {
     public int getOpacity() {
         final int opacity;
         if (hasResult()) {
-            opacity = result.getOpacity();
+            opacity = mResult.getOpacity();
         } else {
             opacity = PixelFormat.TRANSPARENT;
         }
@@ -116,7 +116,7 @@ public class AsyncDrawable extends Drawable {
     public int getIntrinsicWidth() {
         final int out;
         if (hasResult()) {
-            out = result.getIntrinsicWidth();
+            out = mResult.getIntrinsicWidth();
         } else {
             out = 0;
         }
@@ -127,7 +127,7 @@ public class AsyncDrawable extends Drawable {
     public int getIntrinsicHeight() {
         final int out;
         if (hasResult()) {
-            out = result.getIntrinsicHeight();
+            out = mResult.getIntrinsicHeight();
         } else {
             out = 0;
         }

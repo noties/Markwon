@@ -4,7 +4,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }
 
@@ -28,12 +28,12 @@ task wrapper(type: Wrapper) {
 ext {
 
     // Config
-    BUILD_TOOLS = '26.0.2'
-    TARGET_SDK = 26
+    BUILD_TOOLS = '27.0.0'
+    TARGET_SDK = 27
     MIN_SDK = 16
 
     // Dependencies
-    final def supportVersion = '26.1.0'
+    final def supportVersion = '27.0.0'
     SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
     SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
 
@@ -44,5 +44,5 @@ ext {
 
     ANDROID_SVG = 'com.caverock:androidsvg:1.2.1'
     ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
-    OK_HTTP = 'com.squareup.okhttp3:okhttp:3.8.0'
+    OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
 }

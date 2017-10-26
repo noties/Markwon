@@ -22,15 +22,15 @@ public class AsyncDrawableSpan extends ReplacementSpan {
 
     public static final int ALIGN_BOTTOM = 0;
     public static final int ALIGN_BASELINE = 1;
-    public static final int ALIGN_CENTER = 2; // will only center if drawable height is less than text line height
+    public static final int ALIGN_CENTER = 2; // will only center if drawable height is less than mText line height
 
-    private final SpannableTheme theme;
-    private final AsyncDrawable drawable;
-    private final int alignment;
-    private final boolean replacementTextIsLink;
+    private final SpannableTheme mTheme;
+    private final AsyncDrawable mDrawable;
+    private final int mAlignment;
+    private final boolean mReplacementTextIsLink;
 
-    private int lastKnownDrawX;
-    private int lastKnownDrawY;
+    private int mLastKnownDrawX;
+    private int mLastKnownDrawY;
 
     public AsyncDrawableSpan(@NonNull SpannableTheme theme, @NonNull AsyncDrawable drawable) {
         this(theme, drawable, ALIGN_BOTTOM);
@@ -48,10 +48,10 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             @NonNull AsyncDrawable drawable,
             @Alignment int alignment,
             boolean replacementTextIsLink) {
-        this.theme = theme;
-        this.drawable = drawable;
-        this.alignment = alignment;
-        this.replacementTextIsLink = replacementTextIsLink;
+        mTheme = theme;
+        mDrawable = drawable;
+        mAlignment = alignment;
+        mReplacementTextIsLink = replacementTextIsLink;
 
         // additionally set intrinsic bounds if empty
         final Rect rect = drawable.getBounds();
@@ -68,13 +68,13 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             @IntRange(from = 0) int end,
             @Nullable Paint.FontMetricsInt fm) {
 
-        // if we have no async drawable result - we will just render text
+        // if we have no async drawable result - we will just render mText
 
         final int size;
 
-        if (drawable.hasResult()) {
+        if (mDrawable.hasResult()) {
 
-            final Rect rect = drawable.getBounds();
+            final Rect rect = mDrawable.getBounds();
 
             if (fm != null) {
                 fm.ascent = -rect.bottom;
@@ -89,11 +89,11 @@ public class AsyncDrawableSpan extends ReplacementSpan {
         } else {
 
             // we will apply style here in case if theme modifies textSize or style (affects metrics)
-            if (replacementTextIsLink) {
-                theme.applyLinkStyle(paint);
+            if (mReplacementTextIsLink) {
+                mTheme.applyLinkStyle(paint);
             }
 
-            // NB, no specific text handling (no new lines, etc)
+            // NB, no specific mText handling (no new lines, etc)
             size = (int) (paint.measureText(text, start, end) + .5F);
         }
 
@@ -112,10 +112,10 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
-        this.lastKnownDrawX = (int) (x + .5F);
-        this.lastKnownDrawY = y;
+        mLastKnownDrawX = (int) (x + .5F);
+        mLastKnownDrawY = y;
 
-        final AsyncDrawable drawable = this.drawable;
+        final AsyncDrawable drawable = mDrawable;
 
         if (drawable.hasResult()) {
 
@@ -124,9 +124,9 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             final int save = canvas.save();
             try {
                 final int translationY;
-                if (ALIGN_CENTER == alignment) {
+                if (ALIGN_CENTER == mAlignment) {
                     translationY = b - ((bottom - top - drawable.getBounds().height()) / 2);
-                } else if (ALIGN_BASELINE == alignment) {
+                } else if (ALIGN_BASELINE == mAlignment) {
                     translationY = b - paint.getFontMetricsInt().descent;
                 } else {
                     translationY = b;
@@ -142,24 +142,24 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             // let's focus on main functionality and then think of it
 
             final float textY = CanvasUtils.textCenterY(top, bottom, paint);
-            if (replacementTextIsLink) {
-                theme.applyLinkStyle(paint);
+            if (mReplacementTextIsLink) {
+                mTheme.applyLinkStyle(paint);
             }
 
-            // NB, no specific text handling (no new lines, etc)
+            // NB, no specific mText handling (no new lines, etc)
             canvas.drawText(text, start, end, x, textY, paint);
         }
     }
 
     public AsyncDrawable getDrawable() {
-        return drawable;
+        return mDrawable;
     }
 
     public int lastKnownDrawX() {
-        return lastKnownDrawX;
+        return mLastKnownDrawX;
     }
 
     public int lastKnownDrawY() {
-        return lastKnownDrawY;
+        return mLastKnownDrawY;
     }
 }

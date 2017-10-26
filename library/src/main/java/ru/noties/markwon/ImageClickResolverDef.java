@@ -9,13 +9,15 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
-import ru.noties.markwon.spans.LinkSpan;
-
-public class LinkResolverDef implements LinkSpan.Resolver {
+/**
+ * @author pa.gulko zTrap (25.10.2017)
+ * @since 1.0.1
+ */
+public class ImageClickResolverDef implements ImageClickResolver {
 
     @Override
     public void resolve(View view, @NonNull String link) {
-        final Uri uri = Uri.parse(link);
+        final Uri uri = Uri.parse(LinkUtils.cropImageSizes(link));
         final Context context = view.getContext();
         final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());

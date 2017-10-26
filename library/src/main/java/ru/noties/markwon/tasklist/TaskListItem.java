@@ -8,24 +8,24 @@ import org.commonmark.node.CustomNode;
 @SuppressWarnings("WeakerAccess")
 public class TaskListItem extends CustomNode {
 
-    private boolean done;
-    private int indent;
+    private boolean mDone;
+    private int mIndent;
 
     public boolean done() {
-        return done;
+        return mDone;
     }
 
     public TaskListItem done(boolean done) {
-        this.done = done;
+        mDone = done;
         return this;
     }
 
     public int indent() {
-        return indent;
+        return mIndent;
     }
 
     public TaskListItem indent(int indent) {
-        this.indent = indent;
+        mIndent = indent;
         return this;
     }
 }

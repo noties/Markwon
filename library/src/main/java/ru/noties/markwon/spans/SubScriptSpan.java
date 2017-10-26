@@ -6,10 +6,10 @@ import android.text.style.MetricAffectingSpan;
 
 public class SubScriptSpan extends MetricAffectingSpan {
 
-    private final SpannableTheme theme;
+    private final SpannableTheme mTheme;
 
     public SubScriptSpan(@NonNull SpannableTheme theme) {
-        this.theme = theme;
+        mTheme = theme;
     }
 
     @Override
@@ -23,6 +23,6 @@ public class SubScriptSpan extends MetricAffectingSpan {
     }
 
     private void apply(TextPaint paint) {
-        theme.applySubScriptStyle(paint);
+        mTheme.applySubScriptStyle(paint);
     }
 }

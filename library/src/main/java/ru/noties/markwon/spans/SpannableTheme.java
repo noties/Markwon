@@ -122,128 +122,128 @@ public class SpannableTheme {
 
     protected static final int TABLE_ODD_ROW_DEF_ALPHA = 22;
 
-    protected final int linkColor;
+    protected final int mLinkColor;
 
     // used in quote, lists
-    protected final int blockMargin;
+    protected final int mBlockMargin;
 
-    // by default it's 1/4th of `blockMargin`
-    protected final int blockQuoteWidth;
+    // by default it's 1/4th of `mBlockMargin`
+    protected final int mBlockQuoteWidth;
 
-    // by default it's text color with `BLOCK_QUOTE_DEF_COLOR_ALPHA` applied alpha
-    protected final int blockQuoteColor;
+    // by default it's mText color with `BLOCK_QUOTE_DEF_COLOR_ALPHA` applied alpha
+    protected final int mBlockQuoteColor;
 
-    // by default uses text color (applied for un-ordered lists & ordered (bullets & numbers)
-    protected final int listItemColor;
+    // by default uses mText color (applied for un-ordered lists & ordered (bullets & numbers)
+    protected final int mListItemColor;
 
     // by default the stroke color of a paint object
-    protected final int bulletListItemStrokeWidth;
+    protected final int mBulletListItemStrokeWidth;
 
-    // width of bullet, by default min(blockMargin, height) / 2
-    protected final int bulletWidth;
+    // width of bullet, by default min(mBlockMargin, height) / 2
+    protected final int mBulletWidth;
 
-    // by default - main text color
-    protected final int codeTextColor;
+    // by default - main mText color
+    protected final int mCodeTextColor;
 
-    // by default 0.1 alpha of textColor/codeTextColor
-    protected final int codeBackgroundColor;
+    // by default 0.1 alpha of textColor/mCodeTextColor
+    protected final int mCodeBackgroundColor;
 
     // by default `width` of a space char... it's fun and games, but span doesn't have access to paint in `getLeadingMargin`
     // so, we need to set this value explicitly (think of an utility method, that takes TextView/TextPaint and measures space char)
-    protected final int codeMultilineMargin;
+    protected final int mCodeMultilineMargin;
 
     // by default Typeface.MONOSPACE
-    protected final Typeface codeTypeface;
+    protected final Typeface mCodeTypeface;
 
-    // by default a bit (how much?!) smaller than normal text
+    // by default a bit (how much?!) smaller than normal mText
     // applied ONLY if default typeface was used, otherwise, not applied
-    protected final int codeTextSize;
+    protected final int mCodeTextSize;
 
     // by default paint.getStrokeWidth
-    protected final int headingBreakHeight;
+    protected final int mHeadingBreakHeight;
 
-    // by default, text color with `HEADING_DEF_BREAK_COLOR_ALPHA` applied alpha
-    protected final int headingBreakColor;
+    // by default, mText color with `HEADING_DEF_BREAK_COLOR_ALPHA` applied alpha
+    protected final int mHeadingBreakColor;
 
     // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
-    protected final float scriptTextSizeRatio;
+    protected final float mScriptTextSizeRatio;
 
     // by default textColor with `THEMATIC_BREAK_DEF_ALPHA` applied alpha
-    protected final int thematicBreakColor;
+    protected final int mThematicBreakColor;
 
     // by default paint.strokeWidth
-    protected final int thematicBreakHeight;
+    protected final int mThematicBreakHeight;
 
     // by default 0
-    protected final int tableCellPadding;
+    protected final int mTableCellPadding;
 
     // by default paint.color * TABLE_BORDER_DEF_ALPHA
-    protected final int tableBorderColor;
+    protected final int mTableBorderColor;
 
-    protected final int tableBorderWidth;
+    protected final int mTableBorderWidth;
 
     // by default paint.color * TABLE_ODD_ROW_DEF_ALPHA
-    protected final int tableOddRowBackgroundColor;
+    protected final int mTableOddRowBackgroundColor;
 
     // drawable that will be used to render checkbox (should be stateful)
     // TaskListDrawable can be used
-    protected final Drawable taskListDrawable;
+    protected final Drawable mTaskListDrawable;
 
     protected SpannableTheme(@NonNull Builder builder) {
-        this.linkColor = builder.linkColor;
-        this.blockMargin = builder.blockMargin;
-        this.blockQuoteWidth = builder.blockQuoteWidth;
-        this.blockQuoteColor = builder.blockQuoteColor;
-        this.listItemColor = builder.listItemColor;
-        this.bulletListItemStrokeWidth = builder.bulletListItemStrokeWidth;
-        this.bulletWidth = builder.bulletWidth;
-        this.codeTextColor = builder.codeTextColor;
-        this.codeBackgroundColor = builder.codeBackgroundColor;
-        this.codeMultilineMargin = builder.codeMultilineMargin;
-        this.codeTypeface = builder.codeTypeface;
-        this.codeTextSize = builder.codeTextSize;
-        this.headingBreakHeight = builder.headingBreakHeight;
-        this.headingBreakColor = builder.headingBreakColor;
-        this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
-        this.thematicBreakColor = builder.thematicBreakColor;
-        this.thematicBreakHeight = builder.thematicBreakHeight;
-        this.tableCellPadding = builder.tableCellPadding;
-        this.tableBorderColor = builder.tableBorderColor;
-        this.tableBorderWidth = builder.tableBorderWidth;
-        this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
-        this.taskListDrawable = builder.taskListDrawable;
+        mLinkColor = builder.linkColor;
+        mBlockMargin = builder.blockMargin;
+        mBlockQuoteWidth = builder.blockQuoteWidth;
+        mBlockQuoteColor = builder.blockQuoteColor;
+        mListItemColor = builder.listItemColor;
+        mBulletListItemStrokeWidth = builder.bulletListItemStrokeWidth;
+        mBulletWidth = builder.bulletWidth;
+        mCodeTextColor = builder.codeTextColor;
+        mCodeBackgroundColor = builder.codeBackgroundColor;
+        mCodeMultilineMargin = builder.codeMultilineMargin;
+        mCodeTypeface = builder.codeTypeface;
+        mCodeTextSize = builder.codeTextSize;
+        mHeadingBreakHeight = builder.headingBreakHeight;
+        mHeadingBreakColor = builder.headingBreakColor;
+        mScriptTextSizeRatio = builder.scriptTextSizeRatio;
+        mThematicBreakColor = builder.thematicBreakColor;
+        mThematicBreakHeight = builder.thematicBreakHeight;
+        mTableCellPadding = builder.tableCellPadding;
+        mTableBorderColor = builder.tableBorderColor;
+        mTableBorderWidth = builder.tableBorderWidth;
+        mTableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
+        mTaskListDrawable = builder.taskListDrawable;
     }
 
 
     public void applyLinkStyle(@NonNull Paint paint) {
         paint.setUnderlineText(true);
-        if (linkColor != 0) {
-            // by default we will be using text color
-            paint.setColor(linkColor);
+        if (mLinkColor != 0) {
+            // by default we will be using mText color
+            paint.setColor(mLinkColor);
         }
     }
 
     public void applyBlockQuoteStyle(@NonNull Paint paint) {
         final int color;
-        if (blockQuoteColor == 0) {
+        if (mBlockQuoteColor == 0) {
             color = ColorUtils.applyAlpha(paint.getColor(), BLOCK_QUOTE_DEF_COLOR_ALPHA);
         } else {
-            color = blockQuoteColor;
+            color = mBlockQuoteColor;
         }
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(color);
     }
 
     public int getBlockMargin() {
-        return blockMargin;
+        return mBlockMargin;
     }
 
     public int getBlockQuoteWidth() {
         final int out;
-        if (blockQuoteWidth == 0) {
-            out = (int) (blockMargin * .25F + .5F);
+        if (mBlockQuoteWidth == 0) {
+            out = (int) (mBlockMargin * .25F + .5F);
         } else {
-            out = blockQuoteWidth;
+            out = mBlockQuoteWidth;
         }
         return out;
     }
@@ -251,28 +251,28 @@ public class SpannableTheme {
     public void applyListItemStyle(@NonNull Paint paint) {
 
         final int color;
-        if (listItemColor != 0) {
-            color = listItemColor;
+        if (mListItemColor != 0) {
+            color = mListItemColor;
         } else {
             color = paint.getColor();
         }
         paint.setColor(color);
 
-        if (bulletListItemStrokeWidth != 0) {
-            paint.setStrokeWidth(bulletListItemStrokeWidth);
+        if (mBulletListItemStrokeWidth != 0) {
+            paint.setStrokeWidth(mBulletListItemStrokeWidth);
         }
     }
 
     public int getBulletWidth(int height) {
 
-        final int min = Math.min(blockMargin, height) / 2;
+        final int min = Math.min(mBlockMargin, height) / 2;
 
         final int width;
-        if (bulletWidth == 0
-                || bulletWidth > min) {
+        if (mBulletWidth == 0
+                || mBulletWidth > min) {
             width = min;
         } else {
-            width = bulletWidth;
+            width = mBulletWidth;
         }
 
         return width;
@@ -280,27 +280,27 @@ public class SpannableTheme {
 
     public void applyCodeTextStyle(@NonNull Paint paint) {
 
-        if (codeTextColor != 0) {
-            paint.setColor(codeTextColor);
+        if (mCodeTextColor != 0) {
+            paint.setColor(mCodeTextColor);
         }
 
         // custom typeface was set
-        if (codeTypeface != null) {
+        if (mCodeTypeface != null) {
 
-            paint.setTypeface(codeTypeface);
+            paint.setTypeface(mCodeTypeface);
 
             // please note that we won't be calculating textSize
             // (like we do when no Typeface is provided), if it's some specific typeface
             // we would confuse users about textSize
-            if (codeTextSize != 0) {
-                paint.setTextSize(codeTextSize);
+            if (mCodeTextSize != 0) {
+                paint.setTextSize(mCodeTextSize);
             }
 
         } else {
             paint.setTypeface(Typeface.MONOSPACE);
             final float textSize;
-            if (codeTextSize != 0) {
-                textSize = codeTextSize;
+            if (mCodeTextSize != 0) {
+                textSize = mCodeTextSize;
             } else {
                 textSize = paint.getTextSize() * CODE_DEF_TEXT_SIZE_RATIO;
             }
@@ -309,13 +309,13 @@ public class SpannableTheme {
     }
 
     public int getCodeMultilineMargin() {
-        return codeMultilineMargin;
+        return mCodeMultilineMargin;
     }
 
     public int getCodeBackgroundColor(@NonNull Paint paint) {
         final int color;
-        if (codeBackgroundColor != 0) {
-            color = codeBackgroundColor;
+        if (mCodeBackgroundColor != 0) {
+            color = mCodeBackgroundColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
         }
@@ -329,25 +329,25 @@ public class SpannableTheme {
 
     public void applyHeadingBreakStyle(@NonNull Paint paint) {
         final int color;
-        if (headingBreakColor != 0) {
-            color = headingBreakColor;
+        if (mHeadingBreakColor != 0) {
+            color = mHeadingBreakColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), HEADING_DEF_BREAK_COLOR_ALPHA);
         }
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
-        if (headingBreakHeight != 0) {
+        if (mHeadingBreakHeight != 0) {
             //noinspection SuspiciousNameCombination
-            paint.setStrokeWidth(headingBreakHeight);
+            paint.setStrokeWidth(mHeadingBreakHeight);
         }
     }
 
     public void applySuperScriptStyle(@NonNull TextPaint paint) {
         final float ratio;
-        if (Float.compare(scriptTextSizeRatio, .0F) == 0) {
+        if (Float.compare(mScriptTextSizeRatio, .0F) == 0) {
             ratio = SCRIPT_DEF_TEXT_SIZE_RATIO;
         } else {
-            ratio = scriptTextSizeRatio;
+            ratio = mScriptTextSizeRatio;
         }
         paint.setTextSize(paint.getTextSize() * ratio);
         paint.baselineShift += (int) (paint.ascent() / 2);
@@ -355,10 +355,10 @@ public class SpannableTheme {
 
     public void applySubScriptStyle(@NonNull TextPaint paint) {
         final float ratio;
-        if (Float.compare(scriptTextSizeRatio, .0F) == 0) {
+        if (Float.compare(mScriptTextSizeRatio, .0F) == 0) {
             ratio = SCRIPT_DEF_TEXT_SIZE_RATIO;
         } else {
-            ratio = scriptTextSizeRatio;
+            ratio = mScriptTextSizeRatio;
         }
         paint.setTextSize(paint.getTextSize() * ratio);
         paint.baselineShift -= (int) (paint.ascent() / 2);
@@ -366,35 +366,35 @@ public class SpannableTheme {
 
     public void applyThematicBreakStyle(@NonNull Paint paint) {
         final int color;
-        if (thematicBreakColor != 0) {
-            color = thematicBreakColor;
+        if (mThematicBreakColor != 0) {
+            color = mThematicBreakColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), THEMATIC_BREAK_DEF_ALPHA);
         }
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
 
-        if (thematicBreakHeight != 0) {
+        if (mThematicBreakHeight != 0) {
             //noinspection SuspiciousNameCombination
-            paint.setStrokeWidth(thematicBreakHeight);
+            paint.setStrokeWidth(mThematicBreakHeight);
         }
     }
 
     public int tableCellPadding() {
-        return tableCellPadding;
+        return mTableCellPadding;
     }
 
     public void applyTableBorderStyle(@NonNull Paint paint) {
 
         final int color;
-        if (tableBorderColor == 0) {
+        if (mTableBorderColor == 0) {
             color = ColorUtils.applyAlpha(paint.getColor(), TABLE_BORDER_DEF_ALPHA);
         } else {
-            color = tableBorderColor;
+            color = mTableBorderColor;
         }
 
-        if (tableBorderWidth != 0) {
-            paint.setStrokeWidth(tableBorderWidth);
+        if (mTableBorderWidth != 0) {
+            paint.setStrokeWidth(mTableBorderWidth);
         }
 
         paint.setColor(color);
@@ -403,10 +403,10 @@ public class SpannableTheme {
 
     public void applyTableOddRowStyle(@NonNull Paint paint) {
         final int color;
-        if (tableOddRowBackgroundColor == 0) {
+        if (mTableOddRowBackgroundColor == 0) {
             color = ColorUtils.applyAlpha(paint.getColor(), TABLE_ODD_ROW_DEF_ALPHA);
         } else {
-            color = tableOddRowBackgroundColor;
+            color = mTableOddRowBackgroundColor;
         }
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
@@ -418,7 +418,7 @@ public class SpannableTheme {
      */
     @Nullable
     public Drawable getTaskListDrawable() {
-        return taskListDrawable;
+        return mTaskListDrawable;
     }
 
     public static class Builder {
@@ -450,28 +450,28 @@ public class SpannableTheme {
         }
 
         Builder(@NonNull SpannableTheme theme) {
-            this.linkColor = theme.linkColor;
-            this.blockMargin = theme.blockMargin;
-            this.blockQuoteWidth = theme.blockQuoteWidth;
-            this.blockQuoteColor = theme.blockQuoteColor;
-            this.listItemColor = theme.listItemColor;
-            this.bulletListItemStrokeWidth = theme.bulletListItemStrokeWidth;
-            this.bulletWidth = theme.bulletWidth;
-            this.codeTextColor = theme.codeTextColor;
-            this.codeBackgroundColor = theme.codeBackgroundColor;
-            this.codeMultilineMargin = theme.codeMultilineMargin;
-            this.codeTypeface = theme.codeTypeface;
-            this.codeTextSize = theme.codeTextSize;
-            this.headingBreakHeight = theme.headingBreakHeight;
-            this.headingBreakColor = theme.headingBreakColor;
-            this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
-            this.thematicBreakColor = theme.thematicBreakColor;
-            this.thematicBreakHeight = theme.thematicBreakHeight;
-            this.tableCellPadding = theme.tableCellPadding;
-            this.tableBorderColor = theme.tableBorderColor;
-            this.tableBorderWidth = theme.tableBorderWidth;
-            this.tableOddRowBackgroundColor = theme.tableOddRowBackgroundColor;
-            this.taskListDrawable = theme.taskListDrawable;
+            linkColor = theme.mLinkColor;
+            blockMargin = theme.mBlockMargin;
+            blockQuoteWidth = theme.mBlockQuoteWidth;
+            blockQuoteColor = theme.mBlockQuoteColor;
+            listItemColor = theme.mListItemColor;
+            bulletListItemStrokeWidth = theme.mBulletListItemStrokeWidth;
+            bulletWidth = theme.mBulletWidth;
+            codeTextColor = theme.mCodeTextColor;
+            codeBackgroundColor = theme.mCodeBackgroundColor;
+            codeMultilineMargin = theme.mCodeMultilineMargin;
+            codeTypeface = theme.mCodeTypeface;
+            codeTextSize = theme.mCodeTextSize;
+            headingBreakHeight = theme.mHeadingBreakHeight;
+            headingBreakColor = theme.mHeadingBreakColor;
+            scriptTextSizeRatio = theme.mScriptTextSizeRatio;
+            thematicBreakColor = theme.mThematicBreakColor;
+            thematicBreakHeight = theme.mThematicBreakHeight;
+            tableCellPadding = theme.mTableCellPadding;
+            tableBorderColor = theme.mTableBorderColor;
+            tableBorderWidth = theme.mTableBorderWidth;
+            tableOddRowBackgroundColor = theme.mTableOddRowBackgroundColor;
+            taskListDrawable = theme.mTaskListDrawable;
         }
 
         @NonNull
@@ -624,14 +624,14 @@ public class SpannableTheme {
 
     private static class Dip {
 
-        private final float density;
+        private final float mDensity;
 
         Dip(@NonNull Context context) {
-            this.density = context.getResources().getDisplayMetrics().density;
+            mDensity = context.getResources().getDisplayMetrics().density;
         }
 
         int toPx(int dp) {
-            return (int) (dp * density + .5F);
+            return (int) (dp * mDensity + .5F);
         }
     }
 }

@@ -17,15 +17,15 @@ public class MarkwonViewHelper implements IMarkwonView {
         return new MarkwonViewHelper(view);
     }
 
-    private final TextView textView;
+    private final TextView mTextView;
 
-    private ConfigurationProvider provider;
+    private ConfigurationProvider mProvider;
 
-    private SpannableConfiguration configuration;
-    private String markdown;
+    private SpannableConfiguration mConfiguration;
+    private String mMarkdown;
 
     private MarkwonViewHelper(@NonNull TextView textView) {
-        this.textView = textView;
+        mTextView = textView;
     }
 
     public void init(Context context, AttributeSet attributeSet) {
@@ -57,11 +57,11 @@ public class MarkwonViewHelper implements IMarkwonView {
 
     @Override
     public void setConfigurationProvider(@NonNull ConfigurationProvider provider) {
-        this.provider = provider;
-        this.configuration = provider.provide(textView.getContext());
-        if (!TextUtils.isEmpty(markdown)) {
+        mProvider = provider;
+        mConfiguration = provider.provide(mTextView.getContext());
+        if (!TextUtils.isEmpty(mMarkdown)) {
             // invalidate rendered markdown
-            setMarkdown(markdown);
+            setMarkdown(mMarkdown);
         }
     }
 
@@ -72,24 +72,24 @@ public class MarkwonViewHelper implements IMarkwonView {
 
     @Override
     public void setMarkdown(@Nullable SpannableConfiguration configuration, @Nullable String markdown) {
-        this.markdown = markdown;
+        mMarkdown = markdown;
         if (configuration == null) {
-            if (this.configuration == null) {
-                if (provider != null) {
-                    this.configuration = provider.provide(textView.getContext());
+            if (mConfiguration == null) {
+                if (mProvider != null) {
+                    mConfiguration = mProvider.provide(mTextView.getContext());
                 } else {
-                    this.configuration = SpannableConfiguration.create(textView.getContext());
+                    mConfiguration = SpannableConfiguration.create(mTextView.getContext());
                 }
             }
-            configuration = this.configuration;
+            configuration = mConfiguration;
         }
-        Markwon.setMarkdown(textView, configuration, markdown);
+        Markwon.setMarkdown(mTextView, configuration, markdown);
     }
 
     @Nullable
     @Override
     public String getMarkdown() {
-        return markdown;
+        return mMarkdown;
     }
 
     @Nullable

@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -53,39 +55,38 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
     private static final String FILE_ANDROID_ASSETS = "android_asset";
 
-    private final OkHttpClient client;
-    private final Resources resources;
-    private final ExecutorService executorService;
-    private final Handler mainThread;
-    private final Drawable errorDrawable;
+    private final OkHttpClient mClient;
+    private final Resources mResources;
+    private final ExecutorService mExecutorService;
+    private final Handler mMainThread;
+    private final Drawable mErrorDrawable;
 
-    private final Map<String, Future<?>> requests;
+    private final Map<String, Future<?>> mRequests;
 
     AsyncDrawableLoader(Builder builder) {
-        this.client = builder.client;
-        this.resources = builder.resources;
-        this.executorService = builder.executorService;
-        this.mainThread = new Handler(Looper.getMainLooper());
-        this.errorDrawable = builder.errorDrawable;
-        this.requests = new HashMap<>(3);
+        mClient = builder.client;
+        mResources = builder.resources;
+        mExecutorService = builder.executorService;
+        mMainThread = new Handler(Looper.getMainLooper());
+        mErrorDrawable = builder.errorDrawable;
+        mRequests = new HashMap<>(3);
     }
-
 
     @Override
     public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
         // if drawable is not a link -> show loading placeholder...
-        requests.put(destination, execute(destination, drawable));
+        mRequests.put(destination, execute(destination, drawable));
     }
 
     @Override
     public void cancel(@NonNull String destination) {
 
-        final Future<?> request = requests.remove(destination);
+        final Future<?> request = mRequests.remove(destination);
         if (request != null) {
             request.cancel(true);
         }
 
-        final List<Call> calls = client.dispatcher().queuedCalls();
+        final List<Call> calls = mClient.dispatcher().queuedCalls();
         if (calls != null) {
             for (Call call : calls) {
                 if (!call.isCanceled()) {
@@ -97,14 +98,27 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         }
     }
 
-    private Future<?> execute(@NonNull final String destination, @NonNull AsyncDrawable drawable) {
-        final WeakReference<AsyncDrawable> reference = new WeakReference<AsyncDrawable>(drawable);
+    @NonNull
+    private Future<?> execute(@NonNull final String destinationCandidate, @NonNull AsyncDrawable drawable) {
+        final WeakReference<AsyncDrawable> reference = new WeakReference<>(drawable);
         // todo, if not a link -> show placeholder
-        return executorService.submit(new Runnable() {
+        return mExecutorService.submit(new Runnable() {
             @Override
             public void run() {
 
                 final Item item;
+                int height = -1;
+                int width = -1;
+                Matcher matcher = Pattern.compile("(.*)/(\\d+)\\$(\\d+)").matcher(destinationCandidate);
+
+                final String destination;
+                if (matcher.matches()){
+                    width = Integer.parseInt(matcher.group(2));
+                    height = Integer.parseInt(matcher.group(3));
+                    destination = matcher.group(1);
+                } else {
+                    destination = destinationCandidate;
+                }
 
                 final Uri uri = Uri.parse(destination);
                 if ("file".equals(uri.getScheme())) {
@@ -115,8 +129,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
                 Drawable result = null;
 
-                if (item != null
-                        && item.inputStream != null) {
+                if (item != null && item.inputStream != null) {
                     try {
                         if (CONTENT_TYPE_SVG.equals(item.type)) {
                             result = handleSvg(item.inputStream);
@@ -136,12 +149,17 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
                 // if result is null, we assume it's an error
                 if (result == null) {
-                    result = errorDrawable;
+                    result = mErrorDrawable;
                 }
 
                 if (result != null) {
-                    final Drawable out = result;
-                    mainThread.post(new Runnable() {
+                    final Drawable out;
+                    if (height != -1 && width != -1) {
+                        out = resize(result, height, width);
+                    } else {
+                        out = result;
+                    }
+                    mMainThread.post(new Runnable() {
                         @Override
                         public void run() {
                             final AsyncDrawable asyncDrawable = reference.get();
@@ -152,16 +170,39 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                     });
                 }
 
-                requests.remove(destination);
+                mRequests.remove(destinationCandidate);
             }
         });
+    }
+
+    private Drawable resize(Drawable image, int height, float width) {
+        final float density = mResources.getDisplayMetrics().density;
+
+        if (width == 0 || height == 0) {
+            final float imageDensity = (float) image.getIntrinsicWidth() / image.getIntrinsicHeight();
+            if (width == 0) {
+                width = intCeil(height * imageDensity);
+            }
+            if (height == 0) {
+                height = intCeil(width / imageDensity);
+            }
+        }
+
+        final int widthPx = intCeil(width * density);
+        final int heightPx = intCeil(height * density);
+
+        image.setBounds(0, 0, widthPx, heightPx);
+        return image;
+    }
+
+    private int intCeil(double d){
+        return (int) Math.ceil(d);
     }
 
     private Item fromFile(Uri uri) {
 
         final List<String> segments = uri.getPathSegments();
-        if (segments == null
-                || segments.size() == 0) {
+        if (segments == null || segments.size() == 0) {
             // pointing to file & having no path segments is no use
             return null;
         }
@@ -192,7 +233,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             // load assets
             InputStream inner = null;
             try {
-                inner = resources.getAssets().open(path.toString());
+                inner = mResources.getAssets().open(path.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -227,7 +268,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
         Response response = null;
         try {
-            response = client.newCall(request).execute();
+            response = mClient.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -239,8 +280,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 if (inputStream != null) {
                     final String type;
                     final String contentType = response.header(HEADER_CONTENT_TYPE);
-                    if (!TextUtils.isEmpty(contentType)
-                            && contentType.startsWith(CONTENT_TYPE_SVG)) {
+                    if (!TextUtils.isEmpty(contentType) && contentType.startsWith(CONTENT_TYPE_SVG)) {
                         type = CONTENT_TYPE_SVG;
                     } else {
                         type = contentType;
@@ -270,7 +310,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
             final float w = svg.getDocumentWidth();
             final float h = svg.getDocumentHeight();
-            final float density = resources.getDisplayMetrics().density;
+            final float density = mResources.getDisplayMetrics().density;
 
             final int width = (int) (w * density + .5F);
             final int height = (int) (h * density + .5F);
@@ -280,7 +320,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             canvas.scale(density, density);
             svg.renderToCanvas(canvas);
 
-            out = new BitmapDrawable(resources, bitmap);
+            out = new BitmapDrawable(mResources, bitmap);
             DrawableUtils.intrinsicBounds(out);
         }
 
@@ -310,7 +350,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
         final Bitmap bitmap = BitmapFactory.decodeStream(stream);
         if (bitmap != null) {
-            out = new BitmapDrawable(resources, bitmap);
+            out = new BitmapDrawable(mResources, bitmap);
             DrawableUtils.intrinsicBounds(out);
         } else {
             out = null;

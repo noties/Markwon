@@ -11,15 +11,15 @@ import android.text.style.MetricAffectingSpan;
 
 public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
-    private final Rect rect = ObjectsPool.rect();
-    private final Paint paint = ObjectsPool.paint();
+    private final SpannableTheme mTheme;
+    private final Rect mRect = ObjectsPool.rect();
+    private final Paint mPaint = ObjectsPool.paint();
 
-    private final boolean multiline;
+    private final boolean mMultiline;
 
     public CodeSpan(@NonNull SpannableTheme theme, boolean multiline) {
-        this.theme = theme;
-        this.multiline = multiline;
+        mTheme = theme;
+        mMultiline = multiline;
     }
 
     @Override
@@ -30,31 +30,31 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
     @Override
     public void updateDrawState(TextPaint ds) {
         apply(ds);
-        if (!multiline) {
-            ds.bgColor = theme.getCodeBackgroundColor(ds);
+        if (!mMultiline) {
+            ds.bgColor = mTheme.getCodeBackgroundColor(ds);
         }
     }
 
     private void apply(TextPaint p) {
-        theme.applyCodeTextStyle(p);
+        mTheme.applyCodeTextStyle(p);
     }
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return multiline ? theme.getCodeMultilineMargin() : 0;
+        return mMultiline ? mTheme.getCodeMultilineMargin() : 0;
     }
 
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
-        if (multiline) {
+        if (mMultiline) {
 
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(theme.getCodeBackgroundColor(p));
+            mPaint.setStyle(Paint.Style.FILL);
+            mPaint.setColor(mTheme.getCodeBackgroundColor(p));
 
-            rect.set(x, top, c.getWidth(), bottom);
+            mRect.set(x, top, c.getWidth(), bottom);
 
-            c.drawRect(rect, paint);
+            c.drawRect(mRect, mPaint);
         }
     }
 }

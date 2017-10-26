@@ -20,44 +20,50 @@ public class SpannableConfiguration {
         return new Builder(context);
     }
 
-    private final SpannableTheme theme;
-    private final AsyncDrawable.Loader asyncDrawableLoader;
-    private final SyntaxHighlight syntaxHighlight;
-    private final LinkSpan.Resolver linkResolver;
-    private final UrlProcessor urlProcessor;
-    private final SpannableHtmlParser htmlParser;
+    private final SpannableTheme mTheme;
+    private final AsyncDrawable.Loader mAsyncDrawableLoader;
+    private final SyntaxHighlight mSyntaxHighlight;
+    private final LinkSpan.Resolver mLinkResolver;
+    private final UrlProcessor mUrlProcessor;
+    private final SpannableHtmlParser mHtmlParser;
+    private final ImageClickResolver mImageClickResolver;
 
     private SpannableConfiguration(Builder builder) {
-        this.theme = builder.theme;
-        this.asyncDrawableLoader = builder.asyncDrawableLoader;
-        this.syntaxHighlight = builder.syntaxHighlight;
-        this.linkResolver = builder.linkResolver;
-        this.urlProcessor = builder.urlProcessor;
-        this.htmlParser = builder.htmlParser;
+        mTheme = builder.theme;
+        mAsyncDrawableLoader = builder.asyncDrawableLoader;
+        mSyntaxHighlight = builder.syntaxHighlight;
+        mLinkResolver = builder.linkResolver;
+        mUrlProcessor = builder.urlProcessor;
+        mHtmlParser = builder.htmlParser;
+        mImageClickResolver = builder.imageClickResolver;
     }
 
     public SpannableTheme theme() {
-        return theme;
+        return mTheme;
     }
 
     public AsyncDrawable.Loader asyncDrawableLoader() {
-        return asyncDrawableLoader;
+        return mAsyncDrawableLoader;
     }
 
     public SyntaxHighlight syntaxHighlight() {
-        return syntaxHighlight;
+        return mSyntaxHighlight;
     }
 
     public LinkSpan.Resolver linkResolver() {
-        return linkResolver;
+        return mLinkResolver;
     }
 
     public UrlProcessor urlProcessor() {
-        return urlProcessor;
+        return mUrlProcessor;
     }
 
     public SpannableHtmlParser htmlParser() {
-        return htmlParser;
+        return mHtmlParser;
+    }
+
+    public ImageClickResolver imageClickResolver() {
+        return mImageClickResolver;
     }
 
     public static class Builder {
@@ -69,6 +75,7 @@ public class SpannableConfiguration {
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
+        private ImageClickResolver imageClickResolver;
 
         Builder(Context context) {
             this.context = context;
@@ -104,6 +111,11 @@ public class SpannableConfiguration {
             return this;
         }
 
+        public Builder setImageClickResolver(ImageClickResolver imageClickResolver) {
+            this.imageClickResolver = imageClickResolver;
+            return this;
+        }
+
         public SpannableConfiguration build() {
             if (theme == null) {
                 theme = SpannableTheme.create(context);
@@ -120,8 +132,12 @@ public class SpannableConfiguration {
             if (urlProcessor == null) {
                 urlProcessor = new UrlProcessorNoOp();
             }
+            if (imageClickResolver == null) {
+                imageClickResolver = new ImageClickResolverDef();
+            }
             if (htmlParser == null) {
-                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor, linkResolver);
+                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor,
+                        linkResolver, imageClickResolver);
             }
             return new SpannableConfiguration(this);
         }

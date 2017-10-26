@@ -7,14 +7,14 @@ import ru.noties.markwon.spans.SuperScriptSpan;
 
 class SuperScriptProvider implements SpannableHtmlParser.SpanProvider {
 
-    private final SpannableTheme theme;
+    private final SpannableTheme mTheme;
 
     SuperScriptProvider(SpannableTheme theme) {
-        this.theme = theme;
+        mTheme = theme;
     }
 
     @Override
     public Object provide(@NonNull SpannableHtmlParser.Tag tag) {
-        return new SuperScriptSpan(theme);
+        return new SuperScriptSpan(mTheme);
     }
 }
