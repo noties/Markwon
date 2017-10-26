@@ -4,9 +4,12 @@ import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
+import android.view.View;
 
 import java.util.Map;
 
+import ru.noties.markwon.ImageClickResolver;
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
@@ -17,14 +20,17 @@ class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
     private final SpannableTheme theme;
     private final AsyncDrawable.Loader loader;
     private final UrlProcessor urlProcessor;
+    private final ImageClickResolver imageClickResolver;
 
     ImageProviderImpl(
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
-            @NonNull UrlProcessor urlProcessor) {
+            @NonNull UrlProcessor urlProcessor,
+            @NonNull ImageClickResolver imageClickResolver) {
         this.theme = theme;
         this.loader = loader;
         this.urlProcessor = urlProcessor;
+        this.imageClickResolver = imageClickResolver;
     }
 
     @Override
@@ -52,6 +58,14 @@ class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
 
             final SpannableString string = new SpannableString(replacement);
             string.setSpan(span, 0, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            final ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View view) {
+                    imageClickResolver.resolve(view, destination);
+                }
+            };
+            string.setSpan(clickableSpan, 0, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             spanned = string;
         } else {
