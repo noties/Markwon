@@ -11,27 +11,27 @@ import android.text.style.LeadingMarginSpan;
 
 public class BulletListItemSpan implements LeadingMarginSpan {
 
-    private SpannableTheme theme;
+    private SpannableTheme mTheme;
 
-    private final Paint paint = ObjectsPool.paint();
-    private final RectF circle = ObjectsPool.rectF();
-    private final Rect rectangle = ObjectsPool.rect();
+    private final Paint mPaint = ObjectsPool.paint();
+    private final RectF mCircle = ObjectsPool.rectF();
+    private final Rect mRectangle = ObjectsPool.rect();
 
-    private final int blockIndent;
-    private final int level;
+    private final int mBlockIndent;
+    private final int mLevel;
 
     public BulletListItemSpan(
             @NonNull SpannableTheme theme,
             @IntRange(from = 0) int blockIndent,
             @IntRange(from = 0) int level) {
-        this.theme = theme;
-        this.blockIndent = blockIndent;
-        this.level = level;
+        mTheme = theme;
+        mBlockIndent = blockIndent;
+        mLevel = level;
     }
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin();
+        return mTheme.getBlockMargin();
     }
 
     @Override
@@ -42,44 +42,44 @@ public class BulletListItemSpan implements LeadingMarginSpan {
             return;
         }
 
-        paint.set(p);
+        mPaint.set(p);
 
-        theme.applyListItemStyle(paint);
+        mTheme.applyListItemStyle(mPaint);
 
         final int save = c.save();
         try {
 
-            final int width = theme.getBlockMargin();
+            final int width = mTheme.getBlockMargin();
             final int height = bottom - top;
 
-            final int side = theme.getBulletWidth(bottom - top);
+            final int side = mTheme.getBulletWidth(bottom - top);
 
             final int marginLeft = (width - side) / 2;
             final int marginTop = (height - side) / 2;
 
-            final int l = (width * (blockIndent - 1)) + marginLeft;
+            final int l = (width * (mBlockIndent - 1)) + marginLeft;
             final int t = top + marginTop;
             final int r = l + side;
             final int b = t + side;
 
-            if (level == 0
-                    || level == 1) {
+            if (mLevel == 0
+                    || mLevel == 1) {
 
-                circle.set(l, t, r, b);
+                mCircle.set(l, t, r, b);
 
-                final Paint.Style style = level == 0
+                final Paint.Style style = mLevel == 0
                         ? Paint.Style.FILL
                         : Paint.Style.STROKE;
-                paint.setStyle(style);
+                mPaint.setStyle(style);
 
-                c.drawOval(circle, paint);
+                c.drawOval(mCircle, mPaint);
             } else {
 
-                rectangle.set(l, t, r, b);
+                mRectangle.set(l, t, r, b);
 
-                paint.setStyle(Paint.Style.FILL);
+                mPaint.setStyle(Paint.Style.FILL);
 
-                c.drawRect(rectangle, paint);
+                c.drawRect(mRectangle, mPaint);
             }
 
         } finally {

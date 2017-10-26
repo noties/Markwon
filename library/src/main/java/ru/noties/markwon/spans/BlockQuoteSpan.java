@@ -9,19 +9,19 @@ import android.text.style.LeadingMarginSpan;
 
 public class BlockQuoteSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
-    private final Rect rect = ObjectsPool.rect();
-    private final Paint paint = ObjectsPool.paint();
-    private final int indent;
+    private final SpannableTheme mTheme;
+    private final Rect mRect = ObjectsPool.rect();
+    private final Paint mPaint = ObjectsPool.paint();
+    private final int mIndent;
 
     public BlockQuoteSpan(@NonNull SpannableTheme theme, int indent) {
-        this.theme = theme;
-        this.indent = indent;
+        mTheme = theme;
+        mIndent = indent;
     }
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin();
+        return mTheme.getBlockMargin();
     }
 
     @Override
@@ -39,13 +39,13 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
             boolean first,
             Layout layout) {
 
-        final int width = theme.getBlockQuoteWidth();
+        final int width = mTheme.getBlockQuoteWidth();
 
-        theme.applyBlockQuoteStyle(paint);
+        mTheme.applyBlockQuoteStyle(mPaint);
 
-        final int left = theme.getBlockMargin() * (indent - 1);
-        rect.set(left, top, left + width, bottom);
+        final int left = mTheme.getBlockMargin() * (mIndent - 1);
+        mRect.set(left, top, left + width, bottom);
 
-        c.drawRect(rect, paint);
+        c.drawRect(mRect, mPaint);
     }
 }

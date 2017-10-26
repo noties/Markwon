@@ -24,25 +24,25 @@ public class TaskListDrawable extends Drawable {
     private static final Point POINT_1 = new Point(7.F / 18, 12.5F / 18);
     private static final Point POINT_2 = new Point(15.25F / 18, 4.75F / 18);
 
-    private final int checkedFillColor;
-    private final int normalOutlineColor;
+    private final int mCheckedFillColor;
+    private final int mNormalOutlineColor;
 
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final RectF rectF = new RectF();
+    private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF mRectF = new RectF();
 
-    private final Paint checkMarkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Path checkMarkPath = new Path();
+    private final Paint mCheckMarkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Path mCheckMarkPath = new Path();
 
-    private boolean isChecked;
+    private boolean mIsChecked;
 
     // unfortunately we cannot rely on TextView to be LAYER_TYPE_SOFTWARE
-    // if we could we would draw our checkMarkPath with PorterDuff.CLEAR
+    // if we could we would draw our mCheckMarkPath with PorterDuff.CLEAR
     public TaskListDrawable(@ColorInt int checkedFillColor, @ColorInt int normalOutlineColor, @ColorInt int checkMarkColor) {
-        this.checkedFillColor = checkedFillColor;
-        this.normalOutlineColor = normalOutlineColor;
+        mCheckedFillColor = checkedFillColor;
+        mNormalOutlineColor = normalOutlineColor;
 
-        checkMarkPaint.setColor(checkMarkColor);
-        checkMarkPaint.setStyle(Paint.Style.STROKE);
+        mCheckMarkPaint.setColor(checkMarkColor);
+        mCheckMarkPaint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
@@ -56,16 +56,16 @@ public class TaskListDrawable extends Drawable {
         final float stroke = min / 8;
 
         final float side = min - stroke;
-        rectF.set(0, 0, side, side);
+        mRectF.set(0, 0, side, side);
 
-        paint.setStrokeWidth(stroke);
-        checkMarkPaint.setStrokeWidth(stroke);
+        mPaint.setStrokeWidth(stroke);
+        mCheckMarkPaint.setStrokeWidth(stroke);
 
-        checkMarkPath.reset();
+        mCheckMarkPath.reset();
 
-        POINT_0.moveTo(checkMarkPath, side);
-        POINT_1.lineTo(checkMarkPath, side);
-        POINT_2.lineTo(checkMarkPath, side);
+        POINT_0.moveTo(mCheckMarkPath, side);
+        POINT_1.lineTo(mCheckMarkPath, side);
+        POINT_2.lineTo(mCheckMarkPath, side);
     }
 
     @Override
@@ -74,32 +74,32 @@ public class TaskListDrawable extends Drawable {
         final Paint.Style style;
         final int color;
 
-        if (isChecked) {
+        if (mIsChecked) {
             style = Paint.Style.FILL_AND_STROKE;
-            color = checkedFillColor;
+            color = mCheckedFillColor;
         } else {
             style = Paint.Style.STROKE;
-            color = normalOutlineColor;
+            color = mNormalOutlineColor;
         }
-        paint.setStyle(style);
-        paint.setColor(color);
+        mPaint.setStyle(style);
+        mPaint.setColor(color);
 
         final Rect bounds = getBounds();
 
-        final float left = (bounds.width() - rectF.width()) / 2;
-        final float top = (bounds.height() - rectF.height()) / 2;
+        final float left = (bounds.width() - mRectF.width()) / 2;
+        final float top = (bounds.height() - mRectF.height()) / 2;
 
-        final float radius = rectF.width() / 8;
+        final float radius = mRectF.width() / 8;
 
         final int save = canvas.save();
         try {
 
             canvas.translate(left, top);
 
-            canvas.drawRoundRect(rectF, radius, radius, paint);
+            canvas.drawRoundRect(mRectF, radius, radius, mPaint);
 
-            if (isChecked) {
-                canvas.drawPath(checkMarkPath, checkMarkPaint);
+            if (mIsChecked) {
+                canvas.drawPath(mCheckMarkPath, mCheckMarkPaint);
             }
         } finally {
             canvas.restoreToCount(save);
@@ -108,12 +108,12 @@ public class TaskListDrawable extends Drawable {
 
     @Override
     public void setAlpha(@IntRange(from = 0, to = 255) int alpha) {
-        paint.setAlpha(alpha);
+        mPaint.setAlpha(alpha);
     }
 
     @Override
     public void setColorFilter(@Nullable ColorFilter colorFilter) {
-        paint.setColorFilter(colorFilter);
+        mPaint.setColorFilter(colorFilter);
     }
 
     @Override
@@ -150,10 +150,10 @@ public class TaskListDrawable extends Drawable {
             checked = false;
         }
 
-        final boolean result = checked != isChecked;
+        final boolean result = checked != mIsChecked;
         if (result) {
             invalidateSelf();
-            isChecked = checked;
+            mIsChecked = checked;
         }
 
         return result;

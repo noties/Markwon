@@ -23,22 +23,22 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 class TaskListBlockParser extends AbstractBlockParser {
 
-    private static final Pattern PATTERN = Pattern.compile("\\s*-\\s+\\[(x|X|\\s)\\]\\s+(.*)");
+    private static final Pattern PATTERN = Pattern.compile("\\s*-\\s+\\[(x|X|\\s)]\\s+(.*)");
 
-    private final TaskListBlock block = new TaskListBlock();
+    private final TaskListBlock mBlock = new TaskListBlock();
 
-    private final List<Item> items = new ArrayList<>(3);
+    private final List<Item> mItems = new ArrayList<>(3);
 
     private int indent = 0;
 
     TaskListBlockParser(@NonNull String startLine, int startIndent) {
-        items.add(new Item(startLine, startIndent));
+        mItems.add(new Item(startLine, startIndent));
         indent = startIndent;
     }
 
     @Override
     public Block getBlock() {
-        return block;
+        return mBlock;
     }
 
     @Override
@@ -69,7 +69,7 @@ class TaskListBlockParser extends AbstractBlockParser {
     @Override
     public void addLine(CharSequence line) {
         if (length(line) > 0) {
-            items.add(new Item(line.toString(), indent));
+            mItems.add(new Item(line.toString(), indent));
         }
     }
 
@@ -80,7 +80,7 @@ class TaskListBlockParser extends AbstractBlockParser {
 
         TaskListItem listItem;
 
-        for (Item item : items) {
+        for (Item item : mItems) {
             matcher = PATTERN.matcher(item.line);
             if (!matcher.matches()) {
                 continue;
@@ -89,7 +89,7 @@ class TaskListBlockParser extends AbstractBlockParser {
                     .done(isDone(matcher.group(1)))
                     .indent(item.indent / 2);
             inlineParser.parse(matcher.group(2), listItem);
-            block.appendChild(listItem);
+            mBlock.appendChild(listItem);
         }
     }
 

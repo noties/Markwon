@@ -13,8 +13,7 @@ abstract class TableRowsScheduler {
 
     static void schedule(@NonNull final TextView view) {
         final Object[] spans = extract(view);
-        if (spans != null
-                && spans.length > 0) {
+        if (spans != null && spans.length > 0) {
 
             if (view.getTag(R.id.markwon_tables_scheduler) == null) {
                 final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {

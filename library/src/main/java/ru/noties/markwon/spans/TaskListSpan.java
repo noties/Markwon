@@ -12,21 +12,21 @@ import android.text.style.LeadingMarginSpan;
  */
 public class TaskListSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
-    private final int blockIndent;
-    private final int start;
-    private final boolean isDone;
+    private final SpannableTheme mTheme;
+    private final int mBlockIndent;
+    private final int mStart;
+    private final boolean mIsDone;
 
     public TaskListSpan(@NonNull SpannableTheme theme, int blockIndent, int start, boolean isDone) {
-        this.theme = theme;
-        this.blockIndent = blockIndent;
-        this.start = start;
-        this.isDone = isDone;
+        mTheme = theme;
+        mBlockIndent = blockIndent;
+        mStart = start;
+        mIsDone = isDone;
     }
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin() * blockIndent;
+        return mTheme.getBlockMargin() * mBlockIndent;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TaskListSpan implements LeadingMarginSpan {
             return;
         }
 
-        final Drawable drawable = theme.getTaskListDrawable();
+        final Drawable drawable = mTheme.getTaskListDrawable();
         if (drawable == null) {
             return;
         }
@@ -44,7 +44,7 @@ public class TaskListSpan implements LeadingMarginSpan {
         final int save = c.save();
         try {
 
-            final int width = theme.getBlockMargin();
+            final int width = mTheme.getBlockMargin();
             final int height = bottom - top;
 
             final int w = (int) (width * .75F + .5F);
@@ -54,7 +54,7 @@ public class TaskListSpan implements LeadingMarginSpan {
 
             if (drawable.isStateful()) {
                 final int[] state;
-                if (isDone) {
+                if (mIsDone) {
                     state = new int[]{android.R.attr.state_checked};
                 } else {
                     state = new int[0];
@@ -62,7 +62,7 @@ public class TaskListSpan implements LeadingMarginSpan {
                 drawable.setState(state);
             }
 
-            final int l = (width * (blockIndent - 1)) + ((width - w) / 2);
+            final int l = (width * (mBlockIndent - 1)) + ((width - w) / 2);
             final int t = top + ((height - h) / 2);
 
             c.translate(l, t);

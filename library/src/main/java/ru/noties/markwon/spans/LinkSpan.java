@@ -11,23 +11,23 @@ public class LinkSpan extends ClickableSpan {
         void resolve(View view, @NonNull String link);
     }
 
-    private final SpannableTheme theme;
-    private final String link;
-    private final Resolver resolver;
+    private final SpannableTheme mTheme;
+    private final String mLink;
+    private final Resolver mResolver;
 
     public LinkSpan(@NonNull SpannableTheme theme, @NonNull String link, @NonNull Resolver resolver) {
-        this.theme = theme;
-        this.link = link;
-        this.resolver = resolver;
+        mTheme = theme;
+        mLink = link;
+        mResolver = resolver;
     }
 
     @Override
     public void onClick(View widget) {
-        resolver.resolve(widget, link);
+        mResolver.resolve(widget, mLink);
     }
 
     @Override
     public void updateDrawState(TextPaint ds) {
-        theme.applyLinkStyle(ds);
+        mTheme.applyLinkStyle(ds);
     }
 }

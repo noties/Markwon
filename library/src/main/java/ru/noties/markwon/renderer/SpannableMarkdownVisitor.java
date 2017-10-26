@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.text.style.StrikethroughSpan;
+import android.view.View;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -60,41 +62,41 @@ import ru.noties.markwon.tasklist.TaskListItem;
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
-    private final SpannableConfiguration configuration;
-    private final SpannableStringBuilder builder;
-    private final Deque<HtmlInlineItem> htmlInlineItems;
+    private final SpannableConfiguration mConfiguration;
+    private final SpannableStringBuilder mBuilder;
+    private final Deque<HtmlInlineItem> mHtmlInlineItems;
 
-    private int blockQuoteIndent;
-    private int listLevel;
+    private int mBlockQuoteIndent;
+    private int mListLevel;
 
-    private List<TableRowSpan.Cell> pendingTableRow;
-    private boolean tableRowIsHeader;
-    private int tableRows;
+    private List<TableRowSpan.Cell> mPendingTableRow;
+    private boolean mTableRowIsHeader;
+    private int mTableRows;
 
     public SpannableMarkdownVisitor(
             @NonNull SpannableConfiguration configuration,
             @NonNull SpannableStringBuilder builder
     ) {
-        this.configuration = configuration;
-        this.builder = builder;
-        this.htmlInlineItems = new ArrayDeque<>(2);
+        mConfiguration = configuration;
+        mBuilder = builder;
+        mHtmlInlineItems = new ArrayDeque<>(2);
     }
 
     @Override
     public void visit(Text text) {
-        builder.append(text.getLiteral());
+        mBuilder.append(text.getLiteral());
     }
 
     @Override
     public void visit(StrongEmphasis strongEmphasis) {
-        final int length = builder.length();
+        final int length = mBuilder.length();
         visitChildren(strongEmphasis);
         setSpan(length, new StrongEmphasisSpan());
     }
 
     @Override
     public void visit(Emphasis emphasis) {
-        final int length = builder.length();
+        final int length = mBuilder.length();
         visitChildren(emphasis);
         setSpan(length, new EmphasisSpan());
     }
@@ -103,42 +105,42 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(BlockQuote blockQuote) {
 
         newLine();
-        if (blockQuoteIndent != 0) {
-            builder.append('\n');
+        if (mBlockQuoteIndent != 0) {
+            mBuilder.append('\n');
         }
 
-        final int length = builder.length();
+        final int length = mBuilder.length();
 
-        blockQuoteIndent += 1;
+        mBlockQuoteIndent += 1;
 
         visitChildren(blockQuote);
 
         setSpan(length, new BlockQuoteSpan(
-                configuration.theme(),
-                blockQuoteIndent
+                mConfiguration.theme(),
+                mBlockQuoteIndent
         ));
 
-        blockQuoteIndent -= 1;
+        mBlockQuoteIndent -= 1;
 
         newLine();
-        if (blockQuoteIndent == 0) {
-            builder.append('\n');
+        if (mBlockQuoteIndent == 0) {
+            mBuilder.append('\n');
         }
     }
 
     @Override
     public void visit(Code code) {
 
-        final int length = builder.length();
+        final int length = mBuilder.length();
 
         // NB, in order to provide a _padding_ feeling code is wrapped inside two unbreakable spaces
         // unfortunately we cannot use this for multiline code as we cannot control where a new line break will be inserted
-        builder.append('\u00a0');
-        builder.append(code.getLiteral());
-        builder.append('\u00a0');
+        mBuilder.append('\u00a0');
+        mBuilder.append(code.getLiteral());
+        mBuilder.append('\u00a0');
 
         setSpan(length, new CodeSpan(
-                configuration.theme(),
+                mConfiguration.theme(),
                 false
         ));
     }
@@ -148,23 +150,23 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         newLine();
 
-        final int length = builder.length();
+        final int length = mBuilder.length();
 
         // empty lines on top & bottom
-        builder.append('\u00a0').append('\n');
-        builder.append(
-                configuration.syntaxHighlight()
+        mBuilder.append('\u00a0').append('\n');
+        mBuilder.append(
+                mConfiguration.syntaxHighlight()
                         .highlight(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral())
         );
-        builder.append('\u00a0').append('\n');
+        mBuilder.append('\u00a0').append('\n');
 
         setSpan(length, new CodeSpan(
-                configuration.theme(),
+                mConfiguration.theme(),
                 true
         ));
 
         newLine();
-        builder.append('\n');
+        mBuilder.append('\n');
     }
 
     @Override
@@ -181,18 +183,18 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
         visitChildren(node);
         newLine();
-        if (listLevel == 0 && blockQuoteIndent == 0) {
-            builder.append('\n');
+        if (mListLevel == 0 && mBlockQuoteIndent == 0) {
+            mBuilder.append('\n');
         }
     }
 
     @Override
     public void visit(ListItem listItem) {
 
-        final int length = builder.length();
+        final int length = mBuilder.length();
 
-        blockQuoteIndent += 1;
-        listLevel += 1;
+        mBlockQuoteIndent += 1;
+        mListLevel += 1;
 
         final Node parent = listItem.getParent();
         if (parent instanceof OrderedList) {
@@ -202,9 +204,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(listItem);
 
             setSpan(length, new OrderedListItemSpan(
-                    configuration.theme(),
+                    mConfiguration.theme(),
                     String.valueOf(start) + "." + '\u00a0',
-                    blockQuoteIndent
+                    mBlockQuoteIndent
             ));
 
             // after we have visited the children increment start number
@@ -216,14 +218,14 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(listItem);
 
             setSpan(length, new BulletListItemSpan(
-                    configuration.theme(),
-                    blockQuoteIndent,
-                    listLevel - 1
+                    mConfiguration.theme(),
+                    mBlockQuoteIndent,
+                    mListLevel - 1
             ));
         }
 
-        blockQuoteIndent -= 1;
-        listLevel -= 1;
+        mBlockQuoteIndent -= 1;
+        mListLevel -= 1;
 
         newLine();
     }
@@ -233,12 +235,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         newLine();
 
-        final int length = builder.length();
-        builder.append(' '); // without space it won't render
-        setSpan(length, new ThematicBreakSpan(configuration.theme()));
+        final int length = mBuilder.length();
+        mBuilder.append(' '); // without space it won't render
+        setSpan(length, new ThematicBreakSpan(mConfiguration.theme()));
 
         newLine();
-        builder.append('\n');
+        mBuilder.append('\n');
     }
 
     @Override
@@ -246,24 +248,24 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         newLine();
 
-        final int length = builder.length();
+        final int length = mBuilder.length();
         visitChildren(heading);
         setSpan(length, new HeadingSpan(
-                configuration.theme(),
+                mConfiguration.theme(),
                 heading.getLevel(),
-                builder.length() - length)
+                mBuilder.length() - length)
         );
 
         newLine();
 
         // after heading we add another line anyway (no additional checks)
-        builder.append('\n');
+        mBuilder.append('\n');
     }
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
         // at first here was a new line, but here should be a space char
-        builder.append(' ');
+        mBuilder.append(' ');
     }
 
     @Override
@@ -277,11 +279,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(CustomBlock customBlock) {
         if (customBlock instanceof TaskListBlock) {
-            blockQuoteIndent += 1;
+            mBlockQuoteIndent += 1;
             visitChildren(customBlock);
-            blockQuoteIndent -= 1;
+            mBlockQuoteIndent -= 1;
             newLine();
-            builder.append('\n');
+            mBuilder.append('\n');
         } else {
             super.visit(customBlock);
         }
@@ -292,7 +294,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (customNode instanceof Strikethrough) {
 
-            final int length = builder.length();
+            final int length = mBuilder.length();
             visitChildren(customNode);
             setSpan(length, new StrikethroughSpan());
 
@@ -302,22 +304,22 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             final TaskListItem listItem = (TaskListItem) customNode;
 
-            final int length = builder.length();
+            final int length = mBuilder.length();
 
-            blockQuoteIndent += listItem.indent();
+            mBlockQuoteIndent += listItem.indent();
 
             visitChildren(customNode);
 
             setSpan(length, new TaskListSpan(
-                    configuration.theme(),
-                    blockQuoteIndent,
+                    mConfiguration.theme(),
+                    mBlockQuoteIndent,
                     length,
                     listItem.done()
             ));
 
             newLine();
 
-            blockQuoteIndent -= listItem.indent();
+            mBlockQuoteIndent -= listItem.indent();
 
         } else if (!handleTableNodes(customNode)) {
             super.visit(customNode);
@@ -330,50 +332,50 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (node instanceof TableBody) {
             visitChildren(node);
-            tableRows = 0;
+            mTableRows = 0;
             handled = true;
             newLine();
-            builder.append('\n');
+            mBuilder.append('\n');
         } else if (node instanceof TableRow) {
 
-            final int length = builder.length();
+            final int length = mBuilder.length();
             visitChildren(node);
 
-            if (pendingTableRow != null) {
-                builder.append(' ');
+            if (mPendingTableRow != null) {
+                mBuilder.append(' ');
 
                 final TableRowSpan span = new TableRowSpan(
-                        configuration.theme(),
-                        pendingTableRow,
-                        tableRowIsHeader,
-                        tableRows % 2 == 1
+                        mConfiguration.theme(),
+                        mPendingTableRow,
+                        mTableRowIsHeader,
+                        mTableRows % 2 == 1
                 );
 
-                tableRows = tableRowIsHeader
+                mTableRows = mTableRowIsHeader
                         ? 0
-                        : tableRows + 1;
+                        : mTableRows + 1;
 
                 setSpan(length, span);
                 newLine();
-                pendingTableRow = null;
+                mPendingTableRow = null;
             }
 
             handled = true;
         } else if (node instanceof TableCell) {
 
             final TableCell cell = (TableCell) node;
-            final int length = builder.length();
+            final int length = mBuilder.length();
             visitChildren(cell);
-            if (pendingTableRow == null) {
-                pendingTableRow = new ArrayList<>(2);
+            if (mPendingTableRow == null) {
+                mPendingTableRow = new ArrayList<>(2);
             }
-            pendingTableRow.add(new TableRowSpan.Cell(
+            mPendingTableRow.add(new TableRowSpan.Cell(
                     tableCellAlignment(cell.getAlignment()),
-                    builder.subSequence(length, builder.length())
+                    mBuilder.subSequence(length, mBuilder.length())
             ));
-            builder.replace(length, builder.length(), "");
+            mBuilder.replace(length, mBuilder.length(), "");
 
-            tableRowIsHeader = cell.isHeader();
+            mTableRowIsHeader = cell.isHeader();
 
             handled = true;
         } else {
@@ -396,8 +398,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         if (!inTightList) {
             newLine();
 
-            if (blockQuoteIndent == 0) {
-                builder.append('\n');
+            if (mBlockQuoteIndent == 0) {
+                mBuilder.append('\n');
             }
         }
     }
@@ -405,49 +407,53 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(Image image) {
 
-        final int length = builder.length();
+        final int length = mBuilder.length();
 
         visitChildren(image);
 
         // we must check if anything _was_ added, as we need at least one char to render
-        if (length == builder.length()) {
-            builder.append('\uFFFC');
+        if (length == mBuilder.length()) {
+            mBuilder.append('\uFFFC');
         }
 
         final Node parent = image.getParent();
         final boolean link = parent != null && parent instanceof Link;
-        final String destination = configuration.urlProcessor().process(image.getDestination());
+        final String destination = mConfiguration.urlProcessor().process(image.getDestination());
 
         setSpan(
                 length,
                 new AsyncDrawableSpan(
-                        configuration.theme(),
+                        mConfiguration.theme(),
                         new AsyncDrawable(
                                 destination,
-                                configuration.asyncDrawableLoader()
+                                mConfiguration.asyncDrawableLoader()
                         ),
                         AsyncDrawableSpan.ALIGN_BOTTOM,
                         link
                 )
         );
 
-        // todo, maybe, if image is not inside a link, we should make it clickable, so
-        // user can open it in external viewer?
+        setSpan(length, new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                mConfiguration.imageClickResolver().resolve(view, destination);
+            }
+        });
     }
 
     @Override
     public void visit(HtmlBlock htmlBlock) {
         // http://spec.commonmark.org/0.18/#html-blocks
-        final Spanned spanned = configuration.htmlParser().getSpanned(null, htmlBlock.getLiteral());
+        final Spanned spanned = mConfiguration.htmlParser().getSpanned(null, htmlBlock.getLiteral());
         if (!TextUtils.isEmpty(spanned)) {
-            builder.append(spanned);
+            mBuilder.append(spanned);
         }
     }
 
     @Override
     public void visit(HtmlInline htmlInline) {
 
-        final SpannableHtmlParser htmlParser = configuration.htmlParser();
+        final SpannableHtmlParser htmlParser = mConfiguration.htmlParser();
         final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
 
         if (tag != null) {
@@ -455,13 +461,13 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             final boolean voidTag = tag.voidTag();
             if (!voidTag && tag.opening()) {
                 // push in stack
-                htmlInlineItems.push(new HtmlInlineItem(tag, builder.length()));
+                mHtmlInlineItems.push(new HtmlInlineItem(tag, mBuilder.length()));
                 visitChildren(htmlInline);
             } else {
 
                 if (!voidTag) {
-                    if (htmlInlineItems.size() > 0) {
-                        final HtmlInlineItem item = htmlInlineItems.pop();
+                    if (mHtmlInlineItems.size() > 0) {
+                        final HtmlInlineItem item = mHtmlInlineItems.pop();
                         final Object span = htmlParser.getSpanForTag(item.tag);
                         if (span != null) {
                             setSpan(item.start, span);
@@ -471,34 +477,34 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
                     final Spanned html = htmlParser.getSpanned(tag, htmlInline.getLiteral());
                     if (!TextUtils.isEmpty(html)) {
-                        builder.append(html);
+                        mBuilder.append(html);
                     }
 
                 }
             }
         } else {
             // todo, should we append just literal?
-//            builder.append(htmlInline.getLiteral());
+//            mBuilder.append(htmlInline.getLiteral());
             visitChildren(htmlInline);
         }
     }
 
     @Override
     public void visit(Link link) {
-        final int length = builder.length();
+        final int length = mBuilder.length();
         visitChildren(link);
-        final String destination = configuration.urlProcessor().process(link.getDestination());
-        setSpan(length, new LinkSpan(configuration.theme(), destination, configuration.linkResolver()));
+        final String destination = mConfiguration.urlProcessor().process(link.getDestination());
+        setSpan(length, new LinkSpan(mConfiguration.theme(), destination, mConfiguration.linkResolver()));
     }
 
     private void setSpan(int start, @NonNull Object span) {
-        builder.setSpan(span, start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mBuilder.setSpan(span, start, mBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     private void newLine() {
-        if (builder.length() > 0
-                && '\n' != builder.charAt(builder.length() - 1)) {
-            builder.append('\n');
+        if (mBuilder.length() > 0
+                && '\n' != mBuilder.charAt(mBuilder.length() - 1)) {
+            mBuilder.append('\n');
         }
     }
 

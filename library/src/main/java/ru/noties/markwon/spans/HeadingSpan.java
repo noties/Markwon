@@ -12,16 +12,16 @@ import android.text.style.MetricAffectingSpan;
 
 public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
-    private final Rect rect = ObjectsPool.rect();
-    private final Paint paint = ObjectsPool.paint();
-    private final int level;
-    private final int textLength;
+    private final SpannableTheme mTheme;
+    private final Rect mRect = ObjectsPool.rect();
+    private final Paint mPaint = ObjectsPool.paint();
+    private final int mLevel;
+    private final int mTextLength;
 
     public HeadingSpan(@NonNull SpannableTheme theme, @IntRange(from = 1, to = 6) int level, @IntRange(from = 0) int textLength) {
-        this.theme = theme;
-        this.level = level;
-        this.textLength = textLength;
+        mTheme = theme;
+        mLevel = level;
+        mTextLength = textLength;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
     }
 
     private void apply(TextPaint paint) {
-        theme.applyHeadingTextStyle(paint, level);
+        mTheme.applyHeadingTextStyle(paint, mLevel);
     }
 
     @Override
@@ -47,19 +47,19 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
-        if (level == 1
-                || level == 2) {
+        if (mLevel == 1
+                || mLevel == 2) {
 
-            if ((start + textLength) == end) {
-                paint.set(p);
+            if ((start + mTextLength) == end) {
+                mPaint.set(p);
 
-                theme.applyHeadingBreakStyle(paint);
+                mTheme.applyHeadingBreakStyle(mPaint);
 
-                final float height = paint.getStrokeWidth();
+                final float height = mPaint.getStrokeWidth();
                 final int b = (int) (bottom - height + .5F);
 
-                rect.set(x, b, c.getWidth(), bottom);
-                c.drawRect(rect, paint);
+                mRect.set(x, b, c.getWidth(), bottom);
+                c.drawRect(mRect, mPaint);
             }
         }
     }

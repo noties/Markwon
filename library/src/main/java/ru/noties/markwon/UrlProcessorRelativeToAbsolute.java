@@ -9,10 +9,10 @@ import java.net.URL;
 @SuppressWarnings("WeakerAccess")
 public class UrlProcessorRelativeToAbsolute implements UrlProcessor {
 
-    private final URL base;
+    private final URL mBase;
 
     public UrlProcessorRelativeToAbsolute(@NonNull String base) {
-        this.base = obtain(base);
+        mBase = obtain(base);
     }
 
     @NonNull
@@ -21,9 +21,9 @@ public class UrlProcessorRelativeToAbsolute implements UrlProcessor {
 
         String out = destination;
 
-        if (base != null) {
+        if (mBase != null) {
             try {
-                final URL u = new URL(base, destination);
+                final URL u = new URL(mBase, destination);
                 out = u.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();

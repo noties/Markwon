@@ -11,17 +11,17 @@ import ru.noties.markwon.spans.SpannableTheme;
 
 class LinkProvider implements SpannableHtmlParser.SpanProvider {
 
-    private final SpannableTheme theme;
-    private final UrlProcessor urlProcessor;
-    private final LinkSpan.Resolver resolver;
+    private final SpannableTheme mTheme;
+    private final UrlProcessor mUrlProcessor;
+    private final LinkSpan.Resolver mResolver;
 
     LinkProvider(
             @NonNull SpannableTheme theme,
             @NonNull UrlProcessor urlProcessor,
             @NonNull LinkSpan.Resolver resolver) {
-        this.theme = theme;
-        this.urlProcessor = urlProcessor;
-        this.resolver = resolver;
+        mTheme = theme;
+        mUrlProcessor = urlProcessor;
+        mResolver = resolver;
     }
 
     @Override
@@ -33,8 +33,8 @@ class LinkProvider implements SpannableHtmlParser.SpanProvider {
         final String href = attributes.get("href");
         if (!TextUtils.isEmpty(href)) {
 
-            final String destination = urlProcessor.process(href);
-            span = new LinkSpan(theme, destination, resolver);
+            final String destination = mUrlProcessor.process(href);
+            span = new LinkSpan(mTheme, destination, mResolver);
 
         } else {
             span = null;
