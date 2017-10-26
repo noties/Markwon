@@ -9,12 +9,12 @@ import android.text.style.LeadingMarginSpan;
 
 public class ThematicBreakSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
-    private final Rect rect = ObjectsPool.rect();
-    private final Paint paint = ObjectsPool.paint();
+    private final SpannableTheme mTheme;
+    private final Rect mRect = ObjectsPool.rect();
+    private final Paint mPaint = ObjectsPool.paint();
 
     public ThematicBreakSpan(@NonNull SpannableTheme theme) {
-        this.theme = theme;
+        mTheme = theme;
     }
 
     @Override
@@ -27,13 +27,13 @@ public class ThematicBreakSpan implements LeadingMarginSpan {
 
         final int middle = top + ((bottom - top) / 2);
 
-        paint.set(p);
-        theme.applyThematicBreakStyle(paint);
+        mPaint.set(p);
+        mTheme.applyThematicBreakStyle(mPaint);
 
-        final int height = (int) (paint.getStrokeWidth() + .5F);
+        final int height = (int) (mPaint.getStrokeWidth() + .5F);
         final int halfHeight = (int) (height / 2.F + .5F);
 
-        rect.set(x, middle - halfHeight, c.getWidth(), middle + halfHeight);
-        c.drawRect(rect, paint);
+        mRect.set(x, middle - halfHeight, c.getWidth(), middle + halfHeight);
+        c.drawRect(mRect, mPaint);
     }
 }

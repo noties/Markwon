@@ -12,7 +12,7 @@ import ru.noties.markwon.SpannableConfiguration;
 @SuppressLint("AppCompatCustomView")
 public class MarkwonView extends TextView implements IMarkwonView {
 
-    private MarkwonViewHelper helper;
+    private MarkwonViewHelper mHelper;
 
     public MarkwonView(Context context) {
         super(context);
@@ -25,26 +25,26 @@ public class MarkwonView extends TextView implements IMarkwonView {
     }
 
     private void init(Context context, AttributeSet attributeSet) {
-        helper = MarkwonViewHelper.create(this);
-        helper.init(context, attributeSet);
+        mHelper = MarkwonViewHelper.create(this);
+        mHelper.init(context, attributeSet);
     }
 
     @Override
     public void setConfigurationProvider(@NonNull ConfigurationProvider provider) {
-        helper.setConfigurationProvider(provider);
+        mHelper.setConfigurationProvider(provider);
     }
 
     public void setMarkdown(@Nullable String markdown) {
-        helper.setMarkdown(markdown);
+        mHelper.setMarkdown(markdown);
     }
 
     public void setMarkdown(@Nullable SpannableConfiguration configuration, @Nullable String markdown) {
-        helper.setMarkdown(configuration, markdown);
+        mHelper.setMarkdown(configuration, markdown);
     }
 
     @Nullable
     @Override
     public String getMarkdown() {
-        return helper.getMarkdown();
+        return mHelper.getMarkdown();
     }
 }

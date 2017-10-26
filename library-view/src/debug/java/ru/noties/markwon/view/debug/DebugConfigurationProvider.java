@@ -9,17 +9,17 @@ import ru.noties.markwon.view.IMarkwonView;
 
 public class DebugConfigurationProvider implements IMarkwonView.ConfigurationProvider {
 
-    private SpannableConfiguration cached;
+    private SpannableConfiguration mCached;
 
     @NonNull
     @Override
     public SpannableConfiguration provide(@NonNull Context context) {
-        if (cached == null) {
-            cached = SpannableConfiguration.builder(context)
+        if (mCached == null) {
+            mCached = SpannableConfiguration.builder(context)
                     .theme(debugTheme(context))
                     .build();
         }
-        return cached;
+        return mCached;
     }
 
     private static SpannableTheme debugTheme(@NonNull Context context) {

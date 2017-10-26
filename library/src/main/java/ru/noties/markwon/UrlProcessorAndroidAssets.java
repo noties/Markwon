@@ -7,17 +7,17 @@ import android.text.TextUtils;
 
 public class UrlProcessorAndroidAssets implements UrlProcessor {
 
-    private final UrlProcessorRelativeToAbsolute assetsProcessor
+    private final UrlProcessorRelativeToAbsolute mAssetsProcessor
             = new UrlProcessorRelativeToAbsolute("file:///android_asset/");
 
-    private final UrlProcessor processor;
+    private final UrlProcessor mProcessor;
 
     public UrlProcessorAndroidAssets() {
         this(null);
     }
 
     public UrlProcessorAndroidAssets(@Nullable UrlProcessor parent) {
-        this.processor = parent;
+        mProcessor = parent;
     }
 
     @NonNull
@@ -26,10 +26,10 @@ public class UrlProcessorAndroidAssets implements UrlProcessor {
         final String out;
         final Uri uri = Uri.parse(destination);
         if (TextUtils.isEmpty(uri.getScheme())) {
-            out = assetsProcessor.process(destination);
+            out = mAssetsProcessor.process(destination);
         } else {
-            if (processor != null) {
-                out = processor.process(destination);
+            if (mProcessor != null) {
+                out = mProcessor.process(destination);
             } else {
                 out = destination;
             }

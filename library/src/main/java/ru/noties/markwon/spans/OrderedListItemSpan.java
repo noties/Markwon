@@ -9,23 +9,23 @@ import android.text.style.LeadingMarginSpan;
 
 public class OrderedListItemSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
-    private final String number;
-    private final int blockIndent;
+    private final SpannableTheme mTheme;
+    private final String mNumber;
+    private final int mBlockIndent;
 
     public OrderedListItemSpan(
             @NonNull SpannableTheme theme,
             @NonNull String number,
             @IntRange(from = 0) int blockIndent
     ) {
-        this.theme = theme;
-        this.number = number;
-        this.blockIndent = blockIndent;
+        mTheme = theme;
+        mNumber = number;
+        mBlockIndent = blockIndent;
     }
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin();
+        return mTheme.getBlockMargin();
     }
 
     @Override
@@ -36,14 +36,14 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
             return;
         }
 
-        theme.applyListItemStyle(p);
+        mTheme.applyListItemStyle(p);
 
-        final int width = theme.getBlockMargin();
-        final int numberWidth = (int) (p.measureText(number) + .5F);
-        final int numberX = (width * blockIndent) - numberWidth;
+        final int width = mTheme.getBlockMargin();
+        final int numberWidth = (int) (p.measureText(mNumber) + .5F);
+        final int numberX = (width * mBlockIndent) - numberWidth;
 
         final float numberY = CanvasUtils.textCenterY(top, bottom, p);
 
-        c.drawText(number, numberX, numberY, p);
+        c.drawText(mNumber, numberX, numberY, p);
     }
 }
