@@ -2,12 +2,8 @@ package ru.noties.markwon;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
-import android.text.style.LeadingMarginSpan;
 import android.view.View;
 import android.widget.TextView;
 
@@ -61,56 +57,6 @@ public class MainActivity extends Activity {
         final View progress = findViewById(R.id.progress);
 
         appBarRenderer.render(appBarState());
-
-        if (false) {
-
-            final class Whatever {
-                CharSequence text() {
-
-                    final SpannableBuilder builder = new SpannableBuilder();
-
-                    builder.append("First line\n\n");
-                    builder.append(Markwon.markdown(MainActivity.this, "* first\n* second\n* * third\n* * * forth\n\n"));
-                    builder.setSpan(new LeadingMarginSpan() {
-                        @Override
-                        public int getLeadingMargin(boolean first) {
-                            return 100;
-                        }
-
-                        @Override
-                        public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
-
-                        }
-                    }, 0);
-
-                    builder.append("Last line\n\n");
-                    return builder.text();
-                }
-            }
-            final Whatever whatever = new Whatever();
-
-            final SpannableBuilder builder = new SpannableBuilder();
-            builder.append(whatever.text());
-            builder.append(whatever.text());
-
-            builder.setSpan(new LeadingMarginSpan() {
-                @Override
-                public int getLeadingMargin(boolean first) {
-                    return 50;
-                }
-
-                @Override
-                public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
-
-                }
-            }, 0);
-
-            builder.append(whatever.text());
-
-            textView.setText(builder.text());
-
-            return;
-        }
 
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override

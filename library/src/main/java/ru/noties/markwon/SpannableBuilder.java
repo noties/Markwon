@@ -14,6 +14,8 @@ import java.util.Iterator;
  * is using an array to store all the information about spans. So, a span that is added first
  * will be drawn first, which leads to subtle bugs (spans receive wrong `x` values when
  * requested to draw itself)
+ *
+ * @since 1.0.1
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class SpannableBuilder {
@@ -23,6 +25,8 @@ public class SpannableBuilder {
     // we will be using SpannableStringBuilder anyway as a backing store
     // as it has tight connection with system (implements some hidden methods, etc)
     private final SpannableStringBuilder builder;
+
+    // actually we might be just using ArrayList
     private final Deque<Span> spans = new ArrayDeque<>(8);
 
     public SpannableBuilder() {
@@ -31,7 +35,7 @@ public class SpannableBuilder {
 
     public SpannableBuilder(@NonNull CharSequence cs) {
         this.builder = new SpannableStringBuilderImpl(cs.toString());
-        copySpans(cs);
+        copySpans(0, cs);
     }
 
     /**
@@ -55,7 +59,7 @@ public class SpannableBuilder {
     @NonNull
     public SpannableBuilder append(@NonNull CharSequence cs) {
 
-        copySpans(cs);
+        copySpans(length(), cs);
 
         builder.append(cs.toString());
 
@@ -109,7 +113,8 @@ public class SpannableBuilder {
     @NonNull
     public CharSequence remove(int start, int end) {
 
-        // okay: here is what we will try to do:
+        // this method is intended to be used only by markdown visitor
+        // it's a workaround to allow tables
 
         final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder.subSequence(start, end));
 
@@ -165,24 +170,26 @@ public class SpannableBuilder {
         return builder.toString();
     }
 
-    // Unfortunately I cannot see any way to NOT expose this internal value, which opens a gate
-    // to external modification (first of all InputFilters, that potentially break span indexes
-    // as we keep track of them independently). Must warn user to NOT apply inputFilters
     @NonNull
     public CharSequence text() {
 
-        // if called once, it will apply spans, which will modify our state
+        // okay, in order to not allow external modification and keep our spans order
+        // we should not return our builder
+        //
+        // plus, if this method was called -> all spans would be applied, which potentially
+        // breaks the order that we intend to use
+        // so, we will defensively copy builder
 
-        applySpans();
+        final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder.toString());
 
-        // we could return here for example new SpannableStringBuilder(builder)
-        // but, if returned value will be used in other SpannableBuilder,
-        // we won't be able to detect in what order to store the spans
+        for (Span span : spans) {
+            impl.setSpan(span.what, span.start, span.end, span.flags);
+        }
 
-        return builder;
+        return impl;
     }
 
-    private void copySpans(@Nullable CharSequence cs) {
+    private void copySpans(final int index, @Nullable CharSequence cs) {
 
         // we must identify already reversed Spanned...
         // and (!) iterate backwards when adding (to preserve order)
@@ -191,7 +198,6 @@ public class SpannableBuilder {
 
             final Spanned spanned = (Spanned) cs;
             final boolean reverse = spanned instanceof SpannedReversed;
-            final int index = length();
 
             final Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
 
@@ -206,17 +212,6 @@ public class SpannableBuilder {
                     );
                 }
             });
-        }
-    }
-
-    private void applySpans() {
-
-        // will apply appended spans in reverse order
-        // clear the stack (that keeps track of them)
-
-        Span span;
-        while ((span = spans.poll()) != null) {
-            builder.setSpan(span.what, span.start, span.end, span.flags);
         }
     }
 
