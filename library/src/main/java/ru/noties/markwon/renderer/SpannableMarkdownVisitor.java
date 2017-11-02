@@ -61,7 +61,6 @@ import ru.noties.markwon.tasklist.TaskListItem;
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final SpannableConfiguration configuration;
-    //    private final SpannableStringBuilder builder;
     private final SpannableBuilder builder;
     private final Deque<HtmlInlineItem> htmlInlineItems;
 
@@ -321,10 +320,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private boolean handleTableNodes(CustomNode node) {
 
-        if (true) {
-            return false;
-        }
-
         final boolean handled;
 
         if (node instanceof TableBody) {
@@ -367,11 +362,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                 pendingTableRow = new ArrayList<>(2);
             }
 
-//            pendingTableRow.add(new TableRowSpan.Cell(
-//                    tableCellAlignment(cell.getAlignment()),
-//                    builder.subSequence(length, builder.length())
-//            ));
-//            builder.replace(length, builder.length(), "");
+            pendingTableRow.add(new TableRowSpan.Cell(
+                    tableCellAlignment(cell.getAlignment()),
+                    builder.remove(length, builder.length())
+            ));
 
             tableRowIsHeader = cell.isHeader();
 

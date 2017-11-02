@@ -7,6 +7,7 @@ import android.text.Spanned;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Iterator;
 
 /**
  * This class is used to _revert_ order of applied spans. Original SpannableStringBuilder
@@ -14,6 +15,7 @@ import java.util.Deque;
  * will be drawn first, which leads to subtle bugs (spans receive wrong `x` values when
  * requested to draw itself)
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class SpannableBuilder {
 
     // do not implement CharSequence (or any of Spanned interfaces)
@@ -24,25 +26,12 @@ public class SpannableBuilder {
     private final Deque<Span> spans = new ArrayDeque<>(8);
 
     public SpannableBuilder() {
-        this(null);
+        this("");
     }
 
-    public SpannableBuilder(@Nullable CharSequence cs) {
-
-        final CharSequence text;
-
-        if (cs != null) {
-            text = cs;
-        } else {
-            text = null;
-        }
-
-        if (text == null) {
-            this.builder = new SpannableStringBuilderImpl();
-        } else {
-            this.builder = new SpannableStringBuilderImpl(text.toString());
-            copySpans(text);
-        }
+    public SpannableBuilder(@NonNull CharSequence cs) {
+        this.builder = new SpannableStringBuilderImpl(cs.toString());
+        copySpans(cs);
     }
 
     /**
@@ -117,6 +106,59 @@ public class SpannableBuilder {
         return builder.charAt(length() - 1);
     }
 
+    @NonNull
+    public CharSequence remove(int start, int end) {
+
+        // okay: here is what we will try to do:
+
+        final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder.subSequence(start, end));
+
+        final Iterator<Span> iterator = spans.iterator();
+
+        Span span;
+
+        while (iterator.hasNext() && ((span = iterator.next())) != null) {
+            if (span.start >= start && span.end <= end) {
+                impl.setSpan(span.what, span.start - start, span.end - start, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                iterator.remove();
+            }
+        }
+
+        // SHIFT EXISTING!
+
+        if (spans.size() > 0) {
+
+            for (Span s : spans) {
+
+                // if end < start -> not affected
+                if (s.end < start) {
+                    continue;
+                }
+
+                // if end between start & end (which is really bad one) -> make end=start
+                if (s.end >= start && s.end <= end) {
+                    s.end = start;
+                    continue;
+                }
+
+                // if start between start&end -> make start=end
+                if (s.start >= start && s.start <= end) {
+                    s.start = start;
+                    // shift end by difference
+                    s.end = s.end - (end - start);
+                    continue;
+                }
+
+                // if after, just shift by difference
+                final int diff = end - start;
+                s.start = s.start - diff;
+                s.end = s.end - diff;
+            }
+        }
+
+        return impl;
+    }
+
     @Override
     @NonNull
     public String toString() {
@@ -128,7 +170,15 @@ public class SpannableBuilder {
     // as we keep track of them independently). Must warn user to NOT apply inputFilters
     @NonNull
     public CharSequence text() {
+
+        // if called once, it will apply spans, which will modify our state
+
         applySpans();
+
+        // we could return here for example new SpannableStringBuilder(builder)
+        // but, if returned value will be used in other SpannableBuilder,
+        // we won't be able to detect in what order to store the spans
+
         return builder;
     }
 
@@ -173,8 +223,8 @@ public class SpannableBuilder {
     private static class Span {
 
         final Object what;
-        final int start;
-        final int end;
+        int start;
+        int end;
         final int flags;
 
         Span(@NonNull Object what, int start, int end, int flags) {
