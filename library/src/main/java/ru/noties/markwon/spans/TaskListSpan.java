@@ -14,13 +14,11 @@ public class TaskListSpan implements LeadingMarginSpan {
 
     private final SpannableTheme theme;
     private final int blockIndent;
-    private final int start;
     private final boolean isDone;
 
-    public TaskListSpan(@NonNull SpannableTheme theme, int blockIndent, int start, boolean isDone) {
+    public TaskListSpan(@NonNull SpannableTheme theme, int blockIndent, boolean isDone) {
         this.theme = theme;
         this.blockIndent = blockIndent;
-        this.start = start;
         this.isDone = isDone;
     }
 
@@ -32,7 +30,8 @@ public class TaskListSpan implements LeadingMarginSpan {
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
-        if (!first) {
+        if (!first
+                || !LeadingMarginUtils.selfStart(start, text, this)) {
             return;
         }
 
@@ -62,7 +61,13 @@ public class TaskListSpan implements LeadingMarginSpan {
                 drawable.setState(state);
             }
 
-            final int l = (width * (blockIndent - 1)) + ((width - w) / 2);
+            final int l;
+            if (dir > 0) {
+                l = x + (width * (blockIndent - 1)) + ((width - w) / 2);
+            } else {
+                l = x - (width * blockIndent) + ((width - w) / 2);
+            }
+
             final int t = top + ((height - h) / 2);
 
             c.translate(l, t);

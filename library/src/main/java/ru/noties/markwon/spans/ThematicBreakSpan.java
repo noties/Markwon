@@ -33,7 +33,17 @@ public class ThematicBreakSpan implements LeadingMarginSpan {
         final int height = (int) (paint.getStrokeWidth() + .5F);
         final int halfHeight = (int) (height / 2.F + .5F);
 
-        rect.set(x, middle - halfHeight, c.getWidth(), middle + halfHeight);
+        final int left;
+        final int right;
+        if (dir > 0) {
+            left = x;
+            right = c.getWidth();
+        } else {
+            left = x - c.getWidth();
+            right = x;
+        }
+
+        rect.set(left, middle - halfHeight, right, middle + halfHeight);
         c.drawRect(rect, paint);
     }
 }

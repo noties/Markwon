@@ -52,7 +52,17 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(theme.getCodeBackgroundColor(p));
 
-            rect.set(x, top, c.getWidth(), bottom);
+            final int left;
+            final int right;
+            if (dir > 0) {
+                left = x;
+                right = c.getWidth();
+            } else {
+                left = x - c.getWidth();
+                right = x;
+            }
+
+            rect.set(left, top, right, bottom);
 
             c.drawRect(rect, paint);
         }
