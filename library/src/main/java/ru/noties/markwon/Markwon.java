@@ -2,8 +2,6 @@ package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
@@ -61,7 +59,7 @@ public abstract class Markwon {
     public static void setMarkdown(
             @NonNull TextView view,
             @NonNull SpannableConfiguration configuration,
-            @Nullable String markdown
+            @NonNull String markdown
     ) {
 
         setText(view, markdown(configuration, markdown));
@@ -98,16 +96,10 @@ public abstract class Markwon {
      * @return parsed markdown
      * @since 1.0.0
      */
-    @Nullable
-    public static CharSequence markdown(@NonNull Context context, @Nullable String markdown) {
-        final CharSequence out;
-        if (TextUtils.isEmpty(markdown)) {
-            out = null;
-        } else {
-            final SpannableConfiguration configuration = SpannableConfiguration.create(context);
-            out = markdown(configuration, markdown);
-        }
-        return out;
+    @NonNull
+    public static CharSequence markdown(@NonNull Context context, @NonNull String markdown) {
+        final SpannableConfiguration configuration = SpannableConfiguration.create(context);
+        return markdown(configuration, markdown);
     }
 
     /**
@@ -119,18 +111,12 @@ public abstract class Markwon {
      * @see SpannableConfiguration
      * @since 1.0.0
      */
-    @Nullable
-    public static CharSequence markdown(@NonNull SpannableConfiguration configuration, @Nullable String markdown) {
-        final CharSequence out;
-        if (TextUtils.isEmpty(markdown)) {
-            out = null;
-        } else {
-            final Parser parser = createParser();
-            final Node node = parser.parse(markdown);
-            final SpannableRenderer renderer = new SpannableRenderer();
-            out = renderer.render(configuration, node);
-        }
-        return out;
+    @NonNull
+    public static CharSequence markdown(@NonNull SpannableConfiguration configuration, @NonNull String markdown) {
+        final Parser parser = createParser();
+        final Node node = parser.parse(markdown);
+        final SpannableRenderer renderer = new SpannableRenderer();
+        return renderer.render(configuration, node);
     }
 
     /**
