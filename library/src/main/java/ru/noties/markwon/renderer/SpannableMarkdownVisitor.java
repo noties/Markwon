@@ -364,7 +364,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             pendingTableRow.add(new TableRowSpan.Cell(
                     tableCellAlignment(cell.getAlignment()),
-                    builder.remove(length, builder.length())
+                    builder.removeFromEnd(length)
             ));
 
             tableRowIsHeader = cell.isHeader();

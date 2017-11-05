@@ -111,11 +111,14 @@ public class SpannableBuilder {
     }
 
     @NonNull
-    public CharSequence remove(int start, int end) {
+    public CharSequence removeFromEnd(int start) {
 
-        // this method is intended to be used only by markdown visitor
-        // it's a workaround to allow tables
+        // this method is not intended to be used by clients
+        // it's a workaround to support tables
 
+        final int end = length();
+
+        // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
         final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder.subSequence(start, end));
 
         final Iterator<Span> iterator = spans.iterator();
@@ -129,37 +132,7 @@ public class SpannableBuilder {
             }
         }
 
-        // SHIFT EXISTING!
-
-        if (spans.size() > 0) {
-
-            for (Span s : spans) {
-
-                // if end < start -> not affected
-                if (s.end < start) {
-                    continue;
-                }
-
-                // if end between start & end (which is really bad one) -> make end=start
-                if (s.end >= start && s.end <= end) {
-                    s.end = start;
-                    continue;
-                }
-
-                // if start between start&end -> make start=end
-                if (s.start >= start && s.start <= end) {
-                    s.start = start;
-                    // shift end by difference
-                    s.end = s.end - (end - start);
-                    continue;
-                }
-
-                // if after, just shift by difference
-                final int diff = end - start;
-                s.start = s.start - diff;
-                s.end = s.end - diff;
-            }
-        }
+        builder.replace(start, end, "");
 
         return impl;
     }
@@ -180,7 +153,8 @@ public class SpannableBuilder {
         // breaks the order that we intend to use
         // so, we will defensively copy builder
 
-        final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder.toString());
+        // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
+        final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder);
 
         for (Span span : spans) {
             impl.setSpan(span.what, span.start, span.end, span.flags);
@@ -215,7 +189,7 @@ public class SpannableBuilder {
         }
     }
 
-    private static class Span {
+    static class Span {
 
         final Object what;
         int start;
