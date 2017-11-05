@@ -113,10 +113,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         visitChildren(blockQuote);
 
-        setSpan(length, new BlockQuoteSpan(
-                configuration.theme(),
-                blockQuoteIndent
-        ));
+        setSpan(length, new BlockQuoteSpan(configuration.theme()));
 
         blockQuoteIndent -= 1;
 

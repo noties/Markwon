@@ -12,11 +12,9 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
     private final SpannableTheme theme;
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
-    private final int indent;
 
-    public BlockQuoteSpan(@NonNull SpannableTheme theme, int indent) {
+    public BlockQuoteSpan(@NonNull SpannableTheme theme) {
         this.theme = theme;
-        this.indent = indent;
     }
 
     @Override

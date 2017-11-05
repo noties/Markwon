@@ -12,6 +12,10 @@ import android.text.style.LeadingMarginSpan;
  */
 public class TaskListSpan implements LeadingMarginSpan {
 
+    private static final int[] STATE_CHECKED = new int[]{android.R.attr.state_checked};
+
+    private static final int[] STATE_NONE = new int[0];
+
     private final SpannableTheme theme;
     private final int blockIndent;
     private final boolean isDone;
@@ -54,9 +58,9 @@ public class TaskListSpan implements LeadingMarginSpan {
             if (drawable.isStateful()) {
                 final int[] state;
                 if (isDone) {
-                    state = new int[]{android.R.attr.state_checked};
+                    state = STATE_CHECKED;
                 } else {
-                    state = new int[0];
+                    state = STATE_NONE;
                 }
                 drawable.setState(state);
             }
