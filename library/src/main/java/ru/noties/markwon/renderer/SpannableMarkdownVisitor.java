@@ -1,7 +1,6 @@
 package ru.noties.markwon.renderer;
 
 import android.support.annotation.NonNull;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
@@ -14,6 +13,7 @@ import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
+import org.commonmark.node.CustomBlock;
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
@@ -51,13 +52,16 @@ import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.TableRowSpan;
+import ru.noties.markwon.spans.TaskListSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
+import ru.noties.markwon.tasklist.TaskListBlock;
+import ru.noties.markwon.tasklist.TaskListItem;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final SpannableConfiguration configuration;
-    private final SpannableStringBuilder builder;
+    private final SpannableBuilder builder;
     private final Deque<HtmlInlineItem> htmlInlineItems;
 
     private int blockQuoteIndent;
@@ -69,7 +73,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     public SpannableMarkdownVisitor(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableStringBuilder builder
+            @NonNull SpannableBuilder builder
     ) {
         this.configuration = configuration;
         this.builder = builder;
@@ -109,10 +113,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         visitChildren(blockQuote);
 
-        setSpan(length, new BlockQuoteSpan(
-                configuration.theme(),
-                blockQuoteIndent
-        ));
+        setSpan(length, new BlockQuoteSpan(configuration.theme()));
 
         blockQuoteIndent -= 1;
 
@@ -197,11 +198,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(listItem);
 
+            // todo| in order to provide real RTL experience there must be a way to provide this string
             setSpan(length, new OrderedListItemSpan(
                     configuration.theme(),
-                    String.valueOf(start) + "." + '\u00a0',
-                    blockQuoteIndent,
-                    length
+                    String.valueOf(start) + "." + '\u00a0'
             ));
 
             // after we have visited the children increment start number
@@ -214,9 +214,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             setSpan(length, new BulletListItemSpan(
                     configuration.theme(),
-                    blockQuoteIndent,
-                    listLevel - 1,
-                    length
+                    listLevel - 1
             ));
         }
 
@@ -246,11 +244,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         visitChildren(heading);
-        setSpan(length, new HeadingSpan(
-                configuration.theme(),
-                heading.getLevel(),
-                builder.length())
-        );
+        setSpan(length, new HeadingSpan(configuration.theme(), heading.getLevel()));
 
         newLine();
 
@@ -269,6 +263,22 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
     }
 
+    /**
+     * @since 1.0.1
+     */
+    @Override
+    public void visit(CustomBlock customBlock) {
+        if (customBlock instanceof TaskListBlock) {
+            blockQuoteIndent += 1;
+            visitChildren(customBlock);
+            blockQuoteIndent -= 1;
+            newLine();
+            builder.append('\n');
+        } else {
+            super.visit(customBlock);
+        }
+    }
+
     @Override
     public void visit(CustomNode customNode) {
 
@@ -277,6 +287,28 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             final int length = builder.length();
             visitChildren(customNode);
             setSpan(length, new StrikethroughSpan());
+
+        } else if (customNode instanceof TaskListItem) {
+
+            // new in 1.0.1
+
+            final TaskListItem listItem = (TaskListItem) customNode;
+
+            final int length = builder.length();
+
+            blockQuoteIndent += listItem.indent();
+
+            visitChildren(customNode);
+
+            setSpan(length, new TaskListSpan(
+                    configuration.theme(),
+                    blockQuoteIndent,
+                    listItem.done()
+            ));
+
+            newLine();
+
+            blockQuoteIndent -= listItem.indent();
 
         } else if (!handleTableNodes(customNode)) {
             super.visit(customNode);
@@ -326,11 +358,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             if (pendingTableRow == null) {
                 pendingTableRow = new ArrayList<>(2);
             }
+
             pendingTableRow.add(new TableRowSpan.Cell(
                     tableCellAlignment(cell.getAlignment()),
-                    builder.subSequence(length, builder.length())
+                    builder.removeFromEnd(length)
             ));
-            builder.replace(length, builder.length(), "");
 
             tableRowIsHeader = cell.isHeader();
 
@@ -456,7 +488,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private void newLine() {
         if (builder.length() > 0
-                && '\n' != builder.charAt(builder.length() - 1)) {
+                && '\n' != builder.lastChar()) {
             builder.append('\n');
         }
     }

@@ -1,15 +1,17 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
     }
     version = VERSION_NAME
     group = GROUP
@@ -19,24 +21,29 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion '4.3'
+    distributionType 'all'
+}
+
 ext {
 
     // Config
-    BUILD_TOOLS = '25.0.2'
-    TARGET_SDK = 25
+    BUILD_TOOLS = '26.0.3'
+    TARGET_SDK = 26
     MIN_SDK = 16
 
     // Dependencies
-    final def supportVersion = '25.3.1'
+    final def supportVersion = '26.1.0'
     SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
     SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
 
-    final def commonMarkVersion = '0.9.0'
+    final def commonMarkVersion = '0.10.0'
     COMMON_MARK = "com.atlassian.commonmark:commonmark:$commonMarkVersion"
     COMMON_MARK_STRIKETHROUGHT = "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion"
     COMMON_MARK_TABLE = "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion"
 
     ANDROID_SVG = 'com.caverock:androidsvg:1.2.1'
-    ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
-    OK_HTTP = 'com.squareup.okhttp3:okhttp:3.8.0'
+    ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
+    OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
 }

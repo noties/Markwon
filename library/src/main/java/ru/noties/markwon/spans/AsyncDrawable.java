@@ -3,15 +3,20 @@ package ru.noties.markwon.spans;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import ru.noties.markwon.renderer.html.ImageSize;
+import ru.noties.markwon.renderer.html.ImageSizeResolver;
+
 public class AsyncDrawable extends Drawable {
 
     public interface Loader {
+
         void load(@NonNull String destination, @NonNull AsyncDrawable drawable);
 
         void cancel(@NonNull String destination);
@@ -19,13 +24,32 @@ public class AsyncDrawable extends Drawable {
 
     private final String destination;
     private final Loader loader;
+    private final ImageSize imageSize;
+    private final ImageSizeResolver imageSizeResolver;
 
     private Drawable result;
     private Callback callback;
 
+    private int canvasWidth;
+    private float textSize;
+
     public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
+        this(destination, loader, null, null);
+    }
+
+    /**
+     * @since 1.0.1
+     */
+    public AsyncDrawable(
+            @NonNull String destination,
+            @NonNull Loader loader,
+            @Nullable ImageSizeResolver imageSizeResolver,
+            @Nullable ImageSize imageSize
+    ) {
         this.destination = destination;
         this.loader = loader;
+        this.imageSizeResolver = imageSizeResolver;
+        this.imageSize = imageSize;
     }
 
     public String getDestination() {
@@ -77,11 +101,20 @@ public class AsyncDrawable extends Drawable {
         this.result = result;
         this.result.setCallback(callback);
 
-        // should we copy the data here? like bounds etc?
-        // if we are async and we load some image from some source
-        // thr bounds might change... so we are better off copy `result` bounds to this instance
-        setBounds(result.getBounds());
+        final Rect bounds = resolveBounds();
+        result.setBounds(bounds);
+        setBounds(bounds);
+
         invalidateSelf();
+    }
+
+    /**
+     * @since 1.0.1
+     */
+    @SuppressWarnings("WeakerAccess")
+    public void initWithKnownDimensions(int width, float textSize) {
+        this.canvasWidth = width;
+        this.textSize = textSize;
     }
 
     @Override
@@ -132,5 +165,20 @@ public class AsyncDrawable extends Drawable {
             out = 0;
         }
         return out;
+    }
+
+    /**
+     * @since 1.0.1
+     */
+    @NonNull
+    private Rect resolveBounds() {
+        final Rect rect;
+        if (imageSizeResolver == null
+                || imageSize == null) {
+            rect = result.getBounds();
+        } else {
+            rect = imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize);
+        }
+        return rect;
     }
 }

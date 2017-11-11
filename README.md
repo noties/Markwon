@@ -12,9 +12,9 @@
 
 ## Installation
 ```groovy
-compile 'ru.noties:markwon:1.0.0'
-compile 'ru.noties:markwon-image-loader:1.0.0' // optional
-compile 'ru.noties:markwon-view:1.0.0' // optional
+compile 'ru.noties:markwon:1.0.1'
+compile 'ru.noties:markwon-image-loader:1.0.1' // optional
+compile 'ru.noties:markwon-view:1.0.1' // optional
 ```
 
 ## Supported markdown features:
@@ -38,6 +38,11 @@ compile 'ru.noties:markwon-view:1.0.0' // optional
 * * Underline (`<u>`)
 * * Strike-through (`<s>`, `<strike>`, `<del>`)
   * other inline html is rendered via (`Html.fromHtml(...)`)
+* Task lists:
+
+- [ ] Not _done_
+  - [X] **Done** with `X`
+  - [x] ~~and~~ **or** small `x`
 
 ---
 
@@ -45,8 +50,10 @@ compile 'ru.noties:markwon-view:1.0.0' // optional
 
 Taken with default configuration (except for image loading):
 
-<img src="./art/mw_light_01.png" width="33%" /> <img src="./art/mw_light_02.png" width="33%" />
-<img src="./art/mw_light_03.png" width="33%" /> <img src="./art/mw_dark_01.png" width="33%" />
+<a href="./art/mw_light_01.png"><img src="./art/mw_light_01.png" width="30%" /></a>
+<a href="./art/mw_light_02.png"><img src="./art/mw_light_02.png" width="30%" /></a>
+<a href="./art/mw_light_03.png"><img src="./art/mw_light_03.png" width="30%" /></a>
+<a href="./art/mw_dark_01.png"><img src="./art/mw_dark_01.png" width="30%" /></a>
 
 By default configuration uses TextView textColor for styling, so changing textColor changes style
 

@@ -12,11 +12,9 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
     private final SpannableTheme theme;
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
-    private final int indent;
 
-    public BlockQuoteSpan(@NonNull SpannableTheme theme, int indent) {
+    public BlockQuoteSpan(@NonNull SpannableTheme theme) {
         this.theme = theme;
-        this.indent = indent;
     }
 
     @Override
@@ -43,8 +41,16 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
 
         theme.applyBlockQuoteStyle(paint);
 
-        final int left = theme.getBlockMargin() * (indent - 1);
-        rect.set(left, top, left + width, bottom);
+        final int left;
+        final int right;
+        {
+            final int l = x + (dir * width);
+            final int r = l + (dir * width);
+            left = Math.min(l, r);
+            right = Math.max(l, r);
+        }
+
+        rect.set(left, top, right, bottom);
 
         c.drawRect(rect, paint);
     }

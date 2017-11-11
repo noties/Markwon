@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DebugCheckboxDrawableView">
+        <attr name="fcdv_checkedFillColor" format="color" />
+        <attr name="fcdv_normalOutlineColor" format="color" />
+        <attr name="fcdv_checkMarkColor" format="color" />
+        <attr name="fcdv_checked" format="boolean" />
+    </declare-styleable>
+
+</resources>

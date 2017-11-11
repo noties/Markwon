@@ -9,10 +9,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.style.ReplacementSpan;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 @SuppressWarnings("WeakerAccess")
 public class AsyncDrawableSpan extends ReplacementSpan {
 
     @IntDef({ALIGN_BOTTOM, ALIGN_BASELINE, ALIGN_CENTER})
+    @Retention(RetentionPolicy.SOURCE)
     @interface Alignment {
     }
 
@@ -24,9 +28,6 @@ public class AsyncDrawableSpan extends ReplacementSpan {
     private final AsyncDrawable drawable;
     private final int alignment;
     private final boolean replacementTextIsLink;
-
-    private int lastKnownDrawX;
-    private int lastKnownDrawY;
 
     public AsyncDrawableSpan(@NonNull SpannableTheme theme, @NonNull AsyncDrawable drawable) {
         this(theme, drawable, ALIGN_BOTTOM);
@@ -108,8 +109,7 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
-        this.lastKnownDrawX = (int) (x + .5F);
-        this.lastKnownDrawY = y;
+        drawable.initWithKnownDimensions(canvas.getWidth(), paint.getTextSize());
 
         final AsyncDrawable drawable = this.drawable;
 
@@ -149,13 +149,5 @@ public class AsyncDrawableSpan extends ReplacementSpan {
 
     public AsyncDrawable getDrawable() {
         return drawable;
-    }
-
-    public int lastKnownDrawX() {
-        return lastKnownDrawX;
-    }
-
-    public int lastKnownDrawY() {
-        return lastKnownDrawY;
     }
 }
