@@ -109,6 +109,8 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
+        drawable.initWithKnownDimensions(canvas.getWidth(), paint.getTextSize());
+
         final AsyncDrawable drawable = this.drawable;
 
         if (drawable.hasResult()) {
