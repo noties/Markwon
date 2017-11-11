@@ -29,9 +29,6 @@ public class AsyncDrawableSpan extends ReplacementSpan {
     private final int alignment;
     private final boolean replacementTextIsLink;
 
-    private int lastKnownDrawX;
-    private int lastKnownDrawY;
-
     public AsyncDrawableSpan(@NonNull SpannableTheme theme, @NonNull AsyncDrawable drawable) {
         this(theme, drawable, ALIGN_BOTTOM);
     }
@@ -112,12 +109,7 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
-        // we will pass this value, so when image is obtained drawable will have dimensions
-        // to resolve image size
         drawable.initWithKnownDimensions(canvas.getWidth(), paint.getTextSize());
-
-        this.lastKnownDrawX = (int) (x + .5F);
-        this.lastKnownDrawY = y;
 
         final AsyncDrawable drawable = this.drawable;
 
@@ -157,13 +149,5 @@ public class AsyncDrawableSpan extends ReplacementSpan {
 
     public AsyncDrawable getDrawable() {
         return drawable;
-    }
-
-    public int lastKnownDrawX() {
-        return lastKnownDrawX;
-    }
-
-    public int lastKnownDrawY() {
-        return lastKnownDrawY;
     }
 }

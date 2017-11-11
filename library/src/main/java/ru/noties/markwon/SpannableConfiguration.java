@@ -70,6 +70,7 @@ public class SpannableConfiguration {
         return htmlParser;
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
 
         private final Context context;

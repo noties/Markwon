@@ -1,7 +1,6 @@
 package ru.noties.markwon.renderer;
 
 import android.support.annotation.NonNull;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
@@ -39,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
@@ -61,7 +61,7 @@ import ru.noties.markwon.tasklist.TaskListItem;
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final SpannableConfiguration configuration;
-    private final SpannableStringBuilder builder;
+    private final SpannableBuilder builder;
     private final Deque<HtmlInlineItem> htmlInlineItems;
 
     private int blockQuoteIndent;
@@ -73,7 +73,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     public SpannableMarkdownVisitor(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableStringBuilder builder
+            @NonNull SpannableBuilder builder
     ) {
         this.configuration = configuration;
         this.builder = builder;
@@ -113,10 +113,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         visitChildren(blockQuote);
 
-        setSpan(length, new BlockQuoteSpan(
-                configuration.theme(),
-                blockQuoteIndent
-        ));
+        setSpan(length, new BlockQuoteSpan(configuration.theme()));
 
         blockQuoteIndent -= 1;
 
@@ -201,10 +198,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(listItem);
 
+            // todo| in order to provide real RTL experience there must be a way to provide this string
             setSpan(length, new OrderedListItemSpan(
                     configuration.theme(),
-                    String.valueOf(start) + "." + '\u00a0',
-                    blockQuoteIndent
+                    String.valueOf(start) + "." + '\u00a0'
             ));
 
             // after we have visited the children increment start number
@@ -217,7 +214,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             setSpan(length, new BulletListItemSpan(
                     configuration.theme(),
-                    blockQuoteIndent,
                     listLevel - 1
             ));
         }
@@ -248,11 +244,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         visitChildren(heading);
-        setSpan(length, new HeadingSpan(
-                configuration.theme(),
-                heading.getLevel(),
-                builder.length() - length)
-        );
+        setSpan(length, new HeadingSpan(configuration.theme(), heading.getLevel()));
 
         newLine();
 
@@ -311,7 +303,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             setSpan(length, new TaskListSpan(
                     configuration.theme(),
                     blockQuoteIndent,
-                    length,
                     listItem.done()
             ));
 
@@ -367,11 +358,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             if (pendingTableRow == null) {
                 pendingTableRow = new ArrayList<>(2);
             }
+
             pendingTableRow.add(new TableRowSpan.Cell(
                     tableCellAlignment(cell.getAlignment()),
-                    builder.subSequence(length, builder.length())
+                    builder.removeFromEnd(length)
             ));
-            builder.replace(length, builder.length(), "");
 
             tableRowIsHeader = cell.isHeader();
 
@@ -497,7 +488,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private void newLine() {
         if (builder.length() > 0
-                && '\n' != builder.charAt(builder.length() - 1)) {
+                && '\n' != builder.lastChar()) {
             builder.append('\n');
         }
     }
