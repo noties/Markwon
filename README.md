@@ -50,8 +50,10 @@ compile 'ru.noties:markwon-view:1.0.0' // optional
 
 Taken with default configuration (except for image loading):
 
-<img src="./art/mw_light_01.png" width="33%" /> <img src="./art/mw_light_02.png" width="33%" />
-<img src="./art/mw_light_03.png" width="33%" /> <img src="./art/mw_dark_01.png" width="33%" />
+<a href="./art/mw_light_01.png"><img src="./art/mw_light_01.png" width="30%" /></a>
+<a href="./art/mw_light_02.png"><img src="./art/mw_light_02.png" width="30%" /></a>
+<a href="./art/mw_light_03.png"><img src="./art/mw_light_03.png" width="30%" /></a>
+<a href="./art/mw_dark_01.png"><img src="./art/mw_dark_01.png" width="30%" /></a>
 
 By default configuration uses TextView textColor for styling, so changing textColor changes style
 

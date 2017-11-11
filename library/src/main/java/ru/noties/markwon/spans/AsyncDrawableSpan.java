@@ -112,6 +112,8 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
+        drawable.initWithCanvasWidth(canvas.getWidth());
+
         this.lastKnownDrawX = (int) (x + .5F);
         this.lastKnownDrawY = y;
 

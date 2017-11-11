@@ -3,6 +3,7 @@ package ru.noties.markwon;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
+import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 
 @ActivityScope
@@ -57,7 +59,13 @@ public class MarkdownRenderer {
                         .urlProcessor(urlProcessor)
                         .build();
 
+                final long start = SystemClock.uptimeMillis();
+
                 final CharSequence text = Markwon.markdown(configuration, markdown);
+
+                final long end = SystemClock.uptimeMillis();
+
+                Debug.i("markdown rendered: %d ms", end - start);
 
                 if (!isCancelled()) {
                     handler.post(new Runnable() {
