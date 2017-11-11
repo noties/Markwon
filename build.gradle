@@ -29,7 +29,7 @@ task wrapper(type: Wrapper) {
 ext {
 
     // Config
-    BUILD_TOOLS = '26.0.2'
+    BUILD_TOOLS = '26.0.3'
     TARGET_SDK = 26
     MIN_SDK = 16
 
