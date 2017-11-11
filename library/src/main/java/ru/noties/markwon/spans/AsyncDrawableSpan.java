@@ -112,7 +112,9 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
-        drawable.initWithCanvasWidth(canvas.getWidth());
+        // we will pass this value, so when image is obtained drawable will have dimensions
+        // to resolve image size
+        drawable.initWithKnownDimensions(canvas.getWidth(), paint.getTextSize());
 
         this.lastKnownDrawX = (int) (x + .5F);
         this.lastKnownDrawY = y;

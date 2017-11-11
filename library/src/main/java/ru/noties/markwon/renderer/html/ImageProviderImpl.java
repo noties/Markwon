@@ -6,9 +6,9 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.spans.AsyncDrawable;
@@ -17,20 +17,21 @@ import ru.noties.markwon.spans.SpannableTheme;
 
 class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
 
-    private static final Pattern STYLE_WIDTH = Pattern.compile(".*width:\\s*(\\d+)(%|em|px)*.*");
-    private static final Pattern STYLE_HEIGHT = Pattern.compile(".*height:\\s*(\\d+)(%|em|px)*.*");
-
     private final SpannableTheme theme;
     private final AsyncDrawable.Loader loader;
     private final UrlProcessor urlProcessor;
+    private final ImageSizeResolver imageSizeResolver;
 
     ImageProviderImpl(
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
-            @NonNull UrlProcessor urlProcessor) {
+            @NonNull UrlProcessor urlProcessor,
+            @NonNull ImageSizeResolver imageSizeResolver
+    ) {
         this.theme = theme;
         this.loader = loader;
         this.urlProcessor = urlProcessor;
+        this.imageSizeResolver = imageSizeResolver;
     }
 
     @Override
@@ -53,7 +54,7 @@ class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
                 replacement = "\uFFFC";
             }
 
-            final AsyncDrawable drawable = new AsyncDrawable(destination, loader, parseImageSize(attributes));
+            final AsyncDrawable drawable = new AsyncDrawable(destination, loader, imageSizeResolver, parseImageSize(attributes));
             final AsyncDrawableSpan span = new AsyncDrawableSpan(theme, drawable);
 
             final SpannableString string = new SpannableString(replacement);
@@ -70,145 +71,134 @@ class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
     @Nullable
     private static ImageSize parseImageSize(@NonNull Map<String, String> attributes) {
 
-        return null;
+        final ImageSize imageSize;
 
-//        final String width = attributes.get("width");
-//        final String height = attributes.get("height");
-//
-//        final ImageSize imageSize;
-//
-//        final String width = extractWidth(attributes);
-//        final String height = extractHeight(attributes);
-//
-//        if (TextUtils.isEmpty(width)
-//                && TextUtils.isEmpty(height)) {
-//            imageSize = null;
-//        } else {
-//            if (isRelative(width)) {
-//                // check if height is NOT relative, if it is -> ignore
-//                final int h = isRelative(height)
-//                        ? 0
-//                        : parseInt(height);
-//                imageSize = new ImageSize(, parseInt(width), h);
-//            } else {
-//                imageSize = new ImageSize(false, parseInt(width), parseInt(height));
-//            }
-//        }
-//
-//        return imageSize;
-    }
+        final StyleProvider styleProvider = new StyleProvider(attributes.get("style"));
 
-//    @Nullable
-//    private static ImageSize.Dimension parseWidth(@NonNull Map<String, String> attributes) {
-//
-//        // so, we can have raw value specified via direct attribute
-//
-//        final ImageSize.Dimension dimension;
-//
-//        final String width = attributes.get("width");
-//        if (!TextUtils.isEmpty(width)) {
-//            final Matcher matcher =
-//        }
-//    }
+        final ImageSize.Dimension width = parseDimension(extractDimension("width", attributes, styleProvider));
+        final ImageSize.Dimension height = parseDimension(extractDimension("height", attributes, styleProvider));
 
-    @Nullable
-    private static String extractWidth(@NonNull Map<String, String> attributes) {
-
-        // let's check style first
-
-        String width = attributes.get("width");
-
-        if (width == null) {
-            final String style = attributes.get("style");
-            if (!TextUtils.isEmpty(style)) {
-                final Matcher matcher = STYLE_WIDTH.matcher(style);
-                if (matcher.matches()) {
-                    width = matcher.group(1);
-                }
-            }
+        if (width == null
+                && height == null) {
+            imageSize = null;
+        } else {
+            imageSize = new ImageSize(width, height);
         }
 
-        return width;
+        return imageSize;
     }
 
     @Nullable
-    private static String extractHeight(@NonNull Map<String, String> attributes) {
+    private static String extractDimension(@NonNull String name, @NonNull Map<String, String> attributes, @NonNull StyleProvider styleProvider) {
 
-        String height = attributes.get("height");
+        final String out;
 
-        if (height == null) {
-            final String style = attributes.get("style");
-            if (!TextUtils.isEmpty(style)) {
-                final Matcher matcher = STYLE_HEIGHT.matcher(style);
-                if (matcher.matches()) {
-                    height = matcher.group(1);
-                }
-            }
+        final String inline = attributes.get(name);
+        if (!TextUtils.isEmpty(inline)) {
+            out = inline;
+        } else {
+            out = extractDimensionFromStyle(name, styleProvider);
         }
 
-        return height;
+        return out;
     }
 
     @Nullable
-    private static ImageSize.Dimension extractFromStyle(@Nullable String style, @NonNull Pattern pattern) {
+    private static String extractDimensionFromStyle(@NonNull String name, @NonNull StyleProvider styleProvider) {
+        return styleProvider.attributes().get(name);
+    }
+
+    @Nullable
+    private static ImageSize.Dimension parseDimension(@Nullable String raw) {
+
+        // a set of digits, then dimension unit (allow floating)
+
         final ImageSize.Dimension dimension;
-        if (style == null) {
+
+        final int length = raw != null
+                ? raw.length()
+                : 0;
+
+        if (length == 0) {
             dimension = null;
         } else {
-            final Matcher matcher = pattern.matcher(style);
-            if (matcher.matches()) {
-                dimension = new ImageSize.Dimension(
-                        parseUnit(matcher.group(2)),
-                        parseInt(matcher.group(1))
-                );
-            } else {
+
+            // first digit to find -> unit is finished (can be null)
+
+            int index = -1;
+
+            for (int i = length - 1; i >= 0; i--) {
+                if (Character.isDigit(raw.charAt(i))) {
+                    index = i;
+                    break;
+                }
+            }
+
+            // no digits -> no dimension
+            if (index == -1) {
                 dimension = null;
+            } else {
+
+                final String value;
+                final String unit;
+
+                // no unit is specified
+                if (index == length - 1) {
+                    value = raw;
+                    unit = null;
+                } else {
+                    value = raw.substring(0, index + 1);
+                    unit = raw.substring(index + 1);
+                }
+
+                ImageSize.Dimension inner;
+                try {
+                    final float floatValue = Float.parseFloat(value);
+                    inner = new ImageSize.Dimension(floatValue, unit);
+                } catch (NumberFormatException e) {
+                    inner = null;
+                }
+
+                dimension = inner;
             }
         }
+
         return dimension;
     }
 
-    @NonNull
-    private static ImageSize.Unit parseUnit(@Nullable String s) {
+    private static class StyleProvider {
 
-        final ImageSize.Unit unit;
+        private final String style;
+        private Map<String, String> attributes;
 
-        if (TextUtils.isEmpty(s)) {
+        StyleProvider(@Nullable String style) {
+            this.style = style;
+        }
 
-            unit = ImageSize.Unit.PIXELS;
-
-        } else {
-
-            final int length = s.length();
-
-            if (length == 1
-                    && '%' == s.charAt(length - 1)) {
-                unit = ImageSize.Unit.PERCENT;
-            } else if (length == 2
-                    && 'e' == s.charAt(length - 2)
-                    && 'm' == s.charAt(length - 1)) {
-                unit = ImageSize.Unit.FONT_SIZE;
+        @NonNull
+        Map<String, String> attributes() {
+            final Map<String, String> out;
+            if (attributes != null) {
+                out = attributes;
             } else {
-                unit = ImageSize.Unit.PIXELS;
+                if (TextUtils.isEmpty(style)) {
+                    out = attributes = Collections.emptyMap();
+                } else {
+                    final String[] split = style.split(";");
+                    final Map<String, String> map = new HashMap<>(split.length);
+                    String[] parts;
+                    for (String s : split) {
+                        if (!TextUtils.isEmpty(s)) {
+                            parts = s.split(":");
+                            if (parts.length == 2) {
+                                map.put(parts[0].trim(), parts[1].trim());
+                            }
+                        }
+                    }
+                    out = attributes = map;
+                }
             }
+            return out;
         }
-
-        return unit;
-    }
-
-    private static boolean isRelative(@Nullable String attr) {
-        return attr != null && attr.charAt(attr.length() - 1) == '%';
-    }
-
-    private static int parseInt(@Nullable String s) {
-        int result = 0;
-        if (!TextUtils.isEmpty(s)) {
-            try {
-                result = Integer.parseInt(s.replaceAll("[^\\d]", ""));
-            } catch (NumberFormatException e) {
-                result = 0;
-            }
-        }
-        return result;
     }
 }

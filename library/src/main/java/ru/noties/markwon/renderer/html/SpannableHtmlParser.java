@@ -21,37 +21,74 @@ import ru.noties.markwon.spans.SpannableTheme;
 public class SpannableHtmlParser {
 
     // creates default parser
+    @NonNull
     public static SpannableHtmlParser create(
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader
     ) {
-        return builderWithDefaults(theme, loader, null, null)
+        return builderWithDefaults(theme, loader, null, null, null)
                 .build();
     }
 
+    /**
+     * @since 1.0.1
+     */
+    @NonNull
+    public static SpannableHtmlParser create(
+            @NonNull SpannableTheme theme,
+            @NonNull AsyncDrawable.Loader loader,
+            @NonNull ImageSizeResolver imageSizeResolver
+    ) {
+        return builderWithDefaults(theme, loader, null, null, imageSizeResolver)
+                .build();
+    }
+
+    @NonNull
     public static SpannableHtmlParser create(
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
             @NonNull UrlProcessor urlProcessor,
             @NonNull LinkSpan.Resolver resolver
     ) {
-        return builderWithDefaults(theme, loader, urlProcessor, resolver)
+        return builderWithDefaults(theme, loader, urlProcessor, resolver, null)
                 .build();
     }
 
+    /**
+     * @since 1.0.1
+     */
+    @NonNull
+    public static SpannableHtmlParser create(
+            @NonNull SpannableTheme theme,
+            @NonNull AsyncDrawable.Loader loader,
+            @NonNull UrlProcessor urlProcessor,
+            @NonNull LinkSpan.Resolver resolver,
+            @NonNull ImageSizeResolver imageSizeResolver
+    ) {
+        return builderWithDefaults(theme, loader, urlProcessor, resolver, imageSizeResolver)
+                .build();
+    }
+
+    @NonNull
     public static Builder builder() {
         return new Builder();
     }
 
+    @NonNull
     public static Builder builderWithDefaults(@NonNull SpannableTheme theme) {
-        return builderWithDefaults(theme, null, null, null);
+        return builderWithDefaults(theme, null, null, null, null);
     }
 
+    /**
+     * Updated in 1.0.1: added imageSizeResolverArgument
+     */
+    @NonNull
     public static Builder builderWithDefaults(
             @NonNull SpannableTheme theme,
             @Nullable AsyncDrawable.Loader asyncDrawableLoader,
             @Nullable UrlProcessor urlProcessor,
-            @Nullable LinkSpan.Resolver resolver
+            @Nullable LinkSpan.Resolver resolver,
+            @Nullable ImageSizeResolver imageSizeResolver
     ) {
 
         if (urlProcessor == null) {
@@ -68,7 +105,12 @@ public class SpannableHtmlParser {
 
         final ImageProvider imageProvider;
         if (asyncDrawableLoader != null) {
-            imageProvider = new ImageProviderImpl(theme, asyncDrawableLoader, urlProcessor);
+
+            if (imageSizeResolver == null) {
+                imageSizeResolver = new ImageSizeResolverDef();
+            }
+
+            imageProvider = new ImageProviderImpl(theme, asyncDrawableLoader, urlProcessor, imageSizeResolver);
         } else {
             imageProvider = null;
         }
@@ -163,21 +205,25 @@ public class SpannableHtmlParser {
         private ImageProvider imageProvider;
         private HtmlParser parser;
 
+        @NonNull
         Builder simpleTag(@NonNull String tag, @NonNull SpanProvider provider) {
             simpleTags.put(tag, provider);
             return this;
         }
 
-        public Builder imageProvider(ImageProvider imageProvider) {
+        @NonNull
+        public Builder imageProvider(@Nullable ImageProvider imageProvider) {
             this.imageProvider = imageProvider;
             return this;
         }
 
+        @NonNull
         public Builder parser(@NonNull HtmlParser parser) {
             this.parser = parser;
             return this;
         }
 
+        @NonNull
         public SpannableHtmlParser build() {
             if (parser == null) {
                 parser = DefaultHtmlParser.create();

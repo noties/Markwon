@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.noties.markwon.renderer.html.ImageSize;
+import ru.noties.markwon.renderer.html.ImageSizeResolver;
 
 public class AsyncDrawable extends Drawable {
 
@@ -24,22 +25,30 @@ public class AsyncDrawable extends Drawable {
     private final String destination;
     private final Loader loader;
     private final ImageSize imageSize;
+    private final ImageSizeResolver imageSizeResolver;
 
     private Drawable result;
     private Callback callback;
 
     private int canvasWidth;
+    private float textSize;
 
     public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
-        this(destination, loader, null);
+        this(destination, loader, null, null);
     }
 
     /**
      * @since 1.0.1
      */
-    public AsyncDrawable(@NonNull String destination, @NonNull Loader loader, @Nullable ImageSize imageSize) {
+    public AsyncDrawable(
+            @NonNull String destination,
+            @NonNull Loader loader,
+            @Nullable ImageSizeResolver imageSizeResolver,
+            @Nullable ImageSize imageSize
+    ) {
         this.destination = destination;
         this.loader = loader;
+        this.imageSizeResolver = imageSizeResolver;
         this.imageSize = imageSize;
     }
 
@@ -103,8 +112,9 @@ public class AsyncDrawable extends Drawable {
      * @since 1.0.1
      */
     @SuppressWarnings("WeakerAccess")
-    public void initWithCanvasWidth(int width) {
+    public void initWithKnownDimensions(int width, float textSize) {
         this.canvasWidth = width;
+        this.textSize = textSize;
     }
 
     @Override
@@ -162,70 +172,13 @@ public class AsyncDrawable extends Drawable {
      */
     @NonNull
     private Rect resolveBounds() {
-
-        return result.getBounds();
-
-//        final Rect rect;
-//
-//        if (canvasWidth == 0
-//                || imageSize == null) {
-//
-//            rect = result.getBounds();
-//
-//        } else {
-//
-//            final Rect bounds = result.getBounds();
-//            final float ratio = (float) bounds.width() / bounds.height();
-//
-//            if (imageSize.widthIsRelative()) {
-//
-//                final int w = (int) (canvasWidth * ((float) imageSize.width() / 100.F) + .5F);
-//                final int h;
-//
-//                // we still should allow absolute height
-//                if (imageSize.height() > 0) {
-//                    h = imageSize.height();
-//                } else {
-//                    h = (int) (w / ratio);
-//                }
-//
-//                rect = new Rect(0, 0, w, h);
-//
-//            } else {
-//
-//                // if width is specified, but height not -> calculate by ratio (and vice versa)
-//                // else
-//
-//                final int w;
-//                final int h;
-//
-//                final int width = imageSize.width();
-//                final int height = imageSize.height();
-//
-//                if (width > 0
-//                        && height > 0) {
-//                    w = width;
-//                    h = height;
-//                } else if (width > 0) {
-//                    w = width;
-//                    h = (int) (w / ratio + .5F);
-//                } else if (height > 0) {
-//                    h = height;
-//                    w = (int) (h * ratio + .5F);
-//                } else {
-//                    w = 0;
-//                    h = 0;
-//                }
-//
-//                if (w == 0
-//                        || h == 0) {
-//                    rect = bounds;
-//                } else {
-//                    rect = new Rect(0, 0, w, h);
-//                }
-//            }
-//        }
-//
-//        return rect;
+        final Rect rect;
+        if (imageSizeResolver == null
+                || imageSize == null) {
+            rect = result.getBounds();
+        } else {
+            rect = imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize);
+        }
+        return rect;
     }
 }

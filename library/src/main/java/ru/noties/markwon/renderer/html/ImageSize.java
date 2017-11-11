@@ -1,72 +1,37 @@
 package ru.noties.markwon.renderer.html;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
  * @since 1.0.1
  */
+@SuppressWarnings("WeakerAccess")
 public class ImageSize {
-
-    public enum Unit {
-        PERCENT, FONT_SIZE, PIXELS
-    }
 
     public static class Dimension {
 
-        private final Unit unit;
-        private final int value;
+        public final float value;
+        public final String unit;
 
-        public Dimension(@NonNull Unit unit, int value) {
-            this.unit = unit;
+        public Dimension(float value, @Nullable String unit) {
             this.value = value;
-        }
-
-        @NonNull
-        public Unit unit() {
-            return unit;
-        }
-
-        public int value() {
-            return value;
+            this.unit = unit;
         }
 
         @Override
         public String toString() {
             return "Dimension{" +
-                    "unit=" + unit +
-                    ", value=" + value +
+                    "value=" + value +
+                    ", unit='" + unit + '\'' +
                     '}';
         }
     }
 
-    // width can be relative (in percent)
-    // height CANNOT be relative (endless loop)
-    // both can be absolute
-
-    private final Dimension width;
-    private final Dimension height;
+    public final Dimension width;
+    public final Dimension height;
 
     public ImageSize(@Nullable Dimension width, @Nullable Dimension height) {
         this.width = width;
         this.height = height;
-    }
-
-    @Nullable
-    public Dimension width() {
-        return width;
-    }
-
-    @Nullable
-    public Dimension height() {
-        return height;
-    }
-
-    @Override
-    public String toString() {
-        return "ImageSize{" +
-                "width=" + width +
-                ", height=" + height +
-                '}';
     }
 }
