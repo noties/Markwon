@@ -601,7 +601,7 @@ public class SpannableTheme {
         }
 
         /**
-         * Supplied Drawable must be stateful ({@link Drawable#isStateful()} -> true). If a task
+         * Supplied Drawable must be stateful ({@link Drawable#isStateful()} returns true). If a task
          * is marked as done, then this drawable will be updated with an {@code int[] { android.R.attr.state_checked }}
          * as the state, otherwise an empty array will be used. This library provides a ready to be
          * used Drawable: {@link TaskListDrawable}
