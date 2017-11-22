@@ -384,6 +384,16 @@ public class SpannableTheme {
         return tableCellPadding;
     }
 
+    public int tableBorderWidth(@NonNull Paint paint) {
+        final int out;
+        if (tableBorderWidth == -1) {
+            out = (int) (paint.getStrokeWidth() + .5F);
+        } else {
+            out = tableBorderWidth;
+        }
+        return out;
+    }
+
     public void applyTableBorderStyle(@NonNull Paint paint) {
 
         final int color;
@@ -391,10 +401,6 @@ public class SpannableTheme {
             color = ColorUtils.applyAlpha(paint.getColor(), TABLE_BORDER_DEF_ALPHA);
         } else {
             color = tableBorderColor;
-        }
-
-        if (tableBorderWidth != 0) {
-            paint.setStrokeWidth(tableBorderWidth);
         }
 
         paint.setColor(color);
@@ -442,7 +448,7 @@ public class SpannableTheme {
         private int thematicBreakHeight = -1;
         private int tableCellPadding;
         private int tableBorderColor;
-        private int tableBorderWidth;
+        private int tableBorderWidth = -1;
         private int tableOddRowBackgroundColor;
         private Drawable taskListDrawable;
 

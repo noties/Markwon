@@ -169,9 +169,13 @@ public class TableRowSpan extends ReplacementSpan {
             }
         }
 
-        rect.set(0, 0, w, bottom - top);
-
         theme.applyTableBorderStyle(this.paint);
+
+        final int borderWidth = theme.tableBorderWidth(paint);
+        final boolean drawBorder = borderWidth > 0;
+        if (drawBorder) {
+            rect.set(0, 0, w, bottom - top);
+        }
 
         StaticLayout layout;
         for (int i = 0; i < size; i++) {
@@ -180,7 +184,10 @@ public class TableRowSpan extends ReplacementSpan {
             try {
 
                 canvas.translate(x + (i * w), top - heightDiff);
-                canvas.drawRect(rect, this.paint);
+
+                if (drawBorder) {
+                    canvas.drawRect(rect, this.paint);
+                }
 
                 canvas.translate(padding, padding + heightDiff);
                 layout.draw(canvas);
