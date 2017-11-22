@@ -336,7 +336,7 @@ public class SpannableTheme {
         }
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
-        if (headingBreakHeight != 0) {
+        if (headingBreakHeight >= 0) {
             //noinspection SuspiciousNameCombination
             paint.setStrokeWidth(headingBreakHeight);
         }
@@ -374,7 +374,7 @@ public class SpannableTheme {
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
 
-        if (thematicBreakHeight != 0) {
+        if (thematicBreakHeight >= 0) {
             //noinspection SuspiciousNameCombination
             paint.setStrokeWidth(thematicBreakHeight);
         }
@@ -435,11 +435,11 @@ public class SpannableTheme {
         private int codeMultilineMargin;
         private Typeface codeTypeface;
         private int codeTextSize;
-        private int headingBreakHeight;
+        private int headingBreakHeight = -1;
         private int headingBreakColor;
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
-        private int thematicBreakHeight;
+        private int thematicBreakHeight = -1;
         private int tableCellPadding;
         private int tableBorderColor;
         private int tableBorderWidth;
