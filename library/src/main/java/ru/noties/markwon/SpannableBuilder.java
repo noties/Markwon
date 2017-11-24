@@ -160,6 +160,24 @@ public class SpannableBuilder {
             impl.setSpan(span.what, span.start, span.end, span.flags);
         }
 
+        // now, let's remove trailing newLines (so small amounts of text are displayed correctly)
+        // @since 1.0.2
+
+        final int length = impl.length();
+        if (length > 0) {
+            int amount = 0;
+            for (int i = length - 1; i >=0 ; i--) {
+                if (Character.isWhitespace(impl.charAt(i))) {
+                    amount += 1;
+                } else {
+                    break;
+                }
+            }
+            if (amount > 0) {
+                impl.replace(length - amount, length, "");
+            }
+        }
+
         return impl;
     }
 

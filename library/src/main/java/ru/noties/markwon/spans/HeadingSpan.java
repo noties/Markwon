@@ -53,20 +53,24 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
             theme.applyHeadingBreakStyle(paint);
 
             final float height = paint.getStrokeWidth();
-            final int b = (int) (bottom - height + .5F);
 
-            final int left;
-            final int right;
-            if (dir > 0) {
-                left = x;
-                right = c.getWidth();
-            } else {
-                left = x - c.getWidth();
-                right = x;
+            if (height > .0F) {
+
+                final int b = (int) (bottom - height + .5F);
+
+                final int left;
+                final int right;
+                if (dir > 0) {
+                    left = x;
+                    right = c.getWidth();
+                } else {
+                    left = x - c.getWidth();
+                    right = x;
+                }
+
+                rect.set(left, b, right, bottom);
+                c.drawRect(rect, paint);
             }
-
-            rect.set(left, b, right, bottom);
-            c.drawRect(rect, paint);
         }
     }
 }
