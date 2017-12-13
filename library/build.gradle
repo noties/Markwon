@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
 
@@ -18,8 +19,12 @@ dependencies {
     compile COMMON_MARK
     compile COMMON_MARK_STRIKETHROUGHT
     compile COMMON_MARK_TABLE
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 if (project.hasProperty('release')) {
     apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+}
+repositories {
+    mavenCentral()
 }
