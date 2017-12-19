@@ -9,11 +9,14 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
 import android.support.annotation.FloatRange;
-import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.TypedValue;
+
+import ru.noties.markwon.spans.heading.HeadingConfig;
+import ru.noties.markwon.spans.heading.HeadingType;
+import ru.noties.markwon.spans.heading.HeadingTypeConfig;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {
@@ -78,16 +81,16 @@ public class SpannableTheme {
 
         final Dip dip = new Dip(context);
         return new Builder()
-                .linkColor(linkColor)
-                .codeMultilineMargin(dip.toPx(8))
-                .blockMargin(dip.toPx(24))
-                .blockQuoteWidth(dip.toPx(4))
-                .bulletListItemStrokeWidth(dip.toPx(1))
-                .headingBreakHeight(dip.toPx(1))
-                .thematicBreakHeight(dip.toPx(4))
-                .tableCellPadding(dip.toPx(4))
-                .tableBorderWidth(dip.toPx(1))
-                .taskListDrawable(new TaskListDrawable(linkColor, linkColor, backgroundColor));
+            .linkColor(linkColor)
+            .codeMultilineMargin(dip.toPx(8))
+            .blockMargin(dip.toPx(24))
+            .blockQuoteWidth(dip.toPx(4))
+            .bulletListItemStrokeWidth(dip.toPx(1))
+            .headingConfig(new HeadingConfig(), dip.density)
+            .thematicBreakHeight(dip.toPx(4))
+            .tableCellPadding(dip.toPx(4))
+            .tableBorderWidth(dip.toPx(1))
+            .taskListDrawable(new TaskListDrawable(linkColor, linkColor, backgroundColor));
     }
 
     private static int resolve(Context context, @AttrRes int attr) {
@@ -104,6 +107,7 @@ public class SpannableTheme {
     protected static final int BLOCK_QUOTE_DEF_COLOR_ALPHA = 25;
 
     protected static final int CODE_DEF_BACKGROUND_COLOR_ALPHA = 25;
+
     protected static final float CODE_DEF_TEXT_SIZE_RATIO = .87F;
 
     protected static final int HEADING_DEF_BREAK_COLOR_ALPHA = 75;
@@ -111,7 +115,7 @@ public class SpannableTheme {
     // taken from html spec (most browsers render headings like that)
     // is not exposed via protected modifier in order to disallow modification
     private static final float[] HEADING_SIZES = {
-            2.F, 1.5F, 1.17F, 1.F, .83F, .67F,
+        2.F, 1.5F, 1.17F, 1.F, .83F, .67F,
     };
 
     protected static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
@@ -159,11 +163,7 @@ public class SpannableTheme {
     // applied ONLY if default typeface was used, otherwise, not applied
     protected final int codeTextSize;
 
-    // by default paint.getStrokeWidth
-    protected final int headingBreakHeight;
-
-    // by default, text color with `HEADING_DEF_BREAK_COLOR_ALPHA` applied alpha
-    protected final int headingBreakColor;
+    protected final HeadingConfig headingConfig;
 
     // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
     protected final float scriptTextSizeRatio;
@@ -202,8 +202,7 @@ public class SpannableTheme {
         this.codeMultilineMargin = builder.codeMultilineMargin;
         this.codeTypeface = builder.codeTypeface;
         this.codeTextSize = builder.codeTextSize;
-        this.headingBreakHeight = builder.headingBreakHeight;
-        this.headingBreakColor = builder.headingBreakColor;
+        this.headingConfig = builder.headingConfig;
         this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
@@ -213,7 +212,6 @@ public class SpannableTheme {
         this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
         this.taskListDrawable = builder.taskListDrawable;
     }
-
 
     public void applyLinkStyle(@NonNull Paint paint) {
         paint.setUnderlineText(true);
@@ -269,7 +267,7 @@ public class SpannableTheme {
 
         final int width;
         if (bulletWidth == 0
-                || bulletWidth > min) {
+            || bulletWidth > min) {
             width = min;
         } else {
             width = bulletWidth;
@@ -322,13 +320,51 @@ public class SpannableTheme {
         return color;
     }
 
-    public void applyHeadingTextStyle(@NonNull Paint paint, @IntRange(from = 1, to = 6) int level) {
+    public void applyHeadingTextStyle(@NonNull Paint paint, @HeadingType int level) {
+        HeadingTypeConfig headingTypeConfig;
+        switch (level) {
+            case HeadingType.H1:
+                headingTypeConfig = headingConfig.getH1Config();
+                break;
+            case HeadingType.H2:
+                headingTypeConfig = headingConfig.getH2Config();
+                break;
+            case HeadingType.H3:
+                headingTypeConfig = headingConfig.getH3Config();
+                break;
+            case HeadingType.H4:
+                headingTypeConfig = headingConfig.getH4Config();
+                break;
+            case HeadingType.H5:
+                headingTypeConfig = headingConfig.getH5Config();
+                break;
+            case HeadingType.H6:
+                headingTypeConfig = headingConfig.getH6Config();
+                break;
+            default:
+                headingTypeConfig = new HeadingTypeConfig();
+        }
+
         paint.setFakeBoldText(true);
-        paint.setTextSize(paint.getTextSize() * HEADING_SIZES[level - 1]);
+
+        final float textSize = headingTypeConfig.getTextSize() > 0 ?
+            headingTypeConfig.getTextSize() : HEADING_SIZES[level - 1];
+        paint.setTextSize(paint.getTextSize() * textSize);
+
+        final int textColor = headingTypeConfig.getTextColor();
+        if (textColor != -1) {
+            paint.setColor(textColor);
+        }
+
+        final Typeface typeface = headingTypeConfig.getTypeface();
+        if(typeface != null){
+            paint.setTypeface(typeface);
+        }
     }
 
     public void applyHeadingBreakStyle(@NonNull Paint paint) {
         final int color;
+        final int headingBreakColor = headingConfig.getHeadingBreakConfig().getHeadingBreakColor();
         if (headingBreakColor != 0) {
             color = headingBreakColor;
         } else {
@@ -336,6 +372,7 @@ public class SpannableTheme {
         }
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
+        final float headingBreakHeight = headingConfig.getHeadingBreakConfig().getHeadingBreakStrokeWidth();
         if (headingBreakHeight >= 0) {
             //noinspection SuspiciousNameCombination
             paint.setStrokeWidth(headingBreakHeight);
@@ -441,8 +478,7 @@ public class SpannableTheme {
         private int codeMultilineMargin;
         private Typeface codeTypeface;
         private int codeTextSize;
-        private int headingBreakHeight = -1;
-        private int headingBreakColor;
+        private HeadingConfig headingConfig;
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
@@ -468,8 +504,7 @@ public class SpannableTheme {
             this.codeMultilineMargin = theme.codeMultilineMargin;
             this.codeTypeface = theme.codeTypeface;
             this.codeTextSize = theme.codeTextSize;
-            this.headingBreakHeight = theme.headingBreakHeight;
-            this.headingBreakColor = theme.headingBreakColor;
+            this.headingConfig = theme.headingConfig;
             this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
@@ -553,14 +588,9 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder headingBreakHeight(@Dimension int headingBreakHeight) {
-            this.headingBreakHeight = headingBreakHeight;
-            return this;
-        }
-
-        @NonNull
-        public Builder headingBreakColor(@ColorInt int headingBreakColor) {
-            this.headingBreakColor = headingBreakColor;
+        public Builder headingConfig(HeadingConfig headingConfig, float density) {
+            headingConfig.setDensityFactor(density);
+            this.headingConfig = headingConfig;
             return this;
         }
 
@@ -630,7 +660,7 @@ public class SpannableTheme {
 
     private static class Dip {
 
-        private final float density;
+        protected final float density;
 
         Dip(@NonNull Context context) {
             this.density = context.getResources().getDisplayMetrics().density;
