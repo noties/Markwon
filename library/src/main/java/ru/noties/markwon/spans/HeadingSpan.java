@@ -10,7 +10,7 @@ import android.text.TextPaint;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.MetricAffectingSpan;
 
-import ru.noties.markwon.spans.heading.HeadingType;
+import ru.noties.markwon.spans.configuration.heading.HeadingType;
 
 public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 

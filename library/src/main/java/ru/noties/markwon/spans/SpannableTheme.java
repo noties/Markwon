@@ -14,9 +14,9 @@ import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.TypedValue;
 
-import ru.noties.markwon.spans.heading.HeadingConfig;
-import ru.noties.markwon.spans.heading.HeadingType;
-import ru.noties.markwon.spans.heading.HeadingTypeConfig;
+import ru.noties.markwon.spans.configuration.heading.HeadingConfig;
+import ru.noties.markwon.spans.configuration.heading.HeadingType;
+import ru.noties.markwon.spans.configuration.heading.HeadingTypeConfig;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {

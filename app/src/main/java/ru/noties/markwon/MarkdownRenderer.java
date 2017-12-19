@@ -19,8 +19,8 @@ import javax.inject.Inject;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.SpannableTheme;
-import ru.noties.markwon.spans.heading.HeadingConfig;
-import ru.noties.markwon.spans.heading.HeadingTypeConfig;
+import ru.noties.markwon.spans.configuration.heading.HeadingConfig;
+import ru.noties.markwon.spans.configuration.heading.HeadingTypeConfig;
 
 @ActivityScope
 public class MarkdownRenderer {

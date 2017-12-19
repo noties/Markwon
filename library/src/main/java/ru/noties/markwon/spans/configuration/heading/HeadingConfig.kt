@@ -1,4 +1,4 @@
-package ru.noties.markwon.spans.heading
+package ru.noties.markwon.spans.configuration.heading
 
 import android.graphics.Typeface
 import android.support.annotation.ColorInt
@@ -18,7 +18,7 @@ import android.support.annotation.Dimension
  * @property h6Config Config for H6 heading
  * @property headingBreakConfig Config for line breaks (for H1 and H2)
  */
-data class HeadingConfig @JvmOverloads constructor(
+class HeadingConfig @JvmOverloads constructor(
         val h1Config: HeadingTypeConfig = HeadingTypeConfig(),
         val h2Config: HeadingTypeConfig = HeadingTypeConfig(),
         val h3Config: HeadingTypeConfig = HeadingTypeConfig(),
