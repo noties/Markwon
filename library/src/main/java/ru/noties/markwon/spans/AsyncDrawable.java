@@ -12,25 +12,26 @@ import android.support.annotation.Nullable;
 
 import ru.noties.markwon.renderer.html.ImageSize;
 import ru.noties.markwon.renderer.html.ImageSizeResolver;
+import ru.noties.markwon.spans.configuration.image.ImageConfig;
+import ru.noties.markwon.spans.configuration.image.ImageGravity;
+import ru.noties.markwon.spans.configuration.image.ImageWidth;
 
 public class AsyncDrawable extends Drawable {
 
-    public interface Loader {
-
-        void load(@NonNull String destination, @NonNull AsyncDrawable drawable);
-
-        void cancel(@NonNull String destination);
-    }
-
     private final String destination;
+
     private final Loader loader;
+
     private final ImageSize imageSize;
+
     private final ImageSizeResolver imageSizeResolver;
 
     private Drawable result;
+
     private Callback callback;
 
     private int canvasWidth;
+
     private float textSize;
 
     public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
@@ -41,10 +42,10 @@ public class AsyncDrawable extends Drawable {
      * @since 1.0.1
      */
     public AsyncDrawable(
-            @NonNull String destination,
-            @NonNull Loader loader,
-            @Nullable ImageSizeResolver imageSizeResolver,
-            @Nullable ImageSize imageSize
+        @NonNull String destination,
+        @NonNull Loader loader,
+        @Nullable ImageSizeResolver imageSizeResolver,
+        @Nullable ImageSize imageSize
     ) {
         this.destination = destination;
         this.loader = loader;
@@ -91,7 +92,7 @@ public class AsyncDrawable extends Drawable {
         }
     }
 
-    public void setResult(@NonNull Drawable result) {
+    public void setResult(@NonNull Drawable result, @NonNull ImageConfig imageConfig) {
 
         // if we have previous one, detach it
         if (this.result != null) {
@@ -101,7 +102,7 @@ public class AsyncDrawable extends Drawable {
         this.result = result;
         this.result.setCallback(callback);
 
-        final Rect bounds = resolveBounds();
+        final Rect bounds = resolveBounds(imageConfig);
         result.setBounds(bounds);
         setBounds(bounds);
 
@@ -168,17 +169,55 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
+     * @param imageConfig
      * @since 1.0.1
      */
     @NonNull
-    private Rect resolveBounds() {
+    private Rect resolveBounds(@NonNull ImageConfig imageConfig) {
         final Rect rect;
         if (imageSizeResolver == null
-                || imageSize == null) {
+            || imageSize == null) {
             rect = result.getBounds();
         } else {
             rect = imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize);
         }
-        return rect;
+        return adjustBounds(rect, imageConfig);
+    }
+
+    private Rect adjustBounds(Rect bounds, ImageConfig imageConfig) {
+        final ImageGravity gravity = imageConfig.getGravity();
+        final ImageWidth imageWidth = imageConfig.getImageWidth();
+
+        if (imageWidth == ImageWidth.MatchParent) {
+            final float aspectRatio = (float) bounds.width() / bounds.height();
+            bounds.left = 0;
+            bounds.right = canvasWidth;
+            bounds.bottom = (int) (bounds.top + bounds.height() * aspectRatio);
+        } else {
+            switch (gravity) {
+                case Left:
+                    //left is unchanged
+                    break;
+                case Right:
+                    bounds.left = canvasWidth - bounds.width();
+                    bounds.right = canvasWidth;
+                    break;
+                case Center:
+                    final int center = canvasWidth / 2;
+                    final int imageRadius = bounds.width() / 2;
+                    bounds.left = center - imageRadius;
+                    bounds.right = center + imageRadius;
+                    break;
+            }
+        }
+
+        return bounds;
+    }
+
+    public interface Loader {
+
+        void load(@NonNull String destination, @NonNull AsyncDrawable drawable);
+
+        void cancel(@NonNull String destination);
     }
 }
