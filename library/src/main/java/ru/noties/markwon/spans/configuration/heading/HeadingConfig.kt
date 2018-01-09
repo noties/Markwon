@@ -49,16 +49,13 @@ class HeadingConfig @JvmOverloads constructor(
  */
 class HeadingTypeConfig @JvmOverloads constructor(
         //Standard sizes available at #SpannableTheme.java:HEADING_SIZES
-        textSize: Float = -1F,
+        val textSize: Float = -1F,
 
         @ColorInt val textColor: Int = -1,
 
         val typeface: Typeface? = null
 ) {
     internal var densityFactor: Float = -1F
-
-    val textSize: Float = textSize
-        get() = field * densityFactor
 }
 
 /**

@@ -114,7 +114,7 @@ public class SpannableTheme {
 
     // taken from html spec (most browsers render headings like that)
     // is not exposed via protected modifier in order to disallow modification
-    private static final float[] HEADING_SIZES = {
+    private static final float[] HEADING_SCALES = {
         2.F, 1.5F, 1.17F, 1.F, .83F, .67F,
     };
 
@@ -348,7 +348,7 @@ public class SpannableTheme {
         paint.setFakeBoldText(true);
 
         final float textSize = headingTypeConfig.getTextSize() > 0 ?
-            headingTypeConfig.getTextSize() : HEADING_SIZES[level - 1];
+            headingTypeConfig.getTextSize() : HEADING_SCALES[level - 1];
         paint.setTextSize(paint.getTextSize() * textSize);
 
         final int textColor = headingTypeConfig.getTextColor();
