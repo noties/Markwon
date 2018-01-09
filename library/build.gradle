@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'digital.wup.android-maven-publish'
+
 android {
 
     compileSdkVersion TARGET_SDK
@@ -14,19 +17,67 @@ android {
 
         consumerProguardFiles 'lib-proguard-rules.pro'
     }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${POM_ARTIFACT_ID}-release.aar"
+        }
+    }
 }
 
 dependencies {
-    compile SUPPORT_ANNOTATIONS
-    compile COMMON_MARK
-    compile COMMON_MARK_STRIKETHROUGHT
-    compile COMMON_MARK_TABLE
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api SUPPORT_ANNOTATIONS
+    implementation COMMON_MARK
+    implementation COMMON_MARK_STRIKETHROUGHT
+    implementation COMMON_MARK_TABLE
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-if (project.hasProperty('release')) {
-    apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
-}
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId "${GROUP}.auto1"
+            version VERSION_NAME
+            artifactId POM_ARTIFACT_ID
+
+            from components.android
+        }
+    }
+}
+
+artifactory {
+    contextUrl = artifactory_repository
+    publish {
+        repository {
+            repoKey = 'libs-android-local'
+
+            username = artifactory_username
+            password = artifactory_password
+        }
+        defaults {
+            publications('aar')
+            publishArtifacts = true
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'mobile-android']
+            publishPom = true
+        }
+    }
+}
+
+afterEvaluate {
+
+    task cleanBuildPublish {
+        dependsOn 'clean'
+        dependsOn 'assembleRelease'
+        dependsOn 'artifactoryPublish'
+        tasks.findByName('assembleRelease').mustRunAfter 'clean'
+        tasks.findByName('artifactoryPublish').dependsOn 'generatePomFileForAarPublication'
+        tasks.findByName('artifactoryPublish').mustRunAfter 'assembleRelease'
+    }
+
+    cleanBuildPublish
 }

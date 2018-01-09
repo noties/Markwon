@@ -16,6 +16,9 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.il.AsyncDrawableLoader;
 import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.configuration.image.ImageConfig;
+import ru.noties.markwon.spans.configuration.image.ImageGravity;
+import ru.noties.markwon.spans.configuration.image.ImageWidth;
 
 @Module
 class AppModule {
