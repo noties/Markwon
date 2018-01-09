@@ -347,8 +347,8 @@ public class SpannableTheme {
 
         paint.setFakeBoldText(true);
 
-        final float textSize = headingTypeConfig.getTextSize() > 0 ?
-            headingTypeConfig.getTextSize() : HEADING_SCALES[level - 1];
+        final float textSize = headingTypeConfig.getTextScale() > 0 ?
+            headingTypeConfig.getTextScale() : HEADING_SCALES[level - 1];
         paint.setTextSize(paint.getTextSize() * textSize);
 
         final int textColor = headingTypeConfig.getTextColor();

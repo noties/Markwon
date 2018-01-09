@@ -43,13 +43,13 @@ class HeadingConfig @JvmOverloads constructor(
  *
  * Can set text size, text color and font (typeface)
  *
- * @property textSize Text size for heading
+ * @property textScale Text scale for heading
  * @property textColor Text color for heading
- * @property typeface Text size for heading
+ * @property typeface Typeface for heading
  */
 class HeadingTypeConfig @JvmOverloads constructor(
         //Standard sizes available at #SpannableTheme.java:HEADING_SIZES
-        val textSize: Float = -1F,
+        val textScale: Float = -1F,
 
         @ColorInt val textColor: Int = -1,
 
