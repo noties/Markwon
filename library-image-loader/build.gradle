@@ -25,6 +25,4 @@ dependencies {
     implementation OK_HTTP
 }
 
-if (project.hasProperty('release')) {
-    apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
-}
+apply from: '../artifactory-mvn-push.gradle'
