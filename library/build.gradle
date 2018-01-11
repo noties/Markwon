@@ -11,8 +11,6 @@ android {
         targetSdkVersion TARGET_SDK
         versionCode 1
         versionName version
-
-        consumerProguardFiles 'lib-proguard-rules.pro'
     }
 
     libraryVariants.all { variant ->
