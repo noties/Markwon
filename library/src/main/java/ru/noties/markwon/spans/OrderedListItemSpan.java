@@ -11,6 +11,11 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
     private final SpannableTheme theme;
     private final String number;
 
+    // we will use this variable to check if our order number text exceeds block margin,
+    // so we will use it instead of block margin
+    // @since 1.0.3
+    private int margin;
+
     public OrderedListItemSpan(
             @NonNull SpannableTheme theme,
             @NonNull String number
@@ -21,7 +26,8 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin();
+        // @since 1.0.3
+        return margin > 0 ? margin : theme.getBlockMargin();
     }
 
     @Override
@@ -35,8 +41,16 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
 
         theme.applyListItemStyle(p);
 
-        final int width = theme.getBlockMargin();
         final int numberWidth = (int) (p.measureText(number) + .5F);
+
+        // @since 1.0.3
+        int width = theme.getBlockMargin();
+        if (numberWidth > width) {
+            width = numberWidth;
+            margin = numberWidth;
+        } else {
+            margin = 0;
+        }
 
         final int left;
         if (dir > 0) {
