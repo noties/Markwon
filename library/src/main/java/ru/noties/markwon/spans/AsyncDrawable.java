@@ -189,10 +189,10 @@ public class AsyncDrawable extends Drawable {
         final ImageWidth imageWidth = imageConfig.getImageWidth();
 
         if (imageWidth == ImageWidth.MatchParent) {
-            final float aspectRatio = (float) bounds.width() / bounds.height();
+            final float growthRatio = (float) canvasWidth / bounds.width();
             bounds.left = 0;
             bounds.right = canvasWidth;
-            bounds.bottom = (int) (bounds.top + bounds.height() * aspectRatio);
+            bounds.bottom = (int) (bounds.top + bounds.height() * growthRatio);
         } else {
             switch (gravity) {
                 case Left:
