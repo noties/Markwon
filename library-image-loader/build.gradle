@@ -10,6 +10,8 @@ android {
         targetSdkVersion TARGET_SDK
         versionCode 1
         versionName version
+
+        consumerProguardFiles 'lib-proguard-rules.pro'
     }
 
     lintOptions {
@@ -19,12 +21,10 @@ android {
 }
 
 dependencies {
-    compile project(':library')
-    compile ANDROID_SVG
-    compile ANDROID_GIF
-    compile OK_HTTP
+    implementation project(':library')
+    implementation ANDROID_SVG
+    implementation ANDROID_GIF
+    implementation OK_HTTP
 }
 
-if (project.hasProperty('release')) {
-    apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
-}
+apply from: '../artifactory-mvn-push.gradle'
