@@ -1,10 +1,14 @@
 buildscript {
+    ext.kotlin_version = '1.2.10'
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.12"
+        classpath 'digital.wup:android-maven-publish:3.1.1'
     }
 }
 
@@ -27,14 +31,13 @@ task wrapper(type: Wrapper) {
 }
 
 ext {
-
     // Config
-    BUILD_TOOLS = '26.0.3'
+    BUILD_TOOLS = '27.0.1'
     TARGET_SDK = 26
     MIN_SDK = 16
 
     // Dependencies
-    final def supportVersion = '26.1.0'
+    final def supportVersion = '27.0.2'
     SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
     SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
 

@@ -1,0 +1,44 @@
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'digital.wup.android-maven-publish'
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId "${GROUP}.auto1"
+            version VERSION_NAME
+            artifactId POM_ARTIFACT_ID
+
+            from components.android
+        }
+    }
+}
+
+artifactory {
+    contextUrl = artifactory_repository_url
+    publish {
+        repository {
+            repoKey = artifactory_repository_name
+
+            username = artifactory_username
+            password = artifactory_password
+        }
+        defaults {
+            publications('aar')
+            publishArtifacts = true
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'mobile-android']
+            publishPom = true
+        }
+    }
+}
+
+afterEvaluate {
+    task cleanBuildPublish {
+        dependsOn 'clean'
+        dependsOn 'assembleRelease'
+        dependsOn 'artifactoryPublish'
+        tasks.findByName('assembleRelease').mustRunAfter 'clean'
+        tasks.findByName('artifactoryPublish').dependsOn 'generatePomFileForAarPublication'
+        tasks.findByName('artifactoryPublish').mustRunAfter 'assembleRelease'
+    }
+}

@@ -36,6 +36,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import pl.droidsonroids.gif.GifDrawable;
 import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.configuration.image.ImageConfig;
 
 public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
@@ -58,6 +59,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
     private final ExecutorService executorService;
     private final Handler mainThread;
     private final Drawable errorDrawable;
+    private final ImageConfig imageConfig;
 
     private final Map<String, Future<?>> requests;
 
@@ -67,6 +69,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         this.executorService = builder.executorService;
         this.mainThread = new Handler(Looper.getMainLooper());
         this.errorDrawable = builder.errorDrawable;
+        this.imageConfig = builder.imageConfig;
         this.requests = new HashMap<>(3);
     }
 
@@ -146,7 +149,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                         public void run() {
                             final AsyncDrawable asyncDrawable = reference.get();
                             if (asyncDrawable != null && asyncDrawable.isAttached()) {
-                                asyncDrawable.setResult(out);
+                                asyncDrawable.setResult(out, imageConfig);
                             }
                         }
                     });
@@ -345,6 +348,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         private Resources resources;
         private ExecutorService executorService;
         private Drawable errorDrawable;
+        private ImageConfig imageConfig;
 
         public Builder client(@NonNull OkHttpClient client) {
             this.client = client;
@@ -366,6 +370,11 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             return this;
         }
 
+        public Builder imageConfig(ImageConfig imageConfig) {
+            this.imageConfig = imageConfig;
+            return this;
+        }
+
         public AsyncDrawableLoader build() {
             if (client == null) {
                 client = new OkHttpClient();
@@ -376,6 +385,9 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             if (executorService == null) {
                 // we will use executor from okHttp
                 executorService = client.dispatcher().executorService();
+            }
+            if(imageConfig == null){
+                imageConfig = new ImageConfig();
             }
             return new AsyncDrawableLoader(this);
         }

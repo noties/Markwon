@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
 
@@ -11,15 +12,24 @@ android {
         versionCode 1
         versionName version
     }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${POM_ARTIFACT_ID}-release.aar"
+        }
+    }
 }
 
 dependencies {
-    compile SUPPORT_ANNOTATIONS
-    compile COMMON_MARK
-    compile COMMON_MARK_STRIKETHROUGHT
-    compile COMMON_MARK_TABLE
+    api SUPPORT_ANNOTATIONS
+    implementation COMMON_MARK
+    implementation COMMON_MARK_STRIKETHROUGHT
+    implementation COMMON_MARK_TABLE
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-if (project.hasProperty('release')) {
-    apply from: 'https://raw.githubusercontent.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+repositories {
+    mavenCentral()
 }
+
+apply from: '../artifactory-mvn-push.gradle'
