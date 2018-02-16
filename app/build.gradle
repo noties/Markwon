@@ -27,13 +27,13 @@ android {
 
 dependencies {
 
-    compile project(':library')
-    compile project(':library-image-loader')
+    implementation project(':library')
+    implementation project(':library-image-loader')
 
-    compile 'ru.noties:debug:3.0.0@jar'
+    implementation 'ru.noties:debug:3.0.0@jar'
 
-    compile OK_HTTP
+    implementation OK_HTTP
 
-    compile 'com.google.dagger:dagger:2.10'
+    implementation 'com.google.dagger:dagger:2.10'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
 }

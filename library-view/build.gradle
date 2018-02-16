@@ -14,8 +14,8 @@ android {
 }
 
 dependencies {
-    compile project(':library')
-    provided SUPPORT_APP_COMPAT
+    api project(':library')
+    compileOnly SUPPORT_APP_COMPAT
 }
 
 if (project.hasProperty('release')) {

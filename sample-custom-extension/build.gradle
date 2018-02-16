@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion TARGET_SDK
+    buildToolsVersion BUILD_TOOLS
+
+    defaultConfig {
+
+        applicationId "ru.noties.markwon.sample.extension"
+
+        // using 21 as minimum only to be able to vector assets
+        minSdkVersion 21
+        targetSdkVersion TARGET_SDK
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+    implementation project(':library')
+}
