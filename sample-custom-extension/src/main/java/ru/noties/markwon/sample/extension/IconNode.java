@@ -1,12 +1,12 @@
-package noties.ru.markwon_samplecustomextension;
+package ru.noties.markwon.sample.extension;
 
 import android.support.annotation.NonNull;
 
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Delimited;
 
+@SuppressWarnings("WeakerAccess")
 public class IconNode extends CustomNode implements Delimited {
-
 
     public static final char DELIMITER = '@';
 

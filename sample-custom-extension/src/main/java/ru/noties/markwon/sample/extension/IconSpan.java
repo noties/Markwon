@@ -1,4 +1,4 @@
-package noties.ru.markwon_samplecustomextension;
+package ru.noties.markwon.sample.extension;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,10 +12,11 @@ import android.text.style.ReplacementSpan;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+@SuppressWarnings("WeakerAccess")
 public class IconSpan extends ReplacementSpan {
 
     @IntDef({ALIGN_BOTTOM, ALIGN_BASELINE, ALIGN_CENTER})
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     @interface Alignment {
     }
 

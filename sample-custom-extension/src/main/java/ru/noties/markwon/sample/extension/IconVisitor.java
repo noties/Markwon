@@ -1,4 +1,4 @@
-package noties.ru.markwon_samplecustomextension;
+package ru.noties.markwon.sample.extension;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -9,6 +9,7 @@ import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
 
+@SuppressWarnings("WeakerAccess")
 public class IconVisitor extends SpannableMarkdownVisitor {
 
     private final SpannableBuilder builder;
