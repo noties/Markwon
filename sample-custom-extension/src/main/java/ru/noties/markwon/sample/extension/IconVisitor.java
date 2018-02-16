@@ -2,6 +2,7 @@ package ru.noties.markwon.sample.extension;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import org.commonmark.node.CustomNode;
 
@@ -40,14 +41,19 @@ public class IconVisitor extends SpannableMarkdownVisitor {
             final IconNode node = (IconNode) customNode;
 
             final String name = node.name();
+            final String color = node.color();
             final String size = node.size();
 
             if (!TextUtils.isEmpty(name)
+                    && !TextUtils.isEmpty(color)
                     && !TextUtils.isEmpty(size)) {
+
                 final int length = builder.length();
+
                 builder.append(name);
-                builder.setSpan(iconSpanProvider.provide(node.name(), node.color(), node.size()), length);
+                builder.setSpan(iconSpanProvider.provide(name, color, size), length);
                 builder.append(' ');
+                
                 return true;
             }
         }
