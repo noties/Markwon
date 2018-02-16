@@ -14,10 +14,10 @@ android {
 }
 
 dependencies {
-    compile SUPPORT_ANNOTATIONS
-    compile COMMON_MARK
-    compile COMMON_MARK_STRIKETHROUGHT
-    compile COMMON_MARK_TABLE
+    api SUPPORT_ANNOTATIONS
+    api COMMON_MARK
+    api COMMON_MARK_STRIKETHROUGHT
+    api COMMON_MARK_TABLE
 }
 
 if (project.hasProperty('release')) {
