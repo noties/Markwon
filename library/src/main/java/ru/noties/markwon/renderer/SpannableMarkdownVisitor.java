@@ -331,7 +331,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(node);
 
             if (pendingTableRow != null) {
-                builder.append(' ');
+
+                // @since 1.0.4 Replace table char with non-breakable space
+                // we need this because if table is at the end of the text, then it will be
+                // trimmed from the final result
+                builder.append('\u00a0');
 
                 final TableRowSpan span = new TableRowSpan(
                         configuration.theme(),
