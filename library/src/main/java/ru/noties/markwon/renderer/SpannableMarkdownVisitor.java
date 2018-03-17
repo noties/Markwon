@@ -1,6 +1,7 @@
 package ru.noties.markwon.renderer;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
@@ -22,6 +23,7 @@ import org.commonmark.node.Heading;
 import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Image;
+import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
 import org.commonmark.node.ListBlock;
 import org.commonmark.node.ListItem;
@@ -142,7 +144,15 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
+        visitCodeBlock(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral());
+    }
 
+    @Override
+    public void visit(IndentedCodeBlock indentedCodeBlock) {
+        visitCodeBlock(null, indentedCodeBlock.getLiteral());
+    }
+
+    private void visitCodeBlock(@Nullable String info, @NonNull String code) {
         newLine();
 
         final int length = builder.length();
@@ -151,7 +161,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         builder.append('\u00a0').append('\n');
         builder.append(
                 configuration.syntaxHighlight()
-                        .highlight(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral())
+                        .highlight(info, code)
         );
         builder.append('\u00a0').append('\n');
 
