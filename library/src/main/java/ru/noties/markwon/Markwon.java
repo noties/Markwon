@@ -66,7 +66,7 @@ public abstract class Markwon {
     }
 
     /**
-     * Helper method to apply parsed markdown. Please note, that if images or tables are used
+     * Helper method to apply parsed markdown.
      *
      * @param view {@link TextView} to set markdown into
      * @param text parsed markdown

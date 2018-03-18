@@ -144,14 +144,23 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
+        // @since 1.0.4
         visitCodeBlock(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral());
     }
 
+    /**
+     * @since 1.0.4
+     */
     @Override
     public void visit(IndentedCodeBlock indentedCodeBlock) {
         visitCodeBlock(null, indentedCodeBlock.getLiteral());
     }
 
+    /**
+     * @param info tag of a code block
+     * @param code content of a code block
+     * @since 1.0.4
+     */
     private void visitCodeBlock(@Nullable String info, @NonNull String code) {
         newLine();
 
