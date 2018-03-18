@@ -1,6 +1,7 @@
 package ru.noties.markwon.renderer;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
@@ -22,6 +23,7 @@ import org.commonmark.node.Heading;
 import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Image;
+import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
 import org.commonmark.node.ListBlock;
 import org.commonmark.node.ListItem;
@@ -142,7 +144,24 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
+        // @since 1.0.4
+        visitCodeBlock(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral());
+    }
 
+    /**
+     * @since 1.0.4
+     */
+    @Override
+    public void visit(IndentedCodeBlock indentedCodeBlock) {
+        visitCodeBlock(null, indentedCodeBlock.getLiteral());
+    }
+
+    /**
+     * @param info tag of a code block
+     * @param code content of a code block
+     * @since 1.0.4
+     */
+    private void visitCodeBlock(@Nullable String info, @NonNull String code) {
         newLine();
 
         final int length = builder.length();
@@ -151,7 +170,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         builder.append('\u00a0').append('\n');
         builder.append(
                 configuration.syntaxHighlight()
-                        .highlight(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral())
+                        .highlight(info, code)
         );
         builder.append('\u00a0').append('\n');
 
@@ -331,7 +350,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(node);
 
             if (pendingTableRow != null) {
-                builder.append(' ');
+
+                // @since 1.0.4 Replace table char with non-breakable space
+                // we need this because if table is at the end of the text, then it will be
+                // trimmed from the final result
+                builder.append('\u00a0');
 
                 final TableRowSpan span = new TableRowSpan(
                         configuration.theme(),
