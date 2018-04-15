@@ -76,9 +76,11 @@ public class SpannableTheme {
         final int linkColor = resolve(context, android.R.attr.textColorLink);
         final int backgroundColor = resolve(context, android.R.attr.colorBackground);
 
+        // before 1.0.5 build had `linkColor` set, but in order for spans to use default link color
+        // set directly in widget (or any caller), we should not pass it here
+
         final Dip dip = new Dip(context);
         return new Builder()
-                .linkColor(linkColor)
                 .codeMultilineMargin(dip.toPx(8))
                 .blockMargin(dip.toPx(24))
                 .blockQuoteWidth(dip.toPx(4))
@@ -214,12 +216,30 @@ public class SpannableTheme {
         this.taskListDrawable = builder.taskListDrawable;
     }
 
+    /**
+     * @since 1.0.5
+     */
+    public void applyLinkStyle(@NonNull TextPaint paint) {
+        paint.setUnderlineText(true);
+        if (linkColor != 0) {
+            paint.setColor(linkColor);
+        } else {
+            // if linkColor is not specified during configuration -> use default one
+            paint.setColor(paint.linkColor);
+        }
+    }
 
     public void applyLinkStyle(@NonNull Paint paint) {
         paint.setUnderlineText(true);
         if (linkColor != 0) {
             // by default we will be using text color
             paint.setColor(linkColor);
+        } else {
+            // @since 1.0.5, if link color is specified during configuration, _try_ to use the
+            // default one (if provided paint is an instance of TextPaint)
+            if (paint instanceof TextPaint) {
+                paint.setColor(((TextPaint) paint).linkColor);
+            }
         }
     }
 
