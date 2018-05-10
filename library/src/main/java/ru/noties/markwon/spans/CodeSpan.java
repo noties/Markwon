@@ -31,12 +31,12 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
     public void updateDrawState(TextPaint ds) {
         apply(ds);
         if (!multiline) {
-            ds.bgColor = theme.getCodeBackgroundColor(ds);
+            ds.bgColor = theme.getCodeBackgroundColor(ds, false);
         }
     }
 
     private void apply(TextPaint p) {
-        theme.applyCodeTextStyle(p);
+        theme.applyCodeTextStyle(p, multiline);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
         if (multiline) {
 
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(theme.getCodeBackgroundColor(p));
+            paint.setColor(theme.getCodeBackgroundColor(p, true));
 
             final int left;
             final int right;
