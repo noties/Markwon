@@ -52,6 +52,7 @@ public class AsyncDrawable extends Drawable {
         this.imageSize = imageSize;
     }
 
+    @NonNull
     public String getDestination() {
         return destination;
     }
@@ -172,13 +173,29 @@ public class AsyncDrawable extends Drawable {
      */
     @NonNull
     private Rect resolveBounds() {
+
         final Rect rect;
+
         if (imageSizeResolver == null
                 || imageSize == null) {
-            rect = result.getBounds();
+
+            // @since 1.0.5
+            final Rect bounds = result.getBounds();
+            if (bounds.width() > canvasWidth) {
+
+                // let's scale image down, as we do not want to expand beyond canvas width
+                final float ratio = (float) bounds.width() / bounds.height();
+                final int height = (int) (canvasWidth / ratio + .5F);
+                rect = new Rect(0, 0, canvasWidth, height);
+
+            } else {
+                rect = bounds;
+            }
+
         } else {
             rect = imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize);
         }
+
         return rect;
     }
 }

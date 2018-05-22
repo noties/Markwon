@@ -76,9 +76,11 @@ public class SpannableTheme {
         final int linkColor = resolve(context, android.R.attr.textColorLink);
         final int backgroundColor = resolve(context, android.R.attr.colorBackground);
 
+        // before 1.0.5 build had `linkColor` set, but in order for spans to use default link color
+        // set directly in widget (or any caller), we should not pass it here
+
         final Dip dip = new Dip(context);
         return new Builder()
-                .linkColor(linkColor)
                 .codeMultilineMargin(dip.toPx(8))
                 .blockMargin(dip.toPx(24))
                 .blockQuoteWidth(dip.toPx(4))
@@ -145,8 +147,14 @@ public class SpannableTheme {
     // by default - main text color
     protected final int codeTextColor;
 
+    // by default - codeTextColor
+    protected final int codeBlockTextColor;
+
     // by default 0.1 alpha of textColor/codeTextColor
     protected final int codeBackgroundColor;
+
+    // by default codeBackgroundColor
+    protected final int codeBlockBackgroundColor;
 
     // by default `width` of a space char... it's fun and games, but span doesn't have access to paint in `getLeadingMargin`
     // so, we need to set this value explicitly (think of an utility method, that takes TextView/TextPaint and measures space char)
@@ -198,7 +206,9 @@ public class SpannableTheme {
         this.bulletListItemStrokeWidth = builder.bulletListItemStrokeWidth;
         this.bulletWidth = builder.bulletWidth;
         this.codeTextColor = builder.codeTextColor;
+        this.codeBlockTextColor = builder.codeBlockTextColor;
         this.codeBackgroundColor = builder.codeBackgroundColor;
+        this.codeBlockBackgroundColor = builder.codeBlockBackgroundColor;
         this.codeMultilineMargin = builder.codeMultilineMargin;
         this.codeTypeface = builder.codeTypeface;
         this.codeTextSize = builder.codeTextSize;
@@ -214,12 +224,30 @@ public class SpannableTheme {
         this.taskListDrawable = builder.taskListDrawable;
     }
 
+    /**
+     * @since 1.0.5
+     */
+    public void applyLinkStyle(@NonNull TextPaint paint) {
+        paint.setUnderlineText(true);
+        if (linkColor != 0) {
+            paint.setColor(linkColor);
+        } else {
+            // if linkColor is not specified during configuration -> use default one
+            paint.setColor(paint.linkColor);
+        }
+    }
 
     public void applyLinkStyle(@NonNull Paint paint) {
         paint.setUnderlineText(true);
         if (linkColor != 0) {
             // by default we will be using text color
             paint.setColor(linkColor);
+        } else {
+            // @since 1.0.5, if link color is specified during configuration, _try_ to use the
+            // default one (if provided paint is an instance of TextPaint)
+            if (paint instanceof TextPaint) {
+                paint.setColor(((TextPaint) paint).linkColor);
+            }
         }
     }
 
@@ -278,9 +306,16 @@ public class SpannableTheme {
         return width;
     }
 
-    public void applyCodeTextStyle(@NonNull Paint paint) {
+    /**
+     * Modified in 1.0.5 to accept `multiline` argument
+     */
+    public void applyCodeTextStyle(@NonNull Paint paint, boolean multiline) {
 
-        if (codeTextColor != 0) {
+        // @since 1.0.5 added handling of multiline code blocks
+        if (multiline
+                && codeBlockTextColor != 0) {
+            paint.setColor(codeBlockTextColor);
+        } else if (codeTextColor != 0) {
             paint.setColor(codeTextColor);
         }
 
@@ -312,13 +347,23 @@ public class SpannableTheme {
         return codeMultilineMargin;
     }
 
-    public int getCodeBackgroundColor(@NonNull Paint paint) {
+    /**
+     * Modified in 1.0.5 to accept `multiline` argument
+     */
+    public int getCodeBackgroundColor(@NonNull Paint paint, boolean multiline) {
+
         final int color;
-        if (codeBackgroundColor != 0) {
+
+        // @since 1.0.5 added handling of multiline code blocks
+        if (multiline
+                && codeBlockBackgroundColor != 0) {
+            color = codeBlockBackgroundColor;
+        } else if (codeBackgroundColor != 0) {
             color = codeBackgroundColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
         }
+
         return color;
     }
 
@@ -427,6 +472,7 @@ public class SpannableTheme {
         return taskListDrawable;
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
 
         private int linkColor;
@@ -437,7 +483,9 @@ public class SpannableTheme {
         private int bulletListItemStrokeWidth;
         private int bulletWidth;
         private int codeTextColor;
+        private int codeBlockTextColor; // @since 1.0.5
         private int codeBackgroundColor;
+        private int codeBlockBackgroundColor; // @since 1.0.5
         private int codeMultilineMargin;
         private Typeface codeTypeface;
         private int codeTextSize;
@@ -464,7 +512,9 @@ public class SpannableTheme {
             this.bulletListItemStrokeWidth = theme.bulletListItemStrokeWidth;
             this.bulletWidth = theme.bulletWidth;
             this.codeTextColor = theme.codeTextColor;
+            this.codeBlockTextColor = theme.codeBlockTextColor;
             this.codeBackgroundColor = theme.codeBackgroundColor;
+            this.codeBlockBackgroundColor = theme.codeBlockBackgroundColor;
             this.codeMultilineMargin = theme.codeMultilineMargin;
             this.codeTypeface = theme.codeTypeface;
             this.codeTextSize = theme.codeTextSize;
@@ -498,6 +548,7 @@ public class SpannableTheme {
             return this;
         }
 
+        @SuppressWarnings("SameParameterValue")
         @NonNull
         public Builder blockQuoteColor(@ColorInt int blockQuoteColor) {
             this.blockQuoteColor = blockQuoteColor;
@@ -528,9 +579,28 @@ public class SpannableTheme {
             return this;
         }
 
+        /**
+         * @since 1.0.5
+         */
+        @NonNull
+        public Builder codeBlockTextColor(@ColorInt int codeBlockTextColor) {
+            this.codeBlockTextColor = codeBlockTextColor;
+            return this;
+        }
+
+        @SuppressWarnings("SameParameterValue")
         @NonNull
         public Builder codeBackgroundColor(@ColorInt int codeBackgroundColor) {
             this.codeBackgroundColor = codeBackgroundColor;
+            return this;
+        }
+
+        /**
+         * @since 1.0.5
+         */
+        @NonNull
+        public Builder codeBlockBackgroundColor(@ColorInt int codeBlockBackgroundColor) {
+            this.codeBlockBackgroundColor = codeBlockBackgroundColor;
             return this;
         }
 
