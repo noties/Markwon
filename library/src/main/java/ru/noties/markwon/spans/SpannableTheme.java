@@ -147,8 +147,14 @@ public class SpannableTheme {
     // by default - main text color
     protected final int codeTextColor;
 
+    // by default - codeTextColor
+    protected final int codeBlockTextColor;
+
     // by default 0.1 alpha of textColor/codeTextColor
     protected final int codeBackgroundColor;
+
+    // by default codeBackgroundColor
+    protected final int codeBlockBackgroundColor;
 
     // by default `width` of a space char... it's fun and games, but span doesn't have access to paint in `getLeadingMargin`
     // so, we need to set this value explicitly (think of an utility method, that takes TextView/TextPaint and measures space char)
@@ -200,7 +206,9 @@ public class SpannableTheme {
         this.bulletListItemStrokeWidth = builder.bulletListItemStrokeWidth;
         this.bulletWidth = builder.bulletWidth;
         this.codeTextColor = builder.codeTextColor;
+        this.codeBlockTextColor = builder.codeBlockTextColor;
         this.codeBackgroundColor = builder.codeBackgroundColor;
+        this.codeBlockBackgroundColor = builder.codeBlockBackgroundColor;
         this.codeMultilineMargin = builder.codeMultilineMargin;
         this.codeTypeface = builder.codeTypeface;
         this.codeTextSize = builder.codeTextSize;
@@ -298,10 +306,14 @@ public class SpannableTheme {
         return width;
     }
 
-    public void applyCodeTextStyle(@NonNull Paint paint) {
+    public void applyCodeTextStyle(@NonNull Paint paint, boolean multiline) {
 
-        if (codeTextColor != 0) {
-            paint.setColor(codeTextColor);
+        if (multiline && codeBlockTextColor != 0) {
+            paint.setColor(codeBlockTextColor);
+        } else {
+            if (codeTextColor != 0) {
+                paint.setColor(codeTextColor);
+            }
         }
 
         // custom typeface was set
@@ -332,9 +344,11 @@ public class SpannableTheme {
         return codeMultilineMargin;
     }
 
-    public int getCodeBackgroundColor(@NonNull Paint paint) {
+    public int getCodeBackgroundColor(@NonNull Paint paint, boolean multiline) {
         final int color;
-        if (codeBackgroundColor != 0) {
+        if (multiline && codeBlockBackgroundColor != 0) {
+            color = codeBlockBackgroundColor;
+        } else if (codeBackgroundColor != 0) {
             color = codeBackgroundColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
@@ -457,7 +471,9 @@ public class SpannableTheme {
         private int bulletListItemStrokeWidth;
         private int bulletWidth;
         private int codeTextColor;
+        private int codeBlockTextColor;
         private int codeBackgroundColor;
+        private int codeBlockBackgroundColor;
         private int codeMultilineMargin;
         private Typeface codeTypeface;
         private int codeTextSize;
@@ -484,7 +500,9 @@ public class SpannableTheme {
             this.bulletListItemStrokeWidth = theme.bulletListItemStrokeWidth;
             this.bulletWidth = theme.bulletWidth;
             this.codeTextColor = theme.codeTextColor;
+            this.codeBlockTextColor = theme.codeBlockTextColor;
             this.codeBackgroundColor = theme.codeBackgroundColor;
+            this.codeBlockBackgroundColor = theme.codeBlockBackgroundColor;
             this.codeMultilineMargin = theme.codeMultilineMargin;
             this.codeTypeface = theme.codeTypeface;
             this.codeTextSize = theme.codeTextSize;
@@ -549,8 +567,20 @@ public class SpannableTheme {
         }
 
         @NonNull
+        public Builder codeBlockTextColor(@ColorInt int codeBlockTextColor) {
+            this.codeBlockTextColor = codeBlockTextColor;
+            return this;
+        }
+
+        @NonNull
         public Builder codeBackgroundColor(@ColorInt int codeBackgroundColor) {
             this.codeBackgroundColor = codeBackgroundColor;
+            return this;
+        }
+
+        @NonNull
+        public Builder codeBlockBackgroundColor(@ColorInt int codeBlockBackgroundColor) {
+            this.codeBlockBackgroundColor = codeBlockBackgroundColor;
             return this;
         }
 
