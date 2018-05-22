@@ -306,14 +306,17 @@ public class SpannableTheme {
         return width;
     }
 
+    /**
+     * Modified in 1.0.5 to accept `multiline` argument
+     */
     public void applyCodeTextStyle(@NonNull Paint paint, boolean multiline) {
 
-        if (multiline && codeBlockTextColor != 0) {
+        // @since 1.0.5 added handling of multiline code blocks
+        if (multiline
+                && codeBlockTextColor != 0) {
             paint.setColor(codeBlockTextColor);
-        } else {
-            if (codeTextColor != 0) {
-                paint.setColor(codeTextColor);
-            }
+        } else if (codeTextColor != 0) {
+            paint.setColor(codeTextColor);
         }
 
         // custom typeface was set
@@ -344,15 +347,23 @@ public class SpannableTheme {
         return codeMultilineMargin;
     }
 
+    /**
+     * Modified in 1.0.5 to accept `multiline` argument
+     */
     public int getCodeBackgroundColor(@NonNull Paint paint, boolean multiline) {
+
         final int color;
-        if (multiline && codeBlockBackgroundColor != 0) {
+
+        // @since 1.0.5 added handling of multiline code blocks
+        if (multiline
+                && codeBlockBackgroundColor != 0) {
             color = codeBlockBackgroundColor;
         } else if (codeBackgroundColor != 0) {
             color = codeBackgroundColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
         }
+
         return color;
     }
 
@@ -461,6 +472,7 @@ public class SpannableTheme {
         return taskListDrawable;
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
 
         private int linkColor;
@@ -471,9 +483,9 @@ public class SpannableTheme {
         private int bulletListItemStrokeWidth;
         private int bulletWidth;
         private int codeTextColor;
-        private int codeBlockTextColor;
+        private int codeBlockTextColor; // @since 1.0.5
         private int codeBackgroundColor;
-        private int codeBlockBackgroundColor;
+        private int codeBlockBackgroundColor; // @since 1.0.5
         private int codeMultilineMargin;
         private Typeface codeTypeface;
         private int codeTextSize;
@@ -536,6 +548,7 @@ public class SpannableTheme {
             return this;
         }
 
+        @SuppressWarnings("SameParameterValue")
         @NonNull
         public Builder blockQuoteColor(@ColorInt int blockQuoteColor) {
             this.blockQuoteColor = blockQuoteColor;
@@ -566,18 +579,25 @@ public class SpannableTheme {
             return this;
         }
 
+        /**
+         * @since 1.0.5
+         */
         @NonNull
         public Builder codeBlockTextColor(@ColorInt int codeBlockTextColor) {
             this.codeBlockTextColor = codeBlockTextColor;
             return this;
         }
 
+        @SuppressWarnings("SameParameterValue")
         @NonNull
         public Builder codeBackgroundColor(@ColorInt int codeBackgroundColor) {
             this.codeBackgroundColor = codeBackgroundColor;
             return this;
         }
 
+        /**
+         * @since 1.0.5
+         */
         @NonNull
         public Builder codeBlockBackgroundColor(@ColorInt int codeBlockBackgroundColor) {
             this.codeBlockBackgroundColor = codeBlockBackgroundColor;
