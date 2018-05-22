@@ -12,9 +12,9 @@
 
 ## Installation
 ```groovy
-compile 'ru.noties:markwon:1.0.4'
-compile 'ru.noties:markwon-image-loader:1.0.4' // optional
-compile 'ru.noties:markwon-view:1.0.4' // optional
+compile 'ru.noties:markwon:1.0.5'
+compile 'ru.noties:markwon-image-loader:1.0.5' // optional
+compile 'ru.noties:markwon-view:1.0.5' // optional
 ```
 
 ## Supported markdown features:
