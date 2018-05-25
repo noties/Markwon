@@ -48,12 +48,15 @@ public class BulletListItemSpan implements LeadingMarginSpan {
         try {
 
             final int width = theme.getBlockMargin();
-            final int height = bottom - top;
 
-            final int side = theme.getBulletWidth(bottom - top);
+            // @since 1.0.6 we no longer rely on (bottom-top) calculation in order to detect line height
+            // it lead to bad rendering as first & last lines received different results even
+            // if text size is the same (first line received greater amount and bottom line -> less)
+            final int textLineHeight = (int) (paint.descent() - paint.ascent() + .5F);
+
+            final int side = theme.getBulletWidth(textLineHeight);
 
             final int marginLeft = (width - side) / 2;
-            final int marginTop = (height - side) / 2;
 
             // in order to support RTL
             final int l;
@@ -64,7 +67,8 @@ public class BulletListItemSpan implements LeadingMarginSpan {
                 l = Math.min(left, right);
                 r = Math.max(left, right);
             }
-            final int t = top + marginTop;
+
+            final int t = baseline + (int) ((paint.descent() + paint.ascent()) / 2.F + .5F) - (side / 2);
             final int b = t + side;
 
             if (level == 0
