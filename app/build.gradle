@@ -31,6 +31,7 @@ dependencies {
     implementation project(':library-image-loader')
 
     implementation 'ru.noties:debug:3.0.0@jar'
+    implementation 'me.saket:better-link-movement-method:2.2.0'
 
     implementation OK_HTTP
 

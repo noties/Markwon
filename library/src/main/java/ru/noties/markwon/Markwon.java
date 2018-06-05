@@ -2,7 +2,9 @@ package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
 import android.widget.TextView;
 
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -67,20 +69,39 @@ public abstract class Markwon {
 
     /**
      * Helper method to apply parsed markdown.
+     * <p>
+     * Since 1.0.6 redirects it\'s call to {@link #setText(TextView, CharSequence, MovementMethod)}
+     * with LinkMovementMethod as an argument to preserve current API.
      *
      * @param view {@link TextView} to set markdown into
      * @param text parsed markdown
-     * @see #scheduleDrawables(TextView)
-     * @see #scheduleTableRows(TextView)
+     * @see #setText(TextView, CharSequence, MovementMethod)
      * @since 1.0.0
      */
     public static void setText(@NonNull TextView view, CharSequence text) {
+        setText(view, text, LinkMovementMethod.getInstance());
+    }
+
+    /**
+     * Helper method to apply parsed markdown with additional argument of a MovementMethod. Used
+     * to workaround problems that occur when using system LinkMovementMethod (for example:
+     * https://issuetracker.google.com/issues/37068143). As a better alternative to it consider
+     * using: https://github.com/saket/Better-Link-Movement-Method
+     *
+     * @param view           TextView to set markdown into
+     * @param text           parsed markdown
+     * @param movementMethod an implementation if MovementMethod or null
+     * @see #scheduleDrawables(TextView)
+     * @see #scheduleTableRows(TextView)
+     * @since 1.0.6
+     */
+    public static void setText(@NonNull TextView view, CharSequence text, @Nullable MovementMethod movementMethod) {
 
         unscheduleDrawables(view);
         unscheduleTableRows(view);
 
         // update movement method (for links to be clickable)
-        view.setMovementMethod(LinkMovementMethod.getInstance());
+        view.setMovementMethod(movementMethod);
         view.setText(text);
 
         // schedule drawables (dynamic drawables that can change bounds/animate will be correctly updated)
