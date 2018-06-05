@@ -134,6 +134,11 @@ Markwon.scheduleDrawables(textView);
 Markwon.scheduleTableRows(textView);
 ```
 
+Please note that if you are having trouble with `LinkMovementMethod` you can use
+`Markwon.setText(textView, markdown, movementMethod)` method (`@since 1.0.6`) to specify _no_ movement
+method (aka `null`) or own implementation. As an alternative to the system `LinkMovementMethod`
+you can use [better-link-movement-method][Better-Link-Movement-Method].
+
 Please refer to [SpannableConfiguration] document for more info
 
 ---
@@ -315,6 +320,7 @@ Underscores (`_`)
 [commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
 [cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 [SpannableConfiguration]: ./docs/SpannableConfiguration.md
+[better-link-movement-method]: https://github.com/saket/Better-Link-Movement-Method
 
 [arbitrary case-insensitive reference text]: https://www.mozilla.org
 [1]: http://slashdot.org
