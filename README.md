@@ -137,7 +137,7 @@ Markwon.scheduleTableRows(textView);
 Please note that if you are having trouble with `LinkMovementMethod` you can use
 `Markwon.setText(textView, markdown, movementMethod)` method (`@since 1.0.6`) to specify _no_ movement
 method (aka `null`) or own implementation. As an alternative to the system `LinkMovementMethod`
-you can use [better-link-movement-method][Better-Link-Movement-Method].
+you can use [Better-Link-Movement-Method][better-link-movement-method].
 
 Please refer to [SpannableConfiguration] document for more info
 
