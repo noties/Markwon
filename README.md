@@ -299,9 +299,8 @@ Underscores (`_`)
 
 ## Applications using Markwon
 
-<a href="https://play.google.com/store/apps/details?id=com.rgiskard.fairnote">
-<img src="https://lh3.googleusercontent.com/9IGNiS66dweMOEm7F5JzzKpF8ggys5h7kxYRlbXWZIbbA5T1Vqp7xrLdW90V1VTMPw=s360" width="128px"><br>
-FairNote Notepad</a>
+* [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
+
 
 ## License
 

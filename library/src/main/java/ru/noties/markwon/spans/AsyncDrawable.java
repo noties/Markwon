@@ -10,8 +10,8 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.renderer.html.ImageSize;
-import ru.noties.markwon.renderer.html.ImageSizeResolver;
+import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.renderer.ImageSizeResolver;
 
 public class AsyncDrawable extends Drawable {
 
@@ -33,6 +33,10 @@ public class AsyncDrawable extends Drawable {
     private int canvasWidth;
     private float textSize;
 
+    /**
+     * @deprecated 1.0.6 markdown images are also processed with {@link ImageSizeResolver}
+     */
+    @Deprecated
     public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
         this(destination, loader, null, null);
     }
@@ -176,8 +180,7 @@ public class AsyncDrawable extends Drawable {
 
         final Rect rect;
 
-        if (imageSizeResolver == null
-                || imageSize == null) {
+        if (imageSizeResolver == null) {
 
             // @since 1.0.5
             final Rect bounds = result.getBounds();

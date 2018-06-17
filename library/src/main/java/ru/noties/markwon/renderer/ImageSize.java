@@ -1,4 +1,4 @@
-package ru.noties.markwon.renderer.html;
+package ru.noties.markwon.renderer;
 
 import android.support.annotation.Nullable;
 
@@ -33,5 +33,13 @@ public class ImageSize {
     public ImageSize(@Nullable Dimension width, @Nullable Dimension height) {
         this.width = width;
         this.height = height;
+    }
+
+    @Override
+    public String toString() {
+        return "ImageSize{" +
+                "width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

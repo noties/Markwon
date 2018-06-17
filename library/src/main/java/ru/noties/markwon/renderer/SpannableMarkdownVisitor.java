@@ -438,7 +438,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                         configuration.theme(),
                         new AsyncDrawable(
                                 destination,
-                                configuration.asyncDrawableLoader()
+                                configuration.asyncDrawableLoader(),
+                                configuration.imageSizeResolver(),
+                                null
                         ),
                         AsyncDrawableSpan.ALIGN_BOTTOM,
                         link
