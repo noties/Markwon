@@ -11,6 +11,7 @@ android {
         targetSdkVersion TARGET_SDK
         versionCode 1
         versionName version
+        setProperty("archivesBaseName", "markwon-sample-$versionName")
     }
 
     lintOptions {
