@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.noties.markwon.UrlProcessor;
+import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 import ru.noties.markwon.spans.SpannableTheme;

@@ -13,6 +13,8 @@ import java.util.Map;
 import ru.noties.markwon.LinkResolverDef;
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.UrlProcessorNoOp;
+import ru.noties.markwon.renderer.ImageSizeResolver;
+import ru.noties.markwon.renderer.ImageSizeResolverDef;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.SpannableTheme;

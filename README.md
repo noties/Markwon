@@ -12,10 +12,33 @@
 
 ## Installation
 ```groovy
-compile 'ru.noties:markwon:1.0.5'
-compile 'ru.noties:markwon-image-loader:1.0.5' // optional
-compile 'ru.noties:markwon-view:1.0.5' // optional
+compile 'ru.noties:markwon:1.0.6'
+compile 'ru.noties:markwon-image-loader:1.0.6' // optional
+compile 'ru.noties:markwon-view:1.0.6' // optional
 ```
+
+### Snapshot
+![markwon-snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties/markwon.svg?label=markwon)
+
+In order to use latest `SNAPSHOT` version add snapshot repository to your root project's `build.gradle` file:
+
+```groovy
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    }
+}
+```
+
+and then in your module `build.gradle`:
+
+```groovy
+implementation 'ru.noties:markwon:1.0.6-SNAPSHOT'
+```
+
+Please note that `markwon-image-loader` and `markwon-view` are also present in `SNAPSHOT` repository and share the same version as main `markwon` artifact.
 
 ## Supported markdown features:
 * Emphasis (`*`, `_`)
@@ -110,6 +133,11 @@ textView.setText(text);
 Markwon.scheduleDrawables(textView);
 Markwon.scheduleTableRows(textView);
 ```
+
+Please note that if you are having trouble with `LinkMovementMethod` you can use
+`Markwon.setText(textView, markdown, movementMethod)` method (`@since 1.0.6`) to specify _no_ movement
+method (aka `null`) or own implementation. As an alternative to the system `LinkMovementMethod`
+you can use [Better-Link-Movement-Method][better-link-movement-method].
 
 Please refer to [SpannableConfiguration] document for more info
 
@@ -269,6 +297,10 @@ Underscores (`_`)
 
 ---
 
+## Applications using Markwon
+
+* [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
+
 
 ## License
 
@@ -292,6 +324,7 @@ Underscores (`_`)
 [commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
 [cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 [SpannableConfiguration]: ./docs/SpannableConfiguration.md
+[better-link-movement-method]: https://github.com/saket/Better-Link-Movement-Method
 
 [arbitrary case-insensitive reference text]: https://www.mozilla.org
 [1]: http://slashdot.org

@@ -1,4 +1,4 @@
-package ru.noties.markwon.renderer.html;
+package ru.noties.markwon.renderer;
 
 import android.graphics.Rect;
 import android.support.annotation.NonNull;

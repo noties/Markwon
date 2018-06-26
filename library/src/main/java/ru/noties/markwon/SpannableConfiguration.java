@@ -3,8 +3,8 @@ package ru.noties.markwon;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.renderer.html.ImageSizeResolver;
-import ru.noties.markwon.renderer.html.ImageSizeResolverDef;
+import ru.noties.markwon.renderer.ImageSizeResolver;
+import ru.noties.markwon.renderer.ImageSizeResolverDef;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
@@ -30,6 +30,7 @@ public class SpannableConfiguration {
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
     private final SpannableHtmlParser htmlParser;
+    private final ImageSizeResolver imageSizeResolver;
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -38,6 +39,7 @@ public class SpannableConfiguration {
         this.linkResolver = builder.linkResolver;
         this.urlProcessor = builder.urlProcessor;
         this.htmlParser = builder.htmlParser;
+        this.imageSizeResolver = builder.imageSizeResolver;
     }
 
     @NonNull
@@ -68,6 +70,11 @@ public class SpannableConfiguration {
     @NonNull
     public SpannableHtmlParser htmlParser() {
         return htmlParser;
+    }
+
+    @NonNull
+    public ImageSizeResolver imageSizeResolver() {
+        return imageSizeResolver;
     }
 
     @SuppressWarnings("unused")
@@ -154,12 +161,11 @@ public class SpannableConfiguration {
                 urlProcessor = new UrlProcessorNoOp();
             }
 
+            if (imageSizeResolver == null) {
+                imageSizeResolver = new ImageSizeResolverDef();
+            }
+
             if (htmlParser == null) {
-
-                if (imageSizeResolver == null) {
-                    imageSizeResolver = new ImageSizeResolverDef();
-                }
-
                 htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor, linkResolver, imageSizeResolver);
             }
 
