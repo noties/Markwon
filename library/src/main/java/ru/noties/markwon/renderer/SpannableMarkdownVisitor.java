@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.StrikethroughSpan;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -44,19 +43,8 @@ import java.util.List;
 import ru.noties.markwon.ReverseSpannableStringBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
-import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.spans.AsyncDrawableSpan;
-import ru.noties.markwon.spans.BlockQuoteSpan;
-import ru.noties.markwon.spans.BulletListItemSpan;
-import ru.noties.markwon.spans.CodeSpan;
-import ru.noties.markwon.spans.EmphasisSpan;
-import ru.noties.markwon.spans.HeadingSpan;
-import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.OrderedListItemSpan;
-import ru.noties.markwon.spans.StrongEmphasisSpan;
+import ru.noties.markwon.spans.SpanFactory;
 import ru.noties.markwon.spans.TableRowSpan;
-import ru.noties.markwon.spans.TaskListSpan;
-import ru.noties.markwon.spans.ThematicBreakSpan;
 import ru.noties.markwon.tasklist.TaskListBlock;
 import ru.noties.markwon.tasklist.TaskListItem;
 
@@ -64,6 +52,7 @@ import ru.noties.markwon.tasklist.TaskListItem;
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final SpannableConfiguration configuration;
+    private final SpanFactory spanFactory;
     private final SpannableStringBuilder builder;
     private final Deque<HtmlInlineItem> htmlInlineItems;
 
@@ -79,6 +68,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             @NonNull SpannableStringBuilder builder
     ) {
         this.configuration = configuration;
+        this.spanFactory = configuration.spanFactory();
         this.builder = builder;
         this.htmlInlineItems = new ArrayDeque<>(2);
     }
@@ -92,14 +82,14 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(StrongEmphasis strongEmphasis) {
         final int length = builder.length();
         visitChildren(strongEmphasis);
-        setSpan(length, new StrongEmphasisSpan());
+        setSpan(length, spanFactory.createStrongEmphasis());
     }
 
     @Override
     public void visit(Emphasis emphasis) {
         final int length = builder.length();
         visitChildren(emphasis);
-        setSpan(length, new EmphasisSpan());
+        setSpan(length, spanFactory.createEmphasis());
     }
 
     @Override
@@ -116,7 +106,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         visitChildren(blockQuote);
 
-        setSpan(length, new BlockQuoteSpan(configuration.theme()));
+        setSpan(length, spanFactory.createBlockQuote());
 
         blockQuoteIndent -= 1;
 
@@ -137,10 +127,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         builder.append(code.getLiteral());
         builder.append('\u00a0');
 
-        setSpan(length, new CodeSpan(
-                configuration.theme(),
-                false
-        ));
+        setSpan(length, spanFactory.createCode(false));
     }
 
     @Override
@@ -175,10 +162,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         );
         builder.append('\u00a0').append('\n');
 
-        setSpan(length, new CodeSpan(
-                configuration.theme(),
-                true
-        ));
+        setSpan(length, spanFactory.createCode(true));
 
         newLine();
         builder.append('\n');
@@ -218,11 +202,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(listItem);
 
-            // todo| in order to provide real RTL experience there must be a way to provide this string
-            setSpan(length, new OrderedListItemSpan(
-                    configuration.theme(),
-                    String.valueOf(start) + "." + '\u00a0'
-            ));
+            setSpan(length, spanFactory.createOrderedListItem(start));
 
             // after we have visited the children increment start number
             final OrderedList orderedList = (OrderedList) parent;
@@ -232,10 +212,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(listItem);
 
-            setSpan(length, new BulletListItemSpan(
-                    configuration.theme(),
-                    listLevel - 1
-            ));
+            setSpan(length, spanFactory.createBulletListItem(listLevel - 1));
         }
 
         blockQuoteIndent -= 1;
@@ -251,7 +228,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         builder.append(' '); // without space it won't render
-        setSpan(length, new ThematicBreakSpan(configuration.theme()));
+        setSpan(length, spanFactory.createThematicBreak());
 
         newLine();
         builder.append('\n');
@@ -264,7 +241,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         visitChildren(heading);
-        setSpan(length, new HeadingSpan(configuration.theme(), heading.getLevel()));
+        setSpan(length, spanFactory.createHeading(heading.getLevel()));
 
         newLine();
 
@@ -306,7 +283,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             final int length = builder.length();
             visitChildren(customNode);
-            setSpan(length, new StrikethroughSpan());
+            setSpan(length, spanFactory.createStrikethrough());
 
         } else if (customNode instanceof TaskListItem) {
 
@@ -320,11 +297,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(customNode);
 
-            setSpan(length, new TaskListSpan(
-                    configuration.theme(),
-                    blockQuoteIndent,
-                    listItem.done()
-            ));
+            setSpan(length, spanFactory.createTaskList(blockQuoteIndent, listItem.done()));
 
             newLine();
 
@@ -448,20 +421,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final boolean link = parent != null && parent instanceof Link;
         final String destination = configuration.urlProcessor().process(image.getDestination());
 
-        setSpan(
-                length,
-                new AsyncDrawableSpan(
-                        configuration.theme(),
-                        new AsyncDrawable(
-                                destination,
-                                configuration.asyncDrawableLoader(),
-                                configuration.imageSizeResolver(),
-                                null
-                        ),
-                        AsyncDrawableSpan.ALIGN_BOTTOM,
-                        link
-                )
-        );
+        setSpan(length, spanFactory.createImage(destination, link));
 
         // todo, maybe, if image is not inside a link, we should make it clickable, so
         // user can open it in external viewer?
@@ -520,11 +480,17 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final int length = builder.length();
         visitChildren(link);
         final String destination = configuration.urlProcessor().process(link.getDestination());
-        setSpan(length, new LinkSpan(configuration.theme(), destination, configuration.linkResolver()));
+        setSpan(length, spanFactory.createLink(destination));
     }
 
-    private void setSpan(int start, @NonNull Object span) {
-        builder.setSpan(span, start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    private void setSpan(int start, @NonNull Object spans) {
+        if (spans instanceof Object[]) {
+            for (final Object span : (Object[]) spans) {
+                builder.setSpan(span, start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        } else {
+            builder.setSpan(spans, start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
     }
 
     private void newLine() {
