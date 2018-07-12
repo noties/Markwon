@@ -2,6 +2,7 @@ package ru.noties.markwon.sample.extension;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.widget.TextView;
 
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -11,7 +12,7 @@ import org.commonmark.parser.Parser;
 
 import java.util.Arrays;
 
-import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.ReverseSpannableStringBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
@@ -43,7 +44,7 @@ public class MainActivity extends Activity {
 
         final Node node = parser.parse(markdown);
 
-        final SpannableBuilder builder = new SpannableBuilder();
+        final SpannableStringBuilder builder = new ReverseSpannableStringBuilder();
 
         // please note that here I am passing `0` as fallback it means that if markdown references
         // unknown icon, it will try to load fallback one and will fail with ResourceNotFound. It's
@@ -61,6 +62,6 @@ public class MainActivity extends Activity {
         node.accept(visitor);
 
         // apply
-        textView.setText(builder.text());
+        textView.setText(builder);
     }
 }

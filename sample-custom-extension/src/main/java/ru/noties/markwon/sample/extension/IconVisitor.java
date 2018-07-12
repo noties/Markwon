@@ -1,25 +1,25 @@
 package ru.noties.markwon.sample.extension;
 
 import android.support.annotation.NonNull;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
-import android.widget.TextView;
 
 import org.commonmark.node.CustomNode;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
 
 @SuppressWarnings("WeakerAccess")
 public class IconVisitor extends SpannableMarkdownVisitor {
 
-    private final SpannableBuilder builder;
+    private final SpannableStringBuilder builder;
 
     private final IconSpanProvider iconSpanProvider;
 
     public IconVisitor(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder,
+            @NonNull SpannableStringBuilder builder,
             @NonNull IconSpanProvider iconSpanProvider
     ) {
         super(configuration, builder);
@@ -51,7 +51,7 @@ public class IconVisitor extends SpannableMarkdownVisitor {
                 final int length = builder.length();
 
                 builder.append(name);
-                builder.setSpan(iconSpanProvider.provide(name, color, size), length);
+                builder.setSpan(iconSpanProvider.provide(name, color, size), length, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.append(' ');
                 
                 return true;
