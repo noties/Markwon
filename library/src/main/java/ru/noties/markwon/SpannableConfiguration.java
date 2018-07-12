@@ -8,6 +8,7 @@ import ru.noties.markwon.renderer.ImageSizeResolverDef;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
+import ru.noties.markwon.spans.SpanFactory;
 import ru.noties.markwon.spans.SpannableTheme;
 
 @SuppressWarnings("WeakerAccess")
@@ -31,6 +32,7 @@ public class SpannableConfiguration {
     private final UrlProcessor urlProcessor;
     private final SpannableHtmlParser htmlParser;
     private final ImageSizeResolver imageSizeResolver;
+    private final SpanFactory spanFactory;
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -40,6 +42,7 @@ public class SpannableConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.htmlParser = builder.htmlParser;
         this.imageSizeResolver = builder.imageSizeResolver;
+        this.spanFactory = builder.spanFactory;
     }
 
     @NonNull
@@ -77,6 +80,11 @@ public class SpannableConfiguration {
         return imageSizeResolver;
     }
 
+    @NonNull
+    public SpanFactory spanFactory() {
+        return spanFactory;
+    }
+
     @SuppressWarnings("unused")
     public static class Builder {
 
@@ -88,6 +96,7 @@ public class SpannableConfiguration {
         private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
         private ImageSizeResolver imageSizeResolver;
+        private SpanFactory spanFactory;
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -139,6 +148,12 @@ public class SpannableConfiguration {
         }
 
         @NonNull
+        public Builder spanFactory(@NonNull SpanFactory spanFactory) {
+            this.spanFactory = spanFactory;
+            return this;
+        }
+
+        @NonNull
         public SpannableConfiguration build() {
 
             if (theme == null) {
@@ -163,6 +178,10 @@ public class SpannableConfiguration {
 
             if (imageSizeResolver == null) {
                 imageSizeResolver = new ImageSizeResolverDef();
+            }
+
+            if (spanFactory == null) {
+                spanFactory = new SpanFactoryDef(theme, linkResolver, asyncDrawableLoader, imageSizeResolver);
             }
 
             if (htmlParser == null) {
