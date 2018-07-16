@@ -2,8 +2,8 @@ package ru.noties.markwon.syntax;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.text.SpannableStringBuilder;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.prism4j.Prism4j;
 
 public interface Prism4jTheme {
@@ -14,7 +14,7 @@ public interface Prism4jTheme {
     void apply(
             @NonNull String language,
             @NonNull Prism4j.Syntax syntax,
-            @NonNull SpannableBuilder builder,
+            @NonNull SpannableStringBuilder builder,
             int start,
             int end
     );

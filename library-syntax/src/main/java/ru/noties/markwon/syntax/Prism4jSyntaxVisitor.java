@@ -1,8 +1,8 @@
 package ru.noties.markwon.syntax;
 
 import android.support.annotation.NonNull;
+import android.text.SpannableStringBuilder;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.prism4j.AbsVisitor;
 import ru.noties.prism4j.Prism4j;
 
@@ -10,12 +10,12 @@ class Prism4jSyntaxVisitor extends AbsVisitor {
 
     private final String language;
     private final Prism4jTheme theme;
-    private final SpannableBuilder builder;
+    private final SpannableStringBuilder builder;
 
     Prism4jSyntaxVisitor(
             @NonNull String language,
             @NonNull Prism4jTheme theme,
-            @NonNull SpannableBuilder builder) {
+            @NonNull SpannableStringBuilder builder) {
         this.language = language;
         this.theme = theme;
         this.builder = builder;

@@ -2,9 +2,9 @@ package ru.noties.markwon.syntax;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SyntaxHighlight;
 import ru.noties.prism4j.Prism4j;
 
@@ -82,10 +82,10 @@ public class Prism4jSyntaxHighlight implements SyntaxHighlight {
 
     @NonNull
     protected CharSequence highlight(@NonNull String language, @NonNull Prism4j.Grammar grammar, @NonNull String code) {
-        final SpannableBuilder builder = new SpannableBuilder();
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
         final Prism4jSyntaxVisitor visitor = new Prism4jSyntaxVisitor(language, theme, builder);
         visitor.visit(prism4j.tokenize(code, grammar));
-        return builder.text();
+        return builder;
     }
 
     @NonNull

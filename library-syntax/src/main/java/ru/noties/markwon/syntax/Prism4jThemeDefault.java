@@ -3,9 +3,10 @@ package ru.noties.markwon.syntax;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 
@@ -36,13 +37,13 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
             @NonNull String type,
             @Nullable String alias,
             @ColorInt int color,
-            @NonNull SpannableBuilder builder,
+            @NonNull SpannableStringBuilder builder,
             int start,
             int end) {
 
         if ("css".equals(language) && isOfType("string", type, alias)) {
             super.applyColor(language, type, alias, 0xFF9a6e3a, builder, start, end);
-            builder.setSpan(new BackgroundColorSpan(0x80ffffff), start, end);
+            builder.setSpan(new BackgroundColorSpan(0x80ffffff), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return;
         }
 
@@ -54,11 +55,11 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
 
         if (isOfType("important", type, alias)
                 || isOfType("bold", type, alias)) {
-            builder.setSpan(new StrongEmphasisSpan(), start, end);
+            builder.setSpan(new StrongEmphasisSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         if (isOfType("italic", type, alias)) {
-            builder.setSpan(new EmphasisSpan(), start, end);
+            builder.setSpan(new EmphasisSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 

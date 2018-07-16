@@ -5,11 +5,12 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 
 import java.util.HashMap;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.prism4j.Prism4j;
 
 public abstract class Prism4jThemeBase implements Prism4jTheme {
@@ -55,7 +56,7 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
     public void apply(
             @NonNull String language,
             @NonNull Prism4j.Syntax syntax,
-            @NonNull SpannableBuilder builder,
+            @NonNull SpannableStringBuilder builder,
             int start,
             int end) {
 
@@ -74,10 +75,10 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
             @NonNull String type,
             @Nullable String alias,
             @ColorInt int color,
-            @NonNull SpannableBuilder builder,
+            @NonNull SpannableStringBuilder builder,
             int start,
             int end) {
-        builder.setSpan(new ForegroundColorSpan(color), start, end);
+        builder.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     protected static class Color {
