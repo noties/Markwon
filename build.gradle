@@ -38,12 +38,12 @@ ext {
     SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
     SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
 
-    final def commonMarkVersion = '0.10.0'
+    final def commonMarkVersion = '0.11.0'
     COMMON_MARK = "com.atlassian.commonmark:commonmark:$commonMarkVersion"
     COMMON_MARK_STRIKETHROUGHT = "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion"
     COMMON_MARK_TABLE = "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion"
 
     ANDROID_SVG = 'com.caverock:androidsvg:1.2.1'
-    ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
+    ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.14'
     OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
 }
