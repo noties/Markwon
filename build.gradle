@@ -10,6 +10,9 @@ buildscript {
 
 allprojects {
     repositories {
+        if (project.hasProperty('LOCAL_MAVEN_URL')) {
+            maven { url LOCAL_MAVEN_URL }
+        }
         jcenter()
         google()
     }
@@ -46,4 +49,7 @@ ext {
     ANDROID_SVG = 'com.caverock:androidsvg:1.2.1'
     ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.14'
     OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
+
+    PRISM_4J = 'ru.noties:prism4j:1.0.0'
+    PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.0.0'
 }

@@ -1,0 +1,17 @@
+package ru.noties.markwon.syntax;
+
+import android.support.annotation.NonNull;
+
+import ru.noties.markwon.SpannableBuilder;
+import ru.noties.prism4j.Prism4j;
+
+public interface Prism4jTheme {
+
+    void apply(
+            @NonNull String language,
+            @NonNull Prism4j.Syntax syntax,
+            @NonNull SpannableBuilder builder,
+            int start,
+            int end
+    );
+}
