@@ -22,19 +22,19 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion '4.5'
+    gradleVersion '4.8.1'
     distributionType 'all'
 }
 
 ext {
 
     // Config
-    BUILD_TOOLS = '26.0.3'
-    TARGET_SDK = 26
+    BUILD_TOOLS = '27.0.3'
+    TARGET_SDK = 27
     MIN_SDK = 16
 
     // Dependencies
-    final def supportVersion = '26.1.0'
+    final def supportVersion = '27.1.1'
     SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
     SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
 
