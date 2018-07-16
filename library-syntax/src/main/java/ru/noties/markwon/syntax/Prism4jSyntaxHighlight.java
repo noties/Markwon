@@ -14,7 +14,7 @@ public class Prism4jSyntaxHighlight implements SyntaxHighlight {
     public static Prism4jSyntaxHighlight create(
             @NonNull Prism4j prism4j,
             @NonNull Prism4jTheme theme) {
-        return null;
+        return new Prism4jSyntaxHighlight(prism4j, theme, null);
     }
 
     @NonNull
@@ -22,7 +22,7 @@ public class Prism4jSyntaxHighlight implements SyntaxHighlight {
             @NonNull Prism4j prism4j,
             @NonNull Prism4jTheme theme,
             @Nullable String fallback) {
-        return null;
+        return new Prism4jSyntaxHighlight(prism4j, theme, fallback);
     }
 
     private final Prism4j prism4j;

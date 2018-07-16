@@ -30,6 +30,7 @@ dependencies {
 
     implementation project(':library')
     implementation project(':library-image-loader')
+    implementation project(':library-syntax')
 
     implementation 'ru.noties:debug:3.0.0@jar'
     implementation 'me.saket:better-link-movement-method:2.2.0'
@@ -38,4 +39,7 @@ dependencies {
 
     implementation 'com.google.dagger:dagger:2.10'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+
+    implementation PRISM_4J
+    annotationProcessor PRISM_4J_BUNDLER
 }

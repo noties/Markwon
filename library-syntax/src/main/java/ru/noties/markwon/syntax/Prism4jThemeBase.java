@@ -64,7 +64,6 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
 
         final int color = color(language, type, alias);
         if (color != 0) {
-            builder.setSpan(new ForegroundColorSpan(color), start, end);
             applyColor(language, type, alias, color, builder, start, end);
         }
     }

@@ -14,6 +14,10 @@ import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
+import ru.noties.markwon.syntax.Prism4jTheme;
+import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
 public class MarkdownRenderer {
@@ -31,6 +35,12 @@ public class MarkdownRenderer {
     @Inject
     Handler handler;
 
+    @Inject
+    Prism4j prism4j;
+
+    @Inject
+    Prism4jTheme prism4jTheme;
+
     private Future<?> task;
 
     @Inject
@@ -42,7 +52,11 @@ public class MarkdownRenderer {
             @Nullable final Uri uri,
             @NonNull final String markdown,
             @NonNull final MarkdownReadyListener listener) {
+
+        // todo: create prism4j theme factory (accepting light/dark argument)
+
         cancel();
+
         task = service.submit(new Runnable() {
             @Override
             public void run() {
@@ -57,6 +71,10 @@ public class MarkdownRenderer {
                 final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
                         .asyncDrawableLoader(loader)
                         .urlProcessor(urlProcessor)
+                        .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
+                        .theme(SpannableTheme.builderWithDefaults(context)
+                                .codeBackgroundColor(prism4jTheme.background())
+                                .build())
                         .build();
 
                 final long start = SystemClock.uptimeMillis();

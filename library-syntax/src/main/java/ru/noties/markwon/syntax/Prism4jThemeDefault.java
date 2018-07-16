@@ -61,4 +61,9 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
             builder.setSpan(new EmphasisSpan(), start, end);
         }
     }
+
+    @Override
+    public int background() {
+        return 0xFFf5f2f0;
+    }
 }

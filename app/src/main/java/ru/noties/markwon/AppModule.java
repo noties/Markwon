@@ -16,8 +16,14 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.il.AsyncDrawableLoader;
 import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.syntax.Prism4jTheme;
+import ru.noties.markwon.syntax.Prism4jThemeDefault;
+import ru.noties.prism4j.Prism4j;
+import ru.noties.prism4j.annotations.PrismBundle;
 
 @Module
+@PrismBundle(include = {"c", "clojure", "cpp", "csharp", "css", "dart", "git", "go", "java",
+        "javascript", "json", "kotlin", "latex", "makefile", "markup", "python", "sql", "yaml"})
 class AppModule {
 
     private final App app;
@@ -74,5 +80,17 @@ class AppModule {
                 .executorService(executorService)
                 .resources(resources)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    Prism4j prism4j() {
+        return new Prism4j(new GrammarLocatorDef());
+    }
+
+    @Singleton
+    @Provides
+    Prism4jTheme prism4jTheme() {
+        return Prism4jThemeDefault.create();
     }
 }
