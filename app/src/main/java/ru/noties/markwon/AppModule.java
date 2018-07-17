@@ -16,7 +16,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.il.AsyncDrawableLoader;
 import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.syntax.Prism4jTheme;
+import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.prism4j.Prism4j;
 import ru.noties.prism4j.annotations.PrismBundle;
@@ -90,7 +90,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    Prism4jTheme prism4jTheme() {
+    Prism4jThemeDefault prism4jThemeDefault() {
         return Prism4jThemeDefault.create();
+    }
+
+    @Singleton
+    @Provides
+    Prism4jThemeDarkula prism4jThemeDarkula() {
+        return Prism4jThemeDarkula.create();
     }
 }

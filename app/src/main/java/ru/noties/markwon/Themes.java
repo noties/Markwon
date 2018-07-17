@@ -43,4 +43,8 @@ public class Themes {
                 .putBoolean(KEY_THEME_DARK, newValue)
                 .apply();
     }
+
+    public boolean isLight() {
+        return !preferences.getBoolean(KEY_THEME_DARK, false);
+    }
 }

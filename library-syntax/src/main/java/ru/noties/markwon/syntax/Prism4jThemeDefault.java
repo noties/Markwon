@@ -17,6 +17,16 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
         return new Prism4jThemeDefault();
     }
 
+    @Override
+    public int background() {
+        return 0xFFf5f2f0;
+    }
+
+    @Override
+    public int textColor() {
+        return 0xdd000000;
+    }
+
     @NonNull
     @Override
     protected ColorHashMap init() {
@@ -61,15 +71,5 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
         if (isOfType("italic", type, alias)) {
             builder.setSpan(new EmphasisSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-    }
-
-    @Override
-    public int background() {
-        return 0xFFf5f2f0;
-    }
-
-    @Override
-    public int textColor() {
-        return 0xFF000000;
     }
 }

@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override
             public void apply(final String text) {
-                markdownRenderer.render(MainActivity.this, uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
+                markdownRenderer.render(MainActivity.this, themes.isLight(), uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
                     @Override
                     public void onMarkdownReady(CharSequence markdown) {
                         Markwon.setText(textView, markdown, BetterLinkMovementMethod.getInstance());

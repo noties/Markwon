@@ -15,8 +15,10 @@ import javax.inject.Inject;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
 import ru.noties.markwon.syntax.Prism4jTheme;
+import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
@@ -39,7 +41,10 @@ public class MarkdownRenderer {
     Prism4j prism4j;
 
     @Inject
-    Prism4jTheme prism4jTheme;
+    Prism4jThemeDefault prism4jThemeDefault;
+
+    @Inject
+    Prism4jThemeDarkula prism4JThemeDarkula;
 
     private Future<?> task;
 
@@ -49,6 +54,7 @@ public class MarkdownRenderer {
 
     public void render(
             @NonNull final Context context,
+            final boolean isLightTheme,
             @Nullable final Uri uri,
             @NonNull final String markdown,
             @NonNull final MarkdownReadyListener listener) {
@@ -68,12 +74,20 @@ public class MarkdownRenderer {
                     urlProcessor = new UrlProcessorRelativeToAbsolute(uri.toString());
                 }
 
+                final Prism4jTheme prism4jTheme = isLightTheme
+                        ? prism4jThemeDefault
+                        : prism4JThemeDarkula;
+
+                final int background = isLightTheme
+                        ? prism4jTheme.background()
+                        : 0x0Fffffff;
+
                 final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
                         .asyncDrawableLoader(loader)
                         .urlProcessor(urlProcessor)
                         .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
                         .theme(SpannableTheme.builderWithDefaults(context)
-                                .codeBackgroundColor(prism4jTheme.background())
+                                .codeBackgroundColor(background)
                                 .codeTextColor(prism4jTheme.textColor())
                                 .build())
                         .build();
