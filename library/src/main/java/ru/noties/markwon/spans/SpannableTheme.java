@@ -173,6 +173,9 @@ public class SpannableTheme {
     // by default, text color with `HEADING_DEF_BREAK_COLOR_ALPHA` applied alpha
     protected final int headingBreakColor;
 
+    // by default, whatever typeface is set on the TextView
+    protected final Typeface headingTypeface;
+
     // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
     protected final float scriptTextSizeRatio;
 
@@ -214,6 +217,7 @@ public class SpannableTheme {
         this.codeTextSize = builder.codeTextSize;
         this.headingBreakHeight = builder.headingBreakHeight;
         this.headingBreakColor = builder.headingBreakColor;
+        this.headingTypeface = builder.headingTypeface;
         this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
@@ -368,7 +372,11 @@ public class SpannableTheme {
     }
 
     public void applyHeadingTextStyle(@NonNull Paint paint, @IntRange(from = 1, to = 6) int level) {
-        paint.setFakeBoldText(true);
+        if (headingTypeface == null) {
+            paint.setFakeBoldText(true);
+        } else {
+            paint.setTypeface(headingTypeface);
+        }
         paint.setTextSize(paint.getTextSize() * HEADING_SIZES[level - 1]);
     }
 
@@ -491,6 +499,7 @@ public class SpannableTheme {
         private int codeTextSize;
         private int headingBreakHeight = -1;
         private int headingBreakColor;
+        private Typeface headingTypeface;
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
@@ -520,6 +529,7 @@ public class SpannableTheme {
             this.codeTextSize = theme.codeTextSize;
             this.headingBreakHeight = theme.headingBreakHeight;
             this.headingBreakColor = theme.headingBreakColor;
+            this.headingTypeface = theme.headingTypeface;
             this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
@@ -631,6 +641,12 @@ public class SpannableTheme {
         @NonNull
         public Builder headingBreakColor(@ColorInt int headingBreakColor) {
             this.headingBreakColor = headingBreakColor;
+            return this;
+        }
+
+        @NonNull
+        public Builder headingTypeface(Typeface headingTypeface) {
+            this.headingTypeface = headingTypeface;
             return this;
         }
 
