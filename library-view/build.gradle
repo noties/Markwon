@@ -18,6 +18,10 @@ dependencies {
     compileOnly SUPPORT_APP_COMPAT
 }
 
+afterEvaluate {
+    generateReleaseBuildConfig.enabled = false
+}
+
 if (project.hasProperty('release')) {
     apply from: 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
 }
