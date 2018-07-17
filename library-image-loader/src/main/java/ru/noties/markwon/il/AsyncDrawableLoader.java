@@ -59,6 +59,9 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
     private final Handler mainThread;
     private final Drawable errorDrawable;
 
+    // @since 1.1.0
+    private final boolean autoPlayGif;
+
     private final Map<String, Future<?>> requests;
 
     AsyncDrawableLoader(Builder builder) {
@@ -67,6 +70,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         this.executorService = builder.executorService;
         this.mainThread = new Handler(Looper.getMainLooper());
         this.errorDrawable = builder.errorDrawable;
+        this.autoPlayGif = builder.autoPlayGif;
         this.requests = new HashMap<>(3);
     }
 
@@ -294,8 +298,15 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         final byte[] bytes = readBytes(stream);
         if (bytes != null) {
             try {
+
                 out = new GifDrawable(bytes);
                 DrawableUtils.intrinsicBounds(out);
+
+                // @since 1.1.0
+                if (!autoPlayGif) {
+                    ((GifDrawable) out).pause();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -346,6 +357,9 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         private ExecutorService executorService;
         private Drawable errorDrawable;
 
+        // @since 1.1.0
+        private boolean autoPlayGif = true;
+
         public Builder client(@NonNull OkHttpClient client) {
             this.client = client;
             return this;
@@ -366,6 +380,18 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             return this;
         }
 
+        /**
+         * @param autoPlayGif flag indicating if loaded gif should automatically start when displayed
+         * @return self
+         * @since 1.1.0
+         */
+        @NonNull
+        public Builder autoPlayGif(boolean autoPlayGif) {
+            this.autoPlayGif = autoPlayGif;
+            return this;
+        }
+
+        @NonNull
         public AsyncDrawableLoader build() {
             if (client == null) {
                 client = new OkHttpClient();

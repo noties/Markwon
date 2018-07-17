@@ -79,6 +79,7 @@ class AppModule {
                 .client(client)
                 .executorService(executorService)
                 .resources(resources)
+                .autoPlayGif(false)
                 .build();
     }
 
