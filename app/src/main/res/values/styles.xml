@@ -10,7 +10,14 @@
         <item name="ic_app_bar_theme">@drawable/ic_app_bar_theme_dark</item>
     </style>
 
-    <style name="AppThemeLight" parent="AppThemeBaseLight" />
-    <style name="AppThemeDark" parent="AppThemeBaseDark" />
+    <style name="AppThemeLight" parent="AppThemeBaseLight">
+        <item name="android:windowBackground">@color/theme_light_window_background</item>
+        <item name="android:textColor">@color/theme_light_text_color</item>
+    </style>
+
+    <style name="AppThemeDark" parent="AppThemeBaseDark">
+        <item name="android:windowBackground">@color/theme_dark_window_background</item>
+        <item name="android:textColor">@color/theme_dark_text_color</item>
+    </style>
 
 </resources>

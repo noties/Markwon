@@ -67,4 +67,9 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
     public int background() {
         return 0xFFf5f2f0;
     }
+
+    @Override
+    public int textColor() {
+        return 0xFF000000;
+    }
 }

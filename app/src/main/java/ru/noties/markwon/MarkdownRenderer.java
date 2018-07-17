@@ -74,6 +74,7 @@ public class MarkdownRenderer {
                         .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
                         .theme(SpannableTheme.builderWithDefaults(context)
                                 .codeBackgroundColor(prism4jTheme.background())
+                                .codeTextColor(prism4jTheme.textColor())
                                 .build())
                         .build();
 

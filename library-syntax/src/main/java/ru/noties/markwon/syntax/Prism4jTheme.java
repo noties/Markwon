@@ -11,6 +11,9 @@ public interface Prism4jTheme {
     @ColorInt
     int background();
 
+    @ColorInt
+    int textColor();
+
     void apply(
             @NonNull String language,
             @NonNull Prism4j.Syntax syntax,

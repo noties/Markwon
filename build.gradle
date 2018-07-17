@@ -51,5 +51,5 @@ ext {
     OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
 
     PRISM_4J = 'ru.noties:prism4j:1.0.0'
-    PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.0.0'
+    PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.0.1'
 }
