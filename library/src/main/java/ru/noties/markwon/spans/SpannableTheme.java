@@ -12,6 +12,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Size;
 import android.text.TextPaint;
 import android.util.TypedValue;
 
@@ -178,8 +179,7 @@ public class SpannableTheme {
 
     // by default, we use standard multipliers from the HTML spec (see HEADING_SIZES for values).
     // this library supports 6 heading sizes, so make sure the array you pass here has 6 elements.
-    // note also that these values are in PIXELS, so you'll need to convert from SP first.
-    protected final float[] headingTextSizes;
+    protected final float[] headingTextSizeMultipliers;
 
     // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
     protected final float scriptTextSizeRatio;
@@ -223,7 +223,7 @@ public class SpannableTheme {
         this.headingBreakHeight = builder.headingBreakHeight;
         this.headingBreakColor = builder.headingBreakColor;
         this.headingTypeface = builder.headingTypeface;
-        this.headingTextSizes = builder.headingTextSizes;
+        this.headingTextSizeMultipliers = builder.headingTextSizeMultipliers;
         this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
@@ -383,8 +383,8 @@ public class SpannableTheme {
         } else {
             paint.setTypeface(headingTypeface);
         }
-        if (headingTextSizes != null && headingTextSizes.length >= level) {
-            paint.setTextSize(headingTextSizes[level - 1]);
+        if (headingTextSizeMultipliers != null && headingTextSizeMultipliers.length >= level) {
+            paint.setTextSize(paint.getTextSize() * headingTextSizeMultipliers[level - 1]);
         } else {
             paint.setTextSize(paint.getTextSize() * HEADING_SIZES[level - 1]);
         }
@@ -510,7 +510,7 @@ public class SpannableTheme {
         private int headingBreakHeight = -1;
         private int headingBreakColor;
         private Typeface headingTypeface;
-        private float[] headingTextSizes;
+        private float[] headingTextSizeMultipliers;
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
@@ -541,7 +541,7 @@ public class SpannableTheme {
             this.headingBreakHeight = theme.headingBreakHeight;
             this.headingBreakColor = theme.headingBreakColor;
             this.headingTypeface = theme.headingTypeface;
-            this.headingTextSizes = theme.headingTextSizes;
+            this.headingTextSizeMultipliers = theme.headingTextSizeMultipliers;
             this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
@@ -657,14 +657,14 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder headingTypeface(Typeface headingTypeface) {
+        public Builder headingTypeface(@NonNull Typeface headingTypeface) {
             this.headingTypeface = headingTypeface;
             return this;
         }
 
         @NonNull
-        public Builder headingTextSizes(float[] headingTextSizes) {
-            this.headingTextSizes = headingTextSizes;
+        public Builder headingTextSizeMultipliers(@Size(6) @NonNull float[] headingTextSizeMultipliers) {
+            this.headingTextSizeMultipliers = headingTextSizeMultipliers;
             return this;
         }
 

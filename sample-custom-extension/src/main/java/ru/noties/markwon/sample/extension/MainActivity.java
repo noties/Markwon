@@ -52,12 +52,14 @@ public class MainActivity extends Activity {
         // better to provide a valid fallback option
         final IconSpanProvider spanProvider = IconSpanProvider.create(this, 0);
 
-        // create an instance of visitor to process parsed markdown
+        final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};
         SpannableConfiguration configuration = SpannableConfiguration.builder(this)
                 .theme(SpannableTheme.builder()
                         .headingTypeface(Typeface.MONOSPACE)
+                        .headingTextSizeMultipliers(textSizeMultipliers)
                         .build())
                 .build();
+        // create an instance of visitor to process parsed markdown
         final IconVisitor visitor = new IconVisitor(
                 configuration,
                 builder,
