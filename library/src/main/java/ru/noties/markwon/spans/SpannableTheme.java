@@ -16,6 +16,9 @@ import android.support.annotation.Size;
 import android.text.TextPaint;
 import android.util.TypedValue;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {
 
@@ -383,10 +386,17 @@ public class SpannableTheme {
         } else {
             paint.setTypeface(headingTypeface);
         }
-        if (headingTextSizeMultipliers != null && headingTextSizeMultipliers.length >= level) {
-            paint.setTextSize(paint.getTextSize() * headingTextSizeMultipliers[level - 1]);
+        final float[] textSizes = headingTextSizeMultipliers != null
+                ? headingTextSizeMultipliers
+                : HEADING_SIZES;
+
+        if (textSizes != null && textSizes.length >= level) {
+            paint.setTextSize(paint.getTextSize() * textSizes[level - 1]);
         } else {
-            paint.setTextSize(paint.getTextSize() * HEADING_SIZES[level - 1]);
+            throw new IllegalStateException(String.format(
+                    Locale.US,
+                    "Supplied heading level: %d is invalid, where configured heading sizes are: `%s`",
+                    level, Arrays.toString(textSizes)));
         }
     }
 
