@@ -1,6 +1,7 @@
 package ru.noties.markwon.sample.extension;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import java.util.Arrays;
 
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
 public class MainActivity extends Activity {
@@ -50,9 +52,16 @@ public class MainActivity extends Activity {
         // better to provide a valid fallback option
         final IconSpanProvider spanProvider = IconSpanProvider.create(this, 0);
 
+        final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};
+        SpannableConfiguration configuration = SpannableConfiguration.builder(this)
+                .theme(SpannableTheme.builder()
+                        .headingTypeface(Typeface.MONOSPACE)
+                        .headingTextSizeMultipliers(textSizeMultipliers)
+                        .build())
+                .build();
         // create an instance of visitor to process parsed markdown
         final IconVisitor visitor = new IconVisitor(
-                SpannableConfiguration.create(this),
+                configuration,
                 builder,
                 spanProvider
         );
