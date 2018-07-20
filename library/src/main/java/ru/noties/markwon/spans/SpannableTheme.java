@@ -178,10 +178,12 @@ public class SpannableTheme {
     protected final int headingBreakColor;
 
     // by default, whatever typeface is set on the TextView
+    // @since 1.1.0
     protected final Typeface headingTypeface;
 
     // by default, we use standard multipliers from the HTML spec (see HEADING_SIZES for values).
     // this library supports 6 heading sizes, so make sure the array you pass here has 6 elements.
+    // @since 1.1.0
     protected final float[] headingTextSizeMultipliers;
 
     // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
@@ -666,12 +668,23 @@ public class SpannableTheme {
             return this;
         }
 
+        /**
+         * @param headingTypeface Typeface to use for heading elements
+         * @return self
+         * @since 1.1.0
+         */
         @NonNull
         public Builder headingTypeface(@NonNull Typeface headingTypeface) {
             this.headingTypeface = headingTypeface;
             return this;
         }
 
+        /**
+         * @param headingTextSizeMultipliers an array of multipliers values for heading elements.
+         *                                   The base value for this multipliers is TextView\'s text size
+         * @return self
+         * @since 1.1.0
+         */
         @NonNull
         public Builder headingTextSizeMultipliers(@Size(6) @NonNull float[] headingTextSizeMultipliers) {
             this.headingTextSizeMultipliers = headingTextSizeMultipliers;
