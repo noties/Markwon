@@ -15,9 +15,9 @@ import javax.inject.Inject;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.SpannableTheme;
-import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
 import ru.noties.markwon.syntax.Prism4jTheme;
+import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.prism4j.Prism4j;
 
@@ -82,6 +82,11 @@ public class MarkdownRenderer {
                         ? prism4jTheme.background()
                         : 0x0Fffffff;
 
+                final GifPlaceholder gifPlaceholder = new GifPlaceholder(
+                        context.getResources().getDrawable(R.drawable.ic_play_circle_filled_18dp_white),
+                        0x20000000
+                );
+
                 final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
                         .asyncDrawableLoader(loader)
                         .urlProcessor(urlProcessor)
@@ -90,6 +95,7 @@ public class MarkdownRenderer {
                                 .codeBackgroundColor(background)
                                 .codeTextColor(prism4jTheme.textColor())
                                 .build())
+                        .factory(new GifAwareSpannableFactory(gifPlaceholder))
                         .build();
 
                 final long start = SystemClock.uptimeMillis();

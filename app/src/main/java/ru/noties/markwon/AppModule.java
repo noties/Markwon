@@ -107,4 +107,10 @@ class AppModule {
     Prism4jThemeDarkula prism4jThemeDarkula() {
         return Prism4jThemeDarkula.create();
     }
+
+    @Singleton
+    @Provides
+    GifProcessor gifProcessor() {
+        return GifProcessor.create();
+    }
 }
