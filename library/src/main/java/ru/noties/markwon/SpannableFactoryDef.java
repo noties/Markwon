@@ -26,6 +26,9 @@ import ru.noties.markwon.spans.TableRowSpan;
 import ru.noties.markwon.spans.TaskListSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
+/**
+ * @since 1.1.0
+ */
 public class SpannableFactoryDef implements SpannableFactory {
 
     @NonNull

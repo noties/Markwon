@@ -23,55 +23,6 @@ import ru.noties.markwon.spans.SpannableTheme;
 @SuppressWarnings("WeakerAccess")
 public class SpannableHtmlParser {
 
-//    // creates default parser
-//    @NonNull
-//    public static SpannableHtmlParser create(
-//            @NonNull SpannableTheme theme,
-//            @NonNull AsyncDrawable.Loader loader
-//    ) {
-//        return builderWithDefaults(theme, loader, null, null, null)
-//                .build();
-//    }
-//
-//    /**
-//     * @since 1.0.1
-//     */
-//    @NonNull
-//    public static SpannableHtmlParser create(
-//            @NonNull SpannableTheme theme,
-//            @NonNull AsyncDrawable.Loader loader,
-//            @NonNull ImageSizeResolver imageSizeResolver
-//    ) {
-//        return builderWithDefaults(theme, loader, null, null, imageSizeResolver)
-//                .build();
-//    }
-//
-//    @NonNull
-//    public static SpannableHtmlParser create(
-//            @NonNull SpannableTheme theme,
-//            @NonNull AsyncDrawable.Loader loader,
-//            @NonNull UrlProcessor urlProcessor,
-//            @NonNull LinkSpan.Resolver resolver
-//    ) {
-//        return builderWithDefaults(theme, loader, urlProcessor, resolver, null)
-//                .build();
-//    }
-
-//    /**
-//     * @since 1.0.1
-//     */
-//    @NonNull
-//    public static SpannableHtmlParser create(
-//            @NonNull SpannableTheme theme,
-//            @NonNull AsyncDrawable.Loader loader,
-//            @NonNull UrlProcessor urlProcessor,
-//            @NonNull LinkSpan.Resolver resolver,
-//            @NonNull ImageSizeResolver imageSizeResolver
-//    ) {
-//        return builderWithDefaults(theme, loader, urlProcessor, resolver, imageSizeResolver)
-//                .build();
-//    }
-
     /**
      * @since 1.1.0
      */
