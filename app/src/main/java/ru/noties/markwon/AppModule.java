@@ -15,6 +15,9 @@ import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.il.AsyncDrawableLoader;
+import ru.noties.markwon.il.GifMediaDecoder;
+import ru.noties.markwon.il.ImageMediaDecoder;
+import ru.noties.markwon.il.SvgMediaDecoder;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
@@ -46,7 +49,7 @@ class AppModule {
     @Singleton
     OkHttpClient client() {
         return new OkHttpClient.Builder()
-                .cache(new Cache(app.getCacheDir(), 1024L * 20))
+                .cache(new Cache(app.getCacheDir(), 1024L * 1024 * 20)) // 20 mb
                 .followRedirects(true)
                 .retryOnConnectionFailure(true)
                 .build();
@@ -79,7 +82,11 @@ class AppModule {
                 .client(client)
                 .executorService(executorService)
                 .resources(resources)
-                .autoPlayGif(false)
+                .mediaDecoders(
+                        SvgMediaDecoder.create(resources),
+                        GifMediaDecoder.create(false),
+                        ImageMediaDecoder.create(resources)
+                )
                 .build();
     }
 
