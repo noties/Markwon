@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.noties.markwon.LinkResolverDef;
+import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.UrlProcessorNoOp;
 import ru.noties.markwon.renderer.ImageSizeResolver;
@@ -22,53 +23,68 @@ import ru.noties.markwon.spans.SpannableTheme;
 @SuppressWarnings("WeakerAccess")
 public class SpannableHtmlParser {
 
-    // creates default parser
-    @NonNull
-    public static SpannableHtmlParser create(
-            @NonNull SpannableTheme theme,
-            @NonNull AsyncDrawable.Loader loader
-    ) {
-        return builderWithDefaults(theme, loader, null, null, null)
-                .build();
-    }
+//    // creates default parser
+//    @NonNull
+//    public static SpannableHtmlParser create(
+//            @NonNull SpannableTheme theme,
+//            @NonNull AsyncDrawable.Loader loader
+//    ) {
+//        return builderWithDefaults(theme, loader, null, null, null)
+//                .build();
+//    }
+//
+//    /**
+//     * @since 1.0.1
+//     */
+//    @NonNull
+//    public static SpannableHtmlParser create(
+//            @NonNull SpannableTheme theme,
+//            @NonNull AsyncDrawable.Loader loader,
+//            @NonNull ImageSizeResolver imageSizeResolver
+//    ) {
+//        return builderWithDefaults(theme, loader, null, null, imageSizeResolver)
+//                .build();
+//    }
+//
+//    @NonNull
+//    public static SpannableHtmlParser create(
+//            @NonNull SpannableTheme theme,
+//            @NonNull AsyncDrawable.Loader loader,
+//            @NonNull UrlProcessor urlProcessor,
+//            @NonNull LinkSpan.Resolver resolver
+//    ) {
+//        return builderWithDefaults(theme, loader, urlProcessor, resolver, null)
+//                .build();
+//    }
+
+//    /**
+//     * @since 1.0.1
+//     */
+//    @NonNull
+//    public static SpannableHtmlParser create(
+//            @NonNull SpannableTheme theme,
+//            @NonNull AsyncDrawable.Loader loader,
+//            @NonNull UrlProcessor urlProcessor,
+//            @NonNull LinkSpan.Resolver resolver,
+//            @NonNull ImageSizeResolver imageSizeResolver
+//    ) {
+//        return builderWithDefaults(theme, loader, urlProcessor, resolver, imageSizeResolver)
+//                .build();
+//    }
 
     /**
-     * @since 1.0.1
+     * @since 1.1.0
      */
     @NonNull
     public static SpannableHtmlParser create(
-            @NonNull SpannableTheme theme,
-            @NonNull AsyncDrawable.Loader loader,
-            @NonNull ImageSizeResolver imageSizeResolver
-    ) {
-        return builderWithDefaults(theme, loader, null, null, imageSizeResolver)
-                .build();
-    }
-
-    @NonNull
-    public static SpannableHtmlParser create(
-            @NonNull SpannableTheme theme,
-            @NonNull AsyncDrawable.Loader loader,
-            @NonNull UrlProcessor urlProcessor,
-            @NonNull LinkSpan.Resolver resolver
-    ) {
-        return builderWithDefaults(theme, loader, urlProcessor, resolver, null)
-                .build();
-    }
-
-    /**
-     * @since 1.0.1
-     */
-    @NonNull
-    public static SpannableHtmlParser create(
+            @NonNull SpannableFactory factory,
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
             @NonNull UrlProcessor urlProcessor,
             @NonNull LinkSpan.Resolver resolver,
             @NonNull ImageSizeResolver imageSizeResolver
     ) {
-        return builderWithDefaults(theme, loader, urlProcessor, resolver, imageSizeResolver)
-                .build();
+        return builderWithDefaults(factory, theme, loader, urlProcessor, resolver, imageSizeResolver).build();
     }
 
     @NonNull
@@ -76,16 +92,27 @@ public class SpannableHtmlParser {
         return new Builder();
     }
 
+    /**
+     * @since 1.1.0
+     */
     @NonNull
-    public static Builder builderWithDefaults(@NonNull SpannableTheme theme) {
-        return builderWithDefaults(theme, null, null, null, null);
+    public static Builder builderWithDefaults(@NonNull SpannableFactory factory, @NonNull SpannableTheme theme) {
+        return builderWithDefaults(
+                factory,
+                theme,
+                null,
+                null,
+                null,
+                null);
     }
 
     /**
      * Updated in 1.0.1: added imageSizeResolverArgument
+     * Updated in 1.1.0: add SpannableFactory
      */
     @NonNull
     public static Builder builderWithDefaults(
+            @NonNull SpannableFactory factory,
             @NonNull SpannableTheme theme,
             @Nullable AsyncDrawable.Loader asyncDrawableLoader,
             @Nullable UrlProcessor urlProcessor,
@@ -101,9 +128,9 @@ public class SpannableHtmlParser {
             resolver = new LinkResolverDef();
         }
 
-        final BoldProvider boldProvider = new BoldProvider();
-        final ItalicsProvider italicsProvider = new ItalicsProvider();
-        final StrikeProvider strikeProvider = new StrikeProvider();
+        final BoldProvider boldProvider = new BoldProvider(factory);
+        final ItalicsProvider italicsProvider = new ItalicsProvider(factory);
+        final StrikeProvider strikeProvider = new StrikeProvider(factory);
 
         final ImageProvider imageProvider;
         if (asyncDrawableLoader != null) {
@@ -112,7 +139,12 @@ public class SpannableHtmlParser {
                 imageSizeResolver = new ImageSizeResolverDef();
             }
 
-            imageProvider = new ImageProviderImpl(theme, asyncDrawableLoader, urlProcessor, imageSizeResolver);
+            imageProvider = new ImageProviderImpl(
+                    factory,
+                    theme,
+                    asyncDrawableLoader,
+                    urlProcessor,
+                    imageSizeResolver);
         } else {
             imageProvider = null;
         }
@@ -124,13 +156,13 @@ public class SpannableHtmlParser {
                 .simpleTag("em", italicsProvider)
                 .simpleTag("cite", italicsProvider)
                 .simpleTag("dfn", italicsProvider)
-                .simpleTag("sup", new SuperScriptProvider(theme))
-                .simpleTag("sub", new SubScriptProvider(theme))
-                .simpleTag("u", new UnderlineProvider())
+                .simpleTag("sup", new SuperScriptProvider(factory, theme))
+                .simpleTag("sub", new SubScriptProvider(factory, theme))
+                .simpleTag("u", new UnderlineProvider(factory))
                 .simpleTag("del", strikeProvider)
                 .simpleTag("s", strikeProvider)
                 .simpleTag("strike", strikeProvider)
-                .simpleTag("a", new LinkProvider(theme, urlProcessor, resolver))
+                .simpleTag("a", new LinkProvider(factory, theme, urlProcessor, resolver))
                 .imageProvider(imageProvider);
     }
 

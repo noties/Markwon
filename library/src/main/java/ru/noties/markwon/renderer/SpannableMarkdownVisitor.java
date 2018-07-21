@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.StrikethroughSpan;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -44,20 +43,8 @@ import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
-import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.spans.AsyncDrawableSpan;
-import ru.noties.markwon.spans.BlockQuoteSpan;
-import ru.noties.markwon.spans.BulletListItemSpan;
-import ru.noties.markwon.spans.CodeSpan;
-import ru.noties.markwon.spans.EmphasisSpan;
-import ru.noties.markwon.spans.HeadingSpan;
-import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.SpannableTheme;
-import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.TableRowSpan;
-import ru.noties.markwon.spans.TaskListSpan;
-import ru.noties.markwon.spans.ThematicBreakSpan;
 import ru.noties.markwon.tasklist.TaskListBlock;
 import ru.noties.markwon.tasklist.TaskListItem;
 
@@ -467,9 +454,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                     if (htmlInlineItems.size() > 0) {
                         final HtmlInlineItem item = htmlInlineItems.pop();
                         final Object span = htmlParser.getSpanForTag(item.tag);
-                        if (span != null) {
-                            setSpan(item.start, span);
-                        }
+                        setSpan(item.start, span);
                     }
                 } else {
 
@@ -501,7 +486,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             final int length = builder.length();
 
             if (span.getClass().isArray()) {
-                for (Object o: ((Object[]) span)) {
+                for (Object o : ((Object[]) span)) {
                     builder.setSpan(o, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             } else {

@@ -10,26 +10,29 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.spans.AsyncDrawableSpan;
 import ru.noties.markwon.spans.SpannableTheme;
 
 class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
 
+    private final SpannableFactory factory;
     private final SpannableTheme theme;
     private final AsyncDrawable.Loader loader;
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
 
     ImageProviderImpl(
+            @NonNull SpannableFactory factory,
             @NonNull SpannableTheme theme,
             @NonNull AsyncDrawable.Loader loader,
             @NonNull UrlProcessor urlProcessor,
             @NonNull ImageSizeResolver imageSizeResolver
     ) {
+        this.factory = factory;
         this.theme = theme;
         this.loader = loader;
         this.urlProcessor = urlProcessor;
@@ -56,11 +59,26 @@ class ImageProviderImpl implements SpannableHtmlParser.ImageProvider {
                 replacement = "\uFFFC";
             }
 
-            final AsyncDrawable drawable = new AsyncDrawable(destination, loader, imageSizeResolver, parseImageSize(attributes));
-            final AsyncDrawableSpan span = new AsyncDrawableSpan(theme, drawable);
+            final Object span = factory.image(
+                    theme,
+                    destination,
+                    loader,
+                    imageSizeResolver,
+                    parseImageSize(attributes),
+                    false);
 
             final SpannableString string = new SpannableString(replacement);
-            string.setSpan(span, 0, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if (span != null) {
+                final int length = string.length();
+                if (span.getClass().isArray()) {
+                    for (Object o : ((Object[]) span)) {
+                        string.setSpan(o, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                } else {
+                    string.setSpan(span, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
 
             spanned = string;
         } else {

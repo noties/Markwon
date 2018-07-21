@@ -3,6 +3,7 @@ package ru.noties.markwon;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.style.StrikethroughSpan;
+import android.text.style.UnderlineSpan;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
+import ru.noties.markwon.spans.SubScriptSpan;
+import ru.noties.markwon.spans.SuperScriptSpan;
 import ru.noties.markwon.spans.TableRowSpan;
 import ru.noties.markwon.spans.TaskListSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
@@ -117,5 +120,22 @@ public class SpannableFactoryDef implements SpannableFactory {
     @Override
     public Object link(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
         return new LinkSpan(theme, destination, resolver);
+    }
+
+    @Nullable
+    @Override
+    public Object superScript(@NonNull SpannableTheme theme) {
+        return new SuperScriptSpan(theme);
+    }
+
+    @Override
+    public Object subScript(@NonNull SpannableTheme theme) {
+        return new SubScriptSpan(theme);
+    }
+
+    @Nullable
+    @Override
+    public Object underline() {
+        return new UnderlineSpan();
     }
 }

@@ -5,20 +5,24 @@ import android.text.TextUtils;
 
 import java.util.Map;
 
+import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.SpannableTheme;
 
 class LinkProvider implements SpannableHtmlParser.SpanProvider {
 
+    private final SpannableFactory factory;
     private final SpannableTheme theme;
     private final UrlProcessor urlProcessor;
     private final LinkSpan.Resolver resolver;
 
     LinkProvider(
+            @NonNull SpannableFactory factory,
             @NonNull SpannableTheme theme,
             @NonNull UrlProcessor urlProcessor,
             @NonNull LinkSpan.Resolver resolver) {
+        this.factory = factory;
         this.theme = theme;
         this.urlProcessor = urlProcessor;
         this.resolver = resolver;
@@ -34,7 +38,7 @@ class LinkProvider implements SpannableHtmlParser.SpanProvider {
         if (!TextUtils.isEmpty(href)) {
 
             final String destination = urlProcessor.process(href);
-            span = new LinkSpan(theme, destination, resolver);
+            span = factory.link(theme, destination, resolver);
 
         } else {
             span = null;

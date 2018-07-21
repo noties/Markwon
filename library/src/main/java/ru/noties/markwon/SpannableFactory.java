@@ -70,4 +70,16 @@ public interface SpannableFactory {
             @NonNull SpannableTheme theme,
             @NonNull String destination,
             @NonNull LinkSpan.Resolver resolver);
+
+    // Currently used by HTML parser
+    @Nullable
+    Object superScript(@NonNull SpannableTheme theme);
+
+    // Currently used by HTML parser
+    @Nullable
+    Object subScript(@NonNull SpannableTheme theme);
+
+    // Currently used by HTML parser
+    @Nullable
+    Object underline();
 }

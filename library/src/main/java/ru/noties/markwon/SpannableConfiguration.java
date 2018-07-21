@@ -31,7 +31,7 @@ public class SpannableConfiguration {
     private final UrlProcessor urlProcessor;
     private final SpannableHtmlParser htmlParser;
     private final ImageSizeResolver imageSizeResolver;
-    private final SpannableFactory spannableFactory; // @since 1.1.0
+    private final SpannableFactory factory; // @since 1.1.0
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -41,7 +41,7 @@ public class SpannableConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.htmlParser = builder.htmlParser;
         this.imageSizeResolver = builder.imageSizeResolver;
-        this.spannableFactory = builder.spannableFactory;
+        this.factory = builder.factory;
     }
 
     @NonNull
@@ -81,7 +81,7 @@ public class SpannableConfiguration {
 
     @NonNull
     public SpannableFactory factory() {
-        return spannableFactory;
+        return factory;
     }
 
     @SuppressWarnings("unused")
@@ -95,7 +95,7 @@ public class SpannableConfiguration {
         private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
         private ImageSizeResolver imageSizeResolver;
-        private SpannableFactory spannableFactory;
+        private SpannableFactory factory;
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -150,8 +150,8 @@ public class SpannableConfiguration {
          * @since 1.1.0
          */
         @NonNull
-        public Builder spannableFactory(@NonNull SpannableFactory spannableFactory) {
-            this.spannableFactory = spannableFactory;
+        public Builder factory(@NonNull SpannableFactory factory) {
+            this.factory = factory;
             return this;
         }
 
@@ -183,12 +183,18 @@ public class SpannableConfiguration {
             }
 
             // @since 1.1.0
-            if (spannableFactory == null) {
-                spannableFactory = SpannableFactoryDef.create();
+            if (factory == null) {
+                factory = SpannableFactoryDef.create();
             }
 
             if (htmlParser == null) {
-                htmlParser = SpannableHtmlParser.create(theme, asyncDrawableLoader, urlProcessor, linkResolver, imageSizeResolver);
+                htmlParser = SpannableHtmlParser.create(
+                        factory,
+                        theme,
+                        asyncDrawableLoader,
+                        urlProcessor,
+                        linkResolver,
+                        imageSizeResolver);
             }
 
             return new SpannableConfiguration(this);
