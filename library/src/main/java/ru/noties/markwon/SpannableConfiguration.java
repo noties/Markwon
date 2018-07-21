@@ -31,6 +31,7 @@ public class SpannableConfiguration {
     private final UrlProcessor urlProcessor;
     private final SpannableHtmlParser htmlParser;
     private final ImageSizeResolver imageSizeResolver;
+    private final SpannableFactory spannableFactory; // @since 1.1.0
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -40,6 +41,7 @@ public class SpannableConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.htmlParser = builder.htmlParser;
         this.imageSizeResolver = builder.imageSizeResolver;
+        this.spannableFactory = builder.spannableFactory;
     }
 
     @NonNull
@@ -77,6 +79,11 @@ public class SpannableConfiguration {
         return imageSizeResolver;
     }
 
+    @NonNull
+    public SpannableFactory factory() {
+        return spannableFactory;
+    }
+
     @SuppressWarnings("unused")
     public static class Builder {
 
@@ -88,6 +95,7 @@ public class SpannableConfiguration {
         private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
         private ImageSizeResolver imageSizeResolver;
+        private SpannableFactory spannableFactory;
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -138,6 +146,15 @@ public class SpannableConfiguration {
             return this;
         }
 
+        /**
+         * @since 1.1.0
+         */
+        @NonNull
+        public Builder spannableFactory(@NonNull SpannableFactory spannableFactory) {
+            this.spannableFactory = spannableFactory;
+            return this;
+        }
+
         @NonNull
         public SpannableConfiguration build() {
 
@@ -163,6 +180,11 @@ public class SpannableConfiguration {
 
             if (imageSizeResolver == null) {
                 imageSizeResolver = new ImageSizeResolverDef();
+            }
+
+            // @since 1.1.0
+            if (spannableFactory == null) {
+                spannableFactory = SpannableFactoryDef.create();
             }
 
             if (htmlParser == null) {

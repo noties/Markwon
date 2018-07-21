@@ -42,6 +42,7 @@ import java.util.List;
 
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
@@ -52,6 +53,7 @@ import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.HeadingSpan;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
+import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.TableRowSpan;
 import ru.noties.markwon.spans.TaskListSpan;
@@ -65,6 +67,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     private final SpannableConfiguration configuration;
     private final SpannableBuilder builder;
     private final Deque<HtmlInlineItem> htmlInlineItems;
+
+    private final SpannableTheme theme;
+    private final SpannableFactory factory;
 
     private int blockQuoteIndent;
     private int listLevel;
@@ -80,6 +85,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         this.configuration = configuration;
         this.builder = builder;
         this.htmlInlineItems = new ArrayDeque<>(2);
+
+        this.theme = configuration.theme();
+        this.factory = configuration.factory();
     }
 
     @Override
@@ -91,14 +99,14 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(StrongEmphasis strongEmphasis) {
         final int length = builder.length();
         visitChildren(strongEmphasis);
-        setSpan(length, new StrongEmphasisSpan());
+        setSpan(length, factory.strongEmphasis());
     }
 
     @Override
     public void visit(Emphasis emphasis) {
         final int length = builder.length();
         visitChildren(emphasis);
-        setSpan(length, new EmphasisSpan());
+        setSpan(length, factory.emphasis());
     }
 
     @Override
@@ -115,7 +123,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         visitChildren(blockQuote);
 
-        setSpan(length, new BlockQuoteSpan(configuration.theme()));
+        setSpan(length, factory.blockQuote(theme));
 
         blockQuoteIndent -= 1;
 
@@ -136,10 +144,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         builder.append(code.getLiteral());
         builder.append('\u00a0');
 
-        setSpan(length, new CodeSpan(
-                configuration.theme(),
-                false
-        ));
+        setSpan(length, factory.code(theme, false));
     }
 
     @Override
@@ -174,10 +179,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         );
         builder.append('\u00a0').append('\n');
 
-        setSpan(length, new CodeSpan(
-                configuration.theme(),
-                true
-        ));
+        setSpan(length, factory.code(theme, true));
 
         newLine();
         builder.append('\n');
@@ -217,11 +219,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(listItem);
 
-            // todo| in order to provide real RTL experience there must be a way to provide this string
-            setSpan(length, new OrderedListItemSpan(
-                    configuration.theme(),
-                    String.valueOf(start) + "." + '\u00a0'
-            ));
+            setSpan(length, factory.orderedListItem(theme, start));
 
             // after we have visited the children increment start number
             final OrderedList orderedList = (OrderedList) parent;
@@ -231,10 +229,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(listItem);
 
-            setSpan(length, new BulletListItemSpan(
-                    configuration.theme(),
-                    listLevel - 1
-            ));
+            setSpan(length, factory.bulletListItem(theme, listLevel - 1));
         }
 
         blockQuoteIndent -= 1;
@@ -250,7 +245,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         builder.append(' '); // without space it won't render
-        setSpan(length, new ThematicBreakSpan(configuration.theme()));
+
+        setSpan(length, factory.thematicBreak(theme));
 
         newLine();
         builder.append('\n');
@@ -263,7 +259,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         visitChildren(heading);
-        setSpan(length, new HeadingSpan(configuration.theme(), heading.getLevel()));
+        setSpan(length, factory.heading(theme, heading.getLevel()));
 
         newLine();
 
@@ -305,7 +301,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             final int length = builder.length();
             visitChildren(customNode);
-            setSpan(length, new StrikethroughSpan());
+            setSpan(length, factory.strikethrough());
 
         } else if (customNode instanceof TaskListItem) {
 
@@ -319,11 +315,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             visitChildren(customNode);
 
-            setSpan(length, new TaskListSpan(
-                    configuration.theme(),
-                    blockQuoteIndent,
-                    listItem.done()
-            ));
+            setSpan(length, factory.taskListItem(theme, blockQuoteIndent, listItem.done()));
 
             newLine();
 
@@ -356,12 +348,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                 // trimmed from the final result
                 builder.append('\u00a0');
 
-                final TableRowSpan span = new TableRowSpan(
-                        configuration.theme(),
+                final Object span = factory.tableRow(
+                        theme,
                         pendingTableRow,
                         tableRowIsHeader,
-                        tableRows % 2 == 1
-                );
+                        tableRows % 2 == 1);
 
                 tableRows = tableRowIsHeader
                         ? 0
@@ -434,15 +425,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         setSpan(
                 length,
-                new AsyncDrawableSpan(
-                        configuration.theme(),
-                        new AsyncDrawable(
-                                destination,
-                                configuration.asyncDrawableLoader(),
-                                configuration.imageSizeResolver(),
-                                null
-                        ),
-                        AsyncDrawableSpan.ALIGN_BOTTOM,
+                factory.image(
+                        theme,
+                        destination,
+                        configuration.asyncDrawableLoader(),
+                        configuration.imageSizeResolver(),
+                        null,
                         link
                 )
         );
@@ -504,11 +492,22 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final int length = builder.length();
         visitChildren(link);
         final String destination = configuration.urlProcessor().process(link.getDestination());
-        setSpan(length, new LinkSpan(configuration.theme(), destination, configuration.linkResolver()));
+        setSpan(length, factory.link(theme, destination, configuration.linkResolver()));
     }
 
-    private void setSpan(int start, @NonNull Object span) {
-        builder.setSpan(span, start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    private void setSpan(int start, @Nullable Object span) {
+        if (span != null) {
+
+            final int length = builder.length();
+
+            if (span.getClass().isArray()) {
+                for (Object o: ((Object[]) span)) {
+                    builder.setSpan(o, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            } else {
+                builder.setSpan(span, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
     }
 
     private void newLine() {
