@@ -25,8 +25,7 @@ import ru.noties.prism4j.Prism4j;
 import ru.noties.prism4j.annotations.PrismBundle;
 
 @Module
-@PrismBundle(include = {"c", "clojure", "cpp", "csharp", "css", "dart", "git", "go", "java",
-        "javascript", "json", "kotlin", "latex", "makefile", "markup", "python", "sql", "yaml"})
+@PrismBundle(includeAll = true)
 class AppModule {
 
     private final App app;

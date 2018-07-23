@@ -50,6 +50,6 @@ ext {
     ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.14'
     OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
 
-    PRISM_4J = 'ru.noties:prism4j:1.0.0'
-    PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.0.1'
+    PRISM_4J = 'ru.noties:prism4j:1.1.0'
+    PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.1.0'
 }
