@@ -25,9 +25,9 @@ public class Themes {
         // we have only 2 themes and Light one is default
         final int theme;
         if (dark) {
-            theme = R.style.AppThemeBaseDark;
+            theme = R.style.AppThemeDark;
         } else {
-            theme = R.style.AppThemeBaseLight;
+            theme = R.style.AppThemeLight;
         }
 
         final Context appContext = context.getApplicationContext();
@@ -42,5 +42,9 @@ public class Themes {
         preferences.edit()
                 .putBoolean(KEY_THEME_DARK, newValue)
                 .apply();
+    }
+
+    public boolean isLight() {
+        return !preferences.getBoolean(KEY_THEME_DARK, false);
     }
 }

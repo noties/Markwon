@@ -14,6 +14,12 @@ import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
+import ru.noties.markwon.syntax.Prism4jTheme;
+import ru.noties.markwon.syntax.Prism4jThemeDarkula;
+import ru.noties.markwon.syntax.Prism4jThemeDefault;
+import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
 public class MarkdownRenderer {
@@ -31,6 +37,15 @@ public class MarkdownRenderer {
     @Inject
     Handler handler;
 
+    @Inject
+    Prism4j prism4j;
+
+    @Inject
+    Prism4jThemeDefault prism4jThemeDefault;
+
+    @Inject
+    Prism4jThemeDarkula prism4JThemeDarkula;
+
     private Future<?> task;
 
     @Inject
@@ -39,10 +54,15 @@ public class MarkdownRenderer {
 
     public void render(
             @NonNull final Context context,
+            final boolean isLightTheme,
             @Nullable final Uri uri,
             @NonNull final String markdown,
             @NonNull final MarkdownReadyListener listener) {
+
+        // todo: create prism4j theme factory (accepting light/dark argument)
+
         cancel();
+
         task = service.submit(new Runnable() {
             @Override
             public void run() {
@@ -54,9 +74,28 @@ public class MarkdownRenderer {
                     urlProcessor = new UrlProcessorRelativeToAbsolute(uri.toString());
                 }
 
+                final Prism4jTheme prism4jTheme = isLightTheme
+                        ? prism4jThemeDefault
+                        : prism4JThemeDarkula;
+
+                final int background = isLightTheme
+                        ? prism4jTheme.background()
+                        : 0x0Fffffff;
+
+                final GifPlaceholder gifPlaceholder = new GifPlaceholder(
+                        context.getResources().getDrawable(R.drawable.ic_play_circle_filled_18dp_white),
+                        0x20000000
+                );
+
                 final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
                         .asyncDrawableLoader(loader)
                         .urlProcessor(urlProcessor)
+                        .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
+                        .theme(SpannableTheme.builderWithDefaults(context)
+                                .codeBackgroundColor(background)
+                                .codeTextColor(prism4jTheme.textColor())
+                                .build())
+                        .factory(new GifAwareSpannableFactory(gifPlaceholder))
                         .build();
 
                 final long start = SystemClock.uptimeMillis();

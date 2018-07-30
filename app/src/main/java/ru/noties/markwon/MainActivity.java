@@ -28,8 +28,11 @@ public class MainActivity extends Activity {
     @Inject
     UriProcessor uriProcessor;
 
+    @Inject
+    GifProcessor gifProcessor;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         App.component(this)
@@ -64,10 +67,14 @@ public class MainActivity extends Activity {
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override
             public void apply(final String text) {
-                markdownRenderer.render(MainActivity.this, uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
+                markdownRenderer.render(MainActivity.this, themes.isLight(), uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
                     @Override
                     public void onMarkdownReady(CharSequence markdown) {
+
                         Markwon.setText(textView, markdown, BetterLinkMovementMethod.getInstance());
+
+                        gifProcessor.process(textView);
+
                         Views.setVisible(progress, false);
                     }
                 });

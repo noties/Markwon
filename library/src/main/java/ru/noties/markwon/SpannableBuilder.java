@@ -166,7 +166,7 @@ public class SpannableBuilder {
         final int length = impl.length();
         if (length > 0) {
             int amount = 0;
-            for (int i = length - 1; i >=0 ; i--) {
+            for (int i = length - 1; i >= 0; i--) {
                 if (Character.isWhitespace(impl.charAt(i))) {
                     amount += 1;
                 } else {
@@ -192,18 +192,35 @@ public class SpannableBuilder {
             final boolean reverse = spanned instanceof SpannedReversed;
 
             final Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
+            final int length = spans != null
+                    ? spans.length
+                    : 0;
 
-            iterate(reverse, spans, new Action() {
-                @Override
-                public void apply(Object o) {
-                    setSpan(
-                            o,
-                            index + spanned.getSpanStart(o),
-                            index + spanned.getSpanEnd(o),
-                            spanned.getSpanFlags(o)
-                    );
+            if (length > 0) {
+                if (reverse) {
+                    Object o;
+                    for (int i = length - 1; i >= 0; i--) {
+                        o = spans[i];
+                        setSpan(
+                                o,
+                                index + spanned.getSpanStart(o),
+                                index + spanned.getSpanEnd(o),
+                                spanned.getSpanFlags(o)
+                        );
+                    }
+                } else {
+                    Object o;
+                    for (int i = 0; i < length; i++) {
+                        o = spans[i];
+                        setSpan(
+                                o,
+                                index + spanned.getSpanStart(o),
+                                index + spanned.getSpanEnd(o),
+                                spanned.getSpanFlags(o)
+                        );
+                    }
                 }
-            });
+            }
         }
     }
 
@@ -219,27 +236,6 @@ public class SpannableBuilder {
             this.start = start;
             this.end = end;
             this.flags = flags;
-        }
-    }
-
-    private interface Action {
-        void apply(Object o);
-    }
-
-    private static void iterate(boolean reverse, @Nullable Object[] array, @NonNull Action action) {
-        final int length = array != null
-                ? array.length
-                : 0;
-        if (length > 0) {
-            if (reverse) {
-                for (int i = length - 1; i >= 0; i--) {
-                    action.apply(array[i]);
-                }
-            } else {
-                for (int i = 0; i < length; i++) {
-                    action.apply(array[i]);
-                }
-            }
         }
     }
 }

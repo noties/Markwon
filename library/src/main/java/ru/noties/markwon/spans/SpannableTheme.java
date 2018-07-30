@@ -12,8 +12,12 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Size;
 import android.text.TextPaint;
 import android.util.TypedValue;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableTheme {
@@ -173,6 +177,15 @@ public class SpannableTheme {
     // by default, text color with `HEADING_DEF_BREAK_COLOR_ALPHA` applied alpha
     protected final int headingBreakColor;
 
+    // by default, whatever typeface is set on the TextView
+    // @since 1.1.0
+    protected final Typeface headingTypeface;
+
+    // by default, we use standard multipliers from the HTML spec (see HEADING_SIZES for values).
+    // this library supports 6 heading sizes, so make sure the array you pass here has 6 elements.
+    // @since 1.1.0
+    protected final float[] headingTextSizeMultipliers;
+
     // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
     protected final float scriptTextSizeRatio;
 
@@ -214,6 +227,8 @@ public class SpannableTheme {
         this.codeTextSize = builder.codeTextSize;
         this.headingBreakHeight = builder.headingBreakHeight;
         this.headingBreakColor = builder.headingBreakColor;
+        this.headingTypeface = builder.headingTypeface;
+        this.headingTextSizeMultipliers = builder.headingTextSizeMultipliers;
         this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
@@ -368,8 +383,23 @@ public class SpannableTheme {
     }
 
     public void applyHeadingTextStyle(@NonNull Paint paint, @IntRange(from = 1, to = 6) int level) {
-        paint.setFakeBoldText(true);
-        paint.setTextSize(paint.getTextSize() * HEADING_SIZES[level - 1]);
+        if (headingTypeface == null) {
+            paint.setFakeBoldText(true);
+        } else {
+            paint.setTypeface(headingTypeface);
+        }
+        final float[] textSizes = headingTextSizeMultipliers != null
+                ? headingTextSizeMultipliers
+                : HEADING_SIZES;
+
+        if (textSizes != null && textSizes.length >= level) {
+            paint.setTextSize(paint.getTextSize() * textSizes[level - 1]);
+        } else {
+            throw new IllegalStateException(String.format(
+                    Locale.US,
+                    "Supplied heading level: %d is invalid, where configured heading sizes are: `%s`",
+                    level, Arrays.toString(textSizes)));
+        }
     }
 
     public void applyHeadingBreakStyle(@NonNull Paint paint) {
@@ -491,6 +521,8 @@ public class SpannableTheme {
         private int codeTextSize;
         private int headingBreakHeight = -1;
         private int headingBreakColor;
+        private Typeface headingTypeface;
+        private float[] headingTextSizeMultipliers;
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
@@ -520,6 +552,8 @@ public class SpannableTheme {
             this.codeTextSize = theme.codeTextSize;
             this.headingBreakHeight = theme.headingBreakHeight;
             this.headingBreakColor = theme.headingBreakColor;
+            this.headingTypeface = theme.headingTypeface;
+            this.headingTextSizeMultipliers = theme.headingTextSizeMultipliers;
             this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
@@ -631,6 +665,29 @@ public class SpannableTheme {
         @NonNull
         public Builder headingBreakColor(@ColorInt int headingBreakColor) {
             this.headingBreakColor = headingBreakColor;
+            return this;
+        }
+
+        /**
+         * @param headingTypeface Typeface to use for heading elements
+         * @return self
+         * @since 1.1.0
+         */
+        @NonNull
+        public Builder headingTypeface(@NonNull Typeface headingTypeface) {
+            this.headingTypeface = headingTypeface;
+            return this;
+        }
+
+        /**
+         * @param headingTextSizeMultipliers an array of multipliers values for heading elements.
+         *                                   The base value for this multipliers is TextView\'s text size
+         * @return self
+         * @since 1.1.0
+         */
+        @NonNull
+        public Builder headingTextSizeMultipliers(@Size(6) @NonNull float[] headingTextSizeMultipliers) {
+            this.headingTextSizeMultipliers = headingTextSizeMultipliers;
             return this;
         }
 

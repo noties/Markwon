@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion TARGET_SDK
+    buildToolsVersion BUILD_TOOLS
+
+    defaultConfig {
+        minSdkVersion MIN_SDK
+        targetSdkVersion TARGET_SDK
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+    api SUPPORT_ANNOTATIONS
+    api PRISM_4J
+    api project(':library')
+}
+
+afterEvaluate {
+    generateReleaseBuildConfig.enabled = false
+}
+
+if (hasProperty('release')) {
+    if (hasProperty('local')) {
+        ext.RELEASE_REPOSITORY_URL = LOCAL_MAVEN_URL
+        ext.SNAPSHOT_REPOSITORY_URL = LOCAL_MAVEN_URL
+    }
+    apply from: 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
+}

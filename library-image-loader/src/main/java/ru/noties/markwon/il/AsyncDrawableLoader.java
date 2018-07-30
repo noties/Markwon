@@ -1,28 +1,22 @@
 package ru.noties.markwon.il;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGParseException;
+import android.support.annotation.Nullable;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,22 +28,21 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import pl.droidsonroids.gif.GifDrawable;
 import ru.noties.markwon.spans.AsyncDrawable;
 
 public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
+    @NonNull
     public static AsyncDrawableLoader create() {
         return builder().build();
     }
 
+    @NonNull
     public static AsyncDrawableLoader.Builder builder() {
         return new Builder();
     }
 
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
-    private static final String CONTENT_TYPE_SVG = "image/svg+xml";
-    private static final String CONTENT_TYPE_GIF = "image/gif";
 
     private static final String FILE_ANDROID_ASSETS = "android_asset";
 
@@ -58,6 +51,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
     private final ExecutorService executorService;
     private final Handler mainThread;
     private final Drawable errorDrawable;
+    private final List<MediaDecoder> mediaDecoders;
 
     private final Map<String, Future<?>> requests;
 
@@ -67,6 +61,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         this.executorService = builder.executorService;
         this.mainThread = new Handler(Looper.getMainLooper());
         this.errorDrawable = builder.errorDrawable;
+        this.mediaDecoders = builder.mediaDecoders;
         this.requests = new HashMap<>(3);
     }
 
@@ -105,12 +100,15 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             public void run() {
 
                 final Item item;
+                final boolean isFromFile;
 
                 final Uri uri = Uri.parse(destination);
                 if ("file".equals(uri.getScheme())) {
                     item = fromFile(uri);
+                    isFromFile = true;
                 } else {
                     item = fromNetwork(destination);
+                    isFromFile = false;
                 }
 
                 Drawable result = null;
@@ -118,13 +116,15 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 if (item != null
                         && item.inputStream != null) {
                     try {
-                        if (CONTENT_TYPE_SVG.equals(item.type)) {
-                            result = handleSvg(item.inputStream);
-                        } else if (CONTENT_TYPE_GIF.equals(item.type)) {
-                            result = handleGif(item.inputStream);
-                        } else {
-                            result = handleSimple(item.inputStream);
+
+                        final MediaDecoder mediaDecoder = isFromFile
+                                ? mediaDecoderFromFile(item.fileName)
+                                : mediaDecoderFromContentType(item.contentType);
+
+                        if (mediaDecoder != null) {
+                            result = mediaDecoder.decode(item.inputStream);
                         }
+
                     } finally {
                         try {
                             item.inputStream.close();
@@ -157,7 +157,8 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         });
     }
 
-    private Item fromFile(Uri uri) {
+    @Nullable
+    private Item fromFile(@NonNull Uri uri) {
 
         final List<String> segments = uri.getPathSegments();
         if (segments == null
@@ -167,19 +168,10 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         }
 
         final Item out;
-        final String type;
         final InputStream inputStream;
 
         final boolean assets = FILE_ANDROID_ASSETS.equals(segments.get(0));
-        final String lastSegment = uri.getLastPathSegment();
-
-        if (lastSegment.endsWith(".svg")) {
-            type = CONTENT_TYPE_SVG;
-        } else if (lastSegment.endsWith(".gif")) {
-            type = CONTENT_TYPE_GIF;
-        } else {
-            type = null;
-        }
+        final String fileName = uri.getLastPathSegment();
 
         if (assets) {
             final StringBuilder path = new StringBuilder();
@@ -208,7 +200,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         }
 
         if (inputStream != null) {
-            out = new Item(type, inputStream);
+            out = new Item(fileName, null, inputStream);
         } else {
             out = null;
         }
@@ -216,7 +208,8 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         return out;
     }
 
-    private Item fromNetwork(String destination) {
+    @Nullable
+    private Item fromNetwork(@NonNull String destination) {
 
         Item out = null;
 
@@ -237,15 +230,8 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             if (body != null) {
                 final InputStream inputStream = body.byteStream();
                 if (inputStream != null) {
-                    final String type;
                     final String contentType = response.header(HEADER_CONTENT_TYPE);
-                    if (!TextUtils.isEmpty(contentType)
-                            && contentType.startsWith(CONTENT_TYPE_SVG)) {
-                        type = CONTENT_TYPE_SVG;
-                    } else {
-                        type = contentType;
-                    }
-                    out = new Item(type, inputStream);
+                    out = new Item(null, contentType, inputStream);
                 }
             }
         }
@@ -253,87 +239,31 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         return out;
     }
 
-    private Drawable handleSvg(InputStream stream) {
+    @Nullable
+    private MediaDecoder mediaDecoderFromFile(@NonNull String fileName) {
 
-        final Drawable out;
+        MediaDecoder out = null;
 
-        SVG svg = null;
-        try {
-            svg = SVG.getFromInputStream(stream);
-        } catch (SVGParseException e) {
-            e.printStackTrace();
-        }
-
-        if (svg == null) {
-            out = null;
-        } else {
-
-            final float w = svg.getDocumentWidth();
-            final float h = svg.getDocumentHeight();
-            final float density = resources.getDisplayMetrics().density;
-
-            final int width = (int) (w * density + .5F);
-            final int height = (int) (h * density + .5F);
-
-            final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
-            final Canvas canvas = new Canvas(bitmap);
-            canvas.scale(density, density);
-            svg.renderToCanvas(canvas);
-
-            out = new BitmapDrawable(resources, bitmap);
-            DrawableUtils.intrinsicBounds(out);
-        }
-
-        return out;
-    }
-
-    private Drawable handleGif(InputStream stream) {
-
-        Drawable out = null;
-
-        final byte[] bytes = readBytes(stream);
-        if (bytes != null) {
-            try {
-                out = new GifDrawable(bytes);
-                DrawableUtils.intrinsicBounds(out);
-            } catch (IOException e) {
-                e.printStackTrace();
+        for (MediaDecoder mediaDecoder : mediaDecoders) {
+            if (mediaDecoder.canDecodeByFileName(fileName)) {
+                out = mediaDecoder;
+                break;
             }
         }
 
         return out;
     }
 
-    private Drawable handleSimple(InputStream stream) {
+    @Nullable
+    private MediaDecoder mediaDecoderFromContentType(@Nullable String contentType) {
 
-        final Drawable out;
+        MediaDecoder out = null;
 
-        final Bitmap bitmap = BitmapFactory.decodeStream(stream);
-        if (bitmap != null) {
-            out = new BitmapDrawable(resources, bitmap);
-            DrawableUtils.intrinsicBounds(out);
-        } else {
-            out = null;
-        }
-
-        return out;
-    }
-
-    private static byte[] readBytes(InputStream stream) {
-
-        byte[] out = null;
-
-        try {
-            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            final int length = 1024 * 8;
-            final byte[] buffer = new byte[length];
-            int read;
-            while ((read = stream.read(buffer, 0, length)) != -1) {
-                outputStream.write(buffer, 0, read);
+        for (MediaDecoder mediaDecoder : mediaDecoders) {
+            if (mediaDecoder.canDecodeByContentType(contentType)) {
+                out = mediaDecoder;
+                break;
             }
-            out = outputStream.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return out;
@@ -346,47 +276,93 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         private ExecutorService executorService;
         private Drawable errorDrawable;
 
+        // @since 1.1.0
+        private final List<MediaDecoder> mediaDecoders = new ArrayList<>(3);
+
+
+        @NonNull
         public Builder client(@NonNull OkHttpClient client) {
             this.client = client;
             return this;
         }
 
+        /**
+         * Supplied resources argument will be used to open files from assets directory
+         * and to create default {@link MediaDecoder}\'s which require resources instance
+         *
+         * @return self
+         */
+        @NonNull
         public Builder resources(@NonNull Resources resources) {
             this.resources = resources;
             return this;
         }
 
-        public Builder executorService(ExecutorService executorService) {
+        @NonNull
+        public Builder executorService(@NonNull ExecutorService executorService) {
             this.executorService = executorService;
             return this;
         }
 
-        public Builder errorDrawable(Drawable errorDrawable) {
+        @NonNull
+        public Builder errorDrawable(@NonNull Drawable errorDrawable) {
             this.errorDrawable = errorDrawable;
             return this;
         }
 
+        @NonNull
+        public Builder mediaDecoders(@NonNull List<MediaDecoder> mediaDecoders) {
+            this.mediaDecoders.clear();
+            this.mediaDecoders.addAll(mediaDecoders);
+            return this;
+        }
+
+        @NonNull
+        public Builder mediaDecoders(MediaDecoder... mediaDecoders) {
+            this.mediaDecoders.clear();
+            if (mediaDecoders != null
+                    && mediaDecoders.length > 0) {
+                Collections.addAll(this.mediaDecoders, mediaDecoders);
+            }
+            return this;
+        }
+
+        @NonNull
         public AsyncDrawableLoader build() {
+
             if (client == null) {
                 client = new OkHttpClient();
             }
+
             if (resources == null) {
                 resources = Resources.getSystem();
             }
+
             if (executorService == null) {
                 // we will use executor from okHttp
                 executorService = client.dispatcher().executorService();
             }
+
+            // add default media decoders if not specified
+            if (mediaDecoders.size() == 0) {
+                mediaDecoders.add(SvgMediaDecoder.create(resources));
+                mediaDecoders.add(GifMediaDecoder.create(true));
+                mediaDecoders.add(ImageMediaDecoder.create(resources));
+            }
+
             return new AsyncDrawableLoader(this);
         }
     }
 
     private static class Item {
-        final String type;
+
+        final String fileName;
+        final String contentType;
         final InputStream inputStream;
 
-        Item(String type, InputStream inputStream) {
-            this.type = type;
+        Item(@Nullable String fileName, @Nullable String contentType, @Nullable InputStream inputStream) {
+            this.fileName = fileName;
+            this.contentType = contentType;
             this.inputStream = inputStream;
         }
     }
