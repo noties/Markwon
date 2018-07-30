@@ -2,9 +2,9 @@
 
 This is a simple module to add **syntax-highlight** functionality to your markdown rendered with Markwon library. It is based on [Prism4j](https://github.com/noties/Prism4j) so lead there to understand how to configure `Prism4j` instance.
 
-![theme-default](/art/markwon-syntax-default.png)
+![theme-default](./art/markwon-syntax-default.png)
 
-![theme-darkula](/art/markwon-syntax-darkula.png)
+![theme-darkula](./art/markwon-syntax-darkula.png)
 
 ---
 

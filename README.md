@@ -13,10 +13,10 @@
 
 ## Installation
 ```groovy
-implementation 'ru.noties:markwon:1.0.6'
-implementation 'ru.noties:markwon-image-loader:1.0.6' // optional
-implementation 'ru.noties:markwon-syntax:x.x.x' // optional
-implementation 'ru.noties:markwon-view:1.0.6' // optional
+implementation 'ru.noties:markwon:1.1.0'
+implementation 'ru.noties:markwon-image-loader:1.1.0' // optional
+implementation 'ru.noties:markwon-syntax:1.1.0' // optional
+implementation 'ru.noties:markwon-view:1.1.0' // optional
 ```
 
 ### Snapshot
@@ -148,6 +148,8 @@ Please refer to [SpannableConfiguration] document for more info
 Starting with version `1.1.0` there is an artifact (`markwon-syntax`) that allows you to have syntax highlight functionality.
 It is based on [Prism4j](https://github.com/noties/Prism4j) project. It contains 2 builtin themes:
 `Default` (light, `Prism4jThemeDefault`) and `Darkula` (dark, `Prism4jThemeDarkula`).
+
+[library-syntax](./library-syntax/)
 
 ---
 
