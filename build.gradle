@@ -29,6 +29,11 @@ task wrapper(type: Wrapper) {
     distributionType 'all'
 }
 
+if (hasProperty('local')) {
+    ext.RELEASE_REPOSITORY_URL = LOCAL_MAVEN_URL
+    ext.SNAPSHOT_REPOSITORY_URL = LOCAL_MAVEN_URL
+}
+
 ext {
 
     // Config
