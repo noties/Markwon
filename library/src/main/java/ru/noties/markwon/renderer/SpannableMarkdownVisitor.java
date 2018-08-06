@@ -256,8 +256,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
-        // at first here was a new line, but here should be a space char
-        builder.append(' ');
+        // @since 1.1.1 there is an option to treat soft break as a hard break (thus adding new line)
+        if (configuration.softBreakAddsNewLine()) {
+            newLine();
+        } else {
+            builder.append(' ');
+        }
     }
 
     @Override
