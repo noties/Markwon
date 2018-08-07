@@ -15,7 +15,7 @@ android {
 
 dependencies {
     api project(':library')
-    compileOnly SUPPORT_APP_COMPAT
+    implementation SUPPORT_APP_COMPAT
 }
 
 afterEvaluate {
