@@ -2,6 +2,7 @@ package ru.noties.markwon.renderer;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.ReverseSpannableStringBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
@@ -52,7 +53,7 @@ import ru.noties.markwon.tasklist.TaskListItem;
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final SpannableConfiguration configuration;
-    private final SpannableBuilder builder;
+    private final SpannableStringBuilder builder;
     private final Deque<HtmlInlineItem> htmlInlineItems;
 
     private final SpannableTheme theme;
@@ -67,7 +68,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     public SpannableMarkdownVisitor(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder
+            @NonNull SpannableStringBuilder builder
     ) {
         this.configuration = configuration;
         this.builder = builder;
@@ -256,8 +257,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
-        // at first here was a new line, but here should be a space char
-        builder.append(' ');
+        // @since 1.1.1 there is an option to treat soft break as a hard break (thus adding new line)
+        if (configuration.softBreakAddsNewLine()) {
+            newLine();
+        } else {
+            builder.append(' ');
+        }
     }
 
     @Override
@@ -359,10 +364,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             if (pendingTableRow == null) {
                 pendingTableRow = new ArrayList<>(2);
             }
-
             pendingTableRow.add(new TableRowSpan.Cell(
                     tableCellAlignment(cell.getAlignment()),
-                    builder.removeFromEnd(length)
+                    removeFromEnd(length)
             ));
 
             tableRowIsHeader = cell.isHeader();
@@ -373,6 +377,22 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         }
         return handled;
     }
+
+    @NonNull
+    private CharSequence removeFromEnd(int start) {
+
+        // this method is not intended to be used by clients
+        // it's a workaround to support tables
+
+        final int end = builder.length();
+
+        // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
+        final SpannableStringBuilder impl = new ReverseSpannableStringBuilder(builder, start, end);
+        builder.delete(start, end);
+
+        return impl;
+    }
+
 
     @Override
     public void visit(Paragraph paragraph) {
@@ -497,7 +517,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private void newLine() {
         if (builder.length() > 0
-                && '\n' != builder.lastChar()) {
+                && '\n' != builder.charAt(builder.length() - 1)) {
             builder.append('\n');
         }
     }

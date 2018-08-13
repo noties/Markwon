@@ -30,9 +30,5 @@ afterEvaluate {
 }
 
 if (hasProperty('release')) {
-    if (hasProperty('local')) {
-        ext.RELEASE_REPOSITORY_URL = LOCAL_MAVEN_URL
-        ext.SNAPSHOT_REPOSITORY_URL = LOCAL_MAVEN_URL
-    }
     apply from: 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
 }
