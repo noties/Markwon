@@ -57,6 +57,9 @@ public interface SpannableFactory {
             boolean isOdd);
 
     @Nullable
+    Object paragraph(boolean inTightList);
+
+    @Nullable
     Object image(
             @NonNull SpannableTheme theme,
             @NonNull String destination,

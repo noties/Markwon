@@ -105,6 +105,12 @@ public class SpannableFactoryDef implements SpannableFactory {
 
     @Nullable
     @Override
+    public Object paragraph(boolean inTightList) {
+        return null;
+    }
+
+    @Nullable
+    @Override
     public Object image(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new AsyncDrawableSpan(
                 theme,
