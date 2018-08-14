@@ -206,6 +206,14 @@ public class SpannableTheme {
     // by default paint.color * TABLE_ODD_ROW_DEF_ALPHA
     protected final int tableOddRowBackgroundColor;
 
+    // @since 1.1.1
+    // by default no background
+    protected final int tableEventRowBackgroundColor;
+
+    // @since 1.1.1
+    // by default no background
+    protected final int tableHeaderRowBackgroundColor;
+
     // drawable that will be used to render checkbox (should be stateful)
     // TaskListDrawable can be used
     protected final Drawable taskListDrawable;
@@ -236,6 +244,8 @@ public class SpannableTheme {
         this.tableBorderColor = builder.tableBorderColor;
         this.tableBorderWidth = builder.tableBorderWidth;
         this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
+        this.tableEventRowBackgroundColor = builder.tableEvenRowBackgroundColor;
+        this.tableHeaderRowBackgroundColor = builder.tableHeaderRowBackgroundColor;
         this.taskListDrawable = builder.taskListDrawable;
     }
 
@@ -494,6 +504,23 @@ public class SpannableTheme {
     }
 
     /**
+     * @since 1.1.1
+     */
+    public void applyTableEvenRowStyle(@NonNull Paint paint) {
+        // by default to background to even row
+        paint.setColor(tableEventRowBackgroundColor);
+        paint.setStyle(Paint.Style.FILL);
+    }
+
+    /**
+     * @since 1.1.1
+     */
+    public void applyTableHeaderRowStyle(@NonNull Paint paint) {
+        paint.setColor(tableHeaderRowBackgroundColor);
+        paint.setStyle(Paint.Style.FILL);
+    }
+
+    /**
      * @return a Drawable to be used as a checkbox indication in task lists
      * @since 1.0.1
      */
@@ -530,6 +557,8 @@ public class SpannableTheme {
         private int tableBorderColor;
         private int tableBorderWidth = -1;
         private int tableOddRowBackgroundColor;
+        private int tableEvenRowBackgroundColor; // @since 1.1.1
+        private int tableHeaderRowBackgroundColor; // @since 1.1.1
         private Drawable taskListDrawable;
 
         Builder() {
@@ -730,6 +759,24 @@ public class SpannableTheme {
         @NonNull
         public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor) {
             this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
+            return this;
+        }
+
+        /**
+         * @since 1.1.1
+         */
+        @NonNull
+        public Builder tableEvenRowBackgroundColor(@ColorInt int tableEvenRowBackgroundColor) {
+            this.tableEvenRowBackgroundColor = tableEvenRowBackgroundColor;
+            return this;
+        }
+
+        /**
+         * @since 1.1.1
+         */
+        @NonNull
+        public Builder tableHeaderRowBackgroundColor(int tableHeaderRowBackgroundColor) {
+            this.tableHeaderRowBackgroundColor = tableHeaderRowBackgroundColor;
             return this;
         }
 

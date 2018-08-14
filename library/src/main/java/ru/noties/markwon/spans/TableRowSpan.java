@@ -157,15 +157,28 @@ public class TableRowSpan extends ReplacementSpan {
         // feels like magic...
         final int heightDiff = (bottom - top - height) / 4;
 
-        if (odd) {
-            final int save = canvas.save();
-            try {
-                rect.set(0, 0, width, bottom - top);
+        // @since 1.1.1
+        // draw backgrounds
+        {
+            if (header) {
+                theme.applyTableHeaderRowStyle(this.paint);
+            } else if (odd) {
                 theme.applyTableOddRowStyle(this.paint);
-                canvas.translate(x, top - heightDiff);
-                canvas.drawRect(rect, this.paint);
-            } finally {
-                canvas.restoreToCount(save);
+            } else {
+                // even
+                theme.applyTableEvenRowStyle(this.paint);
+            }
+
+            // if present (0 is transparent)
+            if (this.paint.getColor() != 0) {
+                final int save = canvas.save();
+                try {
+                    rect.set(0, 0, width, bottom - top);
+                    canvas.translate(x, top - heightDiff);
+                    canvas.drawRect(rect, this.paint);
+                } finally {
+                    canvas.restoreToCount(save);
+                }
             }
         }
 
