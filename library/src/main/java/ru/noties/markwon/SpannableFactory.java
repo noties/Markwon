@@ -56,6 +56,9 @@ public interface SpannableFactory {
             boolean isHeader,
             boolean isOdd);
 
+    /**
+     * @since 1.1.1
+     */
     @Nullable
     Object paragraph(boolean inTightList);
 

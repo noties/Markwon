@@ -388,6 +388,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
         visitChildren(paragraph);
+
+        // @since 1.1.1 apply paragraph span
         setSpan(length, factory.paragraph(inTightList));
 
         if (!inTightList) {

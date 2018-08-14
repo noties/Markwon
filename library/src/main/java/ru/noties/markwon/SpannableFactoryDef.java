@@ -103,6 +103,9 @@ public class SpannableFactoryDef implements SpannableFactory {
         return new TableRowSpan(theme, cells, isHeader, isOdd);
     }
 
+    /**
+     * @since 1.1.1
+     */
     @Nullable
     @Override
     public Object paragraph(boolean inTightList) {
