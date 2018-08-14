@@ -169,6 +169,10 @@ public class TableRowSpan extends ReplacementSpan {
             }
         }
 
+        // @since 1.1.1 reset after applying background color
+        // as background changes color attribute and if not specific tableBorderColor
+        // is specified then after this row all borders will have color of this row (plus alpha)
+        this.paint.set(paint);
         theme.applyTableBorderStyle(this.paint);
 
         final int borderWidth = theme.tableBorderWidth(paint);
