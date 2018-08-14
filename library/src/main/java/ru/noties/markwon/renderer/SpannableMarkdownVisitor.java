@@ -380,14 +380,15 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Paragraph paragraph) {
-
         final boolean inTightList = isInTightList(paragraph);
 
         if (!inTightList) {
             newLine();
         }
 
+        final int length = builder.length();
         visitChildren(paragraph);
+        setSpan(length, factory.paragraph(inTightList));
 
         if (!inTightList) {
             newLine();
