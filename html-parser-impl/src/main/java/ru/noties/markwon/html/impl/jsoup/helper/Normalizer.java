@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.jsoup.helper;
+package ru.noties.markwon.html.impl.jsoup.helper;
 
 import java.util.Locale;
 

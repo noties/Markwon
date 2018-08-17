@@ -1,18 +1,14 @@
-package ru.noties.markwon.html.jsoup.nodes;
+package ru.noties.markwon.html.impl.jsoup.nodes;
 
-import java.util.AbstractMap;
-import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import ru.noties.markwon.html.jsoup.helper.Validate;
+import ru.noties.markwon.html.impl.jsoup.helper.Validate;
 
-import static ru.noties.markwon.html.jsoup.helper.Normalizer.lowerCase;
+import static ru.noties.markwon.html.impl.jsoup.helper.Normalizer.lowerCase;
 
 /**
  * The attributes of an Element.

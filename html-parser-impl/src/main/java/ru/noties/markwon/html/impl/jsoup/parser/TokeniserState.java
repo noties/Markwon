@@ -1,6 +1,6 @@
-package ru.noties.markwon.html.jsoup.parser;
+package ru.noties.markwon.html.impl.jsoup.parser;
 
-import ru.noties.markwon.html.jsoup.nodes.DocumentType;
+import ru.noties.markwon.html.impl.jsoup.nodes.DocumentType;
 
 /**
  * States and transition activations for the Tokeniser.

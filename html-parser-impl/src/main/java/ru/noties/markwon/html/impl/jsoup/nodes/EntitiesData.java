@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.jsoup.nodes;
+package ru.noties.markwon.html.impl.jsoup.nodes;
 
 /**
  * Holds packed data that represents Entity name=value pairs. Parsed by Entities, created by BuildEntities.

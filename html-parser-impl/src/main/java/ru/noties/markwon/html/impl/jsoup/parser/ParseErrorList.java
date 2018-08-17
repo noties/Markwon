@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.jsoup.parser;
+package ru.noties.markwon.html.impl.jsoup.parser;
 
 import java.util.ArrayList;
 

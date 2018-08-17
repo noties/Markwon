@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.jsoup.nodes;
+package ru.noties.markwon.html.impl.jsoup.nodes;
 
 /**
  * A {@code <!DOCTYPE>} node.

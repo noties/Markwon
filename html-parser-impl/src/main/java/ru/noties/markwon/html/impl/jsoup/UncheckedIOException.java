@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.jsoup;
+package ru.noties.markwon.html.impl.jsoup;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.jsoup.parser;
+package ru.noties.markwon.html.impl.jsoup.parser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -6,8 +6,8 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Locale;
 
-import ru.noties.markwon.html.jsoup.UncheckedIOException;
-import ru.noties.markwon.html.jsoup.helper.Validate;
+import ru.noties.markwon.html.impl.jsoup.UncheckedIOException;
+import ru.noties.markwon.html.impl.jsoup.helper.Validate;
 
 /**
  CharacterReader consumes tokens off a string. Used internally by jsoup. API subject to changes.

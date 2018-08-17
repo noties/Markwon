@@ -1,4 +1,4 @@
-package ru.noties.markwon.html;
+package ru.noties.markwon.html.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,16 +14,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import ru.noties.markwon.html.HtmlTag.Block;
-import ru.noties.markwon.html.HtmlTag.Inline;
-import ru.noties.markwon.html.HtmlTagImpl.BlockImpl;
-import ru.noties.markwon.html.HtmlTagImpl.InlineImpl;
-import ru.noties.markwon.html.jsoup.nodes.Attribute;
-import ru.noties.markwon.html.jsoup.nodes.Attributes;
-import ru.noties.markwon.html.jsoup.parser.CharacterReader;
-import ru.noties.markwon.html.jsoup.parser.ParseErrorList;
-import ru.noties.markwon.html.jsoup.parser.Token;
-import ru.noties.markwon.html.jsoup.parser.Tokeniser;
+import ru.noties.markwon.html.api.HtmlTag.Block;
+import ru.noties.markwon.html.api.HtmlTag.Inline;
+import ru.noties.markwon.html.api.MarkwonHtmlParser;
+import ru.noties.markwon.html.impl.jsoup.nodes.Attribute;
+import ru.noties.markwon.html.impl.jsoup.nodes.Attributes;
+import ru.noties.markwon.html.impl.jsoup.parser.CharacterReader;
+import ru.noties.markwon.html.impl.jsoup.parser.ParseErrorList;
+import ru.noties.markwon.html.impl.jsoup.parser.Token;
+import ru.noties.markwon.html.impl.jsoup.parser.Tokeniser;
 
 public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
@@ -108,9 +107,9 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     private final HtmlEmptyTagReplacement emptyTagReplacement;
 
-    private final List<InlineImpl> inlineTags = new ArrayList<>(0);
+    private final List<HtmlTagImpl.InlineImpl> inlineTags = new ArrayList<>(0);
 
-    private BlockImpl currentBlock = BlockImpl.root();
+    private HtmlTagImpl.BlockImpl currentBlock = HtmlTagImpl.BlockImpl.root();
 
     MarkwonHtmlParserImpl(@NonNull HtmlEmptyTagReplacement replacement) {
         this.emptyTagReplacement = replacement;
@@ -174,7 +173,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     @Override
     public void flushInlineTags(int documentLength, @NonNull FlushAction<Inline> action) {
         if (inlineTags.size() > 0) {
-            for (InlineImpl inline : inlineTags) {
+            for (HtmlTagImpl.InlineImpl inline : inlineTags) {
                 inline.closeAt(documentLength);
             }
             //noinspection unchecked
@@ -186,7 +185,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     @Override
     public void flushBlockTags(int documentLength, @NonNull FlushAction<Block> action) {
 
-        BlockImpl block = currentBlock;
+        HtmlTagImpl.BlockImpl block = currentBlock;
         while (!block.isRoot()) {
             block = block.parent;
         }
@@ -198,13 +197,13 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             action.apply(children);
         }
 
-        currentBlock = BlockImpl.root();
+        currentBlock = HtmlTagImpl.BlockImpl.root();
     }
 
     @Override
     public void reset() {
         inlineTags.clear();
-        currentBlock = BlockImpl.root();
+        currentBlock = HtmlTagImpl.BlockImpl.root();
     }
 
 
@@ -214,7 +213,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final String name = startTag.normalName;
 
-        final InlineImpl inline = new InlineImpl(name, output.length(), extractAttributes(startTag));
+        final HtmlTagImpl.InlineImpl inline = new HtmlTagImpl.InlineImpl(name, output.length(), extractAttributes(startTag));
 
         if (isVoidTag(name)
                 || startTag.selfClosing) {
@@ -239,7 +238,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             @NonNull Token.EndTag endTag) {
 
         // try to find it, if none found -> ignore
-        final InlineImpl openInline = findOpenInlineTag(endTag.normalName);
+        final HtmlTagImpl.InlineImpl openInline = findOpenInlineTag(endTag.normalName);
         if (openInline != null) {
             // close open inline tag
             openInline.closeAt(output.length());
@@ -276,7 +275,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final int start = output.length();
 
-        final BlockImpl block = BlockImpl.create(name, start, extractAttributes(startTag), currentBlock);
+        final HtmlTagImpl.BlockImpl block = HtmlTagImpl.BlockImpl.create(name, start, extractAttributes(startTag), currentBlock);
 
         final boolean isVoid = isVoidTag(name) || startTag.selfClosing;
         if (isVoid) {
@@ -303,7 +302,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final String name = endTag.normalName;
 
-        final BlockImpl block = findOpenBlockTag(endTag.normalName);
+        final HtmlTagImpl.BlockImpl block = findOpenBlockTag(endTag.normalName);
         if (block != null) {
 
             block.closeAt(output.length());
@@ -334,8 +333,8 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         append(output, character.getData());
     }
 
-    protected void appendBlockChild(@NonNull BlockImpl parent, @NonNull BlockImpl child) {
-        List<BlockImpl> children = parent.children;
+    protected void appendBlockChild(@NonNull HtmlTagImpl.BlockImpl parent, @NonNull HtmlTagImpl.BlockImpl child) {
+        List<HtmlTagImpl.BlockImpl> children = parent.children;
         if (children == null) {
             children = new ArrayList<>(2);
             parent.children = children;
@@ -344,9 +343,9 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     }
 
     @Nullable
-    protected InlineImpl findOpenInlineTag(@NonNull String name) {
+    protected HtmlTagImpl.InlineImpl findOpenInlineTag(@NonNull String name) {
 
-        InlineImpl inline;
+        HtmlTagImpl.InlineImpl inline;
 
         for (int i = inlineTags.size() - 1; i > -1; i--) {
             inline = inlineTags.get(i);
@@ -360,9 +359,9 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     }
 
     @Nullable
-    protected BlockImpl findOpenBlockTag(@NonNull String name) {
+    protected HtmlTagImpl.BlockImpl findOpenBlockTag(@NonNull String name) {
 
-        BlockImpl blockTag = currentBlock;
+        HtmlTagImpl.BlockImpl blockTag = currentBlock;
 
         while (blockTag != null
                 && !name.equals(blockTag.name) && !blockTag.isClosed()) {

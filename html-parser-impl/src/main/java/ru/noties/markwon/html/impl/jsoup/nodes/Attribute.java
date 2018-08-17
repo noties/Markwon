@@ -1,8 +1,8 @@
-package ru.noties.markwon.html.jsoup.nodes;
+package ru.noties.markwon.html.impl.jsoup.nodes;
 
 import java.util.Map;
 
-import ru.noties.markwon.html.jsoup.helper.Validate;
+import ru.noties.markwon.html.impl.jsoup.helper.Validate;
 
 /**
  A single key + value attribute. (Only used for presentation.)

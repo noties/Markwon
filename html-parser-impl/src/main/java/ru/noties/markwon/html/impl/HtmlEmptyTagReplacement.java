@@ -1,9 +1,9 @@
-package ru.noties.markwon.html;
+package ru.noties.markwon.html.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.html.jsoup.parser.Token;
+import ru.noties.markwon.html.impl.jsoup.parser.Token;
 
 /**
  * This class will be used to append some text to output in order to

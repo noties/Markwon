@@ -1,11 +1,11 @@
-package ru.noties.markwon.html.jsoup.parser;
+package ru.noties.markwon.html.impl.jsoup.parser;
 
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.html.jsoup.helper.Validate;
-import ru.noties.markwon.html.jsoup.nodes.Attributes;
+import ru.noties.markwon.html.impl.jsoup.helper.Validate;
+import ru.noties.markwon.html.impl.jsoup.nodes.Attributes;
 
-import static ru.noties.markwon.html.jsoup.helper.Normalizer.lowerCase;
+import static ru.noties.markwon.html.impl.jsoup.helper.Normalizer.lowerCase;
 
 /**
  * Parse tokens for the Tokeniser.

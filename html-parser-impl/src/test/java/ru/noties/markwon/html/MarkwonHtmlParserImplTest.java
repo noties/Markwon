@@ -14,7 +14,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ru.noties.markwon.html.jsoup.parser.Token;
+import ru.noties.markwon.html.api.HtmlTag;
+import ru.noties.markwon.html.api.MarkwonHtmlParser;
+import ru.noties.markwon.html.impl.HtmlEmptyTagReplacement;
+import ru.noties.markwon.html.impl.MarkwonHtmlParserImpl;
+import ru.noties.markwon.html.impl.jsoup.parser.Token;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

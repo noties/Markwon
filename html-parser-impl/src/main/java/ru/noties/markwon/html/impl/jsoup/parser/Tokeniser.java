@@ -1,9 +1,9 @@
-package ru.noties.markwon.html.jsoup.parser;
+package ru.noties.markwon.html.impl.jsoup.parser;
 
 import java.util.Arrays;
 
-import ru.noties.markwon.html.jsoup.helper.Validate;
-import ru.noties.markwon.html.jsoup.nodes.Entities;
+import ru.noties.markwon.html.impl.jsoup.helper.Validate;
+import ru.noties.markwon.html.impl.jsoup.nodes.Entities;
 
 /**
  * Readers the input stream into tokens.

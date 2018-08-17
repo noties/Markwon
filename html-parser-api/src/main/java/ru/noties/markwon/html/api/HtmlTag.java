@@ -1,4 +1,4 @@
-package ru.noties.markwon.html;
+package ru.noties.markwon.html.api;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

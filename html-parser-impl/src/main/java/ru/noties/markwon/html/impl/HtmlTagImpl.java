@@ -1,4 +1,4 @@
-package ru.noties.markwon.html;
+package ru.noties.markwon.html.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import ru.noties.markwon.html.api.HtmlTag;
 
 abstract class HtmlTagImpl implements HtmlTag {
 

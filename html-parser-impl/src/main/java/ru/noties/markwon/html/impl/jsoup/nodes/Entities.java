@@ -1,14 +1,14 @@
-package ru.noties.markwon.html.jsoup.nodes;
+package ru.noties.markwon.html.impl.jsoup.nodes;
 
 import java.nio.charset.CharsetEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import ru.noties.markwon.html.jsoup.helper.Validate;
-import ru.noties.markwon.html.jsoup.parser.CharacterReader;
+import ru.noties.markwon.html.impl.jsoup.helper.Validate;
+import ru.noties.markwon.html.impl.jsoup.parser.CharacterReader;
 
-import static ru.noties.markwon.html.jsoup.nodes.Entities.EscapeMode.base;
-import static ru.noties.markwon.html.jsoup.nodes.Entities.EscapeMode.extended;
+import static ru.noties.markwon.html.impl.jsoup.nodes.Entities.EscapeMode.base;
+import static ru.noties.markwon.html.impl.jsoup.nodes.Entities.EscapeMode.extended;
 
 /**
  * HTML entities, and escape routines. Source: <a href="http://www.w3.org/TR/html5/named-character-references.html#named-character-references">W3C
