@@ -1,0 +1,396 @@
+package ru.noties.markwon.html;
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import ru.noties.markwon.html.HtmlTag.Block;
+import ru.noties.markwon.html.HtmlTag.Inline;
+import ru.noties.markwon.html.HtmlTagImpl.BlockImpl;
+import ru.noties.markwon.html.HtmlTagImpl.InlineImpl;
+import ru.noties.markwon.html.jsoup.parser.CharacterReader;
+import ru.noties.markwon.html.jsoup.parser.ParseErrorList;
+import ru.noties.markwon.html.jsoup.parser.Token;
+import ru.noties.markwon.html.jsoup.parser.Tokeniser;
+
+public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
+
+    @NonNull
+    public static MarkwonHtmlParserImpl create() {
+        return new MarkwonHtmlParserImpl();
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements
+    private static final Set<String> INLINE_TAGS;
+
+    private static final Set<String> VOID_TAGS;
+
+    // these are the tags that are considered _block_ ones
+    // this parser will ensure that these blocks are started on a new line
+    // other tags that are NOT inline are considered as block tags, but won't have new line
+    // inserted before them
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
+    private static final Set<String> BLOCK_TAGS;
+
+    private static final String TAG_PARAGRAPH = "p";
+    private static final String TAG_LIST_ITEM = "li";
+
+    // todo: make it configurable
+    private static final String IMG_REPLACEMENT = "\uFFFC";
+
+    static {
+        INLINE_TAGS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+                "a", "abbr", "acronym",
+                "b", "bdo", "big", "br", "button",
+                "cite", "code",
+                "dfn",
+                "em",
+                "i", "img", "input",
+                "kbd",
+                "label",
+                "map",
+                "object",
+                "q",
+                "samp", "script", "select", "small", "span", "strong", "sub", "sup",
+                "textarea", "time", "tt",
+                "var"
+        )));
+        VOID_TAGS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+                "area",
+                "base", "br",
+                "col",
+                "embed",
+                "hr",
+                "img", "input",
+                "keygen",
+                "link",
+                "meta",
+                "param",
+                "source",
+                "track",
+                "wbr"
+        )));
+        BLOCK_TAGS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+                "address", "article", "aside",
+                "blockquote",
+                "canvas",
+                "dd", "div", "dl", "dt",
+                "fieldset", "figcaption", "figure", "footer", "form",
+                "h1", "h2", "h3", "h4", "h5", "h6", "header", "hgroup", "hr",
+                "li",
+                "main",
+                "nav", "noscript",
+                "ol", "output",
+                "p", "pre",
+                "section",
+                "table", "tfoot",
+                "ul",
+                "video"
+        )));
+    }
+
+    private final List<InlineImpl> inlineTags = new ArrayList<>(0);
+
+    private BlockImpl currentBlock = BlockImpl.root();
+
+
+    @Override
+    public <T extends Appendable & CharSequence> void processFragment(
+            @NonNull T output,
+            @NonNull String htmlFragment) {
+
+        // todo: maybe there is a way to reuse tokeniser...
+        final Tokeniser tokeniser = new Tokeniser(new CharacterReader(htmlFragment), ParseErrorList.noTracking());
+
+        while (true) {
+
+            final Token token = tokeniser.read();
+            final Token.TokenType tokenType = token.type;
+
+            if (Token.TokenType.EOF == tokenType) {
+                break;
+            }
+
+            switch (tokenType) {
+
+                case StartTag: {
+
+                    final Token.StartTag startTag = (Token.StartTag) token;
+
+                    if (isInlineTag(startTag.normalName)) {
+                        processInlineTagStart(output, startTag);
+                    } else {
+                        processBlockTagStart(output, startTag);
+                    }
+                }
+                break;
+
+                case EndTag: {
+
+                    final Token.EndTag endTag = (Token.EndTag) token;
+
+                    if (isInlineTag(endTag.normalName)) {
+                        processInlineTagEnd(output, endTag);
+                    } else {
+                        processBlockTagEnd(output, endTag);
+                    }
+                }
+                break;
+
+                case Character: {
+                    processCharacter(output, ((Token.Character) token));
+                }
+                break;
+            }
+
+            // do not forget to reset processed token (even if it's not processed)
+            token.reset();
+        }
+    }
+
+    @Override
+    public void flushInlineTags(int documentLength, @NonNull FlushAction<Inline> action) {
+        if (inlineTags.size() > 0) {
+            for (InlineImpl inline : inlineTags) {
+                inline.closeAt(documentLength);
+            }
+            //noinspection unchecked
+            action.apply(Collections.unmodifiableList((List<? extends Inline>) inlineTags));
+            inlineTags.clear();
+        }
+    }
+
+    @Override
+    public void flushBlockTags(int documentLength, @NonNull FlushAction<Block> action) {
+
+        BlockImpl block = currentBlock;
+        while (!block.isRoot()) {
+            block = block.parent;
+        }
+
+        block.closeAt(documentLength);
+
+        final List<Block> children = block.children();
+        if (children.size() > 0) {
+            action.apply(children);
+        }
+
+        currentBlock = BlockImpl.root();
+    }
+
+    @Override
+    public void reset() {
+        inlineTags.clear();
+        currentBlock = BlockImpl.root();
+    }
+
+
+    protected <T extends Appendable & CharSequence> void processInlineTagStart(
+            @NonNull T output,
+            @NonNull Token.StartTag startTag) {
+
+        final String name = startTag.normalName;
+
+        final InlineImpl inline = new InlineImpl(name, output.length());
+
+        if (isVoidTag(name)
+                || startTag.selfClosing) {
+
+            // check if we have content to append as we must close this tag here
+            processVoidTag(output, startTag);
+
+            inline.end = output.length();
+        }
+
+        // actually only check if there is content for void/self-closing tags
+        // if none -> ignore it
+        if (inline.start != inline.end) {
+            inlineTags.add(inline);
+        }
+    }
+
+    protected <T extends Appendable & CharSequence> void processInlineTagEnd(
+            @NonNull T output,
+            @NonNull Token.EndTag endTag) {
+
+        // try to find it, if none found -> ignore
+        final InlineImpl openInlineTag = findOpenInlineTag(endTag.normalName);
+        if (openInlineTag != null) {
+            // close open inline tag
+            openInlineTag.end = output.length();
+        }
+    }
+
+
+    protected <T extends Appendable & CharSequence> void processBlockTagStart(
+            @NonNull T output,
+            @NonNull Token.StartTag startTag) {
+
+        final String name = startTag.normalName;
+
+        // block tags (all that are NOT inline -> blocks
+        // I think there is only one strong rule -> paragraph cannot contain anything
+        // except inline tags
+        // also, closing paragraph with non-closed inlines -> doesn't close inlines
+        // they are continued for _afterwards_
+
+        if (TAG_PARAGRAPH.equals(currentBlock.name)) {
+            // it must be closed here not matter what we are as here we _assume_
+            // that it's a block tag
+            append(output, "\n");
+            currentBlock.end = output.length();
+            currentBlock = currentBlock.parent;
+        } else if (TAG_LIST_ITEM.equals(name)
+                && TAG_LIST_ITEM.equals(currentBlock.name)) {
+            // close previous list item if in the same parent
+            currentBlock.end = output.length();
+            currentBlock = currentBlock.parent;
+        }
+
+        if (isBlockTag(name)) {
+            ensureNewLine(output);
+        }
+
+        final int start = output.length();
+
+        final BlockImpl block = BlockImpl.create(name, start, currentBlock);
+
+        //noinspection ConstantConditions
+        appendBlockChild(block.parent, block);
+
+        this.currentBlock = block;
+    }
+
+    protected <T extends Appendable & CharSequence> void processBlockTagEnd(
+            @NonNull T output,
+            @NonNull Token.EndTag endTag) {
+
+        final String name = endTag.normalName;
+
+        final BlockImpl block = findOpenBlockTag(endTag.normalName);
+        if (block != null) {
+
+            if (TAG_PARAGRAPH.equals(name)) {
+                append(output, "\n");
+            }
+
+            block.closeAt(output.length());
+            this.currentBlock = block.parent;
+        }
+    }
+
+    protected <T extends Appendable & CharSequence> void processVoidTag(
+            @NonNull T output,
+            @NonNull Token.StartTag startTag) {
+
+        final String name = startTag.normalName;
+
+        if ("br".equals(name)) {
+            append(output, "\n");
+        } else if ("img".equals(name)) {
+            final String alt = startTag.attributes.getIgnoreCase("alt");
+            if (alt == null
+                    || alt.length() == 0) {
+                // no alt is provided
+                append(output, IMG_REPLACEMENT);
+            } else {
+                append(output, alt);
+            }
+        }
+
+        // other tags are ignored
+    }
+
+    protected <T extends Appendable & CharSequence> void processCharacter(
+            @NonNull T output,
+            @NonNull Token.Character character) {
+
+        // the thing here is: if it's a script tag that we are inside -> we must not treat this
+        // as the text to append... should we even care about this? how many people are
+        // going to include freaking script tags as html inline?
+        //
+        // so tags are: BUTTON, INPUT, SELECT, SCRIPT, TEXTAREA
+        //
+        // actually we must decide it here: should we append freaking characters for these _bad_
+        // tags or not, as later we won't be able to change it and/or allow modification (as
+        // all indexes will be affected with this)
+
+        // for now: ignore the inline context
+        append(output, character.getData());
+    }
+
+    protected void appendBlockChild(@NonNull BlockImpl parent, @NonNull BlockImpl child) {
+        List<BlockImpl> children = parent.children;
+        if (children == null) {
+            children = new ArrayList<>(2);
+            parent.children = children;
+        }
+        children.add(child);
+    }
+
+    @Nullable
+    protected InlineImpl findOpenInlineTag(@NonNull String name) {
+
+        InlineImpl inline;
+
+        for (int i = inlineTags.size() - 1; i > -1; i--) {
+            inline = inlineTags.get(i);
+            if (name.equals(inline.name)
+                    && inline.end < 0) {
+                return inline;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    protected BlockImpl findOpenBlockTag(@NonNull String name) {
+
+        BlockImpl blockTag = currentBlock;
+
+        while (blockTag != null
+                && !name.equals(blockTag.name)) {
+            blockTag = blockTag.parent;
+        }
+
+        return blockTag;
+    }
+
+    // name here must lower case
+    protected static boolean isInlineTag(@NonNull String name) {
+        return INLINE_TAGS.contains(name);
+    }
+
+    protected static boolean isVoidTag(@NonNull String name) {
+        return VOID_TAGS.contains(name);
+    }
+
+    protected static boolean isBlockTag(@NonNull String name) {
+        return BLOCK_TAGS.contains(name);
+    }
+
+    protected static void append(@NonNull Appendable appendable, @NonNull CharSequence text) {
+        try {
+            appendable.append(text);
+        } catch (IOException e) {
+            // _must_ not happen
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected static <T extends Appendable & CharSequence> void ensureNewLine(@NonNull T output) {
+        final int length = output.length();
+        if (length > 0
+                && '\n' != output.charAt(length - 1)) {
+            append(output, "\n");
+        }
+    }
+}

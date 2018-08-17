@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion TARGET_SDK
+    buildToolsVersion BUILD_TOOLS
+
+    defaultConfig {
+        minSdkVersion MIN_SDK
+        targetSdkVersion TARGET_SDK
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+    api SUPPORT_ANNOTATIONS
+    api project(':html-parser-api')
+}
+
+afterEvaluate {
+    generateReleaseBuildConfig.enabled = false
+}
+
+// todo: remove `local` check after merge with latest version (1.1.1)
+if (hasProperty('release')) {
+    if (hasProperty('local')) {
+        ext.RELEASE_REPOSITORY_URL = LOCAL_MAVEN_URL
+        ext.SNAPSHOT_REPOSITORY_URL = LOCAL_MAVEN_URL
+    }
+    apply from: 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
+}

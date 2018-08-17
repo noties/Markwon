@@ -1,1 +1,2 @@
-include ':app', ':library', ':library-image-loader', ':library-view', ':sample-custom-extension', ':library-syntax'
+include ':app', ':library', ':library-image-loader', ':library-view', ':sample-custom-extension',
+        ':library-syntax', ':html-parser-api', ':html-parser-impl'
