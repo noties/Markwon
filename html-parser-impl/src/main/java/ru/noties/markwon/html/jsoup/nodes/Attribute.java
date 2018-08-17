@@ -137,13 +137,13 @@ public class Attribute implements Map.Entry<String, String>, Cloneable  {
 //        return new Attribute(unencodedKey, value, null); // parent will get set when Put
 //    }
 
-    protected boolean isDataAttribute() {
-        return isDataAttribute(key);
-    }
-
-    protected static boolean isDataAttribute(String key) {
-        return key.startsWith(Attributes.dataPrefix) && key.length() > Attributes.dataPrefix.length();
-    }
+//    protected boolean isDataAttribute() {
+//        return isDataAttribute(key);
+//    }
+//
+//    protected static boolean isDataAttribute(String key) {
+//        return key.startsWith(Attributes.dataPrefix) && key.length() > Attributes.dataPrefix.length();
+//    }
 
 //    /**
 //     * Collapsible if it's a boolean attribute and value is empty or same as name

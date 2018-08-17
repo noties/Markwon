@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @see Inline
@@ -31,6 +32,9 @@ public interface HtmlTag {
      * @return flag indicating if this tag has no content (when start == end)
      */
     boolean isEmpty();
+
+    @NonNull
+    Map<String, String> attributes();
 
     /**
      * Represents <em>really</em> inline HTML tags (unline commonmark definitions)

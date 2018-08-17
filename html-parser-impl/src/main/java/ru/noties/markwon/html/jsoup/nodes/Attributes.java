@@ -28,7 +28,7 @@ import static ru.noties.markwon.html.jsoup.helper.Normalizer.lowerCase;
  * @author Jonathan Hedley, jonathan@hedley.net
  */
 public class Attributes implements Iterable<Attribute>, Cloneable {
-    protected static final String dataPrefix = "data-";
+//    protected static final String dataPrefix = "data-";
     private static final int InitialCapacity = 4; // todo - analyze Alexa 1MM sites, determine best setting
 
     // manages the key/val arrays
@@ -282,14 +282,14 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         return Collections.unmodifiableList(list);
     }
 
-    /**
-     * Retrieves a filtered view of attributes that are HTML5 custom data attributes; that is, attributes with keys
-     * starting with {@code data-}.
-     * @return map of custom data attributes.
-     */
-    public Map<String, String> dataset() {
-        return new Dataset(this);
-    }
+//    /**
+//     * Retrieves a filtered view of attributes that are HTML5 custom data attributes; that is, attributes with keys
+//     * starting with {@code data-}.
+//     * @return map of custom data attributes.
+//     */
+//    public Map<String, String> dataset() {
+//        return new Dataset(this);
+//    }
 
 //    /**
 //     Get the HTML representation of these attributes.
@@ -380,65 +380,65 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         }
     }
 
-    private static class Dataset extends AbstractMap<String, String> {
-        private final Attributes attributes;
+//    private static class Dataset extends AbstractMap<String, String> {
+//        private final Attributes attributes;
+//
+//        private Dataset(Attributes attributes) {
+//            this.attributes = attributes;
+//        }
+//
+//        @Override
+//        public Set<Entry<String, String>> entrySet() {
+//            return new EntrySet();
+//        }
+//
+//        @Override
+//        public String put(String key, String value) {
+//            String dataKey = dataKey(key);
+//            String oldValue = attributes.hasKey(dataKey) ? attributes.get(dataKey) : null;
+//            attributes.put(dataKey, value);
+//            return oldValue;
+//        }
+//
+//        private class EntrySet extends AbstractSet<Map.Entry<String, String>> {
+//
+//            @Override
+//            public Iterator<Map.Entry<String, String>> iterator() {
+//                return new DatasetIterator();
+//            }
+//
+//            @Override
+//            public int size() {
+//                int count = 0;
+//                Iterator iter = new DatasetIterator();
+//                while (iter.hasNext())
+//                    count++;
+//                return count;
+//            }
+//        }
+//
+//        private class DatasetIterator implements Iterator<Map.Entry<String, String>> {
+//            private Iterator<Attribute> attrIter = attributes.iterator();
+//            private Attribute attr;
+//            public boolean hasNext() {
+//                while (attrIter.hasNext()) {
+//                    attr = attrIter.next();
+//                    if (attr.isDataAttribute()) return true;
+//                }
+//                return false;
+//            }
+//
+//            public Entry<String, String> next() {
+//                return new Attribute(attr.getKey().substring(dataPrefix.length()), attr.getValue());
+//            }
+//
+//            public void remove() {
+//                attributes.remove(attr.getKey());
+//            }
+//        }
+//    }
 
-        private Dataset(Attributes attributes) {
-            this.attributes = attributes;
-        }
-
-        @Override
-        public Set<Entry<String, String>> entrySet() {
-            return new EntrySet();
-        }
-
-        @Override
-        public String put(String key, String value) {
-            String dataKey = dataKey(key);
-            String oldValue = attributes.hasKey(dataKey) ? attributes.get(dataKey) : null;
-            attributes.put(dataKey, value);
-            return oldValue;
-        }
-
-        private class EntrySet extends AbstractSet<Map.Entry<String, String>> {
-
-            @Override
-            public Iterator<Map.Entry<String, String>> iterator() {
-                return new DatasetIterator();
-            }
-
-            @Override
-            public int size() {
-                int count = 0;
-                Iterator iter = new DatasetIterator();
-                while (iter.hasNext())
-                    count++;
-                return count;
-            }
-        }
-
-        private class DatasetIterator implements Iterator<Map.Entry<String, String>> {
-            private Iterator<Attribute> attrIter = attributes.iterator();
-            private Attribute attr;
-            public boolean hasNext() {
-                while (attrIter.hasNext()) {
-                    attr = attrIter.next();
-                    if (attr.isDataAttribute()) return true;
-                }
-                return false;
-            }
-
-            public Entry<String, String> next() {
-                return new Attribute(attr.getKey().substring(dataPrefix.length()), attr.getValue());
-            }
-
-            public void remove() {
-                attributes.remove(attr.getKey());
-            }
-        }
-    }
-
-    private static String dataKey(String key) {
-        return dataPrefix + key;
-    }
+//    private static String dataKey(String key) {
+//        return dataPrefix + key;
+//    }
 }

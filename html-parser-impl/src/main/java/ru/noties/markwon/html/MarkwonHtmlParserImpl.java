@@ -7,14 +7,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import ru.noties.markwon.html.HtmlTag.Block;
 import ru.noties.markwon.html.HtmlTag.Inline;
 import ru.noties.markwon.html.HtmlTagImpl.BlockImpl;
 import ru.noties.markwon.html.HtmlTagImpl.InlineImpl;
+import ru.noties.markwon.html.jsoup.nodes.Attribute;
+import ru.noties.markwon.html.jsoup.nodes.Attributes;
 import ru.noties.markwon.html.jsoup.parser.CharacterReader;
 import ru.noties.markwon.html.jsoup.parser.ParseErrorList;
 import ru.noties.markwon.html.jsoup.parser.Token;
@@ -209,7 +214,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final String name = startTag.normalName;
 
-        final InlineImpl inline = new InlineImpl(name, output.length());
+        final InlineImpl inline = new InlineImpl(name, output.length(), extractAttributes(startTag));
 
         if (isVoidTag(name)
                 || startTag.selfClosing) {
@@ -271,7 +276,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final int start = output.length();
 
-        final BlockImpl block = BlockImpl.create(name, start, currentBlock);
+        final BlockImpl block = BlockImpl.create(name, start, extractAttributes(startTag), currentBlock);
 
         final boolean isVoid = isVoidTag(name) || startTag.selfClosing;
         if (isVoid) {
@@ -395,5 +400,26 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
                 && '\n' != output.charAt(length - 1)) {
             append(output, "\n");
         }
+    }
+
+    @NonNull
+    protected static Map<String, String> extractAttributes(@NonNull Token.StartTag startTag) {
+
+        Map<String, String> map;
+
+        final Attributes attributes = startTag.attributes;
+        final int size = attributes.size();
+
+        if (size > 0) {
+            map = new HashMap<>(size);
+            for (Attribute attribute : attributes) {
+                map.put(attribute.getKey().toLowerCase(Locale.US), attribute.getValue());
+            }
+            map = Collections.unmodifiableMap(map);
+        } else {
+            map = Collections.emptyMap();
+        }
+
+        return map;
     }
 }

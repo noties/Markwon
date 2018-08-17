@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 abstract class HtmlTagImpl implements HtmlTag {
 
@@ -12,11 +13,13 @@ abstract class HtmlTagImpl implements HtmlTag {
 
     final String name;
     final int start;
+    final Map<String, String> attributes;
     int end = NO_VALUE;
 
-    protected HtmlTagImpl(@NonNull String name, int start) {
+    protected HtmlTagImpl(@NonNull String name, int start, @NonNull Map<String, String> attributes) {
         this.name = name;
         this.start = start;
+        this.attributes = attributes;
     }
 
     @NonNull
@@ -40,16 +43,23 @@ abstract class HtmlTagImpl implements HtmlTag {
         return start == end;
     }
 
+    @NonNull
+    @Override
+    public Map<String, String> attributes() {
+        return attributes;
+    }
+
     boolean isClosed() {
         return end > NO_VALUE;
     }
 
     abstract void closeAt(int end);
 
+
     static class InlineImpl extends HtmlTagImpl implements Inline {
 
-        InlineImpl(@NonNull String name, int start) {
-            super(name, start);
+        InlineImpl(@NonNull String name, int start, @NonNull Map<String, String> attributes) {
+            super(name, start, attributes);
         }
 
         @Override
@@ -65,6 +75,7 @@ abstract class HtmlTagImpl implements HtmlTag {
                     "name='" + name + '\'' +
                     ", start=" + start +
                     ", end=" + end +
+                    ", attributes=" + attributes +
                     '}';
         }
     }
@@ -74,20 +85,28 @@ abstract class HtmlTagImpl implements HtmlTag {
         @NonNull
         static BlockImpl root() {
             //noinspection ConstantConditions
-            return new BlockImpl("", 0, null);
+            return new BlockImpl("", 0, null, null);
         }
 
         @NonNull
-        static BlockImpl create(@NonNull String name, int start, @NonNull BlockImpl parent) {
-            return new BlockImpl(name, start, parent);
+        static BlockImpl create(
+                @NonNull String name,
+                int start,
+                @NonNull Map<String, String> attributes,
+                @NonNull BlockImpl parent) {
+            return new BlockImpl(name, start, attributes, parent);
         }
 
         final BlockImpl parent;
         List<BlockImpl> children;
 
         @SuppressWarnings("NullableProblems")
-        BlockImpl(@NonNull String name, int start, @NonNull BlockImpl parent) {
-            super(name, start);
+        BlockImpl(
+                @NonNull String name,
+                int start,
+                @NonNull Map<String, String> attributes,
+                @NonNull BlockImpl parent) {
+            super(name, start, attributes);
             this.parent = parent;
         }
 
@@ -127,12 +146,24 @@ abstract class HtmlTagImpl implements HtmlTag {
             return (List<Block>) (List<? extends Block>) children;
         }
 
+        @NonNull
+        @Override
+        public Map<String, String> attributes() {
+            //noinspection ConstantConditions
+            if (attributes == null) {
+                throw new IllegalStateException("#attributes() getter was called on the root node " +
+                        "which should not be exposed outside internal usage");
+            }
+            return attributes;
+        }
+
         @Override
         public String toString() {
             return "BlockImpl{" +
                     "name='" + name + '\'' +
                     ", start=" + start +
                     ", end=" + end +
+                    ", attributes=" + attributes +
                     ", parent=" + (parent != null ? parent.name : null) +
                     ", children=" + children +
                     '}';
