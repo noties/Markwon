@@ -206,7 +206,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             // check if we have content to append as we must close this tag here
             processVoidTag(output, startTag);
 
-            inline.end = output.length();
+            inline.closeAt(output.length());
         }
 
         // actually only check if there is content for void/self-closing tags
@@ -221,10 +221,10 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             @NonNull Token.EndTag endTag) {
 
         // try to find it, if none found -> ignore
-        final InlineImpl openInlineTag = findOpenInlineTag(endTag.normalName);
-        if (openInlineTag != null) {
+        final InlineImpl openInline = findOpenInlineTag(endTag.normalName);
+        if (openInline != null) {
             // close open inline tag
-            openInlineTag.end = output.length();
+            openInline.closeAt(output.length());
         }
     }
 
@@ -245,12 +245,12 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             // it must be closed here not matter what we are as here we _assume_
             // that it's a block tag
             append(output, "\n");
-            currentBlock.end = output.length();
+            currentBlock.closeAt(output.length());
             currentBlock = currentBlock.parent;
         } else if (TAG_LIST_ITEM.equals(name)
                 && TAG_LIST_ITEM.equals(currentBlock.name)) {
             // close previous list item if in the same parent
-            currentBlock.end = output.length();
+            currentBlock.closeAt(output.length());
             currentBlock = currentBlock.parent;
         }
 
@@ -357,7 +357,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         BlockImpl blockTag = currentBlock;
 
         while (blockTag != null
-                && !name.equals(blockTag.name)) {
+                && !name.equals(blockTag.name) && !blockTag.isClosed()) {
             blockTag = blockTag.parent;
         }
 
