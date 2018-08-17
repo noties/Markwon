@@ -14,8 +14,12 @@ android {
 }
 
 dependencies {
+
     api SUPPORT_ANNOTATIONS
     api project(':html-parser-api')
+
+    testImplementation JUNIT
+    testImplementation ROBOLECTRIC
 }
 
 afterEvaluate {

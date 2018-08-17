@@ -24,7 +24,12 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     @NonNull
     public static MarkwonHtmlParserImpl create() {
-        return new MarkwonHtmlParserImpl();
+        return create(HtmlEmptyTagReplacement.create());
+    }
+
+    @NonNull
+    public static MarkwonHtmlParserImpl create(@NonNull HtmlEmptyTagReplacement inlineTagReplacement) {
+        return new MarkwonHtmlParserImpl(inlineTagReplacement);
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements
@@ -43,7 +48,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     private static final String TAG_LIST_ITEM = "li";
 
     // todo: make it configurable
-    private static final String IMG_REPLACEMENT = "\uFFFC";
+//    private static final String IMG_REPLACEMENT = "\uFFFC";
 
     static {
         INLINE_TAGS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
@@ -96,9 +101,15 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         )));
     }
 
+    private final HtmlEmptyTagReplacement emptyTagReplacement;
+
     private final List<InlineImpl> inlineTags = new ArrayList<>(0);
 
     private BlockImpl currentBlock = BlockImpl.root();
+
+    MarkwonHtmlParserImpl(@NonNull HtmlEmptyTagReplacement replacement) {
+        this.emptyTagReplacement = replacement;
+    }
 
 
     @Override
@@ -203,17 +214,19 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         if (isVoidTag(name)
                 || startTag.selfClosing) {
 
-            // check if we have content to append as we must close this tag here
-            processVoidTag(output, startTag);
+            final String replacement = emptyTagReplacement.replace(startTag);
+            if (replacement != null
+                    && replacement.length() > 0) {
+                append(output, replacement);
+            }
 
+            // the thing is: we will keep this inline tag in the list,
+            // but in case of void-tag that has no replacement, there will be no
+            // possibility to set a span (requires at least one char)
             inline.closeAt(output.length());
         }
 
-        // actually only check if there is content for void/self-closing tags
-        // if none -> ignore it
-        if (inline.start != inline.end) {
-            inlineTags.add(inline);
-        }
+        inlineTags.add(inline);
     }
 
     protected <T extends Appendable & CharSequence> void processInlineTagEnd(
@@ -236,16 +249,14 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         final String name = startTag.normalName;
 
         // block tags (all that are NOT inline -> blocks
-        // I think there is only one strong rule -> paragraph cannot contain anything
+        // there is only one strong rule -> paragraph cannot contain anything
         // except inline tags
-        // also, closing paragraph with non-closed inlines -> doesn't close inlines
-        // they are continued for _afterwards_
 
         if (TAG_PARAGRAPH.equals(currentBlock.name)) {
             // it must be closed here not matter what we are as here we _assume_
             // that it's a block tag
-            append(output, "\n");
             currentBlock.closeAt(output.length());
+            append(output, "\n");
             currentBlock = currentBlock.parent;
         } else if (TAG_LIST_ITEM.equals(name)
                 && TAG_LIST_ITEM.equals(currentBlock.name)) {
@@ -262,10 +273,23 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final BlockImpl block = BlockImpl.create(name, start, currentBlock);
 
+        final boolean isVoid = isVoidTag(name) || startTag.selfClosing;
+        if (isVoid) {
+            final String replacement = emptyTagReplacement.replace(startTag);
+            if (replacement != null
+                    && replacement.length() > 0) {
+                append(output, replacement);
+            }
+            block.closeAt(output.length());
+        }
+
         //noinspection ConstantConditions
         appendBlockChild(block.parent, block);
 
-        this.currentBlock = block;
+        // if not void start filling-in children
+        if (!isVoid) {
+            this.currentBlock = block;
+        }
     }
 
     protected <T extends Appendable & CharSequence> void processBlockTagEnd(
@@ -277,35 +301,14 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         final BlockImpl block = findOpenBlockTag(endTag.normalName);
         if (block != null) {
 
+            block.closeAt(output.length());
+
             if (TAG_PARAGRAPH.equals(name)) {
                 append(output, "\n");
             }
 
-            block.closeAt(output.length());
             this.currentBlock = block.parent;
         }
-    }
-
-    protected <T extends Appendable & CharSequence> void processVoidTag(
-            @NonNull T output,
-            @NonNull Token.StartTag startTag) {
-
-        final String name = startTag.normalName;
-
-        if ("br".equals(name)) {
-            append(output, "\n");
-        } else if ("img".equals(name)) {
-            final String alt = startTag.attributes.getIgnoreCase("alt");
-            if (alt == null
-                    || alt.length() == 0) {
-                // no alt is provided
-                append(output, IMG_REPLACEMENT);
-            } else {
-                append(output, alt);
-            }
-        }
-
-        // other tags are ignored
     }
 
     protected <T extends Appendable & CharSequence> void processCharacter(

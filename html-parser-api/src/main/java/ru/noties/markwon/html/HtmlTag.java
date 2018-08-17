@@ -28,6 +28,11 @@ public interface HtmlTag {
     int end();
 
     /**
+     * @return flag indicating if this tag has no content (when start == end)
+     */
+    boolean isEmpty();
+
+    /**
      * Represents <em>really</em> inline HTML tags (unline commonmark definitions)
      */
     interface Inline extends HtmlTag {

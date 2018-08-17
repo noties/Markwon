@@ -52,4 +52,7 @@ ext {
 
     PRISM_4J = 'ru.noties:prism4j:1.1.0'
     PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.1.0'
+
+    JUNIT = 'junit:junit:4.12'
+    ROBOLECTRIC = 'org.robolectric:robolectric:3.8'
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 abstract class HtmlTagImpl implements HtmlTag {
 
-    static final int NO_VALUE = -1;
+    private static final int NO_VALUE = -1;
 
     final String name;
     final int start;
@@ -35,12 +35,16 @@ abstract class HtmlTagImpl implements HtmlTag {
         return end;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return start == end;
+    }
+
     boolean isClosed() {
         return end > NO_VALUE;
     }
 
     abstract void closeAt(int end);
-
 
     static class InlineImpl extends HtmlTagImpl implements Inline {
 
@@ -53,6 +57,15 @@ abstract class HtmlTagImpl implements HtmlTag {
             if (!isClosed()) {
                 super.end = end;
             }
+        }
+
+        @Override
+        public String toString() {
+            return "InlineImpl{" +
+                    "name='" + name + '\'' +
+                    ", start=" + start +
+                    ", end=" + end +
+                    '}';
         }
     }
 
@@ -83,7 +96,7 @@ abstract class HtmlTagImpl implements HtmlTag {
             if (!isClosed()) {
                 super.end = end;
                 if (children != null) {
-                    for (BlockImpl child: children) {
+                    for (BlockImpl child : children) {
                         child.closeAt(end);
                     }
                     children = Collections.unmodifiableList(children);
@@ -112,6 +125,17 @@ abstract class HtmlTagImpl implements HtmlTag {
         public List<Block> children() {
             //noinspection unchecked
             return (List<Block>) (List<? extends Block>) children;
+        }
+
+        @Override
+        public String toString() {
+            return "BlockImpl{" +
+                    "name='" + name + '\'' +
+                    ", start=" + start +
+                    ", end=" + end +
+                    ", parent=" + (parent != null ? parent.name : null) +
+                    ", children=" + children +
+                    '}';
         }
     }
 }
