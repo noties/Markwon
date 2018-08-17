@@ -14,11 +14,13 @@ import java.util.Iterator;
  * is using an array to store all the information about spans. So, a span that is added first
  * will be drawn first, which leads to subtle bugs (spans receive wrong `x` values when
  * requested to draw itself)
+ * <p>
+ * since 2.0.0 implements Appendable and CharSequence
  *
  * @since 1.0.1
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class SpannableBuilder {
+public class SpannableBuilder implements Appendable, CharSequence {
 
     // do not implement CharSequence (or any of Spanned interfaces)
 
@@ -51,14 +53,31 @@ public class SpannableBuilder {
     }
 
     @NonNull
+    @Override
     public SpannableBuilder append(char c) {
         builder.append(c);
         return this;
     }
 
     @NonNull
+    @Override
     public SpannableBuilder append(@NonNull CharSequence cs) {
 
+        copySpans(length(), cs);
+
+        builder.append(cs.toString());
+
+        return this;
+    }
+
+    /**
+     * @since 2.0.0 to follow Appendable interface
+     */
+    @NonNull
+    @Override
+    public SpannableBuilder append(CharSequence csq, int start, int end) {
+
+        final CharSequence cs = csq.subSequence(start, end);
         copySpans(length(), cs);
 
         builder.append(cs.toString());
@@ -98,12 +117,22 @@ public class SpannableBuilder {
         return this;
     }
 
+    @Override
     public int length() {
         return builder.length();
     }
 
+    @Override
     public char charAt(int index) {
         return builder.charAt(index);
+    }
+
+    /**
+     * @since 2.0.0 to follow CharSequence interface
+     */
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return builder.subSequence(start, end);
     }
 
     public char lastChar() {
