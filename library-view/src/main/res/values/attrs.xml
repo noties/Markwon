@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="markwonViewStyle" format="reference" />
 
     <declare-styleable name="MarkwonView">
         <attr name="mv_configurationProvider" format="string" />
         <attr name="mv_markdown" format="string" />
+
+        <attr name="mv_H1Style" format="reference" />
+        <attr name="mv_H2Style" format="reference" />
+        <attr name="mv_H3Style" format="reference" />
+        <attr name="mv_H4Style" format="reference" />
+        <attr name="mv_H5Style" format="reference" />
+        <attr name="mv_H6Style" format="reference" />
+
+        <attr name="mv_EmphasisStyle" format="reference" />
+        <attr name="mv_StrongEmphasisStyle" format="reference" />
+        <attr name="mv_BlockQuoteStyle" format="reference" />
+        <attr name="mv_CodeSpanStyle" format="reference" />
+        <attr name="mv_MultilineCodeSpanStyle" format="reference" />
+        <attr name="mv_OrderedListItemStyle" format="reference" />
+        <attr name="mv_BulletListItemStyle" format="reference" />
+        <attr name="mv_TaskListItemStyle" format="reference" />
+        <attr name="mv_TableRowStyle" format="reference" />
+        <attr name="mv_ParagraphStyle" format="reference" />
+        <attr name="mv_LinkStyle" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="MV_CustomFonts">
+        <attr name="android:fontFamily" />
+        <attr name="fontFamily" />
+    </declare-styleable>
 </resources>
