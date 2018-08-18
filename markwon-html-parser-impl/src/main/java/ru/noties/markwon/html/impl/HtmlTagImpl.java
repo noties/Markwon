@@ -11,12 +11,10 @@ import ru.noties.markwon.html.api.HtmlTag;
 
 abstract class HtmlTagImpl implements HtmlTag {
 
-    private static final int NO_VALUE = -1;
-
     final String name;
     final int start;
     final Map<String, String> attributes;
-    int end = NO_VALUE;
+    int end = NO_END;
 
     protected HtmlTagImpl(@NonNull String name, int start, @NonNull Map<String, String> attributes) {
         this.name = name;
@@ -51,8 +49,9 @@ abstract class HtmlTagImpl implements HtmlTag {
         return attributes;
     }
 
-    boolean isClosed() {
-        return end > NO_VALUE;
+    @Override
+    public boolean isClosed() {
+        return end > NO_END;
     }
 
     abstract void closeAt(int end);
@@ -86,8 +85,7 @@ abstract class HtmlTagImpl implements HtmlTag {
 
         @NonNull
         static BlockImpl root() {
-            //noinspection ConstantConditions
-            return new BlockImpl("", 0, null, null);
+            return new BlockImpl("", 0, Collections.<String, String>emptyMap(), null);
         }
 
         @NonNull
@@ -95,7 +93,7 @@ abstract class HtmlTagImpl implements HtmlTag {
                 @NonNull String name,
                 int start,
                 @NonNull Map<String, String> attributes,
-                @NonNull BlockImpl parent) {
+                @Nullable BlockImpl parent) {
             return new BlockImpl(name, start, attributes, parent);
         }
 
@@ -107,7 +105,7 @@ abstract class HtmlTagImpl implements HtmlTag {
                 @NonNull String name,
                 int start,
                 @NonNull Map<String, String> attributes,
-                @NonNull BlockImpl parent) {
+                @Nullable BlockImpl parent) {
             super(name, start, attributes);
             this.parent = parent;
         }
@@ -120,42 +118,36 @@ abstract class HtmlTagImpl implements HtmlTag {
                     for (BlockImpl child : children) {
                         child.closeAt(end);
                     }
-                    children = Collections.unmodifiableList(children);
-                } else {
-                    children = Collections.emptyList();
                 }
             }
         }
 
-        boolean isRoot() {
+        @Override
+        public boolean isRoot() {
             return parent == null;
         }
 
         @Nullable
         @Override
         public Block parent() {
-            if (parent == null) {
-                throw new IllegalStateException("#parent() getter was called on the root node " +
-                        "which should not be exposed outside internal usage");
-            }
             return parent;
         }
 
         @NonNull
         @Override
         public List<Block> children() {
-            //noinspection unchecked
-            return (List<Block>) (List<? extends Block>) children;
+            final List<Block> list;
+            if (children == null) {
+                list = Collections.emptyList();
+            } else {
+                list = Collections.unmodifiableList((List<? extends Block>) children);
+            }
+            return list;
         }
 
         @NonNull
         @Override
         public Map<String, String> attributes() {
-            //noinspection ConstantConditions
-            if (attributes == null) {
-                throw new IllegalStateException("#attributes() getter was called on the root node " +
-                        "which should not be exposed outside internal usage");
-            }
             return attributes;
         }
 

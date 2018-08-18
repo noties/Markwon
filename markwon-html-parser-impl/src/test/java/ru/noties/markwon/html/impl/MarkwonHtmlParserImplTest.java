@@ -12,15 +12,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
-import ru.noties.markwon.html.impl.HtmlEmptyTagReplacement;
-import ru.noties.markwon.html.impl.MarkwonHtmlParserImpl;
 import ru.noties.markwon.html.impl.jsoup.parser.Token;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
@@ -257,11 +257,11 @@ public class MarkwonHtmlParserImplTest {
 
         // tag names must be lower cased
         final Set<String> set = new HashSet<>(tags.size());
-        for (String tag: tags) {
+        for (String tag : tags) {
             set.add(tag.toLowerCase());
         }
 
-        for (HtmlTag.Block block: blocks) {
+        for (HtmlTag.Block block : blocks) {
             assertTrue(block.name(), block.isEmpty());
             assertTrue(set.remove(block.name()));
         }
@@ -301,7 +301,7 @@ public class MarkwonHtmlParserImplTest {
         });
 
         final StringBuilder html = new StringBuilder();
-        for (String tag: tags) {
+        for (String tag : tags) {
             html.append('<')
                     .append(tag)
                     .append('>')
@@ -327,7 +327,7 @@ public class MarkwonHtmlParserImplTest {
         final Set<String> set = new HashSet<>(tags);
 
         boolean first = true;
-        for (HtmlTag.Block block: blocks) {
+        for (HtmlTag.Block block : blocks) {
             assertEquals(block.name(), block.name(), output.substring(block.start(), block.end()));
             if (first) {
                 first = false;
@@ -342,58 +342,455 @@ public class MarkwonHtmlParserImplTest {
 
     @Test
     public void multipleFragmentsContinuation() {
-        throw new RuntimeException();
+
+        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement());
+
+        final StringBuilder output = new StringBuilder();
+
+        impl.processFragment(output, "<i>");
+        output.append("italic ");
+        impl.processFragment(output, "</i>");
+
+        final CaptureInlineTagsAction action = new CaptureInlineTagsAction();
+        impl.flushInlineTags(output.length(), action);
+
+        assertTrue(action.called);
+
+        final List<HtmlTag.Inline> inlines = action.tags;
+        assertEquals(inlines.toString(), 1, inlines.size());
+
+        final HtmlTag.Inline inline = inlines.get(0);
+        assertEquals("i", inline.name());
+        assertEquals(0, inline.start());
+        assertEquals(output.length(), inline.end());
+        assertEquals("italic ", output.toString());
     }
 
     @Test
     public void paragraphCannotContainAnythingButInlines() {
-        throw new RuntimeException();
-    }
 
-    // move to htmlInlineTagreplacement test class
-    @Test
-    public void imageReplacementNoAlt() {
-        throw new RuntimeException();
-    }
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
 
-    @Test
-    public void brAddsNewLine() {
-        throw new RuntimeException();
-    }
+        final StringBuilder output = new StringBuilder();
 
-    @Test
-    public void imageReplacementAlt() {
-        throw new RuntimeException();
+        impl.processFragment(output, "<p><i>italic <b>bold italic <div>in-div</div>");
+
+        final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(output.length(), inlineTagsAction);
+        impl.flushBlockTags(output.length(), blockTagsAction);
+
+        assertTrue(inlineTagsAction.called);
+        assertTrue(blockTagsAction.called);
+
+        final List<HtmlTag.Inline> inlines = inlineTagsAction.tags;
+        final List<HtmlTag.Block> blocks = blockTagsAction.tags;
+
+        assertEquals(2, inlines.size());
+        assertEquals(2, blocks.size());
+
+        // inlines will be closed at the end of the document
+        // P will be closed right before <div>
+
+        with(inlines.get(0), new Action<HtmlTag.Inline>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Inline inline) {
+                assertEquals("i", inline.name());
+                assertEquals(0, inline.start());
+                assertEquals(output.length(), inline.end());
+            }
+        });
+
+        with(inlines.get(1), new Action<HtmlTag.Inline>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Inline inline) {
+                assertEquals("b", inline.name());
+                assertEquals("italic ".length(), inline.start());
+                assertEquals(output.length(), inline.end());
+            }
+        });
+
+        with(blocks.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+                assertEquals("p", block.name());
+                assertEquals(0, block.start());
+                assertEquals(output.indexOf("in-div") - 1, block.end());
+            }
+        });
+
+        with(blocks.get(1), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+                assertEquals("div", block.name());
+                assertEquals(output.indexOf("in-div"), block.start());
+                assertEquals(output.length(), block.end());
+            }
+        });
     }
 
     @Test
     public void blockCloseClosesChildren() {
-        throw new RuntimeException();
-    }
 
-    @Test
-    public void allReturnedTagsAreClosed() {
-        throw new RuntimeException();
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        final String html = "<div-1>1<div-2>2<div-3>hello!</div-1>";
+        impl.processFragment(output, html);
+
+        assertEquals("12hello!", output.toString());
+
+        final CaptureBlockTagsAction action = new CaptureBlockTagsAction();
+        impl.flushBlockTags(output.length(), action);
+
+        assertTrue(action.called);
+        assertEquals(1, action.tags.size());
+
+        with(action.tags.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+
+                final int end = output.length();
+
+                assertEquals("div-1", block.name());
+                assertEquals(0, block.start());
+                assertEquals(end, block.end());
+                assertEquals(1, block.children().size());
+
+                with(block.children().get(0), new Action<HtmlTag.Block>() {
+                    @Override
+                    public void apply(@NonNull HtmlTag.Block block) {
+                        assertEquals("div-2", block.name());
+                        assertEquals(1, block.start());
+                        assertEquals(end, block.end());
+                        assertEquals(1, block.children().size());
+
+                        with(block.children().get(0), new Action<HtmlTag.Block>() {
+                            @Override
+                            public void apply(@NonNull HtmlTag.Block block) {
+                                assertEquals("div-3", block.name());
+                                assertEquals(2, block.start());
+                                assertEquals(end, block.end());
+                                assertEquals(0, block.children().size());
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Test
     public void allTagsAreLowerCase() {
-        throw new RuntimeException();
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+        impl.processFragment(output, "<DiV><I>italic <eM>emphasis</Em> italic</i></dIv>");
+
+        final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(output.length(), inlineTagsAction);
+        impl.flushBlockTags(output.length(), blockTagsAction);
+
+        assertTrue(inlineTagsAction.called);
+        assertTrue(blockTagsAction.called);
+
+        with(inlineTagsAction.tags, new Action<List<HtmlTag.Inline>>() {
+            @Override
+            public void apply(@NonNull List<HtmlTag.Inline> inlines) {
+
+                assertEquals(2, inlines.size());
+
+                with(inlines.get(0), new Action<HtmlTag.Inline>() {
+                    @Override
+                    public void apply(@NonNull HtmlTag.Inline inline) {
+                        assertEquals("i", inline.name());
+                        assertEquals(0, inline.start());
+                        assertEquals(output.length(), inline.end());
+                    }
+                });
+
+                with(inlines.get(1), new Action<HtmlTag.Inline>() {
+                    @Override
+                    public void apply(@NonNull HtmlTag.Inline inline) {
+
+                        assertEquals("em", inline.name());
+
+                        final int start = "italic ".length();
+                        assertEquals(start, inline.start());
+                        assertEquals(start + ("emphasis".length()), inline.end());
+                    }
+                });
+            }
+        });
+
+        assertEquals(1, blockTagsAction.tags.size());
+
+        with(blockTagsAction.tags.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+                assertEquals("div", block.name());
+                assertEquals(0, block.start());
+                assertEquals(output.length(), block.end());
+            }
+        });
     }
 
     @Test
     public void previousListItemClosed() {
-        throw new RuntimeException();
-    }
 
-    @Test
-    public void nestedBlocks() {
-        throw new RuntimeException();
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        final String html = "<ul><li>UL-First<li>UL-Second<ol><li>OL-First<li>OL-Second</ol><li>UL-Third";
+
+        impl.processFragment(output, html);
+
+        final CaptureBlockTagsAction action = new CaptureBlockTagsAction();
+        impl.flushBlockTags(output.length(), action);
+
+        assertTrue(action.called);
+        assertEquals(1, action.tags.size());
+
+        with(action.tags.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+
+                assertEquals("ul", block.name());
+                assertEquals(3, block.children().size());
+
+                with(block.children().get(0), new Action<HtmlTag.Block>() {
+                    @Override
+                    public void apply(@NonNull HtmlTag.Block block) {
+                        assertEquals("li", block.name());
+                        assertEquals("UL-First", output.substring(block.start(), block.end()));
+                        assertEquals(0, block.children().size());
+                    }
+                });
+
+                with(block.children().get(1), new Action<HtmlTag.Block>() {
+                    @Override
+                    public void apply(@NonNull HtmlTag.Block block) {
+                        assertEquals("li", block.name());
+
+                        // this block will contain nested block text also
+                        assertEquals("UL-Second\nOL-First\nOL-Second", output.substring(block.start(), block.end()));
+                        assertEquals(1, block.children().size());
+
+                        with(block.children().get(0), new Action<HtmlTag.Block>() {
+                            @Override
+                            public void apply(@NonNull HtmlTag.Block block) {
+                                assertEquals("ol", block.name());
+                                assertEquals(2, block.children().size());
+
+                                with(block.children().get(0), new Action<HtmlTag.Block>() {
+                                    @Override
+                                    public void apply(@NonNull HtmlTag.Block block) {
+                                        assertEquals("li", block.name());
+                                        assertEquals("OL-First", output.substring(block.start(), block.end()));
+                                        assertEquals(0, block.children().size());
+                                    }
+                                });
+
+                                with(block.children().get(1), new Action<HtmlTag.Block>() {
+                                    @Override
+                                    public void apply(@NonNull HtmlTag.Block block) {
+                                        assertEquals("li", block.name());
+                                        assertEquals("OL-Second", output.substring(block.start(), block.end()));
+                                        assertEquals(0, block.children().size());
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                with(block.children().get(2), new Action<HtmlTag.Block>() {
+                    @Override
+                    public void apply(@NonNull HtmlTag.Block block) {
+                        assertEquals("li", block.name());
+                        assertEquals("UL-Third", output.substring(block.start(), block.end()));
+                        assertEquals(0, block.children().size());
+                    }
+                });
+            }
+        });
     }
 
     @Test
     public void attributes() {
-        throw new RuntimeException();
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        impl.processFragment(output, "<my-tag " +
+                "name=no-name " +
+                ":click='doSomething' " +
+                "@focus=\"focus\" " +
+                "@blur.native=\"blur\" " +
+                "android:id=\"@id/id\">my-content</my-tag>");
+
+        final CaptureBlockTagsAction action = new CaptureBlockTagsAction();
+        impl.flushBlockTags(output.length(), action);
+
+        assertTrue(action.called);
+        assertEquals(1, action.tags.size());
+
+        with(action.tags.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+
+                assertEquals("my-tag", block.name());
+
+                with(block.attributes(), new Action<Map<String, String>>() {
+                    @Override
+                    public void apply(@NonNull Map<String, String> attributes) {
+                        assertEquals(5, attributes.size());
+                        assertEquals("no-name", attributes.get("name"));
+                        assertEquals("doSomething", attributes.get(":click"));
+                        assertEquals("focus", attributes.get("@focus"));
+                        assertEquals("blur", attributes.get("@blur.native"));
+                        assertEquals("@id/id", attributes.get("android:id"));
+                    }
+                });
+            }
+        });
+    }
+
+    @Test
+    public void flushCloseTagsIfRequested() {
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        impl.processFragment(output, "<div><i><b><em><strong>divibemstrong");
+
+        final int end = output.length();
+
+        final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(end, inlineTagsAction);
+        impl.flushBlockTags(end, blockTagsAction);
+
+        assertTrue(inlineTagsAction.called);
+        assertTrue(blockTagsAction.called);
+
+        with(inlineTagsAction.tags, new Action<List<HtmlTag.Inline>>() {
+            @Override
+            public void apply(@NonNull List<HtmlTag.Inline> inlines) {
+                assertEquals(4, inlines.size());
+                for (HtmlTag.Inline inline : inlines) {
+                    assertTrue(inline.isClosed());
+                    assertEquals(end, inline.end());
+                }
+            }
+        });
+
+        assertEquals(1, blockTagsAction.tags.size());
+        with(blockTagsAction.tags.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+                assertTrue(block.isClosed());
+                assertEquals(end, block.end());
+            }
+        });
+    }
+
+    @Test
+    public void flushDoesNotCloseTagsIfNoEndRequested() {
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        impl.processFragment(output, "<div><i><b><em><strong>divibemstrong");
+
+        final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(HtmlTag.NO_END, inlineTagsAction);
+        impl.flushBlockTags(HtmlTag.NO_END, blockTagsAction);
+
+        assertTrue(inlineTagsAction.called);
+        assertTrue(blockTagsAction.called);
+
+        with(inlineTagsAction.tags, new Action<List<HtmlTag.Inline>>() {
+            @Override
+            public void apply(@NonNull List<HtmlTag.Inline> inlines) {
+                assertEquals(4, inlines.size());
+                for (HtmlTag.Inline inline : inlines) {
+                    assertFalse(inline.isClosed());
+                    assertEquals(HtmlTag.NO_END, inline.end());
+                }
+            }
+        });
+
+        assertEquals(1, blockTagsAction.tags.size());
+
+        with(blockTagsAction.tags.get(0), new Action<HtmlTag.Block>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Block block) {
+                assertFalse(block.isClosed());
+                assertEquals(HtmlTag.NO_END, block.end());
+            }
+        });
+    }
+
+    @Test
+    public void flushClearsInternalState() {
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+        impl.processFragment(output, "<p><i>italic <b>bold italic</b></i></p><p>paragraph</p><div>and a div</div>");
+
+        final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(output.length(), inlineTagsAction);
+        impl.flushBlockTags(output.length(), blockTagsAction);
+
+        assertTrue(inlineTagsAction.called);
+        assertTrue(blockTagsAction.called);
+
+        assertEquals(2, inlineTagsAction.tags.size());
+        assertEquals(3, blockTagsAction.tags.size());
+
+        final CaptureInlineTagsAction captureInlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction captureBlockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(output.length(), captureInlineTagsAction);
+        impl.flushBlockTags(output.length(), captureBlockTagsAction);
+
+        assertTrue(captureInlineTagsAction.called);
+        assertTrue(captureBlockTagsAction.called);
+
+        assertEquals(0, captureInlineTagsAction.tags.size());
+        assertEquals(0, captureBlockTagsAction.tags.size());
+    }
+
+    @Test
+    public void resetClearsBothInlinesAndBlocks() {
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        impl.processFragment(output, "<p>paragraph <i>italic</i></p><div>div</div>");
+
+        impl.reset();
+
+        final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
+        final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
+
+        impl.flushInlineTags(output.length(), inlineTagsAction);
+        impl.flushBlockTags(output.length(), blockTagsAction);
+
+        assertTrue(inlineTagsAction.called);
+        assertTrue(blockTagsAction.called);
+
+        assertEquals(0, inlineTagsAction.tags.size());
+        assertEquals(0, blockTagsAction.tags.size());
     }
 
     private static class CaptureTagsAction<T> implements MarkwonHtmlParser.FlushAction<T> {
@@ -412,5 +809,13 @@ public class MarkwonHtmlParserImplTest {
     }
 
     private static class CaptureBlockTagsAction extends CaptureTagsAction<HtmlTag.Block> {
+    }
+
+    private interface Action<T> {
+        void apply(@NonNull T t);
+    }
+
+    private static <T> void with(@NonNull T t, @NonNull Action<T> action) {
+        action.apply(t);
     }
 }

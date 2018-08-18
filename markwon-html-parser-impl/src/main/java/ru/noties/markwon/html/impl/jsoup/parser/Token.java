@@ -222,7 +222,7 @@ public abstract class Token {
     }
 
     public final static class StartTag extends Tag {
-        StartTag() {
+        public StartTag() {
             super(TokenType.StartTag);
             attributes = new Attributes();
         }

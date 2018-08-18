@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.HtmlTag.Block;
 import ru.noties.markwon.html.api.HtmlTag.Inline;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
@@ -24,6 +25,9 @@ import ru.noties.markwon.html.impl.jsoup.parser.ParseErrorList;
 import ru.noties.markwon.html.impl.jsoup.parser.Token;
 import ru.noties.markwon.html.impl.jsoup.parser.Tokeniser;
 
+/**
+ * @since 2.0.0
+ */
 public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     @NonNull
@@ -173,12 +177,18 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     @Override
     public void flushInlineTags(int documentLength, @NonNull FlushAction<Inline> action) {
         if (inlineTags.size() > 0) {
-            for (HtmlTagImpl.InlineImpl inline : inlineTags) {
-                inline.closeAt(documentLength);
+
+            if (documentLength > HtmlTag.NO_END) {
+                for (HtmlTagImpl.InlineImpl inline : inlineTags) {
+                    inline.closeAt(documentLength);
+                }
             }
+
             //noinspection unchecked
             action.apply(Collections.unmodifiableList((List<? extends Inline>) inlineTags));
             inlineTags.clear();
+        } else {
+            action.apply(Collections.<Inline>emptyList());
         }
     }
 
@@ -186,15 +196,19 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
     public void flushBlockTags(int documentLength, @NonNull FlushAction<Block> action) {
 
         HtmlTagImpl.BlockImpl block = currentBlock;
-        while (!block.isRoot()) {
+        while (block.parent != null) {
             block = block.parent;
         }
 
-        block.closeAt(documentLength);
+        if (documentLength > HtmlTag.NO_END) {
+            block.closeAt(documentLength);
+        }
 
         final List<Block> children = block.children();
         if (children.size() > 0) {
             action.apply(children);
+        } else {
+            action.apply(Collections.<Block>emptyList());
         }
 
         currentBlock = HtmlTagImpl.BlockImpl.root();

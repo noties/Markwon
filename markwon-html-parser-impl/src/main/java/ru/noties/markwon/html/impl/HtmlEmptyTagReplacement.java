@@ -11,6 +11,8 @@ import ru.noties.markwon.html.impl.jsoup.parser.Token;
  * _void_ tags and tags that are self-closed (even if HTML spec doesn\'t specify
  * a tag as self-closed). This is due to the fact that underlying parser does not
  * validate context and does not check if a tag is correctly used.
+ *
+ * @since 2.0.0
  */
 public class HtmlEmptyTagReplacement {
 

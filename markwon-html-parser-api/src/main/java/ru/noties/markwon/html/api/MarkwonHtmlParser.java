@@ -4,8 +4,14 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+/**
+ * @since 2.0.0
+ */
 public abstract class MarkwonHtmlParser {
 
+    /**
+     * Factory method to create a `no-op` implementation (no parsing)
+     */
     @NonNull
     public static MarkwonHtmlParser noOp() {
         return new MarkwonHtmlParserNoOp();
@@ -19,14 +25,32 @@ public abstract class MarkwonHtmlParser {
             @NonNull T output,
             @NonNull String htmlFragment);
 
-    // clear all pending tags (if any)
-    // todo: we also can do this: if supplied value is -1 (for example) we ignore tags that are not closed
+    /**
+     * After this method exists a {@link MarkwonHtmlParser} will clear internal state for stored tags.
+     * If you wish to process them further after this method exists create own copy of supplied
+     * collection.
+     *
+     * @param documentLength known document length. This value is used to close all non-closed tags.
+     *                       If you wish to keep them open (do not force close at the end of a
+     *                       document pass here {@link HtmlTag#NO_END}. Later non-closed tags
+     *                       can be detected by calling {@link HtmlTag#isClosed()}
+     * @param action         {@link FlushAction} to be called with resulting tags ({@link ru.noties.markwon.html.api.HtmlTag.Inline})
+     */
     public abstract void flushInlineTags(
             int documentLength,
             @NonNull FlushAction<HtmlTag.Inline> action);
 
-    // clear all pending blocks if any
-    // todo: we also can do this: if supplied value is -1 (for example) we ignore tags that are not closed
+    /**
+     * After this method exists a {@link MarkwonHtmlParser} will clear internal state for stored tags.
+     * If you wish to process them further after this method exists create own copy of supplied
+     * collection.
+     *
+     * @param documentLength known document length. This value is used to close all non-closed tags.
+     *                       If you wish to keep them open (do not force close at the end of a
+     *                       document pass here {@link HtmlTag#NO_END}. Later non-closed tags
+     *                       can be detected by calling {@link HtmlTag#isClosed()}
+     * @param action         {@link FlushAction} to be called with resulting tags ({@link ru.noties.markwon.html.api.HtmlTag.Block})
+     */
     public abstract void flushBlockTags(
             int documentLength,
             @NonNull FlushAction<HtmlTag.Block> action);

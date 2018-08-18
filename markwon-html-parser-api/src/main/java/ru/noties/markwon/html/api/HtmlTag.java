@@ -9,8 +9,11 @@ import java.util.Map;
 /**
  * @see Inline
  * @see Block
+ * @since 2.0.0
  */
 public interface HtmlTag {
+
+    int NO_END = -1;
 
     /**
      * @return normalized tag name (lower-case)
@@ -32,6 +35,12 @@ public interface HtmlTag {
      * @return flag indicating if this tag has no content (when start == end)
      */
     boolean isEmpty();
+
+    /**
+     * @return flag indicating if this tag is closed (has valid start and end)
+     * @see #NO_END
+     */
+    boolean isClosed();
 
     @NonNull
     Map<String, String> attributes();
@@ -59,5 +68,11 @@ public interface HtmlTag {
          */
         @NonNull
         List<Block> children();
+
+        /**
+         * @return a flag indicating if this {@link Block} is at the root level (shortcut to calling:
+         * {@code parent() == null}
+         */
+        boolean isRoot();
     }
 }
