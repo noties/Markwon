@@ -4,7 +4,7 @@
 
 [![markwon](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=markwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon%22)
 [![markwon-image-loader](https://img.shields.io/maven-central/v/ru.noties/markwon-image-loader.svg?label=markwon-image-loader)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-image-loader%22)
-[![markwon-syntax](https://img.shields.io/maven-central/v/ru.noties/markwon-syntax.svg?label=markwon-syntax)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-syntax%22)
+[![markwon-syntax-highlight](https://img.shields.io/maven-central/v/ru.noties/markwon-syntax.svg?label=markwon-syntax)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-syntax%22)
 [![markwon-view](https://img.shields.io/maven-central/v/ru.noties/markwon-view.svg?label=markwon-view)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-view%22)
 
 **Markwon** is a library for Android that renders markdown as system-native Spannables. It gives ability to display markdown in all TextView widgets (**TextView**, **Button**, **Switch**, **CheckBox**, etc), **Notifications**, **Toasts**, etc. <u>**No WebView is required**</u>. Library provides reasonable defaults for display style of markdown but also gives all the means to tweak the appearance if desired. All markdown features are supported (including limited support for inlined HTML code, markdown tables and images).
@@ -15,7 +15,7 @@
 ```groovy
 implementation 'ru.noties:markwon:1.1.0'
 implementation 'ru.noties:markwon-image-loader:1.1.0' // optional
-implementation 'ru.noties:markwon-syntax:1.1.0' // optional
+implementation 'ru.noties:markwon-syntax-highlight:1.1.0' // optional
 implementation 'ru.noties:markwon-view:1.1.0' // optional
 ```
 
@@ -40,7 +40,7 @@ and then in your module `build.gradle`:
 implementation 'ru.noties:markwon:1.1.1-SNAPSHOT'
 ```
 
-Please note that `markwon-image-loader`, `markwon-syntax` and `markwon-view` are also present in `SNAPSHOT` repository and share the same version as main `markwon` artifact.
+Please note that `markwon-image-loader`, `markwon-syntax-highlight` and `markwon-view` are also present in `SNAPSHOT` repository and share the same version as main `markwon` artifact.
 
 ## Supported markdown features:
 * Emphasis (`*`, `_`)

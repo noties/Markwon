@@ -30,7 +30,7 @@ dependencies {
 
     implementation project(':markwon')
     implementation project(':markwon-image-loader')
-    implementation project(':markwon-syntax')
+    implementation project(':markwon-syntax-highlight')
 
     deps.with {
         implementation it['okhttp']
