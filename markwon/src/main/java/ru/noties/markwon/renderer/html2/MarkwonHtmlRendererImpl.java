@@ -2,7 +2,6 @@ package ru.noties.markwon.renderer.html2;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Spanned;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
                 for (HtmlTag.Inline inline : tags) {
                     handler = tagHandler(inline.name());
                     if (handler != null) {
-                        setSpans(builder, handler.getSpans(configuration, inline), inline.start(), inline.end());
+                        handler.handle(configuration, builder, inline);
                     }
                 }
             }
@@ -49,7 +48,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
                 for (HtmlTag.Block block : tags) {
                     handler = tagHandler(block.name());
                     if (handler != null) {
-                        setSpans(builder, handler.getSpans(configuration, block), block.start(), block.end());
+                        handler.handle(configuration, builder, block);
                     } else {
                         // see if any of children can be handled
                         apply(block.children());
@@ -65,17 +64,5 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
     @Override
     public TagHandler tagHandler(@NonNull String tagName) {
         return tagHandlers.get(tagName);
-    }
-
-    private static void setSpans(@NonNull SpannableBuilder builder, @Nullable Object spans, int start, int end) {
-        if (spans != null) {
-            if (spans.getClass().isArray()) {
-                for (Object o : ((Object[]) spans)) {
-                    builder.setSpan(o, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            } else {
-                builder.setSpan(spans, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-        }
     }
 }

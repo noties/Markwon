@@ -13,6 +13,7 @@ import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.tag.EmphasisHandler;
 import ru.noties.markwon.renderer.html2.tag.LinkHandler;
+import ru.noties.markwon.renderer.html2.tag.ListHandler;
 import ru.noties.markwon.renderer.html2.tag.StrikeHandler;
 import ru.noties.markwon.renderer.html2.tag.StrongEmphasisHandler;
 import ru.noties.markwon.renderer.html2.tag.SubScriptHandler;
@@ -36,10 +37,16 @@ public abstract class MarkwonHtmlRenderer {
 
     @NonNull
     public static MarkwonHtmlRenderer create() {
+        return builderWithDefaults().build();
+    }
+
+    @NonNull
+    public static Builder builderWithDefaults() {
 
         final EmphasisHandler emphasisHandler = new EmphasisHandler();
         final StrongEmphasisHandler strongEmphasisHandler = new StrongEmphasisHandler();
         final StrikeHandler strikeHandler = new StrikeHandler();
+        final ListHandler listHandler = new ListHandler();
 
         return builder()
                 .handler("i", emphasisHandler)
@@ -55,7 +62,8 @@ public abstract class MarkwonHtmlRenderer {
                 .handler("s", strikeHandler)
                 .handler("strike", strikeHandler)
                 .handler("a", new LinkHandler())
-                .build();
+                .handler("ul", listHandler)
+                .handler("ol", listHandler);
     }
 
     @NonNull

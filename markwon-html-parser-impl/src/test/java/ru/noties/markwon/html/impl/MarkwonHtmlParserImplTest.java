@@ -33,7 +33,7 @@ public class MarkwonHtmlParserImplTest {
         // all inline tags are correctly parsed
 
         // a simple replacement that will return tag name as replacement (for this test purposes)
-        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement() {
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
             public String replace(@NonNull Token.StartTag startTag) {
@@ -95,7 +95,7 @@ public class MarkwonHtmlParserImplTest {
                 "img", "input"
         );
 
-        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement() {
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
             public String replace(@NonNull Token.StartTag startTag) {
@@ -140,7 +140,7 @@ public class MarkwonHtmlParserImplTest {
     @Test
     public void blockVoidTags() {
 
-        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement() {
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
             public String replace(@NonNull Token.StartTag startTag) {
@@ -209,7 +209,7 @@ public class MarkwonHtmlParserImplTest {
                 "FiveFiveFiveFiveFive"
         );
 
-        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement() {
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
             public String replace(@NonNull Token.StartTag startTag) {
@@ -277,7 +277,7 @@ public class MarkwonHtmlParserImplTest {
                 "video"
         );
 
-        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement() {
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
             public String replace(@NonNull Token.StartTag startTag) {
@@ -328,7 +328,7 @@ public class MarkwonHtmlParserImplTest {
     @Test
     public void multipleFragmentsContinuation() {
 
-        final MarkwonHtmlParserImpl impl = new MarkwonHtmlParserImpl(new HtmlEmptyTagReplacement());
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement());
 
         final StringBuilder output = new StringBuilder();
 
@@ -424,7 +424,7 @@ public class MarkwonHtmlParserImplTest {
         final String html = "<div-1>1<div-2>2<div-3>hello!</div-1>";
         impl.processFragment(output, html);
 
-        assertEquals("12hello!", output.toString());
+        assertEquals(output.toString(), "12hello!", output.toString());
 
         final CaptureBlockTagsAction action = new CaptureBlockTagsAction();
         impl.flushBlockTags(output.length(), action);
@@ -472,6 +472,8 @@ public class MarkwonHtmlParserImplTest {
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
         final StringBuilder output = new StringBuilder();
         impl.processFragment(output, "<DiV><I>italic <eM>emphasis</Em> italic</i></dIv>");
+
+        System.out.printf("output: `%s`%n", output);
 
         final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
         final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
@@ -776,6 +778,30 @@ public class MarkwonHtmlParserImplTest {
 
         assertEquals(0, inlineTagsAction.tags.size());
         assertEquals(0, blockTagsAction.tags.size());
+    }
+
+    @Test
+    public void blockTagNewLine() {
+
+        // we should make sure that a block tag will have a new line for it's
+        // content (white spaces before should be ignored)
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final String html = "<ul>" +
+                "   <li>ul-first" +
+                "   <li>ul-second" +
+                "       <ol>" +
+                "           <li>ol-first" +
+                "           <li>ol-second" +
+                "       </ol>" +
+                "   <li>ul-third" +
+                "</ul>";
+
+        final StringBuilder output = new StringBuilder();
+        impl.processFragment(output, html);
+
+        final String[] split = output.toString().split("\n");
+        assertEquals(Arrays.toString(split), 5, split.length);
     }
 
     private static class CaptureTagsAction<T> implements MarkwonHtmlParser.FlushAction<T> {

@@ -22,11 +22,20 @@ import java.util.Iterator;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class SpannableBuilder implements Appendable, CharSequence {
 
-    // do not implement CharSequence (or any of Spanned interfaces)
 
-    // we will be using SpannableStringBuilder anyway as a backing store
-    // as it has tight connection with system (implements some hidden methods, etc)
-//    private final SpannableStringBuilder builder;
+    public static void setSpans(@NonNull SpannableBuilder builder, @Nullable Object spans, int start, int end) {
+        if (spans != null) {
+            if (spans.getClass().isArray()) {
+                for (Object o : ((Object[]) spans)) {
+                    builder.setSpan(o, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            } else {
+                builder.setSpan(spans, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+    }
+
+
     private final StringBuilder builder;
 
     // actually we might be just using ArrayList

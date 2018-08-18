@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +25,8 @@ import ru.noties.markwon.html.impl.jsoup.parser.ParseErrorList;
 import ru.noties.markwon.html.impl.jsoup.parser.Token;
 import ru.noties.markwon.html.impl.jsoup.parser.Tokeniser;
 
+import static ru.noties.markwon.html.impl.AppendableUtils.appendQuietly;
+
 /**
  * @since 2.0.0
  */
@@ -38,7 +39,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     @NonNull
     public static MarkwonHtmlParserImpl create(@NonNull HtmlEmptyTagReplacement inlineTagReplacement) {
-        return new MarkwonHtmlParserImpl(inlineTagReplacement);
+        return new MarkwonHtmlParserImpl(inlineTagReplacement, TrimmingAppender.create());
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements
@@ -56,9 +57,6 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     private static final String TAG_PARAGRAPH = "p";
     private static final String TAG_LIST_ITEM = "li";
-
-    // todo: make it configurable
-//    private static final String IMG_REPLACEMENT = "\uFFFC";
 
     static {
         INLINE_TAGS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
@@ -113,12 +111,19 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     private final HtmlEmptyTagReplacement emptyTagReplacement;
 
+    private final TrimmingAppender trimmingAppender;
+
     private final List<HtmlTagImpl.InlineImpl> inlineTags = new ArrayList<>(0);
 
     private HtmlTagImpl.BlockImpl currentBlock = HtmlTagImpl.BlockImpl.root();
 
-    MarkwonHtmlParserImpl(@NonNull HtmlEmptyTagReplacement replacement) {
+    private boolean isInsidePreTag;
+
+    MarkwonHtmlParserImpl(
+            @NonNull HtmlEmptyTagReplacement replacement,
+            @NonNull TrimmingAppender trimmingAppender) {
         this.emptyTagReplacement = replacement;
+        this.trimmingAppender = trimmingAppender;
     }
 
 
@@ -237,7 +242,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             final String replacement = emptyTagReplacement.replace(startTag);
             if (replacement != null
                     && replacement.length() > 0) {
-                append(output, replacement);
+                appendQuietly(output, replacement);
             }
 
             // the thing is: we will keep this inline tag in the list,
@@ -276,7 +281,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             // it must be closed here not matter what we are as here we _assume_
             // that it's a block tag
             currentBlock.closeAt(output.length());
-            append(output, "\n");
+            appendQuietly(output, '\n');
             currentBlock = currentBlock.parent;
         } else if (TAG_LIST_ITEM.equals(name)
                 && TAG_LIST_ITEM.equals(currentBlock.name)) {
@@ -286,6 +291,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         }
 
         if (isBlockTag(name)) {
+            isInsidePreTag = "pre".equals(name);
             ensureNewLine(output);
         }
 
@@ -298,7 +304,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             final String replacement = emptyTagReplacement.replace(startTag);
             if (replacement != null
                     && replacement.length() > 0) {
-                append(output, replacement);
+                appendQuietly(output, replacement);
             }
             block.closeAt(output.length());
         }
@@ -321,10 +327,14 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         final HtmlTagImpl.BlockImpl block = findOpenBlockTag(endTag.normalName);
         if (block != null) {
 
+            if ("pre".equals(name)) {
+                isInsidePreTag = false;
+            }
+
             block.closeAt(output.length());
 
             if (TAG_PARAGRAPH.equals(name)) {
-                append(output, "\n");
+                appendQuietly(output, '\n');
             }
 
             this.currentBlock = block.parent;
@@ -335,18 +345,14 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
             @NonNull T output,
             @NonNull Token.Character character) {
 
-        // the thing here is: if it's a script tag that we are inside -> we must not treat this
-        // as the text to append... should we even care about this? how many people are
-        // going to include freaking script tags as html inline?
-        //
-        // so tags are: BUTTON, INPUT, SELECT, SCRIPT, TEXTAREA
-        //
-        // actually we must decide it here: should we append freaking characters for these _bad_
-        // tags or not, as later we won't be able to change it and/or allow modification (as
-        // all indexes will be affected with this)
+        // there are tags: BUTTON, INPUT, SELECT, SCRIPT, TEXTAREA, STYLE
+        // that might have character data that we do not want to display
 
-        // for now: ignore the inline context
-        append(output, character.getData());
+        if (isInsidePreTag) {
+            appendQuietly(output, character.getData());
+        } else {
+            trimmingAppender.append(output, character.getData());
+        }
     }
 
     protected void appendBlockChild(@NonNull HtmlTagImpl.BlockImpl parent, @NonNull HtmlTagImpl.BlockImpl child) {
@@ -400,20 +406,11 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         return BLOCK_TAGS.contains(name);
     }
 
-    protected static void append(@NonNull Appendable appendable, @NonNull CharSequence text) {
-        try {
-            appendable.append(text);
-        } catch (IOException e) {
-            // _must_ not happen
-            throw new RuntimeException(e);
-        }
-    }
-
     protected static <T extends Appendable & CharSequence> void ensureNewLine(@NonNull T output) {
         final int length = output.length();
         if (length > 0
                 && '\n' != output.charAt(length - 1)) {
-            append(output, "\n");
+            appendQuietly(output, '\n');
         }
     }
 

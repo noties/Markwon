@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
-public class UnderlineHandler implements TagHandler {
+public class UnderlineHandler extends SimpleTagHandler {
     @Nullable
     @Override
     public Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag) {

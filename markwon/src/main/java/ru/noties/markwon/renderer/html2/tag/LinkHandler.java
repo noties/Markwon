@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
-public class LinkHandler implements TagHandler {
+public class LinkHandler extends SimpleTagHandler {
     @Nullable
     @Override
     public Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag) {
