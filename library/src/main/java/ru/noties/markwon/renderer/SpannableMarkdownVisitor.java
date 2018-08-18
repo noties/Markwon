@@ -266,8 +266,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
-        // at first here was a new line, but here should be a space char
-        builder.append(' ');
+        // @since 1.1.1 there is an option to treat soft break as a hard break (thus adding new line)
+        if (configuration.softBreakAddsNewLine()) {
+            newLine();
+        } else {
+            builder.append(' ');
+        }
     }
 
     @Override
@@ -386,14 +390,17 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(Paragraph paragraph) {
-
         final boolean inTightList = isInTightList(paragraph);
 
         if (!inTightList) {
             newLine();
         }
 
+        final int length = builder.length();
         visitChildren(paragraph);
+
+        // @since 1.1.1 apply paragraph span
+        setSpan(length, factory.paragraph(inTightList));
 
         if (!inTightList) {
             newLine();

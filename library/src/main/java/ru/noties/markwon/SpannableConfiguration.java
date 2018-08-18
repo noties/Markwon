@@ -32,6 +32,7 @@ public class SpannableConfiguration {
     private final SpannableHtmlParser htmlParser;
     private final ImageSizeResolver imageSizeResolver;
     private final SpannableFactory factory; // @since 1.1.0
+    private final boolean softBreakAddsNewLine; // @since 1.1.1
     private final boolean trimWhiteSpaceEnd; // @since 2.0.0
 
     private SpannableConfiguration(@NonNull Builder builder) {
@@ -43,6 +44,7 @@ public class SpannableConfiguration {
         this.htmlParser = builder.htmlParser;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.factory = builder.factory;
+        this.softBreakAddsNewLine = builder.softBreakAddsNewLine;
         this.trimWhiteSpaceEnd = builder.trimWhiteSpaceEnd;
     }
 
@@ -87,6 +89,15 @@ public class SpannableConfiguration {
     }
 
     /**
+     * @return a flag indicating if soft break should be treated as a hard
+     * break and thus adding a new line instead of adding a white space
+     * @since 1.1.1
+     */
+    public boolean softBreakAddsNewLine() {
+        return softBreakAddsNewLine;
+    }
+
+    /**
      * @since 2.0.0
      */
     public boolean trimWhiteSpaceEnd() {
@@ -104,8 +115,9 @@ public class SpannableConfiguration {
         private UrlProcessor urlProcessor;
         private SpannableHtmlParser htmlParser;
         private ImageSizeResolver imageSizeResolver;
-        private SpannableFactory factory;
-        private boolean trimWhiteSpaceEnd = true;
+        private SpannableFactory factory; // @since 1.1.0
+        private boolean softBreakAddsNewLine; // @since 1.1.1
+        private boolean trimWhiteSpaceEnd = true; // @since 2.0.0
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -162,6 +174,19 @@ public class SpannableConfiguration {
         @NonNull
         public Builder factory(@NonNull SpannableFactory factory) {
             this.factory = factory;
+            return this;
+        }
+
+        /**
+         * @param softBreakAddsNewLine a flag indicating if soft break should be treated as a hard
+         *                             break and thus adding a new line instead of adding a white space
+         * @return self
+         * @see <a href="https://spec.commonmark.org/0.28/#soft-line-breaks" > spec </a >
+         * @since 1.1.1
+         */
+        @NonNull
+        public Builder softBreakAddsNewLine(boolean softBreakAddsNewLine) {
+            this.softBreakAddsNewLine = softBreakAddsNewLine;
             return this;
         }
 
