@@ -45,6 +45,16 @@ public interface HtmlTag {
     @NonNull
     Map<String, String> attributes();
 
+    boolean isInline();
+
+    boolean isBlock();
+
+    @NonNull
+    Inline getAsInline();
+
+    @NonNull
+    Block getAsBlock();
+
     /**
      * Represents <em>really</em> inline HTML tags (unlile commonmark definitions)
      */

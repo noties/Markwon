@@ -79,6 +79,28 @@ abstract class HtmlTagImpl implements HtmlTag {
                     ", attributes=" + attributes +
                     '}';
         }
+
+        @Override
+        public boolean isInline() {
+            return true;
+        }
+
+        @Override
+        public boolean isBlock() {
+            return false;
+        }
+
+        @NonNull
+        @Override
+        public Inline getAsInline() {
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public Block getAsBlock() {
+            throw new ClassCastException("Cannot cast Inline instance to Block");
+        }
     }
 
     static class BlockImpl extends HtmlTagImpl implements Block {
@@ -149,6 +171,28 @@ abstract class HtmlTagImpl implements HtmlTag {
         @Override
         public Map<String, String> attributes() {
             return attributes;
+        }
+
+        @Override
+        public boolean isInline() {
+            return false;
+        }
+
+        @Override
+        public boolean isBlock() {
+            return true;
+        }
+
+        @NonNull
+        @Override
+        public Inline getAsInline() {
+            throw new ClassCastException("Cannot cast Block instance to Inline");
+        }
+
+        @NonNull
+        @Override
+        public Block getAsBlock() {
+            return this;
         }
 
         @Override

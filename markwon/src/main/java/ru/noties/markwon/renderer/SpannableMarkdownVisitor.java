@@ -43,6 +43,7 @@ import java.util.List;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
+import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.spans.TableRowSpan;
@@ -54,7 +55,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final SpannableConfiguration configuration;
     private final SpannableBuilder builder;
-    private final Deque<HtmlInlineItem> htmlInlineItems;
+    private final MarkwonHtmlParser htmlParser;
+//    private final Deque<HtmlInlineItem> htmlInlineItems;
 
     private final SpannableTheme theme;
     private final SpannableFactory factory;
@@ -72,7 +74,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     ) {
         this.configuration = configuration;
         this.builder = builder;
-        this.htmlInlineItems = new ArrayDeque<>(2);
+        this.htmlParser = configuration.htmlParser();
+//        this.htmlInlineItems = new ArrayDeque<>(2);
 
         this.theme = configuration.theme();
         this.factory = configuration.factory();
@@ -81,6 +84,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(Document document) {
         super.visit(document);
+
+        configuration.htmlRenderer().render(configuration, builder, htmlParser);
 
         if (configuration.trimWhiteSpaceEnd()) {
             builder.trimWhiteSpaceEnd();
@@ -445,47 +450,59 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(HtmlBlock htmlBlock) {
-        // http://spec.commonmark.org/0.18/#html-blocks
-        final Spanned spanned = configuration.htmlParser().getSpanned(null, htmlBlock.getLiteral());
-        if (!TextUtils.isEmpty(spanned)) {
-            builder.append(spanned);
-        }
+//        // http://spec.commonmark.org/0.18/#html-blocks
+//        final Spanned spanned = configuration.htmlParser().getSpanned(null, htmlBlock.getLiteral());
+//        if (!TextUtils.isEmpty(spanned)) {
+//            builder.append(spanned);
+//        }
+//        htmlParser.processFragment(builder, htmlBlock.getLiteral());
+        visitHtml(htmlBlock.getLiteral());
     }
 
     @Override
     public void visit(HtmlInline htmlInline) {
 
-        final SpannableHtmlParser htmlParser = configuration.htmlParser();
-        final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
+        visitHtml(htmlInline.getLiteral());
 
-        if (tag != null) {
+//        htmlParser.processFragment(builder, htmlInline.getLiteral());
 
-            final boolean voidTag = tag.voidTag();
-            if (!voidTag && tag.opening()) {
-                // push in stack
-                htmlInlineItems.push(new HtmlInlineItem(tag, builder.length()));
-                visitChildren(htmlInline);
-            } else {
+//        final SpannableHtmlParser htmlParser = configuration.htmlParser();
+//        final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
+//
+//        if (tag != null) {
+//
+//            final boolean voidTag = tag.voidTag();
+//            if (!voidTag && tag.opening()) {
+//                // push in stack
+//                htmlInlineItems.push(new HtmlInlineItem(tag, builder.length()));
+//                visitChildren(htmlInline);
+//            } else {
+//
+//                if (!voidTag) {
+//                    if (htmlInlineItems.size() > 0) {
+//                        final HtmlInlineItem item = htmlInlineItems.pop();
+//                        final Object span = htmlParser.getSpanForTag(item.tag);
+//                        setSpan(item.start, span);
+//                    }
+//                } else {
+//
+//                    final Spanned html = htmlParser.getSpanned(tag, htmlInline.getLiteral());
+//                    if (!TextUtils.isEmpty(html)) {
+//                        builder.append(html);
+//                    }
+//
+//                }
+//            }
+//        } else {
+//            // todo, should we append just literal?
+////            builder.append(htmlInline.getLiteral());
+//            visitChildren(htmlInline);
+//        }
+    }
 
-                if (!voidTag) {
-                    if (htmlInlineItems.size() > 0) {
-                        final HtmlInlineItem item = htmlInlineItems.pop();
-                        final Object span = htmlParser.getSpanForTag(item.tag);
-                        setSpan(item.start, span);
-                    }
-                } else {
-
-                    final Spanned html = htmlParser.getSpanned(tag, htmlInline.getLiteral());
-                    if (!TextUtils.isEmpty(html)) {
-                        builder.append(html);
-                    }
-
-                }
-            }
-        } else {
-            // todo, should we append just literal?
-//            builder.append(htmlInline.getLiteral());
-            visitChildren(htmlInline);
+    private void visitHtml(@Nullable String html) {
+        if (html != null) {
+            htmlParser.processFragment(builder, html);
         }
     }
 
@@ -552,14 +569,14 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         return out;
     }
 
-    private static class HtmlInlineItem {
-
-        final SpannableHtmlParser.Tag tag;
-        final int start;
-
-        HtmlInlineItem(SpannableHtmlParser.Tag tag, int start) {
-            this.tag = tag;
-            this.start = start;
-        }
-    }
+//    private static class HtmlInlineItem {
+//
+//        final SpannableHtmlParser.Tag tag;
+//        final int start;
+//
+//        HtmlInlineItem(SpannableHtmlParser.Tag tag, int start) {
+//            this.tag = tag;
+//            this.start = start;
+//        }
+//    }
 }

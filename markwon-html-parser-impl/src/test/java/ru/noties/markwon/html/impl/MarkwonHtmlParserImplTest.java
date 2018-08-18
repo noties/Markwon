@@ -42,22 +42,7 @@ public class MarkwonHtmlParserImplTest {
         });
 
         // all inline tags are parsed as ones
-        final List<String> tags = Arrays.asList(
-                "a", "abbr", "acronym",
-                "b", "bdo", "big", "br", "button",
-                "cite", "code",
-                "dfn",
-                "em",
-                "i", "img", "input",
-                "kbd",
-                "label",
-                "map",
-                "object",
-                "q",
-                "samp", "script", "select", "small", "span", "strong", "sub", "sup",
-                "textarea", "time", "tt",
-                "var"
-        );
+        final List<String> tags = new ArrayList<>(MarkwonHtmlParserImpl.INLINE_TAGS);
 
         final StringBuilder html = new StringBuilder();
         for (String tag : tags) {
