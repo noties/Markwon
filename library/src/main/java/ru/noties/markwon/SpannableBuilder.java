@@ -26,7 +26,8 @@ public class SpannableBuilder implements Appendable, CharSequence {
 
     // we will be using SpannableStringBuilder anyway as a backing store
     // as it has tight connection with system (implements some hidden methods, etc)
-    private final SpannableStringBuilder builder;
+//    private final SpannableStringBuilder builder;
+    private final StringBuilder builder;
 
     // actually we might be just using ArrayList
     private final Deque<Span> spans = new ArrayDeque<>(8);
@@ -36,7 +37,8 @@ public class SpannableBuilder implements Appendable, CharSequence {
     }
 
     public SpannableBuilder(@NonNull CharSequence cs) {
-        this.builder = new SpannableStringBuilderImpl(cs.toString());
+//        this.builder = new SpannableStringBuilderImpl(cs.toString());
+        this.builder = new StringBuilder(cs);
         copySpans(0, cs);
     }
 
@@ -65,7 +67,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
 
         copySpans(length(), cs);
 
-        builder.append(cs.toString());
+        builder.append(cs);
 
         return this;
     }
@@ -80,7 +82,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
         final CharSequence cs = csq.subSequence(start, end);
         copySpans(length(), cs);
 
-        builder.append(cs.toString());
+        builder.append(cs);
 
         return this;
     }
@@ -172,8 +174,73 @@ public class SpannableBuilder implements Appendable, CharSequence {
         return builder.toString();
     }
 
+    /**
+     * Moved from {@link #text()} method
+     *
+     * @since 2.0.0
+     */
+    public void trimWhiteSpaceEnd() {
+
+        // now, let's remove trailing & leading newLines (so small amounts of text are displayed correctly)
+        // @since 1.0.2
+
+        int length = builder.length();
+
+        if (length > 0) {
+
+            length = builder.length();
+            int amount = 0;
+            for (int i = length - 1; i >= 0; i--) {
+                if (Character.isWhitespace(builder.charAt(i))) {
+                    amount += 1;
+                } else {
+                    break;
+                }
+            }
+
+            if (amount > 0) {
+
+                final int newLength = length - amount;
+                builder.replace(newLength, length, "");
+
+                // additionally we should apply new length to the spans (otherwise
+                // sometimes system cannot handle spans with length greater than total length
+                // which causes some internal failure (no exceptions, no logs) in Layout class
+                // and no markdown is displayed at all
+                if (spans.size() > 0) {
+                    Span span;
+                    final Iterator<Span> iterator = spans.iterator();
+                    while (iterator.hasNext()) {
+                        span = iterator.next();
+                        // if span start is greater than newLength, then remove it... one should
+                        // not use white space for spanning resulting text
+                        if (span.start > newLength) {
+                            iterator.remove();
+                        } else if (span.end > newLength) {
+                            span.end = newLength;
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
     @NonNull
     public CharSequence text() {
+        // @since 2.0.0 redirects this call to `#spannableStringBuilder()`
+        return spannableStringBuilder();
+    }
+
+    /**
+     * Simple method to create a SpannableStringBuilder, which is created anyway. Unlike {@link #text()}
+     * method which returns the same SpannableStringBuilder there is no need to cast the resulting
+     * CharSequence
+     *
+     * @since 2.0.0
+     */
+    @NonNull
+    public SpannableStringBuilder spannableStringBuilder() {
 
         // okay, in order to not allow external modification and keep our spans order
         // we should not return our builder
@@ -183,28 +250,11 @@ public class SpannableBuilder implements Appendable, CharSequence {
         // so, we will defensively copy builder
 
         // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
+
         final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder);
 
         for (Span span : spans) {
             impl.setSpan(span.what, span.start, span.end, span.flags);
-        }
-
-        // now, let's remove trailing newLines (so small amounts of text are displayed correctly)
-        // @since 1.0.2
-
-        final int length = impl.length();
-        if (length > 0) {
-            int amount = 0;
-            for (int i = length - 1; i >= 0; i--) {
-                if (Character.isWhitespace(impl.charAt(i))) {
-                    amount += 1;
-                } else {
-                    break;
-                }
-            }
-            if (amount > 0) {
-                impl.replace(length - amount, length, "");
-            }
         }
 
         return impl;

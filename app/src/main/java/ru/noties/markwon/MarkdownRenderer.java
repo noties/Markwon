@@ -96,6 +96,7 @@ public class MarkdownRenderer {
                                 .codeTextColor(prism4jTheme.textColor())
                                 .build())
                         .factory(new GifAwareSpannableFactory(gifPlaceholder))
+                        .trimWhiteSpaceEnd(false)
                         .build();
 
                 final long start = SystemClock.uptimeMillis();

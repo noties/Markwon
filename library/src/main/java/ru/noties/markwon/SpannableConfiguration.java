@@ -32,6 +32,7 @@ public class SpannableConfiguration {
     private final SpannableHtmlParser htmlParser;
     private final ImageSizeResolver imageSizeResolver;
     private final SpannableFactory factory; // @since 1.1.0
+    private final boolean trimWhiteSpaceEnd; // @since 2.0.0
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -42,6 +43,7 @@ public class SpannableConfiguration {
         this.htmlParser = builder.htmlParser;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.factory = builder.factory;
+        this.trimWhiteSpaceEnd = builder.trimWhiteSpaceEnd;
     }
 
     @NonNull
@@ -84,6 +86,13 @@ public class SpannableConfiguration {
         return factory;
     }
 
+    /**
+     * @since 2.0.0
+     */
+    public boolean trimWhiteSpaceEnd() {
+        return trimWhiteSpaceEnd;
+    }
+
     @SuppressWarnings("unused")
     public static class Builder {
 
@@ -96,6 +105,7 @@ public class SpannableConfiguration {
         private SpannableHtmlParser htmlParser;
         private ImageSizeResolver imageSizeResolver;
         private SpannableFactory factory;
+        private boolean trimWhiteSpaceEnd = true;
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -152,6 +162,18 @@ public class SpannableConfiguration {
         @NonNull
         public Builder factory(@NonNull SpannableFactory factory) {
             this.factory = factory;
+            return this;
+        }
+
+        /**
+         * Will trim white space(s) from the end from resulting text.
+         * By default `true`
+         *
+         * @since 2.0.0
+         */
+        @NonNull
+        public Builder trimWhiteSpaceEnd(boolean trimWhiteSpaceEnd) {
+            this.trimWhiteSpaceEnd = trimWhiteSpaceEnd;
             return this;
         }
 

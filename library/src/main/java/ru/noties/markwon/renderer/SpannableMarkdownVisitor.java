@@ -15,6 +15,7 @@ import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
 import org.commonmark.node.CustomBlock;
 import org.commonmark.node.CustomNode;
+import org.commonmark.node.Document;
 import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
@@ -75,6 +76,15 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         this.theme = configuration.theme();
         this.factory = configuration.factory();
+    }
+
+    @Override
+    public void visit(Document document) {
+        super.visit(document);
+
+        if (configuration.trimWhiteSpaceEnd()) {
+            builder.trimWhiteSpaceEnd();
+        }
     }
 
     @Override
