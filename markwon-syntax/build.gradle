@@ -15,20 +15,15 @@ android {
 
 dependencies {
 
-    api project(':html-parser-api')
+    api project(':markwon')
 
     deps.with {
         api it['support-annotations']
-    }
-
-    deps.test.with {
-        testImplementation it['junit']
-        testImplementation it['robolectric']
+        api it['prism4j']
     }
 }
 
 afterEvaluate {
-    generateDebugBuildConfig.enabled = false
     generateReleaseBuildConfig.enabled = false
 }
 

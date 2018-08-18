@@ -28,9 +28,9 @@ android {
 
 dependencies {
 
-    implementation project(':library')
-    implementation project(':library-image-loader')
-    implementation project(':library-syntax')
+    implementation project(':markwon')
+    implementation project(':markwon-image-loader')
+    implementation project(':markwon-syntax')
 
     deps.with {
         implementation it['okhttp']

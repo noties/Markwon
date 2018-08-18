@@ -11,14 +11,21 @@ android {
         versionCode 1
         versionName version
     }
+
+    lintOptions {
+        // okio....
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
 
-    api project(':library')
+    api project(':markwon')
 
     deps.with {
-        compileOnly it['support-app-compat']
+        api it['android-svg']
+        api it['android-gif']
+        api it['okhttp']
     }
 }
 
