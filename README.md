@@ -37,7 +37,7 @@ allprojects {
 and then in your module `build.gradle`:
 
 ```groovy
-implementation 'ru.noties:markwon:1.1.0-SNAPSHOT'
+implementation 'ru.noties:markwon:1.1.1-SNAPSHOT'
 ```
 
 Please note that `markwon-image-loader`, `markwon-syntax` and `markwon-view` are also present in `SNAPSHOT` repository and share the same version as main `markwon` artifact.

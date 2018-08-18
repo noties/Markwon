@@ -59,8 +59,7 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
             left = x + (width * dir) + (width - numberWidth);
         }
 
-        final float numberY = CanvasUtils.textCenterY(top, bottom, p);
-
-        c.drawText(number, left, numberY, p);
+        // @since 1.1.1 we are using `baseline` argument to position text
+        c.drawText(number, left, baseline, p);
     }
 }
