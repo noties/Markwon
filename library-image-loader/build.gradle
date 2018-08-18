@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 
 android {
 
-    compileSdkVersion TARGET_SDK
-    buildToolsVersion BUILD_TOOLS
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
 
     defaultConfig {
-        minSdkVersion MIN_SDK
-        targetSdkVersion TARGET_SDK
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
         versionCode 1
         versionName version
     }
@@ -19,10 +19,14 @@ android {
 }
 
 dependencies {
+
     api project(':library')
-    api ANDROID_SVG
-    api ANDROID_GIF
-    api OK_HTTP
+
+    deps.with {
+        api it['android-svg']
+        api it['android-gif']
+        api it['okhttp']
+    }
 }
 
 afterEvaluate {
@@ -30,5 +34,5 @@ afterEvaluate {
 }
 
 if (hasProperty('release')) {
-    apply from: 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
+    apply from: config['push-aar-gradle']
 }

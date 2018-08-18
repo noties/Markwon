@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion TARGET_SDK
-    buildToolsVersion BUILD_TOOLS
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
 
     defaultConfig {
 
@@ -11,7 +11,7 @@ android {
 
         // using 21 as minimum only to be able to vector assets
         minSdkVersion 21
-        targetSdkVersion TARGET_SDK
+        targetSdkVersion config['target-sdk']
         versionCode 1
         versionName version
     }

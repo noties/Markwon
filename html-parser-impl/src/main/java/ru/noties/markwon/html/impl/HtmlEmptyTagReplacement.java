@@ -23,7 +23,7 @@ public class HtmlEmptyTagReplacement {
 
     /**
      * @return replacement for supplied startTag or null if no replacement should occur (which will
-     * lead to `Inline` tag have start & end the same value, thus not applicable for applying a Span)
+     * lead to `Inline` tag have start &amp; end the same value, thus not applicable for applying a Span)
      */
     @Nullable
     public String replace(@NonNull Token.StartTag startTag) {

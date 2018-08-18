@@ -37,7 +37,7 @@ public interface HtmlTag {
     Map<String, String> attributes();
 
     /**
-     * Represents <em>really</em> inline HTML tags (unline commonmark definitions)
+     * Represents <em>really</em> inline HTML tags (unlile commonmark definitions)
      */
     interface Inline extends HtmlTag {
     }

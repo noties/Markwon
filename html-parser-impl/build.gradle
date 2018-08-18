@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 
 android {
 
-    compileSdkVersion TARGET_SDK
-    buildToolsVersion BUILD_TOOLS
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
 
     defaultConfig {
-        minSdkVersion MIN_SDK
-        targetSdkVersion TARGET_SDK
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
         versionCode 1
         versionName version
     }
@@ -15,11 +15,16 @@ android {
 
 dependencies {
 
-    api SUPPORT_ANNOTATIONS
     api project(':html-parser-api')
 
-    testImplementation JUNIT
-    testImplementation ROBOLECTRIC
+    deps.with {
+        api it['support-annotations']
+    }
+
+    deps.test.with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+    }
 }
 
 afterEvaluate {
@@ -27,11 +32,6 @@ afterEvaluate {
     generateReleaseBuildConfig.enabled = false
 }
 
-// todo: remove `local` check after merge with latest version (1.1.1)
 if (hasProperty('release')) {
-    if (hasProperty('local')) {
-        ext.RELEASE_REPOSITORY_URL = LOCAL_MAVEN_URL
-        ext.SNAPSHOT_REPOSITORY_URL = LOCAL_MAVEN_URL
-    }
-    apply from: 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
+    apply from: config['push-aar-gradle']
 }

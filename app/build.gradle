@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion TARGET_SDK
-    buildToolsVersion BUILD_TOOLS
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
 
     defaultConfig {
         applicationId "ru.noties.markwon"
-        minSdkVersion MIN_SDK
-        targetSdkVersion TARGET_SDK
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
         versionCode 1
         versionName version
         setProperty("archivesBaseName", "markwon-sample-$versionName")
@@ -32,14 +32,16 @@ dependencies {
     implementation project(':library-image-loader')
     implementation project(':library-syntax')
 
-    implementation 'ru.noties:debug:3.0.0@jar'
-    implementation 'me.saket:better-link-movement-method:2.2.0'
+    deps.with {
+        implementation it['okhttp']
+        implementation it['prism4j']
+        implementation it['debug']
+        implementation it['better-link-movement']
+        implementation it['dagger']
+    }
 
-    implementation OK_HTTP
-
-    implementation 'com.google.dagger:dagger:2.10'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
-
-    implementation PRISM_4J
-    annotationProcessor PRISM_4J_BUNDLER
+    deps['annotationProcessor'].with {
+        annotationProcessor it['prism4j-bundler']
+        annotationProcessor it['dagger-compiler']
+    }
 }
