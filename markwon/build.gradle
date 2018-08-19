@@ -24,6 +24,12 @@ dependencies {
         api it['commonmark-strikethrough']
         api it['commonmark-table']
     }
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['ix-java']
+    }
 }
 
 afterEvaluate {
