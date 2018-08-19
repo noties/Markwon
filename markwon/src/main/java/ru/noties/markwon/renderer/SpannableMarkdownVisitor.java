@@ -3,7 +3,6 @@ package ru.noties.markwon.renderer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spanned;
-import android.text.TextUtils;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -35,16 +34,13 @@ import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
-import ru.noties.markwon.renderer.html.SpannableHtmlParser;
 import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.spans.TableRowSpan;
 import ru.noties.markwon.tasklist.TaskListBlock;
