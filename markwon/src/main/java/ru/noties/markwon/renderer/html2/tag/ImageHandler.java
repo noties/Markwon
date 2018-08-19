@@ -9,8 +9,25 @@ import java.util.Map;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.renderer.html2.CssInlineStyleParser;
 
 public class ImageHandler extends SimpleTagHandler {
+
+    interface ImageSizeParser {
+        @Nullable
+        ImageSize parse(@NonNull Map<String, String> attributes);
+    }
+
+    @NonNull
+    public static ImageHandler create() {
+        return new ImageHandler(new ImageSizeParserImpl(CssInlineStyleParser.create()));
+    }
+
+    private final ImageSizeParser imageSizeParser;
+
+    ImageHandler(@NonNull ImageSizeParser imageSizeParser) {
+        this.imageSizeParser = imageSizeParser;
+    }
 
     @Nullable
     @Override
@@ -26,21 +43,17 @@ public class ImageHandler extends SimpleTagHandler {
 
         // todo: replacement text is link... as we are not at block level
         // and cannot inspect the parent of this node... (img and a are both inlines)
+        //
+        // but we can look and see if we are inside a LinkSpan (will have to extend TagHandler
+        // to obtain an instance SpannableBuilder for inspection)
 
         return configuration.factory().image(
                 configuration.theme(),
                 destination,
                 configuration.asyncDrawableLoader(),
                 configuration.imageSizeResolver(),
-                parseImageSize(attributes),
+                imageSizeParser.parse(tag.attributes()),
                 false
         );
-    }
-
-    @Nullable
-    private static ImageSize parseImageSize(@NonNull Map<String, String> attributes) {
-        // strictly speaking percents when specified directly on an attribute
-        // are not part of the HTML spec (I couldn't find any reference)
-        return null;
     }
 }

@@ -67,7 +67,7 @@ public abstract class MarkwonHtmlRenderer {
                 .handler("a", new LinkHandler())
                 .handler("ul", listHandler)
                 .handler("ol", listHandler)
-                .handler("img", new ImageHandler());
+                .handler("img", ImageHandler.create());
     }
 
     @NonNull
