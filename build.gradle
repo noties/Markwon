@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
 
@@ -81,4 +82,9 @@ ext {
             'robolectric': 'org.robolectric:robolectric:3.8',
             'ix-java'    : 'com.github.akarnokd:ixjava:1.0.0'
     ]
+}
+
+task checkUpdates {
+    apply plugin: 'com.github.ben-manes.versions'
+    dependsOn 'dependencyUpdates'
 }
