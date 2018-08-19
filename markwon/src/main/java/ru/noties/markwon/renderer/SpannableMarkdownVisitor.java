@@ -471,13 +471,22 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             final int length = builder.length();
 
-            if (span.getClass().isArray()) {
-                for (Object o : ((Object[]) span)) {
-                    builder.setSpan(o, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            } else {
-                builder.setSpan(span, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            SpannableBuilder.setSpans(
+                    builder,
+                    span,
+                    start,
+                    length
+            );
+
+//            final int length = builder.length();
+//
+//            if (span.getClass().isArray()) {
+//                for (Object o : ((Object[]) span)) {
+//                    builder.setSpan(o, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                }
+//            } else {
+//                builder.setSpan(span, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            }
         }
     }
 

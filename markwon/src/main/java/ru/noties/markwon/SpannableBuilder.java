@@ -25,6 +25,16 @@ public class SpannableBuilder implements Appendable, CharSequence {
 
     public static void setSpans(@NonNull SpannableBuilder builder, @Nullable Object spans, int start, int end) {
         if (spans != null) {
+
+            // let's filter non-valid positions here, so there is no need to validate
+            // it whilst applying non-closed html tags
+            //
+            // setting a span for an invalid position can lead to silent fail (no exception,
+            // but execution is stopped)
+            if (!isPositionValid(builder.length(), start, end)) {
+                return;
+            }
+
             if (spans.getClass().isArray()) {
                 for (Object o : ((Object[]) spans)) {
                     builder.setSpan(o, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -33,6 +43,12 @@ public class SpannableBuilder implements Appendable, CharSequence {
                 builder.setSpan(spans, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
+    }
+
+    private static boolean isPositionValid(int length, int start, int end) {
+        return !(end <= start
+                || start < 0
+                || end > length);
     }
 
 

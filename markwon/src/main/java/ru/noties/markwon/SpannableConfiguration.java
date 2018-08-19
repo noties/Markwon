@@ -3,6 +3,7 @@ package ru.noties.markwon;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.renderer.ImageSizeResolverDef;
@@ -30,13 +31,13 @@ public class SpannableConfiguration {
     private final SyntaxHighlight syntaxHighlight;
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
-    //    private final SpannableHtmlParser htmlParser;
     private final ImageSizeResolver imageSizeResolver;
     private final SpannableFactory factory; // @since 1.1.0
     private final boolean softBreakAddsNewLine; // @since 1.1.1
     private final boolean trimWhiteSpaceEnd; // @since 2.0.0
     private final MarkwonHtmlParser htmlParser; // @since 2.0.0
     private final MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
+    private final boolean htmlIgnoreNonClosedTags; // @since 2.0.0
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -44,13 +45,13 @@ public class SpannableConfiguration {
         this.syntaxHighlight = builder.syntaxHighlight;
         this.linkResolver = builder.linkResolver;
         this.urlProcessor = builder.urlProcessor;
-//        this.htmlParser = builder.htmlParser;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.factory = builder.factory;
         this.softBreakAddsNewLine = builder.softBreakAddsNewLine;
         this.trimWhiteSpaceEnd = builder.trimWhiteSpaceEnd;
         this.htmlParser = builder.htmlParser;
         this.htmlRenderer = builder.htmlRenderer;
+        this.htmlIgnoreNonClosedTags = builder.htmlIgnoreNonClosedTags;
     }
 
     @NonNull
@@ -77,11 +78,6 @@ public class SpannableConfiguration {
     public UrlProcessor urlProcessor() {
         return urlProcessor;
     }
-
-//    @NonNull
-//    public SpannableHtmlParser htmlParser() {
-//        return htmlParser;
-//    }
 
     @NonNull
     public ImageSizeResolver imageSizeResolver() {
@@ -125,6 +121,13 @@ public class SpannableConfiguration {
         return htmlRenderer;
     }
 
+    /**
+     * @since 2.0.0
+     */
+    public boolean htmlIgnoreNonClosedTags() {
+        return htmlIgnoreNonClosedTags;
+    }
+
     @SuppressWarnings("unused")
     public static class Builder {
 
@@ -134,13 +137,13 @@ public class SpannableConfiguration {
         private SyntaxHighlight syntaxHighlight;
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
-        //        private SpannableHtmlParser htmlParser;
         private ImageSizeResolver imageSizeResolver;
         private SpannableFactory factory; // @since 1.1.0
         private boolean softBreakAddsNewLine; // @since 1.1.1
         private boolean trimWhiteSpaceEnd = true; // @since 2.0.0
         private MarkwonHtmlParser htmlParser; // @since 2.0.0
         private MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
+        private boolean htmlIgnoreNonClosedTags = true; // @since 2.0.0
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -175,12 +178,6 @@ public class SpannableConfiguration {
             this.urlProcessor = urlProcessor;
             return this;
         }
-
-//        @NonNull
-//        public Builder htmlParser(@NonNull SpannableHtmlParser htmlParser) {
-//            this.htmlParser = htmlParser;
-//            return this;
-//        }
 
         /**
          * @since 1.0.1
@@ -243,6 +240,19 @@ public class SpannableConfiguration {
             return this;
         }
 
+        /**
+         * @param htmlIgnoreNonClosedTags that indicates if non-closed html tags should be kept open.
+         *                                If this argument is false then all non-closed HTML tags
+         *                                will be closed at the end of a document. Otherwise they will
+         *                                be delivered non-closed {@link HtmlTag#isClosed()}
+         * @since 2.0.0
+         */
+        @NonNull
+        public Builder htmlIgnoreNonClosedTags(boolean htmlIgnoreNonClosedTags) {
+            this.htmlIgnoreNonClosedTags = htmlIgnoreNonClosedTags;
+            return this;
+        }
+
         @NonNull
         public SpannableConfiguration build() {
 
@@ -289,16 +299,6 @@ public class SpannableConfiguration {
             if (htmlRenderer == null) {
                 htmlRenderer = MarkwonHtmlRenderer.create();
             }
-
-//            if (htmlParser == null) {
-//                htmlParser = SpannableHtmlParser.create(
-//                        factory,
-//                        theme,
-//                        asyncDrawableLoader,
-//                        urlProcessor,
-//                        linkResolver,
-//                        imageSizeResolver);
-//            }
 
             return new SpannableConfiguration(this);
         }

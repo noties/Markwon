@@ -26,13 +26,26 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             @NonNull final SpannableBuilder builder,
             @NonNull MarkwonHtmlParser parser) {
 
-        final int length = builder.length();
+        final int end;
+        if (configuration.htmlIgnoreNonClosedTags()) {
+            end = HtmlTag.NO_END;
+        } else {
+            end = builder.length();
+        }
 
-        parser.flushInlineTags(length, new MarkwonHtmlParser.FlushAction<HtmlTag.Inline>() {
+        parser.flushInlineTags(end, new MarkwonHtmlParser.FlushAction<HtmlTag.Inline>() {
             @Override
             public void apply(@NonNull List<HtmlTag.Inline> tags) {
+
                 TagHandler handler;
+
                 for (HtmlTag.Inline inline : tags) {
+
+                    // if tag is not closed -> do not render
+                    if (!inline.isClosed()) {
+                        continue;
+                    }
+
                     handler = tagHandler(inline.name());
                     if (handler != null) {
                         handler.handle(configuration, builder, inline);
@@ -41,11 +54,18 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             }
         });
 
-        parser.flushBlockTags(length, new MarkwonHtmlParser.FlushAction<HtmlTag.Block>() {
+        parser.flushBlockTags(end, new MarkwonHtmlParser.FlushAction<HtmlTag.Block>() {
             @Override
             public void apply(@NonNull List<HtmlTag.Block> tags) {
+
                 TagHandler handler;
+
                 for (HtmlTag.Block block : tags) {
+
+                    if (!block.isClosed()) {
+                        continue;
+                    }
+
                     handler = tagHandler(block.name());
                     if (handler != null) {
                         handler.handle(configuration, builder, block);
