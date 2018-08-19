@@ -22,13 +22,12 @@ import java.util.Iterator;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class SpannableBuilder implements Appendable, CharSequence {
 
-
+    /**
+     * @since 2.0.0
+     */
     public static void setSpans(@NonNull SpannableBuilder builder, @Nullable Object spans, int start, int end) {
         if (spans != null) {
 
-            // let's filter non-valid positions here, so there is no need to validate
-            // it whilst applying non-closed html tags
-            //
             // setting a span for an invalid position can lead to silent fail (no exception,
             // but execution is stopped)
             if (!isPositionValid(builder.length(), start, end)) {

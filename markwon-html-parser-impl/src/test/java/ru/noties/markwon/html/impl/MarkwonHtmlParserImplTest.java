@@ -17,7 +17,6 @@ import java.util.Set;
 
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
-import ru.noties.markwon.html.impl.jsoup.parser.Token;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,8 +35,8 @@ public class MarkwonHtmlParserImplTest {
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
-            public String replace(@NonNull Token.StartTag startTag) {
-                return startTag.normalName;
+            public String replace(@NonNull HtmlTag tag) {
+                return tag.name();
             }
         });
 
@@ -98,7 +97,7 @@ public class MarkwonHtmlParserImplTest {
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
-            public String replace(@NonNull Token.StartTag startTag) {
+            public String replace(@NonNull HtmlTag tag) {
                 return null;
             }
         });
@@ -143,7 +142,7 @@ public class MarkwonHtmlParserImplTest {
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
-            public String replace(@NonNull Token.StartTag startTag) {
+            public String replace(@NonNull HtmlTag tag) {
                 return null;
             }
         });
@@ -212,7 +211,7 @@ public class MarkwonHtmlParserImplTest {
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
             @Nullable
             @Override
-            public String replace(@NonNull Token.StartTag startTag) {
+            public String replace(@NonNull HtmlTag tag) {
                 return null;
             }
         });
@@ -278,10 +277,9 @@ public class MarkwonHtmlParserImplTest {
         );
 
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create(new HtmlEmptyTagReplacement() {
-            @Nullable
             @Override
-            public String replace(@NonNull Token.StartTag startTag) {
-                return startTag.normalName;
+            public String replace(@NonNull HtmlTag tag) {
+                return tag.name();
             }
         });
 
@@ -472,8 +470,6 @@ public class MarkwonHtmlParserImplTest {
         final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
         final StringBuilder output = new StringBuilder();
         impl.processFragment(output, "<DiV><I>italic <eM>emphasis</Em> italic</i></dIv>");
-
-        System.out.printf("output: `%s`%n", output);
 
         final CaptureInlineTagsAction inlineTagsAction = new CaptureInlineTagsAction();
         final CaptureBlockTagsAction blockTagsAction = new CaptureBlockTagsAction();
@@ -802,6 +798,39 @@ public class MarkwonHtmlParserImplTest {
 
         final String[] split = output.toString().split("\n");
         assertEquals(Arrays.toString(split), 5, split.length);
+    }
+
+    @Test
+    public void attributesAreLowerCase() {
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        impl.processFragment(output, "<i CLASS=\"my-class\" dIsAbLeD @HeLLo=\"there\">");
+
+        final CaptureInlineTagsAction action = new CaptureInlineTagsAction();
+        impl.flushInlineTags(output.length(), action);
+
+        assertTrue(action.called);
+        assertEquals(1, action.tags.size());
+
+        with(action.tags.get(0), new Action<HtmlTag.Inline>() {
+            @Override
+            public void apply(@NonNull HtmlTag.Inline inline) {
+
+                assertEquals("i", inline.name());
+
+                with(inline.attributes(), new Action<Map<String, String>>() {
+                    @Override
+                    public void apply(@NonNull Map<String, String> map) {
+                        assertEquals(3, map.size());
+                        assertEquals("my-class", map.get("class"));
+                        assertEquals("", map.get("disabled"));
+                        assertEquals("there", map.get("@hello"));
+                    }
+                });
+            }
+        });
     }
 
     private static class CaptureTagsAction<T> implements MarkwonHtmlParser.FlushAction<T> {

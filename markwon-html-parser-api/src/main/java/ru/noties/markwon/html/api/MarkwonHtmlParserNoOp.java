@@ -2,6 +2,10 @@ package ru.noties.markwon.html.api;
 
 import android.support.annotation.NonNull;
 
+/**
+ * @see MarkwonHtmlParser
+ * @since 2.0.0
+ */
 class MarkwonHtmlParserNoOp extends MarkwonHtmlParser {
 
     @Override

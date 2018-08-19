@@ -119,6 +119,11 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     private boolean isInsidePreTag;
 
+    private Tokeniser tokeniser;
+
+    private CharacterReader reader;
+
+
     MarkwonHtmlParserImpl(
             @NonNull HtmlEmptyTagReplacement replacement,
             @NonNull TrimmingAppender trimmingAppender) {
@@ -126,13 +131,14 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         this.trimmingAppender = trimmingAppender;
     }
 
-
     @Override
     public <T extends Appendable & CharSequence> void processFragment(
             @NonNull T output,
             @NonNull String htmlFragment) {
 
-        // todo: maybe there is a way to reuse tokeniser...
+        // we might want to reuse tokeniser (at least when the same output is involved)
+        // as CharacterReader does a bit of initialization (cache etc) as it's
+        // primary usage is parsing a document in one run (not parsing _fragments_)
         final Tokeniser tokeniser = new Tokeniser(new CharacterReader(htmlFragment), ParseErrorList.noTracking());
 
         while (true) {
@@ -239,7 +245,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         if (isVoidTag(name)
                 || startTag.selfClosing) {
 
-            final String replacement = emptyTagReplacement.replace(startTag);
+            final String replacement = emptyTagReplacement.replace(inline);
             if (replacement != null
                     && replacement.length() > 0) {
                 appendQuietly(output, replacement);
@@ -261,6 +267,12 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         // try to find it, if none found -> ignore
         final HtmlTagImpl.InlineImpl openInline = findOpenInlineTag(endTag.normalName);
         if (openInline != null) {
+
+            // okay, if this tag is empty -> call replacement
+            if (isEmpty(output, openInline)) {
+                appendEmptyTagReplacement(output, openInline);
+            }
+
             // close open inline tag
             openInline.closeAt(output.length());
         }
@@ -301,7 +313,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final boolean isVoid = isVoidTag(name) || startTag.selfClosing;
         if (isVoid) {
-            final String replacement = emptyTagReplacement.replace(startTag);
+            final String replacement = emptyTagReplacement.replace(block);
             if (replacement != null
                     && replacement.length() > 0) {
                 appendQuietly(output, replacement);
@@ -329,6 +341,11 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
             if ("pre".equals(name)) {
                 isInsidePreTag = false;
+            }
+
+            // okay, if this tag is empty -> call replacement
+            if (isEmpty(output, block)) {
+                appendEmptyTagReplacement(output, block);
             }
 
             block.closeAt(output.length());
@@ -433,5 +450,20 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         }
 
         return map;
+    }
+
+    protected static <T extends Appendable & CharSequence> boolean isEmpty(
+            @NonNull T output,
+            @NonNull HtmlTagImpl tag) {
+        return tag.start == output.length();
+    }
+
+    protected <T extends Appendable & CharSequence> void appendEmptyTagReplacement(
+            @NonNull T output,
+            @NonNull HtmlTagImpl tag) {
+        final String replacement = emptyTagReplacement.replace(tag);
+        if (replacement != null) {
+            appendQuietly(output, replacement);
+        }
     }
 }

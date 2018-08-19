@@ -250,7 +250,8 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
 
             @Override
             public Attribute next() {
-                final Attribute attr = new Attribute(keys[i], vals[i], Attributes.this);
+                final String val = vals[i];
+                final Attribute attr = new Attribute(keys[i], val == null ? "" : val, Attributes.this);
                 i++;
                 return attr;
             }
@@ -262,21 +263,21 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         };
     }
 
-    /**
-     Get the attributes as a List, for iteration.
-     @return an view of the attributes as an unmodifialbe List.
-     */
-    public List<Attribute> asList() {
-        ArrayList<Attribute> list = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-//            Attribute attr = vals[i] == null ?
-//                    new BooleanAttribute(keys[i]) : // deprecated class, but maybe someone still wants it
-//                    new Attribute(keys[i], vals[i], Attributes.this);
-//            list.add(attr);
-            list.add(new Attribute(keys[i], vals[i], Attributes.this));
-        }
-        return Collections.unmodifiableList(list);
-    }
+//    /**
+//     Get the attributes as a List, for iteration.
+//     @return an view of the attributes as an unmodifialbe List.
+//     */
+//    public List<Attribute> asList() {
+//        ArrayList<Attribute> list = new ArrayList<>(size);
+//        for (int i = 0; i < size; i++) {
+////            Attribute attr = vals[i] == null ?
+////                    new BooleanAttribute(keys[i]) : // deprecated class, but maybe someone still wants it
+////                    new Attribute(keys[i], vals[i], Attributes.this);
+////            list.add(attr);
+//            list.add(new Attribute(keys[i], vals[i], Attributes.this));
+//        }
+//        return Collections.unmodifiableList(list);
+//    }
 
 //    /**
 //     * Retrieves a filtered view of attributes that are HTML5 custom data attributes; that is, attributes with keys

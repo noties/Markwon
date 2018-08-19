@@ -3,8 +3,10 @@ package ru.noties.markwon.html.impl;
 import org.junit.Before;
 import org.junit.Test;
 
-import ru.noties.markwon.html.impl.jsoup.nodes.Attributes;
-import ru.noties.markwon.html.impl.jsoup.parser.Token;
+import java.util.Collections;
+
+import ru.noties.markwon.html.api.HtmlTag;
+import ru.noties.markwon.html.impl.HtmlTagImpl.InlineImpl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,24 +21,27 @@ public class HtmlEmptyTagReplacementTest {
 
     @Test
     public void imageReplacementNoAlt() {
-        final Token.StartTag startTag = new Token.StartTag();
-        startTag.normalName = "img";
-        assertEquals("\uFFFC", replacement.replace(startTag));
+        final HtmlTag.Inline img = new InlineImpl("img", -1, Collections.<String, String>emptyMap());
+        assertEquals("\uFFFC", replacement.replace(img));
     }
 
     @Test
     public void imageReplacementAlt() {
-        final Token.StartTag startTag = new Token.StartTag();
-        startTag.normalName = "img";
-        startTag.attributes = new Attributes().put("alt", "alternative27");
-        assertEquals("alternative27", replacement.replace(startTag));
+        final HtmlTag.Inline img = new InlineImpl(
+                "img",
+                -1,
+                Collections.singletonMap("alt", "alternative27")
+        );
+        assertEquals("alternative27", replacement.replace(img));
     }
 
     @Test
     public void brAddsNewLine() {
-        final Token.StartTag startTag = new Token.StartTag();
-        startTag.normalName = "br";
-        startTag.selfClosing = true;
-        assertEquals("\n", replacement.replace(startTag));
+        final HtmlTag.Inline br = new InlineImpl(
+                "br",
+                -1,
+                Collections.<String, String>emptyMap()
+        );
+        assertEquals("\n", replacement.replace(br));
     }
 }

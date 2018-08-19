@@ -22,6 +22,11 @@ public abstract class TagHandler {
         TagHandler handler;
 
         for (HtmlTag.Block child : block.children()) {
+
+            if (!child.isClosed()) {
+                continue;
+            }
+
             handler = configuration.htmlRenderer().tagHandler(child.name());
             if (handler != null) {
                 handler.handle(configuration, builder, child);

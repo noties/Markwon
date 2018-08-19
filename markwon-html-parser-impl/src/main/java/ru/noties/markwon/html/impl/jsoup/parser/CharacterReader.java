@@ -1,5 +1,7 @@
 package ru.noties.markwon.html.impl.jsoup.parser;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -10,12 +12,12 @@ import ru.noties.markwon.html.impl.jsoup.UncheckedIOException;
 import ru.noties.markwon.html.impl.jsoup.helper.Validate;
 
 /**
- CharacterReader consumes tokens off a string. Used internally by jsoup. API subject to changes.
+ * CharacterReader consumes tokens off a string. Used internally by jsoup. API subject to changes.
  */
 public final class CharacterReader {
     static final char EOF = (char) -1;
     private static final int maxStringCacheLen = 12;
-    static final int maxBufferLen = 1024 * 32; // visible for testing
+    static final int maxBufferLen = 1024 * 4; // visible for testing
     private static final int readAheadLimit = (int) (maxBufferLen * 0.75);
 
     private final char[] charBuf;
@@ -25,13 +27,13 @@ public final class CharacterReader {
     private int bufPos;
     private int readerPos;
     private int bufMark;
-    private final String[] stringCache = new String[512]; // holds reused strings in this doc, to lessen garbage
+    private final String[] stringCache = new String[128]; // holds reused strings in this doc, to lessen garbage
 
     public CharacterReader(Reader input, int sz) {
         Validate.notNull(input);
         Validate.isTrue(input.markSupported());
         reader = input;
-        charBuf = new char[sz > maxBufferLen ? maxBufferLen : sz];
+        charBuf = new char[maxBufferLen];
         bufferUp();
     }
 
@@ -42,6 +44,15 @@ public final class CharacterReader {
     public CharacterReader(String input) {
         this(new StringReader(input), input.length());
     }
+
+//    public void swapInput(@NonNull String input) {
+//        reader = new StringReader(input);
+//        bufLength = 0;
+//        bufSplitPoint = 0;
+//        bufPos = 0;
+//        readerPos = 0;
+//        bufferUp();
+//    }
 
     private void bufferUp() {
         if (bufPos < bufSplitPoint)
@@ -66,6 +77,7 @@ public final class CharacterReader {
 
     /**
      * Gets the current cursor position in the content.
+     *
      * @return current position
      */
     public int pos() {
@@ -74,6 +86,7 @@ public final class CharacterReader {
 
     /**
      * Tests if all the content has been read.
+     *
      * @return true if nothing left to read.
      */
     public boolean isEmpty() {
@@ -87,6 +100,7 @@ public final class CharacterReader {
 
     /**
      * Get the char at the current position.
+     *
      * @return char
      */
     public char current() {
@@ -122,6 +136,7 @@ public final class CharacterReader {
 
     /**
      * Returns the number of characters between the current position and the next instance of the input char
+     *
      * @param c scan target
      * @return offset between current position and next instance of target. -1 if not found.
      */
@@ -148,9 +163,9 @@ public final class CharacterReader {
         for (int offset = bufPos; offset < bufLength; offset++) {
             // scan to first instance of startchar:
             if (startChar != charBuf[offset])
-                while(++offset < bufLength && startChar != charBuf[offset]) { /* empty */ }
+                while (++offset < bufLength && startChar != charBuf[offset]) { /* empty */ }
             int i = offset + 1;
-            int last = i + seq.length()-1;
+            int last = i + seq.length() - 1;
             if (offset < bufLength && last <= bufLength) {
                 for (int j = 1; i < last && seq.charAt(j) == charBuf[i]; i++, j++) { /* empty */ }
                 if (i == last) // found full sequence
@@ -162,6 +177,7 @@ public final class CharacterReader {
 
     /**
      * Reads characters up to the specific char.
+     *
      * @param c the delimiter
      * @return the chars read
      */
@@ -189,6 +205,7 @@ public final class CharacterReader {
 
     /**
      * Read characters until the first of any delimiters is found.
+     *
      * @param chars delimiters to scan for
      * @return characters read up to the matched delimiter.
      */
@@ -198,7 +215,8 @@ public final class CharacterReader {
         final int remaining = bufLength;
         final char[] val = charBuf;
 
-        OUTER: while (bufPos < remaining) {
+        OUTER:
+        while (bufPos < remaining) {
             for (char c : chars) {
                 if (val[bufPos] == c)
                     break OUTER;
@@ -206,7 +224,7 @@ public final class CharacterReader {
             bufPos++;
         }
 
-        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos -start) : "";
+        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos - start) : "";
     }
 
     String consumeToAnySorted(final char... chars) {
@@ -221,7 +239,7 @@ public final class CharacterReader {
             bufPos++;
         }
 
-        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos -start) : "";
+        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos - start) : "";
     }
 
     String consumeData() {
@@ -233,12 +251,12 @@ public final class CharacterReader {
 
         while (bufPos < remaining) {
             final char c = val[bufPos];
-            if (c == '&'|| c ==  '<' || c ==  TokeniserState.nullChar)
+            if (c == '&' || c == '<' || c == TokeniserState.nullChar)
                 break;
             bufPos++;
         }
 
-        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos -start) : "";
+        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos - start) : "";
     }
 
     String consumeTagName() {
@@ -250,12 +268,12 @@ public final class CharacterReader {
 
         while (bufPos < remaining) {
             final char c = val[bufPos];
-            if (c == '\t'|| c ==  '\n'|| c ==  '\r'|| c ==  '\f'|| c ==  ' '|| c ==  '/'|| c ==  '>'|| c ==  TokeniserState.nullChar)
+            if (c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == ' ' || c == '/' || c == '>' || c == TokeniserState.nullChar)
                 break;
             bufPos++;
         }
 
-        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos -start) : "";
+        return bufPos > start ? cacheString(charBuf, stringCache, start, bufPos - start) : "";
     }
 
     String consumeToEnd() {
@@ -338,7 +356,7 @@ public final class CharacterReader {
             return false;
 
         for (int offset = 0; offset < scanLength; offset++)
-            if (seq.charAt(offset) != charBuf[bufPos +offset])
+            if (seq.charAt(offset) != charBuf[bufPos + offset])
                 return false;
         return true;
     }
@@ -423,7 +441,7 @@ public final class CharacterReader {
 
     /**
      * Caches short strings, as a flywheel pattern, to reduce GC load. Just for this doc, to prevent leaks.
-     * <p />
+     * <p/>
      * Simplistic, and on hash collisions just falls back to creating a new string, vs a full HashMap with Entry list.
      * That saves both having to create objects as hash keys, and running through the entry list, at the expense of
      * some more duplicates.
