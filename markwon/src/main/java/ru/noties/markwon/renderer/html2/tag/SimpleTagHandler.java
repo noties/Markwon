@@ -7,7 +7,7 @@ import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
-public abstract class SimpleTagHandler implements TagHandler {
+public abstract class SimpleTagHandler extends TagHandler {
 
     @Nullable
     public abstract Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag);

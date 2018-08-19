@@ -6,7 +6,7 @@ import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
-public class ListHandler implements TagHandler {
+public class ListHandler extends TagHandler {
 
     @Override
     public void handle(
@@ -49,23 +49,6 @@ public class ListHandler implements TagHandler {
                     );
                 }
                 SpannableBuilder.setSpans(builder, spans, child.start(), child.end());
-            }
-        }
-    }
-
-    private void visitChildren(
-            @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder,
-            @NonNull HtmlTag.Block block) {
-
-        TagHandler handler;
-
-        for (HtmlTag.Block child : block.children()) {
-            handler = configuration.htmlRenderer().tagHandler(child.name());
-            if (handler != null) {
-                handler.handle(configuration, builder, child);
-            } else {
-                visitChildren(configuration, builder, child);
             }
         }
     }

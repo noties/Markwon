@@ -1,15 +1,28 @@
 package ru.noties.markwon.renderer.html2.tag;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
-public class StrikeHandler extends SimpleTagHandler {
-    @Nullable
+public class StrikeHandler extends TagHandler {
+
     @Override
-    public Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag) {
-        return configuration.factory().strikethrough();
+    public void handle(
+            @NonNull SpannableConfiguration configuration,
+            @NonNull SpannableBuilder builder,
+            @NonNull HtmlTag tag) {
+
+        if (tag.isBlock()) {
+            visitChildren(configuration, builder, tag.getAsBlock());
+        }
+
+        SpannableBuilder.setSpans(
+                builder,
+                configuration.factory().strikethrough(),
+                tag.start(),
+                tag.end()
+        );
     }
 }

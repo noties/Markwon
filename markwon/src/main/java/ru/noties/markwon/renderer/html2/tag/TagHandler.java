@@ -6,11 +6,28 @@ import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
-public interface TagHandler {
+public abstract class TagHandler {
 
-    void handle(
+    public abstract void handle(
             @NonNull SpannableConfiguration configuration,
             @NonNull SpannableBuilder builder,
             @NonNull HtmlTag tag
     );
+
+    protected static void visitChildren(
+            @NonNull SpannableConfiguration configuration,
+            @NonNull SpannableBuilder builder,
+            @NonNull HtmlTag.Block block) {
+
+        TagHandler handler;
+
+        for (HtmlTag.Block child : block.children()) {
+            handler = configuration.htmlRenderer().tagHandler(child.name());
+            if (handler != null) {
+                handler.handle(configuration, builder, child);
+            } else {
+                visitChildren(configuration, builder, child);
+            }
+        }
+    }
 }

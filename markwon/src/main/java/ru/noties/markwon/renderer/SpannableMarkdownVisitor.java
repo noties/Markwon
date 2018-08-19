@@ -56,7 +56,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     private final SpannableConfiguration configuration;
     private final SpannableBuilder builder;
     private final MarkwonHtmlParser htmlParser;
-//    private final Deque<HtmlInlineItem> htmlInlineItems;
 
     private final SpannableTheme theme;
     private final SpannableFactory factory;
@@ -75,7 +74,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         this.configuration = configuration;
         this.builder = builder;
         this.htmlParser = configuration.htmlParser();
-//        this.htmlInlineItems = new ArrayDeque<>(2);
 
         this.theme = configuration.theme();
         this.factory = configuration.factory();
@@ -450,54 +448,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     @Override
     public void visit(HtmlBlock htmlBlock) {
-//        // http://spec.commonmark.org/0.18/#html-blocks
-//        final Spanned spanned = configuration.htmlParser().getSpanned(null, htmlBlock.getLiteral());
-//        if (!TextUtils.isEmpty(spanned)) {
-//            builder.append(spanned);
-//        }
-//        htmlParser.processFragment(builder, htmlBlock.getLiteral());
         visitHtml(htmlBlock.getLiteral());
     }
 
     @Override
     public void visit(HtmlInline htmlInline) {
-
         visitHtml(htmlInline.getLiteral());
-
-//        htmlParser.processFragment(builder, htmlInline.getLiteral());
-
-//        final SpannableHtmlParser htmlParser = configuration.htmlParser();
-//        final SpannableHtmlParser.Tag tag = htmlParser.parseTag(htmlInline.getLiteral());
-//
-//        if (tag != null) {
-//
-//            final boolean voidTag = tag.voidTag();
-//            if (!voidTag && tag.opening()) {
-//                // push in stack
-//                htmlInlineItems.push(new HtmlInlineItem(tag, builder.length()));
-//                visitChildren(htmlInline);
-//            } else {
-//
-//                if (!voidTag) {
-//                    if (htmlInlineItems.size() > 0) {
-//                        final HtmlInlineItem item = htmlInlineItems.pop();
-//                        final Object span = htmlParser.getSpanForTag(item.tag);
-//                        setSpan(item.start, span);
-//                    }
-//                } else {
-//
-//                    final Spanned html = htmlParser.getSpanned(tag, htmlInline.getLiteral());
-//                    if (!TextUtils.isEmpty(html)) {
-//                        builder.append(html);
-//                    }
-//
-//                }
-//            }
-//        } else {
-//            // todo, should we append just literal?
-////            builder.append(htmlInline.getLiteral());
-//            visitChildren(htmlInline);
-//        }
     }
 
     private void visitHtml(@Nullable String html) {
@@ -568,15 +524,4 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         }
         return out;
     }
-
-//    private static class HtmlInlineItem {
-//
-//        final SpannableHtmlParser.Tag tag;
-//        final int start;
-//
-//        HtmlInlineItem(SpannableHtmlParser.Tag tag, int start) {
-//            this.tag = tag;
-//            this.start = start;
-//        }
-//    }
 }

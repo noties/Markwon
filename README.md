@@ -145,11 +145,11 @@ Please refer to [SpannableConfiguration] document for more info
 
 ## Syntax highlight
 
-Starting with version `1.1.0` there is an artifact (`markwon-syntax`) that allows you to have syntax highlight functionality.
+Starting with version `1.1.0` there is an artifact (`markwon-syntax-highlight`) that allows you to have syntax highlight functionality.
 It is based on [Prism4j](https://github.com/noties/Prism4j) project. It contains 2 builtin themes:
 `Default` (light, `Prism4jThemeDefault`) and `Darkula` (dark, `Prism4jThemeDarkula`).
 
-[library-syntax](./library-syntax/)
+[markwon-syntax-highlight](./markwon-syntax-highlight/)
 
 ---
 

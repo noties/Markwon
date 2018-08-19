@@ -12,6 +12,7 @@ import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.tag.EmphasisHandler;
+import ru.noties.markwon.renderer.html2.tag.ImageHandler;
 import ru.noties.markwon.renderer.html2.tag.LinkHandler;
 import ru.noties.markwon.renderer.html2.tag.ListHandler;
 import ru.noties.markwon.renderer.html2.tag.StrikeHandler;
@@ -46,6 +47,7 @@ public abstract class MarkwonHtmlRenderer {
         final EmphasisHandler emphasisHandler = new EmphasisHandler();
         final StrongEmphasisHandler strongEmphasisHandler = new StrongEmphasisHandler();
         final StrikeHandler strikeHandler = new StrikeHandler();
+        final UnderlineHandler underlineHandler = new UnderlineHandler();
         final ListHandler listHandler = new ListHandler();
 
         return builder()
@@ -57,13 +59,15 @@ public abstract class MarkwonHtmlRenderer {
                 .handler("strong", strongEmphasisHandler)
                 .handler("sup", new SuperScriptHandler())
                 .handler("sub", new SubScriptHandler())
-                .handler("u", new UnderlineHandler())
+                .handler("u", underlineHandler)
+                .handler("ins", underlineHandler)
                 .handler("del", strikeHandler)
                 .handler("s", strikeHandler)
                 .handler("strike", strikeHandler)
                 .handler("a", new LinkHandler())
                 .handler("ul", listHandler)
-                .handler("ol", listHandler);
+                .handler("ol", listHandler)
+                .handler("img", new ImageHandler());
     }
 
     @NonNull
@@ -82,9 +86,7 @@ public abstract class MarkwonHtmlRenderer {
 
         @NonNull
         public MarkwonHtmlRenderer build() {
-            return new MarkwonHtmlRendererImpl(
-                    Collections.unmodifiableMap(tagHandlers)
-            );
+            return new MarkwonHtmlRendererImpl(Collections.unmodifiableMap(tagHandlers));
         }
     }
 }
