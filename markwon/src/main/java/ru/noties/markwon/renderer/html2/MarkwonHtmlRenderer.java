@@ -11,6 +11,7 @@ import java.util.Map;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
+import ru.noties.markwon.renderer.html2.tag.BlockquoteHandler;
 import ru.noties.markwon.renderer.html2.tag.EmphasisHandler;
 import ru.noties.markwon.renderer.html2.tag.ImageHandler;
 import ru.noties.markwon.renderer.html2.tag.LinkHandler;
@@ -67,7 +68,8 @@ public abstract class MarkwonHtmlRenderer {
                 .handler("a", new LinkHandler())
                 .handler("ul", listHandler)
                 .handler("ol", listHandler)
-                .handler("img", ImageHandler.create());
+                .handler("img", ImageHandler.create())
+                .handler("blockquote", new BlockquoteHandler());
     }
 
     @NonNull
