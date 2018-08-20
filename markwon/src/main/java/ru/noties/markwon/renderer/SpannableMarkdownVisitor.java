@@ -3,6 +3,7 @@ package ru.noties.markwon.renderer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spanned;
+import android.util.Log;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -454,6 +455,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private void visitHtml(@Nullable String html) {
         if (html != null) {
+            Log.e("HTML", html);
             htmlParser.processFragment(builder, html);
         }
     }

@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
+import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
@@ -97,6 +98,7 @@ public class MarkdownRenderer {
                                 .build())
                         .factory(new GifAwareSpannableFactory(gifPlaceholder))
                         .trimWhiteSpaceEnd(false)
+                        .htmlParser(MarkwonHtmlParser.noOp())
                         .build();
 
                 final long start = SystemClock.uptimeMillis();
