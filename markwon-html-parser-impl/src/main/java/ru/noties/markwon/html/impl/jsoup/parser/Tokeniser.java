@@ -3,7 +3,7 @@ package ru.noties.markwon.html.impl.jsoup.parser;
 import java.util.Arrays;
 
 import ru.noties.markwon.html.impl.jsoup.helper.Validate;
-import ru.noties.markwon.html.impl.jsoup.nodes.Entities;
+import ru.noties.markwon.html.impl.jsoup.nodes.CommonMarkEntities;
 
 /**
  * Readers the input stream into tokens.
@@ -175,7 +175,7 @@ public final class Tokeniser {
             String nameRef = reader.consumeLetterThenDigitSequence();
             boolean looksLegit = reader.matches(';');
             // found if a base named entity without a ;, or an extended entity with the ;.
-            boolean found = (Entities.isBaseNamedEntity(nameRef) || (Entities.isNamedEntity(nameRef) && looksLegit));
+            boolean found = (CommonMarkEntities.isNamedEntity(nameRef) && looksLegit);
 
             if (!found) {
                 reader.rewindToMark();
@@ -190,7 +190,7 @@ public final class Tokeniser {
             }
             if (!reader.matchConsume(";"))
                 characterReferenceError("missing semicolon"); // missing semi
-            int numChars = Entities.codepointsForName(nameRef, multipointHolder);
+            int numChars = CommonMarkEntities.codepointsForName(nameRef, multipointHolder);
             if (numChars == 1) {
                 codeRef[0] = multipointHolder[0];
                 return codeRef;

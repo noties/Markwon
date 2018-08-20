@@ -244,7 +244,7 @@ public class SpannableConfiguration {
          * @param htmlIgnoreNonClosedTags that indicates if non-closed html tags should be kept open.
          *                                If this argument is false then all non-closed HTML tags
          *                                will be closed at the end of a document. Otherwise they will
-         *                                be delivered non-closed {@link HtmlTag#isClosed()}
+         *                                be delivered non-closed {@code HtmlTag#isClosed()}
          * @since 2.0.0
          */
         @NonNull

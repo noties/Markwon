@@ -19,6 +19,7 @@ dependencies {
 
     deps.with {
         api it['support-annotations']
+        api it['commonmark']
     }
 
     deps.test.with {
