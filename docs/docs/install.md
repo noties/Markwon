@@ -5,6 +5,10 @@ next: /docs/getting-started.md
 
 # Installation
 
+<MavenBadges />
+
+proguard when using image-loader
+
 ## Snapshot
 
 ![markwon-snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties/markwon.svg?label=markwon)

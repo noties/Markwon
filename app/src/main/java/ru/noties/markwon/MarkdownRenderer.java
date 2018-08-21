@@ -87,6 +87,8 @@ public class MarkdownRenderer {
                         0x20000000
                 );
 
+                final int red = 0xFFff0000;
+
                 final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
                         .asyncDrawableLoader(loader)
                         .urlProcessor(urlProcessor)
@@ -94,6 +96,7 @@ public class MarkdownRenderer {
                         .theme(SpannableTheme.builderWithDefaults(context)
                                 .codeBackgroundColor(background)
                                 .codeTextColor(prism4jTheme.textColor())
+                                .listItemColor(red)
                                 .build())
                         .factory(new GifAwareSpannableFactory(gifPlaceholder))
                         .trimWhiteSpaceEnd(false)

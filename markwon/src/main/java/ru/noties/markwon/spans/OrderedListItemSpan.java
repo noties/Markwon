@@ -10,6 +10,7 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
 
     private final SpannableTheme theme;
     private final String number;
+    private final Paint paint = ObjectsPool.paint();
 
     // we will use this variable to check if our order number text exceeds block margin,
     // so we will use it instead of block margin
@@ -39,7 +40,9 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
             return;
         }
 
-        theme.applyListItemStyle(p);
+        paint.set(p);
+
+        theme.applyListItemStyle(paint);
 
         final int numberWidth = (int) (p.measureText(number) + .5F);
 
@@ -60,6 +63,6 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
         }
 
         // @since 1.1.1 we are using `baseline` argument to position text
-        c.drawText(number, left, baseline, p);
+        c.drawText(number, left, baseline, paint);
     }
 }

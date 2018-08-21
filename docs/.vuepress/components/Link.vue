@@ -1,5 +1,5 @@
 <template>
-    <a :href="linkHref()" v-text="linkText()"></a>
+    <a :href="linkHref()" target="_blank" rel="noopener noreferrer">{{linkText()}}<OutboundLink/></a>
 </template>
 
 <script>
@@ -23,6 +23,13 @@ var map = {
   },
   "html-blocks": {
       href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements"
+  },
+  "jsoup": {
+      displayName: "Jsoup",
+      href: "https://github.com/jhy/jsoup/"
+  },
+  "markwon-jsoup": {
+      href: "https://github.com/noties/Markwon/tree/master/markwon-html-parser-impl/src/main/java/ru/noties/markwon/html/impl/jsoup"
   }
 };
 

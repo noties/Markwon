@@ -1,12 +1,12 @@
 # HTML
-<Badge text="2.x.x" />
+<Badge text="2.0.0" />
 
-Starting with version `2.x.x` `Markwon` brings the whole HTML parsing/rendering
+Starting with version `2.0.0` `Markwon` brings the whole HTML parsing/rendering
 stack _on-site_. The main reason for this are _special_ definitions of HTML nodes
 by <Link name="commonmark-spec" />. More specifically: <Link name="commonmark-spec#inline" displayName="inline" /> 
 and <Link name="commonmark-spec#block" displayName="block" />.
 These two are _a bit_ different from _native_ HTML understanding.
-Well, they are completely different and share only the same names as
+Well, they are _completely_ different and share only the same names as
 <Link name="html-inlines" displayName="HTML-inline"/> and <Link name="html-blocks" displayName="HTML-block"/>
 elements. This leads to situations when for example an `<i>` tag is considered
 a block when it's used like this:
@@ -84,11 +84,89 @@ This might seem like a minor problem, but add more tags to a document,
 introduce some deeply nested structures, spice openning and closing tags up
 by adding markdown markup between them and finally write _malicious_ HTML code :laughing:!
 
-Because of this I 
+There is no such problem on the _frontend_ for which commonmark specification is mostly
+aimed as _frontend_ runs in a web-browser environment. After all _parsed_ markdown
+will become HTML tags (most common usage). And web-browser will know how to render final result.
 
-afterall creating an implementation of a web browser is not a purpose of this library.
+We, on the other hand, do not posess HTML heritage (*thank :robot:!*), but still
+want to display some HTML to style resulting markdown a bit. That's why `Markwon`
+incorporated own HTML parsing logic. It is based on the <Link name="jsoup" /> project.
+And makes usage of the `Tokekiser` class that allows to _tokenise_ input HTML.
+All other code that doesn't follow this purpose was removed. It's safe to use
+in projects that already have `jsoup` dependency as `Markwon` repackaged **jsoup** source classes
+(which could be found <Link name="markwon-jsoup" displayName="here"/>)
 
-html-entities
+## Parser
+
+There are no additional steps to configure HTML parsing. It's enabled by default.
+If you wish to _exclude_ it, please follow the [exclude](#exclude-html-parsing) section below.
+
+The key class here is: `MarkwonHtmlParser` that is defined in `markwon-html-parser-api` module.
+`markwon-html-parser-api` is a simple module that defines HTML parsing contract and
+does not provide implementation. 
+
+To change what implementation `Markwon` should use, `SpannableConfiguration` can be used:
+
+```java{2}
+SpannableConfiguration.builder(context)
+        .htmlParser(MarkwonHtmlParser)
+        .build();
+```
+
+`markwon-html-parser-impl` on the other hand provides `MarkwonHtmlParser` implementation.
+It's called `MarkwonHtmlParserImpl`. It can be created like this:
+
+```java
+final MarkwonHtmlParser htmlParser = MarkwonHtmlParserImpl.create();
+// or
+final MarkwonHtmlParser htmlParser = MarkwonHtmlParserImpl.create(HtmlEmptyTagReplacement);
+```
+
+### Empty tag replacement
+
+In order to append text content for self-closing, void or just _empty_ HTML tags,
+`HtmlEmptyTagReplacement` can be used. As we cannot set Span for empty content,
+we must represent empty tag with text during parsing stage (if we want it to be represented).
+
+Consider this:
+* `<img src="me-sad.JPG">`
+* `<br />`
+* `<who-am-i></who-am-i>`
+
+By default (`HtmlEmptyTagReplacement.create()`) will handle `img` and `br` tags.
+`img` will be replaced with `alt` property if it is present and `\uFFFC` if it is not. 
+And `br` will insert a new line.
+
+### Non-closed tags
+
+It's possible that your HTML can contain non-closed tags. By default `Markwon` will ignore them,
+but if you wish to get a bit closer to a web-browser experience, you can allow this behaviour:
+
+```java{2}
+SpannableConfiguration.builder(context)
+        .htmlIgnoreNonClosedTags(false)
+        .build();
+```
+
+:::warning Note
+If there is (for example) an `<i>` tag at the start of a document and it's not closed
+and `Markwon` is configured to **not** ignore non-closed tags (`.htmlIgnoreNonClosedTags(false)`),
+it will make the whole document in italics
+:::
+
+### Implementation note
+
+`MarkwonHtmlParserImpl` does not create a unified HTML node. Instead it creates
+2 collections: inline tags and block tags. Inline tags are represented as a `List`
+of inline tags (<Link name="html-inlines" displayName="reference" />). And
+block tags are structured in a tree. This helps to achieve _browser_-like behaviour,
+when open inline tag is applied to all content (even if inside blocks) until closing tag.
+All tags that are not _inline_ are considered to be _block_ ones.
+
+## Renderer
+
+### Custom tag handler
+CssInlineStyleParser
 
 ## Exclude HTML parsing
 
@@ -112,3 +190,10 @@ dependencies {
 Excluding `markwon-html-parser-impl` this way will result in
 `MarkwonHtmlParser#noOp` implementation. No further steps are 
 required.
+
+:::warning Note
+Excluding `markwon-html-parser-impl` won't remove *all* the content between
+HTML tags. It will if `commonmark` decides that a specific fragment is a 
+`HtmlBlock`, but it won't if fragment is considered a `HtmlInline` as `HtmlInline`
+does not contain contents (just a tag definition).
+:::
