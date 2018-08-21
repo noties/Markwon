@@ -16,6 +16,8 @@ public interface Loader {
 
 ## AsyncDrawableLoader
 
+<MavenBadge artifact="markwon-image-loader" />
+
 `AsyncDrawableLoader` from `markwon-image-loader` artifact can be used.
 
 :::tip Install

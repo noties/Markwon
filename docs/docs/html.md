@@ -1,5 +1,4 @@
-# HTML
-<Badge text="2.0.0" />
+# HTML <Badge text="2.0.0" />
 
 Starting with version `2.0.0` `Markwon` brings the whole HTML parsing/rendering
 stack _on-site_. The main reason for this are _special_ definitions of HTML nodes
@@ -165,8 +164,112 @@ All tags that are not _inline_ are considered to be _block_ ones.
 
 ## Renderer
 
+Unlike `MarkwonHtmlParser` `Markwon` comes with a `MarkwonHtmlRenderer` by default.
+
+Default implementation can be obtain like this:
+
+```java
+MarkwonHtmlRenderer.create();
+```
+
+Default instance have these tags _handled_:
+* emphasis
+  * `i`
+  * `em`
+  * `cite`
+  * `dfn`
+* strong emphasis
+  * `b`
+  * `strong`
+* `sup` (super script)
+* `sub` (sub script)
+* underline
+  * `u`
+  * `ins`
+* strike through
+  * `del`
+  * `s`
+  * `strike`
+* `a` (link)
+* `ul` (unordered list)
+* `ol` (ordered list)
+* `img` (image)
+* `blockquote` (block quote)
+
+If you wish to _extend_ default handling (or override existing),
+`#builderWithDefaults` factory method can be used:
+
+```java
+MarkwonHtmlRenderer.builderWithDefaults();
+```
+
+For a completely _clean_ configurable instance `#builder` method can be used:
+
+```java
+MarkwonHtmlRenderer.builder();
+```
+
 ### Custom tag handler
-CssInlineStyleParser
+
+To configure `MarkwonHtmlRenderer` to handle tags differently or 
+create a new tag handler - `TagHandler` can be used
+
+```java
+public abstract class TagHandler {
+
+    public abstract void handle(
+            @NonNull SpannableConfiguration configuration,
+            @NonNull SpannableBuilder builder,
+            @NonNull HtmlTag tag
+    );
+}
+```
+
+For the most simple _inline_ tag handler a `SimpleTagHandler` can be used:
+
+```java
+public abstract class SimpleTagHandler extends TagHandler {
+
+    @Nullable
+    public abstract Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag);
+}
+```
+
+For example, `EmphasisHandler`:
+
+```java
+public class EmphasisHandler extends SimpleTagHandler {
+    @Nullable
+    @Override
+    public Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag) {
+        return configuration.factory().emphasis();
+    }
+}
+```
+
+If you wish to handle a _block_ HTML node (for example `<ul><li>First<li>Second</ul>`) refer
+to `ListHandler` source code for reference.
+
+:::warning
+The most important thing when implementing custom `TagHandler` is to know
+what type of `HtmlTag` we are dealing with. There are 2: inline &amp; block.
+Inline tag cannot contain children. Block _can_ contain children. And they
+_most likely_ should also be visited and _handled_ by registered `TagHandler` (if any)
+accordingly. See `TagHandler#visitChildren(configuration, builder, child);`
+:::
+
+#### Css inline style parser
+
+When implementing own `TagHandler` you might want to inspect inline CSS styles
+of a HTML element. `Markwon` provides an utility parser for that purpose:
+
+```java
+final CssInlineStyleParser inlineStyleParser = CssInlineStyleParser.create();
+for (CssProperty property: inlineStyleParser.parse("width: 100%; height: 100%;")) {
+    // [0] = CssProperty({width=100%}),
+    // [1] = CssProperty({height=100%})
+}
+```
 
 ## Exclude HTML parsing
 
