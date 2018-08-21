@@ -22,5 +22,10 @@ module.exports = {
             '/docs/html.md',
             '/docs/view.md'
         ]
+    },
+    markdown: {
+        config: md => {
+            md.use(require('markdown-it-task-lists'));
+        }
     }
 }

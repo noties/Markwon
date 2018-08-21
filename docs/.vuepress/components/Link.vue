@@ -14,6 +14,9 @@ var map = {
   "commonmark-spec#block": {
       href: "https://spec.commonmark.org/0.28/#html-blocks"
   },
+  "commonmark-spec#soft-break": {
+      href: "https://spec.commonmark.org/0.28/#soft-line-breaks"
+  },
   "commonmark-dingus": {
       displayName: "commonmark dingus",
       href: "https://spec.commonmark.org/dingus/"
@@ -30,6 +33,10 @@ var map = {
   },
   "markwon-jsoup": {
       href: "https://github.com/noties/Markwon/tree/master/markwon-html-parser-impl/src/main/java/ru/noties/markwon/html/impl/jsoup"
+  },
+  "commonmark-java": {
+      href: "https://github.com/atlassian/commonmark-java/",
+      displayName: "commonmark-java"
   }
 };
 

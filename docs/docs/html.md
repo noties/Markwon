@@ -195,5 +195,5 @@ required.
 Excluding `markwon-html-parser-impl` won't remove *all* the content between
 HTML tags. It will if `commonmark` decides that a specific fragment is a 
 `HtmlBlock`, but it won't if fragment is considered a `HtmlInline` as `HtmlInline`
-does not contain contents (just a tag definition).
+does not contain content (just a tag definition).
 :::

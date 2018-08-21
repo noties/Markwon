@@ -96,7 +96,7 @@ public class MarkdownRenderer {
                         .theme(SpannableTheme.builderWithDefaults(context)
                                 .codeBackgroundColor(background)
                                 .codeTextColor(prism4jTheme.textColor())
-                                .listItemColor(red)
+                                .codeMultilineMargin(100)
                                 .build())
                         .factory(new GifAwareSpannableFactory(gifPlaceholder))
                         .trimWhiteSpaceEnd(false)
