@@ -1,5 +1,5 @@
 <template>
-    <a :href="githubIssueHref">{{linkContent}}</a>
+    <a :href="githubIssueHref" target="_blank" rel="noopener noreferrer">{{linkContent}}<OutboundLink/></a>
 </template>
 
 <script>
