@@ -45,8 +45,14 @@ public interface HtmlTag {
     @NonNull
     Map<String, String> attributes();
 
+    /**
+     * @see Inline
+     */
     boolean isInline();
 
+    /**
+     * @see Block
+     */
     boolean isBlock();
 
     @NonNull

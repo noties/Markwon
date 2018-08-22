@@ -2,6 +2,8 @@ package ru.noties.markwon.html.api;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collections;
+
 /**
  * @see MarkwonHtmlParser
  * @since 2.0.0
@@ -15,12 +17,12 @@ class MarkwonHtmlParserNoOp extends MarkwonHtmlParser {
 
     @Override
     public void flushInlineTags(int documentLength, @NonNull FlushAction<HtmlTag.Inline> action) {
-
+        action.apply(Collections.<HtmlTag.Inline>emptyList());
     }
 
     @Override
     public void flushBlockTags(int documentLength, @NonNull FlushAction<HtmlTag.Block> action) {
-
+        action.apply(Collections.<HtmlTag.Block>emptyList());
     }
 
     @Override

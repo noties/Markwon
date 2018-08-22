@@ -17,7 +17,7 @@ It gives ability to display markdown in all TextView widgets (**TextView**,
 **Button**, **Switch**, **CheckBox**, etc), **Toasts** and all other places that accept
 **Spanned content**. Library provides reasonable defaults to display style of a markdown content
 but also gives all the means to tweak the appearance if desired. All markdown features 
-listed in [commonmark spec] are supported (including support for **inlined/block HTML code**, 
+listed in <Link name="commonmark-spec" /> are supported (including support for **inlined/block HTML code**, 
 **markdown tables**, **images** and **syntax highlight**).
 
 ## Supported markdown features:

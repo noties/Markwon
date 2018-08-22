@@ -64,4 +64,6 @@ public interface Prism4jTheme {
 }
 ```
 
-> You can extend `Prism4jThemeBase` which has some helper methods
+:::tip
+You can extend `Prism4jThemeBase` which has some helper methods
+:::
