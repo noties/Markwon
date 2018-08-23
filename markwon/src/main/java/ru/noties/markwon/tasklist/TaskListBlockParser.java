@@ -60,7 +60,9 @@ class TaskListBlockParser extends AbstractBlockParser {
                 && PATTERN.matcher(line).matches()) {
             blockContinue = BlockContinue.atIndex(parserState.getIndex());
         } else {
-            blockContinue = BlockContinue.finished();
+            // @since 2.0.0, previously called `BlockContinue.finished()`
+            //  that was swallowing non-matching lines
+            blockContinue = BlockContinue.none();
         }
 
         return blockContinue;
