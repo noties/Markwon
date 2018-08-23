@@ -107,7 +107,16 @@ abstract class TestDataReader {
         @NonNull
         private TestData testData(@NonNull JsonObject jsonObject) {
 
-            final String description = jsonObject.get("description").getAsString();
+            final String description;
+            {
+                final JsonElement element = jsonObject.get("description");
+                if (element != null
+                        && element.isJsonPrimitive()) {
+                    description = element.getAsString();
+                } else {
+                    description = null;
+                }
+            }
 
             final String input = jsonObject.get("input").getAsString();
             if (TextUtils.isEmpty(input)) {
