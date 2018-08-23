@@ -78,9 +78,14 @@ ext {
     ]
 
     deps['test'] = [
-            'junit'      : 'junit:junit:4.12',
-            'robolectric': 'org.robolectric:robolectric:3.8',
-            'ix-java'    : 'com.github.akarnokd:ixjava:1.0.0'
+            'junit'           : 'junit:junit:4.12',
+            'robolectric'     : 'org.robolectric:robolectric:3.8',
+            'ix-java'         : 'com.github.akarnokd:ixjava:1.0.0',
+            'jackson-yaml'    : 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0',
+            'jackson-databind': 'com.fasterxml.jackson.core:jackson-databind:2.9.6',
+            'gson'            : 'com.google.code.gson:gson:2.8.5',
+            'commons-io'      : 'commons-io:commons-io:2.6',
+            'mockito'         : 'org.mockito:mockito-core:2.21.0'
     ]
 }
 

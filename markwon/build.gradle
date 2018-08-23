@@ -29,6 +29,11 @@ dependencies {
         testImplementation it['junit']
         testImplementation it['robolectric']
         testImplementation it['ix-java']
+        testImplementation it['jackson-yaml']
+        testImplementation it['jackson-databind']
+        testImplementation it['gson']
+        testImplementation it['commons-io']
+        testImplementation it['mockito']
     }
 }
 
