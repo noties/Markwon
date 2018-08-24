@@ -1,0 +1,4 @@
+input: "table-table-table"
+
+output:
+  - text: "should fail as we are to decide how to pass info here"

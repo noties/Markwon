@@ -276,7 +276,14 @@ abstract class TestDataReader {
             if (object != null) {
                 attributes = new HashMap<>(object.size());
                 for (String key : object.keySet()) {
-                    attributes.put(key, object.get(key).getAsString());
+                    final String value;
+                    final JsonElement valueElement = object.get(key);
+                    if (valueElement.isJsonNull()) {
+                        value = null;
+                    } else {
+                        value = valueElement.getAsString();
+                    }
+                    attributes.put(key, value);
                 }
             } else {
                 attributes = Collections.emptyMap();

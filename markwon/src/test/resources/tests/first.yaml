@@ -12,8 +12,7 @@ config:
 
 output:
   - text: "Here is some "
-  - a:
-    - text: "link"
+  - a: "link"
     attrs:
       href: "https://my.href"
   - text: " "

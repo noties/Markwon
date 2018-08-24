@@ -18,6 +18,7 @@ import ru.noties.markwon.Markwon;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
+import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
 import ru.noties.markwon.spans.SpannableTheme;
 
@@ -134,11 +135,15 @@ public class SpannableMarkdownVisitorTest {
     private SpannableConfiguration configuration(@NonNull TestConfig config) {
 
         final SpannableFactory factory = new TestFactory(config.hasOption(TestConfig.USE_PARAGRAPHS));
+        final MarkwonHtmlParser htmlParser = config.hasOption(TestConfig.USE_HTML)
+                ? null
+                : MarkwonHtmlParser.noOp();
 
         // todo: rest omitted for now
         return SpannableConfiguration.builder(null)
                 .theme(mock(SpannableTheme.class))
                 .linkResolver(mock(LinkResolverDef.class))
+                .htmlParser(htmlParser)
                 .factory(factory)
                 .build();
     }

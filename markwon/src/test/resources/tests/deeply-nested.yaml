@@ -1,0 +1,15 @@
+input: |-
+  **bold *bold italic ~~bold italic strike `bold italic strike code` bold italic strike~~ bold italic* bold** normal
+
+output:
+  - b:
+    - text: "bold "
+    - i:
+      - text: "bold italic "
+      - s:
+        - text: "bold italic strike "
+        - code: "bold italic strike code"
+        - text: " bold italic strike"
+      - text: " bold italic"
+    - text: " bold"
+  - text: " normal"

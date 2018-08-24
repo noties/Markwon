@@ -1,0 +1,8 @@
+input: "![image](#href)"
+
+output:
+  - img: "image"
+    attrs:
+      scr: "#href"
+      imageSize: null
+      replacementTextIsLink: false

@@ -1,0 +1,6 @@
+input: "1. ol"
+
+output:
+  - ol: "ol"
+    attrs:
+      start: 1

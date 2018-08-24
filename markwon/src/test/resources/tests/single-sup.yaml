@@ -1,0 +1,7 @@
+input: "<sup>sup</sup>"
+
+config:
+  use-html: true
+
+output:
+  - sup: "sup"

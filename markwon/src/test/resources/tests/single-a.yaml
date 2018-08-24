@@ -1,0 +1,6 @@
+input: "[link](#href)"
+
+output:
+  - a: "link"
+    attrs:
+      href: "#href"

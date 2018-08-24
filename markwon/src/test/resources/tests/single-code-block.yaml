@@ -1,0 +1,7 @@
+input: |-
+  ```
+  code block
+  ```
+
+output:
+  - code-block: "code block"

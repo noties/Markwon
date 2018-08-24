@@ -1,0 +1,7 @@
+input: "<u>underline</u>"
+
+config:
+  use-html: true
+
+output:
+  - u: "underline"

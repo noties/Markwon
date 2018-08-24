@@ -1,0 +1,7 @@
+# it is failing as we are still removing white spaces manually
+# this will be fixed when different logic for new lines will be introduced
+
+input: "---"
+
+output:
+  - hr: " "
