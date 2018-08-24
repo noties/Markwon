@@ -10,13 +10,13 @@ class TestData {
     private final String description;
     private final String input;
     private final TestConfig config;
-    private final List<TestEntry> output;
+    private final List<TestNode> output;
 
     TestData(
             @Nullable String description,
             @NonNull String input,
             @NonNull TestConfig config,
-            @NonNull List<TestEntry> output) {
+            @NonNull List<TestNode> output) {
         this.description = description;
         this.input = input;
         this.config = config;
@@ -39,7 +39,7 @@ class TestData {
     }
 
     @NonNull
-    public List<TestEntry> output() {
+    public List<TestNode> output() {
         return output;
     }
 }

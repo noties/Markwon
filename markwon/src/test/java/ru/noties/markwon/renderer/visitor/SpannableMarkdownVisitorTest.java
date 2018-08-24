@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 import ix.Ix;
@@ -54,65 +53,81 @@ public class SpannableMarkdownVisitorTest {
         node.accept(visitor);
 
         final SpannableStringBuilder stringBuilder = builder.spannableStringBuilder();
-        final String raw = stringBuilder.toString();
+
+        System.out.printf("%n%s%n", stringBuilder);
 
         int index = 0;
-        int lastIndex = 0;
 
-        for (TestEntry entry : data.output()) {
-
-            final String expected = entry.text();
-
-            final boolean isText = "text".equals(entry.name());
-
-            final int start;
-            final int end;
-
-            if (isText) {
-                start = lastIndex;
-                end = start + expected.length();
-                index = lastIndex = end;
-            } else {
-                start = raw.indexOf(expected, index);
-                if (start < 0) {
-                    throw new AssertionError(String.format("Cannot find `%s` starting at index: %d, raw: %n###%n%s%n###",
-                            expected, start, raw
-                    ));
-                }
-                end = start + expected.length();
-                lastIndex = Math.max(end, lastIndex);
-            }
-
-            if (!expected.equals(raw.substring(start, end))) {
-                throw new AssertionError(String.format("Expected: `%s`, actual: `%s`, start: %d, raw: %n###%n%s%n###",
-                        expected, raw.substring(start, end), start, raw
-                ));
-            }
-
-            final Object[] spans = stringBuilder.getSpans(start, end, Object.class);
-            final int length = spans != null ? spans.length : 0;
-
-            if (isText) {
-                // validate no spans
-                assertEquals(Arrays.toString(spans), 0, length);
-            } else {
-                assertTrue(length > 0);
-                final Object span = Ix.fromArray(spans)
-                        .filter(new IxPredicate<Object>() {
-                            @Override
-                            public boolean test(Object o) {
-                                return start == stringBuilder.getSpanStart(o)
-                                        && end == stringBuilder.getSpanEnd(o);
-                            }
-                        })
-                        .first(null);
-                assertNotNull(span);
-                assertTrue(span instanceof TestSpan);
-                final TestSpan testSpan = (TestSpan) span;
-                assertEquals(entry.name(), testSpan.name());
-                assertEquals(entry.attributes(), testSpan.attributes());
-            }
+        for (TestNode testNode : data.output()) {
+            index = validate(stringBuilder, index, testNode);
         }
+    }
+
+    private int validate(@NonNull SpannableStringBuilder builder, int index, @NonNull TestNode node) {
+
+        if (node.isText()) {
+
+            final String text;
+            {
+                final String content = node.getAsText().text();
+
+                // code is a special case as we wrap it around non-breakable spaces
+                final TestNode parent = node.parent();
+                if (parent != null) {
+                    final TestNode.Span span = parent.getAsSpan();
+                    if (TestSpan.CODE.equals(span.name())) {
+                        text = "\u00a0" + content + "\u00a0";
+                    } else if (TestSpan.CODE_BLOCK.equals(span.name())) {
+                        text = "\u00a0\n" + content + "\n\u00a0";
+                    } else {
+                        text = content;
+                    }
+                } else {
+                    text = content;
+                }
+            }
+
+            assertEquals(text, builder.subSequence(index, index + text.length()).toString());
+
+            return index + text.length();
+        }
+
+        final TestNode.Span span = node.getAsSpan();
+
+        int out = index;
+
+        for (TestNode child : span.children()) {
+            out = validate(builder, out, child);
+        }
+
+        final String info = node.toString();
+
+        // we can possibly have parent spans here, should filter them
+        final Object[] spans = builder.getSpans(index, out, Object.class);
+        assertTrue(info, spans != null);
+
+        final TestSpan testSpan = Ix.fromArray(spans)
+                .filter(new IxPredicate<Object>() {
+                    @Override
+                    public boolean test(Object o) {
+                        return o instanceof TestSpan;
+                    }
+                })
+                .cast(TestSpan.class)
+                .filter(new IxPredicate<TestSpan>() {
+                    @Override
+                    public boolean test(TestSpan testSpan) {
+                        return span.name().equals(testSpan.name());
+                    }
+                })
+                .first(null);
+
+        assertNotNull(info, testSpan);
+
+        assertEquals(info, span.name(), testSpan.name());
+        assertEquals(info, span.attributes(), testSpan.attributes());
+
+        return out;
     }
 
     @NonNull
@@ -126,7 +141,5 @@ public class SpannableMarkdownVisitorTest {
                 .linkResolver(mock(LinkResolverDef.class))
                 .factory(factory)
                 .build();
-
-//        return configuration;
     }
 }

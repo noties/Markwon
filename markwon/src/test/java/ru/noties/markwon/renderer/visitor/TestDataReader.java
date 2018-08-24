@@ -79,6 +79,9 @@ abstract class TestDataReader {
 
     static class Reader {
 
+        private static final String ATTRS = "attrs";
+        private static final String TEXT = "text";
+
         private final String file;
 
         Reader(@NonNull String file) {
@@ -120,95 +123,99 @@ abstract class TestDataReader {
 
             final String input = jsonObject.get("input").getAsString();
             if (TextUtils.isEmpty(input)) {
-                throw new RuntimeException(String.format("Test case file `%s` is missing input parameter", file));
+                throw new RuntimeException(String.format("Test case file `%s` is missing " +
+                        "input parameter", file));
             }
 
-            final List<TestEntry> testSpans = testEntries(jsonObject.get("output").getAsJsonArray());
-            if (testSpans.size() == 0) {
-                throw new RuntimeException(String.format("Test case file `%s` has no output specified", file));
+            final TestConfig testConfig = testConfig(jsonObject.get("config"));
+
+            final List<TestNode> testNodes = testNodes(jsonObject.get("output").getAsJsonArray());
+            if (testNodes.size() == 0) {
+                throw new RuntimeException(String.format("Test case file `%s` has no " +
+                        "output specified", file));
             }
 
             return new TestData(
                     description,
                     input,
-                    testConfig(jsonObject.get("config")),
-                    testSpans
+                    testConfig,
+                    testNodes
             );
         }
 
-        // todo: rename TestNode -> it's not a node... but... what?
+        @NonNull
+        private List<TestNode> testNodes(@NonNull JsonArray array) {
+            return testNodes(null, array);
+        }
 
         @NonNull
-        private List<TestEntry> testEntries(@NonNull JsonArray array) {
+        private List<TestNode> testNodes(@Nullable TestNode parent, @NonNull JsonArray array) {
 
-            // all items are contained in this array
-            // key is the name of an item
-            // item can be defined like this:
-            //  link: "text-content-of-the-link"
-            //  link:
-            //      attributes:
-            //      - href: "my-href-attribute"
-            //      text: "and here is the text content"
-            // text node can be found only at root level
+            // an item in array is a JsonObject
 
-            final int length = array.size();
+            // it can be "b": "bold" -> means Span(name="b", children=[Text(bold)]
+            //  or b:
+            //      - text: "bold" -> which is the same as above
 
-            final List<TestEntry> testSpans = new ArrayList<>(length);
+            // it can additionally contain "attrs" key which is the attributes
+            // b:
+            //  - text: "bold"
+            //  attrs:
+            //      href: "my-href"
 
-            for (int i = 0; i < length; i++) {
+            final int size = array.size();
 
-                final JsonElement element = array.get(i);
+            final List<TestNode> testNodes = new ArrayList<>(size);
 
-                if (element.isJsonObject()) {
+            for (int i = 0; i < size; i++) {
 
-                    final JsonObject object = element.getAsJsonObject();
+                final JsonObject object = array.get(i).getAsJsonObject();
 
-                    // objects must have exactly 1 key: name of the node
-                    // it's value can be different: JsonPrimitive (String) or an JsonObject (with attributes and text)
+                String name = null;
+                Map<String, String> attributes = null;
 
-                    final String name = object.keySet().iterator().next();
-                    final JsonElement value = object.get(name);
-
-                    final String text;
-                    final Map<String, String> attributes;
-
-                    if (value.isJsonObject()) {
-
-                        final JsonObject valueObject = value.getAsJsonObject();
-                        text = valueObject.get("text").getAsString();
-                        attributes = attributes(valueObject.get("attrs"));
-
+                for (String key : object.keySet()) {
+                    if (ATTRS.equals(key)) {
+                        attributes = attributes(object.get(key));
+                    } else if (name == null) {
+                        name = key;
                     } else {
+                        // we allow only 2 keys: span and/or attributes and no more
+                        throw new RuntimeException("Unexpected key in object: " + object);
+                    }
+                }
 
-                        final JsonPrimitive primitive;
+                if (name == null) {
+                    throw new RuntimeException("Object is missing tag name: " + object);
+                }
 
-                        if (value.isJsonPrimitive()) {
-                            primitive = value.getAsJsonPrimitive();
-                        } else {
-                            primitive = null;
-                        }
+                if (attributes == null) {
+                    attributes = Collections.emptyMap();
+                }
 
-                        if (primitive == null
-                                || !primitive.isString()) {
-                            throw new RuntimeException(String.format("Unexpected json element at index: `%d` in array: `%s`",
-                                    i, array
-                            ));
-                        }
+                final JsonElement element = object.get(name);
 
-                        text = primitive.getAsString();
-                        attributes = Collections.emptyMap();
+                if (TEXT.equals(name)) {
+                    testNodes.add(new TestNode.Text(parent, element.getAsString()));
+                } else {
+
+                    final List<TestNode> children = new ArrayList<>(1);
+                    final TestNode.Span span = new TestNode.Span(parent, name, children, attributes);
+
+                    // if it's primitive string -> just append text node
+                    if (element.isJsonPrimitive()) {
+                        children.add(new TestNode.Text(span, element.getAsString()));
+                    } else if (element.isJsonArray()) {
+                        children.addAll(testNodes(span, element.getAsJsonArray()));
+                    } else {
+                        throw new RuntimeException("Unexpected element: " + object);
                     }
 
-                    testSpans.add(new TestEntry(name, text, attributes));
-
-                } else {
-                    throw new RuntimeException(String.format("Unexpected json element at index: `%d` in array: `%s`",
-                            i, array
-                    ));
+                    testNodes.add(span);
                 }
             }
 
-            return testSpans;
+            return testNodes;
         }
 
         @NonNull

@@ -11,6 +11,7 @@ class TestSpan {
     static final String EMPHASIS = "i";
     static final String BLOCK_QUOTE = "blockquote";
     static final String CODE = "code";
+    static final String CODE_BLOCK = "code-block";
     static final String ORDERED_LIST = "ol";
     static final String BULLET_LIST = "ul";
     static final String THEMATIC_BREAK = "hr";

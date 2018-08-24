@@ -13,11 +13,13 @@ config:
 output:
   - text: "Here is some "
   - a:
-      attrs:
-        href: "https://my.href"
-      text: "link"
+    - text: "link"
+    attrs:
+      href: "https://my.href"
   - text: " "
-  - b: "bold bold italic bold"
-  - i: "bold italic"
+  - b:
+    - text: "bold "
+    - i: "bold italic" #equals to: `- i: - text: "bold italic"`
+    - text: " bold"
   - text: " normal"
 

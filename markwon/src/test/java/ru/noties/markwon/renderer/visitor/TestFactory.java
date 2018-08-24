@@ -19,6 +19,7 @@ import ru.noties.markwon.spans.TableRowSpan;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;
 import static ru.noties.markwon.renderer.visitor.TestSpan.CODE;
+import static ru.noties.markwon.renderer.visitor.TestSpan.CODE_BLOCK;
 import static ru.noties.markwon.renderer.visitor.TestSpan.EMPHASIS;
 import static ru.noties.markwon.renderer.visitor.TestSpan.HEADING;
 import static ru.noties.markwon.renderer.visitor.TestSpan.IMAGE;
@@ -63,13 +64,16 @@ class TestFactory implements SpannableFactory {
     @Nullable
     @Override
     public Object code(@NonNull SpannableTheme theme, boolean multiline) {
-        return new TestSpan(CODE, map("multiline", multiline));
+        final String name = multiline
+                ? CODE_BLOCK
+                : CODE;
+        return new TestSpan(name);
     }
 
     @Nullable
     @Override
     public Object orderedListItem(@NonNull SpannableTheme theme, int startNumber) {
-        return new TestSpan(ORDERED_LIST, map("startNumber", startNumber));
+        return new TestSpan(ORDERED_LIST, map("start", startNumber));
     }
 
     @Nullable
@@ -87,7 +91,7 @@ class TestFactory implements SpannableFactory {
     @Nullable
     @Override
     public Object heading(@NonNull SpannableTheme theme, int level) {
-        return new TestSpan(HEADING, map("level", level));
+        return new TestSpan(HEADING + level);
     }
 
     @Nullable
@@ -101,7 +105,7 @@ class TestFactory implements SpannableFactory {
     public Object taskListItem(@NonNull SpannableTheme theme, int blockIndent, boolean isDone) {
         return new TestSpan(TASK_LIST, map(
                 Pair.of("blockIdent", blockIndent),
-                Pair.of("isDone", isDone)
+                Pair.of("done", isDone)
         ));
     }
 
@@ -110,8 +114,8 @@ class TestFactory implements SpannableFactory {
     public Object tableRow(@NonNull SpannableTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
         return new TestSpan(TABLE_ROW, map(
                 Pair.of("cells", cells),
-                Pair.of("isHeader", isHeader),
-                Pair.of("isOdd", isOdd)
+                Pair.of("header", isHeader),
+                Pair.of("odd", isOdd)
         ));
     }
 
@@ -127,7 +131,7 @@ class TestFactory implements SpannableFactory {
     @Override
     public Object image(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new TestSpan(IMAGE, map(
-                Pair.of("destination", destination),
+                Pair.of("src", destination),
                 Pair.of("imageSize", imageSize),
                 Pair.of("replacementTextIsLink", replacementTextIsLink)
         ));
