@@ -1,0 +1,105 @@
+input: |-
+  <h1>html</h1>
+  <h2>emphasis</h2>
+  <i>i</i><em>em</em><cite>cite</cite><dfn>dfn</dfn>
+  <h2>strong-emphasis</h2>
+  <b>b</b><strong>strong</strong>
+  <h2>super-script</h2>
+  <sup>sup</sup>
+  <h2>sub-script</h2>
+  <sub>sub</sub>
+  <h2>underline</h2>
+  <u>u</u><ins>ins</ins>
+  <h2>strike</h2>
+  <s>s</s><del>del</del>
+  <h2>link</h2>
+  <a href="a://href">a</a>
+  <h2>unordered-list</h2>
+  <ul><li>ul1<li>ul2</ul>
+  <h2>ordered-list</h2>
+  <ol><li>ol1<li>ol2</ol>
+  <h2>image</h2>
+  <img src="img://src" alt="img">
+  <h2>blockquote</h2>
+  <blockquote>blockquote</blockquote>
+  <h3>3</h3>
+  <h4>4</h4>
+  <h5>5</h5>
+  <h6>6</h6>
+
+config:
+  use-html: true
+
+output:
+  - h1: "html"
+  - text: "\n"
+  - h2: "emphasis"
+  - text: "\n"
+  - i: "i"
+  - i: "em"
+  - i: "cite"
+  - i: "dfn"
+  - text: "\n"
+  - h2: "strong-emphasis"
+  - text: "\n"
+  - b: "b"
+  - b: "strong"
+  - text: "\n"
+  - h2: "super-script"
+  - text: "\n"
+  - sup: "sup"
+  - text: "\n"
+  - h2: "sub-script"
+  - text: "\n"
+  - sub: "sub"
+  - text: "\n"
+  - h2: "underline"
+  - text: "\n"
+  - u: "u"
+  - u: "ins"
+  - text: "\n"
+  - h2: "strike"
+  - text: "\n"
+  - s: "s"
+  - s: "del"
+  - text: "\n"
+  - h2: "link"
+  - text: "\n"
+  - a: "a"
+    attrs:
+      href: "a://href"
+  - text: "\n"
+  - h2: "unordered-list"
+  - text: "\n"
+  - ul: "ul1"
+  - text: "\n"
+  - ul: "ul2"
+  - text: "\n"
+  - h2: "ordered-list"
+  - text: "\n"
+  - ol: "ol1"
+    attrs:
+      start: 1
+  - text: "\n"
+  - ol: "ol2"
+    attrs:
+      start: 2
+  - text: "\n"
+  - h2: "image"
+  - text: "\n"
+  - img: "img"
+    attrs:
+      src: "img://src"
+  - text: "\n"
+  - h2: "blockquote"
+  - text: "\n"
+  - blockquote: "blockquote"
+  - text: "\n"
+  - h3: "3"
+  - text: "\n"
+  - h4: "4"
+  - text: "\n"
+  - h5: "5"
+  - text: "\n"
+  - h6: "6"
+

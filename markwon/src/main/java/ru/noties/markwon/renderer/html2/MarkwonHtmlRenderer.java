@@ -13,6 +13,7 @@ import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.tag.BlockquoteHandler;
 import ru.noties.markwon.renderer.html2.tag.EmphasisHandler;
+import ru.noties.markwon.renderer.html2.tag.HeadingHandler;
 import ru.noties.markwon.renderer.html2.tag.ImageHandler;
 import ru.noties.markwon.renderer.html2.tag.LinkHandler;
 import ru.noties.markwon.renderer.html2.tag.ListHandler;
@@ -69,7 +70,13 @@ public abstract class MarkwonHtmlRenderer {
                 .handler("ul", listHandler)
                 .handler("ol", listHandler)
                 .handler("img", ImageHandler.create())
-                .handler("blockquote", new BlockquoteHandler());
+                .handler("blockquote", new BlockquoteHandler())
+                .handler("h1", new HeadingHandler(1))
+                .handler("h2", new HeadingHandler(2))
+                .handler("h3", new HeadingHandler(3))
+                .handler("h4", new HeadingHandler(4))
+                .handler("h5", new HeadingHandler(5))
+                .handler("h6", new HeadingHandler(6));
     }
 
     @NonNull

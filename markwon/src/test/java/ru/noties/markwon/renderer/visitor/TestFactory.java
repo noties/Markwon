@@ -186,7 +186,7 @@ class TestFactory implements SpannableFactory {
         final int length = pairs.length;
         final Map<String, String> map = new HashMap<>(length);
         for (Pair pair : pairs) {
-            map.put(pair.key, String.valueOf(pair.value));
+            map.put(pair.key, pair.value == null ? null : String.valueOf(pair.value));
         }
         return map;
     }

@@ -119,9 +119,9 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
     private boolean isInsidePreTag;
 
-    private Tokeniser tokeniser;
-
-    private CharacterReader reader;
+    // the thing is: we ensure a new line BEFORE block tag
+    // but not after, so another tag will be placed on the same line (which is wrong)
+    private boolean previousIsBlock;
 
 
     MarkwonHtmlParserImpl(
@@ -242,6 +242,8 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
         final HtmlTagImpl.InlineImpl inline = new HtmlTagImpl.InlineImpl(name, output.length(), extractAttributes(startTag));
 
+        ensureNewLineIfPreviousWasBlock(output);
+
         if (isVoidTag(name)
                 || startTag.selfClosing) {
 
@@ -305,6 +307,8 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         if (isBlockTag(name)) {
             isInsidePreTag = "pre".equals(name);
             ensureNewLine(output);
+        } else {
+            ensureNewLineIfPreviousWasBlock(output);
         }
 
         final int start = output.length();
@@ -350,6 +354,11 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
 
             block.closeAt(output.length());
 
+            // if it's empty -> we do no care about if it's block or not
+            if (!block.isEmpty()) {
+                previousIsBlock = isBlockTag(block.name);
+            }
+
             if (TAG_PARAGRAPH.equals(name)) {
                 appendQuietly(output, '\n');
             }
@@ -368,6 +377,7 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         if (isInsidePreTag) {
             appendQuietly(output, character.getData());
         } else {
+            ensureNewLineIfPreviousWasBlock(output);
             trimmingAppender.append(output, character.getData());
         }
     }
@@ -408,6 +418,13 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
         }
 
         return blockTag;
+    }
+
+    protected <T extends Appendable & CharSequence> void ensureNewLineIfPreviousWasBlock(@NonNull T output) {
+        if (previousIsBlock) {
+            ensureNewLine(output);
+            previousIsBlock = false;
+        }
     }
 
     // name here must lower case

@@ -1,15 +1,20 @@
 package ru.noties.markwon.renderer.visitor;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 
 import org.commonmark.node.Node;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Map;
 
 import ix.Ix;
 import ix.IxPredicate;
@@ -55,13 +60,16 @@ public class SpannableMarkdownVisitorTest {
 
         final SpannableStringBuilder stringBuilder = builder.spannableStringBuilder();
 
-        System.out.printf("%n%s%n", stringBuilder);
+        System.out.printf("%s: %s%n", file, Arrays.toString(stringBuilder.getSpans(0, stringBuilder.length(), Object.class)));
 
         int index = 0;
 
         for (TestNode testNode : data.output()) {
             index = validate(stringBuilder, index, testNode);
         }
+
+        // assert that the whole thing is processed
+        assertEquals(stringBuilder.length(), index);
     }
 
     private int validate(@NonNull SpannableStringBuilder builder, int index, @NonNull TestNode node) {
@@ -103,6 +111,8 @@ public class SpannableMarkdownVisitorTest {
 
         final String info = node.toString();
 
+        System.out.printf("%s: %s%n", file, builder.subSequence(index, out));
+
         // we can possibly have parent spans here, should filter them
         final Object[] spans = builder.getSpans(index, out, Object.class);
         assertTrue(info, spans != null);
@@ -123,14 +133,18 @@ public class SpannableMarkdownVisitorTest {
                 })
                 .first(null);
 
-        assertNotNull(info, testSpan);
+        assertNotNull(
+                format("info: %s, spans: %s", info, Arrays.toString(spans)),
+                testSpan
+        );
 
         assertEquals(info, span.name(), testSpan.name());
-        assertEquals(info, span.attributes(), testSpan.attributes());
+        assertMapEquals(info, span.attributes(), testSpan.attributes());
 
         return out;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NonNull
     private SpannableConfiguration configuration(@NonNull TestConfig config) {
 
@@ -146,5 +160,50 @@ public class SpannableMarkdownVisitorTest {
                 .htmlParser(htmlParser)
                 .factory(factory)
                 .build();
+    }
+
+    private static void assertMapEquals(
+            @NonNull String message,
+            @NonNull Map<String, String> expected,
+            @NonNull Map<String, String> actual) {
+        boolean result = true;
+        if (expected.size() == actual.size()) {
+            for (Map.Entry<String, String> entry : expected.entrySet()) {
+                if (!actual.containsKey(entry.getKey())
+                        || !equals(entry.getValue(), actual.get(entry.getKey()))) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        if (!result) {
+            final Comparator<Map.Entry<String, String>> comparator = new Comparator<Map.Entry<String, String>>() {
+                @Override
+                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                    return o1.getKey().compareTo(o2.getKey());
+                }
+            };
+            final String e = Ix.from(expected.entrySet())
+                    .orderBy(comparator)
+                    .toList()
+                    .toString();
+            final String a = Ix.from(actual.entrySet())
+                    .orderBy(comparator)
+                    .toList()
+                    .toString();
+            throw new ComparisonFailure(message, e, a);
+        }
+    }
+
+    private static boolean equals(@Nullable Object o1, @Nullable Object o2) {
+        return o1 != null
+                ? o1.equals(o2)
+                : o2 == null;
+
+    }
+
+    @NonNull
+    private static String format(@NonNull String message, Object... args) {
+        return String.format(message, args);
     }
 }

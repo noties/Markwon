@@ -833,6 +833,30 @@ public class MarkwonHtmlParserImplTest {
         });
     }
 
+    @Test
+    public void newLineAfterBlockTag() {
+
+        final MarkwonHtmlParserImpl impl = MarkwonHtmlParserImpl.create();
+        final StringBuilder output = new StringBuilder();
+
+        final String[] fragments = {
+                "<h1>head #1</h1>just text",
+                "<h2>head #2</h2><span>in span tag</span>",
+                "<h3>head #3</h3><custom-tag>in custom-tag</custom-tag>"
+        };
+
+        for (String fragment: fragments) {
+            impl.processFragment(output, fragment);
+        }
+
+        final String expected = "" +
+                "head #1\njust text\n" +
+                "head #2\nin span tag\n" +
+                "head #3\nin custom-tag";
+
+        assertEquals(expected, output.toString());
+    }
+
     private static class CaptureTagsAction<T> implements MarkwonHtmlParser.FlushAction<T> {
 
         boolean called;

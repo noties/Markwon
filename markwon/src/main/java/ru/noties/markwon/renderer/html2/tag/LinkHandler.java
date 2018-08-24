@@ -11,7 +11,7 @@ public class LinkHandler extends SimpleTagHandler {
     @Nullable
     @Override
     public Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag) {
-        final String destination = tag.attributes().get("src");
+        final String destination = tag.attributes().get("href");
         if (!TextUtils.isEmpty(destination)) {
             return configuration.factory().link(
                     configuration.theme(),
