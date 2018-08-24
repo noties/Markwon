@@ -18,15 +18,37 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ix.Ix;
 import ix.IxFunction;
 import ix.IxPredicate;
+
+import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
+import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;
+import static ru.noties.markwon.renderer.visitor.TestSpan.CODE;
+import static ru.noties.markwon.renderer.visitor.TestSpan.CODE_BLOCK;
+import static ru.noties.markwon.renderer.visitor.TestSpan.EMPHASIS;
+import static ru.noties.markwon.renderer.visitor.TestSpan.HEADING;
+import static ru.noties.markwon.renderer.visitor.TestSpan.IMAGE;
+import static ru.noties.markwon.renderer.visitor.TestSpan.LINK;
+import static ru.noties.markwon.renderer.visitor.TestSpan.ORDERED_LIST;
+import static ru.noties.markwon.renderer.visitor.TestSpan.PARAGRAPH;
+import static ru.noties.markwon.renderer.visitor.TestSpan.STRIKE_THROUGH;
+import static ru.noties.markwon.renderer.visitor.TestSpan.STRONG_EMPHASIS;
+import static ru.noties.markwon.renderer.visitor.TestSpan.SUB_SCRIPT;
+import static ru.noties.markwon.renderer.visitor.TestSpan.SUPER_SCRIPT;
+import static ru.noties.markwon.renderer.visitor.TestSpan.TABLE_ROW;
+import static ru.noties.markwon.renderer.visitor.TestSpan.TASK_LIST;
+import static ru.noties.markwon.renderer.visitor.TestSpan.THEMATIC_BREAK;
+import static ru.noties.markwon.renderer.visitor.TestSpan.UNDERLINE;
 
 abstract class TestDataReader {
 
@@ -79,8 +101,39 @@ abstract class TestDataReader {
 
     static class Reader {
 
-        private static final String ATTRS = "attrs";
         private static final String TEXT = "text";
+
+        private static final Set<String> TAGS;
+
+        static {
+            TAGS = new HashSet<>(Arrays.asList(
+                    STRONG_EMPHASIS,
+                    EMPHASIS,
+                    BLOCK_QUOTE,
+                    CODE,
+                    CODE_BLOCK,
+                    ORDERED_LIST,
+                    BULLET_LIST,
+                    THEMATIC_BREAK,
+                    HEADING,
+                    STRIKE_THROUGH,
+                    TASK_LIST,
+                    TABLE_ROW,
+                    PARAGRAPH,
+                    IMAGE,
+                    LINK,
+                    SUPER_SCRIPT,
+                    SUB_SCRIPT,
+                    UNDERLINE,
+                    HEADING + "1",
+                    HEADING + "2",
+                    HEADING + "3",
+                    HEADING + "4",
+                    HEADING + "5",
+                    HEADING + "6",
+                    TEXT
+            ));
+        }
 
         private final String file;
 
@@ -160,8 +213,7 @@ abstract class TestDataReader {
             // it can additionally contain "attrs" key which is the attributes
             // b:
             //  - text: "bold"
-            //  attrs:
-            //      href: "my-href"
+            //    href: "my-href"
 
             final int size = array.size();
 
@@ -172,25 +224,30 @@ abstract class TestDataReader {
                 final JsonObject object = array.get(i).getAsJsonObject();
 
                 String name = null;
-                Map<String, String> attributes = null;
+                Map<String, String> attributes = new HashMap<>(0);
 
                 for (String key : object.keySet()) {
-                    if (ATTRS.equals(key)) {
-                        attributes = attributes(object.get(key));
-                    } else if (name == null) {
-                        name = key;
+                    if (TAGS.contains(key)) {
+                        if (name == null) {
+                            name = key;
+                        } else {
+                            throw new RuntimeException("Unexpected key in object: " + object);
+                        }
                     } else {
-                        // we allow only 2 keys: span and/or attributes and no more
-                        throw new RuntimeException("Unexpected key in object: " + object);
+                        // fill attribute map with it
+                        final String value;
+                        final JsonElement valueElement = object.get(key);
+                        if (valueElement.isJsonNull()) {
+                            value = null;
+                        } else {
+                            value = valueElement.getAsString();
+                        }
+                        attributes.put(key, value);
                     }
                 }
 
                 if (name == null) {
                     throw new RuntimeException("Object is missing tag name: " + object);
-                }
-
-                if (attributes == null) {
-                    attributes = Collections.emptyMap();
                 }
 
                 final JsonElement element = object.get(name);
@@ -262,34 +319,6 @@ abstract class TestDataReader {
             }
 
             return new TestConfig(map);
-        }
-
-        @NonNull
-        private static Map<String, String> attributes(@NonNull JsonElement element) {
-
-            final JsonObject object = element.isJsonObject()
-                    ? element.getAsJsonObject()
-                    : null;
-
-            final Map<String, String> attributes;
-
-            if (object != null) {
-                attributes = new HashMap<>(object.size());
-                for (String key : object.keySet()) {
-                    final String value;
-                    final JsonElement valueElement = object.get(key);
-                    if (valueElement.isJsonNull()) {
-                        value = null;
-                    } else {
-                        value = valueElement.getAsString();
-                    }
-                    attributes.put(key, value);
-                }
-            } else {
-                attributes = Collections.emptyMap();
-            }
-
-            return attributes;
         }
     }
 }

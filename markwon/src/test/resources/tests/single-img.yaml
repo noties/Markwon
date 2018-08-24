@@ -2,7 +2,6 @@ input: "![image](#href)"
 
 output:
   - img: "image"
-    attrs:
-      src: "#href"
-      imageSize: null
-      replacementTextIsLink: false
+    src: "#href"
+    imageSize: null
+    replacementTextIsLink: false

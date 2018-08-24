@@ -13,8 +13,7 @@ config:
 output:
   - text: "Here is some "
   - a: "link"
-    attrs:
-      href: "https://my.href"
+    href: "https://my.href"
   - text: " "
   - b:
     - text: "bold "

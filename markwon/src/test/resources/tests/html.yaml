@@ -66,8 +66,7 @@ output:
   - h2: "link"
   - text: "\n"
   - a: "a"
-    attrs:
-      href: "a://href"
+    href: "a://href"
   - text: "\n"
   - h2: "unordered-list"
   - text: "\n"
@@ -78,18 +77,15 @@ output:
   - h2: "ordered-list"
   - text: "\n"
   - ol: "ol1"
-    attrs:
-      start: 1
+    start: 1
   - text: "\n"
   - ol: "ol2"
-    attrs:
-      start: 2
+    start: 2
   - text: "\n"
   - h2: "image"
   - text: "\n"
   - img: "img"
-    attrs:
-      src: "img://src"
+    src: "img://src"
   - text: "\n"
   - h2: "blockquote"
   - text: "\n"
