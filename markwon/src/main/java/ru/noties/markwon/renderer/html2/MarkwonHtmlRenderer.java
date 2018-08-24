@@ -2,13 +2,13 @@ package ru.noties.markwon.renderer.html2;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.tag.BlockquoteHandler;
@@ -30,7 +30,7 @@ public abstract class MarkwonHtmlRenderer {
 
     public abstract void render(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder,
+            @NonNull Spannable spannable,
             @NonNull MarkwonHtmlParser parser
     );
 
