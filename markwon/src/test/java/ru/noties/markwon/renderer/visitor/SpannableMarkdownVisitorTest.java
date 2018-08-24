@@ -72,7 +72,7 @@ public class SpannableMarkdownVisitorTest {
         assertEquals(stringBuilder.length(), index);
     }
 
-    private int validate(@NonNull SpannableStringBuilder builder, int index, @NonNull TestNode node) {
+    private int validate(@NonNull final SpannableStringBuilder builder, final int index, @NonNull TestNode node) {
 
         if (node.isText()) {
 
@@ -109,6 +109,8 @@ public class SpannableMarkdownVisitorTest {
             out = validate(builder, out, child);
         }
 
+        final int end = out;
+
         final String info = node.toString();
 
         System.out.printf("%s: %s%n", file, builder.subSequence(index, out));
@@ -128,7 +130,9 @@ public class SpannableMarkdownVisitorTest {
                 .filter(new IxPredicate<TestSpan>() {
                     @Override
                     public boolean test(TestSpan testSpan) {
-                        return span.name().equals(testSpan.name());
+                        return span.name().equals(testSpan.name())
+                                && index == builder.getSpanStart(testSpan)
+                                && end == builder.getSpanEnd(testSpan);
                     }
                 })
                 .first(null);
@@ -139,6 +143,11 @@ public class SpannableMarkdownVisitorTest {
         );
 
         assertEquals(info, span.name(), testSpan.name());
+
+        // for correct tracking of nested blocks we must validate expected start/end
+        assertEquals(info, index, builder.getSpanStart(testSpan));
+        assertEquals(info, out, builder.getSpanEnd(testSpan));
+
         assertMapEquals(info, span.attributes(), testSpan.attributes());
 
         return out;
