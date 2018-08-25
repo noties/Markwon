@@ -143,13 +143,13 @@ but if you wish to get a bit closer to a web-browser experience, you can allow t
 
 ```java{2}
 SpannableConfiguration.builder(context)
-        .htmlIgnoreNonClosedTags(false)
+        .htmlAllowNonClosedTags(true)
         .build();
 ```
 
 :::warning Note
 If there is (for example) an `<i>` tag at the start of a document and it's not closed
-and `Markwon` is configured to **not** ignore non-closed tags (`.htmlIgnoreNonClosedTags(false)`),
+and `Markwon` is configured to **not** ignore non-closed tags (`.htmlAllowNonClosedTags(true)`),
 it will make the whole document in italics
 :::
 
@@ -195,6 +195,7 @@ Default instance have these tags _handled_:
 * `ol` (ordered list)
 * `img` (image)
 * `blockquote` (block quote)
+* `h{1-6}` (heading)
 
 If you wish to _extend_ default handling (or override existing),
 `#builderWithDefaults` factory method can be used:

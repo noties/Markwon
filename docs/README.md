@@ -46,6 +46,7 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
   * Lists (`ul`, `ol`)
   * Images (`img` will require configured image loader)
   * Blockquote (`blockquote`)
+  * Heading (`h1`, `h2`, `h3`, `h4`, `h5`, `h6`)
   * there is support to render any HTML tags, but it will require to create a special `TagHandler`,
     more information can be found in [HTML section](/docs/html.md#custom-tag-handler)
 * Task lists:

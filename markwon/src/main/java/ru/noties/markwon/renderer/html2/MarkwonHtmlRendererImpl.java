@@ -27,7 +27,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             @NonNull MarkwonHtmlParser parser) {
 
         final int end;
-        if (configuration.htmlIgnoreNonClosedTags()) {
+        if (!configuration.htmlAllowNonClosedTags()) {
             end = HtmlTag.NO_END;
         } else {
             end = builder.length();

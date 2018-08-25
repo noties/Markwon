@@ -37,7 +37,7 @@ public class SpannableConfiguration {
     private final boolean trimWhiteSpaceEnd; // @since 2.0.0
     private final MarkwonHtmlParser htmlParser; // @since 2.0.0
     private final MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
-    private final boolean htmlIgnoreNonClosedTags; // @since 2.0.0
+    private final boolean htmlAllowNonClosedTags; // @since 2.0.0
 
     private SpannableConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -51,7 +51,7 @@ public class SpannableConfiguration {
         this.trimWhiteSpaceEnd = builder.trimWhiteSpaceEnd;
         this.htmlParser = builder.htmlParser;
         this.htmlRenderer = builder.htmlRenderer;
-        this.htmlIgnoreNonClosedTags = builder.htmlIgnoreNonClosedTags;
+        this.htmlAllowNonClosedTags = builder.htmlAllowNonClosedTags;
     }
 
     @NonNull
@@ -124,8 +124,8 @@ public class SpannableConfiguration {
     /**
      * @since 2.0.0
      */
-    public boolean htmlIgnoreNonClosedTags() {
-        return htmlIgnoreNonClosedTags;
+    public boolean htmlAllowNonClosedTags() {
+        return htmlAllowNonClosedTags;
     }
 
     @SuppressWarnings("unused")
@@ -143,7 +143,7 @@ public class SpannableConfiguration {
         private boolean trimWhiteSpaceEnd = true; // @since 2.0.0
         private MarkwonHtmlParser htmlParser; // @since 2.0.0
         private MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
-        private boolean htmlIgnoreNonClosedTags = true; // @since 2.0.0
+        private boolean htmlAllowNonClosedTags; // @since 2.0.0
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -241,15 +241,15 @@ public class SpannableConfiguration {
         }
 
         /**
-         * @param htmlIgnoreNonClosedTags that indicates if non-closed html tags should be kept open.
-         *                                If this argument is false then all non-closed HTML tags
+         * @param htmlAllowNonClosedTags that indicates if non-closed html tags should be rendered.
+         *                                If this argument is true then all non-closed HTML tags
          *                                will be closed at the end of a document. Otherwise they will
          *                                be delivered non-closed {@code HtmlTag#isClosed()}
          * @since 2.0.0
          */
         @NonNull
-        public Builder htmlIgnoreNonClosedTags(boolean htmlIgnoreNonClosedTags) {
-            this.htmlIgnoreNonClosedTags = htmlIgnoreNonClosedTags;
+        public Builder htmlAllowNonClosedTags(boolean htmlAllowNonClosedTags) {
+            this.htmlAllowNonClosedTags = htmlAllowNonClosedTags;
             return this;
         }
 

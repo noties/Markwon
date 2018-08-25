@@ -231,15 +231,15 @@ SpannableConfiguration.builder(context)
 If not provided explicitly, default `MarkwonHtmlRenderer` implementation will be used.
 It is documented [here](/docs/html.md#renderer)
 
-### HTML ignore non-closed tags
+### HTML allow non-closed tags
 
-`htmlIgnoreNonClosedTags` option is used to control whether or not to
+`htmlAllowNonClosedTags` option is used to control whether or not to
 render non-closed HTML tags
 
 ```java
 SpannableConfiguration.builder(context)
-        .htmlIgnoreNonClosedTags(boolean)
+        .htmlAllowNonClosedTags(boolean)
         .build();
 ```
 
-If not provided explicitly, default value `true` will be used (non-closed tags **won't** be rendered).
+If not provided explicitly, default value `false` will be used (non-closed tags **won't** be rendered).
