@@ -1,0 +1,19 @@
+input: |-
+  <i>italic
+  <b>bold italic
+  <u>underline bold italic
+  <s>strike underline bold italic
+
+config:
+  use-html: true
+  html-allow-non-closed-tags: true
+
+output:
+  - i:
+    - text: "italic "
+    - b:
+      - text: "bold italic "
+      - u:
+        - text: "underline bold italic "
+        - s:
+          - text: "strike underline bold italic"

@@ -1,0 +1,20 @@
+input: |-
+  * First
+  * * Second
+  * * * Third
+
+output:
+  - ul: "First"
+    level: 0
+  - text: "\n"
+  - ul:
+    - ul: "Second"
+      level: 1
+    - text: "\n"
+    level: 0
+  - ul:
+    - ul:
+      - ul: "Third"
+        level: 2
+      level: 1
+    level: 0
