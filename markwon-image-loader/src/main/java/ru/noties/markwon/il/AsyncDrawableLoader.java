@@ -7,8 +7,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,6 +47,12 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
 
     private static final String FILE_ANDROID_ASSETS = "android_asset";
+
+    private static final String SCHEME_FILE = "file";
+    private static final String SCHEME_DATA = "data";
+
+    private static final DataUriParser DATA_URI_PARSER = DataUriParser.create();
+    private static final DataUriDecoder DATA_URI_DECODER = DataUriDecoder.create();
 
     private final OkHttpClient client;
     private final Resources resources;
@@ -103,9 +111,14 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 final boolean isFromFile;
 
                 final Uri uri = Uri.parse(destination);
-                if ("file".equals(uri.getScheme())) {
+                final String scheme = uri.getScheme();
+
+                if (SCHEME_FILE.equals(scheme)) {
                     item = fromFile(uri);
                     isFromFile = true;
+                } else if (SCHEME_DATA.equals(scheme)) {
+                    item = fromData(uri.getSchemeSpecificPart());
+                    isFromFile = false;
                 } else {
                     item = fromNetwork(destination);
                     isFromFile = false;
@@ -206,6 +219,30 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         }
 
         return out;
+    }
+
+    @Nullable
+    private Item fromData(@Nullable String part) {
+
+        if (TextUtils.isEmpty(part)) {
+            return null;
+        }
+
+        final DataUri dataUri = DATA_URI_PARSER.parse(part);
+        if (dataUri == null) {
+            return null;
+        }
+
+        final byte[] bytes = DATA_URI_DECODER.decode(dataUri);
+        if (bytes == null) {
+            return null;
+        }
+
+        return new Item(
+                null,
+                dataUri.contentType(),
+                new ByteArrayInputStream(bytes)
+        );
     }
 
     @Nullable
