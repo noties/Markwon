@@ -30,6 +30,7 @@ import java.util.Set;
 import ix.Ix;
 import ix.IxFunction;
 import ix.IxPredicate;
+import ru.noties.markwon.spans.TableRowSpan;
 
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;
@@ -102,6 +103,7 @@ abstract class TestDataReader {
     static class Reader {
 
         private static final String TEXT = "text";
+        private static final String CELLS = "cells";
 
         private static final Set<String> TAGS;
 
@@ -240,7 +242,23 @@ abstract class TestDataReader {
                         if (valueElement.isJsonNull()) {
                             value = null;
                         } else {
-                            value = valueElement.getAsString();
+                            // another special case: table cell
+                            // this is not so good
+                            if (CELLS.equals(key)) {
+                                final JsonArray cells = valueElement.getAsJsonArray();
+                                final int length = cells.size();
+                                final List<TableRowSpan.Cell> list = new ArrayList<>(length);
+                                for (int k = 0; k < length; k++) {
+                                    final JsonObject cell = cells.get(k).getAsJsonObject();
+                                    list.add(new TableRowSpan.Cell(
+                                            cell.get("alignment").getAsInt(),
+                                            cell.get("text").getAsString()
+                                    ));
+                                }
+                                value = list.toString();
+                            } else {
+                                value = valueElement.getAsString();
+                            }
                         }
                         attributes.put(key, value);
                     }

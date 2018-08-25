@@ -71,8 +71,10 @@ output:
   - h2: "unordered-list"
   - text: "\n"
   - ul: "ul1"
+    level: 0
   - text: "\n"
   - ul: "ul2"
+    level: 0
   - text: "\n"
   - h2: "ordered-list"
   - text: "\n"
@@ -86,6 +88,8 @@ output:
   - text: "\n"
   - img: "img"
     src: "img://src"
+    imageSize: null
+    replacementTextIsLink: false
   - text: "\n"
   - h2: "blockquote"
   - text: "\n"

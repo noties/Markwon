@@ -239,7 +239,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         newLine();
 
         final int length = builder.length();
-        builder.append(' '); // without space it won't render
+        builder.append('\u00a0'); // without space it won't render
 
         setSpan(length, factory.thematicBreak(theme));
 

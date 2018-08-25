@@ -4,4 +4,4 @@
 input: "---"
 
 output:
-  - hr: " "
+  - hr: "\u00a0"

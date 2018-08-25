@@ -78,7 +78,7 @@ public class ImageSizeResolverDef extends ImageSizeResolver {
         if (UNIT_EM.equals(dimension.unit)) {
             out = (int) (dimension.value * textSize + .5F);
         } else {
-            out = original;
+            out = (int) (dimension.value + .5F);
         }
         return out;
     }

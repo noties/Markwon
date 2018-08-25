@@ -60,7 +60,7 @@ public class SpannableMarkdownVisitorTest {
 
         final SpannableStringBuilder stringBuilder = builder.spannableStringBuilder();
 
-        System.out.printf("%s: %s%n", file, Arrays.toString(stringBuilder.getSpans(0, stringBuilder.length(), Object.class)));
+//        System.out.printf("%s: %s%n", file, Arrays.toString(stringBuilder.getSpans(0, stringBuilder.length(), Object.class)));
 
         int index = 0;
 
@@ -113,7 +113,7 @@ public class SpannableMarkdownVisitorTest {
 
         final String info = node.toString();
 
-        System.out.printf("%s: %s%n", file, builder.subSequence(index, out));
+//        System.out.printf("%s: %s%n", file, builder.subSequence(index, out));
 
         // we can possibly have parent spans here, should filter them
         final Object[] spans = builder.getSpans(index, out, Object.class);
@@ -148,6 +148,8 @@ public class SpannableMarkdownVisitorTest {
         assertEquals(info, index, builder.getSpanStart(testSpan));
         assertEquals(info, out, builder.getSpanEnd(testSpan));
 
+        System.out.printf("%s: expected: %s, actual: %s%n", file, span.attributes(), testSpan.attributes());
+
         assertMapEquals(info, span.attributes(), testSpan.attributes());
 
         return out;
@@ -175,8 +177,8 @@ public class SpannableMarkdownVisitorTest {
             @NonNull String message,
             @NonNull Map<String, String> expected,
             @NonNull Map<String, String> actual) {
-        boolean result = true;
-        if (expected.size() == actual.size()) {
+        boolean result = expected.size() == actual.size();
+        if (result) {
             for (Map.Entry<String, String> entry : expected.entrySet()) {
                 if (!actual.containsKey(entry.getKey())
                         || !equals(entry.getValue(), actual.get(entry.getKey()))) {

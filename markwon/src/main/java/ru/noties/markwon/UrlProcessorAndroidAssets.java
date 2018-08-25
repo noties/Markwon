@@ -8,8 +8,12 @@ import android.text.TextUtils;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UrlProcessorAndroidAssets implements UrlProcessor {
 
+
+    static final String MOCK = "https://android.asset/";
+    static final String BASE = "file:///android_asset/";
+
     private final UrlProcessorRelativeToAbsolute assetsProcessor
-            = new UrlProcessorRelativeToAbsolute("file:///android_asset/");
+            = new UrlProcessorRelativeToAbsolute(MOCK);
 
     private final UrlProcessor processor;
 
@@ -27,7 +31,7 @@ public class UrlProcessorAndroidAssets implements UrlProcessor {
         final String out;
         final Uri uri = Uri.parse(destination);
         if (TextUtils.isEmpty(uri.getScheme())) {
-            out = assetsProcessor.process(destination);
+            out = assetsProcessor.process(destination).replace(MOCK, BASE);
         } else {
             if (processor != null) {
                 out = processor.process(destination);
