@@ -27,6 +27,11 @@ dependencies {
         api it['android-gif']
         api it['okhttp']
     }
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+    }
 }
 
 afterEvaluate {
