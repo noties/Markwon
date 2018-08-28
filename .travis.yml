@@ -1,0 +1,21 @@
+# https://docs.travis-ci.com/user/languages/android/
+language: android
+jdk: openjdk8
+sudo: false
+
+android:
+  components:
+      - tools
+      - platform-tools
+      - tools
+
+      - build-tools-27.0.3
+      - android-27
+
+branches:
+  except:
+    - gh-pages
+
+cache:
+  directories:
+    - $HOME/.m2
