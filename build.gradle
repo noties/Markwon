@@ -19,6 +19,18 @@ allprojects {
     }
     version = VERSION_NAME
     group = GROUP
+
+    project.afterEvaluate {
+        if (project.hasProperty('android')) {
+            project.android.testOptions.unitTests.all {
+                testLogging {
+                    events "passed", "skipped", "failed"
+                    exceptionFormat "short"
+                    showStandardStreams = true
+                }
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {
