@@ -10,7 +10,7 @@ import org.robolectric.annotation.Config;
 
 import ru.noties.markwon.renderer.ImageSize.Dimension;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static ru.noties.markwon.renderer.ImageSizeResolverDef.UNIT_EM;
 import static ru.noties.markwon.renderer.ImageSizeResolverDef.UNIT_PERCENT;
 
@@ -29,7 +29,22 @@ public class ImageSizeResolverDefTest {
     public void no_image_size() {
         // no image size returns image original bounds
         final Rect rect = new Rect(0, 0, 15, 43);
-        assertEquals(rect, def.resolveImageSize(null, rect, -1, Float.NaN));
+        assertEquals(rect, def.resolveImageSize(null, rect, 15, Float.NaN));
+    }
+
+    @Test
+    public void no_image_size_width_greater_than_canvas() {
+        // image must be scaled (with ratio) wo fit canvas width
+        final Rect rect = new Rect(0, 0, 10, 20);
+        assertEquals(
+                new Rect(0, 0, 8, 16),
+                def.resolveImageSize(
+                        null,
+                        rect,
+                        8,
+                        Float.NaN
+                )
+        );
     }
 
     @Test
@@ -64,11 +79,11 @@ public class ImageSizeResolverDefTest {
     public void unknown_dimension_considered_absolute() {
         final Rect rect = new Rect(0, 0, 22, 33);
         assertEquals(
-                new Rect(0,0,7,9),
+                new Rect(0, 0, 7, 9),
                 def.resolveImageSize(
                         new ImageSize(new Dimension(7, "width"), new Dimension(9, "height")),
                         rect,
-                        -1,
+                        90,
                         Float.NaN
                 )
         );
@@ -82,7 +97,7 @@ public class ImageSizeResolverDefTest {
                 def.resolveImageSize(
                         new ImageSize(new Dimension(2.f, UNIT_EM), new Dimension(4.F, UNIT_EM)),
                         rect,
-                        -1,
+                        999,
                         10.F
                 )
         );
@@ -96,7 +111,7 @@ public class ImageSizeResolverDefTest {
                 def.resolveImageSize(
                         new ImageSize(new Dimension(1.F, UNIT_EM), null),
                         rect,
-                        -1,
+                        42,
                         10.F
                 )
         );
@@ -110,7 +125,7 @@ public class ImageSizeResolverDefTest {
                 def.resolveImageSize(
                         new ImageSize(null, new Dimension(50, "px")),
                         rect,
-                        -1,
+                        200,
                         Float.NaN
                 )
         );
@@ -124,7 +139,7 @@ public class ImageSizeResolverDefTest {
                 def.resolveImageSize(
                         new ImageSize(null, new Dimension(3.F, UNIT_EM)),
                         rect,
-                        -1,
+                        40,
                         10.F
                 )
         );

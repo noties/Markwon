@@ -24,7 +24,22 @@ public class ImageSizeResolverDef extends ImageSizeResolver {
     ) {
 
         if (imageSize == null) {
-            return imageBounds;
+            // @since 2.0.0 post process bounds to fit canvasWidth (previously was inside AsyncDrawable)
+            //      must be applied only if imageSize is null
+            final Rect rect;
+            final int w = imageBounds.width();
+            if (w > canvasWidth) {
+                final float reduceRatio = (float) w / canvasWidth;
+                rect = new Rect(
+                        0,
+                        0,
+                        canvasWidth,
+                        (int) (imageBounds.height() / reduceRatio + .5F)
+                );
+            } else {
+                rect = imageBounds;
+            }
+            return rect;
         }
 
         final Rect rect;

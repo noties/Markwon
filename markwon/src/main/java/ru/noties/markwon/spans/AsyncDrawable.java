@@ -34,14 +34,6 @@ public class AsyncDrawable extends Drawable {
     private float textSize;
 
     /**
-     * @deprecated 1.0.6 markdown images are also processed with {@link ImageSizeResolver}
-     */
-    @Deprecated
-    public AsyncDrawable(@NonNull String destination, @NonNull Loader loader) {
-        this(destination, loader, null, null);
-    }
-
-    /**
      * @since 1.0.1
      */
     public AsyncDrawable(
@@ -178,27 +170,11 @@ public class AsyncDrawable extends Drawable {
     @NonNull
     private Rect resolveBounds() {
 
-        final Rect rect;
-
-        if (imageSizeResolver == null) {
-
-            // @since 1.0.5
-            final Rect bounds = result.getBounds();
-            if (bounds.width() > canvasWidth) {
-
-                // let's scale image down, as we do not want to expand beyond canvas width
-                final float ratio = (float) bounds.width() / bounds.height();
-                final int height = (int) (canvasWidth / ratio + .5F);
-                rect = new Rect(0, 0, canvasWidth, height);
-
-            } else {
-                rect = bounds;
-            }
-
-        } else {
-            rect = imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize);
-        }
-
-        return rect;
+        // @since 2.0.0 previously we were checking if image is greater than canvas width here
+        //          but as imageSizeResolver won't be null anymore, we should transfer this logic
+        //          there
+        return imageSizeResolver != null
+                ? imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize)
+                : result.getBounds();
     }
 }
