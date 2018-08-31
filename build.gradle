@@ -19,18 +19,6 @@ allprojects {
     }
     version = VERSION_NAME
     group = GROUP
-
-    project.afterEvaluate {
-        if (project.hasProperty('android')) {
-            project.android.testOptions.unitTests.all {
-                testLogging {
-                    events "passed", "skipped", "failed"
-                    exceptionFormat "short"
-                    showStandardStreams = true
-                }
-            }
-        }
-    }
 }
 
 task clean(type: Delete) {
@@ -51,11 +39,6 @@ if (hasProperty('local')) {
 }
 
 ext {
-
-    // Config
-    BUILD_TOOLS = '27.0.3'
-    TARGET_SDK = 27
-    MIN_SDK = 16
 
     config = [
             'build-tools'    : '27.0.3',
@@ -99,9 +82,34 @@ ext {
             'commons-io'      : 'commons-io:commons-io:2.6',
             'mockito'         : 'org.mockito:mockito-core:2.21.0'
     ]
+
+    registerArtifact = this.&registerArtifact
 }
 
 task checkUpdates {
     apply plugin: 'com.github.ben-manes.versions'
     dependsOn 'dependencyUpdates'
+}
+
+def registerArtifact(project) {
+
+    if (hasProperty('release')) {
+        project.apply from: config['push-aar-gradle']
+    }
+
+    project.afterEvaluate {
+
+        // disable generation of BuildConfig files
+        project.generateDebugBuildConfig.enabled = false
+        project.generateReleaseBuildConfig.enabled = false
+
+        // print test status (for CI)
+        project.android.testOptions.unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed"
+                exceptionFormat "short"
+                showStandardStreams = true
+            }
+        }
+    }
 }

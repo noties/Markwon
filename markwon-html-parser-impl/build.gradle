@@ -28,11 +28,4 @@ dependencies {
     }
 }
 
-afterEvaluate {
-    generateDebugBuildConfig.enabled = false
-    generateReleaseBuildConfig.enabled = false
-}
-
-if (hasProperty('release')) {
-    apply from: config['push-aar-gradle']
-}
+registerArtifact(this)

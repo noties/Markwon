@@ -65,7 +65,7 @@ Please visit [documentation] web-site for further reference
   * Images (`img` will require configured image loader)
   * Blockquote (`blockquote`)
   * Heading (`h1`, `h2`, `h3`, `h4`, `h5`, `h6`)
-  * there is support to render any HTML tags
+  * there is support to render any HTML tag
 * Task lists:
 - [ ] Not _done_
   - [X] **Done** with `X`
