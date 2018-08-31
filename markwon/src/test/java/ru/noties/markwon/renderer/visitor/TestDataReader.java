@@ -223,7 +223,16 @@ abstract class TestDataReader {
 
             for (int i = 0; i < size; i++) {
 
-                final JsonObject object = array.get(i).getAsJsonObject();
+                // if element is a string (or a json primitive) let's just add a text node
+                //  right away, this way we will not have to provide text with `text: "my-text"`
+                //  (we still can though)
+                final JsonElement jsonElement = array.get(i);
+                if (jsonElement.isJsonPrimitive()) {
+                    testNodes.add(new TestNode.Text(parent, jsonElement.getAsString()));
+                    continue;
+                }
+
+                final JsonObject object = jsonElement.getAsJsonObject();
 
                 String name = null;
                 Map<String, String> attributes = new HashMap<>(0);

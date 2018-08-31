@@ -7,6 +7,6 @@ config:
   use-html: true
 
 output:
-  - text: "no italic here "
+  - "no italic here "
   - b: "bold yeah"
-  - text: " no underline"
+  - " no underline"

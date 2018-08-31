@@ -11,13 +11,13 @@ config:
   html-allow-non-closed-tags: false
 
 output:
-  - text: "Here is some "
+  - "Here is some "
   - a: "link"
     href: "https://my.href"
-  - text: " "
+  - " "
   - b:
-    - text: "bold "
+    - "bold "
     - i: "bold italic" #equals to: `- i: - text: "bold italic"`
-    - text: " bold"
-  - text: " normal"
+    - " bold"
+  - " normal"
 

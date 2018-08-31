@@ -10,10 +10,9 @@ config:
 
 output:
   - i:
-    - text: "italic "
+    - "italic "
     - b:
-      - text: "bold italic "
+      - "bold italic "
       - u:
-        - text: "underline bold italic "
-        - s:
-          - text: "strike underline bold italic"
+        - "underline bold italic "
+        - s: "strike underline bold italic"

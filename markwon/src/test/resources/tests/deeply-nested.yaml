@@ -3,13 +3,13 @@ input: |-
 
 output:
   - b:
-    - text: "bold "
+    - "bold "
     - i:
-      - text: "bold italic "
+      - "bold italic "
       - s:
-        - text: "bold italic strike "
+        - "bold italic strike "
         - code: "bold italic strike code"
-        - text: " bold italic strike"
-      - text: " bold italic"
-    - text: " bold"
-  - text: " normal"
+        - " bold italic strike"
+      - " bold italic"
+    - " bold"
+  - " normal"

@@ -5,8 +5,8 @@ input: |-
 
 output:
   - blockquote:
-    - text: "First\n\n"
+    - "First\n\n"
     - blockquote:
-      - text: "Second\n\n"
+      - "Second\n\n"
       - blockquote:
-        - text: "Third"
+        - "Third"
