@@ -1,8 +1,8 @@
 package ru.noties.markwon.renderer.html2.tag;
 
 import android.support.annotation.NonNull;
+import android.text.Spannable;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
@@ -10,13 +10,13 @@ public abstract class TagHandler {
 
     public abstract void handle(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder,
+            @NonNull Spannable spannable,
             @NonNull HtmlTag tag
     );
 
     protected static void visitChildren(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder,
+            @NonNull Spannable spannable,
             @NonNull HtmlTag.Block block) {
 
         TagHandler handler;
@@ -29,9 +29,9 @@ public abstract class TagHandler {
 
             handler = configuration.htmlRenderer().tagHandler(child.name());
             if (handler != null) {
-                handler.handle(configuration, builder, child);
+                handler.handle(configuration, spannable, child);
             } else {
-                visitChildren(configuration, builder, child);
+                visitChildren(configuration, spannable, child);
             }
         }
     }

@@ -2,8 +2,9 @@ package ru.noties.markwon.renderer.html2.tag;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.Spanned;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
@@ -13,10 +14,12 @@ public abstract class SimpleTagHandler extends TagHandler {
     public abstract Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag);
 
     @Override
-    public void handle(@NonNull SpannableConfiguration configuration, @NonNull SpannableBuilder builder, @NonNull HtmlTag tag) {
+    public void handle(@NonNull SpannableConfiguration configuration,
+                       @NonNull Spannable spannable,
+                       @NonNull HtmlTag tag) {
         final Object spans = getSpans(configuration, tag);
         if (spans != null) {
-            SpannableBuilder.setSpans(builder, spans, tag.start(), tag.end());
+            spannable.setSpan(spans, tag.start(), tag.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 }

@@ -1,8 +1,9 @@
 package ru.noties.markwon.renderer.html2.tag;
 
 import android.support.annotation.NonNull;
+import android.text.Spannable;
+import android.text.Spanned;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
@@ -11,7 +12,7 @@ public class ListHandler extends TagHandler {
     @Override
     public void handle(
             @NonNull SpannableConfiguration configuration,
-            @NonNull SpannableBuilder builder,
+            @NonNull Spannable spannable,
             @NonNull HtmlTag tag) {
 
         if (!tag.isBlock()) {
@@ -33,7 +34,7 @@ public class ListHandler extends TagHandler {
 
         for (HtmlTag.Block child : block.children()) {
 
-            visitChildren(configuration, builder, child);
+            visitChildren(configuration, spannable, child);
 
             if ("li".equals(child.name())) {
                 // insert list item here
@@ -48,7 +49,9 @@ public class ListHandler extends TagHandler {
                             bulletLevel
                     );
                 }
-                SpannableBuilder.setSpans(builder, spans, child.start(), child.end());
+
+                spannable.setSpan(spans, child.start(), child.end(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }

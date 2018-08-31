@@ -12,8 +12,8 @@ import org.commonmark.parser.Parser;
 
 import java.util.Arrays;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.renderer.SpannableBuilder;
 import ru.noties.markwon.spans.SpannableTheme;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
@@ -70,6 +70,6 @@ public class MainActivity extends Activity {
         node.accept(visitor);
 
         // apply
-        textView.setText(builder.text());
+        textView.setText(builder);
     }
 }

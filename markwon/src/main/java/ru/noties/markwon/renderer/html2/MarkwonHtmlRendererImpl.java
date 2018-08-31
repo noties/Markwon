@@ -2,11 +2,11 @@ package ru.noties.markwon.renderer.html2;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
 
 import java.util.List;
 import java.util.Map;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
@@ -23,14 +23,14 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
     @Override
     public void render(
             @NonNull final SpannableConfiguration configuration,
-            @NonNull final SpannableBuilder builder,
+            @NonNull final Spannable spannable,
             @NonNull MarkwonHtmlParser parser) {
 
         final int end;
         if (!configuration.htmlAllowNonClosedTags()) {
             end = HtmlTag.NO_END;
         } else {
-            end = builder.length();
+            end = spannable.length();
         }
 
         parser.flushInlineTags(end, new MarkwonHtmlParser.FlushAction<HtmlTag.Inline>() {
@@ -48,7 +48,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
                     handler = tagHandler(inline.name());
                     if (handler != null) {
-                        handler.handle(configuration, builder, inline);
+                        handler.handle(configuration, spannable, inline);
                     }
                 }
             }
@@ -68,7 +68,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
                     handler = tagHandler(block.name());
                     if (handler != null) {
-                        handler.handle(configuration, builder, block);
+                        handler.handle(configuration, spannable, block);
                     } else {
                         // see if any of children can be handled
                         apply(block.children());
