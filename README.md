@@ -7,40 +7,37 @@
 [![markwon-syntax-highlight](https://img.shields.io/maven-central/v/ru.noties/markwon-syntax-highlight.svg?label=markwon-syntax-highlight)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-syntax-highlight%22)
 [![markwon-view](https://img.shields.io/maven-central/v/ru.noties/markwon-view.svg?label=markwon-view)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-view%22)
 
-**Markwon** is a library for Android that renders markdown as system-native Spannables. It gives ability to display markdown in all TextView widgets (**TextView**, **Button**, **Switch**, **CheckBox**, etc), **Notifications**, **Toasts**, etc. <u>**No WebView is required**</u>. Library provides reasonable defaults for display style of markdown but also gives all the means to tweak the appearance if desired. All markdown features are supported (including limited support for inlined HTML code, markdown tables and images).
+**Markwon** is a markdown library for Android. It parses markdown
+following [commonmark-spec] with the help of amazing [commonmark-java]
+library and renders result as _Android-native_ Spannables. **No HTML**
+is involved as an intermediate step. <u>**No WebView** is required</u>.
+It's extremely fast, feature-rich and extensible.
 
-<sup>*</sup>*This file is displayed by default in the [sample-apk] application. Which is a generic markdown viewer with support to display markdown via `http`, `https` & `file` schemes and 2 themes included: Light & Dark*
+It gives ability to display markdown in all TextView widgets
+(**TextView**, **Button**, **Switch**, **CheckBox**, etc), **Toasts**
+and all other places that accept **Spanned content**. Library provides
+reasonable defaults to display style of a markdown content but also 
+gives all the means to tweak the appearance if desired. All markdown
+features listed in [commonmark-spec] are supported
+(including support for **inlined/block HTML code**, **markdown tables**,
+**images** and **syntax highlight**).
+
+[commonmark-spec]: https://spec.commonmark.org/0.28/
+[commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
+
+<sup>*</sup>*This file is displayed by default in the [sample-apk] (`markwon-sample-{latest-version}-debug.apk`) application. Which is a generic markdown viewer with support to display markdown via `http`, `https` & `file` schemes and 2 themes included: Light & Dark*
+
+[sample-apk]: https://github.com/noties/Markwon/releases
 
 ## Installation
 ```groovy
-implementation 'ru.noties:markwon:1.1.0'
-implementation 'ru.noties:markwon-image-loader:1.1.0' // optional
-implementation 'ru.noties:markwon-syntax-highlight:1.1.0' // optional
-implementation 'ru.noties:markwon-view:1.1.0' // optional
+implementation "ru.noties:markwon:${markwonVersion}"
+implementation "ru.noties:markwon-image-loader:${markwonVersion}" // optional
+implementation "ru.noties:markwon-syntax-highlight:${markwonVersion}" // optional
+implementation "ru.noties:markwon-view:${markwonVersion}" // optional
 ```
 
-### Snapshot
-![markwon-snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties/markwon.svg?label=markwon)
-
-In order to use latest `SNAPSHOT` version add snapshot repository to your root project's `build.gradle` file:
-
-```groovy
-allprojects {
-    repositories {
-        jcenter()
-        google()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-    }
-}
-```
-
-and then in your module `build.gradle`:
-
-```groovy
-implementation 'ru.noties:markwon:1.1.1-SNAPSHOT'
-```
-
-Please note that `markwon-image-loader`, `markwon-syntax-highlight` and `markwon-view` are also present in `SNAPSHOT` repository and share the same version as main `markwon` artifact.
+Please visit [documentation] web-site for further reference
 
 ## Supported markdown features:
 * Emphasis (`*`, `_`)
@@ -48,27 +45,31 @@ Please note that `markwon-image-loader`, `markwon-syntax-highlight` and `markwon
 * Strike-through (`~~`)
 * Headers (`#{1,6}`)
 * Links (`[]()` && `[][]`)
-* Images (_requires special handling_)
+* Images
 * Thematic break (`---`, `***`, `___`)
 * Quotes & nested quotes (`>{1,}`)
 * Ordered & non-ordered lists & nested ones
 * Inline code
 * Code blocks
 * Tables (*with limitations*)
-* Small subset of inline-html (which is rendered by this library):
-* * Emphasis (`<i>`, `<em>`, `<cite>`, `<dfn>`)
-* * Strong emphasis (`<b>`, `<strong>`)
-* * SuperScript (`<sup>`)
-* * SubScript (`<sub>`)
-* * Underline (`<u>`)
-* * Strike-through (`<s>`, `<strike>`, `<del>`)
-  * other inline html is rendered via (`Html.fromHtml(...)`)
+* Syntax highlight
+* HTML
+  * Emphasis (`<i>`, `<em>`, `<cite>`, `<dfn>`)
+  * Strong emphasis (`<b>`, `<strong>`)
+  * SuperScript (`<sup>`)
+  * SubScript (`<sub>`)
+  * Underline (`<u>`, `ins`)
+  * Strike-through (`<s>`, `<strike>`, `<del>`)
+  * Link (`a`)
+  * Lists (`ul`, `ol`)
+  * Images (`img` will require configured image loader)
+  * Blockquote (`blockquote`)
+  * Heading (`h1`, `h2`, `h3`, `h4`, `h5`, `h6`)
+  * there is support to render any HTML tags
 * Task lists:
-
 - [ ] Not _done_
   - [X] **Done** with `X`
   - [x] ~~and~~ **or** small `x`
-
 ---
 
 ## Screenshots
@@ -84,72 +85,11 @@ By default configuration uses TextView textColor for styling, so changing textCo
 
 ---
 
-## Quick start
-This is the most simple way to set markdown to a TextView or any of its siblings:
-```java
-Markwon.setMarkdown(textView, markdown);
-```
+## Documentation
 
-It's just a helper method, that does underneath:
-* constructs a `Parser` (see: [commonmark-java][commonmark-java]) and parses markdown
-* constructs a `SpannableConfiguration`
-* *renders* parsed markdown to Spannable (via `SpannableRenderer`)
-* prepares TextView to display images, tables and links
-* sets text
+Please visit [documentation] web-site for reference
 
-This flow answers the most simple usage of displaying markdown: one shot parsing & configuration of relatively small markdown chunks. If your markdown contains a lot of text or you plan to display multiple UI widgets with markdown you might consider *stepping in* and taking control of this flow.
-
-The candidate requirements to *step in*:
-* parsing and processing of parsed markdown in background thread
-* reusing `Parser` and/or `SpannableConfiguration` between multiple calls
-* ignore images and tables specific logic (you know that markdown won't contain them)
-
-So, if we expand `Markwon.setMarkdown(textView, markdown)` method we will see the following:
-```java
-// create a Parser instance (can be done manually)
-// internally creates default Parser instance & registers `strike-through` & `tables` extension
-final Parser parser = Markwon.createParser();
-
-// core class to display markdown, can be obtained via this method,
-// which creates default instance (no images handling though),
-// or via `builder` method, which lets you to configure this instance
-//
-// `this` refers to a Context instance
-final SpannableConfiguration configuration = SpannableConfiguration.create(this);
-
-// it's better **not** to re-use this class between multiple calls
-final SpannableRenderer renderer = new SpannableRenderer();
-
-final Node node = parser.parse(markdown);
-final CharSequence text = renderer.render(configuration, node);
-
-// for links in markdown to be clickable
-textView.setMovementMethod(LinkMovementMethod.getInstance());
-
-// we need these due to the limited nature of Spannables to invalidate TextView
-Markwon.unscheduleDrawables(textView);
-Markwon.unscheduleTableRows(textView);
-
-textView.setText(text);
-
-Markwon.scheduleDrawables(textView);
-Markwon.scheduleTableRows(textView);
-```
-
-Please note that if you are having trouble with `LinkMovementMethod` you can use
-`Markwon.setText(textView, markdown, movementMethod)` method (`@since 1.0.6`) to specify _no_ movement
-method (aka `null`) or own implementation. As an alternative to the system `LinkMovementMethod`
-you can use [Better-Link-Movement-Method][better-link-movement-method].
-
-Please refer to [SpannableConfiguration] document for more info
-
-## Syntax highlight
-
-Starting with version `1.1.0` there is an artifact (`markwon-syntax-highlight`) that allows you to have syntax highlight functionality.
-It is based on [Prism4j](https://github.com/noties/Prism4j) project. It contains 2 builtin themes:
-`Default` (light, `Prism4jThemeDefault`) and `Darkula` (dark, `Prism4jThemeDarkula`).
-
-[markwon-syntax-highlight](./markwon-syntax-highlight/)
+[documentation]: https://noties.github.io/Markwon
 
 ---
 
@@ -230,6 +170,46 @@ s = "Python syntax highlighting"
 print s
 ```
 
+```java
+/**
+ * Helper method to obtain a Parser with registered strike-through &amp; table extensions
+ * &amp; task lists (added in 1.0.1)
+ *
+ * @return a Parser instance that is supported by this library
+ * @since 1.0.0
+ */
+@NonNull
+public static Parser createParser() {
+  return new Parser.Builder()
+      .extensions(Arrays.asList(
+          StrikethroughExtension.create(),
+          TablesExtension.create(),
+          TaskListExtension.create()
+      ))
+      .build();
+}
+```
+
+```xml
+<ScrollView
+  android:id="@+id/scroll_view"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_marginTop="?android:attr/actionBarSize">
+
+  <TextView
+    android:id="@+id/text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dip"
+    android:lineSpacingExtra="2dip"
+    android:textSize="16sp"
+    tools:context="ru.noties.markwon.MainActivity"
+    tools:text="yo\nman" />
+
+</ScrollView>
+```
+
 ```
 No language indicated, so no syntax highlighting.
 But let's throw in a <b>tag</b>.
@@ -275,16 +255,10 @@ Nested quotes
 
 ## Inline HTML
 
-<sup>*</sup>*As Android doesn't support HTML out of box, **Markwon** library supports only a small subset of it. Everything else is rendered via `Html.fromHtml()`*
+```html
+<u><i>H<sup>T<sub>M</sub></sup><b><s>L</s></b></i></u>
+```
 
-* Emphasis (`<i>`, `<em>`, `<cite>`, `<dfn>`)
-* Strong emphasis (`<b>`, `<strong>`)
-* SuperScript (`<sup>`)
-* SubScript (`<sub>`)
-* Underline (`<u>`)
-* Strike-through (`<s>`, `<strike>`, `<del>`)
-
-Let's use it:
 <u><i>H<sup>T<sub>M</sub></sup><b><s>L</s></b></i></u>
 
 ---
@@ -330,11 +304,7 @@ Underscores (`_`)
   limitations under the License.
 ```
 
-[sample-apk]: https://github.com/noties/Markwon/releases/download/v1.0.0/markwon-sample-1.0.0.apk
-[commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
 [cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-[SpannableConfiguration]: ./docs/SpannableConfiguration.md
-[better-link-movement-method]: https://github.com/saket/Better-Link-Movement-Method
 
 [arbitrary case-insensitive reference text]: https://www.mozilla.org
 [1]: http://slashdot.org
