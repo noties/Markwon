@@ -61,7 +61,7 @@ public class SpannableMarkdownVisitorTest {
         }
 
         // assert that the whole thing is processed
-        assertEquals(stringBuilder.length(), index);
+        assertEquals("`" + stringBuilder + "`", stringBuilder.length(), index);
 
         final Object[] spans = stringBuilder.getSpans(0, stringBuilder.length(), Object.class);
         final int length = spans != null

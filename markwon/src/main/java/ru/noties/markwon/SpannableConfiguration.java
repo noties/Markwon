@@ -3,7 +3,6 @@ package ru.noties.markwon;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.renderer.ImageSizeResolverDef;
@@ -34,7 +33,6 @@ public class SpannableConfiguration {
     private final ImageSizeResolver imageSizeResolver;
     private final SpannableFactory factory; // @since 1.1.0
     private final boolean softBreakAddsNewLine; // @since 1.1.1
-    private final boolean trimWhiteSpaceEnd; // @since 2.0.0
     private final MarkwonHtmlParser htmlParser; // @since 2.0.0
     private final MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
     private final boolean htmlAllowNonClosedTags; // @since 2.0.0
@@ -48,7 +46,6 @@ public class SpannableConfiguration {
         this.imageSizeResolver = builder.imageSizeResolver;
         this.factory = builder.factory;
         this.softBreakAddsNewLine = builder.softBreakAddsNewLine;
-        this.trimWhiteSpaceEnd = builder.trimWhiteSpaceEnd;
         this.htmlParser = builder.htmlParser;
         this.htmlRenderer = builder.htmlRenderer;
         this.htmlAllowNonClosedTags = builder.htmlAllowNonClosedTags;
@@ -101,13 +98,6 @@ public class SpannableConfiguration {
     /**
      * @since 2.0.0
      */
-    public boolean trimWhiteSpaceEnd() {
-        return trimWhiteSpaceEnd;
-    }
-
-    /**
-     * @since 2.0.0
-     */
     @NonNull
     public MarkwonHtmlParser htmlParser() {
         return htmlParser;
@@ -140,7 +130,6 @@ public class SpannableConfiguration {
         private ImageSizeResolver imageSizeResolver;
         private SpannableFactory factory; // @since 1.1.0
         private boolean softBreakAddsNewLine; // @since 1.1.1
-        private boolean trimWhiteSpaceEnd = true; // @since 2.0.0
         private MarkwonHtmlParser htmlParser; // @since 2.0.0
         private MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
         private boolean htmlAllowNonClosedTags; // @since 2.0.0
@@ -211,18 +200,6 @@ public class SpannableConfiguration {
         }
 
         /**
-         * Will trim white space(s) from the end from resulting text.
-         * By default `true`
-         *
-         * @since 2.0.0
-         */
-        @NonNull
-        public Builder trimWhiteSpaceEnd(boolean trimWhiteSpaceEnd) {
-            this.trimWhiteSpaceEnd = trimWhiteSpaceEnd;
-            return this;
-        }
-
-        /**
          * @since 2.0.0
          */
         @NonNull
@@ -242,9 +219,9 @@ public class SpannableConfiguration {
 
         /**
          * @param htmlAllowNonClosedTags that indicates if non-closed html tags should be rendered.
-         *                                If this argument is true then all non-closed HTML tags
-         *                                will be closed at the end of a document. Otherwise they will
-         *                                be delivered non-closed {@code HtmlTag#isClosed()}
+         *                               If this argument is true then all non-closed HTML tags
+         *                               will be closed at the end of a document. Otherwise they will
+         *                               be delivered non-closed {@code HtmlTag#isClosed()}
          * @since 2.0.0
          */
         @NonNull
