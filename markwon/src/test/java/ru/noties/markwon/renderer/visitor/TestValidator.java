@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import ix.Ix;
@@ -68,7 +67,10 @@ abstract class TestValidator {
                     }
                 }
 
-                assertEquals(text, builder.subSequence(index, index + text.length()).toString());
+                assertEquals(
+                        String.format("text: %s, position: {%d-%d}", text, index, index + text.length()),
+                        text,
+                        builder.subSequence(index, index + text.length()).toString());
 
                 return index + text.length();
             }
@@ -106,6 +108,7 @@ abstract class TestValidator {
                     .filter(new IxPredicate<TestSpan>() {
                         @Override
                         public boolean test(TestSpan testSpan) {
+
                             // in case of nested spans with the same name (lists)
                             // we also must validate attributes
                             // and thus we are moving most of assertions to this filter method
@@ -170,16 +173,21 @@ abstract class TestValidator {
                 spansText = "[]";
             } else {
                 final StringBuilder builder = new StringBuilder();
-                for (Object o: spans) {
+                for (Object o : spans) {
                     final TestSpan testSpan = (TestSpan) o;
                     if (builder.length() > 0) {
                         builder.append(", ");
                     }
+
                     builder
                             .append("{name: '").append(testSpan.name()).append('\'')
-                            .append(", position{").append(start).append(", ").append(end).append('}')
-                            .append(", attributes: ").append(testSpan.attributes())
-                            .append('}');
+                            .append(", position{").append(start).append(", ").append(end).append('}');
+
+                    if (testSpan.attributes().size() > 0) {
+                        builder.append(", attributes: ").append(testSpan.attributes());
+                    }
+
+                    builder.append('}');
                 }
                 spansText = builder.toString();
             }

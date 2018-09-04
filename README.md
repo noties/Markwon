@@ -158,8 +158,6 @@ Or leave it empty and use the [link text itself].
 
 Inline `code` has `back-ticks around` it.
 
-<sup>*</sup>*Please note, that syntax highlighting is supported but library provides no means to do it automatically*
-
 ```javascript
 var s = "JavaScript syntax highlighting";
 alert(s);

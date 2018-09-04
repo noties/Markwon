@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.tables.TableBody;
 import org.commonmark.ext.gfm.tables.TableCell;
+import org.commonmark.ext.gfm.tables.TableHead;
 import org.commonmark.ext.gfm.tables.TableRow;
 import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.BlockQuote;
@@ -79,10 +80,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         super.visit(document);
 
         configuration.htmlRenderer().render(configuration, builder, htmlParser);
-
-        if (configuration.trimWhiteSpaceEnd()) {
-            builder.trimWhiteSpaceEnd();
-        }
     }
 
     @Override
@@ -122,9 +119,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         blockQuoteIndent -= 1;
 
-        newLine();
-        if (blockQuoteIndent == 0) {
-            builder.append('\n');
+        if (hasNext(blockQuote)) {
+            newLine();
+            if (blockQuoteIndent == 0) {
+                builder.append('\n');
+            }
         }
     }
 
@@ -145,7 +144,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
         // @since 1.0.4
-        visitCodeBlock(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral());
+        visitCodeBlock(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral(), fencedCodeBlock);
     }
 
     /**
@@ -153,7 +152,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
      */
     @Override
     public void visit(IndentedCodeBlock indentedCodeBlock) {
-        visitCodeBlock(null, indentedCodeBlock.getLiteral());
+        visitCodeBlock(null, indentedCodeBlock.getLiteral(), indentedCodeBlock);
     }
 
     /**
@@ -161,7 +160,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
      * @param code content of a code block
      * @since 1.0.4
      */
-    private void visitCodeBlock(@Nullable String info, @NonNull String code) {
+    private void visitCodeBlock(@Nullable String info, @NonNull String code, @NonNull Node node) {
+
         newLine();
 
         final int length = builder.length();
@@ -172,12 +172,16 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                 configuration.syntaxHighlight()
                         .highlight(info, code)
         );
-        builder.append('\u00a0').append('\n');
+
+        newLine();
+        builder.append('\u00a0');
 
         setSpan(length, factory.code(theme, true));
 
-        newLine();
-        builder.append('\n');
+        if (hasNext(node)) {
+            newLine();
+            builder.append('\n');
+        }
     }
 
     @Override
@@ -191,11 +195,16 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     private void visitList(Node node) {
+
         newLine();
+
         visitChildren(node);
-        newLine();
-        if (listLevel == 0 && blockQuoteIndent == 0) {
-            builder.append('\n');
+
+        if (hasNext(node)) {
+            newLine();
+            if (listLevel == 0 && blockQuoteIndent == 0) {
+                builder.append('\n');
+            }
         }
     }
 
@@ -230,7 +239,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         blockQuoteIndent -= 1;
         listLevel -= 1;
 
-        newLine();
+        if (hasNext(listItem)) {
+            newLine();
+        }
     }
 
     @Override
@@ -243,8 +254,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         setSpan(length, factory.thematicBreak(theme));
 
-        newLine();
-        builder.append('\n');
+        if (hasNext(thematicBreak)) {
+            newLine();
+            builder.append('\n');
+        }
     }
 
     @Override
@@ -256,10 +269,11 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         visitChildren(heading);
         setSpan(length, factory.heading(theme, heading.getLevel()));
 
-        newLine();
-
-        // after heading we add another line anyway (no additional checks)
-        builder.append('\n');
+        if (hasNext(heading)) {
+            newLine();
+            // after heading we add another line anyway (no additional checks)
+            builder.append('\n');
+        }
     }
 
     @Override
@@ -282,12 +296,17 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
      */
     @Override
     public void visit(CustomBlock customBlock) {
+
         if (customBlock instanceof TaskListBlock) {
             blockQuoteIndent += 1;
             visitChildren(customBlock);
             blockQuoteIndent -= 1;
-            newLine();
-            builder.append('\n');
+
+            if (hasNext(customBlock)) {
+                newLine();
+                builder.append('\n');
+            }
+
         } else {
             super.visit(customBlock);
         }
@@ -316,7 +335,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             setSpan(length, factory.taskListItem(theme, blockQuoteIndent, listItem.done()));
 
-            newLine();
+            if (hasNext(customNode)) {
+                newLine();
+            }
 
             blockQuoteIndent -= listItem.indent();
 
@@ -330,17 +351,36 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         final boolean handled;
 
         if (node instanceof TableBody) {
+
             visitChildren(node);
             tableRows = 0;
             handled = true;
-            newLine();
-            builder.append('\n');
-        } else if (node instanceof TableRow) {
+
+            if (hasNext(node)) {
+                newLine();
+                builder.append('\n');
+            }
+
+        } else if (node instanceof TableRow || node instanceof TableHead) {
 
             final int length = builder.length();
+
             visitChildren(node);
 
             if (pendingTableRow != null) {
+
+                // @since 2.0.0
+                // we cannot rely on hasNext(TableHead) as it's not reliable
+                // we must apply new line manually and then exclude it from tableRow span
+                final boolean addNewLine;
+                {
+                    final int builderLength = builder.length();
+                    addNewLine = builderLength > 0
+                            && '\n' != builder.charAt(builderLength - 1);
+                }
+                if (addNewLine) {
+                    builder.append('\n');
+                }
 
                 // @since 1.0.4 Replace table char with non-breakable space
                 // we need this because if table is at the end of the text, then it will be
@@ -357,12 +397,13 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                         ? 0
                         : tableRows + 1;
 
-                setSpan(length, span);
-                newLine();
+                setSpan(addNewLine ? length + 1 : length, span);
+
                 pendingTableRow = null;
             }
 
             handled = true;
+
         } else if (node instanceof TableCell) {
 
             final TableCell cell = (TableCell) node;
@@ -383,11 +424,13 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         } else {
             handled = false;
         }
+
         return handled;
     }
 
     @Override
     public void visit(Paragraph paragraph) {
+
         final boolean inTightList = isInTightList(paragraph);
 
         if (!inTightList) {
@@ -400,9 +443,8 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         // @since 1.1.1 apply paragraph span
         setSpan(length, factory.paragraph(inTightList));
 
-        if (!inTightList) {
+        if (hasNext(paragraph) && !inTightList) {
             newLine();
-
             if (blockQuoteIndent == 0) {
                 builder.append('\n');
             }
@@ -517,5 +559,12 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             out = TableRowSpan.ALIGN_LEFT;
         }
         return out;
+    }
+
+    /**
+     * @since 2.0.0
+     */
+    protected static boolean hasNext(@NonNull Node node) {
+        return node.getNext() != null;
     }
 }

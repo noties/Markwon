@@ -183,25 +183,6 @@ If not provided explicitly, default `false` value will be used.
 
 <Link name="commonmark-spec#soft-break" displayName="Commonmark specification" />
 
-## Trim white space from end <Badge text="2.0.0" />
-
-`trimWhiteSpaceEnd` option controls whether or not to trim white spaces from the
-end of a document.
-
-```java
-SpannableConfiguration.builder(context)
-        .trimWhiteSpaceEnd(boolean)
-        .build();
-```
-
-If not provided explicitly, default `true` value will be used.
-
-:::tip Before <Badge text="2.0.0" />
-Before `2.0.0` version this functionality was _implicitly_ included in
-`SpannableBuilder#text` method. This is no longer true and now `SpannableBuilder`
-does not trim white spaces (which was by default and non-configurable)
-:::
-
 ## HTML <Badge text="2.0.0" />
 
 ### Parser

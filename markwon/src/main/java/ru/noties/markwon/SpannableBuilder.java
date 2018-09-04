@@ -61,7 +61,6 @@ public class SpannableBuilder implements Appendable, CharSequence {
     }
 
     public SpannableBuilder(@NonNull CharSequence cs) {
-//        this.builder = new SpannableStringBuilderImpl(cs.toString());
         this.builder = new StringBuilder(cs);
         copySpans(0, cs);
     }
@@ -196,58 +195,6 @@ public class SpannableBuilder implements Appendable, CharSequence {
     @NonNull
     public String toString() {
         return builder.toString();
-    }
-
-    /**
-     * Moved from {@link #text()} method
-     *
-     * @since 2.0.0
-     */
-    public void trimWhiteSpaceEnd() {
-
-        // now, let's remove trailing & leading newLines (so small amounts of text are displayed correctly)
-        // @since 1.0.2
-
-        int length = builder.length();
-
-        if (length > 0) {
-
-            length = builder.length();
-            int amount = 0;
-            for (int i = length - 1; i >= 0; i--) {
-                if (Character.isWhitespace(builder.charAt(i))) {
-                    amount += 1;
-                } else {
-                    break;
-                }
-            }
-
-            if (amount > 0) {
-
-                final int newLength = length - amount;
-                builder.replace(newLength, length, "");
-
-                // additionally we should apply new length to the spans (otherwise
-                // sometimes system cannot handle spans with length greater than total length
-                // which causes some internal failure (no exceptions, no logs) in Layout class
-                // and no markdown is displayed at all
-                if (spans.size() > 0) {
-                    Span span;
-                    final Iterator<Span> iterator = spans.iterator();
-                    while (iterator.hasNext()) {
-                        span = iterator.next();
-                        // if span start is greater than newLength, then remove it... one should
-                        // not use white space for spanning resulting text
-                        if (span.start > newLength) {
-                            iterator.remove();
-                        } else if (span.end > newLength) {
-                            span.end = newLength;
-                        }
-                    }
-                }
-            }
-
-        }
     }
 
     @NonNull

@@ -10,8 +10,8 @@ output:
   - ul:
     - ul: "Second"
       level: 1
-    - text: "\n"
     level: 0
+  - text: "\n"
   - ul:
     - ul:
       - ul: "Third"
