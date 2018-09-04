@@ -39,6 +39,8 @@ public class BlockQuoteSpan implements LeadingMarginSpan {
 
         final int width = theme.getBlockQuoteWidth();
 
+        paint.set(p);
+
         theme.applyBlockQuoteStyle(paint);
 
         final int left;
