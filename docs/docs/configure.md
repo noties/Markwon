@@ -23,7 +23,7 @@ values as they will be applied automatically
 :::warning Images
 If you plan on using images inside your markdown/HTML, you will have to **explicitly**
 register an implementation of `AsyncDrawable.Loader` via `#asyncDrawableLoader` builder method.
-`Markwon` comes with ready implementation for that and it can be cound in 
+`Markwon` comes with ready implementation for that and it can be found in
 `markwon-image-loader` module. Refer to module [documentation](/docs/image-loader.md)
 :::
 
