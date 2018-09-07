@@ -7,13 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -23,13 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import ru.noties.markwon.spans.AsyncDrawable;
 
 public class AsyncDrawableLoader implements AsyncDrawable.Loader {
@@ -44,31 +35,19 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         return new Builder();
     }
 
-    private static final String HEADER_CONTENT_TYPE = "Content-Type";
-
-    private static final String FILE_ANDROID_ASSETS = "android_asset";
-
-    private static final String SCHEME_FILE = "file";
-    private static final String SCHEME_DATA = "data";
-
-    private static final DataUriParser DATA_URI_PARSER = DataUriParser.create();
-    private static final DataUriDecoder DATA_URI_DECODER = DataUriDecoder.create();
-
-    private final OkHttpClient client;
-    private final Resources resources;
     private final ExecutorService executorService;
     private final Handler mainThread;
     private final Drawable errorDrawable;
+    private final Map<String, SchemeHandler> schemeHandlers;
     private final List<MediaDecoder> mediaDecoders;
 
     private final Map<String, Future<?>> requests;
 
     AsyncDrawableLoader(Builder builder) {
-        this.client = builder.client;
-        this.resources = builder.resources;
         this.executorService = builder.executorService;
         this.mainThread = new Handler(Looper.getMainLooper());
         this.errorDrawable = builder.errorDrawable;
+        this.schemeHandlers = builder.schemeHandlers;
         this.mediaDecoders = builder.mediaDecoders;
         this.requests = new HashMap<>(3);
     }
@@ -88,61 +67,58 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             request.cancel(true);
         }
 
-        final List<Call> calls = client.dispatcher().queuedCalls();
-        if (calls != null) {
-            for (Call call : calls) {
-                if (!call.isCanceled()) {
-                    if (destination.equals(call.request().tag())) {
-                        call.cancel();
-                    }
-                }
-            }
+        for (SchemeHandler schemeHandler : schemeHandlers.values()) {
+            schemeHandler.cancel(destination);
         }
     }
 
     private Future<?> execute(@NonNull final String destination, @NonNull AsyncDrawable drawable) {
+
         final WeakReference<AsyncDrawable> reference = new WeakReference<AsyncDrawable>(drawable);
+
+        // todo: should we cancel pending request for the same destination?
+        //      we _could_ but there is possibility that one resource is request in multiple places
+
         // todo, if not a link -> show placeholder
+
         return executorService.submit(new Runnable() {
             @Override
             public void run() {
 
-                final Item item;
-                final boolean isFromFile;
+                final ImageItem item;
 
                 final Uri uri = Uri.parse(destination);
-                final String scheme = uri.getScheme();
 
-                if (SCHEME_FILE.equals(scheme)) {
-                    item = fromFile(uri);
-                    isFromFile = true;
-                } else if (SCHEME_DATA.equals(scheme)) {
-                    item = fromData(uri.getSchemeSpecificPart());
-                    isFromFile = false;
+                final SchemeHandler schemeHandler = schemeHandlers.get(uri.getScheme());
+                if (schemeHandler != null) {
+                    item = schemeHandler.handle(destination, uri);
                 } else {
-                    item = fromNetwork(destination);
-                    isFromFile = false;
+                    item = null;
                 }
+
+                final InputStream inputStream = item != null
+                        ? item.inputStream()
+                        : null;
 
                 Drawable result = null;
 
-                if (item != null
-                        && item.inputStream != null) {
+                if (inputStream != null) {
                     try {
 
-                        final MediaDecoder mediaDecoder = isFromFile
-                                ? mediaDecoderFromFile(item.fileName)
-                                : mediaDecoderFromContentType(item.contentType);
+                        final String fileName = item.fileName();
+                        final MediaDecoder mediaDecoder = fileName != null
+                                ? mediaDecoderFromFile(fileName)
+                                : mediaDecoderFromContentType(item.contentType());
 
                         if (mediaDecoder != null) {
-                            result = mediaDecoder.decode(item.inputStream);
+                            result = mediaDecoder.decode(inputStream);
                         }
 
                     } finally {
                         try {
-                            item.inputStream.close();
+                            inputStream.close();
                         } catch (IOException e) {
-                            // no op
+                            // ignored
                         }
                     }
                 }
@@ -168,112 +144,6 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
                 requests.remove(destination);
             }
         });
-    }
-
-    @Nullable
-    private Item fromFile(@NonNull Uri uri) {
-
-        final List<String> segments = uri.getPathSegments();
-        if (segments == null
-                || segments.size() == 0) {
-            // pointing to file & having no path segments is no use
-            return null;
-        }
-
-        final Item out;
-        final InputStream inputStream;
-
-        final boolean assets = FILE_ANDROID_ASSETS.equals(segments.get(0));
-        final String fileName = uri.getLastPathSegment();
-
-        if (assets) {
-            final StringBuilder path = new StringBuilder();
-            for (int i = 1, size = segments.size(); i < size; i++) {
-                if (i != 1) {
-                    path.append('/');
-                }
-                path.append(segments.get(i));
-            }
-            // load assets
-            InputStream inner = null;
-            try {
-                inner = resources.getAssets().open(path.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            inputStream = inner;
-        } else {
-            InputStream inner = null;
-            try {
-                inner = new BufferedInputStream(new FileInputStream(new File(uri.getPath())));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            inputStream = inner;
-        }
-
-        if (inputStream != null) {
-            out = new Item(fileName, null, inputStream);
-        } else {
-            out = null;
-        }
-
-        return out;
-    }
-
-    @Nullable
-    private Item fromData(@Nullable String part) {
-
-        if (TextUtils.isEmpty(part)) {
-            return null;
-        }
-
-        final DataUri dataUri = DATA_URI_PARSER.parse(part);
-        if (dataUri == null) {
-            return null;
-        }
-
-        final byte[] bytes = DATA_URI_DECODER.decode(dataUri);
-        if (bytes == null) {
-            return null;
-        }
-
-        return new Item(
-                null,
-                dataUri.contentType(),
-                new ByteArrayInputStream(bytes)
-        );
-    }
-
-    @Nullable
-    private Item fromNetwork(@NonNull String destination) {
-
-        Item out = null;
-
-        final Request request = new Request.Builder()
-                .url(destination)
-                .tag(destination)
-                .build();
-
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (response != null) {
-            final ResponseBody body = response.body();
-            if (body != null) {
-                final InputStream inputStream = body.byteStream();
-                if (inputStream != null) {
-                    final String contentType = response.header(HEADER_CONTENT_TYPE);
-                    out = new Item(null, contentType, inputStream);
-                }
-            }
-        }
-
-        return out;
     }
 
     @Nullable
@@ -313,11 +183,15 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         private ExecutorService executorService;
         private Drawable errorDrawable;
 
+        // @since 2.0.0
+        private final Map<String, SchemeHandler> schemeHandlers = new HashMap<>(3);
+
         // @since 1.1.0
         private final List<MediaDecoder> mediaDecoders = new ArrayList<>(3);
 
 
         @NonNull
+        @Deprecated
         public Builder client(@NonNull OkHttpClient client) {
             this.client = client;
             return this;
@@ -347,6 +221,15 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             return this;
         }
 
+        /**
+         * @since 2.0.0
+         */
+        @NonNull
+        public Builder schemeHandler(@NonNull String scheme, @Nullable SchemeHandler schemeHandler) {
+            schemeHandlers.put(scheme, schemeHandler);
+            return this;
+        }
+
         @NonNull
         public Builder mediaDecoders(@NonNull List<MediaDecoder> mediaDecoders) {
             this.mediaDecoders.clear();
@@ -367,17 +250,44 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         @NonNull
         public AsyncDrawableLoader build() {
 
-            if (client == null) {
-                client = new OkHttpClient();
-            }
-
+            // I think we should deprecate this...
             if (resources == null) {
                 resources = Resources.getSystem();
             }
 
             if (executorService == null) {
-                // we will use executor from okHttp
-                executorService = client.dispatcher().executorService();
+                executorService = Executors.newCachedThreadPool();
+            }
+
+            // @since 2.0.0
+            // put default scheme handlers (to mimic previous behavior)
+            {
+
+                final boolean hasHttp = schemeHandlers.containsKey("http");
+                final boolean hasHttps = schemeHandlers.containsKey("https");
+
+                if (!hasHttp || !hasHttps) {
+
+                    if (client == null) {
+                        client = new OkHttpClient();
+                    }
+
+                    final NetworkSchemeHandler handler = NetworkSchemeHandler.create(client);
+                    if (!hasHttp) {
+                        schemeHandlers.put("http", handler);
+                    }
+                    if (!hasHttps) {
+                        schemeHandlers.put("https", handler);
+                    }
+                }
+
+                if (!schemeHandlers.containsKey("file")) {
+                    schemeHandlers.put("file", FileSchemeHandler.createWithAssets(resources.getAssets()));
+                }
+
+                if (!schemeHandlers.containsKey("data")) {
+                    schemeHandlers.put("data", DataUriSchemeHandler.create());
+                }
             }
 
             // add default media decoders if not specified
@@ -388,19 +298,6 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             }
 
             return new AsyncDrawableLoader(this);
-        }
-    }
-
-    private static class Item {
-
-        final String fileName;
-        final String contentType;
-        final InputStream inputStream;
-
-        Item(@Nullable String fileName, @Nullable String contentType, @Nullable InputStream inputStream) {
-            this.fileName = fileName;
-            this.contentType = contentType;
-            this.inputStream = inputStream;
         }
     }
 }

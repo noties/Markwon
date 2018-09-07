@@ -25,6 +25,7 @@ public class ImageMediaDecoder extends MediaDecoder {
 
     private final Resources resources;
 
+    @SuppressWarnings("WeakerAccess")
     ImageMediaDecoder(Resources resources) {
         this.resources = resources;
     }
@@ -45,6 +46,7 @@ public class ImageMediaDecoder extends MediaDecoder {
 
         final Drawable out;
 
+        // absolutely not optimal... thing
         final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
         if (bitmap != null) {
             out = new BitmapDrawable(resources, bitmap);

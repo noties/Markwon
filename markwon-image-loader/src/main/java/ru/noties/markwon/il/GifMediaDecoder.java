@@ -13,6 +13,7 @@ import pl.droidsonroids.gif.GifDrawable;
 /**
  * @since 1.1.0
  */
+@SuppressWarnings("WeakerAccess")
 public class GifMediaDecoder extends MediaDecoder {
 
     protected static final String CONTENT_TYPE_GIF = "image/gif";

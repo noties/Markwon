@@ -28,6 +28,7 @@ public class SvgMediaDecoder extends MediaDecoder {
 
     private final Resources resources;
 
+    @SuppressWarnings("WeakerAccess")
     SvgMediaDecoder(Resources resources) {
         this.resources = resources;
     }
