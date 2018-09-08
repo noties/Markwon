@@ -4,11 +4,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 
 import ru.noties.jlatexmath.JLatexMathDrawable;
@@ -36,13 +37,12 @@ public class JLatexMathMedia {
         }
     }
 
-    public static final String SCHEME = "jlatexmath";
-
     @NonNull
     public static String makeDestination(@NonNull String latex) {
         return SCHEME + "://" + latex;
     }
 
+    private static final String SCHEME = "jlatexmath";
     private static final String CONTENT_TYPE = "text/jlatexmath";
 
     private final Config config;
@@ -67,8 +67,6 @@ public class JLatexMathMedia {
         @Override
         public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
 
-            Log.e("handle", raw);
-
             ImageItem item = null;
 
             try {
@@ -88,6 +86,12 @@ public class JLatexMathMedia {
         @Override
         public void cancel(@NonNull String raw) {
             // no op
+        }
+
+        @NonNull
+        @Override
+        public Collection<String> schemes() {
+            return Collections.singleton(SCHEME);
         }
     }
 
@@ -118,15 +122,12 @@ public class JLatexMathMedia {
                     ? scanner.next()
                     : null;
 
-            Log.e("decode", latex);
-
             if (latex == null) {
                 return null;
             }
 
-            // todo: change to float
             return JLatexMathDrawable.builder(latex)
-                    .textSize((int) config.textSize)
+                    .textSize(config.textSize)
                     .background(config.background)
                     .align(config.align)
                     .fitCanvas(config.fitCanvas)

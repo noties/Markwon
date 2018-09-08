@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import okhttp3.Call;
@@ -77,5 +79,11 @@ public class NetworkSchemeHandler extends SchemeHandler {
                 }
             }
         }
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> schemes() {
+        return Arrays.asList("http", "https");
     }
 }

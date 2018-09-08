@@ -2,7 +2,6 @@ package ru.noties.markwon.sample.jlatexmath;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.commonmark.node.CustomBlock;
@@ -10,7 +9,6 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.jlatexmath.JLatexMathAndroid;
-import ru.noties.jlatexmath.JLatexMathDrawable;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
@@ -59,7 +57,7 @@ public class MainActivity extends Activity {
         final JLatexMathMedia jLatexMathMedia = new JLatexMathMedia(config);
 
         final AsyncDrawableLoader asyncDrawableLoader = AsyncDrawableLoader.builder()
-                .schemeHandler(JLatexMathMedia.SCHEME, jLatexMathMedia.schemeHandler())
+                .addSchemeHandler(jLatexMathMedia.schemeHandler())
                 .mediaDecoders(jLatexMathMedia.mediaDecoder())
                 .build();
 

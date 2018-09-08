@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -97,5 +99,11 @@ public class FileSchemeHandler extends SchemeHandler {
     @Override
     public void cancel(@NonNull String raw) {
         // no op
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> schemes() {
+        return Collections.singleton("file");
     }
 }
