@@ -225,8 +225,18 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
          * @since 2.0.0
          */
         @NonNull
-        public Builder schemeHandler(@NonNull String scheme, @Nullable SchemeHandler schemeHandler) {
-            schemeHandlers.put(scheme, schemeHandler);
+        public Builder addSchemeHandler(@NonNull SchemeHandler schemeHandler) {
+
+            SchemeHandler previous;
+
+            for (String scheme : schemeHandler.schemes()) {
+                previous = schemeHandlers.put(scheme, schemeHandler);
+                if (previous != null) {
+                    throw new IllegalStateException(String.format("Multiple scheme handlers handle " +
+                            "the same scheme: `%s`, %s %s", scheme, previous, schemeHandler));
+                }
+            }
+
             return this;
         }
 
@@ -261,33 +271,13 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
             // @since 2.0.0
             // put default scheme handlers (to mimic previous behavior)
-            {
-
-                final boolean hasHttp = schemeHandlers.containsKey("http");
-                final boolean hasHttps = schemeHandlers.containsKey("https");
-
-                if (!hasHttp || !hasHttps) {
-
-                    if (client == null) {
-                        client = new OkHttpClient();
-                    }
-
-                    final NetworkSchemeHandler handler = NetworkSchemeHandler.create(client);
-                    if (!hasHttp) {
-                        schemeHandlers.put("http", handler);
-                    }
-                    if (!hasHttps) {
-                        schemeHandlers.put("https", handler);
-                    }
+            if (schemeHandlers.size() == 0) {
+                if (client == null) {
+                    client = new OkHttpClient();
                 }
-
-                if (!schemeHandlers.containsKey("file")) {
-                    schemeHandlers.put("file", FileSchemeHandler.createWithAssets(resources.getAssets()));
-                }
-
-                if (!schemeHandlers.containsKey("data")) {
-                    schemeHandlers.put("data", DataUriSchemeHandler.create());
-                }
+                addSchemeHandler(NetworkSchemeHandler.create(client));
+                addSchemeHandler(FileSchemeHandler.createWithAssets(resources.getAssets()));
+                addSchemeHandler(DataUriSchemeHandler.create());
             }
 
             // add default media decoders if not specified

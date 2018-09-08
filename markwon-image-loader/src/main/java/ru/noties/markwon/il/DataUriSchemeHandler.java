@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @since 2.0.0
@@ -56,5 +58,11 @@ public class DataUriSchemeHandler extends SchemeHandler {
     @Override
     public void cancel(@NonNull String raw) {
         // no op
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> schemes() {
+        return Collections.singleton("data");
     }
 }
