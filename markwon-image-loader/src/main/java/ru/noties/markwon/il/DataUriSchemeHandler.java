@@ -19,6 +19,8 @@ public class DataUriSchemeHandler extends SchemeHandler {
         return new DataUriSchemeHandler(DataUriParser.create(), DataUriDecoder.create());
     }
 
+    private static final String START = "data://";
+
     private final DataUriParser uriParser;
     private final DataUriDecoder uriDecoder;
 
@@ -32,11 +34,11 @@ public class DataUriSchemeHandler extends SchemeHandler {
     @Override
     public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
 
-        final String part = uri.getSchemeSpecificPart();
-
-        if (TextUtils.isEmpty(part)) {
+        if (!raw.startsWith(START)) {
             return null;
         }
+
+        final String part = raw.substring(START.length());
 
         final DataUri dataUri = uriParser.parse(part);
         if (dataUri == null) {

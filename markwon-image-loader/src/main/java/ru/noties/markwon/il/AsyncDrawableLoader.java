@@ -79,6 +79,14 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         // todo: should we cancel pending request for the same destination?
         //      we _could_ but there is possibility that one resource is request in multiple places
 
+        // todo: error handing (simply applying errorDrawable is not a good solution
+        //      as reason for an error is unclear (no scheme handler, no input data, error decoding, etc)
+
+        // todo: more efficient ImageMediaDecoder... BitmapFactory.decodeStream is a bit not optimal
+        //      for big images for sure. We _could_ introduce internal Drawable that will check for
+        //      image bounds (but we will need to cache inputStream in order to inspect and optimize
+        //      input image...)
+
         // todo, if not a link -> show placeholder
 
         return executorService.submit(new Runnable() {
@@ -176,6 +184,10 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         return out;
     }
 
+    // todo: as now we have different layers of abstraction (for scheme handling and media decoding)
+    //      we no longer should add dependencies implicitly, it would be way better to allow adding
+    //      multiple artifacts (file, data, network, svg, gif)... at least, maybe we can extract API
+    //      for this module (without implementations), but keep _all-in_ (fat) artifact with all of these.
     public static class Builder {
 
         private OkHttpClient client;
