@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,8 +85,6 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         //      for big images for sure. We _could_ introduce internal Drawable that will check for
         //      image bounds (but we will need to cache inputStream in order to inspect and optimize
         //      input image...)
-
-        // todo, if not a link -> show placeholder
 
         return executorService.submit(new Runnable() {
             @Override
@@ -190,18 +187,30 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
     //      for this module (without implementations), but keep _all-in_ (fat) artifact with all of these.
     public static class Builder {
 
+        /**
+         * @deprecated 2.0.0 add {@link NetworkSchemeHandler} directly
+         */
+        @Deprecated
         private OkHttpClient client;
+
+        /**
+         * @deprecated 2.0.0 construct {@link MediaDecoder} and {@link SchemeHandler} appropriately
+         */
+        @Deprecated
         private Resources resources;
+
         private ExecutorService executorService;
         private Drawable errorDrawable;
-
-        // @since 2.0.0
-        private final Map<String, SchemeHandler> schemeHandlers = new HashMap<>(3);
 
         // @since 1.1.0
         private final List<MediaDecoder> mediaDecoders = new ArrayList<>(3);
 
+        // @since 2.0.0
+        private final Map<String, SchemeHandler> schemeHandlers = new HashMap<>(3);
 
+        /**
+         * @deprecated 2.0.0 add {@link NetworkSchemeHandler} directly
+         */
         @NonNull
         @Deprecated
         public Builder client(@NonNull OkHttpClient client) {
@@ -236,6 +245,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
         /**
          * @since 2.0.0
          */
+        @SuppressWarnings("UnusedReturnValue")
         @NonNull
         public Builder addSchemeHandler(@NonNull SchemeHandler schemeHandler) {
 
@@ -252,20 +262,97 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             return this;
         }
 
+        /**
+         * @see #addMediaDecoder(MediaDecoder)
+         * @see #addMediaDecoders(MediaDecoder...)
+         * @see #addMediaDecoders(Iterable)
+         * @since 1.1.0
+         * @deprecated 2.0.0
+         */
+        @Deprecated
         @NonNull
         public Builder mediaDecoders(@NonNull List<MediaDecoder> mediaDecoders) {
-            this.mediaDecoders.clear();
-            this.mediaDecoders.addAll(mediaDecoders);
+
+            // previously it was clearing before adding
+
+            for (MediaDecoder mediaDecoder : mediaDecoders) {
+                this.mediaDecoders.add(requireNonNull(mediaDecoder));
+            }
+
             return this;
         }
 
+        /**
+         * @see #addMediaDecoder(MediaDecoder)
+         * @see #addMediaDecoders(MediaDecoder...)
+         * @see #addMediaDecoders(Iterable)
+         * @since 1.1.0
+         * @deprecated 2.0.0
+         */
         @NonNull
+        @Deprecated
         public Builder mediaDecoders(MediaDecoder... mediaDecoders) {
-            this.mediaDecoders.clear();
-            if (mediaDecoders != null
-                    && mediaDecoders.length > 0) {
-                Collections.addAll(this.mediaDecoders, mediaDecoders);
+
+            // previously it was clearing before adding
+
+            final int length = mediaDecoders != null
+                    ? mediaDecoders.length
+                    : 0;
+
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
+                    this.mediaDecoders.add(requireNonNull(mediaDecoders[i]));
+                }
             }
+
+            return this;
+        }
+
+        /**
+         * @see SvgMediaDecoder
+         * @see GifMediaDecoder
+         * @see ImageMediaDecoder
+         * @since 2.0.0
+         */
+        @NonNull
+        public Builder addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
+            mediaDecoders.add(mediaDecoder);
+            return this;
+        }
+
+        /**
+         * @see SvgMediaDecoder
+         * @see GifMediaDecoder
+         * @see ImageMediaDecoder
+         * @since 2.0.0
+         */
+        @NonNull
+        public Builder addMediaDecoders(@NonNull Iterable<MediaDecoder> mediaDecoders) {
+            for (MediaDecoder mediaDecoder : mediaDecoders) {
+                this.mediaDecoders.add(requireNonNull(mediaDecoder));
+            }
+            return this;
+        }
+
+        /**
+         * @see SvgMediaDecoder
+         * @see GifMediaDecoder
+         * @see ImageMediaDecoder
+         * @since 2.0.0
+         */
+        @NonNull
+        public Builder addMediaDecoders(MediaDecoder... mediaDecoders) {
+
+            final int length = mediaDecoders != null
+                    ? mediaDecoders.length
+                    : 0;
+
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
+                    this.mediaDecoders.add(requireNonNull(mediaDecoders[i]));
+                }
+            }
+
             return this;
         }
 
@@ -278,11 +365,14 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             }
 
             if (executorService == null) {
+                // @since 2.0.0 we are using newCachedThreadPool instead
+                // of `okHttpClient.dispatcher().executorService()`
                 executorService = Executors.newCachedThreadPool();
             }
 
             // @since 2.0.0
             // put default scheme handlers (to mimic previous behavior)
+            // remove in 3.0.0 with plugins
             if (schemeHandlers.size() == 0) {
                 if (client == null) {
                     client = new OkHttpClient();
@@ -293,6 +383,7 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
             }
 
             // add default media decoders if not specified
+            // remove in 3.0.0 with plugins
             if (mediaDecoders.size() == 0) {
                 mediaDecoders.add(SvgMediaDecoder.create(resources));
                 mediaDecoders.add(GifMediaDecoder.create(true));
@@ -301,5 +392,14 @@ public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 
             return new AsyncDrawableLoader(this);
         }
+    }
+
+    // @since 2.0.0
+    @NonNull
+    private static <T> T requireNonNull(@Nullable T t) {
+        if (t == null) {
+            throw new NullPointerException();
+        }
+        return t;
     }
 }
