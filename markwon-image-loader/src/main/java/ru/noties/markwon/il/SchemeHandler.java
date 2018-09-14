@@ -16,6 +16,10 @@ public abstract class SchemeHandler {
 
     public abstract void cancel(@NonNull String raw);
 
+    /**
+     * Will be called only once during initialization, should return schemes that are
+     * handled by this handler
+     */
     @NonNull
     public abstract Collection<String> schemes();
 }

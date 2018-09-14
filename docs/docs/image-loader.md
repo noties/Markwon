@@ -77,6 +77,12 @@ AsyncDrawableLoader.builder()
 
 If not provided explicitly, default `new OkHttpClient()` will be used
 
+:::warning
+This configuration option is scheduled to be removed in `3.0.0` version,
+use `NetworkSchemeHandler.create(OkHttpClient)` directly by calling
+`build.addSchemeHandler()`
+:::
+
 ### Resources
 
 `android.content.res.Resources` to be used when obtaining an image
@@ -103,6 +109,12 @@ To quote Android documentation for `#getSystem` method:
 
 :::
 
+:::warning
+This configuration option is scheduled to be removed in `3.0.0`. Construct
+your `MediaDecoder`s and `SchemeHandler`s appropriately and add them via
+`build.addMediaDecoder()` and `builder.addSchemeHandler`
+:::
+
 ### Executor service
 
 `ExecutorService` to be used to download images in background thread
@@ -113,7 +125,7 @@ AsyncDrawableLoader.builder()
         .build();
 ```
 
-If not provided explicitly, default `okHttpClient.dispatcher().executorService()` will be used
+If not provided explicitly, default `Executors.newCachedThreadPool()` will be used
 
 ### Error drawable
 
@@ -134,8 +146,9 @@ of a specific image type.
 
 ```java
 AsyncDrawableLoader.builder()
-        .mediaDecoders(MediaDecoder...)
-        .mediaDecoders(List<MediaDecoder>)
+        .addMediaDecoder(MediaDecoder)
+        .addMediaDecoders(MediaDecoder...)
+        .addMediaDecoders(Iterable<MediaDecoder>)
         .build();
 ```
 
@@ -180,3 +193,51 @@ GifMediaDecoder.create(boolean)
 ```java
 ImageMediaDecoder.create(Resources)
 ```
+
+### Scheme handler <Badge text="2.0.0" />
+
+Starting with `2.0.0` `image-loader` module introduced 
+`SchemeHandler` abstraction
+
+```java
+AsyncDrawableLoader.builder()
+        .addSchemeHandler(SchemeHandler)
+        .build()
+```
+
+Currently there are 3 `SchemeHandler`s that are bundled with this module:
+* `NetworkSchemeHandler` (`http` and `https`)
+* `FileSchemeHandler` (`file`)
+* `DataUriSchemeHandler` (`data`)
+
+#### NetworkSchemeHandler <Badge text="2.0.0" />
+
+```java
+NetworkSchemeHandler.create(OkHttpClient);
+```
+
+#### FileSchemeHandler <Badge text="2.0.0" />
+
+Simple file handler
+```java
+FileSchemeHandler.create();
+```
+
+File handler that additionally allows access to Android `assets` folder
+```java
+FileSchemeHandler.createWithAssets(AssetManager);
+```
+
+#### DataUriSchemeHandler <Badge text="2.0.0" />
+
+```java
+DataUriSchemeHandler.create();
+```
+
+---
+
+::: warning
+Note that currently if no `SchemeHandler`s were provided via `builder.addSchemeHandler()`
+call then all 3 default scheme handlers will be added. The same goes for `MediaDecoder`s
+(`builder.addMediaDecoder`). This behavior is scheduled to be removed in `3.0.0`
+:::
