@@ -44,8 +44,6 @@ public class MainActivity extends Activity {
 //        latex += "\\doublebox{\\text{A double framed box}}&\\ovalbox{\\text{An oval framed box}}\\cr";
 //        latex += "\\end{array}";
 
-        // mention another way of doing this: through async drawable to process formulas in background
-
 
         final JLatexMathMedia.Config config = new JLatexMathMedia.Config(textView.getTextSize()) {{
 //            align = JLatexMathDrawable.ALIGN_RIGHT;
