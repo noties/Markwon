@@ -25,7 +25,9 @@ module.exports = {
             '/docs/syntax-highlight.md',
             '/docs/html.md',
             '/docs/view.md'
-        ]
+        ],
+        sidebarDepth: 2,
+        lastUpdated: true
     },
     markdown: {
         config: md => {
