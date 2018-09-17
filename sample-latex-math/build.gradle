@@ -1,0 +1,23 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
+
+    defaultConfig {
+
+        applicationId "ru.noties.markwon.sample.jlatexmath"
+
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+    implementation project(':markwon')
+    implementation project(':markwon-image-loader')
+    implementation 'ru.noties:jlatexmath-android:0.1.0'
+}

@@ -1,0 +1,13 @@
+input: "col1|col2|col3\n---|---|---|"
+
+output:
+  - tr: "\u00a0"
+    header: true
+    odd: false
+    cells:
+      - alignment: 0
+        text: "col1"
+      - alignment: 0
+        text: "col2"
+      - alignment: 0
+        text: "col3"

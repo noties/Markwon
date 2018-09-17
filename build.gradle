@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
 
@@ -39,25 +40,76 @@ if (hasProperty('local')) {
 
 ext {
 
-    // Config
-    BUILD_TOOLS = '27.0.3'
-    TARGET_SDK = 27
-    MIN_SDK = 16
+    config = [
+            'build-tools'    : '27.0.3',
+            'compile-sdk'    : 27,
+            'target-sdk'     : 27,
+            'min-sdk'        : 16,
+            'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
+    ]
 
-    // Dependencies
     final def supportVersion = '27.1.1'
-    SUPPORT_ANNOTATIONS = "com.android.support:support-annotations:$supportVersion"
-    SUPPORT_APP_COMPAT = "com.android.support:appcompat-v7:$supportVersion"
-
     final def commonMarkVersion = '0.11.0'
-    COMMON_MARK = "com.atlassian.commonmark:commonmark:$commonMarkVersion"
-    COMMON_MARK_STRIKETHROUGHT = "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion"
-    COMMON_MARK_TABLE = "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion"
+    final def daggerVersion = '2.10'
 
-    ANDROID_SVG = 'com.caverock:androidsvg:1.2.1'
-    ANDROID_GIF = 'pl.droidsonroids.gif:android-gif-drawable:1.2.14'
-    OK_HTTP = 'com.squareup.okhttp3:okhttp:3.9.0'
+    deps = [
+            'support-annotations'     : "com.android.support:support-annotations:$supportVersion",
+            'support-app-compat'      : "com.android.support:appcompat-v7:$supportVersion",
+            'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
+            'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
+            'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
+            'android-svg'             : 'com.caverock:androidsvg:1.2.1',
+            'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.14',
+            'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
+            'prism4j'                 : 'ru.noties:prism4j:1.1.0',
+            'debug'                   : 'ru.noties:debug:3.0.0@jar',
+            'better-link-movement'    : 'me.saket:better-link-movement-method:2.2.0',
+            'dagger'                  : "com.google.dagger:dagger:$daggerVersion"
+    ]
 
-    PRISM_4J = 'ru.noties:prism4j:1.1.0'
-    PRISM_4J_BUNDLER = 'ru.noties:prism4j-bundler:1.1.0'
+    deps['annotationProcessor'] = [
+            'prism4j-bundler': 'ru.noties:prism4j-bundler:1.1.0',
+            'dagger-compiler': "com.google.dagger:dagger-compiler:$daggerVersion"
+    ]
+
+    deps['test'] = [
+            'junit'           : 'junit:junit:4.12',
+            'robolectric'     : 'org.robolectric:robolectric:3.8',
+            'ix-java'         : 'com.github.akarnokd:ixjava:1.0.0',
+            'jackson-yaml'    : 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0',
+            'jackson-databind': 'com.fasterxml.jackson.core:jackson-databind:2.9.6',
+            'gson'            : 'com.google.code.gson:gson:2.8.5',
+            'commons-io'      : 'commons-io:commons-io:2.6',
+            'mockito'         : 'org.mockito:mockito-core:2.21.0'
+    ]
+
+    registerArtifact = this.&registerArtifact
+}
+
+task checkUpdates {
+    apply plugin: 'com.github.ben-manes.versions'
+    dependsOn 'dependencyUpdates'
+}
+
+def registerArtifact(project) {
+
+    if (hasProperty('release')) {
+        project.apply from: config['push-aar-gradle']
+    }
+
+    project.afterEvaluate {
+
+        // disable generation of BuildConfig files
+        project.generateDebugBuildConfig.enabled = false
+        project.generateReleaseBuildConfig.enabled = false
+
+        // print test status (for CI)
+        project.android.testOptions.unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed"
+                exceptionFormat "short"
+                showStandardStreams = true
+            }
+        }
+    }
 }

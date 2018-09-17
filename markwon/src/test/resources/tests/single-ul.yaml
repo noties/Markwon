@@ -1,0 +1,5 @@
+input: "* ul"
+
+output:
+  - ul: "ul"
+    level: 0

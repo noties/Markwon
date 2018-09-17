@@ -1,0 +1,14 @@
+input: |-
+  * First
+    * Second
+      * Third
+
+output:
+  - ul:
+    - text: "First\n"
+    - ul:
+      - text: "Second\n"
+      - ul: "Third"
+        level: 2
+      level: 1
+    level: 0

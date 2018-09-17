@@ -1,0 +1,14 @@
+input: |-
+  1. First
+     1. Second
+        1. Third
+
+output:
+  - ol:
+    - text: "First\n"
+    - ol:
+      - text: "Second\n"
+      - ol: "Third"
+        start: 1
+      start: 1
+    start: 1

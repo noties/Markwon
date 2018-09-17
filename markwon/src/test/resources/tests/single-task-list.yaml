@@ -1,0 +1,6 @@
+input: "- [ ] task-list"
+
+output:
+  - task-list: "task-list"
+    blockIdent: 1
+    done: false

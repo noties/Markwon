@@ -1,0 +1,12 @@
+input: |-
+  This could be a paragraph
+
+  But it is not and this one is not also
+
+config:
+  use-paragraphs: false
+
+output:
+  - text: "This could be a paragraph"
+  - text: "\n\n"
+  - text: "But it is not and this one is not also"

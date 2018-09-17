@@ -1,0 +1,12 @@
+input: |-
+  So, this is a paragraph
+
+  And this one is another
+
+config:
+  use-paragraphs: true
+
+output:
+  - p: "So, this is a paragraph"
+  - text: "\n\n"
+  - p: "And this one is another"

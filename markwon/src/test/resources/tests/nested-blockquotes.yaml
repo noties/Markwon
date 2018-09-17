@@ -1,0 +1,12 @@
+input: |-
+  > First
+  > > Second
+  > > > Third
+
+output:
+  - blockquote:
+    - "First\n\n"
+    - blockquote:
+      - "Second\n\n"
+      - blockquote:
+        - "Third"

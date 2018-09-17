@@ -1,0 +1,4 @@
+input: "`code`"
+
+output:
+  - code: "code"

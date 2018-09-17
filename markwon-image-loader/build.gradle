@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
+
+    defaultConfig {
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
+        versionCode 1
+        versionName version
+    }
+
+    lintOptions {
+        // okio....
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+
+    api project(':markwon')
+
+    deps.with {
+        api it['android-svg']
+        api it['android-gif']
+        api it['okhttp']
+    }
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+    }
+}
+
+registerArtifact(this)

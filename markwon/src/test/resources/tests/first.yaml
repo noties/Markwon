@@ -1,0 +1,23 @@
+description: Defining test case format
+
+input: |-
+  Here is some [link](https://my.href)
+  **bold _bold italic_ bold** normal
+
+config:
+  use-paragraphs: false
+  use-html: false
+  soft-break-adds-new-line: false
+  html-allow-non-closed-tags: false
+
+output:
+  - "Here is some "
+  - a: "link"
+    href: "https://my.href"
+  - " "
+  - b:
+    - "bold "
+    - i: "bold italic" #equals to: `- i: - text: "bold italic"`
+    - " bold"
+  - " normal"
+

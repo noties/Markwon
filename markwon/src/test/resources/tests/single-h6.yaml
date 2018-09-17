@@ -1,0 +1,4 @@
+input: "###### head6"
+
+output:
+  - h6: "head6"
