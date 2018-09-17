@@ -508,17 +508,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     private void setSpan(int start, @Nullable Object span) {
-        if (span != null) {
-
-            final int length = builder.length();
-
-            SpannableBuilder.setSpans(
-                    builder,
-                    span,
-                    start,
-                    length
-            );
-        }
+        SpannableBuilder.setSpans(builder, span, start, builder.length());
     }
 
     private void newLine() {

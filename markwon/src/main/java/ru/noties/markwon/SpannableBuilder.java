@@ -45,9 +45,9 @@ public class SpannableBuilder implements Appendable, CharSequence {
     }
 
     private static boolean isPositionValid(int length, int start, int end) {
-        return !(end <= start
-                || start < 0
-                || end > length);
+        return end > start
+                && start >= 0
+                && end <= length;
     }
 
 

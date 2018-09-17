@@ -1,6 +1,26 @@
 # Changelog
 
-# v1.1.1
+# 2.0.0
+* Add `html-parser-api` and `html-parser-impl` modules
+* Add `HtmlEmptyTagReplacement`
+* Implement Appendable and CharSequence in SpannableBuilder
+* Renamed library modules to reflect maven artifact names
+* Rename `markwon-syntax` to `markwon-syntax-highlight`
+* Add HtmlRenderer asbtraction
+* Add CssInlineStyleParser
+* Fix Theme#listItemColor and OL
+* Fix task list block parser to revert parsing state when line is not matching
+* Defined test format files
+* image-loader add datauri parser
+* image-loader add support for inline data uri image references
+* Add travis configuration
+* Fix image with width greater than canvas scaled
+* Fix blockquote span
+* Dealing with white spaces at the end of a document
+* image-loader add SchemeHandler abstraction
+* Add sample-latex-math module
+
+## v1.1.1
 * Fix OrderedListItemSpan text position (baseline) (<GithubIssue id="55" />)
 * Add softBreakAddsNewLine option for SpannableConfiguration (<GithubIssue id="54" />)
 * Paragraph text can now explicitly be spanned (<GithubPull id="58" />)<br>Thanks to <GithubUser name="c-b-h" />
