@@ -15,6 +15,9 @@ android {
 
 dependencies {
     api project(':markwon-view-common')
+    deps.with {
+        compileOnly it['support-app-compat']
+    }
 }
 
 registerArtifact(this)
