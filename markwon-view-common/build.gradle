@@ -14,7 +14,7 @@ android {
 }
 
 dependencies {
-    api project(':markwon-view-common')
+    api project(':markwon')
 }
 
 registerArtifact(this)

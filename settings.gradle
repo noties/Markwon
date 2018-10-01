@@ -1,3 +1,5 @@
 rootProject.name = 'MarkwonProject'
-include ':app', ':markwon', ':markwon-image-loader', ':markwon-view', ':sample-custom-extension', ':sample-latex-math',
+include ':app', ':markwon', ':markwon-image-loader',
+        ':markwon-view', ':markwon-view-compat', ':markwon-view-common',
+        ':sample-custom-extension', ':sample-latex-math',
         ':markwon-syntax-highlight', ':markwon-html-parser-api', ':markwon-html-parser-impl'

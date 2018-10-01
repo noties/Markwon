@@ -1,14 +1,14 @@
-# Markwon View
+# Markwon View Compat
 
 [![maven|markwon-view](https://img.shields.io/maven-central/v/ru.noties/markwon-view.svg?label=maven%7Cmarkwon-view)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%markwon-view%22)
 
-This library allows for rendering markdown through a widget `MarkwonView` and supports the following XML attributes:
+This library allows for rendering markdown through a widget `MarkwonViewCompat` and supports the following XML attributes:
 ```
 app:mv_markdown="string"
 app:mv_configurationProvider="string"
 ```
 
-Prefer this library over `MarkdownViewCompat` if you do not want dependency to Android's support library.
+`MarkdownViewCompat` extends Android's support library's `AppCompatTextView`. Prefer this library when you benefit from features in `AppCompatTextView`.
 
 Android Studio's layout-preview supports rendering (with some exceptions, for example, bold span is not rendered due to some limitations of layout preview) markdown text.
 
