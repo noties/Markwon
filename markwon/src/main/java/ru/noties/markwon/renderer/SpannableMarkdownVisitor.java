@@ -415,7 +415,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             pendingTableRow.add(new TableRowSpan.Cell(
                     tableCellAlignment(cell.getAlignment()),
-                    builder.removeFromEnd(length)
+                    removeFromEnd(length)
             ));
 
             tableRowIsHeader = cell.isHeader();
@@ -508,12 +508,13 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     }
 
     private void setSpan(int start, @Nullable Object span) {
-        SpannableBuilder.setSpans(builder, span, start, builder.length());
+        builder.setSpans(span, start, builder.length());
     }
 
     private void newLine() {
-        if (builder.length() > 0
-                && '\n' != builder.lastChar()) {
+        final int length = builder.length();
+
+        if (length > 0 && '\n' != builder.charAt(length - 1)) {
             builder.append('\n');
         }
     }
@@ -529,6 +530,21 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         }
         return false;
     }
+
+    @NonNull
+    public CharSequence removeFromEnd(int start) {
+        // this method is not intended to be used by clients
+        // it's a workaround to support tables
+
+        final int end = builder.length();
+
+        // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
+        final SpannableBuilder impl = new SpannableBuilder(builder, start, end);
+        builder.delete(start, end);
+
+        return impl;
+    }
+
 
     @TableRowSpan.Alignment
     private static int tableCellAlignment(TableCell.Alignment alignment) {

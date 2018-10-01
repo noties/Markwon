@@ -70,6 +70,6 @@ public class MainActivity extends Activity {
         node.accept(visitor);
 
         // apply
-        textView.setText(builder.text());
+        textView.setText(builder);
     }
 }

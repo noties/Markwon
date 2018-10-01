@@ -18,8 +18,7 @@ public class BlockquoteHandler extends TagHandler {
             visitChildren(configuration, builder, tag.getAsBlock());
         }
 
-        SpannableBuilder.setSpans(
-                builder,
+        builder.setSpans(
                 configuration.factory().blockQuote(configuration.theme()),
                 tag.start(),
                 tag.end()

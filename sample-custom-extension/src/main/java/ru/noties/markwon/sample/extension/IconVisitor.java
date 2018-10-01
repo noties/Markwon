@@ -1,6 +1,7 @@
 package ru.noties.markwon.sample.extension;
 
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -51,9 +52,14 @@ public class IconVisitor extends SpannableMarkdownVisitor {
                 final int length = builder.length();
 
                 builder.append(name);
-                builder.setSpan(iconSpanProvider.provide(name, color, size), length);
+                builder.setSpan(
+                        iconSpanProvider.provide(name, color, size),
+                        length,
+                        length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                );
                 builder.append(' ');
-                
+
                 return true;
             }
         }

@@ -14,9 +14,6 @@ public abstract class SimpleTagHandler extends TagHandler {
 
     @Override
     public void handle(@NonNull SpannableConfiguration configuration, @NonNull SpannableBuilder builder, @NonNull HtmlTag tag) {
-        final Object spans = getSpans(configuration, tag);
-        if (spans != null) {
-            SpannableBuilder.setSpans(builder, spans, tag.start(), tag.end());
-        }
+        builder.setSpans(getSpans(configuration, tag), tag.start(), tag.end());
     }
 }

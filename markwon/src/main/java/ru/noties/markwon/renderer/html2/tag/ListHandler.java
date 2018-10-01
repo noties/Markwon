@@ -48,7 +48,7 @@ public class ListHandler extends TagHandler {
                             bulletLevel
                     );
                 }
-                SpannableBuilder.setSpans(builder, spans, child.start(), child.end());
+                builder.setSpans(spans, child.start(), child.end());
             }
         }
     }

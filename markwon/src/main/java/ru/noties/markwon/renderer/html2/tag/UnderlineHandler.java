@@ -21,8 +21,7 @@ public class UnderlineHandler extends TagHandler {
             visitChildren(configuration, builder, tag.getAsBlock());
         }
 
-        SpannableBuilder.setSpans(
-                builder,
+        builder.setSpans(
                 configuration.factory().underline(),
                 tag.start(),
                 tag.end()

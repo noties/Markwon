@@ -1,7 +1,6 @@
 package ru.noties.markwon.renderer.visitor;
 
 import android.support.annotation.NonNull;
-import android.text.SpannableStringBuilder;
 
 import org.commonmark.node.Node;
 import org.junit.Test;
@@ -50,20 +49,19 @@ public class SpannableMarkdownVisitorTest {
         final Node node = Markwon.createParser().parse(data.input());
         node.accept(visitor);
 
-        final SpannableStringBuilder stringBuilder = builder.spannableStringBuilder();
 
         final TestValidator validator = TestValidator.create(file);
 
         int index = 0;
 
         for (TestNode testNode : data.output()) {
-            index = validator.validate(stringBuilder, index, testNode);
+            index = validator.validate(builder, index, testNode);
         }
 
         // assert that the whole thing is processed
-        assertEquals("`" + stringBuilder + "`", stringBuilder.length(), index);
+        assertEquals("`" + builder + "`", builder.length(), index);
 
-        final Object[] spans = stringBuilder.getSpans(0, stringBuilder.length(), Object.class);
+        final Object[] spans = builder.getSpans(0, builder.length(), Object.class);
         final int length = spans != null
                 ? spans.length
                 : 0;

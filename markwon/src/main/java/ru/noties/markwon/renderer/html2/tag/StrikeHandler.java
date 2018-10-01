@@ -18,8 +18,7 @@ public class StrikeHandler extends TagHandler {
             visitChildren(configuration, builder, tag.getAsBlock());
         }
 
-        SpannableBuilder.setSpans(
-                builder,
+        builder.setSpans(
                 configuration.factory().strikethrough(),
                 tag.start(),
                 tag.end()

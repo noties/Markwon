@@ -8,7 +8,6 @@ import org.commonmark.node.CustomBlock;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
-import ru.noties.jlatexmath.JLatexMathAndroid;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableConfiguration;
@@ -83,8 +82,7 @@ public class MainActivity extends Activity {
                 final int length = builder.length();
                 builder.append(latex);
 
-                SpannableBuilder.setSpans(
-                        builder,
+                builder.setSpans(
                         configuration.factory().image(
                                 configuration.theme(),
                                 JLatexMathMedia.makeDestination(latex),
@@ -100,6 +98,6 @@ public class MainActivity extends Activity {
         };
         node.accept(visitor);
 
-        Markwon.setText(textView, builder.text());
+        Markwon.setText(textView, builder);
     }
 }
