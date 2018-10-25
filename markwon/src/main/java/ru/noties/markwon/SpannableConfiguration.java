@@ -51,6 +51,14 @@ public class SpannableConfiguration {
         this.htmlAllowNonClosedTags = builder.htmlAllowNonClosedTags;
     }
 
+    /**
+     * Returns a new builder based on this configuration
+     */
+    @NonNull
+    public Builder newBuilder(@NonNull Context context) {
+        return new Builder(context, this);
+    }
+
     @NonNull
     public SpannableTheme theme() {
         return theme;
@@ -136,6 +144,21 @@ public class SpannableConfiguration {
 
         Builder(@NonNull Context context) {
             this.context = context;
+        }
+
+        Builder(@NonNull Context context, @NonNull SpannableConfiguration configuration) {
+            this(context);
+            this.theme = configuration.theme;
+            this.asyncDrawableLoader = configuration.asyncDrawableLoader;
+            this.syntaxHighlight = configuration.syntaxHighlight;
+            this.linkResolver = configuration.linkResolver;
+            this.urlProcessor = configuration.urlProcessor;
+            this.imageSizeResolver = configuration.imageSizeResolver;
+            this.factory = configuration.factory;
+            this.softBreakAddsNewLine = configuration.softBreakAddsNewLine;
+            this.htmlParser = configuration.htmlParser;
+            this.htmlRenderer = configuration.htmlRenderer;
+            this.htmlAllowNonClosedTags = configuration.htmlAllowNonClosedTags;
         }
 
         @NonNull
