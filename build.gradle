@@ -40,6 +40,7 @@ if (hasProperty('local')) {
 
 ext {
 
+    // NB, updating build-tools or compile-sdk will require updating Travis config (.travis.yml)
     config = [
             'build-tools'    : '28.0.3',
             'compile-sdk'    : 27,
