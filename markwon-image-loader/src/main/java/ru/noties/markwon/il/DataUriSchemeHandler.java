@@ -38,7 +38,7 @@ public class DataUriSchemeHandler extends SchemeHandler {
         }
 
         String part = raw.substring(START.length());
-        
+
         // this part is added to support `data://` with which this functionality was released
         if (part.startsWith("//")) {
             part = part.substring(2);

@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -14,8 +14,8 @@ allprojects {
         if (project.hasProperty('LOCAL_MAVEN_URL')) {
             maven { url LOCAL_MAVEN_URL }
         }
-        jcenter()
         google()
+        jcenter()
     }
     version = VERSION_NAME
     group = GROUP
@@ -41,7 +41,7 @@ if (hasProperty('local')) {
 ext {
 
     config = [
-            'build-tools'    : '27.0.3',
+            'build-tools'    : '28.0.3',
             'compile-sdk'    : 27,
             'target-sdk'     : 27,
             'min-sdk'        : 16,
