@@ -2,12 +2,16 @@ package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class is used to _revert_ order of applied spans. Original SpannableStringBuilder
@@ -44,7 +48,9 @@ public class SpannableBuilder implements Appendable, CharSequence {
         }
     }
 
-    private static boolean isPositionValid(int length, int start, int end) {
+    // @since 2.0.1 package-private visibility for testing
+    @VisibleForTesting
+    static boolean isPositionValid(int length, int start, int end) {
         return end > start
                 && start >= 0
                 && end <= length;
@@ -157,7 +163,58 @@ public class SpannableBuilder implements Appendable, CharSequence {
      */
     @Override
     public CharSequence subSequence(int start, int end) {
+        // todo: NB, we do not copy spans here... we should I think
+        // the thing to deal with: implement own `getSpans` method to mimic _native_ SpannableStringBuilder
+        // behaviour. For example originally it will return all spans that at least _overlap_ with specified
+        // range... which can be confusing
         return builder.subSequence(start, end);
+    }
+
+    /**
+     * This method will return all {@link Span} spans that <em>overlap</em> specified range,
+     * so if for example a 1..9 range is specified some spans might have 0..6 or 0..10 start/end ranges.
+     * NB spans are returned in reversed order (no in order that we store them internally)
+     *
+     * @since 2.0.1
+     */
+    @NonNull
+    public List<Span> getSpans(int start, int end) {
+
+        final int length = length();
+
+        if (!isPositionValid(length, start, end)) {
+            // we might as well throw here
+            return Collections.emptyList();
+        }
+
+        // all requested
+        if (start == 0
+                && length == end) {
+            // but also copy (do not allow external modification)
+            final List<Span> list = new ArrayList<>(spans);
+            Collections.reverse(list);
+            return Collections.unmodifiableList(list);
+        }
+
+        final List<Span> list = new ArrayList<>(0);
+
+        final Iterator<Span> iterator = spans.descendingIterator();
+        Span span;
+
+        while (iterator.hasNext()) {
+            span = iterator.next();
+            // we must execute 2 checks: if overlap with specified range or fully include it
+            // if span.start is >= range.start -> check if it's before range.end
+            // if span.end is <= end -> check if it's after range.start
+            if (
+                    (span.start >= start && span.start < end)
+                            || (span.end <= end && span.end > start)
+                            || (span.start < start && span.end > end)) {
+                list.add(span);
+            }
+        }
+
+        return Collections.unmodifiableList(list);
     }
 
     public char lastChar() {
@@ -173,7 +230,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
         final int end = length();
 
         // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
-        final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder.subSequence(start, end));
+        final SpannableStringBuilderReversed impl = new SpannableStringBuilderReversed(builder.subSequence(start, end));
 
         final Iterator<Span> iterator = spans.iterator();
 
@@ -222,13 +279,15 @@ public class SpannableBuilder implements Appendable, CharSequence {
 
         // as we do not expose builder and do no apply spans to it, we are safe to NOT to convert to String
 
-        final SpannableStringBuilderImpl impl = new SpannableStringBuilderImpl(builder);
+        final SpannableStringBuilderReversed reversed = new SpannableStringBuilderReversed(builder);
 
+        // NB, as e are using Deque -> iteration will be started with last element
+        // so, spans will be appearing in the for loop in reverse order
         for (Span span : spans) {
-            impl.setSpan(span.what, span.start, span.end, span.flags);
+            reversed.setSpan(span.what, span.start, span.end, span.flags);
         }
 
-        return impl;
+        return reversed;
     }
 
     private void copySpans(final int index, @Nullable CharSequence cs) {
@@ -239,7 +298,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
         if (cs instanceof Spanned) {
 
             final Spanned spanned = (Spanned) cs;
-            final boolean reverse = spanned instanceof SpannedReversed;
+            final boolean reversed = spanned instanceof SpannableStringBuilderReversed;
 
             final Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
             final int length = spans != null
@@ -247,7 +306,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
                     : 0;
 
             if (length > 0) {
-                if (reverse) {
+                if (reversed) {
                     Object o;
                     for (int i = length - 1; i >= 0; i--) {
                         o = spans[i];
@@ -274,7 +333,10 @@ public class SpannableBuilder implements Appendable, CharSequence {
         }
     }
 
-    static class Span {
+    /**
+     * @since 2.0.1 made public in order to be returned from `getSpans` method, initially added in 1.0.1
+     */
+    public static class Span {
 
         final Object what;
         int start;
@@ -286,6 +348,16 @@ public class SpannableBuilder implements Appendable, CharSequence {
             this.start = start;
             this.end = end;
             this.flags = flags;
+        }
+    }
+
+    /**
+     * @since 2.0.1 made inner class of {@link SpannableBuilder}, initially added in 1.0.1
+     */
+    static class SpannableStringBuilderReversed extends SpannableStringBuilder {
+
+        SpannableStringBuilderReversed(CharSequence text) {
+            super(text);
         }
     }
 }
