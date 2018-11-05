@@ -1,6 +1,8 @@
 package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static ru.noties.markwon.SpannableBuilder.isPositionValid;
+import static ru.noties.markwon.SpannableBuilder.setSpans;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -64,11 +67,6 @@ public class SpannableBuilderTest {
             assertTrue(position.toString(), isPositionValid(position.length, position.start, position.end));
         }
     }
-
-//    @Test
-//    public void set_spans_position_invalid() {
-//        // will be silently ignored
-//    }
 
     @Test
     public void get_spans() {
@@ -163,6 +161,173 @@ public class SpannableBuilderTest {
                     }
                 })
                 .toList();
+    }
+
+    @Test
+    public void set_spans_position_invalid() {
+        // if supplied position is invalid, no spans should be added
+
+        builder.append('0');
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        setSpans(builder, new Object(), -1, -1);
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+    }
+
+    @Test
+    public void set_spans_single() {
+        // single span as `spans` argument correctly added
+
+        builder.append('0');
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        final Object span = new Object();
+        setSpans(builder, span, 0, 1);
+
+        final List<SpannableBuilder.Span> spans = builder.getSpans(0, builder.length());
+        assertEquals(1, spans.size());
+        assertEquals(span, spans.get(0).what);
+    }
+
+    @Test
+    public void set_spans_array_detected() {
+        // if supplied `spans` argument is an array -> it should be expanded
+
+        builder.append('0');
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        final Object[] spans = {
+                new Object(),
+                new Object(),
+                new Object()
+        };
+
+        setSpans(builder, spans, 0, 1);
+
+        final List<SpannableBuilder.Span> actual = builder.getSpans(0, builder.length());
+        assertEquals(spans.length, actual.size());
+
+        for (int i = 0, length = spans.length; i < length; i++) {
+            assertEquals(spans[i], actual.get(i).what);
+        }
+    }
+
+    @Test
+    public void set_spans_array_of_arrays() {
+        // if array of arrays is supplied -> it won't be expanded to single elements
+
+        builder.append('0');
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        final Object[] spans = {
+                new Object[]{
+                        new Object(), new Object()
+                },
+                new Object[]{
+                        new Object(), new Object(), new Object()
+                }
+        };
+
+        setSpans(builder, spans, 0, 1);
+
+        final List<SpannableBuilder.Span> actual = builder.getSpans(0, builder.length());
+        assertEquals(2, actual.size());
+
+        for (int i = 0, length = spans.length; i < length; i++) {
+            assertEquals(spans[i], actual.get(i).what);
+        }
+    }
+
+    @Test
+    public void set_spans_null() {
+        // if `spans` argument is null, then nothing will be added
+
+        builder.append('0');
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        setSpans(builder, null, 0, builder.length());
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+    }
+
+    @Test
+    public void spans_reversed() {
+        // resulting SpannableStringBuilder should have spans reversed
+
+        final Object[] spans = {
+                0,
+                1,
+                2
+        };
+
+        for (Object span : spans) {
+            builder.append(span.toString(), span);
+        }
+
+        final SpannableStringBuilder spannableStringBuilder = builder.spannableStringBuilder();
+        final Object[] actual = spannableStringBuilder.getSpans(0, builder.length(), Object.class);
+
+        for (int start = 0, length = spans.length, end = length - 1; start < length; start++, end--) {
+            assertEquals(spans[start], actual[end]);
+        }
+    }
+
+    @Test
+    public void append_spanned_normal() {
+        // #append is called with regular Spanned content -> spans should be added in reverse
+
+        final SpannableStringBuilder ssb = new SpannableStringBuilder();
+        for (int i = 0; i < 3; i++) {
+            ssb.append(String.valueOf(i));
+            ssb.setSpan(i, i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        builder.append(ssb);
+
+        assertEquals("012", builder.toString());
+
+        // this one would return normal order as spans are reversed here
+//        final List<SpannableBuilder.Span> spans = builder.getSpans(0, builder.length());
+
+        final SpannableStringBuilder spannableStringBuilder = builder.spannableStringBuilder();
+        final Object[] spans = spannableStringBuilder.getSpans(0, builder.length(), Object.class);
+        assertEquals(3, spans.length);
+
+        for (int i = 0, length = spans.length; i < length; i++) {
+            assertEquals(length - 1 - i, spans[i]);
+        }
+    }
+
+    @Test
+    public void append_spanned_reversed() {
+        // #append is called with reversed spanned content -> spans should be added as-are
+
+        final SpannableBuilder spannableBuilder = new SpannableBuilder();
+        for (int i = 0; i < 3; i++) {
+            spannableBuilder.append(String.valueOf(i), i);
+        }
+
+        assertTrue(builder.getSpans(0, builder.length()).isEmpty());
+
+        builder.append(spannableBuilder.spannableStringBuilder());
+
+        final SpannableStringBuilder spannableStringBuilder = builder.spannableStringBuilder();
+        final Object[] spans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), Object.class);
+        assertEquals(3, spans.length);
+
+        for (int i = 0, length = spans.length; i < length; i++) {
+            // in the end order should be as we expect in order to properly render it
+            // (no matter if reversed is used or not)
+            assertEquals(length - 1 - i, spans[i]);
+        }
     }
 
     private static class Position {

@@ -163,11 +163,46 @@ public class SpannableBuilder implements Appendable, CharSequence {
      */
     @Override
     public CharSequence subSequence(int start, int end) {
-        // todo: NB, we do not copy spans here... we should I think
-        // the thing to deal with: implement own `getSpans` method to mimic _native_ SpannableStringBuilder
-        // behaviour. For example originally it will return all spans that at least _overlap_ with specified
-        // range... which can be confusing
-        return builder.subSequence(start, end);
+
+        final CharSequence out;
+
+        // @since 2.0.1 we copy spans to resulting subSequence
+        final List<Span> spans = getSpans(start, end);
+        if (spans.isEmpty()) {
+            out = builder.subSequence(start, end);
+        } else {
+
+            // we should not be SpannableStringBuilderReversed here
+            final SpannableStringBuilder builder = new SpannableStringBuilder(this.builder.subSequence(start, end));
+
+            final int length = builder.length();
+
+            int s;
+            int e;
+
+            for (Span span : spans) {
+
+                // we should limit start/end to resulting subSequence length
+                //
+                // for example, originally it was 5-7 and range 5-7 requested
+                // span should have 0-2
+                //
+                // if a span was fully including resulting subSequence it's start and
+                // end must be within 0..length bounds
+                s = Math.max(0, span.start - start);
+                e = Math.max(length, s + (span.end - span.start));
+
+                builder.setSpan(
+                        span.what,
+                        s,
+                        e,
+                        span.flags
+                );
+            }
+            out = builder;
+        }
+
+        return out;
     }
 
     /**
@@ -263,7 +298,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
     /**
      * Simple method to create a SpannableStringBuilder, which is created anyway. Unlike {@link #text()}
      * method which returns the same SpannableStringBuilder there is no need to cast the resulting
-     * CharSequence
+     * CharSequence and makes the thing more explicit
      *
      * @since 2.0.0
      */
@@ -338,10 +373,10 @@ public class SpannableBuilder implements Appendable, CharSequence {
      */
     public static class Span {
 
-        final Object what;
-        int start;
-        int end;
-        final int flags;
+        public final Object what;
+        public int start;
+        public int end;
+        public final int flags;
 
         Span(@NonNull Object what, int start, int end, int flags) {
             this.what = what;
@@ -355,7 +390,6 @@ public class SpannableBuilder implements Appendable, CharSequence {
      * @since 2.0.1 made inner class of {@link SpannableBuilder}, initially added in 1.0.1
      */
     static class SpannableStringBuilderReversed extends SpannableStringBuilder {
-
         SpannableStringBuilderReversed(CharSequence text) {
             super(text);
         }
