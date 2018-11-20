@@ -26,7 +26,7 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion '4.8.1'
+    gradleVersion '4.10.2'
     distributionType 'all'
 }
 
@@ -64,7 +64,6 @@ ext {
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'ru.noties:prism4j:1.1.0',
             'debug'                   : 'ru.noties:debug:3.0.0@jar',
-            'better-link-movement'    : 'me.saket:better-link-movement-method:2.2.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion"
     ]
 

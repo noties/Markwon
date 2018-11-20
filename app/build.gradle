@@ -36,7 +36,6 @@ dependencies {
         implementation it['okhttp']
         implementation it['prism4j']
         implementation it['debug']
-        implementation it['better-link-movement']
         implementation it['dagger']
     }
 

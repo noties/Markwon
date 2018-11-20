@@ -15,6 +15,7 @@ import org.commonmark.parser.Parser;
 import java.util.Arrays;
 
 import ru.noties.markwon.renderer.SpannableRenderer;
+import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -99,6 +100,12 @@ public abstract class Markwon {
 
         unscheduleDrawables(view);
         unscheduleTableRows(view);
+
+        // @since 2.0.1 we must measure ordered-list-item-spans before applying text to a TextView.
+        // if markdown has a lot of ordered list items (or text size is relatively big, or block-margin
+        // is relatively small) then this list won't be rendered properly: it will take correct
+        // layout (width and margin) but will be clipped if margin is not _consistent_ between calls.
+        OrderedListItemSpan.measure(view, text);
 
         // update movement method (for links to be clickable)
         view.setMovementMethod(movementMethod);
