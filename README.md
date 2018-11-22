@@ -95,6 +95,14 @@ Please visit [documentation] web-site for reference
 
 ---
 
+## Applications using Markwon
+
+* [Partiko](https://partiko.app)
+* [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
+
+
+---
+
 # Demo
 Based on [this cheatsheet][cheatsheet]
 
@@ -278,12 +286,6 @@ Asterisks (`*`)
 ___
 
 Underscores (`_`)
-
----
-
-## Applications using Markwon
-
-* [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
 
 
 ## License
