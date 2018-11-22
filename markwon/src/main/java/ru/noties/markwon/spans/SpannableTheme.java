@@ -12,6 +12,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Px;
 import android.support.annotation.Size;
 import android.text.TextPaint;
 import android.util.TypedValue;
@@ -600,13 +601,13 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder blockMargin(@Dimension int blockMargin) {
+        public Builder blockMargin(@Px int blockMargin) {
             this.blockMargin = blockMargin;
             return this;
         }
 
         @NonNull
-        public Builder blockQuoteWidth(@Dimension int blockQuoteWidth) {
+        public Builder blockQuoteWidth(@Px int blockQuoteWidth) {
             this.blockQuoteWidth = blockQuoteWidth;
             return this;
         }
@@ -625,13 +626,13 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder bulletListItemStrokeWidth(@Dimension int bulletListItemStrokeWidth) {
+        public Builder bulletListItemStrokeWidth(@Px int bulletListItemStrokeWidth) {
             this.bulletListItemStrokeWidth = bulletListItemStrokeWidth;
             return this;
         }
 
         @NonNull
-        public Builder bulletWidth(@Dimension int bulletWidth) {
+        public Builder bulletWidth(@Px int bulletWidth) {
             this.bulletWidth = bulletWidth;
             return this;
         }
@@ -668,7 +669,7 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder codeMultilineMargin(@Dimension int codeMultilineMargin) {
+        public Builder codeMultilineMargin(@Px int codeMultilineMargin) {
             this.codeMultilineMargin = codeMultilineMargin;
             return this;
         }
@@ -680,13 +681,13 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder codeTextSize(@Dimension int codeTextSize) {
+        public Builder codeTextSize(@Px int codeTextSize) {
             this.codeTextSize = codeTextSize;
             return this;
         }
 
         @NonNull
-        public Builder headingBreakHeight(@Dimension int headingBreakHeight) {
+        public Builder headingBreakHeight(@Px int headingBreakHeight) {
             this.headingBreakHeight = headingBreakHeight;
             return this;
         }
@@ -733,13 +734,13 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder thematicBreakHeight(@Dimension int thematicBreakHeight) {
+        public Builder thematicBreakHeight(@Px int thematicBreakHeight) {
             this.thematicBreakHeight = thematicBreakHeight;
             return this;
         }
 
         @NonNull
-        public Builder tableCellPadding(@Dimension int tableCellPadding) {
+        public Builder tableCellPadding(@Px int tableCellPadding) {
             this.tableCellPadding = tableCellPadding;
             return this;
         }
@@ -751,7 +752,7 @@ public class SpannableTheme {
         }
 
         @NonNull
-        public Builder tableBorderWidth(@Dimension int tableBorderWidth) {
+        public Builder tableBorderWidth(@Px int tableBorderWidth) {
             this.tableBorderWidth = tableBorderWidth;
             return this;
         }
@@ -775,7 +776,7 @@ public class SpannableTheme {
          * @since 1.1.1
          */
         @NonNull
-        public Builder tableHeaderRowBackgroundColor(int tableHeaderRowBackgroundColor) {
+        public Builder tableHeaderRowBackgroundColor(@ColorInt int tableHeaderRowBackgroundColor) {
             this.tableHeaderRowBackgroundColor = tableHeaderRowBackgroundColor;
             return this;
         }
