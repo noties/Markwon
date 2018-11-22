@@ -50,7 +50,7 @@ ext {
     ]
 
     final def supportVersion = '27.1.1'
-    final def commonMarkVersion = '0.11.0'
+    final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
 
     deps = [
