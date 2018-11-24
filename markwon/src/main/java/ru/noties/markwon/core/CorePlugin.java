@@ -9,17 +9,24 @@ import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
 import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
+import org.commonmark.node.HardLineBreak;
+import org.commonmark.node.Heading;
+import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
+import org.commonmark.node.Link;
+import org.commonmark.node.ListBlock;
 import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
 import org.commonmark.node.OrderedList;
+import org.commonmark.node.Paragraph;
+import org.commonmark.node.SoftLineBreak;
 import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 
 public class CorePlugin extends AbstractMarkwonPlugin {
@@ -29,6 +36,25 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     // include only _core_ spans
 
     // todo: softBreak adds new line should be here (or maybe removed even?)
+
+    // todo: add a simple HTML handler
+    // todo: configure primitive images (without okhttp -> just HttpUrlConnection and simple types (static, data)
+
+    @NonNull
+    public static CorePlugin create() {
+        return create(false);
+    }
+
+    @NonNull
+    public static CorePlugin create(boolean softBreakAddsNewLine) {
+        return new CorePlugin(softBreakAddsNewLine);
+    }
+
+    private final boolean softBreakAddsNewLine;
+
+    protected CorePlugin(boolean softBreakAddsNewLine) {
+        this.softBreakAddsNewLine = softBreakAddsNewLine;
+    }
 
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
@@ -43,11 +69,17 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         orderedList(builder);
         listItem(builder);
         thematicBreak(builder);
+        heading(builder);
+        softLineBreak(builder);
+        hardLineBreak(builder);
+        paragraph(builder);
+        image(builder);
+        link(builder);
     }
 
     @Override
-    public void beforeSetText(@NonNull TextView textView, @NonNull SpannableBuilder builder) {
-        OrderedListItemSpan.measure(textView, builder);
+    public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
+        OrderedListItemSpan.measure(textView, markdown);
     }
 
     protected void text(@NonNull MarkwonVisitor.Builder builder) {
@@ -65,7 +97,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull StrongEmphasis strongEmphasis) {
                 final int length = visitor.length();
                 visitor.visitChildren(strongEmphasis);
-                visitor.setSpans(length, visitor.configuration().factory().strongEmphasis());
+                visitor.setSpans(length, visitor.factory().strongEmphasis());
             }
         });
     }
@@ -76,7 +108,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Emphasis emphasis) {
                 final int length = visitor.length();
                 visitor.visitChildren(emphasis);
-                visitor.setSpans(length, visitor.configuration().factory().emphasis());
+                visitor.setSpans(length, visitor.factory().emphasis());
             }
         });
     }
@@ -95,7 +127,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
                 visitor.incrementBlockQuoteIndent();
                 visitor.visitChildren(blockQuote);
-                visitor.setSpans(length, visitor.configuration().factory().blockQuote(visitor.theme()));
+                visitor.setSpans(length, visitor.factory().blockQuote(visitor.theme()));
                 visitor.decrementBlockQuoteIndent();
 
                 if (visitor.hasNext(blockQuote)) {
@@ -122,7 +154,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                         .append(code.getLiteral())
                         .append('\u00a0');
 
-                visitor.setSpans(length, visitor.configuration().factory().code(visitor.theme(), false));
+                visitor.setSpans(length, visitor.factory().code(visitor.theme(), false));
             }
         });
     }
@@ -163,7 +195,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
         visitor.builder().append('\u00a0');
 
-        visitor.setSpans(length, visitor.configuration().factory().code(visitor.theme(), true));
+        visitor.setSpans(length, visitor.factory().code(visitor.theme(), true));
 
         if (visitor.hasNext(node)) {
             visitor.ensureNewLine();
@@ -220,7 +252,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                     final int start = ((OrderedList) parent).getStartNumber();
 
                     visitor.visitChildren(listItem);
-                    visitor.setSpans(length, visitor.configuration().factory().orderedListItem(visitor.theme(), start));
+                    visitor.setSpans(length, visitor.factory().orderedListItem(visitor.theme(), start));
 
 
                     // after we have visited the children increment start number
@@ -230,7 +262,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 } else {
 
                     visitor.visitChildren(listItem);
-                    visitor.setSpans(length, visitor.configuration().factory().bulletListItem(visitor.theme(), visitor.listLevel() - 1));
+                    visitor.setSpans(length, visitor.factory().bulletListItem(visitor.theme(), visitor.listLevel() - 1));
 
                 }
 
@@ -256,7 +288,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 // without space it won't render
                 visitor.builder().append('\u00a0');
 
-                visitor.setSpans(length, visitor.configuration().factory().thematicBreak(visitor.theme()));
+                visitor.setSpans(length, visitor.factory().thematicBreak(visitor.theme()));
 
                 if (visitor.hasNext(thematicBreak)) {
                     visitor.ensureNewLine();
@@ -264,5 +296,133 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 }
             }
         });
+    }
+
+    protected void heading(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(Heading.class, new MarkwonVisitor.NodeVisitor<Heading>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Heading heading) {
+
+                visitor.ensureNewLine();
+
+                final int length = visitor.length();
+                visitor.visitChildren(heading);
+                visitor.setSpans(length, visitor.factory().heading(visitor.theme(), heading.getLevel()));
+
+                if (visitor.hasNext(heading)) {
+                    visitor.ensureNewLine();
+                    visitor.forceNewLine();
+                }
+            }
+        });
+    }
+
+    protected void softLineBreak(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(SoftLineBreak.class, new MarkwonVisitor.NodeVisitor<SoftLineBreak>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull SoftLineBreak softLineBreak) {
+                if (softBreakAddsNewLine) {
+                    visitor.ensureNewLine();
+                } else {
+                    visitor.builder().append(' ');
+                }
+            }
+        });
+    }
+
+    protected void hardLineBreak(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(HardLineBreak.class, new MarkwonVisitor.NodeVisitor<HardLineBreak>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull HardLineBreak hardLineBreak) {
+                visitor.ensureNewLine();
+            }
+        });
+    }
+
+    protected void paragraph(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(Paragraph.class, new MarkwonVisitor.NodeVisitor<Paragraph>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Paragraph paragraph) {
+
+                final boolean inTightList = isInTightList(paragraph);
+
+                if (!inTightList) {
+                    visitor.ensureNewLine();
+                }
+
+                final int length = visitor.length();
+                visitor.visitChildren(paragraph);
+
+                // @since 1.1.1 apply paragraph span
+                visitor.setSpans(length, visitor.factory().paragraph(inTightList));
+
+                if (!inTightList && visitor.hasNext(paragraph)) {
+                    visitor.ensureNewLine();
+                    if (visitor.blockQuoteIndent() == 0) {
+                        visitor.forceNewLine();
+                    }
+                }
+            }
+        });
+    }
+
+    protected void image(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(Image.class, new MarkwonVisitor.NodeVisitor<Image>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Image image) {
+
+                final int length = visitor.length();
+
+                visitor.visitChildren(image);
+
+                // we must check if anything _was_ added, as we need at least one char to render
+                if (length == visitor.length()) {
+                    visitor.builder().append('\uFFFC');
+                }
+
+                final MarkwonConfiguration configuration = visitor.configuration();
+
+                final Node parent = image.getParent();
+                final boolean link = parent instanceof Link;
+                final String destination = configuration
+                        .urlProcessor()
+                        .process(image.getDestination());
+
+                final Object spans = visitor.factory().image(
+                        visitor.theme(),
+                        destination,
+                        configuration.asyncDrawableLoader(),
+                        configuration.imageSizeResolver(),
+                        null,
+                        link);
+
+                visitor.setSpans(length, spans);
+            }
+        });
+    }
+
+    protected void link(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(Link.class, new MarkwonVisitor.NodeVisitor<Link>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Link link) {
+                final int length = visitor.length();
+                visitor.visitChildren(link);
+                final MarkwonConfiguration configuration = visitor.configuration();
+                final String destination = configuration.urlProcessor().process(link.getDestination());
+                visitor.setSpans(length, visitor.factory().link(visitor.theme(), destination, configuration.linkResolver()));
+            }
+        });
+    }
+
+    private static boolean isInTightList(@NonNull Paragraph paragraph) {
+        final Node parent = paragraph.getParent();
+        if (parent != null) {
+            final Node gramps = parent.getParent();
+            if (gramps instanceof ListBlock) {
+                ListBlock list = (ListBlock) gramps;
+                return list.isTight();
+            }
+        }
+        return false;
     }
 }

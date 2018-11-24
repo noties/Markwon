@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
 
         final SpannableBuilder builder = new SpannableBuilder();
 
-        // please note that here I am passing `0` as fallback it means that if markdown references
+        // please note that here I am passing `0` as fallback it means that if toMarkdown references
         // unknown icon, it will try to load fallback one and will fail with ResourceNotFound. It's
         // better to provide a valid fallback option
         final IconSpanProvider spanProvider = IconSpanProvider.create(this, 0);
@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
                         .headingTextSizeMultipliers(textSizeMultipliers)
                         .build())
                 .build();
-        // create an instance of visitor to process parsed markdown
+        // create an instance of visitor to process parsed toMarkdown
         final IconVisitor visitor = new IconVisitor(
                 configuration,
                 builder,

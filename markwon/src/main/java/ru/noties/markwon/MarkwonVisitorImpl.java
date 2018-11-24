@@ -37,19 +37,21 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes;
 
-    private final MarkwonTheme theme;
     private final MarkwonConfiguration configuration;
+    private final MarkwonTheme theme;
+    private final SpannableFactory factory;
+
     private final SpannableBuilder builder = new SpannableBuilder();
 
     private int blockQuoteIndent;
     private int listLevel;
 
     private MarkwonVisitorImpl(
-            @NonNull MarkwonTheme theme,
             @NonNull MarkwonConfiguration configuration,
             @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
-        this.theme = theme;
         this.configuration = configuration;
+        this.theme = configuration.theme();
+        this.factory = configuration.factory();
         this.nodes = nodes;
     }
 
@@ -175,14 +177,20 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     @NonNull
     @Override
+    public MarkwonConfiguration configuration() {
+        return configuration;
+    }
+
+    @NonNull
+    @Override
     public MarkwonTheme theme() {
         return theme;
     }
 
     @NonNull
     @Override
-    public MarkwonConfiguration configuration() {
-        return configuration;
+    public SpannableFactory factory() {
+        return factory;
     }
 
     @NonNull
@@ -280,9 +288,8 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
         @NonNull
         @Override
-        public MarkwonVisitor build(@NonNull MarkwonTheme theme, @NonNull MarkwonConfiguration configuration) {
+        public MarkwonVisitor build(@NonNull MarkwonConfiguration configuration) {
             return new MarkwonVisitorImpl(
-                    theme,
                     configuration,
                     Collections.unmodifiableMap(nodes));
         }

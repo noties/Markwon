@@ -20,7 +20,7 @@ public class MarkwonConfiguration {
     // creates default configuration
     @NonNull
     public static MarkwonConfiguration create(@NonNull Context context) {
-        return new Builder(context).build();
+        return new Builder(context).build(MarkwonTheme.create(context));
     }
 
     @NonNull
@@ -28,9 +28,8 @@ public class MarkwonConfiguration {
         return new Builder(context);
     }
 
-    @Deprecated
-    private final MarkwonTheme theme;
 
+    private final MarkwonTheme theme;
     private final AsyncDrawable.Loader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkSpan.Resolver linkResolver;
@@ -65,7 +64,6 @@ public class MarkwonConfiguration {
     }
 
     @NonNull
-    @Deprecated
     public MarkwonTheme theme() {
         return theme;
     }
@@ -137,7 +135,6 @@ public class MarkwonConfiguration {
 
         private final Context context;
 
-        @Deprecated
         private MarkwonTheme theme;
         private AsyncDrawable.Loader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
@@ -169,12 +166,12 @@ public class MarkwonConfiguration {
             this.htmlAllowNonClosedTags = configuration.htmlAllowNonClosedTags;
         }
 
-        @NonNull
-        @Deprecated
-        public Builder theme(@NonNull MarkwonTheme theme) {
-            this.theme = theme;
-            return this;
-        }
+//        @NonNull
+//        @Deprecated
+//        public Builder theme(@NonNull MarkwonTheme theme) {
+//            this.theme = theme;
+//            return this;
+//        }
 
         @NonNull
         public Builder asyncDrawableLoader(@NonNull AsyncDrawable.Loader asyncDrawableLoader) {
@@ -263,11 +260,9 @@ public class MarkwonConfiguration {
         }
 
         @NonNull
-        public MarkwonConfiguration build() {
+        public MarkwonConfiguration build(@NonNull MarkwonTheme theme) {
 
-            if (theme == null) {
-                theme = MarkwonTheme.create(context);
-            }
+            this.theme = theme;
 
             if (asyncDrawableLoader == null) {
                 asyncDrawableLoader = new AsyncDrawableLoaderNoOp();

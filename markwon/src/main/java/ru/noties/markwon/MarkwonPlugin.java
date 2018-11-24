@@ -23,7 +23,7 @@ public interface MarkwonPlugin {
     @NonNull
     String processMarkdown(@NonNull String markdown);
 
-    void beforeSetText(@NonNull TextView textView, @NonNull SpannableBuilder builder);
+    void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown);
 
-    void afterSetText(@NonNull TextView textView, @NonNull SpannableBuilder builder);
+    void afterSetText(@NonNull TextView textView, @NonNull CharSequence markdown);
 }

@@ -20,14 +20,17 @@ public interface MarkwonVisitor extends Visitor {
         <N extends Node> Builder on(@NonNull Class<N> node, @NonNull NodeVisitor<N> nodeVisitor);
 
         @NonNull
-        MarkwonVisitor build(@NonNull MarkwonTheme theme, @NonNull MarkwonConfiguration configuration);
+        MarkwonVisitor build(@NonNull MarkwonConfiguration configuration);
     }
+
+    @NonNull
+    MarkwonConfiguration configuration();
 
     @NonNull
     MarkwonTheme theme();
 
     @NonNull
-    MarkwonConfiguration configuration();
+    SpannableFactory factory();
 
     @NonNull
     SpannableBuilder builder();

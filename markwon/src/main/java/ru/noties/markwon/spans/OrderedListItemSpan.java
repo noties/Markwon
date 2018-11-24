@@ -20,8 +20,8 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
      * NB, this method must be called <em>before</em> setting text to a TextView (`TextView#setText`
      * internally can trigger new Layout creation which will ask for leading margins right away)
      *
-     * @param textView to which markdown will be applied
-     * @param text     parsed markdown to process
+     * @param textView to which toMarkdown will be applied
+     * @param text     parsed toMarkdown to process
      * @since 2.0.1
      */
     public static void measure(@NonNull TextView textView, @NonNull CharSequence text) {

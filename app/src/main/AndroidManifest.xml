@@ -41,17 +41,17 @@
                 <!--<data-->
                 <!--android:host="*"-->
                 <!--android:scheme="http"-->
-                <!--android:mimeType="text/markdown"/>-->
+                <!--android:mimeType="text/toMarkdown"/>-->
 
                 <!--<data-->
                 <!--android:host="*"-->
                 <!--android:scheme="file"-->
-                <!--android:mimeType="text/markdown"/>-->
+                <!--android:mimeType="text/toMarkdown"/>-->
 
                 <!--<data-->
                 <!--android:host="*"-->
                 <!--android:scheme="https"-->
-                <!--android:mimeType="text/markdown"/>-->
+                <!--android:mimeType="text/toMarkdown"/>-->
 
                 <data android:pathPattern=".*\\.markdown" />
                 <data android:pathPattern=".*\\.mdown" />

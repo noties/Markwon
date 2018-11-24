@@ -35,12 +35,12 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
     }
 
     @Override
-    public void beforeSetText(@NonNull TextView textView, @NonNull SpannableBuilder builder) {
+    public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
 
     }
 
     @Override
-    public void afterSetText(@NonNull TextView textView, @NonNull SpannableBuilder builder) {
+    public void afterSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
 
     }
 }

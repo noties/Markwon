@@ -48,12 +48,12 @@ public abstract class Markwon {
     }
 
     /**
-     * Parses submitted raw markdown, converts it to CharSequence (with Spannables)
+     * Parses submitted raw toMarkdown, converts it to CharSequence (with Spannables)
      * and applies it to view
      *
-     * @param view          {@link TextView} to set markdown into
+     * @param view          {@link TextView} to set toMarkdown into
      * @param configuration a {@link MarkwonConfiguration} instance
-     * @param markdown      raw markdown String (for example: {@code `**Hello**`})
+     * @param markdown      raw toMarkdown String (for example: {@code `**Hello**`})
      * @see #markdown(MarkwonConfiguration, String)
      * @see #setText(TextView, CharSequence)
      * @see MarkwonConfiguration
@@ -69,13 +69,13 @@ public abstract class Markwon {
     }
 
     /**
-     * Helper method to apply parsed markdown.
+     * Helper method to apply parsed toMarkdown.
      * <p>
      * Since 1.0.6 redirects it\'s call to {@link #setText(TextView, CharSequence, MovementMethod)}
      * with LinkMovementMethod as an argument to preserve current API.
      *
-     * @param view {@link TextView} to set markdown into
-     * @param text parsed markdown
+     * @param view {@link TextView} to set toMarkdown into
+     * @param text parsed toMarkdown
      * @see #setText(TextView, CharSequence, MovementMethod)
      * @since 1.0.0
      */
@@ -84,13 +84,13 @@ public abstract class Markwon {
     }
 
     /**
-     * Helper method to apply parsed markdown with additional argument of a MovementMethod. Used
+     * Helper method to apply parsed toMarkdown with additional argument of a MovementMethod. Used
      * to workaround problems that occur when using system LinkMovementMethod (for example:
      * https://issuetracker.google.com/issues/37068143). As a better alternative to it consider
      * using: https://github.com/saket/Better-Link-Movement-Method
      *
-     * @param view           TextView to set markdown into
-     * @param text           parsed markdown
+     * @param view           TextView to set toMarkdown into
+     * @param text           parsed toMarkdown
      * @param movementMethod an implementation if MovementMethod or null
      * @see #scheduleDrawables(TextView)
      * @see #scheduleTableRows(TextView)
@@ -102,7 +102,7 @@ public abstract class Markwon {
         unscheduleTableRows(view);
 
         // @since 2.0.1 we must measure ordered-list-item-spans before applying text to a TextView.
-        // if markdown has a lot of ordered list items (or text size is relatively big, or block-margin
+        // if toMarkdown has a lot of ordered list items (or text size is relatively big, or block-margin
         // is relatively small) then this list won't be rendered properly: it will take correct
         // layout (width and margin) but will be clipped if margin is not _consistent_ between calls.
         OrderedListItemSpan.measure(view, text);
@@ -117,11 +117,11 @@ public abstract class Markwon {
     }
 
     /**
-     * Returns parsed markdown with default {@link MarkwonConfiguration} obtained from {@link Context}
+     * Returns parsed toMarkdown with default {@link MarkwonConfiguration} obtained from {@link Context}
      *
      * @param context  {@link Context}
-     * @param markdown raw markdown
-     * @return parsed markdown
+     * @param markdown raw toMarkdown
+     * @return parsed toMarkdown
      * @since 1.0.0
      */
     @NonNull
@@ -131,11 +131,11 @@ public abstract class Markwon {
     }
 
     /**
-     * Returns parsed markdown with provided {@link MarkwonConfiguration}
+     * Returns parsed toMarkdown with provided {@link MarkwonConfiguration}
      *
      * @param configuration a {@link MarkwonConfiguration}
-     * @param markdown      raw markdown
-     * @return parsed markdown
+     * @param markdown      raw toMarkdown
+     * @return parsed toMarkdown
      * @see MarkwonConfiguration
      * @since 1.0.0
      */

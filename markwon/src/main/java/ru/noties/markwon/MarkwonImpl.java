@@ -1,6 +1,7 @@
 package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
+import android.widget.TextView;
 
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -42,7 +43,26 @@ class MarkwonImpl extends Markwon2 {
 
     @NonNull
     @Override
-    public CharSequence markdown(@NonNull String input) {
+    public CharSequence toMarkdown(@NonNull String input) {
         return render(parse(input));
+    }
+
+    @Override
+    public void setMarkdown(@NonNull TextView textView, @NonNull String markdown) {
+        setParsedMarkdown(textView, toMarkdown(markdown));
+    }
+
+    @Override
+    public void setParsedMarkdown(@NonNull TextView textView, @NonNull CharSequence markdown) {
+
+        for (MarkwonPlugin plugin : plugins) {
+            plugin.beforeSetText(textView, markdown);
+        }
+
+        textView.setText(markdown);
+
+        for (MarkwonPlugin plugin : plugins) {
+            plugin.afterSetText(textView, markdown);
+        }
     }
 }

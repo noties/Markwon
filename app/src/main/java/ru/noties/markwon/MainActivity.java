@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
                     .use(new CorePlugin())
                     .use(TaskListPlugin.create(new TaskListDrawable(0xffff0000, 0xffff0000, -1)))
                     .build();
-            final CharSequence markdown = markwon2.markdown("**hello _dear_** `code`\n\n- [ ] first\n- [x] second");
+            final CharSequence markdown = markwon2.toMarkdown("**hello _dear_** `code`\n\n- [ ] first\n- [x] second");
             textView.setText(markdown);
             return;
         }

@@ -46,7 +46,7 @@ class MarkwonBuilderImpl implements Markwon2.Builder {
 
         return new MarkwonImpl(
                 parserBuilder.build(),
-                visitorBuilder.build(themeBuilder.build(), configurationBuilder.build()),
+                visitorBuilder.build(configurationBuilder.build(themeBuilder.build())),
                 Collections.unmodifiableList(plugins)
         );
     }

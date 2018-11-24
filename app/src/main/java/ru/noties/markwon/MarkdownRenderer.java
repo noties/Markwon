@@ -104,7 +104,7 @@ public class MarkdownRenderer {
 
                 final long end = SystemClock.uptimeMillis();
 
-                Debug.i("markdown rendered: %d ms", end - start);
+                Debug.i("toMarkdown rendered: %d ms", end - start);
 
                 if (!isCancelled()) {
                     handler.post(new Runnable() {
