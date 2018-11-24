@@ -9,7 +9,7 @@ import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.spans.TableRowSpan;
 
 /**
@@ -26,32 +26,32 @@ public interface SpannableFactory {
     Object emphasis();
 
     @Nullable
-    Object blockQuote(@NonNull SpannableTheme theme);
+    Object blockQuote(@NonNull MarkwonTheme theme);
 
     @Nullable
-    Object code(@NonNull SpannableTheme theme, boolean multiline);
+    Object code(@NonNull MarkwonTheme theme, boolean multiline);
 
     @Nullable
-    Object orderedListItem(@NonNull SpannableTheme theme, int startNumber);
+    Object orderedListItem(@NonNull MarkwonTheme theme, int startNumber);
 
     @Nullable
-    Object bulletListItem(@NonNull SpannableTheme theme, int level);
+    Object bulletListItem(@NonNull MarkwonTheme theme, int level);
 
     @Nullable
-    Object thematicBreak(@NonNull SpannableTheme theme);
+    Object thematicBreak(@NonNull MarkwonTheme theme);
 
     @Nullable
-    Object heading(@NonNull SpannableTheme theme, int level);
+    Object heading(@NonNull MarkwonTheme theme, int level);
 
     @Nullable
     Object strikethrough();
 
     @Nullable
-    Object taskListItem(@NonNull SpannableTheme theme, int blockIndent, boolean isDone);
+    Object taskListItem(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone);
 
     @Nullable
     Object tableRow(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull List<TableRowSpan.Cell> cells,
             boolean isHeader,
             boolean isOdd);
@@ -64,7 +64,7 @@ public interface SpannableFactory {
 
     @Nullable
     Object image(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull String destination,
             @NonNull AsyncDrawable.Loader loader,
             @NonNull ImageSizeResolver imageSizeResolver,
@@ -73,17 +73,17 @@ public interface SpannableFactory {
 
     @Nullable
     Object link(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull String destination,
             @NonNull LinkSpan.Resolver resolver);
 
     // Currently used by HTML parser
     @Nullable
-    Object superScript(@NonNull SpannableTheme theme);
+    Object superScript(@NonNull MarkwonTheme theme);
 
     // Currently used by HTML parser
     @Nullable
-    Object subScript(@NonNull SpannableTheme theme);
+    Object subScript(@NonNull MarkwonTheme theme);
 
     // Currently used by HTML parser
     @Nullable

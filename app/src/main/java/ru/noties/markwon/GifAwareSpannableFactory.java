@@ -7,7 +7,7 @@ import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 
 public class GifAwareSpannableFactory extends SpannableFactoryDef {
 
@@ -19,7 +19,7 @@ public class GifAwareSpannableFactory extends SpannableFactoryDef {
 
     @Nullable
     @Override
-    public Object image(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
+    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new AsyncDrawableSpan(
                 theme,
                 new GifAwareAsyncDrawable(

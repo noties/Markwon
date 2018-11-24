@@ -2,15 +2,15 @@ package ru.noties.markwon.renderer.html2.tag;
 
 import android.support.annotation.NonNull;
 
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 
 public class ListHandler extends TagHandler {
 
     @Override
     public void handle(
-            @NonNull SpannableConfiguration configuration,
+            @NonNull MarkwonConfiguration configuration,
             @NonNull SpannableBuilder builder,
             @NonNull HtmlTag tag) {
 

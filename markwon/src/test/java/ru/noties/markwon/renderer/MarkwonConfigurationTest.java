@@ -2,7 +2,7 @@ package ru.noties.markwon.renderer;
 
 import org.junit.Test;
 
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.SyntaxHighlight;
 import ru.noties.markwon.UrlProcessor;
@@ -10,17 +10,17 @@ import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.MarkwonHtmlRenderer;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-public class SpannableConfigurationTest {
+public class MarkwonConfigurationTest {
 
     @Test
     public void testNewBuilder() {
-        final SpannableConfiguration configuration = SpannableConfiguration
+        final MarkwonConfiguration configuration = MarkwonConfiguration
                 .builder(null)
-                .theme(mock(SpannableTheme.class))
+                .theme(mock(MarkwonTheme.class))
                 .asyncDrawableLoader(mock(AsyncDrawable.Loader.class))
                 .syntaxHighlight(mock(SyntaxHighlight.class))
                 .linkResolver(mock(LinkSpan.Resolver.class))
@@ -33,7 +33,7 @@ public class SpannableConfigurationTest {
                 .htmlAllowNonClosedTags(true)
                 .build();
 
-        final SpannableConfiguration newConfiguration = configuration
+        final MarkwonConfiguration newConfiguration = configuration
                 .newBuilder(null)
                 .build();
 

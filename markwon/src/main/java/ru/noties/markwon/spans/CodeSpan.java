@@ -11,13 +11,13 @@ import android.text.style.MetricAffectingSpan;
 
 public class CodeSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
 
     private final boolean multiline;
 
-    public CodeSpan(@NonNull SpannableTheme theme, boolean multiline) {
+    public CodeSpan(@NonNull MarkwonTheme theme, boolean multiline) {
         this.theme = theme;
         this.multiline = multiline;
     }

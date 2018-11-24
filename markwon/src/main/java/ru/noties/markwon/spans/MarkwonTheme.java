@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
-import android.support.annotation.Dimension;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -20,19 +19,21 @@ import android.util.TypedValue;
 import java.util.Arrays;
 import java.util.Locale;
 
+import ru.noties.markwon.tasklist.TaskListDrawable;
+
 @SuppressWarnings("WeakerAccess")
-public class SpannableTheme {
+public class MarkwonTheme {
 
     /**
-     * Factory method to obtain an instance of {@link SpannableTheme} with all values as defaults
+     * Factory method to obtain an instance of {@link MarkwonTheme} with all values as defaults
      *
      * @param context Context in order to resolve defaults
-     * @return {@link SpannableTheme} instance
+     * @return {@link MarkwonTheme} instance
      * @see #builderWithDefaults(Context)
      * @since 1.0.0
      */
     @NonNull
-    public static SpannableTheme create(@NonNull Context context) {
+    public static MarkwonTheme create(@NonNull Context context) {
         return builderWithDefaults(context).build();
     }
 
@@ -43,7 +44,7 @@ public class SpannableTheme {
      *
      * @return {@link Builder instance}
      * @see #builderWithDefaults(Context)
-     * @see #builder(SpannableTheme)
+     * @see #builder(MarkwonTheme)
      * @since 1.0.0
      */
     @NonNull
@@ -53,15 +54,15 @@ public class SpannableTheme {
 
     /**
      * Factory method to create a {@link Builder} instance and initialize it with values
-     * from supplied {@link SpannableTheme}
+     * from supplied {@link MarkwonTheme}
      *
-     * @param copyFrom {@link SpannableTheme} to copy values from
+     * @param copyFrom {@link MarkwonTheme} to copy values from
      * @return {@link Builder} instance
      * @see #builderWithDefaults(Context)
      * @since 1.0.0
      */
     @NonNull
-    public static Builder builder(@NonNull SpannableTheme copyFrom) {
+    public static Builder builder(@NonNull MarkwonTheme copyFrom) {
         return new Builder(copyFrom);
     }
 
@@ -217,9 +218,10 @@ public class SpannableTheme {
 
     // drawable that will be used to render checkbox (should be stateful)
     // TaskListDrawable can be used
+    @Deprecated
     protected final Drawable taskListDrawable;
 
-    protected SpannableTheme(@NonNull Builder builder) {
+    protected MarkwonTheme(@NonNull Builder builder) {
         this.linkColor = builder.linkColor;
         this.blockMargin = builder.blockMargin;
         this.blockQuoteWidth = builder.blockQuoteWidth;
@@ -526,6 +528,7 @@ public class SpannableTheme {
      * @since 1.0.1
      */
     @Nullable
+    @Deprecated
     public Drawable getTaskListDrawable() {
         return taskListDrawable;
     }
@@ -565,7 +568,7 @@ public class SpannableTheme {
         Builder() {
         }
 
-        Builder(@NonNull SpannableTheme theme) {
+        Builder(@NonNull MarkwonTheme theme) {
             this.linkColor = theme.linkColor;
             this.blockMargin = theme.blockMargin;
             this.blockQuoteWidth = theme.blockQuoteWidth;
@@ -792,14 +795,15 @@ public class SpannableTheme {
          * @since 1.0.1
          */
         @NonNull
+        @Deprecated
         public Builder taskListDrawable(@NonNull Drawable taskListDrawable) {
             this.taskListDrawable = taskListDrawable;
             return this;
         }
 
         @NonNull
-        public SpannableTheme build() {
-            return new SpannableTheme(this);
+        public MarkwonTheme build() {
+            return new MarkwonTheme(this);
         }
     }
 

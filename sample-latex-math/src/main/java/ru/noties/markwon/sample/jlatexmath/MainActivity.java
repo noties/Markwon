@@ -10,8 +10,8 @@ import org.commonmark.parser.Parser;
 
 import ru.noties.jlatexmath.JLatexMathAndroid;
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.il.AsyncDrawableLoader;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
                 .mediaDecoders(jLatexMathMedia.mediaDecoder())
                 .build();
 
-        final SpannableConfiguration configuration = SpannableConfiguration.builder(this)
+        final MarkwonConfiguration configuration = MarkwonConfiguration.builder(this)
                 .asyncDrawableLoader(asyncDrawableLoader)
                 .build();
 
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
 
         final Node node = parser.parse(markdown);
         final SpannableBuilder builder = new SpannableBuilder();
-        final SpannableMarkdownVisitor visitor = new SpannableMarkdownVisitor(SpannableConfiguration.create(this), builder) {
+        final SpannableMarkdownVisitor visitor = new SpannableMarkdownVisitor(MarkwonConfiguration.create(this), builder) {
 
             @Override
             public void visit(CustomBlock customBlock) {

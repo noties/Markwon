@@ -208,7 +208,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
     /**
      * This method will return all {@link Span} spans that <em>overlap</em> specified range,
      * so if for example a 1..9 range is specified some spans might have 0..6 or 0..10 start/end ranges.
-     * NB spans are returned in reversed order (no in order that we store them internally)
+     * NB spans are returned in reversed order (not in order that we store them internally)
      *
      * @since 2.0.1
      */

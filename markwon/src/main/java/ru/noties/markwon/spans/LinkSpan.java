@@ -2,7 +2,6 @@ package ru.noties.markwon.spans;
 
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
-import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 
@@ -12,11 +11,11 @@ public class LinkSpan extends URLSpan {
         void resolve(View view, @NonNull String link);
     }
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final String link;
     private final Resolver resolver;
 
-    public LinkSpan(@NonNull SpannableTheme theme, @NonNull String link, @NonNull Resolver resolver) {
+    public LinkSpan(@NonNull MarkwonTheme theme, @NonNull String link, @NonNull Resolver resolver) {
         super(link);
         this.theme = theme;
         this.link = link;

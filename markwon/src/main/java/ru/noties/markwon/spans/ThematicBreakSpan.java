@@ -9,11 +9,11 @@ import android.text.style.LeadingMarginSpan;
 
 public class ThematicBreakSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
 
-    public ThematicBreakSpan(@NonNull SpannableTheme theme) {
+    public ThematicBreakSpan(@NonNull MarkwonTheme theme) {
         this.theme = theme;
     }
 

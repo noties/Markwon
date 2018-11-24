@@ -14,12 +14,12 @@ import java.util.Collection;
 
 import ru.noties.markwon.LinkResolverDef;
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -44,7 +44,7 @@ public class SpannableMarkdownVisitorTest {
 
         final TestData data = TestDataReader.readTest(file);
 
-        final SpannableConfiguration configuration = configuration(data.config());
+        final MarkwonConfiguration configuration = configuration(data.config());
         final SpannableBuilder builder = new SpannableBuilder();
         final SpannableMarkdownVisitor visitor = new SpannableMarkdownVisitor(configuration, builder);
         final Node node = Markwon.createParser().parse(data.input());
@@ -73,7 +73,7 @@ public class SpannableMarkdownVisitorTest {
 
     @SuppressWarnings("ConstantConditions")
     @NonNull
-    private SpannableConfiguration configuration(@NonNull TestConfig config) {
+    private MarkwonConfiguration configuration(@NonNull TestConfig config) {
 
         final SpannableFactory factory = new TestFactory(config.hasOption(TestConfig.USE_PARAGRAPHS));
         final MarkwonHtmlParser htmlParser = config.hasOption(TestConfig.USE_HTML)
@@ -83,8 +83,8 @@ public class SpannableMarkdownVisitorTest {
         final boolean softBreakAddsNewLine = config.hasOption(TestConfig.SOFT_BREAK_ADDS_NEW_LINE);
         final boolean htmlAllowNonClosedTags = config.hasOption(TestConfig.HTML_ALLOW_NON_CLOSED_TAGS);
 
-        return SpannableConfiguration.builder(null)
-                .theme(mock(SpannableTheme.class))
+        return MarkwonConfiguration.builder(null)
+                .theme(mock(MarkwonTheme.class))
                 .linkResolver(mock(LinkResolverDef.class))
                 .htmlParser(htmlParser)
                 .factory(factory)

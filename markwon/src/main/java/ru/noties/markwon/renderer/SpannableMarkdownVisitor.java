@@ -38,10 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.spans.TableRowSpan;
 import ru.noties.markwon.tasklist.TaskListBlock;
 import ru.noties.markwon.tasklist.TaskListItem;
@@ -49,11 +49,11 @@ import ru.noties.markwon.tasklist.TaskListItem;
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
-    private final SpannableConfiguration configuration;
+    private final MarkwonConfiguration configuration;
     private final SpannableBuilder builder;
     private final MarkwonHtmlParser htmlParser;
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final SpannableFactory factory;
 
     private int blockQuoteIndent;
@@ -64,7 +64,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     private int tableRows;
 
     public SpannableMarkdownVisitor(
-            @NonNull SpannableConfiguration configuration,
+            @NonNull MarkwonConfiguration configuration,
             @NonNull SpannableBuilder builder
     ) {
         this.configuration = configuration;

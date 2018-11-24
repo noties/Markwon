@@ -61,7 +61,7 @@ public class TableRowSpan extends ReplacementSpan {
         }
     }
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final List<Cell> cells;
     private final List<StaticLayout> layouts;
     private final TextPaint textPaint;
@@ -76,7 +76,7 @@ public class TableRowSpan extends ReplacementSpan {
     private Invalidator invalidator;
 
     public TableRowSpan(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull List<Cell> cells,
             boolean header,
             boolean odd) {

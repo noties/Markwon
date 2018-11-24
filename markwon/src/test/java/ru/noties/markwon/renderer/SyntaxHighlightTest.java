@@ -13,11 +13,11 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.SyntaxHighlight;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -63,12 +63,12 @@ public class SyntaxHighlightTest {
         };
 
         final SpannableFactory factory = mock(SpannableFactory.class);
-        when(factory.code(any(SpannableTheme.class), anyBoolean())).thenReturn(codeSpan);
+        when(factory.code(any(MarkwonTheme.class), anyBoolean())).thenReturn(codeSpan);
 
-        final SpannableConfiguration configuration = SpannableConfiguration.builder(mock(Context.class))
+        final MarkwonConfiguration configuration = MarkwonConfiguration.builder(mock(Context.class))
                 .syntaxHighlight(highlight)
                 .factory(factory)
-                .theme(mock(SpannableTheme.class))
+                .theme(mock(MarkwonTheme.class))
                 .build();
 
         final SpannableBuilder builder = new SpannableBuilder();

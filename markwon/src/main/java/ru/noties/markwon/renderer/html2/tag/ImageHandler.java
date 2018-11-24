@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import java.util.Map;
 
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.html2.CssInlineStyleParser;
@@ -31,7 +31,7 @@ public class ImageHandler extends SimpleTagHandler {
 
     @Nullable
     @Override
-    public Object getSpans(@NonNull SpannableConfiguration configuration, @NonNull HtmlTag tag) {
+    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull HtmlTag tag) {
 
         final Map<String, String> attributes = tag.attributes();
         final String src = attributes.get("src");

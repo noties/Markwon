@@ -9,11 +9,11 @@ import android.text.style.LeadingMarginSpan;
 
 public class BlockQuoteSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
 
-    public BlockQuoteSpan(@NonNull SpannableTheme theme) {
+    public BlockQuoteSpan(@NonNull MarkwonTheme theme) {
         this.theme = theme;
     }
 

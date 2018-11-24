@@ -18,12 +18,12 @@ import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.HeadingSpan;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.OrderedListItemSpan;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.SubScriptSpan;
 import ru.noties.markwon.spans.SuperScriptSpan;
 import ru.noties.markwon.spans.TableRowSpan;
-import ru.noties.markwon.spans.TaskListSpan;
+import ru.noties.markwon.tasklist.TaskListSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
 /**
@@ -50,38 +50,38 @@ public class SpannableFactoryDef implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object blockQuote(@NonNull SpannableTheme theme) {
+    public Object blockQuote(@NonNull MarkwonTheme theme) {
         return new BlockQuoteSpan(theme);
     }
 
     @Nullable
     @Override
-    public Object code(@NonNull SpannableTheme theme, boolean multiline) {
+    public Object code(@NonNull MarkwonTheme theme, boolean multiline) {
         return new CodeSpan(theme, multiline);
     }
 
     @Nullable
     @Override
-    public Object orderedListItem(@NonNull SpannableTheme theme, int startNumber) {
+    public Object orderedListItem(@NonNull MarkwonTheme theme, int startNumber) {
         // todo| in order to provide real RTL experience there must be a way to provide this string
         return new OrderedListItemSpan(theme, String.valueOf(startNumber) + "." + '\u00a0');
     }
 
     @Nullable
     @Override
-    public Object bulletListItem(@NonNull SpannableTheme theme, int level) {
+    public Object bulletListItem(@NonNull MarkwonTheme theme, int level) {
         return new BulletListItemSpan(theme, level);
     }
 
     @Nullable
     @Override
-    public Object thematicBreak(@NonNull SpannableTheme theme) {
+    public Object thematicBreak(@NonNull MarkwonTheme theme) {
         return new ThematicBreakSpan(theme);
     }
 
     @Nullable
     @Override
-    public Object heading(@NonNull SpannableTheme theme, int level) {
+    public Object heading(@NonNull MarkwonTheme theme, int level) {
         return new HeadingSpan(theme, level);
     }
 
@@ -93,13 +93,13 @@ public class SpannableFactoryDef implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object taskListItem(@NonNull SpannableTheme theme, int blockIndent, boolean isDone) {
+    public Object taskListItem(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone) {
         return new TaskListSpan(theme, blockIndent, isDone);
     }
 
     @Nullable
     @Override
-    public Object tableRow(@NonNull SpannableTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
+    public Object tableRow(@NonNull MarkwonTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
         return new TableRowSpan(theme, cells, isHeader, isOdd);
     }
 
@@ -114,7 +114,7 @@ public class SpannableFactoryDef implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object image(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
+    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new AsyncDrawableSpan(
                 theme,
                 new AsyncDrawable(
@@ -130,18 +130,18 @@ public class SpannableFactoryDef implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object link(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
+    public Object link(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
         return new LinkSpan(theme, destination, resolver);
     }
 
     @Nullable
     @Override
-    public Object superScript(@NonNull SpannableTheme theme) {
+    public Object superScript(@NonNull MarkwonTheme theme) {
         return new SuperScriptSpan(theme);
     }
 
     @Override
-    public Object subScript(@NonNull SpannableTheme theme) {
+    public Object subScript(@NonNull MarkwonTheme theme) {
         return new SubScriptSpan(theme);
     }
 

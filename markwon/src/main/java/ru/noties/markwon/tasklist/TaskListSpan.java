@@ -1,4 +1,4 @@
-package ru.noties.markwon.spans;
+package ru.noties.markwon.tasklist;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -6,6 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
+
+import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.utils.LeadingMarginUtils;
 
 /**
  * @since 1.0.1
@@ -16,14 +19,24 @@ public class TaskListSpan implements LeadingMarginSpan {
 
     private static final int[] STATE_NONE = new int[0];
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
+    private final Drawable drawable;
     private final int blockIndent;
 
     // @since 2.0.1 field is NOT final (to allow mutation)
     private boolean isDone;
 
-    public TaskListSpan(@NonNull SpannableTheme theme, int blockIndent, boolean isDone) {
+    @Deprecated
+    public TaskListSpan(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone) {
         this.theme = theme;
+        this.drawable = null;
+        this.blockIndent = blockIndent;
+        this.isDone = isDone;
+    }
+
+    public TaskListSpan(@NonNull MarkwonTheme theme, @NonNull Drawable drawable, int blockIndent, boolean isDone) {
+        this.theme = theme;
+        this.drawable = drawable;
         this.blockIndent = blockIndent;
         this.isDone = isDone;
     }
@@ -58,10 +71,10 @@ public class TaskListSpan implements LeadingMarginSpan {
             return;
         }
 
-        final Drawable drawable = theme.getTaskListDrawable();
-        if (drawable == null) {
-            return;
-        }
+//        final Drawable drawable = theme.getTaskListDrawable();
+//        if (drawable == null) {
+//            return;
+//        }
 
         final int save = c.save();
         try {

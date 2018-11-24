@@ -13,7 +13,7 @@ import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.spans.TableRowSpan;
 
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
@@ -57,13 +57,13 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object blockQuote(@NonNull SpannableTheme theme) {
+    public Object blockQuote(@NonNull MarkwonTheme theme) {
         return new TestSpan(BLOCK_QUOTE);
     }
 
     @Nullable
     @Override
-    public Object code(@NonNull SpannableTheme theme, boolean multiline) {
+    public Object code(@NonNull MarkwonTheme theme, boolean multiline) {
         final String name = multiline
                 ? CODE_BLOCK
                 : CODE;
@@ -72,25 +72,25 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object orderedListItem(@NonNull SpannableTheme theme, int startNumber) {
+    public Object orderedListItem(@NonNull MarkwonTheme theme, int startNumber) {
         return new TestSpan(ORDERED_LIST, map("start", startNumber));
     }
 
     @Nullable
     @Override
-    public Object bulletListItem(@NonNull SpannableTheme theme, int level) {
+    public Object bulletListItem(@NonNull MarkwonTheme theme, int level) {
         return new TestSpan(BULLET_LIST, map("level", level));
     }
 
     @Nullable
     @Override
-    public Object thematicBreak(@NonNull SpannableTheme theme) {
+    public Object thematicBreak(@NonNull MarkwonTheme theme) {
         return new TestSpan(THEMATIC_BREAK);
     }
 
     @Nullable
     @Override
-    public Object heading(@NonNull SpannableTheme theme, int level) {
+    public Object heading(@NonNull MarkwonTheme theme, int level) {
         return new TestSpan(HEADING + level);
     }
 
@@ -102,7 +102,7 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object taskListItem(@NonNull SpannableTheme theme, int blockIndent, boolean isDone) {
+    public Object taskListItem(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone) {
         return new TestSpan(TASK_LIST, map(
                 Pair.of("blockIdent", blockIndent),
                 Pair.of("done", isDone)
@@ -111,7 +111,7 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object tableRow(@NonNull SpannableTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
+    public Object tableRow(@NonNull MarkwonTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
         return new TestSpan(TABLE_ROW, map(
                 Pair.of("cells", cells),
                 Pair.of("header", isHeader),
@@ -129,7 +129,7 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object image(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
+    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new TestSpan(IMAGE, map(
                 Pair.of("src", destination),
                 Pair.of("imageSize", imageSize),
@@ -139,19 +139,19 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object link(@NonNull SpannableTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
+    public Object link(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
         return new TestSpan(LINK, map("href", destination));
     }
 
     @Nullable
     @Override
-    public Object superScript(@NonNull SpannableTheme theme) {
+    public Object superScript(@NonNull MarkwonTheme theme) {
         return new TestSpan(SUPER_SCRIPT);
     }
 
     @Nullable
     @Override
-    public Object subScript(@NonNull SpannableTheme theme) {
+    public Object subScript(@NonNull MarkwonTheme theme) {
         return new TestSpan(SUB_SCRIPT);
     }
 

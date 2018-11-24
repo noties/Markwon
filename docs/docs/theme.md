@@ -209,4 +209,4 @@ Background of header table row
 
 Drawable of task list item
 
-<ThemeProperty name="taskListDrawable" type="android.graphics.drawable.Drawable" defaults="ru.noties.markwon.spans.TaskListDrawable" />
+<ThemeProperty name="taskListDrawable" type="android.graphics.drawable.Drawable" defaults="ru.noties.markwon.tasklist.TaskListDrawable" />

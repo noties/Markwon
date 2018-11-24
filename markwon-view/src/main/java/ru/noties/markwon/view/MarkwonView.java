@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 
 @SuppressLint("AppCompatCustomView")
 public class MarkwonView extends TextView implements IMarkwonView {
@@ -38,7 +38,7 @@ public class MarkwonView extends TextView implements IMarkwonView {
         helper.setMarkdown(markdown);
     }
 
-    public void setMarkdown(@Nullable SpannableConfiguration configuration, @Nullable String markdown) {
+    public void setMarkdown(@Nullable MarkwonConfiguration configuration, @Nullable String markdown) {
         helper.setMarkdown(configuration, markdown);
     }
 

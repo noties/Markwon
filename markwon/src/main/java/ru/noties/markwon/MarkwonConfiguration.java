@@ -9,14 +9,17 @@ import ru.noties.markwon.renderer.ImageSizeResolverDef;
 import ru.noties.markwon.renderer.html2.MarkwonHtmlRenderer;
 import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 
+/**
+ * since 3.0.0 renamed `SpannableConfiguration` -&gt; `MarkwonConfiguration`
+ */
 @SuppressWarnings("WeakerAccess")
-public class SpannableConfiguration {
+public class MarkwonConfiguration {
 
     // creates default configuration
     @NonNull
-    public static SpannableConfiguration create(@NonNull Context context) {
+    public static MarkwonConfiguration create(@NonNull Context context) {
         return new Builder(context).build();
     }
 
@@ -25,7 +28,9 @@ public class SpannableConfiguration {
         return new Builder(context);
     }
 
-    private final SpannableTheme theme;
+    @Deprecated
+    private final MarkwonTheme theme;
+
     private final AsyncDrawable.Loader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkSpan.Resolver linkResolver;
@@ -37,7 +42,7 @@ public class SpannableConfiguration {
     private final MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
     private final boolean htmlAllowNonClosedTags; // @since 2.0.0
 
-    private SpannableConfiguration(@NonNull Builder builder) {
+    private MarkwonConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
         this.asyncDrawableLoader = builder.asyncDrawableLoader;
         this.syntaxHighlight = builder.syntaxHighlight;
@@ -60,7 +65,8 @@ public class SpannableConfiguration {
     }
 
     @NonNull
-    public SpannableTheme theme() {
+    @Deprecated
+    public MarkwonTheme theme() {
         return theme;
     }
 
@@ -130,7 +136,9 @@ public class SpannableConfiguration {
     public static class Builder {
 
         private final Context context;
-        private SpannableTheme theme;
+
+        @Deprecated
+        private MarkwonTheme theme;
         private AsyncDrawable.Loader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
         private LinkSpan.Resolver linkResolver;
@@ -146,7 +154,7 @@ public class SpannableConfiguration {
             this.context = context;
         }
 
-        Builder(@NonNull Context context, @NonNull SpannableConfiguration configuration) {
+        Builder(@NonNull Context context, @NonNull MarkwonConfiguration configuration) {
             this(context);
             this.theme = configuration.theme;
             this.asyncDrawableLoader = configuration.asyncDrawableLoader;
@@ -162,7 +170,8 @@ public class SpannableConfiguration {
         }
 
         @NonNull
-        public Builder theme(@NonNull SpannableTheme theme) {
+        @Deprecated
+        public Builder theme(@NonNull MarkwonTheme theme) {
             this.theme = theme;
             return this;
         }
@@ -254,10 +263,10 @@ public class SpannableConfiguration {
         }
 
         @NonNull
-        public SpannableConfiguration build() {
+        public MarkwonConfiguration build() {
 
             if (theme == null) {
-                theme = SpannableTheme.create(context);
+                theme = MarkwonTheme.create(context);
             }
 
             if (asyncDrawableLoader == null) {
@@ -300,7 +309,7 @@ public class SpannableConfiguration {
                 htmlRenderer = MarkwonHtmlRenderer.create();
             }
 
-            return new SpannableConfiguration(this);
+            return new MarkwonConfiguration(this);
         }
     }
 

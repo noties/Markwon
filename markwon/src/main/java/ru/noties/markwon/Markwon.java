@@ -40,11 +40,11 @@ public abstract class Markwon {
     }
 
     /**
-     * @see #setMarkdown(TextView, SpannableConfiguration, String)
+     * @see #setMarkdown(TextView, MarkwonConfiguration, String)
      * @since 1.0.0
      */
     public static void setMarkdown(@NonNull TextView view, @NonNull String markdown) {
-        setMarkdown(view, SpannableConfiguration.create(view.getContext()), markdown);
+        setMarkdown(view, MarkwonConfiguration.create(view.getContext()), markdown);
     }
 
     /**
@@ -52,16 +52,16 @@ public abstract class Markwon {
      * and applies it to view
      *
      * @param view          {@link TextView} to set markdown into
-     * @param configuration a {@link SpannableConfiguration} instance
+     * @param configuration a {@link MarkwonConfiguration} instance
      * @param markdown      raw markdown String (for example: {@code `**Hello**`})
-     * @see #markdown(SpannableConfiguration, String)
+     * @see #markdown(MarkwonConfiguration, String)
      * @see #setText(TextView, CharSequence)
-     * @see SpannableConfiguration
+     * @see MarkwonConfiguration
      * @since 1.0.0
      */
     public static void setMarkdown(
             @NonNull TextView view,
-            @NonNull SpannableConfiguration configuration,
+            @NonNull MarkwonConfiguration configuration,
             @NonNull String markdown
     ) {
 
@@ -117,7 +117,7 @@ public abstract class Markwon {
     }
 
     /**
-     * Returns parsed markdown with default {@link SpannableConfiguration} obtained from {@link Context}
+     * Returns parsed markdown with default {@link MarkwonConfiguration} obtained from {@link Context}
      *
      * @param context  {@link Context}
      * @param markdown raw markdown
@@ -126,21 +126,21 @@ public abstract class Markwon {
      */
     @NonNull
     public static CharSequence markdown(@NonNull Context context, @NonNull String markdown) {
-        final SpannableConfiguration configuration = SpannableConfiguration.create(context);
+        final MarkwonConfiguration configuration = MarkwonConfiguration.create(context);
         return markdown(configuration, markdown);
     }
 
     /**
-     * Returns parsed markdown with provided {@link SpannableConfiguration}
+     * Returns parsed markdown with provided {@link MarkwonConfiguration}
      *
-     * @param configuration a {@link SpannableConfiguration}
+     * @param configuration a {@link MarkwonConfiguration}
      * @param markdown      raw markdown
      * @return parsed markdown
-     * @see SpannableConfiguration
+     * @see MarkwonConfiguration
      * @since 1.0.0
      */
     @NonNull
-    public static CharSequence markdown(@NonNull SpannableConfiguration configuration, @NonNull String markdown) {
+    public static CharSequence markdown(@NonNull MarkwonConfiguration configuration, @NonNull String markdown) {
         final Parser parser = createParser();
         final Node node = parser.parse(markdown);
         final SpannableRenderer renderer = new SpannableRenderer();

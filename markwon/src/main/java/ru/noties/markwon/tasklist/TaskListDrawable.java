@@ -1,4 +1,4 @@
-package ru.noties.markwon.spans;
+package ru.noties.markwon.tasklist;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;

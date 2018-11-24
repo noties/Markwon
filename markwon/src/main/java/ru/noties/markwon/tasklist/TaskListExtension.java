@@ -7,6 +7,7 @@ import org.commonmark.parser.Parser;
 /**
  * @since 1.0.1
  */
+@Deprecated
 public class TaskListExtension implements Parser.ParserExtension {
 
     @NonNull

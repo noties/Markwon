@@ -1,14 +1,14 @@
-package ru.noties.markwon.spans;
+package ru.noties.markwon.utils;
 
 import android.text.Spanned;
 
-abstract class LeadingMarginUtils {
+public abstract class LeadingMarginUtils {
 
-    static boolean selfStart(int start, CharSequence text, Object span) {
+    public static boolean selfStart(int start, CharSequence text, Object span) {
         return text instanceof Spanned && ((Spanned) text).getSpanStart(span) == start;
     }
 
-    static boolean selfEnd(int end, CharSequence text, Object span) {
+    public static boolean selfEnd(int end, CharSequence text, Object span) {
         return text instanceof Spanned && ((Spanned) text).getSpanEnd(span) == end;
     }
 

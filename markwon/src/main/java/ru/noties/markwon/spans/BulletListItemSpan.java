@@ -9,9 +9,11 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
 
+import ru.noties.markwon.utils.LeadingMarginUtils;
+
 public class BulletListItemSpan implements LeadingMarginSpan {
 
-    private SpannableTheme theme;
+    private MarkwonTheme theme;
 
     private final Paint paint = ObjectsPool.paint();
     private final RectF circle = ObjectsPool.rectF();
@@ -20,7 +22,7 @@ public class BulletListItemSpan implements LeadingMarginSpan {
     private final int level;
 
     public BulletListItemSpan(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @IntRange(from = 0) int level) {
         this.theme = theme;
         this.level = level;

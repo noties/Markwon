@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.tag.BlockquoteHandler;
 import ru.noties.markwon.renderer.html2.tag.EmphasisHandler;
@@ -30,7 +30,7 @@ import ru.noties.markwon.renderer.html2.tag.UnderlineHandler;
 public abstract class MarkwonHtmlRenderer {
 
     public abstract void render(
-            @NonNull SpannableConfiguration configuration,
+            @NonNull MarkwonConfiguration configuration,
             @NonNull SpannableBuilder builder,
             @NonNull MarkwonHtmlParser parser
     );

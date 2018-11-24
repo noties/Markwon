@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 
 public class MarkwonViewCompat extends AppCompatTextView implements IMarkwonView {
 
@@ -38,7 +38,7 @@ public class MarkwonViewCompat extends AppCompatTextView implements IMarkwonView
     }
 
     @Override
-    public void setMarkdown(@Nullable SpannableConfiguration configuration, @Nullable String markdown) {
+    public void setMarkdown(@Nullable MarkwonConfiguration configuration, @Nullable String markdown) {
         helper.setMarkdown(configuration, markdown);
     }
 

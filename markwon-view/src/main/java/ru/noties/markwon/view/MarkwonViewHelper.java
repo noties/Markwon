@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import ru.noties.markwon.Markwon;
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 
 public class MarkwonViewHelper implements IMarkwonView {
 
@@ -21,7 +21,7 @@ public class MarkwonViewHelper implements IMarkwonView {
 
     private ConfigurationProvider provider;
 
-    private SpannableConfiguration configuration;
+    private MarkwonConfiguration configuration;
     private String markdown;
 
     private MarkwonViewHelper(@NonNull TextView textView) {
@@ -71,14 +71,14 @@ public class MarkwonViewHelper implements IMarkwonView {
     }
 
     @Override
-    public void setMarkdown(@Nullable SpannableConfiguration configuration, @Nullable String markdown) {
+    public void setMarkdown(@Nullable MarkwonConfiguration configuration, @Nullable String markdown) {
         this.markdown = markdown;
         if (configuration == null) {
             if (this.configuration == null) {
                 if (provider != null) {
                     this.configuration = provider.provide(textView.getContext());
                 } else {
-                    this.configuration = SpannableConfiguration.create(textView.getContext());
+                    this.configuration = MarkwonConfiguration.create(textView.getContext());
                 }
             }
             configuration = this.configuration;

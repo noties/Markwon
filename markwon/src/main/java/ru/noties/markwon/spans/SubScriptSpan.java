@@ -6,9 +6,9 @@ import android.text.style.MetricAffectingSpan;
 
 public class SubScriptSpan extends MetricAffectingSpan {
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
 
-    public SubScriptSpan(@NonNull SpannableTheme theme) {
+    public SubScriptSpan(@NonNull MarkwonTheme theme) {
         this.theme = theme;
     }
 

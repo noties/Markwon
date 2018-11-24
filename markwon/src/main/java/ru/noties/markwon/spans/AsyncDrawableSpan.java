@@ -24,24 +24,24 @@ public class AsyncDrawableSpan extends ReplacementSpan {
     public static final int ALIGN_BASELINE = 1;
     public static final int ALIGN_CENTER = 2; // will only center if drawable height is less than text line height
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final AsyncDrawable drawable;
     private final int alignment;
     private final boolean replacementTextIsLink;
 
-    public AsyncDrawableSpan(@NonNull SpannableTheme theme, @NonNull AsyncDrawable drawable) {
+    public AsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable) {
         this(theme, drawable, ALIGN_BOTTOM);
     }
 
     public AsyncDrawableSpan(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull AsyncDrawable drawable,
             @Alignment int alignment) {
         this(theme, drawable, alignment, false);
     }
 
     public AsyncDrawableSpan(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull AsyncDrawable drawable,
             @Alignment int alignment,
             boolean replacementTextIsLink) {

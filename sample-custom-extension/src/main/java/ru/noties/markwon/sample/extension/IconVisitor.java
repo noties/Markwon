@@ -2,12 +2,11 @@ package ru.noties.markwon.sample.extension;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.TextView;
 
 import org.commonmark.node.CustomNode;
 
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
 
 @SuppressWarnings("WeakerAccess")
@@ -18,7 +17,7 @@ public class IconVisitor extends SpannableMarkdownVisitor {
     private final IconSpanProvider iconSpanProvider;
 
     public IconVisitor(
-            @NonNull SpannableConfiguration configuration,
+            @NonNull MarkwonConfiguration configuration,
             @NonNull SpannableBuilder builder,
             @NonNull IconSpanProvider iconSpanProvider
     ) {

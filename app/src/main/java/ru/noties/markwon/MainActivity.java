@@ -12,6 +12,9 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
+import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.tasklist.TaskListDrawable;
+import ru.noties.markwon.tasklist.TaskListPlugin;
 
 public class MainActivity extends Activity {
 
@@ -40,7 +43,7 @@ public class MainActivity extends Activity {
 
         themes.apply(this);
 
-        // how can we obtain SpannableConfiguration after theme was applied?
+        // how can we obtain MarkwonConfiguration after theme was applied?
         // as we inject `themes` we won't be able to inject configuration, as it requires theme set
 
         setContentView(R.layout.activity_main);
@@ -62,6 +65,16 @@ public class MainActivity extends Activity {
         final View progress = findViewById(R.id.progress);
 
         appBarRenderer.render(appBarState());
+
+        if (true) {
+            final Markwon2 markwon2 = Markwon2.builder(this)
+                    .use(new CorePlugin())
+                    .use(TaskListPlugin.create(new TaskListDrawable(0xffff0000, 0xffff0000, -1)))
+                    .build();
+            final CharSequence markdown = markwon2.markdown("**hello _dear_** `code`\n\n- [ ] first\n- [x] second");
+            textView.setText(markdown);
+            return;
+        }
 
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override

@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import ru.noties.markwon.R;
-import ru.noties.markwon.spans.TaskListDrawable;
+import ru.noties.markwon.tasklist.TaskListDrawable;
 
 public class DebugCheckboxDrawableView extends View {
 

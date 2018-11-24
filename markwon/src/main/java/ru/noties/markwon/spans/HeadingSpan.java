@@ -10,14 +10,16 @@ import android.text.TextPaint;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.MetricAffectingSpan;
 
+import ru.noties.markwon.utils.LeadingMarginUtils;
+
 public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpan {
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final Rect rect = ObjectsPool.rect();
     private final Paint paint = ObjectsPool.paint();
     private final int level;
 
-    public HeadingSpan(@NonNull SpannableTheme theme, @IntRange(from = 1, to = 6) int level) {
+    public HeadingSpan(@NonNull MarkwonTheme theme, @IntRange(from = 1, to = 6) int level) {
         this.theme = theme;
         this.level = level;
     }

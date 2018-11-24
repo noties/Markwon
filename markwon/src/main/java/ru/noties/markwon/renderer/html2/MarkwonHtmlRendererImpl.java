@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.renderer.html2.tag.TagHandler;
@@ -22,7 +22,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
     @Override
     public void render(
-            @NonNull final SpannableConfiguration configuration,
+            @NonNull final MarkwonConfiguration configuration,
             @NonNull final SpannableBuilder builder,
             @NonNull MarkwonHtmlParser parser) {
 

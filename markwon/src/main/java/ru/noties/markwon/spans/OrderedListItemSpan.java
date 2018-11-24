@@ -9,6 +9,8 @@ import android.text.TextPaint;
 import android.text.style.LeadingMarginSpan;
 import android.widget.TextView;
 
+import ru.noties.markwon.utils.LeadingMarginUtils;
+
 public class OrderedListItemSpan implements LeadingMarginSpan {
 
     /**
@@ -42,7 +44,7 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
         }
     }
 
-    private final SpannableTheme theme;
+    private final MarkwonTheme theme;
     private final String number;
     private final Paint paint = ObjectsPool.paint();
 
@@ -52,7 +54,7 @@ public class OrderedListItemSpan implements LeadingMarginSpan {
     private int margin;
 
     public OrderedListItemSpan(
-            @NonNull SpannableTheme theme,
+            @NonNull MarkwonTheme theme,
             @NonNull String number
     ) {
         this.theme = theme;

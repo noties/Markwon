@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
 import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
@@ -87,11 +87,11 @@ public class MarkdownRenderer {
                         0x20000000
                 );
 
-                final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
+                final MarkwonConfiguration configuration = MarkwonConfiguration.builder(context)
                         .asyncDrawableLoader(loader)
                         .urlProcessor(urlProcessor)
                         .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
-                        .theme(SpannableTheme.builderWithDefaults(context)
+                        .theme(MarkwonTheme.builderWithDefaults(context)
                                 .codeBackgroundColor(background)
                                 .codeTextColor(prism4jTheme.textColor())
                                 .build())

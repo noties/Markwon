@@ -12,9 +12,9 @@ import org.commonmark.parser.Parser;
 
 import java.util.Arrays;
 
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableConfiguration;
-import ru.noties.markwon.spans.SpannableTheme;
+import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
 public class MainActivity extends Activity {
@@ -53,8 +53,8 @@ public class MainActivity extends Activity {
         final IconSpanProvider spanProvider = IconSpanProvider.create(this, 0);
 
         final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};
-        SpannableConfiguration configuration = SpannableConfiguration.builder(this)
-                .theme(SpannableTheme.builder()
+        MarkwonConfiguration configuration = MarkwonConfiguration.builder(this)
+                .theme(MarkwonTheme.builder()
                         .headingTypeface(Typeface.MONOSPACE)
                         .headingTextSizeMultipliers(textSizeMultipliers)
                         .build())
