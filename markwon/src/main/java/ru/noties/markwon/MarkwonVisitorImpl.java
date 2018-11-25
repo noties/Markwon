@@ -281,8 +281,14 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
         @NonNull
         @Override
-        public <N extends Node> Builder on(@NonNull Class<N> node, @NonNull NodeVisitor<N> nodeVisitor) {
-            nodes.put(node, nodeVisitor);
+        public <N extends Node> Builder on(@NonNull Class<N> node, @Nullable NodeVisitor<N> nodeVisitor) {
+            // we should allow `null` to exclude node from being visited (for example to disable
+            // some functionality)
+            if (nodeVisitor == null) {
+                nodes.remove(node);
+            } else {
+                nodes.put(node, nodeVisitor);
+            }
             return this;
         }
 

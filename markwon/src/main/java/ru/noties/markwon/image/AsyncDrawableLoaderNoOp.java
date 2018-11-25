@@ -1,10 +1,8 @@
-package ru.noties.markwon;
+package ru.noties.markwon.image;
 
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.spans.AsyncDrawable;
-
-class AsyncDrawableLoaderNoOp implements AsyncDrawable.Loader {
+public class AsyncDrawableLoaderNoOp extends AsyncDrawableLoader {
     @Override
     public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
 

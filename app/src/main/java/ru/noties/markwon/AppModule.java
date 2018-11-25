@@ -14,11 +14,6 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import ru.noties.markwon.il.AsyncDrawableLoader;
-import ru.noties.markwon.il.GifMediaDecoder;
-import ru.noties.markwon.il.ImageMediaDecoder;
-import ru.noties.markwon.il.SvgMediaDecoder;
-import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.prism4j.Prism4j;
@@ -73,23 +68,6 @@ class AppModule {
     }
 
     @Provides
-    AsyncDrawable.Loader asyncDrawableLoader(
-            OkHttpClient client,
-            ExecutorService executorService,
-            Resources resources) {
-        return AsyncDrawableLoader.builder()
-                .client(client)
-                .executorService(executorService)
-                .resources(resources)
-                .mediaDecoders(
-                        SvgMediaDecoder.create(resources),
-                        GifMediaDecoder.create(false),
-                        ImageMediaDecoder.create(resources)
-                )
-                .build();
-    }
-
-    @Provides
     @Singleton
     Prism4j prism4j() {
         return new Prism4j(new GrammarLocatorDef());
@@ -104,12 +82,12 @@ class AppModule {
     @Singleton
     @Provides
     Prism4jThemeDarkula prism4jThemeDarkula() {
-        return Prism4jThemeDarkula.create();
+        return Prism4jThemeDarkula.create(0x0Fffffff);
     }
-
-    @Singleton
-    @Provides
-    GifProcessor gifProcessor() {
-        return GifProcessor.create();
-    }
+//
+//    @Singleton
+//    @Provides
+//    GifProcessor gifProcessor() {
+//        return GifProcessor.create();
+//    }
 }

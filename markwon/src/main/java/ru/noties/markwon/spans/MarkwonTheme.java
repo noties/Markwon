@@ -1,25 +1,22 @@
 package ru.noties.markwon.spans;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.Px;
 import android.support.annotation.Size;
 import android.text.TextPaint;
-import android.util.TypedValue;
 
 import java.util.Arrays;
 import java.util.Locale;
 
-import ru.noties.markwon.tasklist.TaskListDrawable;
+import ru.noties.markwon.utils.ColorUtils;
+import ru.noties.markwon.utils.Dip;
 
 @SuppressWarnings("WeakerAccess")
 public class MarkwonTheme {
@@ -77,36 +74,14 @@ public class MarkwonTheme {
     @NonNull
     public static Builder builderWithDefaults(@NonNull Context context) {
 
-        // by default we will be using link color for the checkbox color
-        // & window background as a checkMark color
-        final int linkColor = resolve(context, android.R.attr.textColorLink);
-        final int backgroundColor = resolve(context, android.R.attr.colorBackground);
-
-        // before 1.0.5 build had `linkColor` set, but in order for spans to use default link color
-        // set directly in widget (or any caller), we should not pass it here
-
-        final Dip dip = new Dip(context);
+        final Dip dip = Dip.create(context);
         return new Builder()
                 .codeMultilineMargin(dip.toPx(8))
                 .blockMargin(dip.toPx(24))
                 .blockQuoteWidth(dip.toPx(4))
                 .bulletListItemStrokeWidth(dip.toPx(1))
                 .headingBreakHeight(dip.toPx(1))
-                .thematicBreakHeight(dip.toPx(4))
-                .tableCellPadding(dip.toPx(4))
-                .tableBorderWidth(dip.toPx(1))
-                .taskListDrawable(new TaskListDrawable(linkColor, linkColor, backgroundColor));
-    }
-
-    private static int resolve(Context context, @AttrRes int attr) {
-        final TypedValue typedValue = new TypedValue();
-        final int attrs[] = new int[]{attr};
-        final TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, attrs);
-        try {
-            return typedArray.getColor(0, 0);
-        } finally {
-            typedArray.recycle();
-        }
+                .thematicBreakHeight(dip.toPx(4));
     }
 
     protected static final int BLOCK_QUOTE_DEF_COLOR_ALPHA = 25;
@@ -125,10 +100,6 @@ public class MarkwonTheme {
     protected static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
     protected static final int THEMATIC_BREAK_DEF_ALPHA = 25;
-
-    protected static final int TABLE_BORDER_DEF_ALPHA = 75;
-
-    protected static final int TABLE_ODD_ROW_DEF_ALPHA = 22;
 
     protected final int linkColor;
 
@@ -197,30 +168,6 @@ public class MarkwonTheme {
     // by default paint.strokeWidth
     protected final int thematicBreakHeight;
 
-    // by default 0
-    protected final int tableCellPadding;
-
-    // by default paint.color * TABLE_BORDER_DEF_ALPHA
-    protected final int tableBorderColor;
-
-    protected final int tableBorderWidth;
-
-    // by default paint.color * TABLE_ODD_ROW_DEF_ALPHA
-    protected final int tableOddRowBackgroundColor;
-
-    // @since 1.1.1
-    // by default no background
-    protected final int tableEventRowBackgroundColor;
-
-    // @since 1.1.1
-    // by default no background
-    protected final int tableHeaderRowBackgroundColor;
-
-    // drawable that will be used to render checkbox (should be stateful)
-    // TaskListDrawable can be used
-    @Deprecated
-    protected final Drawable taskListDrawable;
-
     protected MarkwonTheme(@NonNull Builder builder) {
         this.linkColor = builder.linkColor;
         this.blockMargin = builder.blockMargin;
@@ -243,13 +190,6 @@ public class MarkwonTheme {
         this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
-        this.tableCellPadding = builder.tableCellPadding;
-        this.tableBorderColor = builder.tableBorderColor;
-        this.tableBorderWidth = builder.tableBorderWidth;
-        this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
-        this.tableEventRowBackgroundColor = builder.tableEvenRowBackgroundColor;
-        this.tableHeaderRowBackgroundColor = builder.tableHeaderRowBackgroundColor;
-        this.taskListDrawable = builder.taskListDrawable;
     }
 
     /**
@@ -468,71 +408,6 @@ public class MarkwonTheme {
         }
     }
 
-    public int tableCellPadding() {
-        return tableCellPadding;
-    }
-
-    public int tableBorderWidth(@NonNull Paint paint) {
-        final int out;
-        if (tableBorderWidth == -1) {
-            out = (int) (paint.getStrokeWidth() + .5F);
-        } else {
-            out = tableBorderWidth;
-        }
-        return out;
-    }
-
-    public void applyTableBorderStyle(@NonNull Paint paint) {
-
-        final int color;
-        if (tableBorderColor == 0) {
-            color = ColorUtils.applyAlpha(paint.getColor(), TABLE_BORDER_DEF_ALPHA);
-        } else {
-            color = tableBorderColor;
-        }
-
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
-    }
-
-    public void applyTableOddRowStyle(@NonNull Paint paint) {
-        final int color;
-        if (tableOddRowBackgroundColor == 0) {
-            color = ColorUtils.applyAlpha(paint.getColor(), TABLE_ODD_ROW_DEF_ALPHA);
-        } else {
-            color = tableOddRowBackgroundColor;
-        }
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.FILL);
-    }
-
-    /**
-     * @since 1.1.1
-     */
-    public void applyTableEvenRowStyle(@NonNull Paint paint) {
-        // by default to background to even row
-        paint.setColor(tableEventRowBackgroundColor);
-        paint.setStyle(Paint.Style.FILL);
-    }
-
-    /**
-     * @since 1.1.1
-     */
-    public void applyTableHeaderRowStyle(@NonNull Paint paint) {
-        paint.setColor(tableHeaderRowBackgroundColor);
-        paint.setStyle(Paint.Style.FILL);
-    }
-
-    /**
-     * @return a Drawable to be used as a checkbox indication in task lists
-     * @since 1.0.1
-     */
-    @Nullable
-    @Deprecated
-    public Drawable getTaskListDrawable() {
-        return taskListDrawable;
-    }
-
     @SuppressWarnings("unused")
     public static class Builder {
 
@@ -557,13 +432,6 @@ public class MarkwonTheme {
         private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
-        private int tableCellPadding;
-        private int tableBorderColor;
-        private int tableBorderWidth = -1;
-        private int tableOddRowBackgroundColor;
-        private int tableEvenRowBackgroundColor; // @since 1.1.1
-        private int tableHeaderRowBackgroundColor; // @since 1.1.1
-        private Drawable taskListDrawable;
 
         Builder() {
         }
@@ -590,11 +458,6 @@ public class MarkwonTheme {
             this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
-            this.tableCellPadding = theme.tableCellPadding;
-            this.tableBorderColor = theme.tableBorderColor;
-            this.tableBorderWidth = theme.tableBorderWidth;
-            this.tableOddRowBackgroundColor = theme.tableOddRowBackgroundColor;
-            this.taskListDrawable = theme.taskListDrawable;
         }
 
         @NonNull
@@ -743,80 +606,9 @@ public class MarkwonTheme {
         }
 
         @NonNull
-        public Builder tableCellPadding(@Px int tableCellPadding) {
-            this.tableCellPadding = tableCellPadding;
-            return this;
-        }
-
-        @NonNull
-        public Builder tableBorderColor(@ColorInt int tableBorderColor) {
-            this.tableBorderColor = tableBorderColor;
-            return this;
-        }
-
-        @NonNull
-        public Builder tableBorderWidth(@Px int tableBorderWidth) {
-            this.tableBorderWidth = tableBorderWidth;
-            return this;
-        }
-
-        @NonNull
-        public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor) {
-            this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
-            return this;
-        }
-
-        /**
-         * @since 1.1.1
-         */
-        @NonNull
-        public Builder tableEvenRowBackgroundColor(@ColorInt int tableEvenRowBackgroundColor) {
-            this.tableEvenRowBackgroundColor = tableEvenRowBackgroundColor;
-            return this;
-        }
-
-        /**
-         * @since 1.1.1
-         */
-        @NonNull
-        public Builder tableHeaderRowBackgroundColor(@ColorInt int tableHeaderRowBackgroundColor) {
-            this.tableHeaderRowBackgroundColor = tableHeaderRowBackgroundColor;
-            return this;
-        }
-
-        /**
-         * Supplied Drawable must be stateful ({@link Drawable#isStateful()} returns true). If a task
-         * is marked as done, then this drawable will be updated with an {@code int[] { android.R.attr.state_checked }}
-         * as the state, otherwise an empty array will be used. This library provides a ready to be
-         * used Drawable: {@link TaskListDrawable}
-         *
-         * @param taskListDrawable Drawable to be used as the task list indication (checkbox)
-         * @see TaskListDrawable
-         * @since 1.0.1
-         */
-        @NonNull
-        @Deprecated
-        public Builder taskListDrawable(@NonNull Drawable taskListDrawable) {
-            this.taskListDrawable = taskListDrawable;
-            return this;
-        }
-
-        @NonNull
         public MarkwonTheme build() {
             return new MarkwonTheme(this);
         }
     }
 
-    private static class Dip {
-
-        private final float density;
-
-        Dip(@NonNull Context context) {
-            this.density = context.getResources().getDisplayMetrics().density;
-        }
-
-        int toPx(int dp) {
-            return (int) (dp * density + .5F);
-        }
-    }
 }

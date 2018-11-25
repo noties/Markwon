@@ -6,9 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import pl.droidsonroids.gif.GifDrawable;
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
-import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.image.AsyncDrawable;
 
 public class GifAwareAsyncDrawable extends AsyncDrawable {
 
@@ -23,7 +24,7 @@ public class GifAwareAsyncDrawable extends AsyncDrawable {
     public GifAwareAsyncDrawable(
             @NonNull Drawable gifPlaceholder,
             @NonNull String destination,
-            @NonNull Loader loader,
+            @NonNull AsyncDrawableLoader loader,
             @Nullable ImageSizeResolver imageSizeResolver,
             @Nullable ImageSize imageSize) {
         super(destination, loader, imageSizeResolver, imageSize);

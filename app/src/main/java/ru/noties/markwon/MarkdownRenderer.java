@@ -13,23 +13,22 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
-import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
+import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.image.ImagesPlugin;
+import ru.noties.markwon.image.gif.GifPlugin;
+import ru.noties.markwon.image.svg.SvgPlugin;
 import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
+import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
 public class MarkdownRenderer {
 
     interface MarkdownReadyListener {
-        void onMarkdownReady(CharSequence markdown);
+        void onMarkdownReady(@NonNull Markwon2 markwon2, CharSequence markdown);
     }
-
-    @Inject
-    AsyncDrawable.Loader loader;
 
     @Inject
     ExecutorService service;
@@ -78,40 +77,39 @@ public class MarkdownRenderer {
                         ? prism4jThemeDefault
                         : prism4JThemeDarkula;
 
-                final int background = isLightTheme
-                        ? prism4jTheme.background()
-                        : 0x0Fffffff;
+//                final int background = isLightTheme
+//                        ? prism4jTheme.background()
+//                        : 0x0Fffffff;
 
-                final GifPlaceholder gifPlaceholder = new GifPlaceholder(
-                        context.getResources().getDrawable(R.drawable.ic_play_circle_filled_18dp_white),
-                        0x20000000
-                );
-
-                final MarkwonConfiguration configuration = MarkwonConfiguration.builder(context)
-                        .asyncDrawableLoader(loader)
-                        .urlProcessor(urlProcessor)
-                        .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
-                        .theme(MarkwonTheme.builderWithDefaults(context)
-                                .codeBackgroundColor(background)
-                                .codeTextColor(prism4jTheme.textColor())
-                                .build())
-                        .factory(new GifAwareSpannableFactory(gifPlaceholder))
+                final Markwon2 markwon2 = Markwon2.builder(context)
+                        .use(CorePlugin.create())
+                        .use(ImagesPlugin.createWithAssets(context))
+                        .use(SvgPlugin.create(context.getResources()))
+                        .use(GifPlugin.create(false))
+                        .use(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
+                        .use(GifAwarePlugin.create(context))
+                        .use(new AbstractMarkwonPlugin() {
+                            @Override
+                            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                                builder.urlProcessor(urlProcessor);
+                            }
+                        })
                         .build();
 
                 final long start = SystemClock.uptimeMillis();
 
-                final CharSequence text = Markwon.markdown(configuration, markdown);
+                final CharSequence text = markwon2.toMarkdown(markdown);
 
                 final long end = SystemClock.uptimeMillis();
 
-                Debug.i("toMarkdown rendered: %d ms", end - start);
+                Debug.i("markdown rendered: %d ms", end - start);
 
                 if (!isCancelled()) {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (!isCancelled()) {
-                                listener.onMarkdownReady(text);
+                                listener.onMarkdownReady(markwon2, text);
                                 task = null;
                             }
                         }

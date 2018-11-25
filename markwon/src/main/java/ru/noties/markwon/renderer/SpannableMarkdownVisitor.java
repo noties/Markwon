@@ -42,7 +42,7 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.spans.TableRowSpan;
+import ru.noties.markwon.table.TableRowSpan;
 import ru.noties.markwon.tasklist.TaskListBlock;
 import ru.noties.markwon.tasklist.TaskListItem;
 
@@ -321,112 +321,92 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             visitChildren(customNode);
             setSpan(length, factory.strikethrough());
 
-        } else if (customNode instanceof TaskListItem) {
-
-            // new in 1.0.1
-
-            final TaskListItem listItem = (TaskListItem) customNode;
-
-            final int length = builder.length();
-
-            blockQuoteIndent += listItem.indent();
-
-            visitChildren(customNode);
-
-            setSpan(length, factory.taskListItem(theme, blockQuoteIndent, listItem.done()));
-
-            if (hasNext(customNode)) {
-                newLine();
-            }
-
-            blockQuoteIndent -= listItem.indent();
-
-        } else if (!handleTableNodes(customNode)) {
+        } else {
             super.visit(customNode);
         }
     }
 
-    private boolean handleTableNodes(CustomNode node) {
-
-        final boolean handled;
-
-        if (node instanceof TableBody) {
-
-            visitChildren(node);
-            tableRows = 0;
-            handled = true;
-
-            if (hasNext(node)) {
-                newLine();
-                builder.append('\n');
-            }
-
-        } else if (node instanceof TableRow || node instanceof TableHead) {
-
-            final int length = builder.length();
-
-            visitChildren(node);
-
-            if (pendingTableRow != null) {
-
-                // @since 2.0.0
-                // we cannot rely on hasNext(TableHead) as it's not reliable
-                // we must apply new line manually and then exclude it from tableRow span
-                final boolean addNewLine;
-                {
-                    final int builderLength = builder.length();
-                    addNewLine = builderLength > 0
-                            && '\n' != builder.charAt(builderLength - 1);
-                }
-                if (addNewLine) {
-                    builder.append('\n');
-                }
-
-                // @since 1.0.4 Replace table char with non-breakable space
-                // we need this because if table is at the end of the text, then it will be
-                // trimmed from the final result
-                builder.append('\u00a0');
-
-                final Object span = factory.tableRow(
-                        theme,
-                        pendingTableRow,
-                        tableRowIsHeader,
-                        tableRows % 2 == 1);
-
-                tableRows = tableRowIsHeader
-                        ? 0
-                        : tableRows + 1;
-
-                setSpan(addNewLine ? length + 1 : length, span);
-
-                pendingTableRow = null;
-            }
-
-            handled = true;
-
-        } else if (node instanceof TableCell) {
-
-            final TableCell cell = (TableCell) node;
-            final int length = builder.length();
-            visitChildren(cell);
-            if (pendingTableRow == null) {
-                pendingTableRow = new ArrayList<>(2);
-            }
-
-            pendingTableRow.add(new TableRowSpan.Cell(
-                    tableCellAlignment(cell.getAlignment()),
-                    builder.removeFromEnd(length)
-            ));
-
-            tableRowIsHeader = cell.isHeader();
-
-            handled = true;
-        } else {
-            handled = false;
-        }
-
-        return handled;
-    }
+//    private boolean handleTableNodes(CustomNode node) {
+//
+//        final boolean handled;
+//
+//        if (node instanceof TableBody) {
+//
+//            visitChildren(node);
+//            tableRows = 0;
+//            handled = true;
+//
+//            if (hasNext(node)) {
+//                newLine();
+//                builder.append('\n');
+//            }
+//
+//        } else if (node instanceof TableRow || node instanceof TableHead) {
+//
+//            final int length = builder.length();
+//
+//            visitChildren(node);
+//
+//            if (pendingTableRow != null) {
+//
+//                // @since 2.0.0
+//                // we cannot rely on hasNext(TableHead) as it's not reliable
+//                // we must apply new line manually and then exclude it from tableRow span
+//                final boolean addNewLine;
+//                {
+//                    final int builderLength = builder.length();
+//                    addNewLine = builderLength > 0
+//                            && '\n' != builder.charAt(builderLength - 1);
+//                }
+//                if (addNewLine) {
+//                    builder.append('\n');
+//                }
+//
+//                // @since 1.0.4 Replace table char with non-breakable space
+//                // we need this because if table is at the end of the text, then it will be
+//                // trimmed from the final result
+//                builder.append('\u00a0');
+//
+//                final Object span = factory.tableRow(
+//                        theme,
+//                        pendingTableRow,
+//                        tableRowIsHeader,
+//                        tableRows % 2 == 1);
+//
+//                tableRows = tableRowIsHeader
+//                        ? 0
+//                        : tableRows + 1;
+//
+//                setSpan(addNewLine ? length + 1 : length, span);
+//
+//                pendingTableRow = null;
+//            }
+//
+//            handled = true;
+//
+//        } else if (node instanceof TableCell) {
+//
+//            final TableCell cell = (TableCell) node;
+//            final int length = builder.length();
+//            visitChildren(cell);
+//            if (pendingTableRow == null) {
+//                pendingTableRow = new ArrayList<>(2);
+//            }
+//
+//            pendingTableRow.add(new TableRowSpan.Cell(
+//                    tableCellAlignment(cell.getAlignment()),
+//                    builder.removeFromEnd(length)
+//            ));
+//
+//            tableRowIsHeader = cell.isHeader();
+//
+//            handled = true;
+//        } else {
+//            handled = false;
+//        }
+//
+//        return handled;
+//    }
 
     @Override
     public void visit(Paragraph paragraph) {
@@ -530,26 +510,26 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         return false;
     }
 
-    @TableRowSpan.Alignment
-    private static int tableCellAlignment(TableCell.Alignment alignment) {
-        final int out;
-        if (alignment != null) {
-            switch (alignment) {
-                case CENTER:
-                    out = TableRowSpan.ALIGN_CENTER;
-                    break;
-                case RIGHT:
-                    out = TableRowSpan.ALIGN_RIGHT;
-                    break;
-                default:
-                    out = TableRowSpan.ALIGN_LEFT;
-                    break;
-            }
-        } else {
-            out = TableRowSpan.ALIGN_LEFT;
-        }
-        return out;
-    }
+//    @TableRowSpan.Alignment
+//    private static int tableCellAlignment(TableCell.Alignment alignment) {
+//        final int out;
+//        if (alignment != null) {
+//            switch (alignment) {
+//                case CENTER:
+//                    out = TableRowSpan.ALIGN_CENTER;
+//                    break;
+//                case RIGHT:
+//                    out = TableRowSpan.ALIGN_RIGHT;
+//                    break;
+//                default:
+//                    out = TableRowSpan.ALIGN_LEFT;
+//                    break;
+//            }
+//        } else {
+//            out = TableRowSpan.ALIGN_LEFT;
+//        }
+//        return out;
+//    }
 
     /**
      * @since 2.0.0

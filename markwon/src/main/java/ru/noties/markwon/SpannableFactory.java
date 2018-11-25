@@ -3,14 +3,11 @@ package ru.noties.markwon;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.List;
-
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
-import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.spans.TableRowSpan;
 
 /**
  * Each method can return null or a Span object or an array of spans
@@ -46,16 +43,6 @@ public interface SpannableFactory {
     @Nullable
     Object strikethrough();
 
-    @Nullable
-    Object taskListItem(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone);
-
-    @Nullable
-    Object tableRow(
-            @NonNull MarkwonTheme theme,
-            @NonNull List<TableRowSpan.Cell> cells,
-            boolean isHeader,
-            boolean isOdd);
-
     /**
      * @since 1.1.1
      */
@@ -66,7 +53,7 @@ public interface SpannableFactory {
     Object image(
             @NonNull MarkwonTheme theme,
             @NonNull String destination,
-            @NonNull AsyncDrawable.Loader loader,
+            @NonNull AsyncDrawableLoader loader,
             @NonNull ImageSizeResolver imageSizeResolver,
             @Nullable ImageSize imageSize,
             boolean replacementTextIsLink);

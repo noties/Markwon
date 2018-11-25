@@ -4,10 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
+import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.image.AsyncDrawableLoaderNoOp;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.renderer.ImageSizeResolverDef;
 import ru.noties.markwon.renderer.html2.MarkwonHtmlRenderer;
-import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
 
@@ -20,7 +21,7 @@ public class MarkwonConfiguration {
     // creates default configuration
     @NonNull
     public static MarkwonConfiguration create(@NonNull Context context) {
-        return new Builder(context).build(MarkwonTheme.create(context));
+        return new Builder(context).build(MarkwonTheme.create(context), new AsyncDrawableLoaderNoOp());
     }
 
     @NonNull
@@ -30,7 +31,7 @@ public class MarkwonConfiguration {
 
 
     private final MarkwonTheme theme;
-    private final AsyncDrawable.Loader asyncDrawableLoader;
+    private final AsyncDrawableLoader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
@@ -69,7 +70,7 @@ public class MarkwonConfiguration {
     }
 
     @NonNull
-    public AsyncDrawable.Loader asyncDrawableLoader() {
+    public AsyncDrawableLoader asyncDrawableLoader() {
         return asyncDrawableLoader;
     }
 
@@ -136,7 +137,7 @@ public class MarkwonConfiguration {
         private final Context context;
 
         private MarkwonTheme theme;
-        private AsyncDrawable.Loader asyncDrawableLoader;
+        private AsyncDrawableLoader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
@@ -164,19 +165,6 @@ public class MarkwonConfiguration {
             this.htmlParser = configuration.htmlParser;
             this.htmlRenderer = configuration.htmlRenderer;
             this.htmlAllowNonClosedTags = configuration.htmlAllowNonClosedTags;
-        }
-
-//        @NonNull
-//        @Deprecated
-//        public Builder theme(@NonNull MarkwonTheme theme) {
-//            this.theme = theme;
-//            return this;
-//        }
-
-        @NonNull
-        public Builder asyncDrawableLoader(@NonNull AsyncDrawable.Loader asyncDrawableLoader) {
-            this.asyncDrawableLoader = asyncDrawableLoader;
-            return this;
         }
 
         @NonNull
@@ -260,13 +248,10 @@ public class MarkwonConfiguration {
         }
 
         @NonNull
-        public MarkwonConfiguration build(@NonNull MarkwonTheme theme) {
+        public MarkwonConfiguration build(@NonNull MarkwonTheme theme, @NonNull AsyncDrawableLoader asyncDrawableLoader) {
 
             this.theme = theme;
-
-            if (asyncDrawableLoader == null) {
-                asyncDrawableLoader = new AsyncDrawableLoaderNoOp();
-            }
+            this.asyncDrawableLoader = asyncDrawableLoader;
 
             if (syntaxHighlight == null) {
                 syntaxHighlight = new SyntaxHighlightNoOp();

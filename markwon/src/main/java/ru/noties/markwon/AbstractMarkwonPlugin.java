@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import org.commonmark.parser.Parser;
 
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.spans.MarkwonTheme;
 
 public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
@@ -15,6 +16,11 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
 
     @Override
     public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+
+    }
+
+    @Override
+    public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
 
     }
 
@@ -40,7 +46,7 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
     }
 
     @Override
-    public void afterSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
+    public void afterSetText(@NonNull TextView textView) {
 
     }
 }

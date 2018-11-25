@@ -11,7 +11,6 @@ import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
-import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
 import org.commonmark.node.ListBlock;
@@ -73,13 +72,19 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         softLineBreak(builder);
         hardLineBreak(builder);
         paragraph(builder);
-        image(builder);
+//        image(builder);
         link(builder);
     }
 
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
         OrderedListItemSpan.measure(textView, markdown);
+        AsyncDrawableScheduler.unschedule(textView);
+    }
+
+    @Override
+    public void afterSetText(@NonNull TextView textView) {
+        AsyncDrawableScheduler.schedule(textView);
     }
 
     protected void text(@NonNull MarkwonVisitor.Builder builder) {
@@ -362,41 +367,6 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                         visitor.forceNewLine();
                     }
                 }
-            }
-        });
-    }
-
-    protected void image(@NonNull MarkwonVisitor.Builder builder) {
-        builder.on(Image.class, new MarkwonVisitor.NodeVisitor<Image>() {
-            @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Image image) {
-
-                final int length = visitor.length();
-
-                visitor.visitChildren(image);
-
-                // we must check if anything _was_ added, as we need at least one char to render
-                if (length == visitor.length()) {
-                    visitor.builder().append('\uFFFC');
-                }
-
-                final MarkwonConfiguration configuration = visitor.configuration();
-
-                final Node parent = image.getParent();
-                final boolean link = parent instanceof Link;
-                final String destination = configuration
-                        .urlProcessor()
-                        .process(image.getDestination());
-
-                final Object spans = visitor.factory().image(
-                        visitor.theme(),
-                        destination,
-                        configuration.asyncDrawableLoader(),
-                        configuration.imageSizeResolver(),
-                        null,
-                        link);
-
-                visitor.setSpans(length, spans);
             }
         });
     }

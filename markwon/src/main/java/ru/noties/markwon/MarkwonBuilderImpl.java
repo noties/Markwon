@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.spans.MarkwonTheme;
 
 class MarkwonBuilderImpl implements Markwon2.Builder {
@@ -34,19 +35,25 @@ class MarkwonBuilderImpl implements Markwon2.Builder {
 
         final Parser.Builder parserBuilder = new Parser.Builder();
         final MarkwonTheme.Builder themeBuilder = MarkwonTheme.builderWithDefaults(context);
+        final AsyncDrawableLoader.Builder asyncDrawableLoaderBuilder = new AsyncDrawableLoader.Builder();
         final MarkwonConfiguration.Builder configurationBuilder = new MarkwonConfiguration.Builder(context);
         final MarkwonVisitor.Builder visitorBuilder = new MarkwonVisitorImpl.BuilderImpl();
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.configureParser(parserBuilder);
             plugin.configureTheme(themeBuilder);
+            plugin.configureImages(asyncDrawableLoaderBuilder);
             plugin.configureConfiguration(configurationBuilder);
             plugin.configureVisitor(visitorBuilder);
         }
 
+        final MarkwonConfiguration configuration = configurationBuilder.build(
+                themeBuilder.build(),
+                asyncDrawableLoaderBuilder.build());
+
         return new MarkwonImpl(
                 parserBuilder.build(),
-                visitorBuilder.build(configurationBuilder.build(themeBuilder.build())),
+                visitorBuilder.build(configuration),
                 Collections.unmodifiableList(plugins)
         );
     }

@@ -30,7 +30,7 @@ import java.util.Set;
 import ix.Ix;
 import ix.IxFunction;
 import ix.IxPredicate;
-import ru.noties.markwon.spans.TableRowSpan;
+import ru.noties.markwon.table.TableRowSpan;
 
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;

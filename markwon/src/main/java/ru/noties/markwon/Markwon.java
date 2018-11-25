@@ -14,8 +14,11 @@ import org.commonmark.parser.Parser;
 
 import java.util.Arrays;
 
+import ru.noties.markwon.image.AsyncDrawable;
+//import ru.noties.markwon.image.DrawablesScheduler;
 import ru.noties.markwon.renderer.SpannableRenderer;
 import ru.noties.markwon.spans.OrderedListItemSpan;
+import ru.noties.markwon.table.TableRowSpan;
 import ru.noties.markwon.tasklist.TaskListExtension;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -148,7 +151,7 @@ public abstract class Markwon {
     }
 
     /**
-     * This method adds support for {@link ru.noties.markwon.spans.AsyncDrawable} to be used. As
+     * This method adds support for {@link AsyncDrawable} to be used. As
      * textView seems not to support drawables that change bounds (and gives no means
      * to update the layout), we create own {@link android.graphics.drawable.Drawable.Callback}
      * and apply it. So, textView can display drawables, that are: async (loading from disk, network);
@@ -157,14 +160,14 @@ public abstract class Markwon {
      * in order to avoid keeping drawables in memory after they have been removed from layout
      *
      * @param view a {@link TextView}
-     * @see ru.noties.markwon.spans.AsyncDrawable
+     * @see AsyncDrawable
      * @see ru.noties.markwon.spans.AsyncDrawableSpan
      * @see DrawablesScheduler#schedule(TextView)
      * @see DrawablesScheduler#unschedule(TextView)
      * @since 1.0.0
      */
     public static void scheduleDrawables(@NonNull TextView view) {
-        DrawablesScheduler.schedule(view);
+//        DrawablesScheduler.schedule(view);
     }
 
     /**
@@ -175,7 +178,7 @@ public abstract class Markwon {
      * @since 1.0.0
      */
     public static void unscheduleDrawables(@NonNull TextView view) {
-        DrawablesScheduler.unschedule(view);
+//        DrawablesScheduler.unschedule(view);
     }
 
     /**
@@ -185,28 +188,28 @@ public abstract class Markwon {
      * to return `size` (width) of our replacement, but we are not provided
      * with the total one (canvas width). In order to correctly calculate height of our
      * table cell text, we must have available width first. This method gives
-     * ability for {@link ru.noties.markwon.spans.TableRowSpan} to invalidate
+     * ability for {@link TableRowSpan} to invalidate
      * `view` when it encounters such a situation (when available width is not known or have changed).
      * Precede this call with {@link #unscheduleTableRows(TextView)} in order to
-     * de-reference previously scheduled {@link ru.noties.markwon.spans.TableRowSpan}&#39;s
+     * de-reference previously scheduled {@link TableRowSpan}&#39;s
      *
      * @param view a {@link TextView}
      * @see #unscheduleTableRows(TextView)
      * @since 1.0.0
      */
     public static void scheduleTableRows(@NonNull TextView view) {
-        TableRowsScheduler.schedule(view);
+//        TableRowsScheduler.schedule(view);
     }
 
     /**
-     * De-references previously scheduled {@link ru.noties.markwon.spans.TableRowSpan}&#39;s
+     * De-references previously scheduled {@link TableRowSpan}&#39;s
      *
      * @param view a {@link TextView}
      * @see #scheduleTableRows(TextView)
      * @since 1.0.0
      */
     public static void unscheduleTableRows(@NonNull TextView view) {
-        TableRowsScheduler.unschedule(view);
+//        TableRowsScheduler.unschedule(view);
     }
 
     private Markwon() {

@@ -18,6 +18,6 @@ android {
 
 dependencies {
     implementation project(':markwon')
-    implementation project(':markwon-image-loader')
+//    implementation project(':markwon-image-loader')
     implementation 'ru.noties:jlatexmath-android:0.1.0'
 }

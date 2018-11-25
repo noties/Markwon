@@ -17,7 +17,7 @@ public interface MarkwonVisitor extends Visitor {
     interface Builder {
 
         @NonNull
-        <N extends Node> Builder on(@NonNull Class<N> node, @NonNull NodeVisitor<N> nodeVisitor);
+        <N extends Node> Builder on(@NonNull Class<N> node, @Nullable NodeVisitor<N> nodeVisitor);
 
         @NonNull
         MarkwonVisitor build(@NonNull MarkwonConfiguration configuration);

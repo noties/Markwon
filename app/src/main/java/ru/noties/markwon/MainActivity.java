@@ -29,9 +29,9 @@ public class MainActivity extends Activity {
 
     @Inject
     UriProcessor uriProcessor;
-
-    @Inject
-    GifProcessor gifProcessor;
+//
+//    @Inject
+//    GifProcessor gifProcessor;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -66,26 +66,14 @@ public class MainActivity extends Activity {
 
         appBarRenderer.render(appBarState());
 
-        if (true) {
-            final Markwon2 markwon2 = Markwon2.builder(this)
-                    .use(new CorePlugin())
-                    .use(TaskListPlugin.create(new TaskListDrawable(0xffff0000, 0xffff0000, -1)))
-                    .build();
-            final CharSequence markdown = markwon2.toMarkdown("**hello _dear_** `code`\n\n- [ ] first\n- [x] second");
-            textView.setText(markdown);
-            return;
-        }
-
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override
             public void apply(final String text) {
                 markdownRenderer.render(MainActivity.this, themes.isLight(), uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
                     @Override
-                    public void onMarkdownReady(CharSequence markdown) {
+                    public void onMarkdownReady(@NonNull Markwon2 markwon2, CharSequence markdown) {
 
-                        Markwon.setText(textView, markdown);
-
-                        gifProcessor.process(textView);
+                        markwon2.setParsedMarkdown(textView, markdown);
 
                         Views.setVisible(progress, false);
                     }

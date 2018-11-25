@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import org.commonmark.parser.Parser;
 
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.spans.MarkwonTheme;
 
 public interface MarkwonPlugin {
@@ -13,11 +14,12 @@ public interface MarkwonPlugin {
 
     void configureTheme(@NonNull MarkwonTheme.Builder builder);
 
+    void configureImages(@NonNull AsyncDrawableLoader.Builder builder);
+
     void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder);
 
     void configureVisitor(@NonNull MarkwonVisitor.Builder builder);
 
-    // images
     // html
 
     @NonNull
@@ -25,5 +27,8 @@ public interface MarkwonPlugin {
 
     void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown);
 
-    void afterSetText(@NonNull TextView textView, @NonNull CharSequence markdown);
+    // this method do not receive markdown like `beforeSetText` does because at this
+    // point TextView already has markdown set and to manipulate spans one must
+    // request them from TextView (getText())
+    void afterSetText(@NonNull TextView textView);
 }

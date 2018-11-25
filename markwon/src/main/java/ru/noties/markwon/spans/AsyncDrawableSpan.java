@@ -12,6 +12,8 @@ import android.text.style.ReplacementSpan;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import ru.noties.markwon.image.AsyncDrawable;
+
 @SuppressWarnings("WeakerAccess")
 public class AsyncDrawableSpan extends ReplacementSpan {
 
@@ -29,16 +31,16 @@ public class AsyncDrawableSpan extends ReplacementSpan {
     private final int alignment;
     private final boolean replacementTextIsLink;
 
-    public AsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable) {
-        this(theme, drawable, ALIGN_BOTTOM);
-    }
+//    public AsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable) {
+//        this(theme, drawable, ALIGN_BOTTOM);
+//    }
 
-    public AsyncDrawableSpan(
-            @NonNull MarkwonTheme theme,
-            @NonNull AsyncDrawable drawable,
-            @Alignment int alignment) {
-        this(theme, drawable, alignment, false);
-    }
+//    public AsyncDrawableSpan(
+//            @NonNull MarkwonTheme theme,
+//            @NonNull AsyncDrawable drawable,
+//            @Alignment int alignment) {
+//        this(theme, drawable, alignment, false);
+//    }
 
     public AsyncDrawableSpan(
             @NonNull MarkwonTheme theme,
@@ -137,7 +139,7 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             // will it make sense to have additional background/borders for an image replacement?
             // let's focus on main functionality and then think of it
 
-            final float textY = CanvasUtils.textCenterY(top, bottom, paint);
+            final float textY = textCenterY(top, bottom, paint);
             if (replacementTextIsLink) {
                 theme.applyLinkStyle(paint);
             }
@@ -149,5 +151,10 @@ public class AsyncDrawableSpan extends ReplacementSpan {
 
     public AsyncDrawable getDrawable() {
         return drawable;
+    }
+
+    private static float textCenterY(int top, int bottom, @NonNull Paint paint) {
+        // @since 1.1.1 it's `top +` and not `bottom -`
+        return (int) (top + ((bottom - top) / 2) - ((paint.descent() + paint.ascent()) / 2.F + .5F));
     }
 }

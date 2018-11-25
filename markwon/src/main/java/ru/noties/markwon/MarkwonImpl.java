@@ -62,7 +62,7 @@ class MarkwonImpl extends Markwon2 {
         textView.setText(markdown);
 
         for (MarkwonPlugin plugin : plugins) {
-            plugin.afterSetText(textView, markdown);
+            plugin.afterSetText(textView);
         }
     }
 }

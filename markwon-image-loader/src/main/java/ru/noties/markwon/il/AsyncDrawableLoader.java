@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import okhttp3.OkHttpClient;
-import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.image.AsyncDrawable;
 
 public class AsyncDrawableLoader implements AsyncDrawable.Loader {
 

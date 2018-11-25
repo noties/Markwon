@@ -1,9 +1,12 @@
 package ru.noties.markwon.tasklist;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 
 import org.commonmark.parser.Parser;
 
@@ -13,6 +16,11 @@ import ru.noties.markwon.MarkwonVisitor;
 public class TaskListPlugin extends AbstractMarkwonPlugin {
 
     /**
+     * Supplied Drawable must be stateful ({@link Drawable#isStateful()} returns true). If a task
+     * is marked as done, then this drawable will be updated with an {@code int[] { android.R.attr.state_checked }}
+     * as the state, otherwise an empty array will be used. This library provides a ready to be
+     * used Drawable: {@link TaskListDrawable}
+     *
      * @see TaskListDrawable
      */
     @NonNull
@@ -22,8 +30,13 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static TaskListPlugin create(@NonNull Context context) {
-        // resolve link color and background color
-        return null;
+
+        // by default we will be using link color for the checkbox color
+        // & window background as a checkMark color
+        final int linkColor = resolve(context, android.R.attr.textColorLink);
+        final int backgroundColor = resolve(context, android.R.attr.colorBackground);
+
+        return new TaskListPlugin(new TaskListDrawable(linkColor, linkColor, backgroundColor));
     }
 
     @NonNull
@@ -89,5 +102,16 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
                         visitor.blockQuoteIntent(indent);
                     }
                 });
+    }
+
+    private static int resolve(Context context, @AttrRes int attr) {
+        final TypedValue typedValue = new TypedValue();
+        final int attrs[] = new int[]{attr};
+        final TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, attrs);
+        try {
+            return typedArray.getColor(0, 0);
+        } finally {
+            typedArray.recycle();
+        }
     }
 }

@@ -11,10 +11,10 @@ import java.util.Map;
 import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
-import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.spans.TableRowSpan;
+import ru.noties.markwon.table.TableRowSpan;
 
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;

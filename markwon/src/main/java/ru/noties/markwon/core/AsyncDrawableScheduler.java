@@ -1,4 +1,4 @@
-package ru.noties.markwon;
+package ru.noties.markwon.core;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -15,10 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.noties.markwon.renderer.R;
-import ru.noties.markwon.spans.AsyncDrawable;
+import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 
-abstract class DrawablesScheduler {
+abstract class AsyncDrawableScheduler {
 
     static void schedule(@NonNull final TextView textView) {
 
@@ -104,7 +104,7 @@ abstract class DrawablesScheduler {
         return list;
     }
 
-    private DrawablesScheduler() {
+    private AsyncDrawableScheduler() {
     }
 
     private static class DrawableCallbackImpl implements Drawable.Callback {

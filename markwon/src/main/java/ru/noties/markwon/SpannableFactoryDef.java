@@ -5,11 +5,10 @@ import android.support.annotation.Nullable;
 import android.text.style.StrikethroughSpan;
 import android.text.style.UnderlineSpan;
 
-import java.util.List;
-
+import ru.noties.markwon.image.AsyncDrawable;
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.renderer.ImageSize;
 import ru.noties.markwon.renderer.ImageSizeResolver;
-import ru.noties.markwon.spans.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 import ru.noties.markwon.spans.BlockQuoteSpan;
 import ru.noties.markwon.spans.BulletListItemSpan;
@@ -17,13 +16,11 @@ import ru.noties.markwon.spans.CodeSpan;
 import ru.noties.markwon.spans.EmphasisSpan;
 import ru.noties.markwon.spans.HeadingSpan;
 import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
 import ru.noties.markwon.spans.SubScriptSpan;
 import ru.noties.markwon.spans.SuperScriptSpan;
-import ru.noties.markwon.spans.TableRowSpan;
-import ru.noties.markwon.tasklist.TaskListSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
 /**
@@ -91,18 +88,6 @@ public class SpannableFactoryDef implements SpannableFactory {
         return new StrikethroughSpan();
     }
 
-    @Nullable
-    @Override
-    public Object taskListItem(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone) {
-        return new TaskListSpan(theme, blockIndent, isDone);
-    }
-
-    @Nullable
-    @Override
-    public Object tableRow(@NonNull MarkwonTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
-        return new TableRowSpan(theme, cells, isHeader, isOdd);
-    }
-
     /**
      * @since 1.1.1
      */
@@ -114,7 +99,7 @@ public class SpannableFactoryDef implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
+    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawableLoader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new AsyncDrawableSpan(
                 theme,
                 new AsyncDrawable(

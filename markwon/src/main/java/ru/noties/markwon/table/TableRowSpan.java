@@ -1,4 +1,4 @@
-package ru.noties.markwon.spans;
+package ru.noties.markwon.table;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
@@ -61,22 +61,22 @@ public class TableRowSpan extends ReplacementSpan {
         }
     }
 
-    private final MarkwonTheme theme;
+    private final TableTheme theme;
     private final List<Cell> cells;
     private final List<StaticLayout> layouts;
     private final TextPaint textPaint;
     private final boolean header;
     private final boolean odd;
 
-    private final Rect rect = ObjectsPool.rect();
-    private final Paint paint = ObjectsPool.paint();
+    private final Rect rect = new Rect();
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private int width;
     private int height;
     private Invalidator invalidator;
 
     public TableRowSpan(
-            @NonNull MarkwonTheme theme,
+            @NonNull TableTheme theme,
             @NonNull List<Cell> cells,
             boolean header,
             boolean odd) {
@@ -272,8 +272,7 @@ public class TableRowSpan extends ReplacementSpan {
         return out;
     }
 
-    public TableRowSpan invalidator(Invalidator invalidator) {
+    public void invalidator(@Nullable Invalidator invalidator) {
         this.invalidator = invalidator;
-        return this;
     }
 }

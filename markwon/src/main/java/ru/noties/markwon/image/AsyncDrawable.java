@@ -1,4 +1,4 @@
-package ru.noties.markwon.spans;
+package ru.noties.markwon.image;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -15,15 +15,8 @@ import ru.noties.markwon.renderer.ImageSizeResolver;
 
 public class AsyncDrawable extends Drawable {
 
-    public interface Loader {
-
-        void load(@NonNull String destination, @NonNull AsyncDrawable drawable);
-
-        void cancel(@NonNull String destination);
-    }
-
     private final String destination;
-    private final Loader loader;
+    private final AsyncDrawableLoader loader;
     private final ImageSize imageSize;
     private final ImageSizeResolver imageSizeResolver;
 
@@ -38,7 +31,7 @@ public class AsyncDrawable extends Drawable {
      */
     public AsyncDrawable(
             @NonNull String destination,
-            @NonNull Loader loader,
+            @NonNull AsyncDrawableLoader loader,
             @Nullable ImageSizeResolver imageSizeResolver,
             @Nullable ImageSize imageSize
     ) {

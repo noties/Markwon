@@ -1,13 +1,13 @@
-package ru.noties.markwon;
+package ru.noties.markwon.table;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import ru.noties.markwon.renderer.R;
-import ru.noties.markwon.spans.TableRowSpan;
 
 abstract class TableRowsScheduler {
 
@@ -57,6 +57,7 @@ abstract class TableRowsScheduler {
         }
     }
 
+    @Nullable
     private static Object[] extract(@NonNull TextView view) {
         final Object[] out;
         final CharSequence text = view.getText();
