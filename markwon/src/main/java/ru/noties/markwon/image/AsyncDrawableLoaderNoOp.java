@@ -2,7 +2,7 @@ package ru.noties.markwon.image;
 
 import android.support.annotation.NonNull;
 
-public class AsyncDrawableLoaderNoOp extends AsyncDrawableLoader {
+class AsyncDrawableLoaderNoOp extends AsyncDrawableLoader {
     @Override
     public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
 

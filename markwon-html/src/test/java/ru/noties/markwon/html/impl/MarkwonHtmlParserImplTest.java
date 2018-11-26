@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ru.noties.markwon.html.HtmlEmptyTagReplacement;
+import ru.noties.markwon.html.MarkwonHtmlParserImpl;
 import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 

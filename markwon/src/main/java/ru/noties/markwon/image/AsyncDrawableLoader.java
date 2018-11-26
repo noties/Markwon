@@ -12,6 +12,22 @@ import java.util.concurrent.Executors;
 
 public abstract class AsyncDrawableLoader {
 
+    /**
+     * @since 3.0.0
+     */
+    @NonNull
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * @since 3.0.0
+     */
+    @NonNull
+    public static AsyncDrawableLoader noOp() {
+        return new AsyncDrawableLoaderNoOp();
+    }
+
 
     public abstract void load(@NonNull String destination, @NonNull AsyncDrawable drawable);
 

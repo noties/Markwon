@@ -14,6 +14,8 @@ import java.util.Map;
 
 import ix.Ix;
 import ix.IxFunction;
+import ru.noties.markwon.html.CssInlineStyleParser;
+import ru.noties.markwon.html.CssProperty;
 import ru.noties.markwon.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;

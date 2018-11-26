@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.noties.markwon.html.tag.ImageSizeParserImpl;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.renderer.html2.CssInlineStyleParser;
 

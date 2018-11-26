@@ -18,7 +18,7 @@ import ru.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import ru.noties.markwon.ext.tables.TablePlugin;
 import ru.noties.markwon.ext.tasklist.TaskListPlugin;
 import ru.noties.markwon.gif.GifAwarePlugin;
-import ru.noties.markwon.html.impl.HtmlPlugin;
+import ru.noties.markwon.html.HtmlPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.gif.GifPlugin;
 import ru.noties.markwon.image.svg.SvgPlugin;
