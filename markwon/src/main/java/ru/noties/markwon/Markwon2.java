@@ -29,6 +29,15 @@ public abstract class Markwon2 {
 
     public interface Builder {
 
+        /**
+         * Specify bufferType when applying text to a TextView {@code textView.setText(CharSequence,BufferType)}.
+         * By default `BufferType.SPANNABLE` is used
+         *
+         * @param bufferType BufferType
+         */
+        @NonNull
+        Builder bufferType(@NonNull TextView.BufferType bufferType);
+
         @NonNull
         Builder use(@NonNull MarkwonPlugin plugin);
 

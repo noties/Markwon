@@ -10,14 +10,17 @@ import java.util.List;
 
 class MarkwonImpl extends Markwon2 {
 
+    private final TextView.BufferType bufferType;
     private final Parser parser;
     private final MarkwonVisitor visitor;
     private final List<MarkwonPlugin> plugins;
 
     MarkwonImpl(
+            @NonNull TextView.BufferType bufferType,
             @NonNull Parser parser,
             @NonNull MarkwonVisitor visitor,
             @NonNull List<MarkwonPlugin> plugins) {
+        this.bufferType = bufferType;
         this.parser = parser;
         this.visitor = visitor;
         this.plugins = plugins;
@@ -59,7 +62,7 @@ class MarkwonImpl extends Markwon2 {
             plugin.beforeSetText(textView, markdown);
         }
 
-        textView.setText(markdown);
+        textView.setText(markdown, bufferType);
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.afterSetText(textView);

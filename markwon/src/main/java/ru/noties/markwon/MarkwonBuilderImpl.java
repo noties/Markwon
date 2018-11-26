@@ -2,6 +2,7 @@ package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.TextView;
 
 import org.commonmark.parser.Parser;
 
@@ -17,9 +18,17 @@ class MarkwonBuilderImpl implements Markwon2.Builder {
     private final Context context;
 
     private final List<MarkwonPlugin> plugins = new ArrayList<>(3);
+    private TextView.BufferType bufferType = TextView.BufferType.SPANNABLE;
 
     MarkwonBuilderImpl(@NonNull Context context) {
         this.context = context;
+    }
+
+    @NonNull
+    @Override
+    public Markwon2.Builder bufferType(@NonNull TextView.BufferType bufferType) {
+        this.bufferType = bufferType;
+        return this;
     }
 
     @NonNull
@@ -52,6 +61,7 @@ class MarkwonBuilderImpl implements Markwon2.Builder {
                 asyncDrawableLoaderBuilder.build());
 
         return new MarkwonImpl(
+                bufferType,
                 parserBuilder.build(),
                 visitorBuilder.build(configuration),
                 Collections.unmodifiableList(plugins)

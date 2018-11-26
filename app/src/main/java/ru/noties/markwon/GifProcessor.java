@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import pl.droidsonroids.gif.GifDrawable;
-import ru.noties.debug.Debug;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 
 public abstract class GifProcessor {
@@ -26,20 +25,16 @@ public abstract class GifProcessor {
         @Override
         public void process(@NonNull final TextView textView) {
 
-            Debug.i("textView: %s", textView);
-
             // here is what we will do additionally:
             // we query for all asyncDrawableSpans
             // we check if they are inside clickableSpan
             // if not we apply onGifListener
 
             final Spannable spannable = spannable(textView);
-            Debug.i(spannable);
+
             if (spannable == null) {
                 return;
             }
-
-            Debug.i(spannable);
 
             final AsyncDrawableSpan[] asyncDrawableSpans =
                     spannable.getSpans(0, spannable.length(), AsyncDrawableSpan.class);
@@ -47,8 +42,6 @@ public abstract class GifProcessor {
                     || asyncDrawableSpans.length == 0) {
                 return;
             }
-
-            Debug.i(asyncDrawableSpans);
 
             int start;
             int end;
@@ -58,8 +51,6 @@ public abstract class GifProcessor {
 
                 start = spannable.getSpanStart(asyncDrawableSpan);
                 end = spannable.getSpanEnd(asyncDrawableSpan);
-
-                Debug.i(asyncDrawableSpan, start, end);
 
                 if (start < 0
                         || end < 0) {
@@ -84,7 +75,6 @@ public abstract class GifProcessor {
         @Nullable
         private static Spannable spannable(@NonNull TextView textView) {
             final CharSequence charSequence = textView.getText();
-            Debug.i("type: %s, spanned: %s, spannable: %s", charSequence.getClass().getName(), charSequence instanceof Spanned, charSequence instanceof Spannable);
             if (charSequence instanceof Spannable) {
                 return (Spannable) charSequence;
             }
@@ -96,12 +86,11 @@ public abstract class GifProcessor {
                 @NonNull AsyncDrawableSpan span,
                 @NonNull GifAwareAsyncDrawable drawable) {
 
-            Debug.i("textView: %s, span: %s, drawable: %s", textView, span, drawable);
-
             // important thing here is to obtain new spannable from textView
             // as with each `setText()` new spannable is created and keeping reference
             // to an older one won't affect textView
             final Spannable spannable = spannable(textView);
+
             if (spannable == null) {
                 return;
             }
