@@ -33,6 +33,9 @@ public class AsyncDrawable extends Drawable {
     private int canvasWidth;
     private float textSize;
 
+    // @since 2.0.1 for use-cases when image is loaded faster than span is drawn and knows canvas width
+    private boolean waitingForDemensions;
+
     /**
      * @since 1.0.1
      */
@@ -98,6 +101,19 @@ public class AsyncDrawable extends Drawable {
         this.result = result;
         this.result.setCallback(callback);
 
+        initBounds();
+    }
+
+    private void initBounds() {
+
+        if (canvasWidth == 0) {
+            // we still have no bounds - wait for them
+            waitingForDemensions = true;
+            return;
+        }
+
+        waitingForDemensions = false;
+
         final Rect bounds = resolveBounds();
         result.setBounds(bounds);
         setBounds(bounds);
@@ -112,6 +128,10 @@ public class AsyncDrawable extends Drawable {
     public void initWithKnownDimensions(int width, float textSize) {
         this.canvasWidth = width;
         this.textSize = textSize;
+
+        if (waitingForDemensions) {
+            initBounds();
+        }
     }
 
     @Override
