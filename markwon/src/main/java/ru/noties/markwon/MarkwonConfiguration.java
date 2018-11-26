@@ -3,12 +3,12 @@ package ru.noties.markwon;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.html.api.MarkwonHtmlParser;
+import ru.noties.markwon.html.MarkwonHtmlParser;
+import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.AsyncDrawableLoaderNoOp;
 import ru.noties.markwon.renderer.ImageSizeResolver;
 import ru.noties.markwon.renderer.ImageSizeResolverDef;
-import ru.noties.markwon.renderer.html2.MarkwonHtmlRenderer;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
 
@@ -37,7 +37,6 @@ public class MarkwonConfiguration {
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
     private final SpannableFactory factory; // @since 1.1.0
-    private final boolean softBreakAddsNewLine; // @since 1.1.1
     private final MarkwonHtmlParser htmlParser; // @since 2.0.0
     private final MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
     private final boolean htmlAllowNonClosedTags; // @since 2.0.0
@@ -50,7 +49,6 @@ public class MarkwonConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.factory = builder.factory;
-        this.softBreakAddsNewLine = builder.softBreakAddsNewLine;
         this.htmlParser = builder.htmlParser;
         this.htmlRenderer = builder.htmlRenderer;
         this.htmlAllowNonClosedTags = builder.htmlAllowNonClosedTags;
@@ -100,15 +98,6 @@ public class MarkwonConfiguration {
     }
 
     /**
-     * @return a flag indicating if soft break should be treated as a hard
-     * break and thus adding a new line instead of adding a white space
-     * @since 1.1.1
-     */
-    public boolean softBreakAddsNewLine() {
-        return softBreakAddsNewLine;
-    }
-
-    /**
      * @since 2.0.0
      */
     @NonNull
@@ -143,7 +132,6 @@ public class MarkwonConfiguration {
         private UrlProcessor urlProcessor;
         private ImageSizeResolver imageSizeResolver;
         private SpannableFactory factory; // @since 1.1.0
-        private boolean softBreakAddsNewLine; // @since 1.1.1
         private MarkwonHtmlParser htmlParser; // @since 2.0.0
         private MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
         private boolean htmlAllowNonClosedTags; // @since 2.0.0
@@ -161,7 +149,6 @@ public class MarkwonConfiguration {
             this.urlProcessor = configuration.urlProcessor;
             this.imageSizeResolver = configuration.imageSizeResolver;
             this.factory = configuration.factory;
-            this.softBreakAddsNewLine = configuration.softBreakAddsNewLine;
             this.htmlParser = configuration.htmlParser;
             this.htmlRenderer = configuration.htmlRenderer;
             this.htmlAllowNonClosedTags = configuration.htmlAllowNonClosedTags;
@@ -200,19 +187,6 @@ public class MarkwonConfiguration {
         @NonNull
         public Builder factory(@NonNull SpannableFactory factory) {
             this.factory = factory;
-            return this;
-        }
-
-        /**
-         * @param softBreakAddsNewLine a flag indicating if soft break should be treated as a hard
-         *                             break and thus adding a new line instead of adding a white space
-         * @return self
-         * @see <a href="https://spec.commonmark.org/0.28/#soft-line-breaks" > spec </a >
-         * @since 1.1.1
-         */
-        @NonNull
-        public Builder softBreakAddsNewLine(boolean softBreakAddsNewLine) {
-            this.softBreakAddsNewLine = softBreakAddsNewLine;
             return this;
         }
 
@@ -276,17 +250,12 @@ public class MarkwonConfiguration {
 
             // @since 2.0.0
             if (htmlParser == null) {
-                try {
-                    // if impl artifact was excluded -> fallback to no-op implementation
-                    htmlParser = ru.noties.markwon.html.impl.MarkwonHtmlParserImpl.create();
-                } catch (Throwable t) {
-                    htmlParser = MarkwonHtmlParser.noOp();
-                }
+                htmlParser = MarkwonHtmlParser.noOp();
             }
 
             // @since 2.0.0
             if (htmlRenderer == null) {
-                htmlRenderer = MarkwonHtmlRenderer.create();
+                htmlRenderer = MarkwonHtmlRenderer.noOp();
             }
 
             return new MarkwonConfiguration(this);

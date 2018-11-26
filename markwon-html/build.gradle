@@ -15,22 +15,17 @@ android {
 
 dependencies {
 
+    api project(':markwon')
+
     deps.with {
         api it['support-annotations']
         api it['commonmark']
-        api it['commonmark-strikethrough']
-        api it['commonmark-table']
     }
 
-    deps['test'].with {
+    deps.test.with {
         testImplementation it['junit']
         testImplementation it['robolectric']
         testImplementation it['ix-java']
-        testImplementation it['jackson-yaml']
-        testImplementation it['jackson-databind']
-        testImplementation it['gson']
-        testImplementation it['commons-io']
-        testImplementation it['mockito']
     }
 }
 

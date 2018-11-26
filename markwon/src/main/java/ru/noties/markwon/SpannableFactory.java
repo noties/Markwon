@@ -63,16 +63,4 @@ public interface SpannableFactory {
             @NonNull MarkwonTheme theme,
             @NonNull String destination,
             @NonNull LinkSpan.Resolver resolver);
-
-    // Currently used by HTML parser
-    @Nullable
-    Object superScript(@NonNull MarkwonTheme theme);
-
-    // Currently used by HTML parser
-    @Nullable
-    Object subScript(@NonNull MarkwonTheme theme);
-
-    // Currently used by HTML parser
-    @Nullable
-    Object underline();
 }

@@ -16,6 +16,10 @@ public class Prism4jThemeDarkula extends Prism4jThemeBase {
         return new Prism4jThemeDarkula(0xFF2d2d2d);
     }
 
+    /**
+     * @param background color
+     * @since 3.0.0
+     */
     @NonNull
     public static Prism4jThemeDarkula create(@ColorInt int background) {
         return new Prism4jThemeDarkula(background);

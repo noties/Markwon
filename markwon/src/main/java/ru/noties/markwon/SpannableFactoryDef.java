@@ -118,21 +118,4 @@ public class SpannableFactoryDef implements SpannableFactory {
     public Object link(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
         return new LinkSpan(theme, destination, resolver);
     }
-
-    @Nullable
-    @Override
-    public Object superScript(@NonNull MarkwonTheme theme) {
-        return new SuperScriptSpan(theme);
-    }
-
-    @Override
-    public Object subScript(@NonNull MarkwonTheme theme) {
-        return new SubScriptSpan(theme);
-    }
-
-    @Nullable
-    @Override
-    public Object underline() {
-        return new UnderlineSpan();
-    }
 }

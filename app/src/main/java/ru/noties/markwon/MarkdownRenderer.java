@@ -77,10 +77,6 @@ public class MarkdownRenderer {
                         ? prism4jThemeDefault
                         : prism4JThemeDarkula;
 
-//                final int background = isLightTheme
-//                        ? prism4jTheme.background()
-//                        : 0x0Fffffff;
-
                 final Markwon2 markwon2 = Markwon2.builder(context)
                         .use(CorePlugin.create())
                         .use(ImagesPlugin.createWithAssets(context))
