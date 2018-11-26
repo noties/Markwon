@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.renderer.ImageSize;
-import ru.noties.markwon.renderer.ImageSizeResolver;
+import ru.noties.markwon.image.ImageSize;
+import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
 
@@ -39,9 +39,6 @@ public interface SpannableFactory {
 
     @Nullable
     Object heading(@NonNull MarkwonTheme theme, int level);
-
-    @Nullable
-    Object strikethrough();
 
     /**
      * @since 1.1.1

@@ -8,7 +8,7 @@ import org.commonmark.parser.Parser;
 
 import java.util.List;
 
-class MarkwonImpl extends Markwon2 {
+class MarkwonImpl extends Markwon {
 
     private final TextView.BufferType bufferType;
     private final Parser parser;

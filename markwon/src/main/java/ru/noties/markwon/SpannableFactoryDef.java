@@ -2,13 +2,11 @@ package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.style.StrikethroughSpan;
-import android.text.style.UnderlineSpan;
 
 import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.renderer.ImageSize;
-import ru.noties.markwon.renderer.ImageSizeResolver;
+import ru.noties.markwon.image.ImageSize;
+import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 import ru.noties.markwon.spans.BlockQuoteSpan;
 import ru.noties.markwon.spans.BulletListItemSpan;
@@ -19,8 +17,6 @@ import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.spans.OrderedListItemSpan;
 import ru.noties.markwon.spans.StrongEmphasisSpan;
-import ru.noties.markwon.spans.SubScriptSpan;
-import ru.noties.markwon.spans.SuperScriptSpan;
 import ru.noties.markwon.spans.ThematicBreakSpan;
 
 /**
@@ -80,12 +76,6 @@ public class SpannableFactoryDef implements SpannableFactory {
     @Override
     public Object heading(@NonNull MarkwonTheme theme, int level) {
         return new HeadingSpan(theme, level);
-    }
-
-    @Nullable
-    @Override
-    public Object strikethrough() {
-        return new StrikethroughSpan();
     }
 
     /**

@@ -8,11 +8,13 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import ru.noties.markwon.renderer.ImageSize.Dimension;
+import ru.noties.markwon.image.ImageSize;
+import ru.noties.markwon.image.ImageSize.Dimension;
+import ru.noties.markwon.image.ImageSizeResolverDef;
 
 import static org.junit.Assert.assertEquals;
-import static ru.noties.markwon.renderer.ImageSizeResolverDef.UNIT_EM;
-import static ru.noties.markwon.renderer.ImageSizeResolverDef.UNIT_PERCENT;
+import static ru.noties.markwon.image.ImageSizeResolverDef.UNIT_EM;
+import static ru.noties.markwon.image.ImageSizeResolverDef.UNIT_PERCENT;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)

@@ -9,7 +9,7 @@ import java.util.Map;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.html.HtmlTag;
 import ru.noties.markwon.html.impl.CssInlineStyleParser;
-import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.image.ImageSize;
 
 public class ImageHandler extends SimpleTagHandler {
 

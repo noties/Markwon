@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.renderer.html2.CssInlineStyleParser;
 
 import static org.junit.Assert.assertEquals;

@@ -1,6 +1,7 @@
 package ru.noties.markwon.html.impl.tag;
 
 import android.support.annotation.NonNull;
+import android.text.style.StrikethroughSpan;
 
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
@@ -21,7 +22,7 @@ public class StrikeHandler extends TagHandler {
 
         SpannableBuilder.setSpans(
                 builder,
-                configuration.factory().strikethrough(),
+                new StrikethroughSpan(),
                 tag.start(),
                 tag.end()
         );

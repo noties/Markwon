@@ -14,6 +14,10 @@ import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
 import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import ru.noties.markwon.ext.tables.TablePlugin;
+import ru.noties.markwon.ext.tasklist.TaskListPlugin;
+import ru.noties.markwon.gif.GifAwarePlugin;
 import ru.noties.markwon.html.impl.HtmlPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.gif.GifPlugin;
@@ -22,15 +26,13 @@ import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
-import ru.noties.markwon.table.TablePlugin;
-import ru.noties.markwon.tasklist.TaskListPlugin;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
 public class MarkdownRenderer {
 
     interface MarkdownReadyListener {
-        void onMarkdownReady(@NonNull Markwon2 markwon2, CharSequence markdown);
+        void onMarkdownReady(@NonNull Markwon markwon, CharSequence markdown);
     }
 
     @Inject
@@ -80,7 +82,7 @@ public class MarkdownRenderer {
                         ? prism4jThemeDefault
                         : prism4JThemeDarkula;
 
-                final Markwon2 markwon2 = Markwon2.builder(context)
+                final Markwon markwon = Markwon.builder(context)
                         .use(CorePlugin.create())
                         .use(ImagesPlugin.createWithAssets(context))
                         .use(SvgPlugin.create(context.getResources()))
@@ -89,6 +91,7 @@ public class MarkdownRenderer {
                         .use(GifAwarePlugin.create(context))
                         .use(TablePlugin.create(context))
                         .use(TaskListPlugin.create(context))
+                        .use(StrikethroughPlugin.create())
                         .use(HtmlPlugin.create())
                         .use(new AbstractMarkwonPlugin() {
                             @Override
@@ -100,7 +103,7 @@ public class MarkdownRenderer {
 
                 final long start = SystemClock.uptimeMillis();
 
-                final CharSequence text = markwon2.toMarkdown(markdown);
+                final CharSequence text = markwon.toMarkdown(markdown);
 
                 final long end = SystemClock.uptimeMillis();
 
@@ -111,7 +114,7 @@ public class MarkdownRenderer {
                         @Override
                         public void run() {
                             if (!isCancelled()) {
-                                listener.onMarkdownReady(markwon2, text);
+                                listener.onMarkdownReady(markwon, text);
                                 task = null;
                             }
                         }

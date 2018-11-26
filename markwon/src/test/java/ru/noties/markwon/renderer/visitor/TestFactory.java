@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import ru.noties.markwon.SpannableFactory;
-import ru.noties.markwon.renderer.ImageSize;
-import ru.noties.markwon.renderer.ImageSizeResolver;
+import ru.noties.markwon.image.ImageSize;
+import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;

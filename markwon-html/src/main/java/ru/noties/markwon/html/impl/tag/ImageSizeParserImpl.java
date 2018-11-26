@@ -9,7 +9,7 @@ import java.util.Map;
 
 import ru.noties.markwon.html.impl.CssInlineStyleParser;
 import ru.noties.markwon.html.impl.CssProperty;
-import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.image.ImageSize;
 
 class ImageSizeParserImpl implements ImageHandler.ImageSizeParser {
 

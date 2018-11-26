@@ -13,7 +13,7 @@ import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.il.AsyncDrawableLoader;
-import ru.noties.markwon.renderer.ImageSize;
+import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
 
 public class MainActivity extends Activity {

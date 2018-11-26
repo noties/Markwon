@@ -29,6 +29,9 @@ android {
 dependencies {
 
     implementation project(':markwon')
+    implementation project(':markwon-ext-strikethrough')
+    implementation project(':markwon-ext-tables')
+    implementation project(':markwon-ext-tasklist')
     implementation project(':markwon-html')
     implementation project(':markwon-image-gif')
     implementation project(':markwon-image-svg')

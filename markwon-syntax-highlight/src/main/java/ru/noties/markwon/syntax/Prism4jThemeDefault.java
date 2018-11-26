@@ -14,12 +14,26 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
 
     @NonNull
     public static Prism4jThemeDefault create() {
-        return new Prism4jThemeDefault();
+        return new Prism4jThemeDefault(0xFFf5f2f0);
+    }
+
+    /**
+     * @since 3.0.0
+     */
+    @NonNull
+    public static Prism4jThemeDefault create(@ColorInt int background) {
+        return new Prism4jThemeDefault(background);
+    }
+
+    private final int background;
+
+    public Prism4jThemeDefault(@ColorInt int background) {
+        this.background = background;
     }
 
     @Override
     public int background() {
-        return 0xFFf5f2f0;
+        return background;
     }
 
     @Override

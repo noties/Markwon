@@ -9,6 +9,7 @@ import ru.noties.markwon.UrlProcessor;
 import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawable;
+import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.spans.LinkSpan;
 import ru.noties.markwon.spans.MarkwonTheme;
 

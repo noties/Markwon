@@ -13,7 +13,7 @@ import java.util.List;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.spans.MarkwonTheme;
 
-class MarkwonBuilderImpl implements Markwon2.Builder {
+class MarkwonBuilderImpl implements Markwon.Builder {
 
     private final Context context;
 
@@ -26,21 +26,21 @@ class MarkwonBuilderImpl implements Markwon2.Builder {
 
     @NonNull
     @Override
-    public Markwon2.Builder bufferType(@NonNull TextView.BufferType bufferType) {
+    public Markwon.Builder bufferType(@NonNull TextView.BufferType bufferType) {
         this.bufferType = bufferType;
         return this;
     }
 
     @NonNull
     @Override
-    public Markwon2.Builder use(@NonNull MarkwonPlugin plugin) {
+    public Markwon.Builder use(@NonNull MarkwonPlugin plugin) {
         plugins.add(plugin);
         return this;
     }
 
     @NonNull
     @Override
-    public Markwon2 build() {
+    public Markwon build() {
 
         final Parser.Builder parserBuilder = new Parser.Builder();
         final MarkwonTheme.Builder themeBuilder = MarkwonTheme.builderWithDefaults(context);

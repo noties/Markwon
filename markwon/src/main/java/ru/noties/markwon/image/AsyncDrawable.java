@@ -10,9 +10,6 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.renderer.ImageSize;
-import ru.noties.markwon.renderer.ImageSizeResolver;
-
 public class AsyncDrawable extends Drawable {
 
     private final String destination;

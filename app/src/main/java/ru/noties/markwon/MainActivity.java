@@ -13,9 +13,6 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
-import ru.noties.markwon.core.CorePlugin;
-import ru.noties.markwon.tasklist.TaskListDrawable;
-import ru.noties.markwon.tasklist.TaskListPlugin;
 
 public class MainActivity extends Activity {
 
@@ -74,9 +71,9 @@ public class MainActivity extends Activity {
             public void apply(final String text) {
                 markdownRenderer.render(MainActivity.this, themes.isLight(), uri(), text, new MarkdownRenderer.MarkdownReadyListener() {
                     @Override
-                    public void onMarkdownReady(@NonNull Markwon2 markwon2, CharSequence markdown) {
+                    public void onMarkdownReady(@NonNull Markwon markwon, CharSequence markdown) {
 
-                        markwon2.setParsedMarkdown(textView, markdown);
+                        markwon.setParsedMarkdown(textView, markdown);
 
                         Views.setVisible(progress, false);
                     }
