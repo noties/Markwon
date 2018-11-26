@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
 import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.html.impl.HtmlPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.gif.GifPlugin;
 import ru.noties.markwon.image.svg.SvgPlugin;
@@ -21,6 +22,8 @@ import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
+import ru.noties.markwon.table.TablePlugin;
+import ru.noties.markwon.tasklist.TaskListPlugin;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
@@ -84,6 +87,9 @@ public class MarkdownRenderer {
                         .use(GifPlugin.create(false))
                         .use(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
                         .use(GifAwarePlugin.create(context))
+                        .use(TablePlugin.create(context))
+                        .use(TaskListPlugin.create(context))
+                        .use(HtmlPlugin.create())
                         .use(new AbstractMarkwonPlugin() {
                             @Override
                             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {

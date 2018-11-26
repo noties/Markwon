@@ -4,23 +4,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
-import org.commonmark.ext.gfm.tables.TableBody;
-import org.commonmark.ext.gfm.tables.TableCell;
-import org.commonmark.ext.gfm.tables.TableHead;
-import org.commonmark.ext.gfm.tables.TableRow;
 import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
 import org.commonmark.node.CustomBlock;
 import org.commonmark.node.CustomNode;
-import org.commonmark.node.Document;
 import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
-import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
@@ -29,29 +22,25 @@ import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
 import org.commonmark.node.OrderedList;
 import org.commonmark.node.Paragraph;
-import org.commonmark.node.SoftLineBreak;
 import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.SpannableFactory;
-import ru.noties.markwon.html.api.MarkwonHtmlParser;
 import ru.noties.markwon.spans.MarkwonTheme;
 import ru.noties.markwon.table.TableRowSpan;
 import ru.noties.markwon.tasklist.TaskListBlock;
-import ru.noties.markwon.tasklist.TaskListItem;
 
 @SuppressWarnings("WeakerAccess")
 public class SpannableMarkdownVisitor extends AbstractVisitor {
 
     private final MarkwonConfiguration configuration;
     private final SpannableBuilder builder;
-    private final MarkwonHtmlParser htmlParser;
+//    private final MarkwonHtmlParser htmlParser;
 
     private final MarkwonTheme theme;
     private final SpannableFactory factory;
@@ -69,18 +58,18 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     ) {
         this.configuration = configuration;
         this.builder = builder;
-        this.htmlParser = configuration.htmlParser();
+//        this.htmlParser = configuration.htmlParser();
 
         this.theme = configuration.theme();
         this.factory = configuration.factory();
     }
 
-    @Override
-    public void visit(Document document) {
-        super.visit(document);
-
-        configuration.htmlRenderer().render(configuration, builder, htmlParser);
-    }
+//    @Override
+//    public void visit(Document document) {
+//        super.visit(document);
+//
+//        configuration.htmlRenderer().render(configuration, builder, htmlParser);
+//    }
 
     @Override
     public void visit(Text text) {
@@ -276,15 +265,15 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         }
     }
 
-    @Override
-    public void visit(SoftLineBreak softLineBreak) {
-        // @since 1.1.1 there is an option to treat soft break as a hard break (thus adding new line)
-        if (configuration.softBreakAddsNewLine()) {
-            newLine();
-        } else {
-            builder.append(' ');
-        }
-    }
+//    @Override
+//    public void visit(SoftLineBreak softLineBreak) {
+//        // @since 1.1.1 there is an option to treat soft break as a hard break (thus adding new line)
+//        if (configuration.softBreakAddsNewLine()) {
+//            newLine();
+//        } else {
+//            builder.append(' ');
+//        }
+//    }
 
     @Override
     public void visit(HardLineBreak hardLineBreak) {
@@ -463,21 +452,21 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         // user can open it in external viewer?
     }
 
-    @Override
-    public void visit(HtmlBlock htmlBlock) {
-        visitHtml(htmlBlock.getLiteral());
-    }
-
-    @Override
-    public void visit(HtmlInline htmlInline) {
-        visitHtml(htmlInline.getLiteral());
-    }
-
-    private void visitHtml(@Nullable String html) {
-        if (html != null) {
-            htmlParser.processFragment(builder, html);
-        }
-    }
+//    @Override
+//    public void visit(HtmlBlock htmlBlock) {
+//        visitHtml(htmlBlock.getLiteral());
+//    }
+//
+//    @Override
+//    public void visit(HtmlInline htmlInline) {
+//        visitHtml(htmlInline.getLiteral());
+//    }
+//
+//    private void visitHtml(@Nullable String html) {
+//        if (html != null) {
+//            htmlParser.processFragment(builder, html);
+//        }
+//    }
 
     @Override
     public void visit(Link link) {

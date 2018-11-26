@@ -34,8 +34,24 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
         return builderWithDefaults().build();
     }
 
+    /**
+     * @since 3.0.0
+     */
+    @NonNull
+    public static MarkwonHtmlRendererImpl create(boolean allowNonClosedTags) {
+        return builderWithDefaults(allowNonClosedTags).build();
+    }
+
     @NonNull
     public static Builder builderWithDefaults() {
+        return builderWithDefaults(false);
+    }
+
+    /**
+     * @since 3.0.0
+     */
+    @NonNull
+    public static Builder builderWithDefaults(boolean allowNonClosedTags) {
 
         final EmphasisHandler emphasisHandler = new EmphasisHandler();
         final StrongEmphasisHandler strongEmphasisHandler = new StrongEmphasisHandler();
@@ -44,6 +60,7 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
         final ListHandler listHandler = new ListHandler();
 
         return builder()
+                .allowNonClosedTags(allowNonClosedTags)
                 .handler("i", emphasisHandler)
                 .handler("em", emphasisHandler)
                 .handler("cite", emphasisHandler)
@@ -77,9 +94,11 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
     public static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
+    private final boolean allowNonClosedTags;
     private final Map<String, TagHandler> tagHandlers;
 
-    private MarkwonHtmlRendererImpl(@NonNull Map<String, TagHandler> tagHandlers) {
+    private MarkwonHtmlRendererImpl(boolean allowNonClosedTags, @NonNull Map<String, TagHandler> tagHandlers) {
+        this.allowNonClosedTags = allowNonClosedTags;
         this.tagHandlers = tagHandlers;
     }
 
@@ -90,7 +109,7 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             @NonNull MarkwonHtmlParser parser) {
 
         final int end;
-        if (!configuration.htmlAllowNonClosedTags()) {
+        if (!allowNonClosedTags) {
             end = HtmlTag.NO_END;
         } else {
             end = builder.length();
@@ -152,6 +171,7 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
     public static class Builder {
 
         private final Map<String, TagHandler> tagHandlers = new HashMap<>(2);
+        private boolean allowNonClosedTags;
 
         @NonNull
         public Builder handler(@NonNull String tagName, @NonNull TagHandler tagHandler) {
@@ -159,9 +179,23 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             return this;
         }
 
+        /**
+         * @param allowNonClosedTags that indicates if non-closed html tags should be rendered.
+         *                           If this argument is true then all non-closed HTML tags
+         *                           will be closed at the end of a document. Otherwise they will
+         *                           be delivered non-closed {@code HtmlTag#isClosed()} and thus not
+         *                           rendered at all
+         * @since 3.0.0
+         */
+        @NonNull
+        public Builder allowNonClosedTags(boolean allowNonClosedTags) {
+            this.allowNonClosedTags = allowNonClosedTags;
+            return this;
+        }
+
         @NonNull
         public MarkwonHtmlRendererImpl build() {
-            return new MarkwonHtmlRendererImpl(Collections.unmodifiableMap(tagHandlers));
+            return new MarkwonHtmlRendererImpl(allowNonClosedTags, Collections.unmodifiableMap(tagHandlers));
         }
     }
 }

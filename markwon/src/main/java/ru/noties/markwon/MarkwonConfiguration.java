@@ -39,7 +39,7 @@ public class MarkwonConfiguration {
     private final SpannableFactory factory; // @since 1.1.0
     private final MarkwonHtmlParser htmlParser; // @since 2.0.0
     private final MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
-    private final boolean htmlAllowNonClosedTags; // @since 2.0.0
+//    private final boolean htmlAllowNonClosedTags; // @since 2.0.0
 
     private MarkwonConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -51,7 +51,7 @@ public class MarkwonConfiguration {
         this.factory = builder.factory;
         this.htmlParser = builder.htmlParser;
         this.htmlRenderer = builder.htmlRenderer;
-        this.htmlAllowNonClosedTags = builder.htmlAllowNonClosedTags;
+//        this.htmlAllowNonClosedTags = builder.htmlAllowNonClosedTags;
     }
 
     /**
@@ -113,12 +113,12 @@ public class MarkwonConfiguration {
         return htmlRenderer;
     }
 
-    /**
-     * @since 2.0.0
-     */
-    public boolean htmlAllowNonClosedTags() {
-        return htmlAllowNonClosedTags;
-    }
+//    /**
+//     * @since 2.0.0
+//     */
+//    public boolean htmlAllowNonClosedTags() {
+//        return htmlAllowNonClosedTags;
+//    }
 
     @SuppressWarnings("unused")
     public static class Builder {
@@ -134,7 +134,7 @@ public class MarkwonConfiguration {
         private SpannableFactory factory; // @since 1.1.0
         private MarkwonHtmlParser htmlParser; // @since 2.0.0
         private MarkwonHtmlRenderer htmlRenderer; // @since 2.0.0
-        private boolean htmlAllowNonClosedTags; // @since 2.0.0
+//        private boolean htmlAllowNonClosedTags; // @since 2.0.0
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -151,7 +151,7 @@ public class MarkwonConfiguration {
             this.factory = configuration.factory;
             this.htmlParser = configuration.htmlParser;
             this.htmlRenderer = configuration.htmlRenderer;
-            this.htmlAllowNonClosedTags = configuration.htmlAllowNonClosedTags;
+//            this.htmlAllowNonClosedTags = configuration.htmlAllowNonClosedTags;
         }
 
         @NonNull
@@ -208,18 +208,18 @@ public class MarkwonConfiguration {
             return this;
         }
 
-        /**
-         * @param htmlAllowNonClosedTags that indicates if non-closed html tags should be rendered.
-         *                               If this argument is true then all non-closed HTML tags
-         *                               will be closed at the end of a document. Otherwise they will
-         *                               be delivered non-closed {@code HtmlTag#isClosed()}
-         * @since 2.0.0
-         */
-        @NonNull
-        public Builder htmlAllowNonClosedTags(boolean htmlAllowNonClosedTags) {
-            this.htmlAllowNonClosedTags = htmlAllowNonClosedTags;
-            return this;
-        }
+//        /**
+//         * @param htmlAllowNonClosedTags that indicates if non-closed html tags should be rendered.
+//         *                               If this argument is true then all non-closed HTML tags
+//         *                               will be closed at the end of a document. Otherwise they will
+//         *                               be delivered non-closed {@code HtmlTag#isClosed()}
+//         * @since 2.0.0
+//         */
+//        @NonNull
+//        public Builder htmlAllowNonClosedTags(boolean htmlAllowNonClosedTags) {
+//            this.htmlAllowNonClosedTags = htmlAllowNonClosedTags;
+//            return this;
+//        }
 
         @NonNull
         public MarkwonConfiguration build(@NonNull MarkwonTheme theme, @NonNull AsyncDrawableLoader asyncDrawableLoader) {
