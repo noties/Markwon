@@ -105,9 +105,6 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(BlockQuote blockQuote) {
 
         newLine();
-        if (blockQuoteIndent != 0) {
-            builder.append('\n');
-        }
 
         final int length = builder.length();
 
@@ -121,9 +118,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (hasNext(blockQuote)) {
             newLine();
-            if (blockQuoteIndent == 0) {
-                builder.append('\n');
-            }
+            forceNewLine();
         }
     }
 
@@ -180,7 +175,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (hasNext(node)) {
             newLine();
-            builder.append('\n');
+            forceNewLine();
         }
     }
 
@@ -202,9 +197,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (hasNext(node)) {
             newLine();
-            if (listLevel == 0 && blockQuoteIndent == 0) {
-                builder.append('\n');
-            }
+            forceNewLine();
         }
     }
 
@@ -256,7 +249,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (hasNext(thematicBreak)) {
             newLine();
-            builder.append('\n');
+            forceNewLine();
         }
     }
 
@@ -272,7 +265,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
         if (hasNext(heading)) {
             newLine();
             // after heading we add another line anyway (no additional checks)
-            builder.append('\n');
+            forceNewLine();
         }
     }
 
@@ -298,13 +291,14 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     public void visit(CustomBlock customBlock) {
 
         if (customBlock instanceof TaskListBlock) {
+
             blockQuoteIndent += 1;
             visitChildren(customBlock);
             blockQuoteIndent -= 1;
 
             if (hasNext(customBlock)) {
                 newLine();
-                builder.append('\n');
+                forceNewLine();
             }
 
         } else {
@@ -358,7 +352,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             if (hasNext(node)) {
                 newLine();
-                builder.append('\n');
+                forceNewLine();
             }
 
         } else if (node instanceof TableRow || node instanceof TableHead) {
@@ -445,9 +439,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (hasNext(paragraph) && !inTightList) {
             newLine();
-            if (blockQuoteIndent == 0) {
-                builder.append('\n');
-            }
+            forceNewLine();
         }
     }
 
@@ -516,6 +508,10 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
                 && '\n' != builder.lastChar()) {
             builder.append('\n');
         }
+    }
+
+    private void forceNewLine() {
+        builder.append('\n');
     }
 
     private boolean isInTightList(Paragraph paragraph) {
