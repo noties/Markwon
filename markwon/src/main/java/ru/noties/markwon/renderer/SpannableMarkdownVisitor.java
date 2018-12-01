@@ -56,7 +56,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
     private final SpannableTheme theme;
     private final SpannableFactory factory;
 
-    private int blockQuoteIndent;
+    private int blockIndent;
     private int listLevel;
 
     private List<TableRowSpan.Cell> pendingTableRow;
@@ -108,13 +108,13 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
 
-        blockQuoteIndent += 1;
+        blockIndent += 1;
 
         visitChildren(blockQuote);
 
         setSpan(length, factory.blockQuote(theme));
 
-        blockQuoteIndent -= 1;
+        blockIndent -= 1;
 
         if (hasNext(blockQuote)) {
             newLine();
@@ -206,7 +206,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         final int length = builder.length();
 
-        blockQuoteIndent += 1;
+        blockIndent += 1;
         listLevel += 1;
 
         final Node parent = listItem.getParent();
@@ -229,7 +229,7 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
             setSpan(length, factory.bulletListItem(theme, listLevel - 1));
         }
 
-        blockQuoteIndent -= 1;
+        blockIndent -= 1;
         listLevel -= 1;
 
         if (hasNext(listItem)) {
@@ -292,9 +292,9 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
         if (customBlock instanceof TaskListBlock) {
 
-            blockQuoteIndent += 1;
+            blockIndent += 1;
             visitChildren(customBlock);
-            blockQuoteIndent -= 1;
+            blockIndent -= 1;
 
             if (hasNext(customBlock)) {
                 newLine();
@@ -323,17 +323,17 @@ public class SpannableMarkdownVisitor extends AbstractVisitor {
 
             final int length = builder.length();
 
-            blockQuoteIndent += listItem.indent();
+            blockIndent += listItem.indent();
 
             visitChildren(customNode);
 
-            setSpan(length, factory.taskListItem(theme, blockQuoteIndent, listItem.done()));
+            setSpan(length, factory.taskListItem(theme, blockIndent, listItem.done()));
 
             if (hasNext(customNode)) {
                 newLine();
             }
 
-            blockQuoteIndent -= listItem.indent();
+            blockIndent -= listItem.indent();
 
         } else if (!handleTableNodes(customNode)) {
             super.visit(customNode);
