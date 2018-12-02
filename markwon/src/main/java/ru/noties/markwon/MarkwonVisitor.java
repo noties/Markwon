@@ -39,13 +39,13 @@ public interface MarkwonVisitor extends Visitor {
 
     boolean hasNext(@NonNull Node node);
 
-    void incrementBlockQuoteIndent();
+    void incrementBlockIndent();
 
-    void decrementBlockQuoteIndent();
+    void decrementBlockIndent();
 
-    void blockQuoteIntent(int blockQuoteIndent);
+    void blockIntent(int blockIndent);
 
-    int blockQuoteIndent();
+    int blockIndent();
 
     void incrementListLevel();
 

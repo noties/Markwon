@@ -70,9 +70,9 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
                         visitor.ensureNewLine();
 
-                        visitor.incrementBlockQuoteIndent();
+                        visitor.incrementBlockIndent();
                         visitor.visitChildren(taskListBlock);
-                        visitor.decrementBlockQuoteIndent();
+                        visitor.decrementBlockIndent();
 
                         if (visitor.hasNext(taskListBlock)) {
                             visitor.ensureNewLine();
@@ -86,20 +86,20 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
                         final int length = visitor.length();
 
-                        final int indent = visitor.blockQuoteIndent();
-                        visitor.blockQuoteIntent(indent + taskListItem.indent());
+                        final int indent = visitor.blockIndent();
+                        visitor.blockIntent(indent + taskListItem.indent());
                         visitor.visitChildren(taskListItem);
                         visitor.setSpans(length, new TaskListSpan(
                                 visitor.theme(),
                                 drawable,
-                                visitor.blockQuoteIndent(),
+                                visitor.blockIndent(),
                                 taskListItem.done()));
 
                         if (visitor.hasNext(taskListItem)) {
                             visitor.ensureNewLine();
                         }
 
-                        visitor.blockQuoteIntent(indent);
+                        visitor.blockIntent(indent);
                     }
                 });
     }

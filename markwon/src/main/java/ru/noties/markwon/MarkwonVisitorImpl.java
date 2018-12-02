@@ -217,22 +217,22 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     }
 
     @Override
-    public void incrementBlockQuoteIndent() {
+    public void incrementBlockIndent() {
         blockQuoteIndent += 1;
     }
 
     @Override
-    public void decrementBlockQuoteIndent() {
+    public void decrementBlockIndent() {
         blockQuoteIndent -= 1;
     }
 
     @Override
-    public void blockQuoteIntent(int blockQuoteIndent) {
-        this.blockQuoteIndent = blockQuoteIndent;
+    public void blockIntent(int blockIndent) {
+        this.blockQuoteIndent = blockIndent;
     }
 
     @Override
-    public int blockQuoteIndent() {
+    public int blockIndent() {
         return blockQuoteIndent;
     }
 

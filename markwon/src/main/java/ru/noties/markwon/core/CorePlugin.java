@@ -126,10 +126,10 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 visitor.ensureNewLine();
 
                 final int length = visitor.length();
-                visitor.incrementBlockQuoteIndent();
+                visitor.incrementBlockIndent();
                 visitor.visitChildren(blockQuote);
                 visitor.setSpans(length, visitor.factory().blockQuote(visitor.theme()));
-                visitor.decrementBlockQuoteIndent();
+                visitor.decrementBlockIndent();
 
                 if (visitor.hasNext(blockQuote)) {
                     visitor.ensureNewLine();
@@ -229,7 +229,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         if (visitor.hasNext(node)) {
             visitor.ensureNewLine();
             if (visitor.listLevel() == 0
-                    && visitor.blockQuoteIndent() == 0) {
+                    && visitor.blockIndent() == 0) {
                 visitor.forceNewLine();
             }
         }
@@ -242,7 +242,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 final int length = visitor.length();
 
-                visitor.incrementBlockQuoteIndent();
+                visitor.incrementBlockIndent();
                 visitor.incrementListLevel();
 
                 final Node parent = listItem.getParent();
@@ -265,7 +265,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 }
 
-                visitor.decrementBlockQuoteIndent();
+                visitor.decrementBlockIndent();
                 visitor.decrementListLevel();
 
                 if (visitor.hasNext(listItem)) {
