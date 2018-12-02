@@ -125,10 +125,6 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 visitor.ensureNewLine();
 
-                if (visitor.blockQuoteIndent() > 0) {
-                    visitor.forceNewLine();
-                }
-
                 final int length = visitor.length();
                 visitor.incrementBlockQuoteIndent();
                 visitor.visitChildren(blockQuote);
@@ -137,9 +133,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 if (visitor.hasNext(blockQuote)) {
                     visitor.ensureNewLine();
-                    if (visitor.blockQuoteIndent() > 0) {
-                        visitor.forceNewLine();
-                    }
+                    visitor.forceNewLine();
                 }
             }
         });
@@ -363,9 +357,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 if (!inTightList && visitor.hasNext(paragraph)) {
                     visitor.ensureNewLine();
-                    if (visitor.blockQuoteIndent() == 0) {
-                        visitor.forceNewLine();
-                    }
+                    visitor.forceNewLine();
                 }
             }
         });
