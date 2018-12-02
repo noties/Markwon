@@ -15,7 +15,6 @@ public class ListItemNodeVisitor implements MarkwonVisitor.NodeVisitor<ListItem>
 
         final int length = visitor.length();
 
-        visitor.incrementBlockIndent();
         visitor.incrementListLevel();
 
         final Node parent = listItem.getParent();
@@ -38,7 +37,6 @@ public class ListItemNodeVisitor implements MarkwonVisitor.NodeVisitor<ListItem>
 
         }
 
-        visitor.decrementBlockIndent();
         visitor.decrementListLevel();
 
         if (visitor.hasNext(listItem)) {

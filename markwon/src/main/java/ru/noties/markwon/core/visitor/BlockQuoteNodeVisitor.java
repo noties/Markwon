@@ -13,10 +13,9 @@ public class BlockQuoteNodeVisitor implements MarkwonVisitor.NodeVisitor<BlockQu
         visitor.ensureNewLine();
 
         final int length = visitor.length();
-        visitor.incrementBlockIndent();
+
         visitor.visitChildren(blockQuote);
         visitor.setSpans(length, visitor.factory().blockQuote(visitor.theme()));
-        visitor.decrementBlockIndent();
 
         if (visitor.hasNext(blockQuote)) {
             visitor.ensureNewLine();

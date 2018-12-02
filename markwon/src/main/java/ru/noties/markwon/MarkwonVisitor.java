@@ -19,10 +19,6 @@ public interface MarkwonVisitor extends Visitor {
         @NonNull
         <N extends Node> Builder on(@NonNull Class<N> node, @Nullable NodeVisitor<? super N> nodeVisitor);
 
-        // to obtain currently registered one
-        @Nullable
-        <N extends Node> NodeVisitor<N> registeredVisitor(@NonNull Class<N> node);
-
         @NonNull
         MarkwonVisitor build(@NonNull MarkwonConfiguration configuration);
     }
@@ -42,14 +38,6 @@ public interface MarkwonVisitor extends Visitor {
     void visitChildren(@NonNull Node node);
 
     boolean hasNext(@NonNull Node node);
-
-    void incrementBlockIndent();
-
-    void decrementBlockIndent();
-
-    void blockIntent(int blockIndent);
-
-    int blockIndent();
 
     void incrementListLevel();
 

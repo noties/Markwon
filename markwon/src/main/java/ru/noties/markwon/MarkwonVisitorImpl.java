@@ -43,7 +43,6 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final SpannableBuilder builder = new SpannableBuilder();
 
-    private int blockQuoteIndent;
     private int listLevel;
 
     private MarkwonVisitorImpl(
@@ -217,26 +216,6 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     }
 
     @Override
-    public void incrementBlockIndent() {
-        blockQuoteIndent += 1;
-    }
-
-    @Override
-    public void decrementBlockIndent() {
-        blockQuoteIndent -= 1;
-    }
-
-    @Override
-    public void blockIntent(int blockIndent) {
-        this.blockQuoteIndent = blockIndent;
-    }
-
-    @Override
-    public int blockIndent() {
-        return blockQuoteIndent;
-    }
-
-    @Override
     public void incrementListLevel() {
         listLevel += 1;
     }
@@ -290,13 +269,6 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
                 nodes.put(node, nodeVisitor);
             }
             return this;
-        }
-
-        @Nullable
-        @Override
-        public <N extends Node> NodeVisitor<N> registeredVisitor(@NonNull Class<N> node) {
-            //noinspection unchecked
-            return (NodeVisitor<N>) nodes.get(node);
         }
 
         @NonNull

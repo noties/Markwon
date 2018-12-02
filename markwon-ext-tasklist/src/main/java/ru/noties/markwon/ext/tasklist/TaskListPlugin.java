@@ -8,6 +8,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
+import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
@@ -70,9 +71,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
                         visitor.ensureNewLine();
 
-                        visitor.incrementBlockIndent();
                         visitor.visitChildren(taskListBlock);
-                        visitor.decrementBlockIndent();
 
                         if (visitor.hasNext(taskListBlock)) {
                             visitor.ensureNewLine();
@@ -86,20 +85,16 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
                         final int length = visitor.length();
 
-                        final int indent = visitor.blockIndent();
-                        visitor.blockIntent(indent + taskListItem.indent());
                         visitor.visitChildren(taskListItem);
                         visitor.setSpans(length, new TaskListSpan(
                                 visitor.theme(),
                                 drawable,
-                                visitor.blockIndent(),
+                                indent(taskListItem) + taskListItem.indent(),
                                 taskListItem.done()));
 
                         if (visitor.hasNext(taskListItem)) {
                             visitor.ensureNewLine();
                         }
-
-                        visitor.blockIntent(indent);
                     }
                 });
     }
@@ -113,5 +108,18 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
         } finally {
             typedArray.recycle();
         }
+    }
+
+    private static int indent(@NonNull Node node) {
+        int indent = 0;
+        Node parent = node.getParent();
+        if (parent != null) {
+            parent = parent.getParent();
+            while (parent != null) {
+                indent += 1;
+                parent = parent.getParent();
+            }
+        }
+        return indent;
     }
 }
