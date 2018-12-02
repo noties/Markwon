@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import org.commonmark.node.Document;
 import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.HtmlInline;
+import org.commonmark.node.Node;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonVisitor;
@@ -41,17 +42,13 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
+    public void afterRender(@NonNull Node node, @NonNull MarkwonVisitor visitor) {
+        renderer.render(visitor.configuration(), visitor.builder(), parser);
+    }
+
+    @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder
-                .on(Document.class, new MarkwonVisitor.NodeVisitor<Document>() {
-                    @Override
-                    public void visit(@NonNull MarkwonVisitor visitor, @NonNull Document document) {
-
-                        visitor.visitChildren(document);
-
-                        renderer.render(visitor.configuration(), visitor.builder(), parser);
-                    }
-                })
                 .on(HtmlBlock.class, new MarkwonVisitor.NodeVisitor<HtmlBlock>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull HtmlBlock htmlBlock) {

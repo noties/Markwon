@@ -3,6 +3,7 @@ package ru.noties.markwon;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
+import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.image.AsyncDrawableLoader;
@@ -20,10 +21,12 @@ public interface MarkwonPlugin {
 
     void configureVisitor(@NonNull MarkwonVisitor.Builder builder);
 
-    // html
-
     @NonNull
     String processMarkdown(@NonNull String markdown);
+
+    void beforeRender(@NonNull Node node);
+
+    void afterRender(@NonNull Node node, @NonNull MarkwonVisitor visitor);
 
     void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown);
 

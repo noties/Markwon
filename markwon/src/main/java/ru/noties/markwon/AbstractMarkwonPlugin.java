@@ -3,6 +3,7 @@ package ru.noties.markwon;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
+import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.image.AsyncDrawableLoader;
@@ -38,6 +39,16 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
     @Override
     public String processMarkdown(@NonNull String markdown) {
         return markdown;
+    }
+
+    @Override
+    public void beforeRender(@NonNull Node node) {
+
+    }
+
+    @Override
+    public void afterRender(@NonNull Node node, @NonNull MarkwonVisitor visitor) {
+
     }
 
     @Override

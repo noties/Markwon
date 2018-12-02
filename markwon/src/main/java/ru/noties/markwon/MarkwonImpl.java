@@ -40,7 +40,17 @@ class MarkwonImpl extends Markwon {
     @NonNull
     @Override
     public CharSequence render(@NonNull Node node) {
+
+        for (MarkwonPlugin plugin : plugins) {
+            plugin.beforeRender(node);
+        }
+
         node.accept(visitor);
+
+        for (MarkwonPlugin plugin : plugins) {
+            plugin.afterRender(node, visitor);
+        }
+
         return visitor.builder().text();
     }
 
