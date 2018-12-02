@@ -43,8 +43,6 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final SpannableBuilder builder = new SpannableBuilder();
 
-    private int listLevel;
-
     private MarkwonVisitorImpl(
             @NonNull MarkwonConfiguration configuration,
             @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
@@ -216,21 +214,6 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     }
 
     @Override
-    public void incrementListLevel() {
-        listLevel += 1;
-    }
-
-    @Override
-    public void decrementListLevel() {
-        listLevel -= 1;
-    }
-
-    @Override
-    public int listLevel() {
-        return listLevel;
-    }
-
-    @Override
     public void ensureNewLine() {
         if (builder.length() > 0
                 && '\n' != builder.lastChar()) {
@@ -251,6 +234,13 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     @Override
     public void setSpans(int start, @Nullable Object spans) {
         SpannableBuilder.setSpans(builder, spans, start, builder.length());
+    }
+
+    @Nullable
+    @Override
+    public <N extends Node> NodeVisitor<N> nodeVisitor(@NonNull Class<N> node) {
+        //noinspection unchecked
+        return (NodeVisitor<N>) nodes.get(node);
     }
 
     static class BuilderImpl implements Builder {

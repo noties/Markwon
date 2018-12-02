@@ -39,12 +39,6 @@ public interface MarkwonVisitor extends Visitor {
 
     boolean hasNext(@NonNull Node node);
 
-    void incrementListLevel();
-
-    void decrementListLevel();
-
-    int listLevel();
-
     void ensureNewLine();
 
     void forceNewLine();
@@ -52,4 +46,7 @@ public interface MarkwonVisitor extends Visitor {
     int length();
 
     void setSpans(int start, @Nullable Object spans);
+
+    @Nullable
+    <N extends Node> NodeVisitor<N> nodeVisitor(@NonNull Class<N> node);
 }

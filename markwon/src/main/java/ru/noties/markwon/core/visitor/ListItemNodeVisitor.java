@@ -15,8 +15,6 @@ public class ListItemNodeVisitor implements MarkwonVisitor.NodeVisitor<ListItem>
 
         final int length = visitor.length();
 
-        visitor.incrementListLevel();
-
         final Node parent = listItem.getParent();
         if (parent instanceof OrderedList) {
 
@@ -33,14 +31,24 @@ public class ListItemNodeVisitor implements MarkwonVisitor.NodeVisitor<ListItem>
         } else {
 
             visitor.visitChildren(listItem);
-            visitor.setSpans(length, visitor.factory().bulletListItem(visitor.theme(), visitor.listLevel() - 1));
+            visitor.setSpans(length, visitor.factory().bulletListItem(visitor.theme(), listLevel(listItem)));
 
         }
-
-        visitor.decrementListLevel();
 
         if (visitor.hasNext(listItem)) {
             visitor.ensureNewLine();
         }
+    }
+
+    private static int listLevel(@NonNull Node node) {
+        int level = 0;
+        Node parent = node.getParent();
+        while (parent != null) {
+            if (parent instanceof ListItem) {
+                level += 1;
+            }
+            parent = parent.getParent();
+        }
+        return level;
     }
 }
