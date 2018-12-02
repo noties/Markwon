@@ -79,12 +79,6 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
         OrderedListItemSpan.measure(textView, markdown);
-        AsyncDrawableScheduler.unschedule(textView);
-    }
-
-    @Override
-    public void afterSetText(@NonNull TextView textView) {
-        AsyncDrawableScheduler.schedule(textView);
     }
 
     protected void text(@NonNull MarkwonVisitor.Builder builder) {

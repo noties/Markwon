@@ -1,4 +1,4 @@
-package ru.noties.markwon.core;
+package ru.noties.markwon.image;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -15,12 +15,11 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.noties.markwon.renderer.R;
-import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.spans.AsyncDrawableSpan;
 
-abstract class AsyncDrawableScheduler {
+public abstract class AsyncDrawableScheduler {
 
-    static void schedule(@NonNull final TextView textView) {
+    public static void schedule(@NonNull final TextView textView) {
 
         final List<AsyncDrawable> list = extract(textView);
         if (list.size() > 0) {
@@ -50,7 +49,7 @@ abstract class AsyncDrawableScheduler {
     }
 
     // must be called when text manually changed in TextView
-    static void unschedule(@NonNull TextView view) {
+    public static void unschedule(@NonNull TextView view) {
         for (AsyncDrawable drawable : extract(view)) {
             drawable.setCallback2(null);
         }

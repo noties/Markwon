@@ -1,4 +1,4 @@
-package ru.noties.markwon.sample.jlatexmath;
+package ru.noties.markwon.ext.latex;
 
 import org.commonmark.node.CustomBlock;
 

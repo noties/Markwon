@@ -2,6 +2,7 @@ package ru.noties.markwon.image;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.TextView;
 
 import org.commonmark.node.Image;
 import org.commonmark.node.Link;
@@ -88,5 +89,15 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
                 visitor.setSpans(length, spans);
             }
         });
+    }
+
+    @Override
+    public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
+        AsyncDrawableScheduler.unschedule(textView);
+    }
+
+    @Override
+    public void afterSetText(@NonNull TextView textView) {
+        AsyncDrawableScheduler.schedule(textView);
     }
 }

@@ -4,17 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import org.commonmark.node.CustomBlock;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-
-import ru.noties.jlatexmath.JLatexMathAndroid;
 import ru.noties.markwon.Markwon;
-import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.il.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImageSize;
-import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
+import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.ext.latex.JLatexMathPlugin;
+import ru.noties.markwon.image.ImagesPlugin;
 
 public class MainActivity extends Activity {
 
@@ -45,61 +38,21 @@ public class MainActivity extends Activity {
 //        latex += "\\end{array}";
 
 
-        final JLatexMathMedia.Config config = new JLatexMathMedia.Config(textView.getTextSize()) {{
+        final JLatexMathPlugin.Config config = new JLatexMathPlugin.Config(textView.getTextSize()) {{
 //            align = JLatexMathDrawable.ALIGN_RIGHT;
         }};
-        final JLatexMathMedia jLatexMathMedia = new JLatexMathMedia(config);
-
-        final AsyncDrawableLoader asyncDrawableLoader = AsyncDrawableLoader.builder()
-                .addSchemeHandler(jLatexMathMedia.schemeHandler())
-                .mediaDecoders(jLatexMathMedia.mediaDecoder())
-                .build();
-
-        final MarkwonConfiguration configuration = MarkwonConfiguration.builder(this)
-                .asyncDrawableLoader(asyncDrawableLoader)
-                .build();
 
         final String markdown = "# Example of LaTeX\n\n$$"
                 + latex + "$$\n\n something like **this**";
 
-        final Parser parser = new Parser.Builder()
-                .customBlockParserFactory(new JLatexMathBlockParser.Factory())
+        final Markwon markwon = Markwon.builder(this)
+                .use(CorePlugin.create())
+                // strictly speaking this one is not required as long as JLatexMathPlugin schedules
+                // drawables on it's own
+                .use(ImagesPlugin.create(this))
+                .use(JLatexMathPlugin.create(config))
                 .build();
 
-        final Node node = parser.parse(markdown);
-        final SpannableBuilder builder = new SpannableBuilder();
-        final SpannableMarkdownVisitor visitor = new SpannableMarkdownVisitor(MarkwonConfiguration.create(this), builder) {
-
-            @Override
-            public void visit(CustomBlock customBlock) {
-
-                if (!(customBlock instanceof JLatexMathBlock)) {
-                    super.visit(customBlock);
-                    return;
-                }
-
-                final String latex = ((JLatexMathBlock) customBlock).latex();
-
-                final int length = builder.length();
-                builder.append(latex);
-
-                SpannableBuilder.setSpans(
-                        builder,
-                        configuration.factory().image(
-                                configuration.theme(),
-                                JLatexMathMedia.makeDestination(latex),
-                                configuration.asyncDrawableLoader(),
-                                configuration.imageSizeResolver(),
-                                new ImageSize(new ImageSize.Dimension(100, "%"), null),
-                                false
-                        ),
-                        length,
-                        builder.length()
-                );
-            }
-        };
-        node.accept(visitor);
-
-        Markwon.setText(textView, builder.text());
+        markwon.setMarkdown(textView, markdown);
     }
 }
