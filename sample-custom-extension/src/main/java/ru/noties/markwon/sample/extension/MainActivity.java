@@ -3,19 +3,12 @@ package ru.noties.markwon.sample.extension;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.TextView;
 
-import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
-import org.commonmark.ext.gfm.tables.TablesExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-
-import java.util.Arrays;
-
-import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.AbstractMarkwonPlugin;
+import ru.noties.markwon.Markwon;
 import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.tasklist.TaskListExtension;
 
 public class MainActivity extends Activity {
 
@@ -27,49 +20,19 @@ public class MainActivity extends Activity {
 
         final TextView textView = findViewById(R.id.text_view);
 
-        // obtain an instance of parser
-        final Parser parser = new Parser.Builder()
-                // we will register all known to Markwon extensions
-                .extensions(Arrays.asList(
-                        StrikethroughExtension.create(),
-                        TablesExtension.create(),
-                        TaskListExtension.create()
-                ))
-                // this is the handler for custom icons
-                .customDelimiterProcessor(IconProcessor.create())
+        final Markwon markwon = Markwon.builder(this)
+                .use(IconPlugin.create(IconSpanProvider.create(this, 0)))
+                .use(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};
+                        builder
+                                .headingTypeface(Typeface.MONOSPACE)
+                                .headingTextSizeMultipliers(textSizeMultipliers);
+                    }
+                })
                 .build();
 
-        // we process input to wrap icon definitions with `@` on both ends
-        // if your input already does it, there is not need for `IconProcessor.prepare()` call.
-        final String markdown = IconProcessor.prepare(getString(R.string.input));
-
-        final Node node = parser.parse(markdown);
-
-        final SpannableBuilder builder = new SpannableBuilder();
-
-        // please note that here I am passing `0` as fallback it means that if toMarkdown references
-        // unknown icon, it will try to load fallback one and will fail with ResourceNotFound. It's
-        // better to provide a valid fallback option
-        final IconSpanProvider spanProvider = IconSpanProvider.create(this, 0);
-
-        final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};
-        MarkwonConfiguration configuration = MarkwonConfiguration.builder(this)
-                .theme(MarkwonTheme.builder()
-                        .headingTypeface(Typeface.MONOSPACE)
-                        .headingTextSizeMultipliers(textSizeMultipliers)
-                        .build())
-                .build();
-        // create an instance of visitor to process parsed toMarkdown
-        final IconVisitor visitor = new IconVisitor(
-                configuration,
-                builder,
-                spanProvider
-        );
-
-        // trigger visit
-        node.accept(visitor);
-
-        // apply
-        textView.setText(builder.text());
+        markwon.setMarkdown(textView, getString(R.string.input));
     }
 }
