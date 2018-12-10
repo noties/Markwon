@@ -3,7 +3,6 @@ package ru.noties.markwon.il;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
@@ -19,7 +18,7 @@ public class DataUriSchemeHandler extends SchemeHandler {
         return new DataUriSchemeHandler(DataUriParser.create(), DataUriDecoder.create());
     }
 
-    private static final String START = "data://";
+    private static final String START = "data:";
 
     private final DataUriParser uriParser;
     private final DataUriDecoder uriDecoder;
@@ -38,7 +37,12 @@ public class DataUriSchemeHandler extends SchemeHandler {
             return null;
         }
 
-        final String part = raw.substring(START.length());
+        String part = raw.substring(START.length());
+
+        // this part is added to support `data://` with which this functionality was released
+        if (part.startsWith("//")) {
+            part = part.substring(2);
+        }
 
         final DataUri dataUri = uriParser.parse(part);
         if (dataUri == null) {

@@ -82,6 +82,9 @@ textView.setMovementMethod(LinkMovementMethod.getInstance());
 Markwon.unscheduleDrawables(textView);
 Markwon.unscheduleTableRows(textView);
 
+// @since 2.0.1 we must measure ordered list items _before_ they are rendered
+OrderedListItemSpan.measure(view, text);
+
 textView.setText(text);
 
 Markwon.scheduleDrawables(textView);

@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -14,8 +14,8 @@ allprojects {
         if (project.hasProperty('LOCAL_MAVEN_URL')) {
             maven { url LOCAL_MAVEN_URL }
         }
-        jcenter()
         google()
+        jcenter()
     }
     version = VERSION_NAME
     group = GROUP
@@ -26,7 +26,7 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion '4.8.1'
+    gradleVersion '4.10.2'
     distributionType 'all'
 }
 
@@ -40,8 +40,9 @@ if (hasProperty('local')) {
 
 ext {
 
+    // NB, updating build-tools or compile-sdk will require updating Travis config (.travis.yml)
     config = [
-            'build-tools'    : '27.0.3',
+            'build-tools'    : '28.0.3',
             'compile-sdk'    : 27,
             'target-sdk'     : 27,
             'min-sdk'        : 16,
@@ -49,7 +50,7 @@ ext {
     ]
 
     final def supportVersion = '27.1.1'
-    final def commonMarkVersion = '0.11.0'
+    final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
 
     deps = [
@@ -63,7 +64,6 @@ ext {
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'ru.noties:prism4j:1.1.0',
             'debug'                   : 'ru.noties:debug:3.0.0@jar',
-            'better-link-movement'    : 'me.saket:better-link-movement-method:2.2.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion"
     ]
 

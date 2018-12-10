@@ -71,6 +71,33 @@ public class DataUriSchemeHandlerTest {
         }
     }
 
+    @Test
+    public void correct_real() {
+
+        final class Item {
+
+            final String contentType;
+            final String data;
+
+            Item(String contentType, String data) {
+                this.contentType = contentType;
+                this.data = data;
+            }
+        }
+
+        final Map<String, Item> expected = new HashMap<String, Item>() {{
+            put("data:text/plain;,123", new Item("text/plain", "123"));
+            put("data:image/svg+xml;base64,MTIz", new Item("image/svg+xml", "123"));
+        }};
+
+        for (Map.Entry<String, Item> entry : expected.entrySet()) {
+            final ImageItem item = handler.handle(entry.getKey(), Uri.parse(entry.getKey()));
+            assertNotNull(entry.getKey(), item);
+            assertEquals(entry.getKey(), entry.getValue().contentType, item.contentType());
+            assertEquals(entry.getKey(), entry.getValue().data, readStream(item.inputStream()));
+        }
+    }
+
     @NonNull
     private static String readStream(@NonNull InputStream stream) {
         try {

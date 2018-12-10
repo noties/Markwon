@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ru.noties.debug.Debug;
 
 public class MainActivity extends Activity {
@@ -71,7 +70,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onMarkdownReady(CharSequence markdown) {
 
-                        Markwon.setText(textView, markdown, BetterLinkMovementMethod.getInstance());
+                        Markwon.setText(textView, markdown);
 
                         gifProcessor.process(textView);
 

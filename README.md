@@ -7,6 +7,8 @@
 [![markwon-syntax-highlight](https://img.shields.io/maven-central/v/ru.noties/markwon-syntax-highlight.svg?label=markwon-syntax-highlight)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-syntax-highlight%22)
 [![markwon-view](https://img.shields.io/maven-central/v/ru.noties/markwon-view.svg?label=markwon-view)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-view%22)
 
+[![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
+
 **Markwon** is a markdown library for Android. It parses markdown
 following [commonmark-spec] with the help of amazing [commonmark-java]
 library and renders result as _Android-native_ Spannables. **No HTML**
@@ -90,6 +92,14 @@ By default configuration uses TextView textColor for styling, so changing textCo
 Please visit [documentation] web-site for reference
 
 [documentation]: https://noties.github.io/Markwon
+
+---
+
+## Applications using Markwon
+
+* [Partiko](https://partiko.app)
+* [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
+
 
 ---
 
@@ -276,12 +286,6 @@ Asterisks (`*`)
 ___
 
 Underscores (`_`)
-
----
-
-## Applications using Markwon
-
-* [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
 
 
 ## License

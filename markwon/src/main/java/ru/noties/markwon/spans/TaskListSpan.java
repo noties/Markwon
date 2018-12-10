@@ -18,11 +18,30 @@ public class TaskListSpan implements LeadingMarginSpan {
 
     private final SpannableTheme theme;
     private final int blockIndent;
-    private final boolean isDone;
+
+    // @since 2.0.1 field is NOT final (to allow mutation)
+    private boolean isDone;
 
     public TaskListSpan(@NonNull SpannableTheme theme, int blockIndent, boolean isDone) {
         this.theme = theme;
         this.blockIndent = blockIndent;
+        this.isDone = isDone;
+    }
+
+    /**
+     * @since 2.0.1
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
+     * Update {@link #isDone} property of this span. Please note that this is merely a visual change
+     * which is not changing underlying text in any means.
+     *
+     * @since 2.0.1
+     */
+    public void setDone(boolean isDone) {
         this.isDone = isDone;
     }
 
