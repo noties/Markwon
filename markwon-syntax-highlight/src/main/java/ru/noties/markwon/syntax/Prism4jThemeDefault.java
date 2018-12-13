@@ -7,8 +7,8 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 
-import ru.noties.markwon.spans.EmphasisSpan;
-import ru.noties.markwon.spans.StrongEmphasisSpan;
+import ru.noties.markwon.core.spans.EmphasisSpan;
+import ru.noties.markwon.core.spans.StrongEmphasisSpan;
 
 public class Prism4jThemeDefault extends Prism4jThemeBase {
 

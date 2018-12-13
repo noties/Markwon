@@ -1,7 +1,0 @@
-input: "<sub>sub</sub>"
-
-config:
-  use-html: true
-
-output:
-  - sub: "sub"

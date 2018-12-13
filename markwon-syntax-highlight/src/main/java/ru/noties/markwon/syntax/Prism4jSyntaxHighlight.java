@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
-import ru.noties.markwon.SyntaxHighlight;
 import ru.noties.prism4j.Prism4j;
 
 public class Prism4jSyntaxHighlight implements SyntaxHighlight {

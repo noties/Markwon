@@ -60,7 +60,7 @@ public class MarkwonViewHelper implements IMarkwonView {
         this.provider = provider;
         this.configuration = provider.provide(textView.getContext());
         if (!TextUtils.isEmpty(markdown)) {
-            // invalidate rendered toMarkdown
+            // invalidate rendered markdown
             setMarkdown(markdown);
         }
     }

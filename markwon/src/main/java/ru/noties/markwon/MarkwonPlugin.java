@@ -7,7 +7,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 
 public interface MarkwonPlugin {
 

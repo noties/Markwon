@@ -3,11 +3,15 @@ package ru.noties.markwon;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.spans.LinkSpan;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.image.ImageSizeResolverDef;
-import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.syntax.SyntaxHighlight;
+import ru.noties.markwon.syntax.SyntaxHighlightNoOp;
+import ru.noties.markwon.urlprocessor.UrlProcessor;
+import ru.noties.markwon.urlprocessor.UrlProcessorNoOp;
 
 /**
  * since 3.0.0 renamed `SpannableConfiguration` -&gt; `MarkwonConfiguration`
@@ -27,7 +31,6 @@ public class MarkwonConfiguration {
         return new Builder(context);
     }
 
-
     private final MarkwonTheme theme;
     private final AsyncDrawableLoader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
@@ -44,14 +47,6 @@ public class MarkwonConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.factory = builder.factory;
-    }
-
-    /**
-     * Returns a new builder based on this configuration
-     */
-    @NonNull
-    public Builder newBuilder(@NonNull Context context) {
-        return new Builder(context, this);
     }
 
     @NonNull
@@ -104,17 +99,6 @@ public class MarkwonConfiguration {
 
         Builder(@NonNull Context context) {
             this.context = context;
-        }
-
-        Builder(@NonNull Context context, @NonNull MarkwonConfiguration configuration) {
-            this(context);
-            this.theme = configuration.theme;
-            this.asyncDrawableLoader = configuration.asyncDrawableLoader;
-            this.syntaxHighlight = configuration.syntaxHighlight;
-            this.linkResolver = configuration.linkResolver;
-            this.urlProcessor = configuration.urlProcessor;
-            this.imageSizeResolver = configuration.imageSizeResolver;
-            this.factory = configuration.factory;
         }
 
         @NonNull

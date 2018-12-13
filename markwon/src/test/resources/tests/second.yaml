@@ -1,6 +1,5 @@
 input: |-
   First **line** is *always*
-  ~~strike~~ down
 
   > Some quote here!
 
@@ -18,9 +17,7 @@ output:
   - b: "line"
   - text: " is "
   - i: "always"
-  - text: " "
-  - s: "strike"
-  - text: " down\n\n"
+  - text: "\n\n"
   - blockquote: "Some quote here!"
   - text: "\n\n"
   - h1: "Header 1"

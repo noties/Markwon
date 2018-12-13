@@ -5,16 +5,14 @@ import android.support.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ru.noties.markwon.SpannableFactory;
+import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.spans.LinkSpan;
+import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.image.ImageSizeResolver;
-import ru.noties.markwon.image.AsyncDrawable;
-import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.table.TableRowSpan;
 
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;
@@ -26,14 +24,8 @@ import static ru.noties.markwon.renderer.visitor.TestSpan.IMAGE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.LINK;
 import static ru.noties.markwon.renderer.visitor.TestSpan.ORDERED_LIST;
 import static ru.noties.markwon.renderer.visitor.TestSpan.PARAGRAPH;
-import static ru.noties.markwon.renderer.visitor.TestSpan.STRIKE_THROUGH;
 import static ru.noties.markwon.renderer.visitor.TestSpan.STRONG_EMPHASIS;
-import static ru.noties.markwon.renderer.visitor.TestSpan.SUB_SCRIPT;
-import static ru.noties.markwon.renderer.visitor.TestSpan.SUPER_SCRIPT;
-import static ru.noties.markwon.renderer.visitor.TestSpan.TABLE_ROW;
-import static ru.noties.markwon.renderer.visitor.TestSpan.TASK_LIST;
 import static ru.noties.markwon.renderer.visitor.TestSpan.THEMATIC_BREAK;
-import static ru.noties.markwon.renderer.visitor.TestSpan.UNDERLINE;
 
 class TestFactory implements SpannableFactory {
 
@@ -96,31 +88,6 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object strikethrough() {
-        return new TestSpan(STRIKE_THROUGH);
-    }
-
-    @Nullable
-    @Override
-    public Object taskListItem(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone) {
-        return new TestSpan(TASK_LIST, map(
-                Pair.of("blockIdent", blockIndent),
-                Pair.of("done", isDone)
-        ));
-    }
-
-    @Nullable
-    @Override
-    public Object tableRow(@NonNull MarkwonTheme theme, @NonNull List<TableRowSpan.Cell> cells, boolean isHeader, boolean isOdd) {
-        return new TestSpan(TABLE_ROW, map(
-                Pair.of("cells", cells),
-                Pair.of("header", isHeader),
-                Pair.of("odd", isOdd)
-        ));
-    }
-
-    @Nullable
-    @Override
     public Object paragraph(boolean inTightList) {
         return !useParagraphs
                 ? null
@@ -129,7 +96,7 @@ class TestFactory implements SpannableFactory {
 
     @Nullable
     @Override
-    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawable.Loader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
+    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawableLoader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
         return new TestSpan(IMAGE, map(
                 Pair.of("src", destination),
                 Pair.of("imageSize", imageSize),
@@ -141,24 +108,6 @@ class TestFactory implements SpannableFactory {
     @Override
     public Object link(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull LinkSpan.Resolver resolver) {
         return new TestSpan(LINK, map("href", destination));
-    }
-
-    @Nullable
-    @Override
-    public Object superScript(@NonNull MarkwonTheme theme) {
-        return new TestSpan(SUPER_SCRIPT);
-    }
-
-    @Nullable
-    @Override
-    public Object subScript(@NonNull MarkwonTheme theme) {
-        return new TestSpan(SUB_SCRIPT);
-    }
-
-    @Nullable
-    @Override
-    public Object underline() {
-        return new TestSpan(UNDERLINE);
     }
 
     @NonNull

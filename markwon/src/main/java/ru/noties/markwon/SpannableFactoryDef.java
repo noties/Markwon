@@ -7,17 +7,17 @@ import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.image.ImageSizeResolver;
-import ru.noties.markwon.spans.AsyncDrawableSpan;
-import ru.noties.markwon.spans.BlockQuoteSpan;
-import ru.noties.markwon.spans.BulletListItemSpan;
-import ru.noties.markwon.spans.CodeSpan;
-import ru.noties.markwon.spans.EmphasisSpan;
-import ru.noties.markwon.spans.HeadingSpan;
-import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.MarkwonTheme;
-import ru.noties.markwon.spans.OrderedListItemSpan;
-import ru.noties.markwon.spans.StrongEmphasisSpan;
-import ru.noties.markwon.spans.ThematicBreakSpan;
+import ru.noties.markwon.core.spans.AsyncDrawableSpan;
+import ru.noties.markwon.core.spans.BlockQuoteSpan;
+import ru.noties.markwon.core.spans.BulletListItemSpan;
+import ru.noties.markwon.core.spans.CodeSpan;
+import ru.noties.markwon.core.spans.EmphasisSpan;
+import ru.noties.markwon.core.spans.HeadingSpan;
+import ru.noties.markwon.core.spans.LinkSpan;
+import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.spans.OrderedListItemSpan;
+import ru.noties.markwon.core.spans.StrongEmphasisSpan;
+import ru.noties.markwon.core.spans.ThematicBreakSpan;
 
 /**
  * @since 1.1.0

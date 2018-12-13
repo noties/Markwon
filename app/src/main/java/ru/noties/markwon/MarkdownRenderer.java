@@ -26,6 +26,8 @@ import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
 import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
+import ru.noties.markwon.urlprocessor.UrlProcessor;
+import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope

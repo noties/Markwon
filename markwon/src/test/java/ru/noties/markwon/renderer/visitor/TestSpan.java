@@ -16,15 +16,15 @@ class TestSpan {
     static final String BULLET_LIST = "ul";
     static final String THEMATIC_BREAK = "hr";
     static final String HEADING = "h";
-    static final String STRIKE_THROUGH = "s";
-    static final String TASK_LIST = "task-list";
-    static final String TABLE_ROW = "tr";
+//    static final String STRIKE_THROUGH = "s";
+//    static final String TASK_LIST = "task-list";
+//    static final String TABLE_ROW = "tr";
     static final String PARAGRAPH = "p";
     static final String IMAGE = "img";
     static final String LINK = "a";
-    static final String SUPER_SCRIPT = "sup";
-    static final String SUB_SCRIPT = "sub";
-    static final String UNDERLINE = "u";
+//    static final String SUPER_SCRIPT = "sup";
+//    static final String SUB_SCRIPT = "sub";
+//    static final String UNDERLINE = "u";
 
 
     private final String name;

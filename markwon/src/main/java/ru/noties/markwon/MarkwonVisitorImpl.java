@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 
 class MarkwonVisitorImpl implements MarkwonVisitor {
 
@@ -43,7 +43,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final SpannableBuilder builder = new SpannableBuilder();
 
-    private MarkwonVisitorImpl(
+    MarkwonVisitorImpl(
             @NonNull MarkwonConfiguration configuration,
             @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
         this.configuration = configuration;

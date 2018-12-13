@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 
 class MarkwonBuilderImpl implements Markwon.Builder {
 

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.view.IMarkwonView;
 
 public class DebugConfigurationProvider implements IMarkwonView.ConfigurationProvider {

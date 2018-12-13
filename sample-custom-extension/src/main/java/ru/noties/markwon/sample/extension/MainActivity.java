@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 
 public class MainActivity extends Activity {
 

@@ -1,25 +1,23 @@
 package ru.noties.markwon.renderer.visitor;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 
-import org.commonmark.node.Node;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import ru.noties.markwon.LinkResolverDef;
+import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableFactory;
-import ru.noties.markwon.html.api.MarkwonHtmlParser;
-import ru.noties.markwon.renderer.SpannableMarkdownVisitor;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.image.ImagesPlugin;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -43,14 +41,11 @@ public class SpannableMarkdownVisitorTest {
     public void test() {
 
         final TestData data = TestDataReader.readTest(file);
+        
+        final Markwon markwon = markwon(data.config());
 
-        final MarkwonConfiguration configuration = configuration(data.config());
-        final SpannableBuilder builder = new SpannableBuilder();
-        final SpannableMarkdownVisitor visitor = new SpannableMarkdownVisitor(configuration, builder);
-        final Node node = Markwon.createParser().parse(data.input());
-        node.accept(visitor);
-
-        final SpannableStringBuilder stringBuilder = builder.spannableStringBuilder();
+        // okay we must thing about it... casting?
+        final SpannableStringBuilder stringBuilder = (SpannableStringBuilder) markwon.toMarkdown(data.input());
 
         final TestValidator validator = TestValidator.create(file);
 
@@ -71,25 +66,18 @@ public class SpannableMarkdownVisitorTest {
         assertEquals(Arrays.toString(spans), validator.processedSpanNodesCount(), length);
     }
 
-    @SuppressWarnings("ConstantConditions")
+
     @NonNull
-    private MarkwonConfiguration configuration(@NonNull TestConfig config) {
-
-        final SpannableFactory factory = new TestFactory(config.hasOption(TestConfig.USE_PARAGRAPHS));
-        final MarkwonHtmlParser htmlParser = config.hasOption(TestConfig.USE_HTML)
-                ? null
-                : MarkwonHtmlParser.noOp();
-
-        final boolean softBreakAddsNewLine = config.hasOption(TestConfig.SOFT_BREAK_ADDS_NEW_LINE);
-        final boolean htmlAllowNonClosedTags = config.hasOption(TestConfig.HTML_ALLOW_NON_CLOSED_TAGS);
-
-        return MarkwonConfiguration.builder(null)
-                .theme(mock(MarkwonTheme.class))
-                .linkResolver(mock(LinkResolverDef.class))
-                .htmlParser(htmlParser)
-                .factory(factory)
-                .softBreakAddsNewLine(softBreakAddsNewLine)
-                .htmlAllowNonClosedTags(htmlAllowNonClosedTags)
+    private Markwon markwon(@NonNull final TestConfig config) {
+        return Markwon.builder(RuntimeEnvironment.application)
+                .use(CorePlugin.create(config.hasOption(TestConfig.SOFT_BREAK_ADDS_NEW_LINE)))
+                .use(ImagesPlugin.create(mock(Context.class)))
+                .use(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.factory(new TestFactory(config.hasOption(TestConfig.USE_PARAGRAPHS)));
+                    }
+                })
                 .build();
     }
 }

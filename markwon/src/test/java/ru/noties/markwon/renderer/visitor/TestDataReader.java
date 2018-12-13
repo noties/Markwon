@@ -30,7 +30,6 @@ import java.util.Set;
 import ix.Ix;
 import ix.IxFunction;
 import ix.IxPredicate;
-import ru.noties.markwon.table.TableRowSpan;
 
 import static ru.noties.markwon.renderer.visitor.TestSpan.BLOCK_QUOTE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.BULLET_LIST;
@@ -42,14 +41,8 @@ import static ru.noties.markwon.renderer.visitor.TestSpan.IMAGE;
 import static ru.noties.markwon.renderer.visitor.TestSpan.LINK;
 import static ru.noties.markwon.renderer.visitor.TestSpan.ORDERED_LIST;
 import static ru.noties.markwon.renderer.visitor.TestSpan.PARAGRAPH;
-import static ru.noties.markwon.renderer.visitor.TestSpan.STRIKE_THROUGH;
 import static ru.noties.markwon.renderer.visitor.TestSpan.STRONG_EMPHASIS;
-import static ru.noties.markwon.renderer.visitor.TestSpan.SUB_SCRIPT;
-import static ru.noties.markwon.renderer.visitor.TestSpan.SUPER_SCRIPT;
-import static ru.noties.markwon.renderer.visitor.TestSpan.TABLE_ROW;
-import static ru.noties.markwon.renderer.visitor.TestSpan.TASK_LIST;
 import static ru.noties.markwon.renderer.visitor.TestSpan.THEMATIC_BREAK;
-import static ru.noties.markwon.renderer.visitor.TestSpan.UNDERLINE;
 
 abstract class TestDataReader {
 
@@ -103,7 +96,7 @@ abstract class TestDataReader {
     static class Reader {
 
         private static final String TEXT = "text";
-        private static final String CELLS = "cells";
+//        private static final String CELLS = "cells";
 
         private static final Set<String> TAGS;
 
@@ -118,15 +111,9 @@ abstract class TestDataReader {
                     BULLET_LIST,
                     THEMATIC_BREAK,
                     HEADING,
-                    STRIKE_THROUGH,
-                    TASK_LIST,
-                    TABLE_ROW,
                     PARAGRAPH,
                     IMAGE,
                     LINK,
-                    SUPER_SCRIPT,
-                    SUB_SCRIPT,
-                    UNDERLINE,
                     HEADING + "1",
                     HEADING + "2",
                     HEADING + "3",
@@ -251,24 +238,27 @@ abstract class TestDataReader {
                         if (valueElement.isJsonNull()) {
                             value = null;
                         } else {
-                            // another special case: table cell
-                            // this is not so good
-                            if (CELLS.equals(key)) {
-                                final JsonArray cells = valueElement.getAsJsonArray();
-                                final int length = cells.size();
-                                final List<TableRowSpan.Cell> list = new ArrayList<>(length);
-                                for (int k = 0; k < length; k++) {
-                                    final JsonObject cell = cells.get(k).getAsJsonObject();
-                                    list.add(new TableRowSpan.Cell(
-                                            cell.get("alignment").getAsInt(),
-                                            cell.get("text").getAsString()
-                                    ));
-                                }
-                                value = list.toString();
-                            } else {
-                                value = valueElement.getAsString();
-                            }
+                            value = valueElement.getAsString();
                         }
+//                        else {
+//                            // another special case: table cell
+//                            // this is not so good
+//                            if (CELLS.equals(key)) {
+//                                final JsonArray cells = valueElement.getAsJsonArray();
+//                                final int length = cells.size();
+//                                final List<TableRowSpan.Cell> list = new ArrayList<>(length);
+//                                for (int k = 0; k < length; k++) {
+//                                    final JsonObject cell = cells.get(k).getAsJsonObject();
+//                                    list.add(new TableRowSpan.Cell(
+//                                            cell.get("alignment").getAsInt(),
+//                                            cell.get("text").getAsString()
+//                                    ));
+//                                }
+//                                value = list.toString();
+//                            } else {
+//                                value = valueElement.getAsString();
+//                            }
+//                        }
                         attributes.put(key, value);
                     }
                 }

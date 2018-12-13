@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
-import ru.noties.markwon.spans.EmphasisSpan;
-import ru.noties.markwon.spans.StrongEmphasisSpan;
+import ru.noties.markwon.core.spans.EmphasisSpan;
+import ru.noties.markwon.core.spans.StrongEmphasisSpan;
 
 public class Prism4jThemeDarkula extends Prism4jThemeBase {
 

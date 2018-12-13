@@ -3,8 +3,6 @@ package ru.noties.markwon.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.spans.MarkwonTheme;
-
 public class Dip {
 
     @NonNull

@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import org.commonmark.node.Node;
 import org.commonmark.node.Visitor;
 
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 
 public interface MarkwonVisitor extends Visitor {
 

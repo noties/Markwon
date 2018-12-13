@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
-import ru.noties.markwon.spans.LinkSpan;
+import ru.noties.markwon.core.spans.LinkSpan;
 
 public class LinkResolverDef implements LinkSpan.Resolver {
     @Override

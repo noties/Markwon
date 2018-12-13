@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.prism4j.Prism4j;
 
 public class SyntaxHighlightPlugin extends AbstractMarkwonPlugin {

@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.image.ImageSizeResolver;
-import ru.noties.markwon.spans.LinkSpan;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.spans.LinkSpan;
+import ru.noties.markwon.core.MarkwonTheme;
 
 /**
  * Each method can return null or a Span object or an array of spans

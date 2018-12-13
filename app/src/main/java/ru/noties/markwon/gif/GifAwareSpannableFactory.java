@@ -7,8 +7,8 @@ import ru.noties.markwon.SpannableFactoryDef;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.image.ImageSizeResolver;
-import ru.noties.markwon.spans.AsyncDrawableSpan;
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.spans.AsyncDrawableSpan;
+import ru.noties.markwon.core.MarkwonTheme;
 
 public class GifAwareSpannableFactory extends SpannableFactoryDef {
 

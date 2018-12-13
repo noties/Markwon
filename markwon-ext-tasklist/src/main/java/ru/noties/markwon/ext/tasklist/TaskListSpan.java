@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
 
-import ru.noties.markwon.spans.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.utils.LeadingMarginUtils;
 
 /**

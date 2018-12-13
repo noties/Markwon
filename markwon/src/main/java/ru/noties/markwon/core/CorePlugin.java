@@ -36,7 +36,7 @@ import ru.noties.markwon.core.visitor.SoftLineBreakNodeVisitor;
 import ru.noties.markwon.core.visitor.StrongEmphasisNodeVisitor;
 import ru.noties.markwon.core.visitor.TextNodeVisitor;
 import ru.noties.markwon.core.visitor.ThematicBreakNodeVisitor;
-import ru.noties.markwon.spans.OrderedListItemSpan;
+import ru.noties.markwon.core.spans.OrderedListItemSpan;
 
 public class CorePlugin extends AbstractMarkwonPlugin {
 

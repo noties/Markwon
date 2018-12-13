@@ -38,21 +38,6 @@
                     android:host="*"
                     android:scheme="https" />
 
-                <!--<data-->
-                <!--android:host="*"-->
-                <!--android:scheme="http"-->
-                <!--android:mimeType="text/toMarkdown"/>-->
-
-                <!--<data-->
-                <!--android:host="*"-->
-                <!--android:scheme="file"-->
-                <!--android:mimeType="text/toMarkdown"/>-->
-
-                <!--<data-->
-                <!--android:host="*"-->
-                <!--android:scheme="https"-->
-                <!--android:mimeType="text/toMarkdown"/>-->
-
                 <data android:pathPattern=".*\\.markdown" />
                 <data android:pathPattern=".*\\.mdown" />
                 <data android:pathPattern=".*\\.mkdn" />
