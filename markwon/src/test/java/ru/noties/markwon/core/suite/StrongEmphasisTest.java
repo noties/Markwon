@@ -5,25 +5,25 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import ru.noties.markwon.test.TestSpan;
+import ru.noties.markwon.test.TestSpan.Document;
 
 import static ru.noties.markwon.core.suite.TestFactory.BOLD;
-import static ru.noties.markwon.core.suite.TestFactory.ITALIC;
 import static ru.noties.markwon.test.TestSpan.document;
 import static ru.noties.markwon.test.TestSpan.span;
 import static ru.noties.markwon.test.TestSpan.text;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class BoldItalicTest extends BaseSuiteTest {
+public class StrongEmphasisTest extends BaseSuiteTest {
 
   @Test
-  public void test() {
+  public void single() {
 
-    final TestSpan.Document document = document(
-      span(BOLD,
-        span(ITALIC, text("bold italic"))));
+    final Document document = document(
+      span(BOLD, text("bold"))
+    );
 
-    match("**_bold italic_**", document);
+    match("**bold**", document);
+    match("__bold__", document);
   }
 }

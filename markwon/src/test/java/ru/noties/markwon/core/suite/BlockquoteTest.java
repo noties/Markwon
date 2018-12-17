@@ -43,6 +43,6 @@ public class BlockquoteTest extends BaseSuiteTest {
     final Document document = document(
       span(BLOCK_QUOTE, text("blockquote")));
 
-    matchInput("single-blockquote.md", document);
+    match("> blockquote", document);
   }
 }

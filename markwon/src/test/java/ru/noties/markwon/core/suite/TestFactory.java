@@ -22,7 +22,9 @@ class TestFactory implements SpannableFactory {
   static final String BLOCK_QUOTE = "blockquote";
   static final String PARAGRAPH = "paragraph";
   static final String ORDERED_LIST = "ordered-list";
+  static final String UN_ORDERED_LIST = "un-ordered-list";
   static final String HEADING = "heading";
+  static final String THEMATIC_BREAK = "thematic-break";
 
   private final boolean useParagraphs;
 
@@ -63,13 +65,13 @@ class TestFactory implements SpannableFactory {
   @Nullable
   @Override
   public Object bulletListItem(@NonNull MarkwonTheme theme, int level) {
-    return null;
+    return span(UN_ORDERED_LIST, args("level", level));
   }
 
   @Nullable
   @Override
   public Object thematicBreak(@NonNull MarkwonTheme theme) {
-    return null;
+    return span(THEMATIC_BREAK);
   }
 
   @Nullable

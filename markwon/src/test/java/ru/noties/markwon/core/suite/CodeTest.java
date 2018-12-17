@@ -56,7 +56,7 @@ public class CodeTest extends BaseSuiteTest {
       span(CODE, args("multiline", false), text("\u00a0code\u00a0"))
     );
 
-    matchInput("single-code.md", document);
+    match("`code`", document);
   }
 
   @Test

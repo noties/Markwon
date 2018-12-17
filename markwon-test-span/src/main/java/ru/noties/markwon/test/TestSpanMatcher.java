@@ -84,7 +84,8 @@ public abstract class TestSpanMatcher {
                     public boolean test(TestSpan.Span span) {
                         return expected.name().equals(span.name())
                                 && start == spanned.getSpanStart(span)
-                                && end == spanned.getSpanEnd(span);
+                                && end == spanned.getSpanEnd(span)
+                                && expected.arguments().equals(span.arguments());
                     }
                 })
                 .first(null);

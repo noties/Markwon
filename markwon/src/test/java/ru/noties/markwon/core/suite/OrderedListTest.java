@@ -103,6 +103,6 @@ public class OrderedListTest extends BaseSuiteTest {
         text("ol"))
     );
 
-    matchInput("single-ol.md", document);
+    match("1. ol", document);
   }
 }

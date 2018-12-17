@@ -15,6 +15,11 @@ import ru.noties.markwon.test.TestUtil;
 
 abstract class BaseSuiteTest {
 
+  void match(@NonNull String markdown, @NonNull TestSpan.Document document) {
+    final Spanned spanned = markwon().toMarkdown(markdown);
+    TestSpanMatcher.matches(spanned, document);
+  }
+
   void matchInput(@NonNull String name, @NonNull TestSpan.Document document) {
     final Spanned spanned = markwon().toMarkdown(read(name));
     TestSpanMatcher.matches(spanned, document);
@@ -28,7 +33,7 @@ abstract class BaseSuiteTest {
   @NonNull
   Markwon markwon() {
     return Markwon.builder(RuntimeEnvironment.application)
-      .use(CorePlugin.create())
+      .use(CorePlugin.create(softBreakAddsNewLine()))
       .use(new AbstractMarkwonPlugin() {
         @Override
         public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
@@ -39,6 +44,10 @@ abstract class BaseSuiteTest {
   }
 
   boolean useParagraphs() {
+    return false;
+  }
+
+  boolean softBreakAddsNewLine() {
     return false;
   }
 }

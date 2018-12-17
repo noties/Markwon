@@ -1,4 +1,0 @@
-input: "**bold**"
-
-output:
-  - b: "bold"
