@@ -1,5 +1,0 @@
-input: "**_bold italic_**"
-
-output:
-  - b:
-    - i: "bold italic"

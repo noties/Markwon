@@ -46,14 +46,12 @@ class TestSpanSpan extends TestSpan.Span {
         TestSpanSpan that = (TestSpanSpan) o;
 
         if (!name.equals(that.name)) return false;
-        if (!children.equals(that.children)) return false;
         return arguments.equals(that.arguments);
     }
 
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + children.hashCode();
         result = 31 * result + arguments.hashCode();
         return result;
     }

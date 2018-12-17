@@ -72,16 +72,18 @@ public abstract class TestSpanMatcher {
             @NonNull final Spanned spanned,
             final int start,
             final int end,
-            @NonNull TestSpan.Span expected) {
+            @NonNull final TestSpan.Span expected) {
 
         // when queried multiple spans can be returned (for example if one span
         // wraps another one. so [0 1 [2 3] 4 5] where [] represents start/end of
         // a span of same type, when queried for spans at 2-3 position, both will be returned
-        final TestSpan.Span actual = Ix.fromArray(spanned.getSpans(start, end, expected.getClass()))
+        final TestSpan.Span actual = Ix.fromArray(spanned.getSpans(start, end, Object.class))
+                .cast(TestSpan.Span.class)
                 .filter(new IxPredicate<TestSpan.Span>() {
                     @Override
                     public boolean test(TestSpan.Span span) {
-                        return start == spanned.getSpanStart(span)
+                        return expected.name().equals(span.name())
+                                && start == spanned.getSpanStart(span)
                                 && end == spanned.getSpanEnd(span);
                     }
                 })

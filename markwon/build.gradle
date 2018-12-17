@@ -21,14 +21,20 @@ dependencies {
     }
 
     deps['test'].with {
+
+        testImplementation project(':markwon-test-span')
+        testImplementation project(':markwon-test-util')
+
         testImplementation it['junit']
         testImplementation it['robolectric']
+        testImplementation it['mockito']
+
+        // to remove after migration
         testImplementation it['ix-java']
         testImplementation it['jackson-yaml']
         testImplementation it['jackson-databind']
         testImplementation it['gson']
         testImplementation it['commons-io']
-        testImplementation it['mockito']
     }
 }
 

@@ -1,0 +1,1 @@
+**bold *bold italic `bold italic code` bold italic* bold** normal

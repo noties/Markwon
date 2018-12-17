@@ -105,6 +105,7 @@ public abstract class TestSpan {
         public abstract int length();
     }
 
+    // important: children should not be included in equals...
     public static abstract class Span extends TestSpan {
 
         @NonNull
