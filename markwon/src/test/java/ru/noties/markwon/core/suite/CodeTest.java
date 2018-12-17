@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import ru.noties.markwon.test.TestSpan;
+import ru.noties.markwon.test.TestSpan.Document;
 
 import static ru.noties.markwon.core.suite.TestFactory.CODE;
 import static ru.noties.markwon.test.TestSpan.args;
@@ -15,7 +15,7 @@ import static ru.noties.markwon.test.TestSpan.text;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class CodeBlocks extends BaseSuiteTest {
+public class CodeTest extends BaseSuiteTest {
 
   /*
   ```java
@@ -30,9 +30,9 @@ public class CodeBlocks extends BaseSuiteTest {
    */
 
   @Test
-  public void test() {
+  public void multiple_blocks() {
 
-    final TestSpan.Document document = document(
+    final Document document = document(
       span(CODE,
         args("multiline", true),
         text("\u00a0\nfinal String s = null;\n\u00a0")),
@@ -47,5 +47,25 @@ public class CodeBlocks extends BaseSuiteTest {
     );
 
     matchInput("code-blocks.md", document);
+  }
+
+  @Test
+  public void single() {
+
+    final Document document = document(
+      span(CODE, args("multiline", false), text("\u00a0code\u00a0"))
+    );
+
+    matchInput("single-code.md", document);
+  }
+
+  @Test
+  public void single_block() {
+
+    final Document document = document(
+      span(CODE, args("multiline", true), text("\u00a0\ncode block\n\u00a0"))
+    );
+
+    matchInput("single-code-block.md", document);
   }
 }

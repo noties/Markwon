@@ -15,17 +15,13 @@ import ru.noties.markwon.test.TestUtil;
 
 abstract class BaseSuiteTest {
 
-  void matches(@NonNull String input, @NonNull TestSpan.Document document) {
-    final Spanned spanned = (Spanned) markwon().toMarkdown(input);
+  void matchInput(@NonNull String name, @NonNull TestSpan.Document document) {
+    final Spanned spanned = markwon().toMarkdown(read(name));
     TestSpanMatcher.matches(spanned, document);
   }
 
-  void matchInput(@NonNull String name, @NonNull TestSpan.Document document) {
-    matches(read(name), document);
-  }
-
   @NonNull
-  String read(@NonNull String name) {
+  private String read(@NonNull String name) {
     return TestUtil.read(this, "tests/" + name);
   }
 
@@ -36,9 +32,13 @@ abstract class BaseSuiteTest {
       .use(new AbstractMarkwonPlugin() {
         @Override
         public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-          builder.factory(new TestFactory());
+          builder.factory(new TestFactory(useParagraphs()));
         }
       })
       .build();
+  }
+
+  boolean useParagraphs() {
+    return false;
   }
 }

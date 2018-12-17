@@ -19,6 +19,16 @@ class TestFactory implements SpannableFactory {
   static final String ITALIC = "italic";
   static final String CODE = "code";
   static final String LINK = "link";
+  static final String BLOCK_QUOTE = "blockquote";
+  static final String PARAGRAPH = "paragraph";
+  static final String ORDERED_LIST = "ordered-list";
+  static final String HEADING = "heading";
+
+  private final boolean useParagraphs;
+
+  TestFactory(boolean useParagraphs) {
+    this.useParagraphs = useParagraphs;
+  }
 
   @Nullable
   @Override
@@ -35,7 +45,7 @@ class TestFactory implements SpannableFactory {
   @Nullable
   @Override
   public Object blockQuote(@NonNull MarkwonTheme theme) {
-    return null;
+    return span(BLOCK_QUOTE);
   }
 
   @Nullable
@@ -47,7 +57,7 @@ class TestFactory implements SpannableFactory {
   @Nullable
   @Override
   public Object orderedListItem(@NonNull MarkwonTheme theme, int startNumber) {
-    return null;
+    return span(ORDERED_LIST, args("start", startNumber));
   }
 
   @Nullable
@@ -65,13 +75,15 @@ class TestFactory implements SpannableFactory {
   @Nullable
   @Override
   public Object heading(@NonNull MarkwonTheme theme, int level) {
-    return null;
+    return span(HEADING, args("level", level));
   }
 
   @Nullable
   @Override
   public Object paragraph(boolean inTightList) {
-    return null;
+    return useParagraphs
+      ? span(PARAGRAPH)
+      : null;
   }
 
   @Nullable

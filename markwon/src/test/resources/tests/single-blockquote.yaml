@@ -1,4 +1,0 @@
-input: "> blockquote"
-
-output:
-  - blockquote: "blockquote"

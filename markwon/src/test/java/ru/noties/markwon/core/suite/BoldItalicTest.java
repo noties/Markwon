@@ -15,7 +15,7 @@ import static ru.noties.markwon.test.TestSpan.text;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class BoldItalic extends BaseSuiteTest {
+public class BoldItalicTest extends BaseSuiteTest {
 
   /*
    **_bold italic_**
