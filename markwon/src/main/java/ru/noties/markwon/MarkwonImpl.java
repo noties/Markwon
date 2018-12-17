@@ -1,6 +1,7 @@
 package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.widget.TextView;
 
 import org.commonmark.node.Node;
@@ -39,7 +40,7 @@ class MarkwonImpl extends Markwon {
 
     @NonNull
     @Override
-    public CharSequence render(@NonNull Node node) {
+    public Spanned render(@NonNull Node node) {
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.beforeRender(node);
@@ -51,12 +52,12 @@ class MarkwonImpl extends Markwon {
             plugin.afterRender(node, visitor);
         }
 
-        return visitor.builder().text();
+        return visitor.builder().spannableStringBuilder();
     }
 
     @NonNull
     @Override
-    public CharSequence toMarkdown(@NonNull String input) {
+    public Spanned toMarkdown(@NonNull String input) {
         return render(parse(input));
     }
 

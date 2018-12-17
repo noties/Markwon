@@ -2,6 +2,7 @@ package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.widget.TextView;
 
 import org.commonmark.node.Node;
@@ -17,11 +18,11 @@ public abstract class Markwon {
     public abstract Node parse(@NonNull String input);
 
     @NonNull
-    public abstract CharSequence render(@NonNull Node node);
+    public abstract Spanned render(@NonNull Node node);
 
     // parse + render
     @NonNull
-    public abstract CharSequence toMarkdown(@NonNull String input);
+    public abstract Spanned toMarkdown(@NonNull String input);
 
     public abstract void setMarkdown(@NonNull TextView textView, @NonNull String markdown);
 
