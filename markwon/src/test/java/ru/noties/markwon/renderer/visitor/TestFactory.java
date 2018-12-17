@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonSpannableFactory;
 import ru.noties.markwon.core.spans.LinkSpan;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSize;
@@ -27,7 +27,7 @@ import static ru.noties.markwon.renderer.visitor.TestSpan.PARAGRAPH;
 import static ru.noties.markwon.renderer.visitor.TestSpan.STRONG_EMPHASIS;
 import static ru.noties.markwon.renderer.visitor.TestSpan.THEMATIC_BREAK;
 
-class TestFactory implements SpannableFactory {
+class TestFactory implements MarkwonSpannableFactory {
 
     private final boolean useParagraphs;
 

@@ -7,6 +7,7 @@ import org.commonmark.node.Node;
 import org.commonmark.node.Visitor;
 
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonSpannableFactory;
 
 public interface MarkwonVisitor extends Visitor {
 
@@ -30,7 +31,7 @@ public interface MarkwonVisitor extends Visitor {
     MarkwonTheme theme();
 
     @NonNull
-    SpannableFactory factory();
+    MarkwonSpannableFactory factory();
 
     @NonNull
     SpannableBuilder builder();

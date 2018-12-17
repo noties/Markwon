@@ -21,8 +21,8 @@ import ru.noties.markwon.AbstractMarkwonVisitorImpl;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.SpannableBuilder;
-import ru.noties.markwon.SpannableFactory;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonSpannableFactory;
 import ru.noties.markwon.core.visitor.CodeBlockNodeVisitor;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 
@@ -71,7 +71,7 @@ public class SyntaxHighlightTest {
             }
         };
 
-        final SpannableFactory factory = mock(SpannableFactory.class);
+        final MarkwonSpannableFactory factory = mock(MarkwonSpannableFactory.class);
         when(factory.code(any(MarkwonTheme.class), anyBoolean())).thenReturn(codeSpan);
 
         final MarkwonConfiguration configuration = MarkwonConfiguration.builder(mock(Context.class))

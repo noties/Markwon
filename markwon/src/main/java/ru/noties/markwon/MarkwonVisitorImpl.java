@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonSpannableFactory;
 
 class MarkwonVisitorImpl implements MarkwonVisitor {
 
@@ -39,7 +40,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final MarkwonConfiguration configuration;
     private final MarkwonTheme theme;
-    private final SpannableFactory factory;
+    private final MarkwonSpannableFactory factory;
 
     private final SpannableBuilder builder = new SpannableBuilder();
 
@@ -186,7 +187,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     @NonNull
     @Override
-    public SpannableFactory factory() {
+    public MarkwonSpannableFactory factory() {
         return factory;
     }
 

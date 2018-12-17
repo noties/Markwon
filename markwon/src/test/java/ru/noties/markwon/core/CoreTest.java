@@ -1,7 +1,6 @@
 package ru.noties.markwon.core;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Spanned;
 
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.robolectric.annotation.Config;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.SpannableFactoryDef;
 import ru.noties.markwon.test.TestSpan;
 import ru.noties.markwon.test.TestSpanMatcher;
 
@@ -38,7 +36,7 @@ public class CoreTest {
                 .use(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.factory(new SpannableFactoryDef() {
+                        builder.factory(new MarkwonSpannableFactoryDef() {
 
                             @Override
                             public Object strongEmphasis() {

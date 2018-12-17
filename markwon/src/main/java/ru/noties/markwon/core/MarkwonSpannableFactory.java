@@ -1,20 +1,16 @@
-package ru.noties.markwon;
+package ru.noties.markwon.core;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImageSize;
-import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.core.spans.LinkSpan;
-import ru.noties.markwon.core.MarkwonTheme;
 
 /**
  * Each method can return null or a Span object or an array of spans
  *
  * @since 1.1.0
  */
-public interface SpannableFactory {
+public interface MarkwonSpannableFactory {
 
     @Nullable
     Object strongEmphasis();
@@ -45,15 +41,6 @@ public interface SpannableFactory {
      */
     @Nullable
     Object paragraph(boolean inTightList);
-
-    @Nullable
-    Object image(
-            @NonNull MarkwonTheme theme,
-            @NonNull String destination,
-            @NonNull AsyncDrawableLoader loader,
-            @NonNull ImageSizeResolver imageSizeResolver,
-            @Nullable ImageSize imageSize,
-            boolean replacementTextIsLink);
 
     @Nullable
     Object link(

@@ -6,8 +6,8 @@ import android.widget.TextView;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
-import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.image.AsyncDrawableLoader;
 
 public interface MarkwonPlugin {
 

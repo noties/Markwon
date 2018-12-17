@@ -2,6 +2,7 @@ package ru.noties.markwon.image;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import org.commonmark.node.Image;
@@ -13,6 +14,8 @@ import java.util.Arrays;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.spans.AsyncDrawableSpan;
 import ru.noties.markwon.image.data.DataUriSchemeHandler;
 import ru.noties.markwon.image.file.FileSchemeHandler;
 import ru.noties.markwon.image.network.NetworkSchemeHandler;
@@ -78,12 +81,11 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
                         .urlProcessor()
                         .process(image.getDestination());
 
-                final Object spans = visitor.factory().image(
+                final Object spans = imageSpan(
                         visitor.theme(),
                         destination,
                         configuration.asyncDrawableLoader(),
                         configuration.imageSizeResolver(),
-                        null,
                         link);
 
                 visitor.setSpans(length, spans);
@@ -99,5 +101,25 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     @Override
     public void afterSetText(@NonNull TextView textView) {
         AsyncDrawableScheduler.schedule(textView);
+    }
+
+    @Nullable
+    protected Object imageSpan(
+            @NonNull MarkwonTheme theme,
+            @NonNull String destination,
+            @NonNull AsyncDrawableLoader loader,
+            @NonNull ImageSizeResolver imageSizeResolver,
+            boolean replacementTextIsLink) {
+        return new AsyncDrawableSpan(
+                theme,
+                new AsyncDrawable(
+                        destination,
+                        loader,
+                        imageSizeResolver,
+                        null
+                ),
+                AsyncDrawableSpan.ALIGN_BOTTOM,
+                replacementTextIsLink
+        );
     }
 }

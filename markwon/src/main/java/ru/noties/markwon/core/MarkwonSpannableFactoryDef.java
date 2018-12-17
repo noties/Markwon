@@ -1,20 +1,14 @@
-package ru.noties.markwon;
+package ru.noties.markwon.core;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.image.AsyncDrawable;
-import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImageSize;
-import ru.noties.markwon.image.ImageSizeResolver;
-import ru.noties.markwon.core.spans.AsyncDrawableSpan;
 import ru.noties.markwon.core.spans.BlockQuoteSpan;
 import ru.noties.markwon.core.spans.BulletListItemSpan;
 import ru.noties.markwon.core.spans.CodeSpan;
 import ru.noties.markwon.core.spans.EmphasisSpan;
 import ru.noties.markwon.core.spans.HeadingSpan;
 import ru.noties.markwon.core.spans.LinkSpan;
-import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.core.spans.OrderedListItemSpan;
 import ru.noties.markwon.core.spans.StrongEmphasisSpan;
 import ru.noties.markwon.core.spans.ThematicBreakSpan;
@@ -22,11 +16,11 @@ import ru.noties.markwon.core.spans.ThematicBreakSpan;
 /**
  * @since 1.1.0
  */
-public class SpannableFactoryDef implements SpannableFactory {
+public class MarkwonSpannableFactoryDef implements MarkwonSpannableFactory {
 
     @NonNull
-    public static SpannableFactoryDef create() {
-        return new SpannableFactoryDef();
+    public static MarkwonSpannableFactoryDef create() {
+        return new MarkwonSpannableFactoryDef();
     }
 
     @Nullable
@@ -85,22 +79,6 @@ public class SpannableFactoryDef implements SpannableFactory {
     @Override
     public Object paragraph(boolean inTightList) {
         return null;
-    }
-
-    @Nullable
-    @Override
-    public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawableLoader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
-        return new AsyncDrawableSpan(
-                theme,
-                new AsyncDrawable(
-                        destination,
-                        loader,
-                        imageSizeResolver,
-                        imageSize
-                ),
-                AsyncDrawableSpan.ALIGN_BOTTOM,
-                replacementTextIsLink
-        );
     }
 
     @Nullable

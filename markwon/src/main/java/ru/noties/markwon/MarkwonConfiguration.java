@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonSpannableFactory;
+import ru.noties.markwon.core.MarkwonSpannableFactoryDef;
 import ru.noties.markwon.core.spans.LinkSpan;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSizeResolver;
@@ -37,7 +39,7 @@ public class MarkwonConfiguration {
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
-    private final SpannableFactory factory; // @since 1.1.0
+    private final MarkwonSpannableFactory factory; // @since 1.1.0
 
     private MarkwonConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -80,7 +82,7 @@ public class MarkwonConfiguration {
     }
 
     @NonNull
-    public SpannableFactory factory() {
+    public MarkwonSpannableFactory factory() {
         return factory;
     }
 
@@ -95,7 +97,7 @@ public class MarkwonConfiguration {
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
         private ImageSizeResolver imageSizeResolver;
-        private SpannableFactory factory; // @since 1.1.0
+        private MarkwonSpannableFactory factory; // @since 1.1.0
 
         Builder(@NonNull Context context) {
             this.context = context;
@@ -132,7 +134,7 @@ public class MarkwonConfiguration {
          * @since 1.1.0
          */
         @NonNull
-        public Builder factory(@NonNull SpannableFactory factory) {
+        public Builder factory(@NonNull MarkwonSpannableFactory factory) {
             this.factory = factory;
             return this;
         }
@@ -161,7 +163,7 @@ public class MarkwonConfiguration {
 
             // @since 1.1.0
             if (factory == null) {
-                factory = SpannableFactoryDef.create();
+                factory = MarkwonSpannableFactoryDef.create();
             }
 
             return new MarkwonConfiguration(this);

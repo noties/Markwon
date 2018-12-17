@@ -3,14 +3,14 @@ package ru.noties.markwon.gif;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.SpannableFactoryDef;
+import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.core.MarkwonSpannableFactoryDef;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.core.spans.AsyncDrawableSpan;
-import ru.noties.markwon.core.MarkwonTheme;
 
-public class GifAwareSpannableFactory extends SpannableFactoryDef {
+public class GifAwareSpannableFactory extends MarkwonSpannableFactoryDef {
 
     private final GifPlaceholder gifPlaceholder;
 

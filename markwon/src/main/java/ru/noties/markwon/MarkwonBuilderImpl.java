@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.image.AsyncDrawableLoader;
 
 class MarkwonBuilderImpl implements Markwon.Builder {
 

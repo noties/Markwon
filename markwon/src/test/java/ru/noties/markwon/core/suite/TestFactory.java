@@ -3,17 +3,14 @@ package ru.noties.markwon.core.suite;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.noties.markwon.SpannableFactory;
+import ru.noties.markwon.core.MarkwonSpannableFactory;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.core.spans.LinkSpan;
-import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImageSize;
-import ru.noties.markwon.image.ImageSizeResolver;
 
 import static ru.noties.markwon.test.TestSpan.args;
 import static ru.noties.markwon.test.TestSpan.span;
 
-class TestFactory implements SpannableFactory {
+class TestFactory implements MarkwonSpannableFactory {
 
   static final String BOLD = "bold";
   static final String ITALIC = "italic";
@@ -86,12 +83,6 @@ class TestFactory implements SpannableFactory {
     return useParagraphs
       ? span(PARAGRAPH)
       : null;
-  }
-
-  @Nullable
-  @Override
-  public Object image(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawableLoader loader, @NonNull ImageSizeResolver imageSizeResolver, @Nullable ImageSize imageSize, boolean replacementTextIsLink) {
-    return null;
   }
 
   @Nullable

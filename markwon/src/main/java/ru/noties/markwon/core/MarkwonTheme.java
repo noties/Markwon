@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Px;
@@ -96,8 +95,6 @@ public class MarkwonTheme {
             2.F, 1.5F, 1.17F, 1.F, .83F, .67F,
     };
 
-    protected static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
-
     protected static final int THEMATIC_BREAK_DEF_ALPHA = 25;
 
     protected final int linkColor;
@@ -158,9 +155,6 @@ public class MarkwonTheme {
     // @since 1.1.0
     protected final float[] headingTextSizeMultipliers;
 
-    // by default `SCRIPT_DEF_TEXT_SIZE_RATIO`
-    protected final float scriptTextSizeRatio;
-
     // by default textColor with `THEMATIC_BREAK_DEF_ALPHA` applied alpha
     protected final int thematicBreakColor;
 
@@ -186,7 +180,6 @@ public class MarkwonTheme {
         this.headingBreakColor = builder.headingBreakColor;
         this.headingTypeface = builder.headingTypeface;
         this.headingTextSizeMultipliers = builder.headingTextSizeMultipliers;
-        this.scriptTextSizeRatio = builder.scriptTextSizeRatio;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
     }
@@ -369,28 +362,6 @@ public class MarkwonTheme {
         }
     }
 
-    public void applySuperScriptStyle(@NonNull TextPaint paint) {
-        final float ratio;
-        if (Float.compare(scriptTextSizeRatio, .0F) == 0) {
-            ratio = SCRIPT_DEF_TEXT_SIZE_RATIO;
-        } else {
-            ratio = scriptTextSizeRatio;
-        }
-        paint.setTextSize(paint.getTextSize() * ratio);
-        paint.baselineShift += (int) (paint.ascent() / 2);
-    }
-
-    public void applySubScriptStyle(@NonNull TextPaint paint) {
-        final float ratio;
-        if (Float.compare(scriptTextSizeRatio, .0F) == 0) {
-            ratio = SCRIPT_DEF_TEXT_SIZE_RATIO;
-        } else {
-            ratio = scriptTextSizeRatio;
-        }
-        paint.setTextSize(paint.getTextSize() * ratio);
-        paint.baselineShift -= (int) (paint.ascent() / 2);
-    }
-
     public void applyThematicBreakStyle(@NonNull Paint paint) {
         final int color;
         if (thematicBreakColor != 0) {
@@ -428,7 +399,6 @@ public class MarkwonTheme {
         private int headingBreakColor;
         private Typeface headingTypeface;
         private float[] headingTextSizeMultipliers;
-        private float scriptTextSizeRatio;
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
 
@@ -454,7 +424,6 @@ public class MarkwonTheme {
             this.headingBreakColor = theme.headingBreakColor;
             this.headingTypeface = theme.headingTypeface;
             this.headingTextSizeMultipliers = theme.headingTextSizeMultipliers;
-            this.scriptTextSizeRatio = theme.scriptTextSizeRatio;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
         }
@@ -583,12 +552,6 @@ public class MarkwonTheme {
         @NonNull
         public Builder headingTextSizeMultipliers(@Size(6) @NonNull float[] headingTextSizeMultipliers) {
             this.headingTextSizeMultipliers = headingTextSizeMultipliers;
-            return this;
-        }
-
-        @NonNull
-        public Builder scriptTextSizeRatio(@FloatRange(from = .0F, to = Float.MAX_VALUE) float scriptTextSizeRatio) {
-            this.scriptTextSizeRatio = scriptTextSizeRatio;
             return this;
         }
 
