@@ -1,12 +1,10 @@
-package ru.noties.markwon.html.impl;
+package ru.noties.markwon.html;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
 
-import ru.noties.markwon.html.HtmlEmptyTagReplacement;
-import ru.noties.markwon.html.api.HtmlTag;
 import ru.noties.markwon.html.HtmlTagImpl.InlineImpl;
 
 import static org.junit.Assert.assertEquals;

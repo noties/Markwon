@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.impl;
+package ru.noties.markwon.html;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,11 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import ru.noties.markwon.html.HtmlEmptyTagReplacement;
-import ru.noties.markwon.html.MarkwonHtmlParserImpl;
-import ru.noties.markwon.html.api.HtmlTag;
-import ru.noties.markwon.html.api.MarkwonHtmlParser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -847,7 +842,7 @@ public class MarkwonHtmlParserImplTest {
                 "<h3>head #3</h3><custom-tag>in custom-tag</custom-tag>"
         };
 
-        for (String fragment: fragments) {
+        for (String fragment : fragments) {
             impl.processFragment(output, fragment);
         }
 

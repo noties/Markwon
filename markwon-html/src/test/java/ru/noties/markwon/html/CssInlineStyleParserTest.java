@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.impl;
+package ru.noties.markwon.html;
 
 import android.support.annotation.NonNull;
 
@@ -14,13 +14,9 @@ import java.util.Map;
 
 import ix.Ix;
 import ix.IxFunction;
-import ru.noties.markwon.html.CssInlineStyleParser;
-import ru.noties.markwon.html.CssProperty;
-import ru.noties.markwon.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static ru.noties.markwon.test.TestUtils.with;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -42,7 +38,7 @@ public class CssInlineStyleParserTest {
 
         assertEquals(1, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key", cssProperty.key());
@@ -60,7 +56,7 @@ public class CssInlineStyleParserTest {
 
         assertEquals(2, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key1", cssProperty.key());
@@ -68,7 +64,7 @@ public class CssInlineStyleParserTest {
             }
         });
 
-        with(list.get(1), new TestUtils.Action<CssProperty>() {
+        with(list.get(1), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key2", cssProperty.key());
@@ -84,7 +80,7 @@ public class CssInlineStyleParserTest {
         final List<CssProperty> list = listProperties(input);
         assertEquals(1, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key", cssProperty.key());
@@ -100,7 +96,7 @@ public class CssInlineStyleParserTest {
         final List<CssProperty> list = listProperties(input);
         assertEquals(1, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key", cssProperty.key());
@@ -116,7 +112,7 @@ public class CssInlineStyleParserTest {
         final List<CssProperty> list = listProperties(input);
         assertEquals(2, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key1", cssProperty.key());
@@ -124,7 +120,7 @@ public class CssInlineStyleParserTest {
             }
         });
 
-        with(list.get(1), new TestUtils.Action<CssProperty>() {
+        with(list.get(1), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key2", cssProperty.key());
@@ -149,7 +145,7 @@ public class CssInlineStyleParserTest {
         final List<CssProperty> list = listProperties(input);
         assertEquals(1, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key4", cssProperty.key());
@@ -174,7 +170,7 @@ public class CssInlineStyleParserTest {
 
         assertEquals(2, list.size());
 
-        with(list.get(0), new TestUtils.Action<CssProperty>() {
+        with(list.get(0), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key1", cssProperty.key());
@@ -182,7 +178,7 @@ public class CssInlineStyleParserTest {
             }
         });
 
-        with(list.get(1), new TestUtils.Action<CssProperty>() {
+        with(list.get(1), new Action<CssProperty>() {
             @Override
             public void apply(@NonNull CssProperty cssProperty) {
                 assertEquals("key3", cssProperty.key());
@@ -211,14 +207,14 @@ public class CssInlineStyleParserTest {
         }};
 
         final StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, String> entry: map.entrySet()) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
             builder.append(entry.getKey())
                     .append(':')
                     .append(entry.getValue())
                     .append(';');
         }
 
-        for (CssProperty cssProperty: impl.parse(builder.toString())) {
+        for (CssProperty cssProperty : impl.parse(builder.toString())) {
             final String value = map.remove(cssProperty.key());
             assertNotNull(cssProperty.key(), value);
             assertEquals(cssProperty.key(), value, cssProperty.value());
@@ -238,4 +234,13 @@ public class CssInlineStyleParserTest {
                 })
                 .toList();
     }
+
+    public interface Action<T> {
+        void apply(@NonNull T t);
+    }
+
+    private static <T> void with(@NonNull T t, @NonNull Action<T> action) {
+        action.apply(t);
+    }
+
 }

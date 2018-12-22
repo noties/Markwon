@@ -1,8 +1,9 @@
-package ru.noties.markwon.html.impl.tag;
+package ru.noties.markwon.html.tag;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +14,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.noties.markwon.html.tag.ImageSizeParserImpl;
+import ru.noties.markwon.html.CssInlineStyleParser;
 import ru.noties.markwon.image.ImageSize;
-import ru.noties.markwon.renderer.html2.CssInlineStyleParser;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -36,7 +32,7 @@ public class ImageSizeParserImplTest {
 
     @Test
     public void nothing() {
-        assertNull(impl.parse(Collections.<String, String>emptyMap()));
+        Assert.assertNull(impl.parse(Collections.<String, String>emptyMap()));
     }
 
     @Test
@@ -153,15 +149,15 @@ public class ImageSizeParserImplTest {
         };
 
         for (String dimension : dimensions) {
-            assertNull(dimension, impl.dimension(dimension));
+            Assert.assertNull(dimension, impl.dimension(dimension));
         }
     }
 
     private static void assertImageSize(@Nullable ImageSize expected, @Nullable ImageSize actual) {
         if (expected == null) {
-            assertNull(actual);
+            Assert.assertNull(actual);
         } else {
-            assertNotNull(actual);
+            Assert.assertNotNull(actual);
             assertDimension("width", expected.width, actual.width);
             assertDimension("height", expected.height, actual.height);
         }
@@ -172,11 +168,11 @@ public class ImageSizeParserImplTest {
             @Nullable ImageSize.Dimension expected,
             @Nullable ImageSize.Dimension actual) {
         if (expected == null) {
-            assertNull(name, actual);
+            Assert.assertNull(name, actual);
         } else {
-            assertNotNull(name, actual);
-            assertEquals(name, expected.value, actual.value, DELTA);
-            assertEquals(name, expected.unit, actual.unit);
+            Assert.assertNotNull(name, actual);
+            Assert.assertEquals(name, expected.value, actual.value, DELTA);
+            Assert.assertEquals(name, expected.unit, actual.unit);
         }
     }
 

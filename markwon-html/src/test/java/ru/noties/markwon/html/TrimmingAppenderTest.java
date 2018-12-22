@@ -1,4 +1,4 @@
-package ru.noties.markwon.html.impl;
+package ru.noties.markwon.html;
 
 import org.junit.Before;
 import org.junit.Test;
