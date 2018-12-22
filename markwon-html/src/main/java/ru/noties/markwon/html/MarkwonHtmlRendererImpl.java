@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.html.tag.BlockquoteHandler;
 import ru.noties.markwon.html.tag.EmphasisHandler;
 import ru.noties.markwon.html.tag.HeadingHandler;
@@ -100,15 +99,14 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
     @Override
     public void render(
-            @NonNull final MarkwonConfiguration configuration,
-            @NonNull final SpannableBuilder builder,
+            @NonNull final MarkwonVisitor visitor,
             @NonNull MarkwonHtmlParser parser) {
 
         final int end;
         if (!allowNonClosedTags) {
             end = HtmlTag.NO_END;
         } else {
-            end = builder.length();
+            end = visitor.length();
         }
 
         parser.flushInlineTags(end, new MarkwonHtmlParser.FlushAction<HtmlTag.Inline>() {
@@ -126,7 +124,7 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
                     handler = tagHandler(inline.name());
                     if (handler != null) {
-                        handler.handle(configuration, MarkwonHtmlRendererImpl.this, builder, inline);
+                        handler.handle(visitor, MarkwonHtmlRendererImpl.this, inline);
                     }
                 }
             }
@@ -146,7 +144,7 @@ public class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
                     handler = tagHandler(block.name());
                     if (handler != null) {
-                        handler.handle(configuration, MarkwonHtmlRendererImpl.this, builder, block);
+                        handler.handle(visitor, MarkwonHtmlRendererImpl.this, block);
                     } else {
                         // see if any of children can be handled
                         apply(block.children());

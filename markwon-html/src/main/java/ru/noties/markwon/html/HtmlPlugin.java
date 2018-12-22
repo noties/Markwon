@@ -3,7 +3,6 @@ package ru.noties.markwon.html;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.commonmark.node.Document;
 import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Node;
@@ -43,7 +42,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void afterRender(@NonNull Node node, @NonNull MarkwonVisitor visitor) {
-        renderer.render(visitor.configuration(), visitor.builder(), parser);
+        renderer.render(visitor, parser);
     }
 
     @Override

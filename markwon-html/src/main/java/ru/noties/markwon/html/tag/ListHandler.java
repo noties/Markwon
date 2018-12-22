@@ -2,8 +2,14 @@ package ru.noties.markwon.html.tag;
 
 import android.support.annotation.NonNull;
 
+import org.commonmark.node.ListItem;
+
 import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.core.CoreProps;
 import ru.noties.markwon.html.HtmlTag;
 import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.html.TagHandler;
@@ -12,9 +18,8 @@ public class ListHandler extends TagHandler {
 
     @Override
     public void handle(
-            @NonNull MarkwonConfiguration configuration,
+            @NonNull MarkwonVisitor visitor,
             @NonNull MarkwonHtmlRenderer renderer,
-            @NonNull SpannableBuilder builder,
             @NonNull HtmlTag tag) {
 
         if (!tag.isBlock()) {
@@ -29,29 +34,33 @@ public class ListHandler extends TagHandler {
             return;
         }
 
+        final MarkwonConfiguration configuration = visitor.configuration();
+        final RenderProps renderProps = visitor.renderProps();
+        final SpanFactory spanFactory = configuration.spansFactory().get(ListItem.class);
+
         int number = 1;
         final int bulletLevel = currentBulletListLevel(block);
 
-        Object spans;
-
         for (HtmlTag.Block child : block.children()) {
 
-            visitChildren(configuration, renderer, builder, child);
+            visitChildren(visitor, renderer, child);
 
-            if ("li".equals(child.name())) {
+            if (spanFactory != null && "li".equals(child.name())) {
+
                 // insert list item here
                 if (ol) {
-                    spans = configuration.factory().orderedListItem(
-                            configuration.theme(),
-                            number++
-                    );
+                    CoreProps.LIST_ITEM_TYPE.set(renderProps, CoreProps.ListItemType.ORDERED);
+                    CoreProps.ORDERED_LIST_ITEM_NUMBER.set(renderProps, number++);
                 } else {
-                    spans = configuration.factory().bulletListItem(
-                            configuration.theme(),
-                            bulletLevel
-                    );
+                    CoreProps.LIST_ITEM_TYPE.set(renderProps, CoreProps.ListItemType.BULLET);
+                    CoreProps.BULLET_LIST_ITEM_LEVEL.set(renderProps, bulletLevel);
                 }
-                SpannableBuilder.setSpans(builder, spans, child.start(), child.end());
+
+                SpannableBuilder.setSpans(
+                        visitor.builder(),
+                        spanFactory.getSpans(configuration, renderProps),
+                        child.start(),
+                        child.end());
             }
         }
     }

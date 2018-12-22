@@ -2,22 +2,19 @@ package ru.noties.markwon.html;
 
 import android.support.annotation.NonNull;
 
-import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.MarkwonVisitor;
 
 public abstract class TagHandler {
 
     public abstract void handle(
-            @NonNull MarkwonConfiguration configuration,
+            @NonNull MarkwonVisitor visitor,
             @NonNull MarkwonHtmlRenderer renderer,
-            @NonNull SpannableBuilder builder,
             @NonNull HtmlTag tag
     );
 
     protected static void visitChildren(
-            @NonNull MarkwonConfiguration configuration,
+            @NonNull MarkwonVisitor visitor,
             @NonNull MarkwonHtmlRenderer renderer,
-            @NonNull SpannableBuilder builder,
             @NonNull HtmlTag.Block block) {
 
         TagHandler handler;
@@ -30,9 +27,9 @@ public abstract class TagHandler {
 
             handler = renderer.tagHandler(child.name());
             if (handler != null) {
-                handler.handle(configuration, renderer, builder, child);
+                handler.handle(visitor, renderer, child);
             } else {
-                visitChildren(configuration, renderer, builder, child);
+                visitChildren(visitor, renderer, child);
             }
         }
     }

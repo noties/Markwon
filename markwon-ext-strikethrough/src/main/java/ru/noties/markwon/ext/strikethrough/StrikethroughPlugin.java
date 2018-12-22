@@ -10,7 +10,11 @@ import org.commonmark.parser.Parser;
 import java.util.Collections;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
+import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.SpanFactory;
 
 public class StrikethroughPlugin extends AbstractMarkwonPlugin {
 
@@ -25,13 +29,23 @@ public class StrikethroughPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
+    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+        builder.setFactory(Strikethrough.class, new SpanFactory() {
+            @Override
+            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+                return new StrikethroughSpan();
+            }
+        });
+    }
+
+    @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder.on(Strikethrough.class, new MarkwonVisitor.NodeVisitor<Strikethrough>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Strikethrough strikethrough) {
                 final int length = visitor.length();
                 visitor.visitChildren(strikethrough);
-                visitor.setSpans(length, new StrikethroughSpan());
+                visitor.setSpansForNode(strikethrough, length);
             }
         });
     }

@@ -2,7 +2,11 @@ package ru.noties.markwon.html.tag;
 
 import android.support.annotation.NonNull;
 
+import org.commonmark.node.BlockQuote;
+
 import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.html.HtmlTag;
 import ru.noties.markwon.html.MarkwonHtmlRenderer;
@@ -12,20 +16,23 @@ public class BlockquoteHandler extends TagHandler {
 
     @Override
     public void handle(
-            @NonNull MarkwonConfiguration configuration,
+            @NonNull MarkwonVisitor visitor,
             @NonNull MarkwonHtmlRenderer renderer,
-            @NonNull SpannableBuilder builder,
             @NonNull HtmlTag tag) {
 
         if (tag.isBlock()) {
-            visitChildren(configuration, renderer, builder, tag.getAsBlock());
+            visitChildren(visitor, renderer, tag.getAsBlock());
         }
 
-        SpannableBuilder.setSpans(
-                builder,
-                configuration.factory().blockQuote(configuration.theme()),
-                tag.start(),
-                tag.end()
-        );
+        final MarkwonConfiguration configuration = visitor.configuration();
+        final SpanFactory factory = configuration.spansFactory().get(BlockQuote.class);
+        if (factory != null) {
+            SpannableBuilder.setSpans(
+                    visitor.builder(),
+                    factory.getSpans(configuration, visitor.renderProps()),
+                    tag.start(),
+                    tag.end()
+            );
+        }
     }
 }
