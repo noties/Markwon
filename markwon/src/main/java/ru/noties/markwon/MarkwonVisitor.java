@@ -49,6 +49,10 @@ public interface MarkwonVisitor extends Visitor {
     // will throw, if not desired use setSpansForNodeOptional
     <N extends Node> void setSpansForNode(@NonNull N node, int start);
 
+    <N extends Node> void setSpansForNode(@NonNull Class<N> node, int start);
+
     // does not throw if there is no SpanFactory registered for this node
     <N extends Node> void setSpansForNodeOptional(@NonNull N node, int start);
+
+    <N extends Node> void setSpansForNodeOptional(@NonNull Class<N> node, int start);
 }

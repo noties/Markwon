@@ -237,7 +237,20 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     }
 
     @Override
+    public <N extends Node> void setSpansForNode(@NonNull Class<N> node, int start) {
+        setSpans(start, configuration.spansFactory().require(node).getSpans(configuration, renderProps));
+    }
+
+    @Override
     public <N extends Node> void setSpansForNodeOptional(@NonNull N node, int start) {
+        final SpanFactory factory = configuration.spansFactory().get(node);
+        if (factory != null) {
+            setSpans(start, factory.getSpans(configuration, renderProps));
+        }
+    }
+
+    @Override
+    public <N extends Node> void setSpansForNodeOptional(@NonNull Class<N> node, int start) {
         final SpanFactory factory = configuration.spansFactory().get(node);
         if (factory != null) {
             setSpans(start, factory.getSpans(configuration, renderProps));

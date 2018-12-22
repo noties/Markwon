@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.commonmark.node.Image;
 import org.commonmark.parser.Parser;
 
 import java.io.ByteArrayInputStream;
@@ -14,10 +15,11 @@ import java.util.Scanner;
 
 import ru.noties.jlatexmath.JLatexMathDrawable;
 import ru.noties.markwon.AbstractMarkwonPlugin;
-import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageItem;
+import ru.noties.markwon.image.ImageProps;
 import ru.noties.markwon.image.ImageSize;
 import ru.noties.markwon.image.MediaDecoder;
 import ru.noties.markwon.image.SchemeHandler;
@@ -77,19 +79,13 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
                 visitor.builder().append(latex);
 
-                final MarkwonConfiguration configuration = visitor.configuration();
+                final RenderProps renderProps = visitor.renderProps();
 
-                visitor.setSpans(
-                        length,
-                        configuration.factory().image(
-                                visitor.theme(),
-                                makeDestination(latex),
-                                configuration.asyncDrawableLoader(),
-                                configuration.imageSizeResolver(),
-                                new ImageSize(new ImageSize.Dimension(100, "%"), null),
-                                false
-                        )
-                );
+                ImageProps.DESTINATION.set(renderProps, makeDestination(latex));
+                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(renderProps, false);
+                ImageProps.IMAGE_SIZE.set(renderProps, new ImageSize(new ImageSize.Dimension(100, "%"), null));
+
+                visitor.setSpansForNode(Image.class, length);
             }
         });
     }
