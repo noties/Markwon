@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import pl.droidsonroids.gif.GifDrawable;
-import ru.noties.markwon.core.spans.AsyncDrawableSpan;
+import ru.noties.markwon.image.AsyncDrawableSpan;
 
 public abstract class GifProcessor {
 

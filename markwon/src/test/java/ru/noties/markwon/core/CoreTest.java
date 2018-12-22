@@ -32,8 +32,8 @@ public class CoreTest {
                         span("italic", text("bold italic"))));
 
         final Spanned spanned = (Spanned) Markwon.builder(RuntimeEnvironment.application)
-                .use(CorePlugin.create())
-                .use(new AbstractMarkwonPlugin() {
+                .usePlugin(CorePlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.factory(new MarkwonSpannableFactoryDef() {

@@ -31,25 +31,25 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.core.MarkwonSpannableFactory;
-
+/**
+ * @since 3.0.0
+ */
 class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes;
 
     private final MarkwonConfiguration configuration;
-    private final MarkwonTheme theme;
-    private final MarkwonSpannableFactory factory;
+
+    private final RenderProps renderProps;
 
     private final SpannableBuilder builder = new SpannableBuilder();
 
     MarkwonVisitorImpl(
             @NonNull MarkwonConfiguration configuration,
+            @NonNull RenderProps renderProps,
             @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
         this.configuration = configuration;
-        this.theme = configuration.theme();
-        this.factory = configuration.factory();
+        this.renderProps = renderProps;
         this.nodes = nodes;
     }
 
@@ -181,14 +181,8 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     @NonNull
     @Override
-    public MarkwonTheme theme() {
-        return theme;
-    }
-
-    @NonNull
-    @Override
-    public MarkwonSpannableFactory factory() {
-        return factory;
+    public RenderProps renderProps() {
+        return renderProps;
     }
 
     @NonNull
@@ -237,17 +231,22 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
         SpannableBuilder.setSpans(builder, spans, start, builder.length());
     }
 
-    @Nullable
     @Override
-    public <N extends Node> NodeVisitor<N> nodeVisitor(@NonNull Class<N> node) {
-        //noinspection unchecked
-        return (NodeVisitor<N>) nodes.get(node);
+    public <N extends Node> void setSpansForNode(@NonNull N node, int start) {
+        setSpans(start, configuration.spansFactory().require(node).getSpans(configuration, renderProps));
+    }
+
+    @Override
+    public <N extends Node> void setSpansForNodeOptional(@NonNull N node, int start) {
+        final SpanFactory factory = configuration.spansFactory().get(node);
+        if (factory != null) {
+            setSpans(start, factory.getSpans(configuration, renderProps));
+        }
     }
 
     static class BuilderImpl implements Builder {
 
-        private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes =
-                new HashMap<>(3);
+        private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes = new HashMap<>();
 
         @NonNull
         @Override
@@ -264,9 +263,10 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
         @NonNull
         @Override
-        public MarkwonVisitor build(@NonNull MarkwonConfiguration configuration) {
+        public MarkwonVisitor build(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps) {
             return new MarkwonVisitorImpl(
                     configuration,
+                    renderProps,
                     Collections.unmodifiableMap(nodes));
         }
     }

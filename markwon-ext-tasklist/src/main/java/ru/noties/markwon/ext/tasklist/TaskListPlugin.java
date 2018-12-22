@@ -12,8 +12,13 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
+import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
 
+/**
+ * @since 3.0.0
+ */
 public class TaskListPlugin extends AbstractMarkwonPlugin {
 
     /**
@@ -63,6 +68,11 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
+    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+        builder.setFactory(TaskListItem.class, new TaskListSpanFactory(drawable));
+    }
+
+    @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder
                 .on(TaskListBlock.class, new MarkwonVisitor.NodeVisitor<TaskListBlock>() {
@@ -86,11 +96,13 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
                         final int length = visitor.length();
 
                         visitor.visitChildren(taskListItem);
-                        visitor.setSpans(length, new TaskListSpan(
-                                visitor.theme(),
-                                drawable,
-                                indent(taskListItem) + taskListItem.indent(),
-                                taskListItem.done()));
+
+                        final RenderProps context = visitor.renderProps();
+
+                        TaskListProps.BLOCK_INDENT.set(context, indent(taskListItem) + taskListItem.indent());
+                        TaskListProps.DONE.set(context, taskListItem.done());
+
+                        visitor.setSpansForNode(taskListItem, length);
 
                         if (visitor.hasNext(taskListItem)) {
                             visitor.ensureNewLine();
@@ -99,7 +111,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
                 });
     }
 
-    private static int resolve(Context context, @AttrRes int attr) {
+    private static int resolve(@NonNull Context context, @AttrRes int attr) {
         final TypedValue typedValue = new TypedValue();
         final int attrs[] = new int[]{attr};
         final TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, attrs);

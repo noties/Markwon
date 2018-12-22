@@ -21,8 +21,8 @@ public class MainActivity extends Activity {
         final TextView textView = findViewById(R.id.text_view);
 
         final Markwon markwon = Markwon.builder(this)
-                .use(IconPlugin.create(IconSpanProvider.create(this, 0)))
-                .use(new AbstractMarkwonPlugin() {
+                .usePlugin(IconPlugin.create(IconSpanProvider.create(this, 0)))
+                .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
                         final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};

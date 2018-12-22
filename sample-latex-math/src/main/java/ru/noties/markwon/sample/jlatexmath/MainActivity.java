@@ -46,11 +46,11 @@ public class MainActivity extends Activity {
                 + latex + "$$\n\n something like **this**";
 
         final Markwon markwon = Markwon.builder(this)
-                .use(CorePlugin.create())
+                .usePlugin(CorePlugin.create())
                 // strictly speaking this one is not required as long as JLatexMathPlugin schedules
                 // drawables on it's own
-                .use(ImagesPlugin.create(this))
-                .use(JLatexMathPlugin.create(config))
+                .usePlugin(ImagesPlugin.create(this))
+                .usePlugin(JLatexMathPlugin.create(config))
                 .build();
 
         markwon.setMarkdown(textView, markdown);

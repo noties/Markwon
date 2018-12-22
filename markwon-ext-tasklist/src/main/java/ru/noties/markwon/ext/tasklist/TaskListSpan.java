@@ -26,13 +26,6 @@ public class TaskListSpan implements LeadingMarginSpan {
     // @since 2.0.1 field is NOT final (to allow mutation)
     private boolean isDone;
 
-    @Deprecated
-    public TaskListSpan(@NonNull MarkwonTheme theme, int blockIndent, boolean isDone) {
-        this.theme = theme;
-        this.drawable = null;
-        this.blockIndent = blockIndent;
-        this.isDone = isDone;
-    }
 
     public TaskListSpan(@NonNull MarkwonTheme theme, @NonNull Drawable drawable, int blockIndent, boolean isDone) {
         this.theme = theme;
@@ -70,11 +63,6 @@ public class TaskListSpan implements LeadingMarginSpan {
                 || !LeadingMarginUtils.selfStart(start, text, this)) {
             return;
         }
-
-//        final Drawable drawable = theme.getTaskListDrawable();
-//        if (drawable == null) {
-//            return;
-//        }
 
         final int save = c.save();
         try {

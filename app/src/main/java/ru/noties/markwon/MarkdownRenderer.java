@@ -85,17 +85,17 @@ public class MarkdownRenderer {
                         : prism4JThemeDarkula;
 
                 final Markwon markwon = Markwon.builder(context)
-                        .use(CorePlugin.create())
-                        .use(ImagesPlugin.createWithAssets(context))
-                        .use(SvgPlugin.create(context.getResources()))
-                        .use(GifPlugin.create(false))
-                        .use(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
-                        .use(GifAwarePlugin.create(context))
-                        .use(TablePlugin.create(context))
-                        .use(TaskListPlugin.create(context))
-                        .use(StrikethroughPlugin.create())
-                        .use(HtmlPlugin.create())
-                        .use(new AbstractMarkwonPlugin() {
+                        .usePlugin(CorePlugin.create())
+                        .usePlugin(ImagesPlugin.createWithAssets(context))
+                        .usePlugin(SvgPlugin.create(context.getResources()))
+                        .usePlugin(GifPlugin.create(false))
+                        .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
+                        .usePlugin(GifAwarePlugin.create(context))
+                        .usePlugin(TablePlugin.create(context))
+                        .usePlugin(TaskListPlugin.create(context))
+                        .usePlugin(StrikethroughPlugin.create())
+                        .usePlugin(HtmlPlugin.create())
+                        .usePlugin(new AbstractMarkwonPlugin() {
                             @Override
                             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                                 builder.urlProcessor(urlProcessor);

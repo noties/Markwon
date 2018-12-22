@@ -2,7 +2,6 @@ package ru.noties.markwon.image;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import org.commonmark.node.Image;
@@ -13,9 +12,9 @@ import java.util.Arrays;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.core.spans.AsyncDrawableSpan;
+import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.image.data.DataUriSchemeHandler;
 import ru.noties.markwon.image.file.FileSchemeHandler;
 import ru.noties.markwon.image.network.NetworkSchemeHandler;
@@ -35,7 +34,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     private final Context context;
     private final boolean useAssets;
 
-    private ImagesPlugin(Context context, boolean useAssets) {
+    protected ImagesPlugin(Context context, boolean useAssets) {
         this.context = context;
         this.useAssets = useAssets;
     }
@@ -59,6 +58,11 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
+    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+        builder.setFactory(Image.class, new ImageSpanFactory());
+    }
+
+    @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder.on(Image.class, new MarkwonVisitor.NodeVisitor<Image>() {
             @Override
@@ -77,18 +81,21 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
 
                 final Node parent = image.getParent();
                 final boolean link = parent instanceof Link;
+
                 final String destination = configuration
                         .urlProcessor()
                         .process(image.getDestination());
 
-                final Object spans = imageSpan(
-                        visitor.theme(),
-                        destination,
-                        configuration.asyncDrawableLoader(),
-                        configuration.imageSizeResolver(),
-                        link);
+                final RenderProps context = visitor.renderProps();
 
-                visitor.setSpans(length, spans);
+                // apply image properties
+                // Please note that we explicitly set IMAGE_SIZE to null as we do not clear
+                // properties after we applied span (we could though)
+                ImageProps.DESTINATION.set(context, destination);
+                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(context, link);
+                ImageProps.IMAGE_SIZE.set(context, null);
+
+                visitor.setSpansForNode(image, length);
             }
         });
     }
@@ -101,25 +108,5 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     @Override
     public void afterSetText(@NonNull TextView textView) {
         AsyncDrawableScheduler.schedule(textView);
-    }
-
-    @Nullable
-    protected Object imageSpan(
-            @NonNull MarkwonTheme theme,
-            @NonNull String destination,
-            @NonNull AsyncDrawableLoader loader,
-            @NonNull ImageSizeResolver imageSizeResolver,
-            boolean replacementTextIsLink) {
-        return new AsyncDrawableSpan(
-                theme,
-                new AsyncDrawable(
-                        destination,
-                        loader,
-                        imageSizeResolver,
-                        null
-                ),
-                AsyncDrawableSpan.ALIGN_BOTTOM,
-                replacementTextIsLink
-        );
     }
 }

@@ -8,11 +8,15 @@ import org.commonmark.parser.Parser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 
+/**
+ * @since 3.0.0
+ */
 class MarkwonBuilderImpl implements Markwon.Builder {
 
     private final Context context;
@@ -33,8 +37,27 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
     @NonNull
     @Override
-    public Markwon.Builder use(@NonNull MarkwonPlugin plugin) {
+    public Markwon.Builder usePlugin(@NonNull MarkwonPlugin plugin) {
         plugins.add(plugin);
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public Markwon.Builder usePlugins(@NonNull Iterable<? extends MarkwonPlugin> plugins) {
+
+        final Iterator<? extends MarkwonPlugin> iterator = plugins.iterator();
+
+        MarkwonPlugin plugin;
+
+        while (iterator.hasNext()) {
+            plugin = iterator.next();
+            if (plugin == null) {
+                throw new NullPointerException();
+            }
+            this.plugins.add(plugin);
+        }
+
         return this;
     }
 
@@ -45,8 +68,10 @@ class MarkwonBuilderImpl implements Markwon.Builder {
         final Parser.Builder parserBuilder = new Parser.Builder();
         final MarkwonTheme.Builder themeBuilder = MarkwonTheme.builderWithDefaults(context);
         final AsyncDrawableLoader.Builder asyncDrawableLoaderBuilder = new AsyncDrawableLoader.Builder();
-        final MarkwonConfiguration.Builder configurationBuilder = new MarkwonConfiguration.Builder(context);
+        final MarkwonConfiguration.Builder configurationBuilder = new MarkwonConfiguration.Builder();
         final MarkwonVisitor.Builder visitorBuilder = new MarkwonVisitorImpl.BuilderImpl();
+        final MarkwonSpansFactory.Builder spanFactoryBuilder = new MarkwonSpansFactoryImpl.BuilderImpl();
+        final RenderProps renderProps = new RenderPropsImpl();
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.configureParser(parserBuilder);
@@ -54,16 +79,19 @@ class MarkwonBuilderImpl implements Markwon.Builder {
             plugin.configureImages(asyncDrawableLoaderBuilder);
             plugin.configureConfiguration(configurationBuilder);
             plugin.configureVisitor(visitorBuilder);
+            plugin.configureSpansFactory(spanFactoryBuilder);
+            plugin.configureRenderProps(renderProps);
         }
 
         final MarkwonConfiguration configuration = configurationBuilder.build(
                 themeBuilder.build(),
-                asyncDrawableLoaderBuilder.build());
+                asyncDrawableLoaderBuilder.build(),
+                spanFactoryBuilder.build());
 
         return new MarkwonImpl(
                 bufferType,
                 parserBuilder.build(),
-                visitorBuilder.build(configuration),
+                visitorBuilder.build(configuration, renderProps),
                 Collections.unmodifiableList(plugins)
         );
     }

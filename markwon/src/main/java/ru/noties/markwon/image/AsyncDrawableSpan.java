@@ -1,4 +1,4 @@
-package ru.noties.markwon.core.spans;
+package ru.noties.markwon.image;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -13,7 +13,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.image.AsyncDrawable;
 
 @SuppressWarnings("WeakerAccess")
 public class AsyncDrawableSpan extends ReplacementSpan {
@@ -31,17 +30,6 @@ public class AsyncDrawableSpan extends ReplacementSpan {
     private final AsyncDrawable drawable;
     private final int alignment;
     private final boolean replacementTextIsLink;
-
-//    public AsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable) {
-//        this(theme, drawable, ALIGN_BOTTOM);
-//    }
-
-//    public AsyncDrawableSpan(
-//            @NonNull MarkwonTheme theme,
-//            @NonNull AsyncDrawable drawable,
-//            @Alignment int alignment) {
-//        this(theme, drawable, alignment, false);
-//    }
 
     public AsyncDrawableSpan(
             @NonNull MarkwonTheme theme,
@@ -150,6 +138,7 @@ public class AsyncDrawableSpan extends ReplacementSpan {
         }
     }
 
+    @NonNull
     public AsyncDrawable getDrawable() {
         return drawable;
     }

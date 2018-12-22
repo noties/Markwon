@@ -1,11 +1,8 @@
 package ru.noties.markwon;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.core.MarkwonSpannableFactory;
-import ru.noties.markwon.core.MarkwonSpannableFactoryDef;
 import ru.noties.markwon.core.spans.LinkSpan;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSizeResolver;
@@ -21,16 +18,9 @@ import ru.noties.markwon.urlprocessor.UrlProcessorNoOp;
 @SuppressWarnings("WeakerAccess")
 public class MarkwonConfiguration {
 
-    // creates default configuration
     @NonNull
-    @Deprecated
-    public static MarkwonConfiguration create(@NonNull Context context) {
-        return new Builder(context).build(MarkwonTheme.create(context), AsyncDrawableLoader.noOp());
-    }
-
-    @NonNull
-    public static Builder builder(@NonNull Context context) {
-        return new Builder(context);
+    public static Builder builder() {
+        return new Builder();
     }
 
     private final MarkwonTheme theme;
@@ -39,7 +29,9 @@ public class MarkwonConfiguration {
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
-    private final MarkwonSpannableFactory factory; // @since 1.1.0
+
+    // @since 3.0.0
+    private final MarkwonSpansFactory spansFactory;
 
     private MarkwonConfiguration(@NonNull Builder builder) {
         this.theme = builder.theme;
@@ -48,7 +40,7 @@ public class MarkwonConfiguration {
         this.linkResolver = builder.linkResolver;
         this.urlProcessor = builder.urlProcessor;
         this.imageSizeResolver = builder.imageSizeResolver;
-        this.factory = builder.factory;
+        this.spansFactory = builder.spansFactory;
     }
 
     @NonNull
@@ -81,15 +73,16 @@ public class MarkwonConfiguration {
         return imageSizeResolver;
     }
 
+    /**
+     * @since 3.0.0
+     */
     @NonNull
-    public MarkwonSpannableFactory factory() {
-        return factory;
+    public MarkwonSpansFactory spansFactory() {
+        return spansFactory;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "UnusedReturnValue"})
     public static class Builder {
-
-        private final Context context;
 
         private MarkwonTheme theme;
         private AsyncDrawableLoader asyncDrawableLoader;
@@ -97,10 +90,9 @@ public class MarkwonConfiguration {
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
         private ImageSizeResolver imageSizeResolver;
-        private MarkwonSpannableFactory factory; // @since 1.1.0
+        private MarkwonSpansFactory spansFactory;
 
-        Builder(@NonNull Context context) {
-            this.context = context;
+        Builder() {
         }
 
         @NonNull
@@ -130,20 +122,15 @@ public class MarkwonConfiguration {
             return this;
         }
 
-        /**
-         * @since 1.1.0
-         */
         @NonNull
-        public Builder factory(@NonNull MarkwonSpannableFactory factory) {
-            this.factory = factory;
-            return this;
-        }
-
-        @NonNull
-        public MarkwonConfiguration build(@NonNull MarkwonTheme theme, @NonNull AsyncDrawableLoader asyncDrawableLoader) {
+        public MarkwonConfiguration build(
+                @NonNull MarkwonTheme theme,
+                @NonNull AsyncDrawableLoader asyncDrawableLoader,
+                @NonNull MarkwonSpansFactory spansFactory) {
 
             this.theme = theme;
             this.asyncDrawableLoader = asyncDrawableLoader;
+            this.spansFactory = spansFactory;
 
             if (syntaxHighlight == null) {
                 syntaxHighlight = new SyntaxHighlightNoOp();
@@ -159,11 +146,6 @@ public class MarkwonConfiguration {
 
             if (imageSizeResolver == null) {
                 imageSizeResolver = new ImageSizeResolverDef();
-            }
-
-            // @since 1.1.0
-            if (factory == null) {
-                factory = MarkwonSpannableFactoryDef.create();
             }
 
             return new MarkwonConfiguration(this);

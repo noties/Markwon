@@ -6,9 +6,9 @@ import android.support.annotation.Nullable;
 import org.commonmark.node.Node;
 import org.commonmark.node.Visitor;
 
-import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.core.MarkwonSpannableFactory;
-
+/**
+ * @since 3.0.0
+ */
 public interface MarkwonVisitor extends Visitor {
 
     interface NodeVisitor<N extends Node> {
@@ -21,17 +21,14 @@ public interface MarkwonVisitor extends Visitor {
         <N extends Node> Builder on(@NonNull Class<N> node, @Nullable NodeVisitor<? super N> nodeVisitor);
 
         @NonNull
-        MarkwonVisitor build(@NonNull MarkwonConfiguration configuration);
+        MarkwonVisitor build(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps);
     }
 
     @NonNull
     MarkwonConfiguration configuration();
 
     @NonNull
-    MarkwonTheme theme();
-
-    @NonNull
-    MarkwonSpannableFactory factory();
+    RenderProps renderProps();
 
     @NonNull
     SpannableBuilder builder();
@@ -48,6 +45,10 @@ public interface MarkwonVisitor extends Visitor {
 
     void setSpans(int start, @Nullable Object spans);
 
-    @Nullable
-    <N extends Node> NodeVisitor<N> nodeVisitor(@NonNull Class<N> node);
+    // will automatically obtain SpanFactory instance and use it, it no SpanFactory is registered,
+    // will throw, if not desired use setSpansForNodeOptional
+    <N extends Node> void setSpansForNode(@NonNull N node, int start);
+
+    // does not throw if there is no SpanFactory registered for this node
+    <N extends Node> void setSpansForNodeOptional(@NonNull N node, int start);
 }

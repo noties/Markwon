@@ -16,6 +16,7 @@ import ru.noties.markwon.core.spans.ThematicBreakSpan;
 /**
  * @since 1.1.0
  */
+@Deprecated
 public class MarkwonSpannableFactoryDef implements MarkwonSpannableFactory {
 
     @NonNull

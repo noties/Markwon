@@ -23,7 +23,6 @@ import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.core.MarkwonSpannableFactory;
-import ru.noties.markwon.core.visitor.CodeBlockNodeVisitor;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 
 import static org.junit.Assert.assertEquals;

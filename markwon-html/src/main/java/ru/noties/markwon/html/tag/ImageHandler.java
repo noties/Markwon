@@ -47,13 +47,15 @@ public class ImageHandler extends SimpleTagHandler {
         // but we can look and see if we are inside a LinkSpan (will have to extend TagHandler
         // to obtain an instance SpannableBuilder for inspection)
 
-        return configuration.factory().image(
-                configuration.theme(),
-                destination,
-                configuration.asyncDrawableLoader(),
-                configuration.imageSizeResolver(),
-                imageSizeParser.parse(tag.attributes()),
-                false
-        );
+        return null;
+
+//        return configuration.factory().image(
+//                configuration.theme(),
+//                destination,
+//                configuration.asyncDrawableLoader(),
+//                configuration.imageSizeResolver(),
+//                imageSizeParser.parse(tag.attributes()),
+//                false
+//        );
     }
 }

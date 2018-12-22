@@ -10,6 +10,7 @@ import ru.noties.markwon.core.spans.LinkSpan;
  *
  * @since 1.1.0
  */
+@Deprecated
 public interface MarkwonSpannableFactory {
 
     @Nullable

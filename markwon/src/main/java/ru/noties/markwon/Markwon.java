@@ -9,6 +9,9 @@ import org.commonmark.node.Node;
 
 public abstract class Markwon {
 
+    /**
+     * @since 3.0.0
+     */
     @NonNull
     public static Builder builder(@NonNull Context context) {
         return new MarkwonBuilderImpl(context);
@@ -28,6 +31,9 @@ public abstract class Markwon {
 
     public abstract void setParsedMarkdown(@NonNull TextView textView, @NonNull CharSequence markdown);
 
+    /**
+     * @since 3.0.0
+     */
     public interface Builder {
 
         /**
@@ -40,7 +46,10 @@ public abstract class Markwon {
         Builder bufferType(@NonNull TextView.BufferType bufferType);
 
         @NonNull
-        Builder use(@NonNull MarkwonPlugin plugin);
+        Builder usePlugin(@NonNull MarkwonPlugin plugin);
+
+        @NonNull
+        Builder usePlugins(@NonNull Iterable<? extends MarkwonPlugin> plugins);
 
         @NonNull
         Markwon build();

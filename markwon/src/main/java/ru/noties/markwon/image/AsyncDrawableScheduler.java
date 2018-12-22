@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.noties.markwon.renderer.R;
-import ru.noties.markwon.core.spans.AsyncDrawableSpan;
 
 public abstract class AsyncDrawableScheduler {
 

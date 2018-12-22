@@ -35,6 +35,16 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
 
     }
 
+    @Override
+    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+
+    }
+
+    @Override
+    public void configureRenderProps(@NonNull RenderProps renderProps) {
+
+    }
+
     @NonNull
     @Override
     public String processMarkdown(@NonNull String markdown) {

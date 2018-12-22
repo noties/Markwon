@@ -9,6 +9,9 @@ import org.commonmark.parser.Parser;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 
+/**
+ * @since 3.0.0
+ */
 public interface MarkwonPlugin {
 
     void configureParser(@NonNull Parser.Builder builder);
@@ -20,6 +23,11 @@ public interface MarkwonPlugin {
     void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder);
 
     void configureVisitor(@NonNull MarkwonVisitor.Builder builder);
+
+    void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder);
+
+    // can be used to configure own properties and use between plugins
+    void configureRenderProps(@NonNull RenderProps renderProps);
 
     @NonNull
     String processMarkdown(@NonNull String markdown);

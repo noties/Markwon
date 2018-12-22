@@ -24,6 +24,7 @@ public class IconPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
         builder.customDelimiterProcessor(IconProcessor.create());
+        builder.postProcessor()
     }
 
     @Override

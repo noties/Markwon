@@ -33,8 +33,8 @@ abstract class BaseSuiteTest {
   @NonNull
   Markwon markwon() {
     return Markwon.builder(RuntimeEnvironment.application)
-      .use(CorePlugin.create(softBreakAddsNewLine()))
-      .use(new AbstractMarkwonPlugin() {
+      .usePlugin(CorePlugin.create(softBreakAddsNewLine()))
+      .usePlugin(new AbstractMarkwonPlugin() {
         @Override
         public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
           builder.factory(new TestFactory(useParagraphs()));
