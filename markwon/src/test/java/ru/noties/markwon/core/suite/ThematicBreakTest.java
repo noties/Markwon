@@ -7,7 +7,6 @@ import org.robolectric.annotation.Config;
 
 import ru.noties.markwon.test.TestSpan.Document;
 
-import static ru.noties.markwon.core.suite.TestFactory.THEMATIC_BREAK;
 import static ru.noties.markwon.test.TestSpan.document;
 import static ru.noties.markwon.test.TestSpan.span;
 import static ru.noties.markwon.test.TestSpan.text;

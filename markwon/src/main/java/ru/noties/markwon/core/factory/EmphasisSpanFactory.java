@@ -11,7 +11,7 @@ import ru.noties.markwon.core.spans.EmphasisSpan;
 public class EmphasisSpanFactory implements SpanFactory {
     @Nullable
     @Override
-    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
         return new EmphasisSpan();
     }
 }

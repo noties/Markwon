@@ -2,14 +2,21 @@ package ru.noties.markwon.image;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import org.commonmark.node.Image;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonSpansFactory;
+import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.test.TestSpan.Document;
@@ -32,10 +39,16 @@ public class ImageTest {
         final Context context = RuntimeEnvironment.application;
         final Markwon markwon = Markwon.builder(context)
                 .usePlugin(CorePlugin.create())
-                .usePlugin(new ImagesPlugin(context, false) {
+                .usePlugin(new ImagesPlugin(context, false))
+                .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
-                    protected Object imageSpan(@NonNull MarkwonTheme theme, @NonNull String destination, @NonNull AsyncDrawableLoader loader, @NonNull ImageSizeResolver imageSizeResolver, boolean replacementTextIsLink) {
-                        return span("image", args("href", destination));
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        builder.setFactory(Image.class, new SpanFactory() {
+                            @Override
+                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
+                                return span("image", args("href", ImageProps.DESTINATION.require(props)));
+                            }
+                        });
                     }
                 })
                 .build();

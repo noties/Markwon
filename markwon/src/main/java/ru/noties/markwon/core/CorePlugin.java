@@ -2,6 +2,7 @@ package ru.noties.markwon.core;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.widget.TextView;
 
 import org.commonmark.node.BlockQuote;
@@ -142,9 +143,18 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(BlockQuote.class, new MarkwonVisitor.NodeVisitor<BlockQuote>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull BlockQuote blockQuote) {
+
+                visitor.ensureNewLine();
+
                 final int length = visitor.length();
+
                 visitor.visitChildren(blockQuote);
                 visitor.setSpansForNode(blockQuote, length);
+
+                if (visitor.hasNext(blockQuote)) {
+                    visitor.ensureNewLine();
+                    visitor.forceNewLine();
+                }
             }
         });
     }
@@ -186,7 +196,8 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         });
     }
 
-    private static void visitCodeBlock(
+    @VisibleForTesting
+    static void visitCodeBlock(
             @NonNull MarkwonVisitor visitor,
             @Nullable String info,
             @NonNull String code,
@@ -227,6 +238,11 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 final int length = visitor.length();
 
+                // it's important to visit children before applying render props (
+                // we can have nested children, who are list items also, thus they will
+                // override out props (if we set them before visiting children)
+                visitor.visitChildren(listItem);
+
                 final Node parent = listItem.getParent();
                 if (parent instanceof OrderedList) {
 
@@ -244,7 +260,6 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                     CoreProps.BULLET_LIST_ITEM_LEVEL.set(visitor.renderProps(), listLevel(listItem));
                 }
 
-                visitor.visitChildren(listItem);
                 visitor.setSpansForNode(listItem, length);
 
                 if (visitor.hasNext(listItem)) {

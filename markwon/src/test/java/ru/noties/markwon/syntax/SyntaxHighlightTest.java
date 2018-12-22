@@ -1,6 +1,5 @@
 package ru.noties.markwon.syntax;
 
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,21 +13,24 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import ru.noties.markwon.AbstractMarkwonVisitorImpl;
 import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.RenderPropsImpl;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.SpannableBuilder;
+import ru.noties.markwon.core.CorePluginBridge;
 import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.core.MarkwonSpannableFactory;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,6 +55,7 @@ public class SyntaxHighlightTest {
     @Test
     public void test() {
 
+        // code span must be first in the list, then should go highlight spans
         class Highlight {
         }
 
@@ -70,19 +73,23 @@ public class SyntaxHighlightTest {
             }
         };
 
-        final MarkwonSpannableFactory factory = mock(MarkwonSpannableFactory.class);
-        when(factory.code(any(MarkwonTheme.class), anyBoolean())).thenReturn(codeSpan);
+        final MarkwonSpansFactory spansFactory = mock(MarkwonSpansFactory.class);
+        when(spansFactory.require(any(FencedCodeBlock.class))).thenReturn(new SpanFactory() {
+            @Override
+            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
+                return codeSpan;
+            }
+        });
 
-        final MarkwonConfiguration configuration = MarkwonConfiguration.builder(mock(Context.class))
+        final MarkwonConfiguration configuration = MarkwonConfiguration.builder()
                 .syntaxHighlight(highlight)
-                .factory(factory)
-                .build(mock(MarkwonTheme.class), mock(AsyncDrawableLoader.class));
+                .build(mock(MarkwonTheme.class), mock(AsyncDrawableLoader.class), spansFactory);
 
-        final Map<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>> visitorMap = new HashMap<>(1);
-        visitorMap.put(FencedCodeBlock.class, new CodeBlockNodeVisitor.Fenced());
+        final Map<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>> visitorMap = Collections.emptyMap();
 
         final MarkwonVisitor visitor = new AbstractMarkwonVisitorImpl(
                 configuration,
+                new RenderPropsImpl(),
                 visitorMap);
 
         final SpannableBuilder builder = visitor.builder();
@@ -96,12 +103,7 @@ public class SyntaxHighlightTest {
         final FencedCodeBlock fencedCodeBlock = new FencedCodeBlock();
         fencedCodeBlock.setLiteral("{code}");
 
-        CodeBlockNodeVisitor.visitCodeBlock(
-                visitor,
-                null,
-                "{code}",
-                fencedCodeBlock
-        );
+        CorePluginBridge.visitCodeBlock(visitor, null, "{code}", fencedCodeBlock);
 
         final int end = builder.length();
 
@@ -116,6 +118,7 @@ public class SyntaxHighlightTest {
         assertEquals(length, spans.length);
         assertEquals(codeSpan, spans[0]);
 
+        // each character
         for (int i = 1; i < length; i++) {
             assertTrue(spans[i] instanceof Highlight);
         }

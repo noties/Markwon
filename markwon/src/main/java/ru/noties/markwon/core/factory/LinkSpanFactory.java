@@ -12,10 +12,10 @@ import ru.noties.markwon.core.spans.LinkSpan;
 public class LinkSpanFactory implements SpanFactory {
     @Nullable
     @Override
-    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
         return new LinkSpan(
                 configuration.theme(),
-                CoreProps.LINK_DESTINATION.require(context),
+                CoreProps.LINK_DESTINATION.require(props),
                 configuration.linkResolver()
         );
     }

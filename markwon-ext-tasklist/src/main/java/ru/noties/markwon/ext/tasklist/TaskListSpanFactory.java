@@ -18,12 +18,12 @@ public class TaskListSpanFactory implements SpanFactory {
 
     @Nullable
     @Override
-    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
         return new TaskListSpan(
                 configuration.theme(),
                 drawable,
-                TaskListProps.BLOCK_INDENT.get(context, 0),
-                TaskListProps.DONE.get(context, false)
+                TaskListProps.BLOCK_INDENT.get(props, 0),
+                TaskListProps.DONE.get(props, false)
         );
     }
 }

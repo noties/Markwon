@@ -11,5 +11,5 @@ public interface SpanFactory {
     @Nullable
     Object getSpans(
             @NonNull MarkwonConfiguration configuration,
-            @NonNull RenderProps context);
+            @NonNull RenderProps props);
 }

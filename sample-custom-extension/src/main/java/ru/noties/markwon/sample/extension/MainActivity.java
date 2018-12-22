@@ -25,6 +25,8 @@ public class MainActivity extends Activity {
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        // this part has nothing to do with actual IconPlugin
+                        // this part is used to showcase that headers can be controlled via Theme
                         final float[] textSizeMultipliers = new float[]{3f, 2f, 1.5f, 1f, .5f, .25f};
                         builder
                                 .headingTypeface(Typeface.MONOSPACE)

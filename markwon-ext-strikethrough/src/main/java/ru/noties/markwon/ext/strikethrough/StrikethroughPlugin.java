@@ -32,7 +32,7 @@ public class StrikethroughPlugin extends AbstractMarkwonPlugin {
     public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
         builder.setFactory(Strikethrough.class, new SpanFactory() {
             @Override
-            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
                 return new StrikethroughSpan();
             }
         });

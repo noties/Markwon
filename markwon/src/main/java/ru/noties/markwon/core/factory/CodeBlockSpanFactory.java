@@ -11,7 +11,7 @@ import ru.noties.markwon.core.spans.CodeSpan;
 public class CodeBlockSpanFactory implements SpanFactory {
     @Nullable
     @Override
-    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
         return new CodeSpan(configuration.theme(), true);
     }
 }

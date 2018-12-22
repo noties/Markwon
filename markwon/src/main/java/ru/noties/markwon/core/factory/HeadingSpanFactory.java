@@ -12,10 +12,10 @@ import ru.noties.markwon.core.spans.HeadingSpan;
 public class HeadingSpanFactory implements SpanFactory {
     @Nullable
     @Override
-    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+    public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
         return new HeadingSpan(
                 configuration.theme(),
-                CoreProps.HEADING_LEVEL.require(context)
+                CoreProps.HEADING_LEVEL.require(props)
         );
     }
 }

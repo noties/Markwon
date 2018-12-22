@@ -40,18 +40,18 @@ public class GifAwarePlugin extends AbstractMarkwonPlugin {
 
         builder.setFactory(Image.class, new SpanFactory() {
             @Override
-            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps context) {
+            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
                 return new AsyncDrawableSpan(
                         configuration.theme(),
                         new GifAwareAsyncDrawable(
                                 gifPlaceholder,
-                                ImageProps.DESTINATION.require(context),
+                                ImageProps.DESTINATION.require(props),
                                 configuration.asyncDrawableLoader(),
                                 configuration.imageSizeResolver(),
-                                ImageProps.IMAGE_SIZE.get(context)
+                                ImageProps.IMAGE_SIZE.get(props)
                         ),
                         AsyncDrawableSpan.ALIGN_BOTTOM,
-                        ImageProps.REPLACEMENT_TEXT_IS_LINK.get(context, false)
+                        ImageProps.REPLACEMENT_TEXT_IS_LINK.get(props, false)
                 );
             }
         });

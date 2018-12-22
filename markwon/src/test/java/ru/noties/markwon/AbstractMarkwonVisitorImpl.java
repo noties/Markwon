@@ -10,7 +10,8 @@ public class AbstractMarkwonVisitorImpl extends MarkwonVisitorImpl {
 
     public AbstractMarkwonVisitorImpl(
             @NonNull MarkwonConfiguration configuration,
+            @NonNull RenderProps renderProps,
             @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
-        super(configuration, nodes);
+        super(configuration, renderProps, nodes);
     }
 }
