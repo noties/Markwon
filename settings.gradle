@@ -9,7 +9,6 @@ include ':app',
         ':markwon-image-gif',
         ':markwon-syntax-highlight',
         ':markwon-html',
-        ':markwon-view',
         ':markwon-test-span',
         ':sample-custom-extension',
         ':sample-latex-math'
