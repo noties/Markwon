@@ -2,6 +2,7 @@ package ru.noties.markwon.ext.tables;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.widget.TextView;
 
 import org.commonmark.ext.gfm.tables.TableBody;
@@ -49,7 +50,7 @@ public class TablePlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
-    public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
+    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         TableRowsScheduler.unschedule(textView);
     }
 

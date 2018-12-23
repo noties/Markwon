@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spanned;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -34,7 +35,7 @@ import ru.noties.prism4j.Prism4j;
 public class MarkdownRenderer {
 
     interface MarkdownReadyListener {
-        void onMarkdownReady(@NonNull Markwon markwon, CharSequence markdown);
+        void onMarkdownReady(@NonNull Markwon markwon, Spanned markdown);
     }
 
     @Inject
@@ -105,7 +106,7 @@ public class MarkdownRenderer {
 
                 final long start = SystemClock.uptimeMillis();
 
-                final CharSequence text = markwon.toMarkdown(markdown);
+                final Spanned text = markwon.toMarkdown(markdown);
 
                 final long end = SystemClock.uptimeMillis();
 

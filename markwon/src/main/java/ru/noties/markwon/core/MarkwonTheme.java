@@ -56,6 +56,7 @@ public class MarkwonTheme {
      * @return {@link Builder instance}
      * @see #builderWithDefaults(Context)
      * @see #builder(MarkwonTheme)
+     * @see #emptyBuilder()
      * @since 1.0.0
      * @deprecated 3.0.0
      */
@@ -75,7 +76,7 @@ public class MarkwonTheme {
      * @since 3.0.0
      */
     @NonNull
-    public static Builder builderNoDefaults() {
+    public static Builder emptyBuilder() {
         return new Builder();
     }
 
