@@ -80,7 +80,6 @@ class MarkwonBuilderImpl implements Markwon.Builder {
             plugin.configureConfiguration(configurationBuilder);
             plugin.configureVisitor(visitorBuilder);
             plugin.configureSpansFactory(spanFactoryBuilder);
-            plugin.configureRenderProps(renderProps);
         }
 
         final MarkwonConfiguration configuration = configurationBuilder.build(

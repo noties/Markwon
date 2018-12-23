@@ -45,6 +45,7 @@ public class RenderPropsImpl implements RenderProps {
         values.remove(prop);
     }
 
+    @Override
     public void clearAll() {
         values.clear();
     }

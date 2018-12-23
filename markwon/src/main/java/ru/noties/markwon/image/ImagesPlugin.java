@@ -2,6 +2,7 @@ package ru.noties.markwon.image;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
 import android.widget.TextView;
 
 import org.commonmark.node.Image;
@@ -15,6 +16,7 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.image.data.DataUriSchemeHandler;
 import ru.noties.markwon.image.file.FileSchemeHandler;
 import ru.noties.markwon.image.network.NetworkSchemeHandler;
@@ -68,6 +70,13 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Image image) {
 
+                // if there is no image spanFactory, ignore
+                final SpanFactory spanFactory = visitor.configuration().spansFactory().get(image);
+                if (spanFactory == null) {
+                    visitor.visitChildren(image);
+                    return;
+                }
+
                 final int length = visitor.length();
 
                 visitor.visitChildren(image);
@@ -86,22 +95,22 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
                         .urlProcessor()
                         .process(image.getDestination());
 
-                final RenderProps context = visitor.renderProps();
+                final RenderProps props = visitor.renderProps();
 
                 // apply image properties
                 // Please note that we explicitly set IMAGE_SIZE to null as we do not clear
                 // properties after we applied span (we could though)
-                ImageProps.DESTINATION.set(context, destination);
-                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(context, link);
-                ImageProps.IMAGE_SIZE.set(context, null);
+                ImageProps.DESTINATION.set(props, destination);
+                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
+                ImageProps.IMAGE_SIZE.set(props, null);
 
-                visitor.setSpansForNode(image, length);
+                visitor.setSpans(length, spanFactory.getSpans(configuration, props));
             }
         });
     }
 
     @Override
-    public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
+    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         AsyncDrawableScheduler.unschedule(textView);
     }
 

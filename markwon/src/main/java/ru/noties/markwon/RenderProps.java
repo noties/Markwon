@@ -17,4 +17,6 @@ public interface RenderProps {
     <T> void set(@NonNull Prop<T> prop, @Nullable T value);
 
     <T> void clear(@NonNull Prop<T> prop);
+
+    void clearAll();
 }

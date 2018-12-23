@@ -9,6 +9,9 @@ import org.commonmark.parser.Parser;
 
 import java.util.List;
 
+/**
+ * @since 3.0.0
+ */
 class MarkwonImpl extends Markwon {
 
     private final TextView.BufferType bufferType;
@@ -31,6 +34,7 @@ class MarkwonImpl extends Markwon {
     @Override
     public Node parse(@NonNull String input) {
 
+        // make sure that all plugins are called `processMarkdown` before parsing
         for (MarkwonPlugin plugin : plugins) {
             input = plugin.processMarkdown(input);
         }
@@ -42,7 +46,14 @@ class MarkwonImpl extends Markwon {
     @Override
     public Spanned render(@NonNull Node node) {
 
+        final RenderProps renderProps = visitor.renderProps();
+
         for (MarkwonPlugin plugin : plugins) {
+
+            // let plugins apply render properties before rendering (as we will clear
+            // renderProps after rendering)
+            plugin.configureRenderProps(renderProps);
+
             plugin.beforeRender(node);
         }
 
@@ -51,6 +62,9 @@ class MarkwonImpl extends Markwon {
         for (MarkwonPlugin plugin : plugins) {
             plugin.afterRender(node, visitor);
         }
+
+        // clear render props after rending
+        renderProps.clearAll();
 
         return visitor.builder().spannableStringBuilder();
     }
@@ -67,7 +81,7 @@ class MarkwonImpl extends Markwon {
     }
 
     @Override
-    public void setParsedMarkdown(@NonNull TextView textView, @NonNull CharSequence markdown) {
+    public void setParsedMarkdown(@NonNull TextView textView, @NonNull Spanned markdown) {
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.beforeSetText(textView, markdown);

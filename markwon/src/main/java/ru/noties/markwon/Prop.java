@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * Class to hold data in {@link RenderProps}
+ * Class to hold data in {@link RenderProps}. Represents a certain <em>property</em>.
  *
  * @param <T> represents the type that this instance holds
+ * @see #of(String)
+ * @see #of(Class, String)
  * @since 3.0.0
  */
 public final class Prop<T> {

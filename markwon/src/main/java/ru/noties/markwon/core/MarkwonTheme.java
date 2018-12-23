@@ -16,6 +16,22 @@ import java.util.Locale;
 import ru.noties.markwon.utils.ColorUtils;
 import ru.noties.markwon.utils.Dip;
 
+/**
+ * Class to hold <i>theming</i> information for rending of markdown.
+ * <p>
+ * Since version 3.0.0 this class should be considered as <em>CoreTheme</em> as it\'s
+ * information holds data for core features only. But based on this other components can still use it
+ * to display markdown consistently.
+ * <p>
+ * Since version 3.0.0 this class should not be instantiated manually. Instead a {@link ru.noties.markwon.MarkwonPlugin}
+ * should be used: {@link ru.noties.markwon.MarkwonPlugin#configureTheme(Builder)}
+ * <p>
+ * Since version 3.0.0 properties related to <em>strike-through</em>, <em>tables</em> and <em>HTML</em>
+ * are moved to specific plugins in independent artifacts
+ *
+ * @see CorePlugin
+ * @see ru.noties.markwon.MarkwonPlugin#configureTheme(Builder)
+ */
 @SuppressWarnings("WeakerAccess")
 public class MarkwonTheme {
 
@@ -41,9 +57,25 @@ public class MarkwonTheme {
      * @see #builderWithDefaults(Context)
      * @see #builder(MarkwonTheme)
      * @since 1.0.0
+     * @deprecated 3.0.0
      */
     @NonNull
+    @Deprecated
     public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Create an <strong>empty</strong> instance of {@link Builder} with no default values applied
+     * <p>
+     * Since version 3.0.0 manual construction of {@link MarkwonTheme} is not required, instead a
+     * {@link ru.noties.markwon.MarkwonPlugin#configureTheme(Builder)} should be used in order
+     * to change certain theme properties
+     *
+     * @since 3.0.0
+     */
+    @NonNull
+    public static Builder builderNoDefaults() {
         return new Builder();
     }
 
@@ -549,6 +581,7 @@ public class MarkwonTheme {
          * @return self
          * @since 1.1.0
          */
+        @SuppressWarnings("UnusedReturnValue")
         @NonNull
         public Builder headingTextSizeMultipliers(@Size(6) @NonNull float[] headingTextSizeMultipliers) {
             this.headingTextSizeMultipliers = headingTextSizeMultipliers;

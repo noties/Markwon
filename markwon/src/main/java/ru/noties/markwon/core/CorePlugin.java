@@ -3,6 +3,7 @@ package ru.noties.markwon.core;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.text.Spanned;
 import android.widget.TextView;
 
 import org.commonmark.node.BlockQuote;
@@ -104,7 +105,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
-    public void beforeSetText(@NonNull TextView textView, @NonNull CharSequence markdown) {
+    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         OrderedListItemSpan.measure(textView, markdown);
     }
 
@@ -123,7 +124,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull StrongEmphasis strongEmphasis) {
                 final int length = visitor.length();
                 visitor.visitChildren(strongEmphasis);
-                visitor.setSpansForNode(strongEmphasis, length);
+                visitor.setSpansForNodeOptional(strongEmphasis, length);
             }
         });
     }
@@ -134,7 +135,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Emphasis emphasis) {
                 final int length = visitor.length();
                 visitor.visitChildren(emphasis);
-                visitor.setSpansForNode(emphasis, length);
+                visitor.setSpansForNodeOptional(emphasis, length);
             }
         });
     }
@@ -149,7 +150,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
 
                 visitor.visitChildren(blockQuote);
-                visitor.setSpansForNode(blockQuote, length);
+                visitor.setSpansForNodeOptional(blockQuote, length);
 
                 if (visitor.hasNext(blockQuote)) {
                     visitor.ensureNewLine();
@@ -173,7 +174,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                         .append(code.getLiteral())
                         .append('\u00a0');
 
-                visitor.setSpansForNode(code, length);
+                visitor.setSpansForNodeOptional(code, length);
             }
         });
     }
@@ -215,7 +216,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
         visitor.builder().append('\u00a0');
 
-        visitor.setSpansForNode(node, length);
+        visitor.setSpansForNodeOptional(node, length);
 
         if (visitor.hasNext(node)) {
             visitor.ensureNewLine();
@@ -260,7 +261,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                     CoreProps.BULLET_LIST_ITEM_LEVEL.set(visitor.renderProps(), listLevel(listItem));
                 }
 
-                visitor.setSpansForNode(listItem, length);
+                visitor.setSpansForNodeOptional(listItem, length);
 
                 if (visitor.hasNext(listItem)) {
                     visitor.ensureNewLine();
@@ -293,7 +294,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 // without space it won't render
                 visitor.builder().append('\u00a0');
 
-                visitor.setSpansForNode(thematicBreak, length);
+                visitor.setSpansForNodeOptional(thematicBreak, length);
 
                 if (visitor.hasNext(thematicBreak)) {
                     visitor.ensureNewLine();
@@ -315,7 +316,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 CoreProps.HEADING_LEVEL.set(visitor.renderProps(), heading.getLevel());
 
-                visitor.setSpansForNode(heading, length);
+                visitor.setSpansForNodeOptional(heading, length);
 
                 if (visitor.hasNext(heading)) {
                     visitor.ensureNewLine();
@@ -399,7 +400,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 CoreProps.LINK_DESTINATION.set(visitor.renderProps(), destination);
 
-                visitor.setSpansForNode(link, length);
+                visitor.setSpansForNodeOptional(link, length);
             }
         });
     }

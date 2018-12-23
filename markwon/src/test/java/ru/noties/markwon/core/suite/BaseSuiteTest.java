@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spanned;
 
+import org.apache.commons.io.IOUtils;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.Code;
 import org.commonmark.node.Emphasis;
@@ -18,7 +19,8 @@ import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.ThematicBreak;
 import org.robolectric.RuntimeEnvironment;
 
-import java.util.Collections;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +34,6 @@ import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.CoreProps;
 import ru.noties.markwon.test.TestSpan;
 import ru.noties.markwon.test.TestSpanMatcher;
-import ru.noties.markwon.test.TestUtil;
 
 import static ru.noties.markwon.test.TestSpan.args;
 import static ru.noties.markwon.test.TestSpan.span;
@@ -62,7 +63,11 @@ abstract class BaseSuiteTest {
 
   @NonNull
   private String read(@NonNull String name) {
-    return TestUtil.read(this, "tests/" + name);
+    try {
+      return IOUtils.resourceToString("tests/" + name, StandardCharsets.UTF_8, getClass().getClassLoader());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @NonNull
@@ -160,12 +165,7 @@ abstract class BaseSuiteTest {
     @Nullable
     @Override
     public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
-      return span(name, extractArgs(props));
-    }
-
-    @NonNull
-    Map<String, Object> extractArgs(@NonNull RenderProps props) {
-      return Collections.emptyMap();
+      return span(name);
     }
   }
 }

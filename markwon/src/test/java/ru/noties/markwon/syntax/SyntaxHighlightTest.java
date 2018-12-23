@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -74,7 +75,7 @@ public class SyntaxHighlightTest {
         };
 
         final MarkwonSpansFactory spansFactory = mock(MarkwonSpansFactory.class);
-        when(spansFactory.require(any(FencedCodeBlock.class))).thenReturn(new SpanFactory() {
+        when(spansFactory.get(any(FencedCodeBlock.class))).thenReturn(new SpanFactory() {
             @Override
             public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
                 return codeSpan;
@@ -103,7 +104,7 @@ public class SyntaxHighlightTest {
         final FencedCodeBlock fencedCodeBlock = new FencedCodeBlock();
         fencedCodeBlock.setLiteral("{code}");
 
-        CorePluginBridge.visitCodeBlock(visitor, null, "{code}", fencedCodeBlock);
+        CorePluginBridge.visitCodeBlock(visitor, null, fencedCodeBlock.getLiteral(), fencedCodeBlock);
 
         final int end = builder.length();
 
@@ -115,7 +116,7 @@ public class SyntaxHighlightTest {
 
         // each character + code span
         final int length = fencedCodeBlock.getLiteral().length() + 1;
-        assertEquals(length, spans.length);
+        assertEquals(Arrays.toString(spans), length, spans.length);
         assertEquals(codeSpan, spans[0]);
 
         // each character

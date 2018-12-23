@@ -11,6 +11,5 @@ include ':app',
         ':markwon-html',
         ':markwon-view',
         ':markwon-test-span',
-        ':markwon-test-util',
         ':sample-custom-extension',
         ':sample-latex-math'

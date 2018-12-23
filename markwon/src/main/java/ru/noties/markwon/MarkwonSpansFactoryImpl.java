@@ -22,21 +22,20 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
     @Nullable
     @Override
-    public <N extends Node, F extends SpanFactory> F get(@NonNull Class<N> node) {
-        //noinspection unchecked
-        return (F) factories.get(node);
+    public <N extends Node> SpanFactory get(@NonNull Class<N> node) {
+        return factories.get(node);
     }
 
     @Nullable
     @Override
-    public <N extends Node, F extends SpanFactory> F get(@NonNull N node) {
+    public <N extends Node> SpanFactory get(@NonNull N node) {
         return get(node.getClass());
     }
 
     @NonNull
     @Override
-    public <N extends Node, F extends SpanFactory> F require(@NonNull Class<N> node) {
-        final F f = get(node);
+    public <N extends Node> SpanFactory require(@NonNull Class<N> node) {
+        final SpanFactory f = get(node);
         if (f == null) {
             throw new NullPointerException();
         }
@@ -45,8 +44,8 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
     @NonNull
     @Override
-    public <N extends Node, F extends SpanFactory> F require(@NonNull N node) {
-        final F f = get(node);
+    public <N extends Node> SpanFactory require(@NonNull N node) {
+        final SpanFactory f = get(node);
         if (f == null) {
             throw new NullPointerException();
         }
@@ -60,7 +59,7 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
         @NonNull
         @Override
-        public <N extends Node, F extends SpanFactory> Builder setFactory(@NonNull Class<N> node, @NonNull F factory) {
+        public <N extends Node> Builder setFactory(@NonNull Class<N> node, @NonNull SpanFactory factory) {
             factories.put(node, factory);
             return this;
         }
