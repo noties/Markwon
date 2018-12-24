@@ -13,6 +13,12 @@ import java.net.URL;
 import ru.noties.markwon.image.ImageItem;
 import ru.noties.markwon.image.SchemeHandler;
 
+/**
+ * A simple network scheme handler that is not dependent on any external libraries.
+ *
+ * @see #create()
+ * @since 3.0.0
+ */
 public class NetworkSchemeHandler extends SchemeHandler {
 
     public static final String SCHEME_HTTP = "http";
