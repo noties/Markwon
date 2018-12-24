@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import ru.noties.markwon.renderer.R;
-
 abstract class TableRowsScheduler {
 
     static void schedule(@NonNull final TextView view) {

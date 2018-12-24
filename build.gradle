@@ -49,6 +49,8 @@ ext {
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
+    // for now 27.1.1 is used because it's the last one distributed with source files
+    // next version with sources is androidx one (we wait until migration)
     final def supportVersion = '27.1.1'
     final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
@@ -56,6 +58,7 @@ ext {
     deps = [
             'support-annotations'     : "com.android.support:support-annotations:$supportVersion",
             'support-app-compat'      : "com.android.support:appcompat-v7:$supportVersion",
+            'support-recycler-view'   : "com.android.support:recyclerview-v7:$supportVersion",
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
