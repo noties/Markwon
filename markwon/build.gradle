@@ -28,7 +28,6 @@ dependencies {
         testImplementation it['robolectric']
         testImplementation it['mockito']
 
-        testImplementation it['ix-java']
         testImplementation it['commons-io']
     }
 }

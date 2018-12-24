@@ -75,6 +75,7 @@ public class MarkwonTheme {
      *
      * @since 3.0.0
      */
+    @SuppressWarnings("unused")
     @NonNull
     public static Builder emptyBuilder() {
         return new Builder();
@@ -519,7 +520,7 @@ public class MarkwonTheme {
             return this;
         }
 
-        @SuppressWarnings("SameParameterValue")
+        @SuppressWarnings({"SameParameterValue", "UnusedReturnValue"})
         @NonNull
         public Builder codeBackgroundColor(@ColorInt int codeBackgroundColor) {
             this.codeBackgroundColor = codeBackgroundColor;

@@ -16,6 +16,14 @@ import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.SpanFactory;
 
+/**
+ * Plugin to add strikethrough markdown feature. This plugin will extend commonmark-java.Parser
+ * with strikethrough extension, add SpanFactory and register commonmark-java.Strikethrough node
+ * visitor
+ *
+ * @see #create()
+ * @since 3.0.0
+ */
 public class StrikethroughPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
@@ -45,7 +53,7 @@ public class StrikethroughPlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Strikethrough strikethrough) {
                 final int length = visitor.length();
                 visitor.visitChildren(strikethrough);
-                visitor.setSpansForNode(strikethrough, length);
+                visitor.setSpansForNodeOptional(strikethrough, length);
             }
         });
     }

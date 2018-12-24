@@ -20,6 +20,14 @@ dependencies {
     deps.with {
         api it['commonmark-strikethrough']
     }
+
+    deps.test.with {
+        testImplementation project(':markwon-test-span')
+        testImplementation it['junit']
+        testImplementation it['mockito']
+        testImplementation it['robolectric']
+        testImplementation it['ix-java']
+    }
 }
 
 registerArtifact(this)
