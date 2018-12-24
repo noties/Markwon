@@ -325,6 +325,14 @@ public class SpannableBuilder implements Appendable, CharSequence {
         return reversed;
     }
 
+    /**
+     * @since 3.0.0
+     */
+    public void clear() {
+        builder.setLength(0);
+        spans.clear();
+    }
+
     private void copySpans(final int index, @Nullable CharSequence cs) {
 
         // we must identify already reversed Spanned...

@@ -232,6 +232,12 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     }
 
     @Override
+    public void clear() {
+        renderProps.clearAll();
+        builder.clear();
+    }
+
+    @Override
     public <N extends Node> void setSpansForNode(@NonNull N node, int start) {
         setSpans(start, configuration.spansFactory().require(node).getSpans(configuration, renderProps));
     }

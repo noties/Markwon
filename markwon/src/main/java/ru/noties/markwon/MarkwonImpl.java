@@ -63,10 +63,12 @@ class MarkwonImpl extends Markwon {
             plugin.afterRender(node, visitor);
         }
 
-        // clear render props after rending
-        renderProps.clearAll();
+        final Spanned spanned = visitor.builder().spannableStringBuilder();
 
-        return visitor.builder().spannableStringBuilder();
+        // clear render props and builder after rending
+        visitor.clear();
+
+        return spanned;
     }
 
     @NonNull

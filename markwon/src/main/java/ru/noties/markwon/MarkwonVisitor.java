@@ -89,6 +89,11 @@ public interface MarkwonVisitor extends Visitor {
     void setSpans(int start, @Nullable Object spans);
 
     /**
+     * Clears state of visitor (both {@link RenderProps} and {@link SpannableBuilder} will be cleared
+     */
+    void clear();
+
+    /**
      * Helper method to obtain and apply spans for supplied Node. Internally queries {@link SpanFactory}
      * for the node (via {@link MarkwonSpansFactory#require(Node)} thus throwing an exception
      * if there is no {@link SpanFactory} registered for the node).
