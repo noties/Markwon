@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
 
@@ -17,7 +16,7 @@ import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.sample.extension.R;
 
 // do not use in real applications, this is just a showcase
-public class TableNodeEntry implements MarkwonAdapter.Entry<TableNodeEntry.TableNodeHolder, TableBlock> {
+public class TableEntry implements MarkwonAdapter.Entry<TableEntry.TableNodeHolder, TableBlock> {
 
     private final Map<TableBlock, Table> cache = new HashMap<>(2);
 
@@ -37,16 +36,9 @@ public class TableNodeEntry implements MarkwonAdapter.Entry<TableNodeEntry.Table
         }
 
         if (table != null) {
+            holder.tableEntryView.setTable(table);
             // render table
-            renderTable(markwon, holder, table);
         } // we need to do something with null table...
-    }
-
-    private void renderTable(
-            @NonNull Markwon markwon,
-            @NonNull TableNodeHolder holder,
-            @NonNull Table table) {
-
     }
 
     @Override
@@ -61,12 +53,12 @@ public class TableNodeEntry implements MarkwonAdapter.Entry<TableNodeEntry.Table
 
     static class TableNodeHolder extends MarkwonAdapter.Holder {
 
-        final TableLayout layout;
+        final TableEntryView tableEntryView;
 
         TableNodeHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.layout = requireView(R.id.table_layout);
+            this.tableEntryView = requireView(R.id.table_entry);
         }
     }
 }

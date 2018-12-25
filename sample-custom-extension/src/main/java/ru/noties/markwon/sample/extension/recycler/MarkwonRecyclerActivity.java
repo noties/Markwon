@@ -49,7 +49,7 @@ public class MarkwonRecyclerActivity extends Activity {
 
         final MarkwonAdapter adapter = MarkwonAdapter.builder()
                 .include(FencedCodeBlock.class, new SimpleEntry(R.layout.adapter_fenced_code_block))
-                .include(TableBlock.class, new TableNodeEntry())
+                .include(TableBlock.class, new TableEntry())
                 .defaultEntry(new SimpleEntry(R.layout.adapter_default_entry))
                 .build();
 
