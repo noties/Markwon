@@ -29,7 +29,7 @@ import ru.noties.markwon.html.HtmlPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.svg.SvgPlugin;
 import ru.noties.markwon.recycler.MarkwonAdapter;
-import ru.noties.markwon.recycler.SimpleNodeEntry;
+import ru.noties.markwon.recycler.SimpleEntry;
 import ru.noties.markwon.sample.extension.R;
 import ru.noties.markwon.urlprocessor.UrlProcessor;
 import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
@@ -48,8 +48,9 @@ public class MarkwonRecyclerActivity extends Activity {
         setContentView(R.layout.activity_recycler);
 
         final MarkwonAdapter adapter = MarkwonAdapter.builder()
-                .include(FencedCodeBlock.class, new SimpleNodeEntry(R.layout.adapter_fenced_code_block))
+                .include(FencedCodeBlock.class, new SimpleEntry(R.layout.adapter_fenced_code_block))
                 .include(TableBlock.class, new TableNodeEntry())
+                .defaultEntry(new SimpleEntry(R.layout.adapter_default_entry))
                 .build();
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);

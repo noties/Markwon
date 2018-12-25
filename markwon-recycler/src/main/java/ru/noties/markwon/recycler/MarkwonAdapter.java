@@ -15,7 +15,25 @@ import java.util.List;
 
 import ru.noties.markwon.Markwon;
 
-// each node block will be rendered by a simple TextView, but we can provide own entries for each block
+/**
+ * Class to display markdown in a RecyclerView. It is done by extracting root blocks from a
+ * parsed markdown document and rendering each block in a standalone RecyclerView entry. Provides
+ * ability to customize rendering of blocks. For example display certain blocks in a horizontal
+ * scrolling container or display tables in a specific widget designed for it ({@link Builder#include(Class, Entry)}).
+ * <p>
+ * By default each node will be rendered in a TextView provided by this artifact. It has no styling
+ * information and thus must be replaced with your own layout ({@link Builder#defaultEntry(int)} or
+ * {@link Builder#defaultEntry(Entry)}).
+ *
+ * @see #builder()
+ * @see #create()
+ * @see #create(int)
+ * @see #create(Entry)
+ * @see #setMarkdown(Markwon, String)
+ * @see #setParsedMarkdown(Markwon, Node)
+ * @see #setParsedMarkdown(Markwon, List)
+ * @since 3.0.0
+ */
 public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter.Holder> {
 
     @NonNull
@@ -59,6 +77,9 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
         MarkwonAdapter build();
     }
 
+    /**
+     * @see SimpleEntry
+     */
     public interface Entry<H extends Holder, N extends Node> {
 
         @NonNull

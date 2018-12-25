@@ -65,7 +65,7 @@ class MarkwonImpl extends Markwon {
 
         final Spanned spanned = visitor.builder().spannableStringBuilder();
 
-        // clear render props and builder after rending
+        // clear render props and builder after rendering
         visitor.clear();
 
         return spanned;

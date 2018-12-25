@@ -1,7 +1,6 @@
 package ru.noties.markwon.recycler;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     private Markwon markwon;
     private List<Node> nodes;
 
+    @SuppressWarnings("WeakerAccess")
     MarkwonAdapterImpl(
             @NonNull SparseArray<Entry<Holder, Node>> entries,
             @NonNull Entry<Holder, Node> defaultEntry,
@@ -67,9 +67,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
 
-        final Entry<Holder, Node> entry = viewType == 0
-                ? defaultEntry
-                : entries.get(viewType);
+        final Entry<Holder, Node> entry = getEntry(viewType);
 
         return entry.createHolder(layoutInflater, parent);
     }
@@ -80,9 +78,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         final Node node = nodes.get(position);
         final int viewType = getNodeViewType(node.getClass());
 
-        final Entry<Holder, Node> entry = viewType == 0
-                ? defaultEntry
-                : entries.get(viewType);
+        final Entry<Holder, Node> entry = getEntry(viewType);
 
         entry.bindHolder(markwon, holder, node);
     }
@@ -94,6 +90,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
                 : 0;
     }
 
+    @SuppressWarnings("unused")
     @NonNull
     public List<Node> getItems() {
         return nodes != null
@@ -110,12 +107,11 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     public long getItemId(int position) {
         final Node node = nodes.get(position);
         final int type = getNodeViewType(node.getClass());
-        final Entry<Holder, Node> entry = type == 0
-                ? defaultEntry
-                : entries.get(type);
+        final Entry<Holder, Node> entry = getEntry(type);
         return entry.id(node);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public int getNodeViewType(@NonNull Class<? extends Node> node) {
         // if has registered -> then return it, else 0
         final int hash = node.hashCode();
@@ -123,6 +119,13 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
             return hash;
         }
         return 0;
+    }
+
+    @NonNull
+    private Entry<Holder, Node> getEntry(int viewType) {
+        return viewType == 0
+                ? defaultEntry
+                : entries.get(viewType);
     }
 
     static class BuilderImpl implements Builder {
@@ -154,7 +157,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         @Override
         public Builder defaultEntry(int layoutResId) {
             //noinspection unchecked
-            this.defaultEntry = (Entry<Holder, Node>) (Entry) new SimpleNodeEntry(layoutResId);
+            this.defaultEntry = (Entry<Holder, Node>) (Entry) new SimpleEntry(layoutResId);
             return this;
         }
 
@@ -171,7 +174,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
             if (defaultEntry == null) {
                 //noinspection unchecked
-                defaultEntry = (Entry<Holder, Node>) (Entry) new SimpleNodeEntry();
+                defaultEntry = (Entry<Holder, Node>) (Entry) new SimpleEntry();
             }
 
             if (reducer == null) {
@@ -190,7 +193,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
             final List<Node> list = new ArrayList<>();
 
-//            // we will extract all blocks that are direct children of Document
+            // we will extract all blocks that are direct children of Document
             Node node = root.getFirstChild();
             Node temp;
 
@@ -200,8 +203,6 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
                 node.unlink();
                 node = temp;
             }
-
-            Log.e("NODES", list.toString());
 
             return list;
         }

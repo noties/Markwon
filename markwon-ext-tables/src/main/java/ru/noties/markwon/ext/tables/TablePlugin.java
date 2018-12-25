@@ -33,10 +33,11 @@ public class TablePlugin extends AbstractMarkwonPlugin {
         return new TablePlugin(tableTheme);
     }
 
-    private final TableTheme tableTheme;
+    private final TableVisitor visitor;
 
+    @SuppressWarnings("WeakerAccess")
     TablePlugin(@NonNull TableTheme tableTheme) {
-        this.tableTheme = tableTheme;
+        this.visitor = new TableVisitor(tableTheme);
     }
 
     @Override
@@ -46,7 +47,12 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        TableVisitor.configure(tableTheme, builder);
+        visitor.configure(builder);
+    }
+
+    @Override
+    public void beforeRender(@NonNull Node node) {
+        visitor.clear();
     }
 
     @Override
@@ -61,18 +67,23 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
     private static class TableVisitor {
 
-        static void configure(@NonNull TableTheme tableTheme, @NonNull MarkwonVisitor.Builder builder) {
-            new TableVisitor(tableTheme, builder);
-        }
-
         private final TableTheme tableTheme;
 
         private List<TableRowSpan.Cell> pendingTableRow;
         private boolean tableRowIsHeader;
         private int tableRows;
 
-        private TableVisitor(@NonNull TableTheme tableTheme, @NonNull MarkwonVisitor.Builder builder) {
+        TableVisitor(@NonNull TableTheme tableTheme) {
             this.tableTheme = tableTheme;
+        }
+
+        void clear() {
+            pendingTableRow = null;
+            tableRowIsHeader = false;
+            tableRows = 0;
+        }
+
+        void configure(@NonNull MarkwonVisitor.Builder builder) {
             builder
                     .on(TableBody.class, new MarkwonVisitor.NodeVisitor<TableBody>() {
                         @Override

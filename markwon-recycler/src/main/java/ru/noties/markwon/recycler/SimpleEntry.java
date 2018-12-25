@@ -17,7 +17,7 @@ import java.util.Map;
 
 import ru.noties.markwon.Markwon;
 
-public class SimpleNodeEntry implements MarkwonAdapter.Entry<SimpleNodeEntry.Holder, Node> {
+public class SimpleEntry implements MarkwonAdapter.Entry<SimpleEntry.Holder, Node> {
 
     private static final NoCopySpannableFactory FACTORY = new NoCopySpannableFactory();
 
@@ -26,11 +26,11 @@ public class SimpleNodeEntry implements MarkwonAdapter.Entry<SimpleNodeEntry.Hol
 
     private final int layoutResId;
 
-    public SimpleNodeEntry() {
-        this(R.layout.adapter_simple_entry);
+    public SimpleEntry() {
+        this(R.layout.markwon_adapter_simple_entry);
     }
 
-    public SimpleNodeEntry(@LayoutRes int layoutResId) {
+    public SimpleEntry(@LayoutRes int layoutResId) {
         this.layoutResId = layoutResId;
     }
 
