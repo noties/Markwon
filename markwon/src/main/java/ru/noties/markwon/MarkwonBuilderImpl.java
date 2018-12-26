@@ -2,6 +2,7 @@ package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.commonmark.parser.Parser;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.priority.PriorityProcessor;
 
 /**
  * @since 3.0.0
@@ -22,7 +24,10 @@ class MarkwonBuilderImpl implements Markwon.Builder {
     private final Context context;
 
     private final List<MarkwonPlugin> plugins = new ArrayList<>(3);
+
     private TextView.BufferType bufferType = TextView.BufferType.SPANNABLE;
+
+    private PriorityProcessor priorityProcessor;
 
     MarkwonBuilderImpl(@NonNull Context context) {
         this.context = context;
@@ -62,6 +67,12 @@ class MarkwonBuilderImpl implements Markwon.Builder {
     }
 
     @NonNull
+    public MarkwonBuilderImpl priorityProcessor(@NonNull PriorityProcessor priorityProcessor) {
+        this.priorityProcessor = priorityProcessor;
+        return this;
+    }
+
+    @NonNull
     @Override
     public Markwon build() {
 
@@ -73,7 +84,18 @@ class MarkwonBuilderImpl implements Markwon.Builder {
         final MarkwonSpansFactory.Builder spanFactoryBuilder = new MarkwonSpansFactoryImpl.BuilderImpl();
         final RenderProps renderProps = new RenderPropsImpl();
 
+        PriorityProcessor priorityProcessor = this.priorityProcessor;
+        if (priorityProcessor == null) {
+            // strictly speaking we do not need updating this field
+            // as we are not building this class to be reused between multiple `build` calls
+            priorityProcessor = this.priorityProcessor = PriorityProcessor.create();
+        }
+        final List<MarkwonPlugin> plugins = priorityProcessor.process(this.plugins);
+
         for (MarkwonPlugin plugin : plugins) {
+            if (true) {
+                Log.e("PLUGIN", plugin.getClass().getName());
+            }
             plugin.configureParser(parserBuilder);
             plugin.configureTheme(themeBuilder);
             plugin.configureImages(asyncDrawableLoaderBuilder);

@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.image.ImagesPlugin;
+import ru.noties.markwon.priority.Priority;
 
 public class SvgPlugin extends AbstractMarkwonPlugin {
 
@@ -22,5 +24,11 @@ public class SvgPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
         builder.addMediaDecoder(SvgMediaDecoder.CONTENT_TYPE, SvgMediaDecoder.create(resources));
+    }
+
+    @NonNull
+    @Override
+    public Priority priority() {
+        return Priority.after(ImagesPlugin.class);
     }
 }

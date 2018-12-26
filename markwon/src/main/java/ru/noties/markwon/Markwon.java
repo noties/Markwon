@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import org.commonmark.node.Node;
 
+import ru.noties.markwon.core.CorePlugin;
+
 /**
  * Class to parse and render markdown. Since version 3.0.0 instance specific (previously consisted
  * of static stateless methods). An instance of builder can be obtained via {@link #builder(Context)}
@@ -18,7 +20,22 @@ import org.commonmark.node.Node;
 public abstract class Markwon {
 
     /**
-     * Factory method to obtain an instance of {@link Builder}
+     * Factory method to create a <em>minimally</em> functional {@link Markwon} instance. This
+     * instance will have <strong>only</strong> {@link CorePlugin} registered. If you wish
+     * to configure this instance more consider using {@link #builder(Context)} method.
+     *
+     * @return {@link Markwon} instance with only CorePlugin registered
+     * @since 3.0.0
+     */
+    @NonNull
+    public static Markwon create(@NonNull Context context) {
+        return builder(context)
+                .usePlugin(CorePlugin.create())
+                .build();
+    }
+
+    /**
+     * Factory method to obtain an instance of {@link Builder}.
      *
      * @see Builder
      * @since 3.0.0

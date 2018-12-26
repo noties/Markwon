@@ -7,8 +7,10 @@ import android.widget.TextView;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
+import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.priority.Priority;
 
 /**
  * Class that extends {@link MarkwonPlugin} with all methods implemented (empty body)
@@ -73,6 +75,16 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
     @Override
     public void configureRenderProps(@NonNull RenderProps renderProps) {
 
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @NonNull
+    @Override
+    public Priority priority() {
+        // by default all come after CorePlugin
+        return Priority.after(CorePlugin.class);
     }
 
     /**

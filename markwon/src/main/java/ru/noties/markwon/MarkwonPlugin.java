@@ -11,6 +11,7 @@ import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.MediaDecoder;
 import ru.noties.markwon.image.SchemeHandler;
+import ru.noties.markwon.priority.Priority;
 
 /**
  * Class represents a plugin (extension) to Markwon to configure how parsing and rendering
@@ -86,6 +87,9 @@ public interface MarkwonPlugin {
      * @see RenderProps
      */
     void configureRenderProps(@NonNull RenderProps renderProps);
+
+    @NonNull
+    Priority priority();
 
     /**
      * Process input markdown and return new string to be used in parsing stage further.

@@ -39,6 +39,7 @@ import ru.noties.markwon.core.factory.ListItemSpanFactory;
 import ru.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import ru.noties.markwon.core.factory.ThematicBreakSpanFactory;
 import ru.noties.markwon.core.spans.OrderedListItemSpan;
+import ru.noties.markwon.priority.Priority;
 
 /**
  * @since 3.0.0
@@ -55,11 +56,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         return new CorePlugin(softBreakAddsNewLine);
     }
 
-    // todo: can we make it configurable somewhere else?
-    // even possibility of options that require creating factory method for each configuration... meh
     private final boolean softBreakAddsNewLine;
-
-    // todo: test that visitors are registered for all expected nodes
 
     protected CorePlugin(boolean softBreakAddsNewLine) {
         this.softBreakAddsNewLine = softBreakAddsNewLine;
@@ -102,6 +99,12 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 .setFactory(Heading.class, new HeadingSpanFactory())
                 .setFactory(Link.class, new LinkSpanFactory())
                 .setFactory(ThematicBreak.class, new ThematicBreakSpanFactory());
+    }
+
+    @NonNull
+    @Override
+    public Priority priority() {
+        return Priority.none();
     }
 
     @Override

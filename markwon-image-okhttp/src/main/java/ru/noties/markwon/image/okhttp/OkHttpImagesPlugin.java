@@ -7,7 +7,9 @@ import java.util.Arrays;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.network.NetworkSchemeHandler;
+import ru.noties.markwon.priority.Priority;
 
 /**
  * Plugin to use OkHttpClient to obtain images from network (http and https schemes)
@@ -17,21 +19,21 @@ import ru.noties.markwon.image.network.NetworkSchemeHandler;
  * @since 3.0.0
  */
 @SuppressWarnings("WeakerAccess")
-public class MarkwonImageOkHttpPlugin extends AbstractMarkwonPlugin {
+public class OkHttpImagesPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
-    public static MarkwonImageOkHttpPlugin create() {
-        return new MarkwonImageOkHttpPlugin(new OkHttpClient());
+    public static OkHttpImagesPlugin create() {
+        return new OkHttpImagesPlugin(new OkHttpClient());
     }
 
     @NonNull
-    public static MarkwonImageOkHttpPlugin create(@NonNull OkHttpClient okHttpClient) {
-        return new MarkwonImageOkHttpPlugin(okHttpClient);
+    public static OkHttpImagesPlugin create(@NonNull OkHttpClient okHttpClient) {
+        return new OkHttpImagesPlugin(okHttpClient);
     }
 
     private final OkHttpClient client;
 
-    MarkwonImageOkHttpPlugin(@NonNull OkHttpClient client) {
+    OkHttpImagesPlugin(@NonNull OkHttpClient client) {
         this.client = client;
     }
 
@@ -41,5 +43,11 @@ public class MarkwonImageOkHttpPlugin extends AbstractMarkwonPlugin {
                 Arrays.asList(NetworkSchemeHandler.SCHEME_HTTP, NetworkSchemeHandler.SCHEME_HTTPS),
                 new OkHttpSchemeHandler(client)
         );
+    }
+
+    @NonNull
+    @Override
+    public Priority priority() {
+        return Priority.after(ImagesPlugin.class);
     }
 }
