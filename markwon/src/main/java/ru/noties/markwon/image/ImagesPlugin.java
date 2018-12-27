@@ -21,6 +21,9 @@ import ru.noties.markwon.image.data.DataUriSchemeHandler;
 import ru.noties.markwon.image.file.FileSchemeHandler;
 import ru.noties.markwon.image.network.NetworkSchemeHandler;
 
+/**
+ * @since 3.0.0
+ */
 public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     @NonNull

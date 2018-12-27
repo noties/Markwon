@@ -2,6 +2,7 @@ package ru.noties.markwon.priority;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,7 +19,10 @@ class PriorityProcessorImpl extends PriorityProcessor {
 
     @NonNull
     @Override
-    public List<MarkwonPlugin> process(@NonNull List<MarkwonPlugin> plugins) {
+    public List<MarkwonPlugin> process(@NonNull List<MarkwonPlugin> in) {
+
+        // create new collection based on supplied argument
+        final List<MarkwonPlugin> plugins = new ArrayList<>(in);
 
         final int size = plugins.size();
 
@@ -32,7 +36,6 @@ class PriorityProcessorImpl extends PriorityProcessor {
             }
         }
 
-        // change to Map<Plugin,Int>
         final Map<MarkwonPlugin, Integer> cache = new HashMap<>(size);
         for (MarkwonPlugin plugin : plugins) {
             cache.put(plugin, eval(plugin, map));
@@ -125,9 +128,5 @@ class PriorityProcessorImpl extends PriorityProcessor {
         public int compare(MarkwonPlugin o1, MarkwonPlugin o2) {
             return map.get(o1).compareTo(map.get(o2));
         }
-    }
-
-    private static class NoCorePluginAddedException extends Exception {
-
     }
 }

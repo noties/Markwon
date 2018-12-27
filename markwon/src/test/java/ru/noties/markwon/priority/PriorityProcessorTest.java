@@ -160,6 +160,33 @@ public class PriorityProcessorTest {
     }
 
     @Test
+    public void five_plugins_sequential() {
+
+        final MarkwonPlugin a = new NamedPlugin("a") {
+        };
+
+        final MarkwonPlugin b = new NamedPlugin("b", a) {
+        };
+
+        final MarkwonPlugin c = new NamedPlugin("c", b) {
+        };
+
+        final MarkwonPlugin d = new NamedPlugin("d", c) {
+        };
+
+        final MarkwonPlugin e = new NamedPlugin("e", d) {
+        };
+
+        final List<MarkwonPlugin> plugins = processor.process(Arrays.asList(d, e, a, c, b));
+        assertEquals(5, plugins.size());
+        assertEquals(a, plugins.get(0));
+        assertEquals(b, plugins.get(1));
+        assertEquals(c, plugins.get(2));
+        assertEquals(d, plugins.get(3));
+        assertEquals(e, plugins.get(4));
+    }
+
+    @Test
     public void plugin_duplicate() {
 
         final MarkwonPlugin plugin = new AbstractMarkwonPlugin() {
