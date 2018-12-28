@@ -12,10 +12,22 @@ android {
         versionCode 1
         versionName version
         setProperty("archivesBaseName", "markwon-sample-$versionName")
+
+        resConfig 'en'
     }
 
     lintOptions {
         abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize '5g'
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -31,12 +43,20 @@ dependencies {
     implementation project(':markwon-syntax-highlight')
 
     deps.with {
+        implementation it['support-recycler-view']
         implementation it['okhttp']
         implementation it['prism4j']
         implementation it['debug']
+        implementation it['adapt']
     }
 
     deps['annotationProcessor'].with {
         annotationProcessor it['prism4j-bundler']
+    }
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
     }
 }

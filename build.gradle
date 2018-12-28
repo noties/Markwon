@@ -68,6 +68,7 @@ ext {
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'ru.noties:prism4j:1.1.0',
             'debug'                   : 'ru.noties:debug:3.0.0@jar',
+            'adapt'                   : 'ru.noties:adapt:1.1.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion"
     ]
 

@@ -18,6 +18,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".core.CoreActivity" />
+        <activity android:name=".latex.LatexActivity" />
+        <activity android:name=".customextension.CustomExtensionActivity" />
+
     </application>
 
 </manifest>
