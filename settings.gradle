@@ -1,5 +1,5 @@
 rootProject.name = 'MarkwonProject'
-include ':app',
+include ':app', ':sample',
         ':markwon',
         ':markwon-ext-latex',
         ':markwon-ext-strikethrough',

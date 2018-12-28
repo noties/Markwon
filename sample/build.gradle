@@ -6,23 +6,16 @@ android {
     buildToolsVersion config['build-tools']
 
     defaultConfig {
-        applicationId "ru.noties.markwon"
+        applicationId "ru.noties.markwon.sample"
         minSdkVersion config['min-sdk']
         targetSdkVersion config['target-sdk']
         versionCode 1
         versionName version
-        setProperty("archivesBaseName", "markwon-$versionName")
+        setProperty("archivesBaseName", "markwon-sample-$versionName")
     }
 
     lintOptions {
         abortOnError false
-    }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFile 'proguard.pro'
-        }
     }
 }
 
@@ -41,11 +34,9 @@ dependencies {
         implementation it['okhttp']
         implementation it['prism4j']
         implementation it['debug']
-        implementation it['dagger']
     }
 
     deps['annotationProcessor'].with {
         annotationProcessor it['prism4j-bundler']
-        annotationProcessor it['dagger-compiler']
     }
 }
