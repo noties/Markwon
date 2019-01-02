@@ -31,6 +31,11 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return new ImagesPlugin(context, false);
     }
 
+    /**
+     * Special scheme that is used {@code file:///android_asset/}
+     * @param context
+     * @return
+     */
     @NonNull
     public static ImagesPlugin createWithAssets(@NonNull Context context) {
         return new ImagesPlugin(context, true);

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.noties.markwon.sample">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +23,8 @@
         <activity android:name=".core.CoreActivity" />
         <activity android:name=".latex.LatexActivity" />
         <activity android:name=".customextension.CustomExtensionActivity" />
+        <activity android:name=".basicplugins.BasicPluginsActivity" />
+        <activity android:name=".recycler.RecyclerActivity" />
 
     </application>
 

@@ -4,7 +4,15 @@
     <!--Ignore missing translation warning-->
 
     <string name="sample_core"># \# Core\n\nSimple usage example</string>
-    <string name="sample_latex"># \# LaTeX\n\nShows how to display a **LaTeX** formula in a Markwon powered application</string>
-    <string name="sample_custom_extension"># \# Custom extension\n\nShows how to create a custom extension to display an icon referenced in markdown as `@ic-android-black-24`</string>
+
+    <string name="sample_basic_plugins"># \# Basic plugins\n\nShows basic usage of plugins</string>
+
+    <string name="sample_latex"># \# LaTeX\n\nShows how to display a **LaTeX** formula</string>
+
+    <string name="sample_custom_extension"># \# Custom extension\n\nShows how to create a custom
+        extension to display an icon referenced in markdown as `@ic-android-black-24`</string>
+
+    <string name="sample_recycler"># \# Recycler\n\nShow how to render markdown in a RecyclerView.
+        Renders code blocks wrapped in a HorizontalScrollView. Renders tables in a custom view.</string>
 
 </resources>

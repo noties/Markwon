@@ -17,9 +17,11 @@ import ru.noties.adapt.OnClickViewProcessor;
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.sample.basicplugins.BasicPluginsActivity;
 import ru.noties.markwon.sample.core.CoreActivity;
 import ru.noties.markwon.sample.customextension.CustomExtensionActivity;
 import ru.noties.markwon.sample.latex.LatexActivity;
+import ru.noties.markwon.sample.recycler.RecyclerActivity;
 
 public class MainActivity extends Activity {
 
@@ -79,12 +81,20 @@ public class MainActivity extends Activity {
                 activity = CoreActivity.class;
                 break;
 
+            case BASIC_PLUGINS:
+                activity = BasicPluginsActivity.class;
+                break;
+
             case LATEX:
                 activity = LatexActivity.class;
                 break;
 
             case CUSTOM_EXTENSION:
                 activity = CustomExtensionActivity.class;
+                break;
+
+            case RECYCLER:
+                activity = RecyclerActivity.class;
                 break;
 
             default:

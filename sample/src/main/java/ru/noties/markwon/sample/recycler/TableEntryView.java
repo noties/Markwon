@@ -1,5 +1,6 @@
-package ru.noties.markwon.sample.extension.recycler;
+package ru.noties.markwon.sample.recycler;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannedString;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.noties.markwon.ext.tables.Table;
-import ru.noties.markwon.sample.extension.R;
+import ru.noties.markwon.sample.R;
 
 public class TableEntryView extends LinearLayout {
 
@@ -97,6 +99,7 @@ public class TableEntryView extends LinearLayout {
         for (int i = 0, size = rows.size(); i < size; i++) {
             addRow(i, rows.get(i));
         }
+        requestLayout();
     }
 
     private void addRow(int index, @NonNull Table.Row row) {
@@ -106,6 +109,7 @@ public class TableEntryView extends LinearLayout {
         final int backgroundColor = !row.header() && (index % 2) == 0
                 ? rowEvenBackgroundColor
                 : 0;
+
         group.setBackgroundColor(backgroundColor);
 
         final List<Table.Column> columns = row.columns();
@@ -116,7 +120,7 @@ public class TableEntryView extends LinearLayout {
         for (int i = 0, size = columns.size(); i < size; i++) {
             textView = ensureCell(group, i);
             column = columns.get(i);
-            textView.setTextAlignment(textAlignment(column.alignment()));
+            textView.setGravity(textGravity(column.alignment()));
             textView.setText(column.content());
             textView.getPaint().setFakeBoldText(row.header());
         }
@@ -185,21 +189,30 @@ public class TableEntryView extends LinearLayout {
         }
     }
 
-    private static int textAlignment(@NonNull Table.Alignment alignment) {
-        final int out;
+    // we will use gravity instead of textAlignment because min sdk is 16 (textAlignment starts at 17)
+    @SuppressLint("RtlHardcoded")
+    private static int textGravity(@NonNull Table.Alignment alignment) {
+
+        final int gravity;
+
         switch (alignment) {
+
             case LEFT:
-                out = TextView.TEXT_ALIGNMENT_TEXT_START;
+                gravity = Gravity.LEFT;
                 break;
+
             case CENTER:
-                out = TextView.TEXT_ALIGNMENT_CENTER;
+                gravity = Gravity.CENTER_HORIZONTAL;
                 break;
+
             case RIGHT:
-                out = TextView.TEXT_ALIGNMENT_TEXT_END;
+                gravity = Gravity.RIGHT;
                 break;
+
             default:
-                throw new IllegalStateException("Unexpected alignment: " + alignment);
+                throw new IllegalStateException("Unknown table alignment: " + alignment);
         }
-        return out;
+
+        return gravity;
     }
 }

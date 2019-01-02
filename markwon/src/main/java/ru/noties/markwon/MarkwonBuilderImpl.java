@@ -170,6 +170,8 @@ class MarkwonBuilderImpl implements Markwon.Builder {
             }
         }
 
+        // important thing here is to check if corePlugin is added
+        // add it _only_ if it's not present
         if (hasCoreDependents && !hasCore) {
             final List<MarkwonPlugin> out = new ArrayList<>(plugins.size() + 1);
             // add default instance of CorePlugin

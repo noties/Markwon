@@ -29,6 +29,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets {
+        main {
+            // let's use different res directory so sample will have _isolated_ resources from others
+            res.srcDirs += [ './src/main/recycler/res' ]
+            assets.srcDirs += ['./src/main/recycler/assets']
+        }
+    }
 }
 
 dependencies {
@@ -41,6 +49,7 @@ dependencies {
     implementation project(':markwon-image-gif')
     implementation project(':markwon-image-svg')
     implementation project(':markwon-syntax-highlight')
+    implementation project(':markwon-recycler')
 
     deps.with {
         implementation it['support-recycler-view']

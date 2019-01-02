@@ -17,11 +17,15 @@ import java.util.Map;
 
 import ru.noties.markwon.Markwon;
 
+/**
+ * @since 3.0.0
+ */
+@SuppressWarnings("WeakerAccess")
 public class SimpleEntry implements MarkwonAdapter.Entry<SimpleEntry.Holder, Node> {
 
-    private static final NoCopySpannableFactory FACTORY = new NoCopySpannableFactory();
+    public static final Spannable.Factory NO_COPY_SPANNABLE_FACTORY = new NoCopySpannableFactory();
 
-    // small cache, maybe add pre-compute of text, also spannableFactory (so no copying of spans)
+    // small cache for already rendered nodes
     private final Map<Node, Spanned> cache = new HashMap<>();
 
     private final int layoutResId;
@@ -60,15 +64,15 @@ public class SimpleEntry implements MarkwonAdapter.Entry<SimpleEntry.Holder, Nod
         cache.clear();
     }
 
-    static class Holder extends MarkwonAdapter.Holder {
+    public static class Holder extends MarkwonAdapter.Holder {
 
         final TextView textView;
 
-        Holder(@NonNull View itemView) {
+        protected Holder(@NonNull View itemView) {
             super(itemView);
 
             this.textView = requireView(R.id.text);
-            this.textView.setSpannableFactory(FACTORY);
+            this.textView.setSpannableFactory(NO_COPY_SPANNABLE_FACTORY);
         }
     }
 
