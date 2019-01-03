@@ -1,10 +1,12 @@
-package ru.noties.markwon;
+package ru.noties.markwon.movement;
 
 import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.widget.TextView;
+
+import ru.noties.markwon.AbstractMarkwonPlugin;
 
 /**
  * @since 3.0.0

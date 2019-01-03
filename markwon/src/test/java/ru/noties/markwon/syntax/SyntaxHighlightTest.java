@@ -90,6 +90,7 @@ public class SyntaxHighlightTest {
         final MarkwonVisitor visitor = new AbstractMarkwonVisitorImpl(
                 configuration,
                 mock(RenderProps.class),
+                new SpannableBuilder(),
                 visitorMap);
 
         final SpannableBuilder builder = visitor.builder();

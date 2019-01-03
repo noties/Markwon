@@ -19,7 +19,7 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonPlugin;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.MovementMethodPlugin;
+import ru.noties.markwon.movement.MovementMethodPlugin;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageItem;

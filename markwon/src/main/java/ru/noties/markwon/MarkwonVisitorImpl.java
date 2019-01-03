@@ -36,20 +36,22 @@ import java.util.Map;
  */
 class MarkwonVisitorImpl implements MarkwonVisitor {
 
-    private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes;
-
     private final MarkwonConfiguration configuration;
 
     private final RenderProps renderProps;
 
-    private final SpannableBuilder builder = new SpannableBuilder();
+    private final SpannableBuilder builder;
+
+    private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes;
 
     MarkwonVisitorImpl(
             @NonNull MarkwonConfiguration configuration,
             @NonNull RenderProps renderProps,
+            @NonNull SpannableBuilder builder,
             @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
         this.configuration = configuration;
         this.renderProps = renderProps;
+        this.builder = builder;
         this.nodes = nodes;
     }
 
@@ -286,6 +288,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
             return new MarkwonVisitorImpl(
                     configuration,
                     renderProps,
+                    new SpannableBuilder(),
                     Collections.unmodifiableMap(nodes));
         }
     }
