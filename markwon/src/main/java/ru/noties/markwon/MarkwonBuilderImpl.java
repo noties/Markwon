@@ -155,6 +155,10 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
             // here we do not check for exact match (a user could've subclasses CorePlugin
             // and supplied it. In this case we DO NOT implicitly add CorePlugin
+            //
+            // if core is present already we do not need to iterate anymore -> as nothing
+            // will be changed (and we actually do not care if there are any dependents of Core
+            // as it's present anyway)
             if (CorePlugin.class.isAssignableFrom(plugin.getClass())) {
                 hasCore = true;
                 break;

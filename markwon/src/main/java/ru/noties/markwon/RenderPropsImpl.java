@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * @since 3.0.0
  */
-public class RenderPropsImpl implements RenderProps {
+class RenderPropsImpl implements RenderProps {
 
     private final Map<Prop, Object> values = new HashMap<>(3);
 

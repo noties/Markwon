@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
  * @see #of(Class, String)
  * @since 3.0.0
  */
-public final class Prop<T> {
+public class Prop<T> {
 
     @SuppressWarnings("unused")
     @NonNull
@@ -26,7 +26,7 @@ public final class Prop<T> {
 
     private final String name;
 
-    private Prop(@NonNull String name) {
+    Prop(@NonNull String name) {
         this.name = name;
     }
 
