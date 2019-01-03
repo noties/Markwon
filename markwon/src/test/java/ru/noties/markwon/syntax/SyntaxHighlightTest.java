@@ -22,7 +22,6 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.RenderProps;
-import ru.noties.markwon.RenderPropsImpl;
 import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.core.CorePluginBridge;
@@ -90,7 +89,7 @@ public class SyntaxHighlightTest {
 
         final MarkwonVisitor visitor = new AbstractMarkwonVisitorImpl(
                 configuration,
-                new RenderPropsImpl(),
+                mock(RenderProps.class),
                 visitorMap);
 
         final SpannableBuilder builder = visitor.builder();
