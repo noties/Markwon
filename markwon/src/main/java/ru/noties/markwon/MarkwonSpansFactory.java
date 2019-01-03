@@ -25,21 +25,8 @@ public interface MarkwonSpansFactory {
     @Nullable
     <N extends Node> SpanFactory get(@NonNull Class<N> node);
 
-    /**
-     * @see #get(Class)
-     * @see #require(Node)
-     */
-    @Nullable
-    <N extends Node> SpanFactory get(@NonNull N node);
-
     @NonNull
     <N extends Node> SpanFactory require(@NonNull Class<N> node);
-
-    /**
-     * @see #require(Class)
-     */
-    @NonNull
-    <N extends Node> SpanFactory require(@NonNull N node);
 
 
     interface Builder {

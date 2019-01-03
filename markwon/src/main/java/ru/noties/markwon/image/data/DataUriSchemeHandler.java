@@ -10,7 +10,7 @@ import ru.noties.markwon.image.ImageItem;
 import ru.noties.markwon.image.SchemeHandler;
 
 /**
- * @since 3.0.0
+ * @since 2.0.0
  */
 public class DataUriSchemeHandler extends SchemeHandler {
 

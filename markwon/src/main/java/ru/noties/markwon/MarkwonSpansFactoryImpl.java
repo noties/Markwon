@@ -16,7 +16,7 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
     private final Map<Class<? extends Node>, SpanFactory> factories;
 
-    private MarkwonSpansFactoryImpl(@NonNull Map<Class<? extends Node>, SpanFactory> factories) {
+    MarkwonSpansFactoryImpl(@NonNull Map<Class<? extends Node>, SpanFactory> factories) {
         this.factories = factories;
     }
 
@@ -26,28 +26,12 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
         return factories.get(node);
     }
 
-    @Nullable
-    @Override
-    public <N extends Node> SpanFactory get(@NonNull N node) {
-        return get(node.getClass());
-    }
-
     @NonNull
     @Override
     public <N extends Node> SpanFactory require(@NonNull Class<N> node) {
         final SpanFactory f = get(node);
         if (f == null) {
-            throw new NullPointerException();
-        }
-        return f;
-    }
-
-    @NonNull
-    @Override
-    public <N extends Node> SpanFactory require(@NonNull N node) {
-        final SpanFactory f = get(node);
-        if (f == null) {
-            throw new NullPointerException();
+            throw new NullPointerException(node.getName());
         }
         return f;
     }

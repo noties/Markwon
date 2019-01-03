@@ -2,6 +2,9 @@ package ru.noties.markwon.core;
 
 import ru.noties.markwon.Prop;
 
+/**
+ * @since 3.0.0
+ */
 public abstract class CoreProps {
 
     public static final Prop<ListItemType> LIST_ITEM_TYPE = Prop.of("list-item-type");

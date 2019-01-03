@@ -42,6 +42,7 @@ import ru.noties.markwon.core.spans.OrderedListItemSpan;
 import ru.noties.markwon.priority.Priority;
 
 /**
+ * @see CoreProps
  * @since 3.0.0
  */
 public class CorePlugin extends AbstractMarkwonPlugin {

@@ -36,30 +36,30 @@ public class Prop<T> {
     }
 
     @Nullable
-    public T get(@NonNull RenderProps context) {
-        return context.get(this);
+    public T get(@NonNull RenderProps props) {
+        return props.get(this);
     }
 
     @NonNull
-    public T get(@NonNull RenderProps context, @NonNull T defValue) {
-        return context.get(this, defValue);
+    public T get(@NonNull RenderProps props, @NonNull T defValue) {
+        return props.get(this, defValue);
     }
 
     @NonNull
-    public T require(@NonNull RenderProps context) {
-        final T t = get(context);
+    public T require(@NonNull RenderProps props) {
+        final T t = get(props);
         if (t == null) {
-            throw new NullPointerException();
+            throw new NullPointerException(name);
         }
         return t;
     }
 
-    public void set(@NonNull RenderProps context, @Nullable T value) {
-        context.set(this, value);
+    public void set(@NonNull RenderProps props, @Nullable T value) {
+        props.set(this, value);
     }
 
-    public void clear(@NonNull RenderProps context) {
-        context.clear(this);
+    public void clear(@NonNull RenderProps props) {
+        props.clear(this);
     }
 
     @Override

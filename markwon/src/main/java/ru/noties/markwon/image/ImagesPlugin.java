@@ -33,6 +33,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     /**
      * Special scheme that is used {@code file:///android_asset/}
+     *
      * @param context
      * @return
      */
@@ -79,7 +80,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Image image) {
 
                 // if there is no image spanFactory, ignore
-                final SpanFactory spanFactory = visitor.configuration().spansFactory().get(image);
+                final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Image.class);
                 if (spanFactory == null) {
                     visitor.visitChildren(image);
                     return;

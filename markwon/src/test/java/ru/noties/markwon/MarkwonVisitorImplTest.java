@@ -1,6 +1,8 @@
 package ru.noties.markwon;
 
+import org.commonmark.node.BlockQuote;
 import org.commonmark.node.Node;
+import org.commonmark.node.Text;
 import org.commonmark.node.Visitor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +20,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -132,7 +137,23 @@ public class MarkwonVisitorImplTest {
 
     @Test
     public void non_registered_nodes_children_visited() {
-        fail();
+        // if a node is encountered, but we have no registered visitor -> just visit children
+        // (node.firstChild.accept)
+
+        final MarkwonVisitorImpl impl = new MarkwonVisitorImpl(
+                mock(MarkwonConfiguration.class),
+                mock(RenderProps.class),
+                mock(SpannableBuilder.class),
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+
+        final BlockQuote node = mock(BlockQuote.class);
+        final Node child = mock(Node.class);
+        when(node.getFirstChild()).thenReturn(child);
+
+        impl.visit(node);
+
+        verify(node, times(1)).getFirstChild();
+        verify(child, times(1)).accept(eq(impl));
     }
 
     @Test
@@ -185,11 +206,61 @@ public class MarkwonVisitorImplTest {
 
     @Test
     public void set_spans_for_node() {
-        fail();
+        // internally requests spanFactory via `require` call (thus throwing exception)
+        // configuration.spansFactory().require(node).getSpans(configuration, renderProps)
+
+        final MarkwonConfiguration configuration = mock(MarkwonConfiguration.class);
+        final MarkwonSpansFactory spansFactory = mock(MarkwonSpansFactory.class);
+        final SpanFactory factory = mock(SpanFactory.class);
+
+        when(configuration.spansFactory()).thenReturn(spansFactory);
+        when(spansFactory.require(eq(Node.class))).thenReturn(factory);
+        when(spansFactory.require(eq(Text.class))).thenThrow(new NullPointerException());
+
+        final MarkwonVisitorImpl impl = new MarkwonVisitorImpl(
+                configuration,
+                mock(RenderProps.class),
+                mock(SpannableBuilder.class),
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+
+        impl.setSpansForNode(Node.class, 0);
+
+        verify(configuration, times(1)).spansFactory();
+        verify(spansFactory, times(1)).require(eq(Node.class));
+        verify(factory, times(1)).getSpans(eq(configuration), any(RenderProps.class));
+
+        try {
+            impl.setSpansForNode(Text.class, 0);
+            fail();
+        } catch (NullPointerException e) {
+            assertTrue(true);
+        }
     }
 
     @Test
     public void set_spans_for_node_optional() {
-        fail();
+        // if spanFactory is not found -> nothing will happen (no spans will be applied)
+
+        final MarkwonConfiguration configuration = mock(MarkwonConfiguration.class);
+        final MarkwonSpansFactory spansFactory = mock(MarkwonSpansFactory.class);
+
+        when(configuration.spansFactory()).thenReturn(spansFactory);
+
+        final SpannableBuilder builder = new SpannableBuilder();
+
+        final MarkwonVisitorImpl impl = new MarkwonVisitorImpl(
+                configuration,
+                mock(RenderProps.class),
+                builder,
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+
+        // append something
+        builder.append("no-spans-test");
+
+        assertEquals(0, builder.getSpans(0, builder.length()).size());
+
+        impl.setSpansForNodeOptional(Node.class, 0);
+
+        assertEquals(0, builder.getSpans(0, builder.length()).size());
     }
 }

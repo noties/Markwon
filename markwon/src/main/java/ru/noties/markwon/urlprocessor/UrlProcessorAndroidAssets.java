@@ -5,6 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+/**
+ * Processor that will <em>assume</em> that an URL without scheme points to android assets folder.
+ * URL with a scheme will be processed by {@link #processor} (if it is specified) or returned `as-is`.
+ */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UrlProcessorAndroidAssets implements UrlProcessor {
 

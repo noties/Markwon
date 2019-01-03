@@ -74,7 +74,7 @@ public class SyntaxHighlightTest {
         };
 
         final MarkwonSpansFactory spansFactory = mock(MarkwonSpansFactory.class);
-        when(spansFactory.get(any(FencedCodeBlock.class))).thenReturn(new SpanFactory() {
+        when(spansFactory.get(any(Class.class))).thenReturn(new SpanFactory() {
             @Override
             public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
                 return codeSpan;

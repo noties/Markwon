@@ -95,7 +95,7 @@ public interface MarkwonVisitor extends Visitor {
 
     /**
      * Helper method to obtain and apply spans for supplied Node. Internally queries {@link SpanFactory}
-     * for the node (via {@link MarkwonSpansFactory#require(Node)} thus throwing an exception
+     * for the node (via {@link MarkwonSpansFactory#require(Class)} thus throwing an exception
      * if there is no {@link SpanFactory} registered for the node).
      *
      * @param node  to retrieve {@link SpanFactory} for
@@ -119,7 +119,7 @@ public interface MarkwonVisitor extends Visitor {
      * {@link MarkwonSpansFactory} instance. Otherwise ignores this call (no spans will be applied).
      * If there is a need to ensure that specified <code>node</code> has a {@link SpanFactory} registered,
      * then {@link #setSpansForNode(Node, int)} can be used. {@link #setSpansForNode(Node, int)} internally
-     * uses {@link MarkwonSpansFactory#require(Node)}. This method uses {@link MarkwonSpansFactory#get(Node)}.
+     * uses {@link MarkwonSpansFactory#require(Class)}. This method uses {@link MarkwonSpansFactory#get(Class)}.
      *
      * @see #setSpansForNode(Node, int)
      */
