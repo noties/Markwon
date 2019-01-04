@@ -4,15 +4,10 @@ import android.support.annotation.NonNull;
 
 import java.util.Collections;
 
-/**
- * @see MarkwonHtmlParser
- * @since 2.0.0
- */
 class MarkwonHtmlParserNoOp extends MarkwonHtmlParser {
-
     @Override
     public <T extends Appendable & CharSequence> void processFragment(@NonNull T output, @NonNull String htmlFragment) {
-
+        // no op
     }
 
     @Override
@@ -27,6 +22,6 @@ class MarkwonHtmlParserNoOp extends MarkwonHtmlParser {
 
     @Override
     public void reset() {
-
+        // no op
     }
 }

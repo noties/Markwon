@@ -13,12 +13,6 @@ import ru.noties.markwon.html.HtmlTag;
 
 public class HeadingHandler extends SimpleTagHandler {
 
-    private final int level;
-
-    public HeadingHandler(int level) {
-        this.level = level;
-    }
-
     @Nullable
     @Override
     public Object getSpans(
@@ -28,6 +22,18 @@ public class HeadingHandler extends SimpleTagHandler {
 
         final SpanFactory factory = configuration.spansFactory().get(Heading.class);
         if (factory == null) {
+            return null;
+        }
+
+        int level;
+        try {
+            level = Integer.parseInt(tag.name().substring(1));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            level = 0;
+        }
+
+        if (level < 1 || level > 6) {
             return null;
         }
 

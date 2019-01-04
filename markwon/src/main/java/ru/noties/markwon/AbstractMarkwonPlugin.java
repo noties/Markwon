@@ -9,6 +9,7 @@ import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.priority.Priority;
 
@@ -66,6 +67,14 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
      */
     @Override
     public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
 
     }
 

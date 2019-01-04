@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.core.spans.LinkSpan;
+import ru.noties.markwon.html.MarkwonHtmlParser;
+import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.ImageSizeResolver;
 import ru.noties.markwon.image.ImageSizeResolverDef;
@@ -29,6 +31,8 @@ public class MarkwonConfiguration {
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
+    private final MarkwonHtmlParser htmlParser;
+    private final MarkwonHtmlRenderer htmlRenderer;
 
     // @since 3.0.0
     private final MarkwonSpansFactory spansFactory;
@@ -41,6 +45,8 @@ public class MarkwonConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.spansFactory = builder.spansFactory;
+        this.htmlParser = builder.htmlParser;
+        this.htmlRenderer = builder.htmlRenderer;
     }
 
     @NonNull
@@ -73,6 +79,16 @@ public class MarkwonConfiguration {
         return imageSizeResolver;
     }
 
+    @NonNull
+    public MarkwonHtmlParser htmlParser() {
+        return htmlParser;
+    }
+
+    @NonNull
+    public MarkwonHtmlRenderer htmlRenderer() {
+        return htmlRenderer;
+    }
+
     /**
      * @since 3.0.0
      */
@@ -90,6 +106,8 @@ public class MarkwonConfiguration {
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
         private ImageSizeResolver imageSizeResolver;
+        private MarkwonHtmlParser htmlParser;
+        private MarkwonHtmlRenderer htmlRenderer;
         private MarkwonSpansFactory spansFactory;
 
         Builder() {
@@ -113,6 +131,12 @@ public class MarkwonConfiguration {
             return this;
         }
 
+        @NonNull
+        public Builder htmlParser(@NonNull MarkwonHtmlParser htmlParser) {
+            this.htmlParser = htmlParser;
+            return this;
+        }
+
         /**
          * @since 1.0.1
          */
@@ -126,10 +150,12 @@ public class MarkwonConfiguration {
         public MarkwonConfiguration build(
                 @NonNull MarkwonTheme theme,
                 @NonNull AsyncDrawableLoader asyncDrawableLoader,
+                @NonNull MarkwonHtmlRenderer htmlRenderer,
                 @NonNull MarkwonSpansFactory spansFactory) {
 
             this.theme = theme;
             this.asyncDrawableLoader = asyncDrawableLoader;
+            this.htmlRenderer = htmlRenderer;
             this.spansFactory = spansFactory;
 
             if (syntaxHighlight == null) {
@@ -146,6 +172,10 @@ public class MarkwonConfiguration {
 
             if (imageSizeResolver == null) {
                 imageSizeResolver = new ImageSizeResolverDef();
+            }
+
+            if (htmlParser == null) {
+                htmlParser = MarkwonHtmlParser.noOp();
             }
 
             return new MarkwonConfiguration(this);

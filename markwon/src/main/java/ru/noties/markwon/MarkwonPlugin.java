@@ -8,6 +8,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.image.MediaDecoder;
 import ru.noties.markwon.image.SchemeHandler;
@@ -73,7 +74,13 @@ public interface MarkwonPlugin {
      */
     void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder);
 
-    // can be used to configure own properties and use between plugins
+    /**
+     * Configure {@link MarkwonHtmlRenderer} to add or remove HTML {@link ru.noties.markwon.html.TagHandler}s
+     *
+     * @see MarkwonHtmlRenderer
+     * @see MarkwonHtmlRenderer.Builder
+     */
+    void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder);
 
     /**
      * A method to store some arbitrary data in {@link RenderProps}. Although it won\'t make

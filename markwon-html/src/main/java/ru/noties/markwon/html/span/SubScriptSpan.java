@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
-import ru.noties.markwon.html.MarkwonHtmlRendererImpl;
+import ru.noties.markwon.html.HtmlPlugin;
 
 public class SubScriptSpan extends MetricAffectingSpan {
 
@@ -19,7 +19,7 @@ public class SubScriptSpan extends MetricAffectingSpan {
     }
 
     private void apply(TextPaint paint) {
-        paint.setTextSize(paint.getTextSize() * MarkwonHtmlRendererImpl.SCRIPT_DEF_TEXT_SIZE_RATIO);
+        paint.setTextSize(paint.getTextSize() * HtmlPlugin.SCRIPT_DEF_TEXT_SIZE_RATIO);
         paint.baselineShift -= (int) (paint.ascent() / 2);
     }
 }

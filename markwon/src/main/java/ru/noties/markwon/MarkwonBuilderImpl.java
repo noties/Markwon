@@ -14,6 +14,7 @@ import java.util.List;
 
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.priority.PriorityProcessor;
 
@@ -102,7 +103,7 @@ class MarkwonBuilderImpl implements Markwon.Builder {
         final MarkwonConfiguration.Builder configurationBuilder = new MarkwonConfiguration.Builder();
         final MarkwonVisitor.Builder visitorBuilder = new MarkwonVisitorImpl.BuilderImpl();
         final MarkwonSpansFactory.Builder spanFactoryBuilder = new MarkwonSpansFactoryImpl.BuilderImpl();
-        final RenderProps renderProps = new RenderPropsImpl();
+        final MarkwonHtmlRenderer.Builder htmlRendererBuilder = MarkwonHtmlRenderer.builder();
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.configureParser(parserBuilder);
@@ -111,12 +112,16 @@ class MarkwonBuilderImpl implements Markwon.Builder {
             plugin.configureConfiguration(configurationBuilder);
             plugin.configureVisitor(visitorBuilder);
             plugin.configureSpansFactory(spanFactoryBuilder);
+            plugin.configureHtmlRenderer(htmlRendererBuilder);
         }
 
         final MarkwonConfiguration configuration = configurationBuilder.build(
                 themeBuilder.build(),
                 asyncDrawableLoaderBuilder.build(),
+                htmlRendererBuilder.build(),
                 spanFactoryBuilder.build());
+
+        final RenderProps renderProps = new RenderPropsImpl();
 
         return new MarkwonImpl(
                 bufferType,

@@ -21,6 +21,7 @@ import java.util.List;
 
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.html.MarkwonHtmlRenderer;
 import ru.noties.markwon.image.AsyncDrawableLoader;
 import ru.noties.markwon.priority.Priority;
 import ru.noties.markwon.priority.PriorityProcessor;
@@ -216,6 +217,7 @@ public class MarkwonBuilderImplTest {
         verify(plugin, times(1)).configureConfiguration(any(MarkwonConfiguration.Builder.class));
         verify(plugin, times(1)).configureVisitor(any(MarkwonVisitor.Builder.class));
         verify(plugin, times(1)).configureSpansFactory(any(MarkwonSpansFactory.Builder.class));
+        verify(plugin, times(1)).configureHtmlRenderer(any(MarkwonHtmlRenderer.Builder.class));
 
         // we do not know how many times exactly, but at least once it must be called
         verify(plugin, atLeast(1)).priority();
