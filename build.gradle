@@ -85,7 +85,6 @@ ext {
             'junit'      : 'junit:junit:4.12',
             'robolectric': 'org.robolectric:robolectric:3.8',
             'ix-java'    : 'com.github.akarnokd:ixjava:1.0.0',
-            'gson'       : 'com.google.code.gson:gson:2.8.5',
             'commons-io' : 'commons-io:commons-io:2.6',
             'mockito'    : 'org.mockito:mockito-core:2.21.0'
     ]
