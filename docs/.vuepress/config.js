@@ -23,9 +23,36 @@ module.exports = {
                     '/docs/core/getting-started.md'
                 ]
             },
-            '/docs/configure.md',
-            '/docs/theme.md',
-            '/docs/factory.md',
+            {
+                title: 'LaTeX extension',
+                children: [
+                    '/docs/ext-latex/latex.md'
+                ]
+            },
+            {
+                title: 'Strikethrough extension',
+                children: [
+                    '/docs/ext-strikethrough/strikethrough.md'
+                ]
+            },
+            {
+                title: 'Tables extension',
+                children: [
+                    '/docs/ext-tables/tables.md'
+                ]
+            },
+            {
+                title: 'Task list extension',
+                children: [
+                    '/docs/ext-tasklist/tasklist.md'
+                ]
+            },
+            {
+                title: 'HTML',
+                children: [
+                    '/docs/html/html.md'
+                ]
+            },
             {
                 title: 'Image',
                 children: [
@@ -34,9 +61,18 @@ module.exports = {
                     '/docs/image/svg.md'
                 ]
             },
-            '/docs/image-loader.md',
-            '/docs/syntax-highlight.md',
-            '/docs/html.md',
+            {
+                title: 'Recycler',
+                children: [
+                    '/docs/recycler/recycler.md'
+                ]
+            },
+            {
+                title: 'Syntax highlight',
+                children: [
+                    '/docs/syntax-highlight/syntax-highlight.md'
+                ]
+            },
             '/docs/migration-2-3.md'
 
         ],

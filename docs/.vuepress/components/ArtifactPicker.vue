@@ -34,7 +34,7 @@
 import {artifacts} from '../.artifacts.js';
 
 if (!artifacts) {
-    throw 'Artifacts not found. Use `collectArtifacts.js` script to obtain artificats metadata.'
+    throw 'Artifacts not found. Use `collectArtifacts.js` script to obtain artifacts metadata.'
 }
 
 export default {

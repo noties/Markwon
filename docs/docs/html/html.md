@@ -1,4 +1,10 @@
+---
+title: 'Overview'
+---
+
 # HTML <Badge text="2.0.0" />
+
+<MavenBadge :artifact="'html'" />
 
 Starting with version `2.0.0` `Markwon` brings the whole HTML parsing/rendering
 stack _on-site_. The main reason for this are _special_ definitions of HTML nodes
