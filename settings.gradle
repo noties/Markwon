@@ -1,6 +1,6 @@
 rootProject.name = 'MarkwonProject'
 include ':app', ':sample',
-        ':markwon',
+        ':markwon-core',
         ':markwon-ext-latex',
         ':markwon-ext-strikethrough',
         ':markwon-ext-tables',

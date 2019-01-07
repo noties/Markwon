@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       artifacts,
-      selected: []
+      selected: ['core']
     };
   },
   methods: {
@@ -86,6 +86,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  margin-top: 0.5em;
 }
 .artifact {
   flex: 1;

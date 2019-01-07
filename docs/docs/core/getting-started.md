@@ -23,6 +23,12 @@ final CharSequence markdown = Markwon.markdown(context, "**Hello there!**");
 Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 ```
 
+:::warning v3 migration
+Starting with <Badge text="3.0.0" /> version Markwon no longer relies on static
+utility methods. To learn more about migrating existing applications
+refer to [migration](/docs/migration-2-3.md) section.
+:::
+
 ## Longer one
 
 When you need to customize markdown parsing/rendering you can use [SpannableConfiguration](/docs/configure.md):

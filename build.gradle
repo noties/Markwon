@@ -19,6 +19,10 @@ allprojects {
     }
     version = VERSION_NAME
     group = GROUP
+
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 }
 
 task clean(type: Delete) {

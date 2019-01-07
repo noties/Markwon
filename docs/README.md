@@ -1,11 +1,12 @@
 ---
-title: 'Overview'
+title: 'Introduction'
 ---
 
 <img :src="$withBase('./art/markwon_logo.png')" alt="Markwon Logo" width="50%">
 
 <br><br>
-<MavenBadges/>
+[![markwon](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=markwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20)
+[![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
 
 **Markwon** is a markdown library for Android. It parses markdown following 
 <Link name="commonmark-spec" /> with the help of amazing <Link name="commonmark-java" /> library

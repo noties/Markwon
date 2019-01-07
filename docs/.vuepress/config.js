@@ -17,14 +17,28 @@ module.exports = {
         ],
         sidebar: [
             '/',
-            '/docs/getting-started.md',
+            {
+                title: 'Core',
+                children: [
+                    '/docs/core/getting-started.md'
+                ]
+            },
             '/docs/configure.md',
             '/docs/theme.md',
             '/docs/factory.md',
+            {
+                title: 'Image',
+                children: [
+                    '/docs/image/gif.md',
+                    '/docs/image/okhttp.md',
+                    '/docs/image/svg.md'
+                ]
+            },
             '/docs/image-loader.md',
             '/docs/syntax-highlight.md',
             '/docs/html.md',
-            '/docs/view.md'
+            '/docs/migration-2-3.md'
+
         ],
         sidebarDepth: 2,
         lastUpdated: true

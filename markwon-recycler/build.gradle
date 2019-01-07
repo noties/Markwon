@@ -15,7 +15,7 @@ android {
 
 dependencies {
 
-    api project(':markwon')
+    api project(':markwon-core')
 
     deps.with {
         api it['support-recycler-view']
