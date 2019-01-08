@@ -3,6 +3,7 @@
     "docs:build": "node ./collectArtifacts.js && vuepress build"
   },
   "dependencies": {
+    "commonmark": "^0.28.1",
     "markdown-it-task-lists": "^2.1.1",
     "vuepress": "^0.14.2"
   }

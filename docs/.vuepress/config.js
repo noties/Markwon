@@ -13,6 +13,7 @@ module.exports = {
         nav: [
             { text: 'Install', link: '/docs/install.md' },
             { text: 'Changelog', link: '/CHANGELOG.md' },
+            { text: 'Sandbox', link: '/sandbox.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: [
