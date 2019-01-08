@@ -14,6 +14,7 @@ import ru.noties.markwon.core.CorePlugin;
  * of static stateless methods). An instance of builder can be obtained via {@link #builder(Context)}
  * method.
  *
+ * @see #create(Context)
  * @see #builder(Context)
  * @see Builder
  */
@@ -46,7 +47,7 @@ public abstract class Markwon {
     }
 
     /**
-     * Method to simply parse markdown (without rendering)
+     * Method to parse markdown (without rendering)
      *
      * @param input markdown input to parse
      * @return parsed via commonmark-java <code>org.commonmark.node.Node</code>
@@ -56,10 +57,30 @@ public abstract class Markwon {
     @NonNull
     public abstract Node parse(@NonNull String input);
 
+    /**
+     * Create Spanned markdown from parsed Node (via {@link #parse(String)} call).
+     * <p>
+     * Please note that returned Spanned has few limitations. For example, images, tables
+     * and ordered lists require TextView to be properly displayed. This is why images and tables
+     * most likely won\'t work in this case. Ordered lists might have mis-measurements. Whenever
+     * possible use {@link #setMarkdown(TextView, String)} or {@link #setParsedMarkdown(TextView, Spanned)}
+     * as these methods will additionally call specific {@link MarkwonPlugin} methods to <em>prepare</em>
+     * proper display.
+     *
+     * @since 3.0.0
+     */
     @NonNull
     public abstract Spanned render(@NonNull Node node);
 
-    // parse + render
+    /**
+     * This method will {@link #parse(String)} and {@link #render(Node)} supplied markdown. Returned
+     * Spanned has the same limitations as from {@link #render(Node)} method.
+     *
+     * @param input markdown input
+     * @see #parse(String)
+     * @see #render(Node)
+     * @since 3.0.0
+     */
     @NonNull
     public abstract Spanned toMarkdown(@NonNull String input);
 

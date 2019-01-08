@@ -21,7 +21,7 @@ but also gives all the means to tweak the appearance if desired. All markdown fe
 listed in <Link name="commonmark-spec" /> are supported (including support for **inlined/block HTML code**, 
 **markdown tables**, **images** and **syntax highlight**).
 
-## Supported markdown features:
+## Supported markdown features
 
 * Emphasis (`*`, `_`)
 * Strong emphasis (`**`, `__`)
