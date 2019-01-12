@@ -111,7 +111,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         return entry.id(node);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @Override
     public int getNodeViewType(@NonNull Class<? extends Node> node) {
         // if has registered -> then return it, else 0
         final int hash = node.hashCode();

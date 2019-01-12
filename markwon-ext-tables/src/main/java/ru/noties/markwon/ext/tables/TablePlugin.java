@@ -23,6 +23,10 @@ import ru.noties.markwon.SpannableBuilder;
 
 public class TablePlugin extends AbstractMarkwonPlugin {
 
+    public interface ThemeConfigure {
+        void configureTheme(@NonNull TableTheme.Builder builder);
+    }
+
     @NonNull
     public static TablePlugin create(@NonNull Context context) {
         return new TablePlugin(TableTheme.create(context));
@@ -31,6 +35,13 @@ public class TablePlugin extends AbstractMarkwonPlugin {
     @NonNull
     public static TablePlugin create(@NonNull TableTheme tableTheme) {
         return new TablePlugin(tableTheme);
+    }
+
+    @NonNull
+    public static TablePlugin create(@NonNull ThemeConfigure themeConfigure) {
+        final TableTheme.Builder builder = new TableTheme.Builder();
+        themeConfigure.configureTheme(builder);
+        return new TablePlugin(builder.build());
     }
 
     private final TableVisitor visitor;

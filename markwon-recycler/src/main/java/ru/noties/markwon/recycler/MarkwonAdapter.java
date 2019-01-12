@@ -181,6 +181,8 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
 
     public abstract void setParsedMarkdown(@NonNull Markwon markwon, @NonNull List<Node> nodes);
 
+    public abstract int getNodeViewType(@NonNull Class<? extends Node> node);
+
     @SuppressWarnings("WeakerAccess")
     public static class Holder extends RecyclerView.ViewHolder {
 
