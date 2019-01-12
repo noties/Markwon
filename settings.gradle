@@ -11,6 +11,4 @@ include ':app', ':sample',
         ':markwon-image-svg',
         ':markwon-recycler',
         ':markwon-syntax-highlight',
-        ':markwon-test-span',
-        ':sample-custom-extension',
-        ':sample-latex-math'
+        ':markwon-test-span'

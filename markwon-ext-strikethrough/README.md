@@ -1,6 +1,6 @@
 # Strikethrough
 
-[![markwon-ext-strikethrough](https://img.shields.io/maven-central/v/ru.noties/markwon-ext-strikethrough.svg?label=markwon-ext-strikethrough)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-ext-strikethrough%22)
+[![ext-strikethrough](https://img.shields.io/maven-central/v/ru.noties.markwon/ext-strikethrough.svg?label=ext-strikethrough)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20AND%20a%3A%22ext-strikethrough%22)
 
 This module adds `strikethrough` functionality to `Markwon` via `StrikethroughPlugin`:
 
@@ -13,7 +13,7 @@ This plugin registers `SpanFactory` for `Strikethrough` node, so it's possible t
 
 ```java
 Markwon.builder(context)
-        .usePlugin(StrikethroughPlugin.class)
+        .usePlugin(StrikethroughPlugin.create())
         .usePlugin(new AbstractMarkwonPlugin() {
             @Override
             public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply from: '../markwon-bundle.gradle'
 
 android {
 
@@ -26,12 +25,6 @@ android {
         }
     }
 }
-
-ext.markwon = [
-        'version': '3.0.0-SNAPSHOT',
-        'includeAll': true,
-        'exclude': ['ext-latex', 'core']
-]
 
 dependencies {
 

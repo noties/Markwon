@@ -1,1 +1,1 @@
-# Migration v2 -> v3
+# Migration 2.x.x -> 3.x.x

@@ -1,6 +1,8 @@
 # LaTeX
 
-This is a small extension that will help you display LaTeX formulas in your markdown.
+[![ext-latex](https://img.shields.io/maven-central/v/ru.noties.markwon/ext-latex.svg?label=ext-latex)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20AND%20a%3A%22ext-latex%22)
+
+This is an extension that will help you display LaTeX formulas in your markdown.
 Syntax is pretty simple: pre-fix and post-fix your latex with `$$` (double dollar sign).
 `$$` should be the first characters in a line.
 
@@ -16,7 +18,6 @@ $$\\text{A long division \\longdiv{12345}{13}$$
 
 ```java
 Markwon.builder(context)
-    .use(CorePlugin.create())
     .use(ImagesPlugin.create(context))
     .use(JLatexMathPlugin.create(new Config(textSize))
     .build();

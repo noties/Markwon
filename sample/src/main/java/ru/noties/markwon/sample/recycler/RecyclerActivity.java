@@ -31,6 +31,7 @@ import ru.noties.markwon.image.svg.SvgPlugin;
 import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.recycler.SimpleEntry;
 import ru.noties.markwon.sample.R;
+import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
 import ru.noties.markwon.urlprocessor.UrlProcessor;
 import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 

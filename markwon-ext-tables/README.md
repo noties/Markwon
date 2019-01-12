@@ -1,6 +1,6 @@
-# Tables extension
+# Tables
 
-<MavenBadge :artifact="'ext-tables'" />
+[![ext-tables](https://img.shields.io/maven-central/v/ru.noties.markwon/ext-tables.svg?label=ext-tables)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20AND%20a%3A%22ext-tables%22)
 
 This extension adds support for GFM tables.
 
@@ -43,41 +43,3 @@ myTableWidget.setTable(table);
 
 Unfortunately Markwon does not provide a widget that can be used for tables. But it does
 provide API that can be used to achieve desired result.
-
-## Theme
-
-### Cell padding
-
-Padding inside a table cell
-
-<ThemeProperty name="tableCellPadding" type="@Px int" defaults="0" />
-
-### Border color
-
-The color of table borders
-
-<ThemeProperty name="tableBorderColor" type="@ColorInt int" defaults="(text color) with 75 (0-255) alpha" />
-
-### Border width
-
-The width of table borders
-
-<ThemeProperty name="tableBorderWidth" type="@Px int" defaults="Stroke with of context TextPaint" />
-
-### Odd row background
-
-Background of an odd table row
-
-<ThemeProperty name="tableOddRowBackgroundColor" type="@ColorInt int" defaults="(text color) with 22 (0-255) alpha" />
-
-### Even row background <Badge text="1.1.1" />
-
-Background of an even table row
-
-<ThemeProperty name="tableEventRowBackgroundColor" type="@ColorInt int" defaults="0" />
-
-### Header row background <Badge text="1.1.1" />
-
-Background of header table row
-
-<ThemeProperty name="tableHeaderRowBackgroundColor" type="@ColorInt int" defaults="0" />

@@ -52,6 +52,7 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void beforeRender(@NonNull Node node) {
+        // clear before rendering (as visitor has some internal mutable state)
         visitor.clear();
     }
 

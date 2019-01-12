@@ -25,6 +25,7 @@
         <activity android:name=".customextension.CustomExtensionActivity" />
         <activity android:name=".basicplugins.BasicPluginsActivity" />
         <activity android:name=".recycler.RecyclerActivity" />
+        <activity android:name=".theme.ThemeActivity" />
 
     </application>
 
