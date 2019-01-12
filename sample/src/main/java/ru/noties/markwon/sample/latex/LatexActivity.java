@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import ru.noties.markwon.Markwon;
-import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.ext.latex.JLatexMathPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.sample.R;
@@ -40,17 +39,12 @@ public class LatexActivity extends Activity {
 //        latex += "\\doublebox{\\text{A double framed box}}&\\ovalbox{\\text{An oval framed box}}\\cr";
 //        latex += "\\end{array}";
 
-
-        final JLatexMathPlugin.Config config = new JLatexMathPlugin.Config(textView.getTextSize()) {{
-//            align = JLatexMathDrawable.ALIGN_RIGHT;
-        }};
-
         final String markdown = "# Example of LaTeX\n\n$$"
                 + latex + "$$\n\n something like **this**";
 
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(ImagesPlugin.create(this))
-                .usePlugin(JLatexMathPlugin.create(config))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
                 .build();
 
         markwon.setMarkdown(textView, markdown);

@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Px;
 
 import org.commonmark.node.Image;
 import org.commonmark.parser.Parser;
@@ -26,28 +27,56 @@ import ru.noties.markwon.image.MediaDecoder;
 import ru.noties.markwon.image.SchemeHandler;
 import ru.noties.markwon.priority.Priority;
 
+/**
+ * @since 3.0.0
+ */
 public class JLatexMathPlugin extends AbstractMarkwonPlugin {
+
+    public interface BuilderConfigure {
+        void configureBuilder(@NonNull Builder builder);
+    }
+
+    @NonNull
+    public static JLatexMathPlugin create(float textSize) {
+        return new JLatexMathPlugin(builder(textSize).build());
+    }
 
     @NonNull
     public static JLatexMathPlugin create(@NonNull Config config) {
         return new JLatexMathPlugin(config);
     }
 
+    @NonNull
+    public static JLatexMathPlugin create(float textSize, @NonNull BuilderConfigure builderConfigure) {
+        final Builder builder = new Builder(textSize);
+        builderConfigure.configureBuilder(builder);
+        return new JLatexMathPlugin(builder.build());
+    }
+
+    @NonNull
+    public static JLatexMathPlugin.Builder builder(float textSize) {
+        return new Builder(textSize);
+    }
+
     public static class Config {
 
-        protected final float textSize;
+        private final float textSize;
 
-        protected Drawable background;
+        private final Drawable background;
 
         @JLatexMathDrawable.Align
-        protected int align = JLatexMathDrawable.ALIGN_CENTER;
+        private final int align;
 
-        protected boolean fitCanvas = true;
+        private final boolean fitCanvas;
 
-        protected int padding;
+        private final int padding;
 
-        public Config(float textSize) {
-            this.textSize = textSize;
+        Config(@NonNull Builder builder) {
+            this.textSize = builder.textSize;
+            this.background = builder.background;
+            this.align = builder.align;
+            this.fitCanvas = builder.fitCanvas;
+            this.padding = builder.padding;
         }
     }
 
@@ -143,5 +172,52 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     @Override
     public Priority priority() {
         return Priority.after(ImagesPlugin.class);
+    }
+
+    public static class Builder {
+
+        private final float textSize;
+
+        private Drawable background;
+
+        @JLatexMathDrawable.Align
+        private int align = JLatexMathDrawable.ALIGN_CENTER;
+
+        private boolean fitCanvas = true;
+
+        private int padding;
+
+        Builder(float textSize) {
+            this.textSize = textSize;
+        }
+
+        @NonNull
+        public Builder background(@NonNull Drawable background) {
+            this.background = background;
+            return this;
+        }
+
+        @NonNull
+        public Builder align(@JLatexMathDrawable.Align int align) {
+            this.align = align;
+            return this;
+        }
+
+        @NonNull
+        public Builder fitCanvas(boolean fitCanvas) {
+            this.fitCanvas = fitCanvas;
+            return this;
+        }
+
+        @NonNull
+        public Builder padding(@Px int padding) {
+            this.padding = padding;
+            return this;
+        }
+
+        @NonNull
+        public Config build() {
+            return new Config(this);
+        }
     }
 }

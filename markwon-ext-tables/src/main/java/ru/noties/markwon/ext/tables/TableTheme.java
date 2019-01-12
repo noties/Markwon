@@ -2,7 +2,9 @@ package ru.noties.markwon.ext.tables;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Px;
 
 import ru.noties.markwon.utils.ColorUtils;
 import ru.noties.markwon.utils.Dip;
@@ -121,37 +123,37 @@ public class TableTheme {
         private int tableHeaderRowBackgroundColor; // @since 1.1.1
 
         @NonNull
-        public Builder tableCellPadding(int tableCellPadding) {
+        public Builder tableCellPadding(@Px int tableCellPadding) {
             this.tableCellPadding = tableCellPadding;
             return this;
         }
 
         @NonNull
-        public Builder tableBorderColor(int tableBorderColor) {
+        public Builder tableBorderColor(@ColorInt int tableBorderColor) {
             this.tableBorderColor = tableBorderColor;
             return this;
         }
 
         @NonNull
-        public Builder tableBorderWidth(int tableBorderWidth) {
+        public Builder tableBorderWidth(@Px int tableBorderWidth) {
             this.tableBorderWidth = tableBorderWidth;
             return this;
         }
 
         @NonNull
-        public Builder tableOddRowBackgroundColor(int tableOddRowBackgroundColor) {
+        public Builder tableOddRowBackgroundColor(@ColorInt int tableOddRowBackgroundColor) {
             this.tableOddRowBackgroundColor = tableOddRowBackgroundColor;
             return this;
         }
 
         @NonNull
-        public Builder tableEvenRowBackgroundColor(int tableEvenRowBackgroundColor) {
+        public Builder tableEvenRowBackgroundColor(@ColorInt int tableEvenRowBackgroundColor) {
             this.tableEvenRowBackgroundColor = tableEvenRowBackgroundColor;
             return this;
         }
 
         @NonNull
-        public Builder tableHeaderRowBackgroundColor(int tableHeaderRowBackgroundColor) {
+        public Builder tableHeaderRowBackgroundColor(@ColorInt int tableHeaderRowBackgroundColor) {
             this.tableHeaderRowBackgroundColor = tableHeaderRowBackgroundColor;
             return this;
         }

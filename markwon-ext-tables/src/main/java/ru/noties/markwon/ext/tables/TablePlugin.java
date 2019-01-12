@@ -21,6 +21,9 @@ import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.SpannableBuilder;
 
+/**
+ * @since 3.0.0
+ */
 public class TablePlugin extends AbstractMarkwonPlugin {
 
     public interface ThemeConfigure {
