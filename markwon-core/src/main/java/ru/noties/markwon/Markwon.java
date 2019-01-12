@@ -89,6 +89,19 @@ public abstract class Markwon {
     public abstract void setParsedMarkdown(@NonNull TextView textView, @NonNull Spanned markdown);
 
     /**
+     * Requests information if certain plugin has been registered. Please note that this
+     * method will check for super classes also, so if supplied with {@code markwon.hasPlugin(MarkwonPlugin.class)}
+     * this method (if has at least one plugin) will return true. If for example a custom
+     * (subclassed) version of a {@link CorePlugin} has been registered and given name
+     * {@code CorePlugin2}, then both {@code markwon.hasPlugin(CorePlugin2.class)} and
+     * {@code markwon.hasPlugin(CorePlugin.class)} will return true.
+     *
+     * @param plugin type to query
+     * @return true if a plugin is used when configuring this {@link Markwon} instance
+     */
+    public abstract boolean hasPlugin(@NonNull Class<? extends MarkwonPlugin> plugin);
+
+    /**
      * Builder for {@link Markwon}.
      * <p>
      * Please note that the order in which plugins are supplied is important as this order will be

@@ -95,4 +95,16 @@ class MarkwonImpl extends Markwon {
             plugin.afterSetText(textView);
         }
     }
+
+    @Override
+    public boolean hasPlugin(@NonNull Class<? extends MarkwonPlugin> type) {
+        boolean result = false;
+        for (MarkwonPlugin plugin : plugins) {
+            if (type.isAssignableFrom(plugin.getClass())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 }

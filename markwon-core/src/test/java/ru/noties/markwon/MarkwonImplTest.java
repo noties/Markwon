@@ -16,9 +16,11 @@ import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -228,5 +230,31 @@ public class MarkwonImplTest {
         assertTrue(flag.get());
 
         verify(plugin, times(1)).afterSetText(eq(textView));
+    }
+
+    @Test
+    public void has_plugin() {
+
+        final class First extends AbstractMarkwonPlugin {
+        }
+
+        final class Second extends AbstractMarkwonPlugin {
+        }
+
+        final List<MarkwonPlugin> plugins = Collections.singletonList((MarkwonPlugin) new First());
+
+        final MarkwonImpl impl = new MarkwonImpl(
+                TextView.BufferType.SPANNABLE,
+                mock(Parser.class),
+                mock(MarkwonVisitor.class),
+                plugins);
+
+        assertTrue("First", impl.hasPlugin(First.class));
+        assertFalse("Second", impl.hasPlugin(Second.class));
+
+        // can use super types. So if we ask if CorePlugin is registered,
+        // but it was subclassed, we would still have true returned from this method
+        assertTrue("AbstractMarkwonPlugin", impl.hasPlugin(AbstractMarkwonPlugin.class));
+        assertTrue("MarkwonPlugin", impl.hasPlugin(MarkwonPlugin.class));
     }
 }
