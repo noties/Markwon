@@ -37,7 +37,7 @@ module.exports = {
                         '/docs/core/theme.md'
                     ]
                 },
-                '/docs/ext-latex/latex.md',
+                '/docs/ext-latex/',
                 '/docs/ext-strikethrough/strikethrough.md',
                 '/docs/ext-tables/tables.md',
                 '/docs/ext-tasklist/tasklist.md',

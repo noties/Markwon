@@ -10,20 +10,27 @@ to learn how to add `Markwon` to your project
 This is the most simple way to set markdown to a `TextView` or any of its siblings:
 
 ```java
-Markwon.setMarkdown(textView, "**Hello there!**");
+// obtain an instance of Markwon
+final Markwon markwon = Markwon.create(context);
+
+// set markdown
+markwon.setMarkdown(textView, "**Hello there!**");
 ```
 
 The most simple way to obtain markdown to be applied _somewhere_ else:
 
 ```java
-// parsed and styled markdown
-final CharSequence markdown = Markwon.markdown(context, "**Hello there!**");
+// obtain an instance of Markwon
+final Markwon markwon = Markwon.create(context);
+
+// parse markdown and create styled text
+final Spanned markdown = markwon.toMarkdown("**Hello there!**");
 
 // use it
 Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 ```
 
-:::warning v3 migration
+:::warning 3.x.x migration
 Starting with <Badge text="3.0.0" /> version Markwon no longer relies on static
 utility methods. To learn more about migrating existing applications
 refer to [migration](/docs/migration-2-3.md) section.
@@ -31,68 +38,77 @@ refer to [migration](/docs/migration-2-3.md) section.
 
 ## Longer one
 
-When you need to customize markdown parsing/rendering you can use [SpannableConfiguration](/docs/configure.md):
+With explicit `parse` and `render` methods:
 
 ```java
-final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
-        .asyncDrawableLoader(AsyncDrawableLoader.create())
-        .build();
+// obtain an instance of Markwon
+final Markwon markwon = Markwon.create(context);
 
-Markwon.setMarkdown(textView, configuration, "Are **you** still there?");
+// parse markdown to commonmark-java Node
+final Node node = markwon.parse("Are **you** still there?");
 
-final CharSequence markdown = Markwon.markdown(configuration, "Are **you** still there?");
+// create styled text from parsed Node
+final Spanned markdown = markwon.render(node);
+
+// use it on a TextView
+markwon.setParsedMarkdown(textView, markdown);
+
+// or a Toast
 Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 ```
 
 ## No magic one
 
-In order to understand how previous examples work, let's break them down:
-
-* construct a `Parser` (see: <Link name="commonmark-java" />) and parse markdown
-* construct a `SpannableConfiguration` (if it's not provided)
-* *render* parsed markdown to Spannable (via `SpannableRenderer`)
-* prepares TextView to display images, tables and links
-* sets text
-
-This flow answers the most simple usage of displaying markdown: one shot parsing
-&amp; configuration of relatively small markdown chunks. If your markdown contains
-a lot of text or you plan to display multiple UI widgets with markdown you might 
-consider *stepping in* and taking control of this flow.
-
-The candidate requirements to *step in*:
-* parsing and processing of parsed markdown in a background thread
-* reusing `Parser` and/or `SpannableConfiguration` between multiple calls
-* ignore images or tables specific logic (you know that markdown won't contain them)
-
-So, if we expand `Markwon.setMarkdown(textView, markdown)` method we will see the following:
+So, what happens _internally_ when there is a `markwon#setMarkdown(TextView,String)` call?
+Please note that this is mere representaion of what happens underneath and a caller
+would likely never has to deal with these method calls directly. It still valuable
+to understand how things are working:
 
 ```java
-// create a Parser instance (can be done manually)
-// internally creates default Parser instance & registers `strike-through` & `tables` extension
-final Parser parser = Markwon.createParser();
+// `Markwon#create` implicitly uses CorePlugin
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(CorePlugin.create())
+        .build();
 
-// core class to display markdown, can be obtained via this method,
-// which creates default instance (no images handling though),
-// or via `builder` method, which lets you to configure this instance
-final SpannableConfiguration configuration = SpannableConfiguration.create(context);
+// each plugin will configure resulting Markwon instance
+// we will cover it in plugins section of documentation
 
-final SpannableRenderer renderer = new SpannableRenderer();
+// warning: pseudo-code
 
-final Node node = parser.parse(markdown);
-final CharSequence text = renderer.render(configuration, node);
+// 0. each plugin will be called to _pre-process_ raw input markdown
+rawInput = plugins.reduce(rawInput, (input, plugin) -> plugin.processMarkdown(input));
 
-// for links in markdown to be clickable
-textView.setMovementMethod(LinkMovementMethod.getInstance());
+// 1. after input is processed it's being parsed to a Node
+node = parser.parse(rawInput);
 
-// we need these due to the limited nature of Spannables to invalidate TextView
-Markwon.unscheduleDrawables(textView);
-Markwon.unscheduleTableRows(textView);
+// 2. each plugin will configure RenderProps
+plugins.forEach(plugin -> plugin.configureRenderProps(renderProps));
 
-textView.setText(text);
+// 3. each plugin will be able to inspect or manipulate resulting Node
+//  before rendering
+plugins.forEach(plugin -> plugin.beforeRender(node));
 
-Markwon.scheduleDrawables(textView);
-Markwon.scheduleTableRows(textView);
+// 4. node is being visited by a visitor
+node.accept(visitor);
+
+// 5. each plugin will be called after node is being visited (aka rendered)
+plugins.forEach(plugin -> plugin.afterRender(node, visitor));
+
+// 6. styled markdown ready at this point
+final Spanned markdown = visitor.markdown();
+
+// 7. each plugin will be called before styled markdown is applied to a TextView
+plugins.forEach(plugin -> plugin.beforeSetText(textView, markdown));
+
+// 8. markdown is applied to a TextView
+textView.setText(markdown);
+
+// 9. each plugin will be called after markdown is applied to a TextView
+plugins.forEach(plugin -> plugin.afterSetText(textView));
 ```
+
+As you can see a `plugin` is what lifts the most weight. We will cover
+plugins next.
 
 :::tip Note
 If you are having trouble with `LinkMovementMethod` you can use

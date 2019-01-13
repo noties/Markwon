@@ -2,11 +2,6 @@
 
 # Getting started
 
-:::tip Installation
-Please follow [installation](/docs/install.md) instructions
-to learn how to add `Markwon` to your project
-:::
-
 ## Quick one
 
 This is the most simple way to set markdown to a `TextView` or any of its siblings:

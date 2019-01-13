@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:padding="8dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="15sp"
+        android:textColor="#000"
+        android:textSize="16sp"
         tools:text="whatever" />
 
 </ScrollView>

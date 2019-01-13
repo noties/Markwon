@@ -19,7 +19,7 @@ $$\\text{A long division \\longdiv{12345}{13}$$
 ```java
 Markwon.builder(context)
     .use(ImagesPlugin.create(context))
-    .use(JLatexMathPlugin.create(new Config(textSize))
+    .use(JLatexMathPlugin.create(textSize))
     .build();
 ```
 
@@ -30,17 +30,17 @@ final result
 ## Config
 
 ```java
-public static class Config {
-
-    protected final float textSize;
-
-    protected Drawable background;
-
-    @JLatexMathDrawable.Align
-    protected int align = JLatexMathDrawable.ALIGN_CENTER;
-
-    protected boolean fitCanvas = true;
-
-    protected int padding;
-}
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(ImagesPlugin.create(context))
+        .usePlugin(JLatexMathPlugin.create(textSize, new BuilderConfigure() {
+            @Override
+            public void configureBuilder(@NonNull Builder builder) {
+                builder
+                        .background(backgroundDrawable)
+                        .align(JLatexMathDrawable.ALIGN_CENTER)
+                        .fitCanvas(true)
+                        .padding(paddingPx);
+            }
+        }))
+        .build();
 ```

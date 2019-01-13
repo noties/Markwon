@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import org.commonmark.node.BlockQuote;
@@ -111,6 +112,16 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         OrderedListItemSpan.measure(textView, markdown);
+    }
+
+    @Override
+    public void afterSetText(@NonNull TextView textView) {
+        // let's ensure that there is a movement method applied
+        // we do it `afterSetText` so any user-defined movement method won't be
+        // replaced (it should be done in `beforeSetText` or manually on a TextView)
+        if (textView.getMovementMethod() == null) {
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+        }
     }
 
     private static void text(@NonNull MarkwonVisitor.Builder builder) {
