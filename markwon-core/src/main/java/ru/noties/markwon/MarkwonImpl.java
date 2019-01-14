@@ -46,14 +46,7 @@ class MarkwonImpl extends Markwon {
     @Override
     public Spanned render(@NonNull Node node) {
 
-        final RenderProps renderProps = visitor.renderProps();
-
         for (MarkwonPlugin plugin : plugins) {
-
-            // let plugins apply render properties before rendering (as we will clear
-            // renderProps after rendering)
-            plugin.configureRenderProps(renderProps);
-
             plugin.beforeRender(node);
         }
 

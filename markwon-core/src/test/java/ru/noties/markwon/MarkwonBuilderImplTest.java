@@ -223,7 +223,6 @@ public class MarkwonBuilderImplTest {
         verify(plugin, atLeast(1)).priority();
 
         // note, no render props -> they must be configured on render stage
-        verify(plugin, times(0)).configureRenderProps(any(RenderProps.class));
         verify(plugin, times(0)).processMarkdown(anyString());
         verify(plugin, times(0)).beforeRender(any(Node.class));
         verify(plugin, times(0)).afterRender(any(Node.class), any(MarkwonVisitor.class));

@@ -22,6 +22,8 @@ import ru.noties.markwon.html.tag.SubScriptHandler;
 import ru.noties.markwon.html.tag.SuperScriptHandler;
 import ru.noties.markwon.html.tag.UnderlineHandler;
 
+import static java.util.Arrays.asList;
+
 /**
  * @since 3.0.0
  */
@@ -41,18 +43,41 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
+
         builder
-                .addHandler(new EmphasisHandler(), "i", "em", "cite", "dfn")
-                .addHandler(new StrongEmphasisHandler(), "b", "strong")
-                .addHandler(new SuperScriptHandler(), "sup")
-                .addHandler(new SubScriptHandler(), "sub")
-                .addHandler(new UnderlineHandler(), "u", "ins")
-                .addHandler(new StrikeHandler(), "s", "del")
-                .addHandler(new LinkHandler(), "a")
-                .addHandler(new ListHandler(), "ul", "ol")
-                .addHandler(ImageHandler.create(), "img")
-                .addHandler(new BlockquoteHandler(), "blockquote")
-                .addHandler(new HeadingHandler(), "h1", "h2", "h3", "h4", "h5", "h6");
+                .addHandler(
+                        "img",
+                        ImageHandler.create())
+                .addHandler(
+                        "a",
+                        new LinkHandler())
+                .addHandler(
+                        "blockquote",
+                        new BlockquoteHandler())
+                .addHandler(
+                        "sub",
+                        new SubScriptHandler())
+                .addHandler(
+                        "sup",
+                        new SuperScriptHandler())
+                .addHandler(
+                        asList("b", "strong"),
+                        new StrongEmphasisHandler())
+                .addHandler(
+                        asList("s", "del"),
+                        new StrikeHandler())
+                .addHandler(
+                        asList("u", "ins"),
+                        new UnderlineHandler())
+                .addHandler(
+                        asList("ul", "ol"),
+                        new ListHandler())
+                .addHandler(
+                        asList("i", "em", "cite", "dfn"),
+                        new EmphasisHandler())
+                .addHandler(
+                        asList("h1", "h2", "h3", "h4", "h5", "h6"),
+                        new HeadingHandler());
     }
 
     @Override

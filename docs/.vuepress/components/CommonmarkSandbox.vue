@@ -17,7 +17,7 @@
       </p>
       <p>
         <em>
-          ** For a little more sophisticated commonmark sandbox editor
+          ** For a more sophisticated commonmark sandbox editor
           <a href="https://spec.commonmark.org/dingus/">the dingus</a> can be used.
         </em>
       </p>

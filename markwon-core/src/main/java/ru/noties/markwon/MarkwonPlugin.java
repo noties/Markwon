@@ -82,19 +82,6 @@ public interface MarkwonPlugin {
      */
     void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder);
 
-    /**
-     * A method to store some arbitrary data in {@link RenderProps}. Although it won\'t make
-     * much sense to use existing {@link Prop} keys for {@link SpanFactory}, it can be helpful
-     * to establish a communication channel between multiple plugins in decoupled way (provide
-     * some initial properties for example or indicate that certain plugin is registered).
-     * <p>
-     * This method will be called before <em>each</em> rendering step (after rendering {@link RenderProps}
-     * will be cleared. This method <strong>won\'t</strong> be called during initialization stage.
-     *
-     * @see RenderProps
-     */
-    void configureRenderProps(@NonNull RenderProps renderProps);
-
     @NonNull
     Priority priority();
 

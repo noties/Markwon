@@ -186,6 +186,7 @@ public class CorePluginTest {
             add("configureVisitor");
             add("configureSpansFactory");
             add("beforeSetText");
+            add("afterSetText");
             add("priority");
         }};
 

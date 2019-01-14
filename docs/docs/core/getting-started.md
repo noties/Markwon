@@ -81,39 +81,28 @@ rawInput = plugins.reduce(rawInput, (input, plugin) -> plugin.processMarkdown(in
 // 1. after input is processed it's being parsed to a Node
 node = parser.parse(rawInput);
 
-// 2. each plugin will configure RenderProps
-plugins.forEach(plugin -> plugin.configureRenderProps(renderProps));
-
-// 3. each plugin will be able to inspect or manipulate resulting Node
+// 2. each plugin will be able to inspect or manipulate resulting Node
 //  before rendering
 plugins.forEach(plugin -> plugin.beforeRender(node));
 
-// 4. node is being visited by a visitor
+// 3. node is being visited by a visitor
 node.accept(visitor);
 
-// 5. each plugin will be called after node is being visited (aka rendered)
+// 4. each plugin will be called after node is being visited (aka rendered)
 plugins.forEach(plugin -> plugin.afterRender(node, visitor));
 
-// 6. styled markdown ready at this point
+// 5. styled markdown ready at this point
 final Spanned markdown = visitor.markdown();
 
-// 7. each plugin will be called before styled markdown is applied to a TextView
+// 6. each plugin will be called before styled markdown is applied to a TextView
 plugins.forEach(plugin -> plugin.beforeSetText(textView, markdown));
 
-// 8. markdown is applied to a TextView
+// 7. markdown is applied to a TextView
 textView.setText(markdown);
 
-// 9. each plugin will be called after markdown is applied to a TextView
+// 8. each plugin will be called after markdown is applied to a TextView
 plugins.forEach(plugin -> plugin.afterSetText(textView));
 ```
 
 As you can see a `plugin` is what lifts the most weight. We will cover
 plugins next.
-
-:::tip Note
-If you are having trouble with `LinkMovementMethod` you can use
-`Markwon.setText(textView, markdown, movementMethod)` method <Badge text="1.0.6" /> to specify _no_ movement
-method (aka `null`) or own implementation. As an alternative to the system `LinkMovementMethod`
-you can use [Better-Link-Movement-Method](https://github.com/saket/Better-Link-Movement-Method).
-Please note that `Markwon.setText` method expects _parsed_ markdown as the second argument.
-:::

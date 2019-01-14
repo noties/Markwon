@@ -1,24 +1,33 @@
 module.exports = {
     base: '/Markwon/',
     title: 'Markwon',
-    description: 'Android markdown library based on commonmark specification',
+    description: 'Android markdown library based on commonmark specification that renders markdown as system-native Spannables (no WebView)',
     head: [
         ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png?v=1' }],
         ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png?v=1' }],
         ['link', { rel: 'icon', href: '/favicon.ico?v=1' }],
         ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png?v=1' }],
         ['link', { rel: 'manifest', href: '/manifest.json?v=1' }],
+        ['meta', { name: 'keywords', content: 'android,markdown,library,spannable,markwon,commonmark' }]
     ],
     themeConfig: {
         nav: [
             { text: 'Install', link: '/docs/install.md' },
             { text: 'Changelog', link: '/CHANGELOG.md' },
+            {
+                text: 'API Version',
+                items: [
+                    { text: 'Current (3.x.x)', link: '/' },
+                    { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
+                ]
+            },
             { text: 'Sandbox', link: '/sandbox.md' },
+            { text: 'Donate', link: '/donate.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: {
             '/docs/v2/': [
-                'install.md',
+                '',
                 'getting-started.md',
                 'configure.md',
                 'theme.md',
@@ -34,7 +43,13 @@ module.exports = {
                     title: 'Core',
                     children: [
                         '/docs/core/getting-started.md',
-                        '/docs/core/theme.md'
+                        '/docs/core/plugins.md',
+                        '/docs/core/theme.md',
+                        '/docs/core/images.md',
+                        '/docs/core/configuration.md',
+                        '/docs/core/visitor.md',
+                        '/docs/core/spans-factory.md',
+                        '/docs/core/html-renderer.md'
                     ]
                 },
                 '/docs/ext-latex/',
@@ -57,8 +72,7 @@ module.exports = {
                 },
                 '/docs/recycler/recycler.md',
                 '/docs/syntax-highlight/syntax-highlight.md',
-                '/docs/migration-2-3.md',
-                ['/docs/v2/install.md', 'Legacy 2.x.x documentation']
+                '/docs/migration-2-3.md'
             ]
         },
         sidebarDepth: 2,

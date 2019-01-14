@@ -3,6 +3,7 @@ package ru.noties.markwon.html;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -99,14 +100,14 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
         @NonNull
         @Override
-        public Builder addHandler(@NonNull TagHandler tagHandler, @NonNull String tagName) {
+        public Builder addHandler(@NonNull String tagName, @NonNull TagHandler tagHandler) {
             tagHandlers.put(tagName, tagHandler);
             return this;
         }
 
         @NonNull
         @Override
-        public Builder addHandler(@NonNull TagHandler tagHandler, String... tagNames) {
+        public Builder addHandler(@NonNull Collection<String> tagNames, @NonNull TagHandler tagHandler) {
             for (String tagName : tagNames) {
                 if (tagName != null) {
                     tagHandlers.put(tagName, tagHandler);

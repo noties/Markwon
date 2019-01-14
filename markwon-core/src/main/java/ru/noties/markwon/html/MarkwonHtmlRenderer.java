@@ -3,6 +3,8 @@ package ru.noties.markwon.html;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonVisitor;
 
 /**
@@ -39,19 +41,11 @@ public abstract class MarkwonHtmlRenderer {
         @NonNull
         Builder allowNonClosedTags(boolean allowNonClosedTags);
 
-        /**
-         * Please note that if there is already a {@link TagHandler} registered with specified
-         * {@code tagName} it will be replaced with newly supplied one.
-         *
-         * @param tagHandler {@link TagHandler}
-         * @param tagName    name of a tag
-         * @return self
-         */
         @NonNull
-        Builder addHandler(@NonNull TagHandler tagHandler, @NonNull String tagName);
+        Builder addHandler(@NonNull String tagName, @NonNull TagHandler tagHandler);
 
         @NonNull
-        Builder addHandler(@NonNull TagHandler tagHandler, String... tagNames);
+        Builder addHandler(@NonNull Collection<String> tagNames, @NonNull TagHandler tagHandler);
 
         @NonNull
         Builder removeHandler(@NonNull String tagName);

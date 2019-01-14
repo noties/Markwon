@@ -57,11 +57,6 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
 
     }
 
-    @Override
-    public void configureRenderProps(@NonNull RenderProps renderProps) {
-
-    }
-
     @NonNull
     @Override
     public Priority priority() {

@@ -107,8 +107,6 @@ public class MarkwonImplTest {
                 // mark this flag (we must ensure that this method body is executed)
                 flag.set(true);
 
-                //noinspection ConstantConditions
-                verify(plugin, times(1)).configureRenderProps(null);
                 verify(plugin, times(1)).beforeRender(eq(node));
                 verify(plugin, times(0)).afterRender(any(Node.class), any(MarkwonVisitor.class));
 
@@ -175,8 +173,6 @@ public class MarkwonImplTest {
 
                 flag.set(true);
 
-                verify(visitor, times(1)).renderProps();
-                verify(plugin, times(1)).configureRenderProps(eq(renderProps));
                 verify(renderProps, times(0)).clearAll();
 
                 return null;
