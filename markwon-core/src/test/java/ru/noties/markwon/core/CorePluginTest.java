@@ -2,6 +2,8 @@ package ru.noties.markwon.core;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.method.MovementMethod;
+import android.widget.TextView;
 
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
@@ -46,6 +48,7 @@ import ru.noties.markwon.SpannableBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -223,26 +226,9 @@ public class CorePluginTest {
     }
 
     @Test
-    public void softbreak_adds_new_line_default() {
-        // default is false
-        softbreak_adds_new_line(CorePlugin.create(), false);
-    }
+    public void softbreak() {
 
-    @Test
-    public void softbreak_adds_new_line_false() {
-        // a space character will be added
-        softbreak_adds_new_line(CorePlugin.create(false), false);
-    }
-
-    @Test
-    public void softbreak_adds_new_line_true() {
-        // a new line will be added
-        softbreak_adds_new_line(CorePlugin.create(true), true);
-    }
-
-    private static void softbreak_adds_new_line(
-            @NonNull CorePlugin plugin,
-            boolean softBreakAddsNewLine) {
+        final CorePlugin plugin = CorePlugin.create();
 
         final MarkwonVisitor.Builder builder = mock(MarkwonVisitor.Builder.class);
         when(builder.on(any(Class.class), any(MarkwonVisitor.NodeVisitor.class))).thenReturn(builder);
@@ -259,21 +245,44 @@ public class CorePluginTest {
         final MarkwonVisitor.NodeVisitor<SoftLineBreak> nodeVisitor = captor.getValue();
         final MarkwonVisitor visitor = mock(MarkwonVisitor.class);
 
-        if (!softBreakAddsNewLine) {
+        // we must mock SpannableBuilder and verify that it has a space character appended
+        final SpannableBuilder spannableBuilder = mock(SpannableBuilder.class);
+        when(visitor.builder()).thenReturn(spannableBuilder);
+        nodeVisitor.visit(visitor, mock(SoftLineBreak.class));
 
-            // we must mock SpannableBuilder and verify that it has a space character appended
-            final SpannableBuilder spannableBuilder = mock(SpannableBuilder.class);
-            when(visitor.builder()).thenReturn(spannableBuilder);
-            nodeVisitor.visit(visitor, mock(SoftLineBreak.class));
+        verify(visitor, times(1)).builder();
+        verify(spannableBuilder, times(1)).append(eq(' '));
+    }
 
-            verify(visitor, times(1)).builder();
-            verify(spannableBuilder, times(1)).append(eq(' '));
+    @Test
+    public void implicit_movement_method_after_set_text_added() {
+        // validate that CorePlugin will implicitly add LinkMovementMethod if one is missing
+        final TextView textView = mock(TextView.class);
+        when(textView.getMovementMethod()).thenReturn(null);
 
-        } else {
+        final CorePlugin plugin = CorePlugin.create();
 
-            nodeVisitor.visit(visitor, mock(SoftLineBreak.class));
+        assertNull(textView.getMovementMethod());
 
-            verify(visitor, times(1)).ensureNewLine();
-        }
+        plugin.afterSetText(textView);
+
+        final ArgumentCaptor<MovementMethod> captor = ArgumentCaptor.forClass(MovementMethod.class);
+        verify(textView, times(1)).setMovementMethod(captor.capture());
+
+        assertNotNull(captor.getValue());
+    }
+
+    @Test
+    public void implicit_movement_method_after_set_text_no_op() {
+        // validate that CorePlugin won't change movement method if one is present on a TextView
+
+        final TextView textView = mock(TextView.class);
+        when(textView.getMovementMethod()).thenReturn(mock(MovementMethod.class));
+
+        final CorePlugin plugin = CorePlugin.create();
+
+        plugin.afterSetText(textView);
+
+        verify(textView, times(0)).setMovementMethod(any(MovementMethod.class));
     }
 }

@@ -25,18 +25,19 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
 
 * Emphasis (`*`, `_`)
 * Strong emphasis (`**`, `__`)
-* Strike-through (`~~`)
 * Headers (`#{1,6}`)
 * Links (`[]()` && `[][]`)
-* [Images](/docs/image-loader.md)
+* [Images](/docs/core/images.md)
 * Thematic break (`---`, `***`, `___`)
 * Quotes & nested quotes (`>{1,}`)
 * Ordered & non-ordered lists & nested ones
 * Inline code
 * Code blocks
-* Tables (*with limitations*)
-* [Syntax highlight](/docs/syntax-highlight.md)
-* [HTML](/docs/html.md)
+* [Strike-through](/docs/ext-strikethrough/) (`~~`)
+* [Tables](/docs/ext-tables/) (*with limitations*)
+* [Syntax highlight](/docs/syntax-highlight/)
+* [LaTeX](/docs/ext-latex/) formulas
+* [HTML](/docs/html/)
   * Emphasis (`<i>`, `<em>`, `<cite>`, `<dfn>`)
   * Strong emphasis (`<b>`, `<strong>`)
   * SuperScript (`<sup>`)
@@ -49,8 +50,8 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
   * Blockquote (`blockquote`)
   * Heading (`h1`, `h2`, `h3`, `h4`, `h5`, `h6`)
   * there is support to render any HTML tag, but it will require to create a special `TagHandler`,
-    more information can be found in [HTML section](/docs/html.md#custom-tag-handler)
-* Task lists:
+    more information can be found in [HTML section](/docs/html/custom-tag-handler.md)
+* [Task lists](/docs/ext-tasklist/):
 - [ ] Not _done_
   - [X] **Done** with `X`
   - [x] ~~and~~ **or** small `x`

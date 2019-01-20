@@ -81,6 +81,8 @@ public class RecyclerActivity extends Activity {
                 .usePlugin(CorePlugin.create())
                 .usePlugin(ImagesPlugin.createWithAssets(context))
                 .usePlugin(SvgPlugin.create(context.getResources()))
+                // although we will be rendering table differently we still need
+                // to register commonmark-java tables extension (which TablePlugin does)
                 .usePlugin(TablePlugin.create(context))
                 .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {

@@ -49,17 +49,20 @@ module.exports = {
                         '/docs/core/configuration.md',
                         '/docs/core/visitor.md',
                         '/docs/core/spans-factory.md',
-                        '/docs/core/html-renderer.md'
+                        '/docs/core/html-renderer.md',
+                        '/docs/core/core-plugin.md',
+                        '/docs/core/movement-method-plugin.md'
                     ]
                 },
                 '/docs/ext-latex/',
-                '/docs/ext-strikethrough/strikethrough.md',
-                '/docs/ext-tables/tables.md',
-                '/docs/ext-tasklist/tasklist.md',
+                '/docs/ext-strikethrough/',
+                '/docs/ext-tables/',
+                '/docs/ext-tasklist/',
                 {
                     title: 'HTML',
                     children: [
-                        '/docs/html/html.md'
+                        '/docs/html/',
+                        '/docs/html/custom-tag-handler.md'
                     ]
                 },
                 {
@@ -70,8 +73,8 @@ module.exports = {
                         '/docs/image/svg.md'
                     ]
                 },
-                '/docs/recycler/recycler.md',
-                '/docs/syntax-highlight/syntax-highlight.md',
+                '/docs/recycler/',
+                '/docs/syntax-highlight/',
                 '/docs/migration-2-3.md'
             ]
         },

@@ -30,6 +30,13 @@ public class TablePlugin extends AbstractMarkwonPlugin {
         void configureTheme(@NonNull TableTheme.Builder builder);
     }
 
+    /**
+     * Factory method to create a {@link TablePlugin} with default {@link TableTheme} instance
+     * (obtained via {@link TableTheme#create(Context)} method)
+     *
+     * @see #create(TableTheme)
+     * @see #create(ThemeConfigure)
+     */
     @NonNull
     public static TablePlugin create(@NonNull Context context) {
         return new TablePlugin(TableTheme.create(context));

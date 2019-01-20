@@ -50,18 +50,10 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static CorePlugin create() {
-        return create(false);
+        return new CorePlugin();
     }
 
-    @NonNull
-    public static CorePlugin create(boolean softBreakAddsNewLine) {
-        return new CorePlugin(softBreakAddsNewLine);
-    }
-
-    private final boolean softBreakAddsNewLine;
-
-    protected CorePlugin(boolean softBreakAddsNewLine) {
-        this.softBreakAddsNewLine = softBreakAddsNewLine;
+    protected CorePlugin() {
     }
 
     @Override
@@ -78,7 +70,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         listItem(builder);
         thematicBreak(builder);
         heading(builder);
-        softLineBreak(builder, softBreakAddsNewLine);
+        softLineBreak(builder);
         hardLineBreak(builder);
         paragraph(builder);
         link(builder);
@@ -341,15 +333,11 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         });
     }
 
-    private static void softLineBreak(@NonNull MarkwonVisitor.Builder builder, final boolean softBreakAddsNewLine) {
+    private static void softLineBreak(@NonNull MarkwonVisitor.Builder builder) {
         builder.on(SoftLineBreak.class, new MarkwonVisitor.NodeVisitor<SoftLineBreak>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull SoftLineBreak softLineBreak) {
-                if (softBreakAddsNewLine) {
-                    visitor.ensureNewLine();
-                } else {
-                    visitor.builder().append(' ');
-                }
+                visitor.builder().append(' ');
             }
         });
     }

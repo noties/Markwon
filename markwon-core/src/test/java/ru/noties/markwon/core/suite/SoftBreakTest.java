@@ -14,20 +14,15 @@ import static ru.noties.markwon.test.TestSpan.text;
 @Config(manifest = Config.NONE)
 public class SoftBreakTest extends BaseSuiteTest {
 
-    @Test
-    public void test() {
+  @Test
+  public void test() {
 
-        final Document document = document(
-                text("First line "),
-                text("same line but with space between "),
-                text("this is also the first line")
-        );
+    final Document document = document(
+      text("First line "),
+      text("same line but with space between "),
+      text("this is also the first line")
+    );
 
-        matchInput("soft-break.md", document);
-    }
-
-    @Override
-    boolean softBreakAddsNewLine() {
-        return false;
-    }
+    matchInput("soft-break.md", document);
+  }
 }

@@ -126,7 +126,7 @@ public class MarkwonBuilderImplTest {
         };
 
         // our subclass
-        final CorePlugin corePlugin = new CorePlugin(false) {
+        final CorePlugin corePlugin = new CorePlugin() {
 
         };
 

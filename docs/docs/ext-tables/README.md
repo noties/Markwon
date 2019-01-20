@@ -24,6 +24,19 @@ final Markwon markwon = Markwon.builder(context)
         .usePlugin(TablePlugin.create(tableTheme))
 ```
 
+```java
+Markwon.builder(context)
+        .usePlugin(TablePlugin.create(builder ->
+                builder
+                        .tableBorderColor(Color.RED)
+                        .tableBorderWidth(0)
+                        .tableCellPadding(0)
+                        .tableHeaderRowBackgroundColor(Color.BLACK)
+                        .tableEvenRowBackgroundColor(Color.GREEN)
+                        .tableOddRowBackgroundColor(Color.YELLOW)
+))
+```
+
 Please note, that _by default_ tables have limitations. For example, there is no support
 for images inside table cells. And table contents won't be copied to clipboard if a TextView
 has such functionality. Table will always take full width of a TextView in which it is displayed.

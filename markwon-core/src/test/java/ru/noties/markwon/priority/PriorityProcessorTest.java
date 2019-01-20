@@ -109,7 +109,7 @@ public class PriorityProcessorTest {
     public void subclass_found() {
         // when a plugin comes after another, but _another_ was subclassed and placed in the list
 
-        final MarkwonPlugin core = new CorePlugin(false) {
+        final MarkwonPlugin core = new CorePlugin() {
         };
         final MarkwonPlugin plugin = new AbstractMarkwonPlugin() {
             @NonNull

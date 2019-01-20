@@ -73,7 +73,7 @@ abstract class BaseSuiteTest {
   @NonNull
   Markwon markwon() {
     return Markwon.builder(RuntimeEnvironment.application)
-      .usePlugin(CorePlugin.create(softBreakAddsNewLine()))
+      .usePlugin(CorePlugin.create())
       .usePlugin(new AbstractMarkwonPlugin() {
         @Override
         public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
@@ -96,10 +96,6 @@ abstract class BaseSuiteTest {
   }
 
   boolean useParagraphs() {
-    return false;
-  }
-
-  boolean softBreakAddsNewLine() {
     return false;
   }
 
