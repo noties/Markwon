@@ -422,3 +422,46 @@ Please note that unlike `#beforeSetText`, `#afterSetText` won't receive
 `Spanned` markdown. This happens because at this point spans must be
 queried directly from a TextView.
 :::
+
+## What happens underneath
+
+Here is an approximation of how a `Markwon` instance will handle plugins:
+
+```java
+// `Markwon#create` implicitly uses CorePlugin
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(CorePlugin.create())
+        .build();
+
+// warning: pseudo-code
+
+// 0. each plugin will be called to _pre-process_ raw input markdown
+rawInput = plugins.reduce(rawInput, (input, plugin) -> plugin.processMarkdown(input));
+
+// 1. after input is processed it's being parsed to a Node
+node = parser.parse(rawInput);
+
+// 2. each plugin will be able to inspect or manipulate resulting Node
+//  before rendering
+plugins.forEach(plugin -> plugin.beforeRender(node));
+
+// 3. node is being visited by a visitor
+node.accept(visitor);
+
+// 4. each plugin will be called after node is being visited (aka rendered)
+plugins.forEach(plugin -> plugin.afterRender(node, visitor));
+
+// 5. styled markdown ready at this point
+final Spanned markdown = visitor.markdown();
+
+// NB, points 6-8 are applied **only** if markdown is set to a TextView
+
+// 6. each plugin will be called before styled markdown is applied to a TextView
+plugins.forEach(plugin -> plugin.beforeSetText(textView, markdown));
+
+// 7. markdown is applied to a TextView
+textView.setText(markdown);
+
+// 8. each plugin will be called after markdown is applied to a TextView
+plugins.forEach(plugin -> plugin.afterSetText(textView));
+```

@@ -59,50 +59,7 @@ Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 
 ## No magic one
 
-So, what happens _internally_ when there is a `markwon#setMarkdown(TextView,String)` call?
-Please note that this is mere representaion of what happens underneath and a caller
-would likely never has to deal with these method calls directly. It still valuable
-to understand how things are working:
-
-```java
-// `Markwon#create` implicitly uses CorePlugin
-final Markwon markwon = Markwon.builder(context)
-        .usePlugin(CorePlugin.create())
-        .build();
-
-// each plugin will configure resulting Markwon instance
-// we will cover it in plugins section of documentation
-
-// warning: pseudo-code
-
-// 0. each plugin will be called to _pre-process_ raw input markdown
-rawInput = plugins.reduce(rawInput, (input, plugin) -> plugin.processMarkdown(input));
-
-// 1. after input is processed it's being parsed to a Node
-node = parser.parse(rawInput);
-
-// 2. each plugin will be able to inspect or manipulate resulting Node
-//  before rendering
-plugins.forEach(plugin -> plugin.beforeRender(node));
-
-// 3. node is being visited by a visitor
-node.accept(visitor);
-
-// 4. each plugin will be called after node is being visited (aka rendered)
-plugins.forEach(plugin -> plugin.afterRender(node, visitor));
-
-// 5. styled markdown ready at this point
-final Spanned markdown = visitor.markdown();
-
-// 6. each plugin will be called before styled markdown is applied to a TextView
-plugins.forEach(plugin -> plugin.beforeSetText(textView, markdown));
-
-// 7. markdown is applied to a TextView
-textView.setText(markdown);
-
-// 8. each plugin will be called after markdown is applied to a TextView
-plugins.forEach(plugin -> plugin.afterSetText(textView));
-```
-
-As you can see a `plugin` is what lifts the most weight. We will cover
-plugins next.
+This section is kept due to historical reasons. Starting with version <Badge text="3.0.0" />
+the amount of magic is reduced. To leverage your `Markwon` usage a concept of `Plugin`
+is introduced which helps to extend default behavior in a simple and _no-breaking-the-flow_ manner.
+Head to the [next section](/docs/core/plugins.md) to know more.

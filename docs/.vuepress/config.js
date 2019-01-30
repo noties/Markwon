@@ -41,6 +41,7 @@ module.exports = {
                 '',
                 {
                     title: 'Core',
+                    collapsable: false,
                     children: [
                         '/docs/core/getting-started.md',
                         '/docs/core/plugins.md',
@@ -60,19 +61,15 @@ module.exports = {
                 '/docs/ext-tasklist/',
                 {
                     title: 'HTML',
+                    collapsable: false,
                     children: [
                         '/docs/html/',
                         '/docs/html/custom-tag-handler.md'
                     ]
                 },
-                {
-                    title: 'Image',
-                    children: [
-                        '/docs/image/gif.md',
-                        '/docs/image/okhttp.md',
-                        '/docs/image/svg.md'
-                    ]
-                },
+                '/docs/image/gif.md',
+                '/docs/image/okhttp.md',
+                '/docs/image/svg.md',
                 '/docs/recycler/',
                 '/docs/syntax-highlight/',
                 '/docs/migration-2-3.md'

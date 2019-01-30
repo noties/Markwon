@@ -1,6 +1,19 @@
 # Changelog
 
-# 2.0.0
+# 2.0.1
+* `SpannableMarkdownVisitor` Rename blockQuoteIndent to blockIndent
+* Fixed block new lines logic for block quote and paragraph (<GithubIssue id="82" />)
+* AsyncDrawable fix no dimensions bug (<GithubIssue id="81" />)
+* Update SpannableTheme to use Px instead of Dimension annotation
+* Allow TaskListSpan isDone mutation
+* Updated commonmark-java to 0.12.1
+* Add OrderedListItemSpan measure utility method (<GithubIssue id="78" />)
+* Add SpannableBuilder#getSpans method
+* Fix DataUri scheme handler in image-loader (<GithubIssue id="74" />)
+* Introduced a "copy" builder for SpannableThem <br>Thanks <GithubUser name="c-b-h" />
+
+
+## 2.0.0
 * Add `html-parser-api` and `html-parser-impl` modules
 * Add `HtmlEmptyTagReplacement`
 * Implement Appendable and CharSequence in SpannableBuilder
