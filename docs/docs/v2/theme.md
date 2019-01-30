@@ -2,11 +2,20 @@
 
 # Theme
 
-Here is the list of properties that can be configured via `SpannableTheme#builder` factory
-method. If you wish to control what is out of this list, you can use [SpannableFactory](/docs/v2/factory.md)
+Here is the list of properties that can be configured via `SpannableTheme`. If you wish to control what 
+is out of this list, you can use [SpannableFactory](/docs/v2/factory.md)
 abstraction which lets you to gather full control of Spans that are used to display markdown.
 
-* factory methods
+* `SpannableTheme#create(Context)` - creates a **default** instance of `SpannableBuilder (with _defaults_ registered)
+* `SpannableTheme#builder` - creates **empty** builder with **no defaults registered**
+* `SpannableTheme#builderWithDefaults(Context)` - create a **default** instance of builder (with default values registered)
+
+:::warning
+`SpannbleTheme#builder` method has an unfortunate naming. It should've been `emptyBuilder`
+or `builderNoDefaults` because `#builder` method returns a builder with <strong>no default
+theme values registered</strong>. To create a builder **with** default values registered
+use `SpannableBuilder#builderWithDefaults(Context)`
+:::
 
 ## Link color
 
