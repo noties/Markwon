@@ -11,27 +11,29 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
+import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.FencedCodeBlock;
+import org.commonmark.parser.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
 
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.core.CorePlugin;
-import ru.noties.markwon.ext.tables.TablePlugin;
 import ru.noties.markwon.html.HtmlPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.svg.SvgPlugin;
 import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.recycler.SimpleEntry;
 import ru.noties.markwon.sample.R;
-import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
 import ru.noties.markwon.urlprocessor.UrlProcessor;
 import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 
@@ -54,7 +56,7 @@ public class RecyclerActivity extends Activity {
                 // with `@+id/text` id
                 .include(FencedCodeBlock.class, new SimpleEntry(R.layout.adapter_fenced_code_block))
                 // create own implementation of entry for different rendering
-                .include(TableBlock.class, new TableEntry())
+                .include(TableBlock.class, new TableEntry2())
                 // specify default entry (for all other blocks)
                 .defaultEntry(new SimpleEntry(R.layout.adapter_default_entry))
                 .build();
@@ -81,14 +83,34 @@ public class RecyclerActivity extends Activity {
                 .usePlugin(CorePlugin.create())
                 .usePlugin(ImagesPlugin.createWithAssets(context))
                 .usePlugin(SvgPlugin.create(context.getResources()))
-                // although we will be rendering table differently we still need
-                // to register commonmark-java tables extension (which TablePlugin does)
-                .usePlugin(TablePlugin.create(context))
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureParser(@NonNull Parser.Builder builder) {
+                        // it's important NOT to use TablePlugin
+                        // the only thing we want from it is commonmark-java parser extension
+                        builder.extensions(Collections.singleton(TablesExtension.create()));
+                    }
+                })
                 .usePlugin(HtmlPlugin.create())
+//                .usePlugin(SyntaxHighlightPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.urlProcessor(new UrlProcessorInitialReadme());
+                    }
+
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.on(FencedCodeBlock.class, (visitor, fencedCodeBlock) -> {
+                            // we actually won't be applying code spans here, as our custom view will
+                            // draw background and apply mono typeface
+                            //
+                            // NB the `trim` operation on literal (as code will have a new line at the end)
+                            final CharSequence code = visitor.configuration()
+                                    .syntaxHighlight()
+                                    .highlight(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral().trim());
+                            visitor.builder().append(code);
+                        });
                     }
                 })
                 .build();

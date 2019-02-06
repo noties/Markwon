@@ -17,7 +17,7 @@ import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.sample.R;
 
 // do not use in real applications, this is just a showcase
-public class TableEntry implements MarkwonAdapter.Entry<TableEntry.TableNodeHolder, TableBlock> {
+public class TableEntry implements MarkwonAdapter.Entry<TableBlock, TableEntry.TableNodeHolder> {
 
     private final Map<TableBlock, Table> cache = new HashMap<>(2);
 

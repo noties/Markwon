@@ -21,7 +21,7 @@ import ru.noties.markwon.Markwon;
  * @since 3.0.0
  */
 @SuppressWarnings("WeakerAccess")
-public class SimpleEntry implements MarkwonAdapter.Entry<SimpleEntry.Holder, Node> {
+public class SimpleEntry implements MarkwonAdapter.Entry<Node, SimpleEntry.Holder> {
 
     public static final Spannable.Factory NO_COPY_SPANNABLE_FACTORY = new NoCopySpannableFactory();
 

@@ -10,7 +10,6 @@ import org.commonmark.ext.gfm.tables.TableHead;
 import org.commonmark.ext.gfm.tables.TableRow;
 import org.commonmark.node.AbstractVisitor;
 import org.commonmark.node.CustomNode;
-import org.commonmark.node.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,20 +159,12 @@ public class Table {
 
                 final TableCell cell = (TableCell) customNode;
 
-                final Node firstChild = cell.getFirstChild();
-
-                // need to investigate why... (most likely initial node is modified by someone)
-                if (firstChild != null) {
-
-                    if (pendingRow == null) {
-                        pendingRow = new ArrayList<>(2);
-                    }
-
-                    // let's TRY to not visit this node but instead try to render its first child
-
-                    pendingRow.add(new Table.Column(alignment(cell.getAlignment()), markwon.render(firstChild)));
-                    pendingRowIsHeader = cell.isHeader();
+                if (pendingRow == null) {
+                    pendingRow = new ArrayList<>(2);
                 }
+
+                pendingRow.add(new Table.Column(alignment(cell.getAlignment()), markwon.render(cell)));
+                pendingRowIsHeader = cell.isHeader();
 
                 return;
             }
@@ -215,6 +206,4 @@ public class Table {
             return out;
         }
     }
-
-
 }

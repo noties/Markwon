@@ -67,7 +67,7 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
      * @see SimpleEntry
      */
     @NonNull
-    public static MarkwonAdapter create(@NonNull Entry<? extends Holder, ? extends Node> defaultEntry) {
+    public static MarkwonAdapter create(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
         return new MarkwonAdapterImpl.BuilderImpl().defaultEntry(defaultEntry).build();
     }
 
@@ -109,7 +109,7 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
         @NonNull
         <N extends Node> Builder include(
                 @NonNull Class<N> node,
-                @NonNull Entry<? extends Holder, ? super N> entry);
+                @NonNull Entry<? super N, ? extends Holder> entry);
 
         /**
          * Specify which {@link Entry} to use for all non-explicitly registered nodes
@@ -119,7 +119,7 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
          * @see SimpleEntry
          */
         @NonNull
-        Builder defaultEntry(@NonNull Entry<? extends Holder, ? extends Node> defaultEntry);
+        Builder defaultEntry(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry);
 
         /**
          * Specify which layout {@link SimpleEntry} will use to render all non-explicitly
@@ -156,7 +156,7 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
     /**
      * @see SimpleEntry
      */
-    public interface Entry<H extends Holder, N extends Node> {
+    public interface Entry<N extends Node, H extends Holder> {
 
         @NonNull
         H createHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent);

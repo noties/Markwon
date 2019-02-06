@@ -2,6 +2,23 @@
 
 Here is the list of properties that can be configured via `MarkwonTheme.Builder` class. 
 
+:::tip
+Starting with <Badge text="3.0.0" /> there is no need to manually construct a `MarkwonTheme`.
+Instead a `Plugin` should be used:
+```java
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder
+                        .codeTextColor(Color.BLACK)
+                        .codeBackgroundColor(Color.GREEN);
+            }
+        })
+        .build();
+```
+:::
+
 ## Link color
 
 Controls the color of a [link](#)

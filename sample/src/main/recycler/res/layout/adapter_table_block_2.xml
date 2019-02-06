@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
@@ -11,11 +10,9 @@
     android:paddingBottom="8dip"
     android:scrollbarStyle="outsideInset">
 
-    <ru.noties.markwon.sample.recycler.TableEntryView
-        android:id="@+id/table_entry"
+    <TableLayout
+        android:id="@+id/table_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:tev_debugData="head1,head2,head3|col1,col2,col3|col1,col2,col3|col1,col2,col3"
-        app:tev_rowEvenBackgroundColor="#40ff0000" />
+        android:layout_height="wrap_content" />
 
 </HorizontalScrollView>

@@ -15,8 +15,8 @@ import ru.noties.markwon.Markwon;
 
 class MarkwonAdapterImpl extends MarkwonAdapter {
 
-    private final SparseArray<Entry<Holder, Node>> entries;
-    private final Entry<Holder, Node> defaultEntry;
+    private final SparseArray<Entry<Node, Holder>> entries;
+    private final Entry<Node, Holder> defaultEntry;
     private final Reducer reducer;
 
     private LayoutInflater layoutInflater;
@@ -26,8 +26,8 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
     @SuppressWarnings("WeakerAccess")
     MarkwonAdapterImpl(
-            @NonNull SparseArray<Entry<Holder, Node>> entries,
-            @NonNull Entry<Holder, Node> defaultEntry,
+            @NonNull SparseArray<Entry<Node, Holder>> entries,
+            @NonNull Entry<Node, Holder> defaultEntry,
             @NonNull Reducer reducer) {
         this.entries = entries;
         this.defaultEntry = defaultEntry;
@@ -67,7 +67,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
 
-        final Entry<Holder, Node> entry = getEntry(viewType);
+        final Entry<Node, Holder> entry = getEntry(viewType);
 
         return entry.createHolder(layoutInflater, parent);
     }
@@ -78,7 +78,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         final Node node = nodes.get(position);
         final int viewType = getNodeViewType(node.getClass());
 
-        final Entry<Holder, Node> entry = getEntry(viewType);
+        final Entry<Node, Holder> entry = getEntry(viewType);
 
         entry.bindHolder(markwon, holder, node);
     }
@@ -107,7 +107,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     public long getItemId(int position) {
         final Node node = nodes.get(position);
         final int type = getNodeViewType(node.getClass());
-        final Entry<Holder, Node> entry = getEntry(type);
+        final Entry<Node, Holder> entry = getEntry(type);
         return entry.id(node);
     }
 
@@ -122,7 +122,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     }
 
     @NonNull
-    private Entry<Holder, Node> getEntry(int viewType) {
+    private Entry<Node, Holder> getEntry(int viewType) {
         return viewType == 0
                 ? defaultEntry
                 : entries.get(viewType);
@@ -130,26 +130,26 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
     static class BuilderImpl implements Builder {
 
-        private final SparseArray<Entry<Holder, Node>> entries = new SparseArray<>(3);
+        private final SparseArray<Entry<Node, Holder>> entries = new SparseArray<>(3);
 
-        private Entry<Holder, Node> defaultEntry;
+        private Entry<Node, Holder> defaultEntry;
         private Reducer reducer;
 
         @NonNull
         @Override
         public <N extends Node> Builder include(
                 @NonNull Class<N> node,
-                @NonNull Entry<? extends Holder, ? super N> entry) {
+                @NonNull Entry<? super N, ? extends Holder> entry) {
             //noinspection unchecked
-            entries.append(node.hashCode(), (Entry<Holder, Node>) entry);
+            entries.append(node.hashCode(), (Entry<Node, Holder>) entry);
             return this;
         }
 
         @NonNull
         @Override
-        public Builder defaultEntry(@NonNull Entry<? extends Holder, ? extends Node> defaultEntry) {
+        public Builder defaultEntry(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
             //noinspection unchecked
-            this.defaultEntry = (Entry<Holder, Node>) defaultEntry;
+            this.defaultEntry = (Entry<Node, Holder>) defaultEntry;
             return this;
         }
 
@@ -157,7 +157,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         @Override
         public Builder defaultEntry(int layoutResId) {
             //noinspection unchecked
-            this.defaultEntry = (Entry<Holder, Node>) (Entry) new SimpleEntry(layoutResId);
+            this.defaultEntry = (Entry<Node, Holder>) (Entry) new SimpleEntry(layoutResId);
             return this;
         }
 
@@ -174,7 +174,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
             if (defaultEntry == null) {
                 //noinspection unchecked
-                defaultEntry = (Entry<Holder, Node>) (Entry) new SimpleEntry();
+                defaultEntry = (Entry<Node, Holder>) (Entry) new SimpleEntry();
             }
 
             if (reducer == null) {

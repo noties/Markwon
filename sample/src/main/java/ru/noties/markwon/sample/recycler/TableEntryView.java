@@ -54,7 +54,6 @@ public class TableEntryView extends LinearLayout {
 
                 rowEvenBackgroundColor = array.getColor(R.styleable.TableEntryView_tev_rowEvenBackgroundColor, 0);
 
-
                 final int stroke = array.getDimensionPixelSize(R.styleable.TableEntryView_tev_borderWidth, 0);
 
                 // half of requested
@@ -124,6 +123,8 @@ public class TableEntryView extends LinearLayout {
             textView.setText(column.content());
             textView.getPaint().setFakeBoldText(row.header());
         }
+
+        group.requestLayout();
     }
 
     @NonNull
