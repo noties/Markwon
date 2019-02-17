@@ -8,6 +8,8 @@ input: |-
   + [ ] First plus
   + [x] Second plus
   + [X] Third plus
+  1. [x] Number with dot
+  3) [ ] Number
 
 output:
   - task-list: "First"
@@ -45,3 +47,11 @@ output:
   - task-list: "Third plus"
     blockIdent: 1
     done: true
+  - text: "\n"
+  - task-list: "Number with dot"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "Number"
+    blockIdent: 1
+    done: false
