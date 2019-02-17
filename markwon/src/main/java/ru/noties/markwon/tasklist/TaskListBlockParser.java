@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 class TaskListBlockParser extends AbstractBlockParser {
 
-    private static final Pattern PATTERN = Pattern.compile("\\s*([-*+]|\\d+[.)])\\s+\\[(x|X|\\s)]\\s+(.*)");
+    private static final Pattern PATTERN = Pattern.compile("\\s*([-*+]|\\d{1,9}[.)])\\s+\\[(x|X|\\s)]\\s+(.*)");
 
     private final TaskListBlock block = new TaskListBlock();
 
