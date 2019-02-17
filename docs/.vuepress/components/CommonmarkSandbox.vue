@@ -7,6 +7,9 @@
       <div class="container-item display" v-html="markdownHtml"></div>
     </div>
     <div class="footer">
+      <!-- <p v-if="permalink">
+        Permalink: <span v-html="permalink"></span>
+      </p> -->
       <p>
         <em>
           * Please note that this tool can be used to evaluate how commonmark
@@ -18,7 +21,9 @@
       <p>
         <em>
           ** For a more sophisticated commonmark sandbox editor
-          <a href="https://spec.commonmark.org/dingus/">the dingus</a> can be used.
+          <a
+            href="https://spec.commonmark.org/dingus/"
+          >the dingus</a> can be used.
         </em>
       </p>
     </div>
@@ -31,22 +36,40 @@ import commonmark from "commonmark";
 const parser = new commonmark.Parser();
 const writer = new commonmark.HtmlRenderer();
 
-const initialMarkdown = `# Header 1\n\n*Hello* __there!__`;
-
 export default {
   name: "CommonmarkSandbox",
   data() {
     return {
-      markdownInput: initialMarkdown,
-      markdownHtml: writer.render(parser.parse(initialMarkdown))
+      markdownInput: this.initialMarkdown()
     };
   },
   methods: {
+    initialMarkdown() {
+      // const query = this.$route.query;
+      // if (query) {
+      //   const md = query.md;
+      //   if (md) {
+      //     query.md = null;
+      //     return md;
+      //   }
+      // }
+      return `# Header 1\n\n*Hello* __there!__`;
+    },
     processMarkdown(e) {
-      const input = e.target.value;
-      const parsed = parser.parse(input);
-      this.markdownHtml = writer.render(parsed);
+      this.markdownInput = e.target.value;
     }
+  },
+  computed: {
+    markdownHtml() {
+      return writer.render(parser.parse(this.markdownInput));
+    },
+    // permalink() {
+    //   if (!this.markdownInput) {
+    //       return null;
+    //   }
+    //   const url = `${window.location.href}?md=${encodeURIComponent(this.markdownInput)}`;
+    //   return `<a href="#" title="${url}" onclick="">click to copy</a>`;
+    // }
   }
 };
 </script>
@@ -74,8 +97,8 @@ export default {
   background-color: rgba(0, 0, 0, 0.05);
 }
 .footer {
-    color: #666;
-    font-size: 0.85em;
+  color: #666;
+  font-size: 0.85em;
 }
 </style>
 

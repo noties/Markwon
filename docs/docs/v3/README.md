@@ -70,3 +70,24 @@ Screenshots are taken from sample application. It is a generic markdown viewer
 with support to display markdown content via `http`, `https` &amp; `file` schemes 
 and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](https://github.com/noties/Markwon/releases)
 :::
+
+
+## Awesome Markwon
+
+<u>Applications using Markwon</u>:
+
+* [Partico](https://partiko.app/) - Partiko is a censorship free social network.
+* [FairNote](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote) - simple and intuitive notepad app. It gives you speed and efficiency when you write notes, to-do lists, e-mails, or jot down quick ideas.
+
+
+<u>Extension/plugins</u>:
+
+* [MarkwonCodeEx](https://github.com/kingideayou/MarkwonCodeEx) - Markwon extension support elegant code background.
+
+---
+
+[Help to improve][awesome_link] this section by submitting your application/library/anything
+that is using `Markwon`
+
+
+[awesome_link]: https://github.com/noties/Markwon/issues/new?labels=awesome&body=Please%20provide%20the%20following%3A%0A*%20Project%20name%0A*%20Project%20URL%20(repository%2C%20store%20listing%2C%20web%20page)%0A*%20Optionally%20_brand_%20image%20URL%0A%0APlease%20make%20sure%20that%20there%20is%20the%20**awesome**%20label%20selected%20for%20this%20issue.%0A%0A%F0%9F%99%8C%20
