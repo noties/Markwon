@@ -2,7 +2,7 @@
 
 Starting with <Badge text="3.0.0" /> `Markwon` comes with `ImagesPlugin`
 which supports `http(s)`, `file` and `data` schemes and default media
-decoder (for simple images, no [SVG](/docs/image/svg.md) or [GIF](/docs/image/gif.md) which
+decoder (for simple images, no [SVG](/docs/v3/image/svg.md) or [GIF](/docs/v3/image/gif.md) which
 are defined in standalone modules).
 
 ## ImagesPlugin
@@ -114,7 +114,7 @@ be used.
 ## MediaDecoder
 
 :::tip
-If you are using [html](/docs/html/) you do not have to additionally setup
+If you are using [html](/docs/v3/html/) you do not have to additionally setup
 images displayed via `<img>` tag, as `HtmlPlugin` automatically uses configured
 image loader. But images referenced in HTML come with additional support for
 sizes, which is not supported natively by markdown, allowing absolute or relative sizes:

@@ -1,5 +1,3 @@
-<LegacyWarning />
-
 # Syntax highlight
 
 <MavenBadge2xx artifact="markwon-syntax-highlight" />

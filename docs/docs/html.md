@@ -1,5 +1,3 @@
-<LegacyWarning />
-
 # HTML <Badge text="2.0.0" />
 
 Starting with version `2.0.0` `Markwon` brings the whole HTML parsing/rendering

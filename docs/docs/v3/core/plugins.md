@@ -87,7 +87,7 @@ added CorePlugin _explicitly_ as `AbstractMarkwonPlugin` declares a dependency o
 If it's not desireable override `AbstractMarkwonPlugin#priority` method to specify own rules.
 :::
 
-More information about `MarkwonTheme` can be found [here](/docs/core/theme.md).
+More information about `MarkwonTheme` can be found [here](/docs/v3/core/theme.md).
 
 
 ## Images
@@ -126,7 +126,7 @@ Markwon.builder(context)
 Without explicit usage of `ImagesPlugin` all image configuration will be ignored (no-op'ed)
 :::
 
-More information about dealing with images can be found [here](/docs/core/images.md)
+More information about dealing with images can be found [here](/docs/v3/core/images.md)
 
 
 ## Configuration
@@ -152,7 +152,7 @@ final Markwon markwon = Markwon.builder(context)
         .build();
 ```
 
-More information about `MarkwonConfiguration` can be found [here](/docs/core/configuration.md)
+More information about `MarkwonConfiguration` can be found [here](/docs/v3/core/configuration.md)
 
 
 ## Visitor
@@ -196,7 +196,7 @@ Please note that `Priority` plays nicely here to ensure that your
 custom Node override/disable happens _after_ some plugin defines it.
 :::
 
-More information about `MarkwonVisitor` can be found [here](/docs/core/visitor.md)
+More information about `MarkwonVisitor` can be found [here](/docs/v3/core/visitor.md)
 
 
 ## Spans Factory
@@ -237,7 +237,7 @@ public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull Ren
 ```
 :::
 
-More information about spans factory can be found [here](/docs/core/spans-factory.md)
+More information about spans factory can be found [here](/docs/v3/core/spans-factory.md)
 
 
 ## HTML Renderer
@@ -276,7 +276,7 @@ project **explicitly** and then registered via `Markwon.Builder#usePlugin(HtmlPl
 If not done so, no HTML will be parsed nor rendered.
 :::
 
-More information about HTML rendering can be found [here](/docs/core/html-renderer.md)
+More information about HTML rendering can be found [here](/docs/v3/core/html-renderer.md)
 
 
 ## Priority

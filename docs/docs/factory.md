@@ -1,5 +1,3 @@
-<LegacyWarning />
-
 # Factory <Badge text="1.1.0" />
 
 `SpannableFactory` is used to create Span implementations.

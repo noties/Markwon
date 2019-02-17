@@ -17,62 +17,61 @@ module.exports = {
             {
                 text: 'API Version',
                 items: [
-                    { text: 'Current (3.x.x)', link: '/' },
-                    { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
+                    { text: 'Current (2.x.x)', link: '/' },
+                    { text: 'BETA (3.x.x)', link: '/docs/v3/' }
                 ]
             },
             { text: 'Sandbox', link: '/sandbox.md' },
-            { text: 'Donate', link: '/donate.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: {
-            '/docs/v2/': [
-                '',
-                'getting-started.md',
-                'configure.md',
-                'theme.md',
-                'factory.md',
-                'image-loader.md',
-                'syntax-highlight.md',
-                'html.md',
-                'view.md'
-            ],
-            '/': [
+            '/docs/v3/': [
                 '',
                 {
                     title: 'Core',
                     collapsable: false,
                     children: [
-                        '/docs/core/getting-started.md',
-                        '/docs/core/plugins.md',
-                        '/docs/core/theme.md',
-                        '/docs/core/images.md',
-                        '/docs/core/configuration.md',
-                        '/docs/core/visitor.md',
-                        '/docs/core/spans-factory.md',
-                        '/docs/core/html-renderer.md',
-                        '/docs/core/core-plugin.md',
-                        '/docs/core/movement-method-plugin.md'
+                        '/docs/v3/core/getting-started.md',
+                        '/docs/v3/core/plugins.md',
+                        '/docs/v3/core/theme.md',
+                        '/docs/v3/core/images.md',
+                        '/docs/v3/core/configuration.md',
+                        '/docs/v3/core/visitor.md',
+                        '/docs/v3/core/spans-factory.md',
+                        '/docs/v3/core/html-renderer.md',
+                        '/docs/v3/core/core-plugin.md',
+                        '/docs/v3/core/movement-method-plugin.md'
                     ]
                 },
-                '/docs/ext-latex/',
-                '/docs/ext-strikethrough/',
-                '/docs/ext-tables/',
-                '/docs/ext-tasklist/',
+                '/docs/v3/ext-latex/',
+                '/docs/v3/ext-strikethrough/',
+                '/docs/v3/ext-tables/',
+                '/docs/v3/ext-tasklist/',
                 {
                     title: 'HTML',
                     collapsable: false,
                     children: [
-                        '/docs/html/',
-                        '/docs/html/custom-tag-handler.md'
+                        '/docs/v3/html/',
+                        '/docs/v3/html/custom-tag-handler.md'
                     ]
                 },
-                '/docs/image/gif.md',
-                '/docs/image/okhttp.md',
-                '/docs/image/svg.md',
-                '/docs/recycler/',
-                '/docs/syntax-highlight/',
-                '/docs/migration-2-3.md'
+                '/docs/v3/image/gif.md',
+                '/docs/v3/image/okhttp.md',
+                '/docs/v3/image/svg.md',
+                '/docs/v3/recycler/',
+                '/docs/v3/syntax-highlight/',
+                '/docs/v3/migration-2-3.md'
+            ],
+            '/': [
+                '',
+                '/docs/getting-started.md',
+                '/docs/configure.md',
+                '/docs/theme.md',
+                '/docs/factory.md',
+                '/docs/image-loader.md',
+                '/docs/syntax-highlight.md',
+                '/docs/html.md',
+                '/docs/view.md'
             ]
         },
         sidebarDepth: 2,

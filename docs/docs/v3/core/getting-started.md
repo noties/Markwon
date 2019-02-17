@@ -1,7 +1,7 @@
 # Getting started
 
 :::tip Installation
-Please follow [installation](/docs/install.md) instructions
+Please follow [installation](/docs/v3/install.md) instructions
 to learn how to add `Markwon` to your project
 :::
 
@@ -33,7 +33,7 @@ Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 :::warning 3.x.x migration
 Starting with <Badge text="3.0.0" /> version Markwon no longer relies on static
 utility methods. To learn more about migrating existing applications
-refer to [migration](/docs/migration-2-3.md) section.
+refer to [migration](/docs/v3/migration-2-3.md) section.
 :::
 
 ## Longer one
@@ -62,4 +62,4 @@ Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 This section is kept due to historical reasons. Starting with version <Badge text="3.0.0" />
 the amount of magic is reduced. To leverage your `Markwon` usage a concept of `Plugin`
 is introduced which helps to extend default behavior in a simple and _no-breaking-the-flow_ manner.
-Head to the [next section](/docs/core/plugins.md) to know more.
+Head to the [next section](/docs/v3/core/plugins.md) to know more.

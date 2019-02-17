@@ -1,11 +1,12 @@
 ---
-title: 'Overview'
+title: 'Introduction'
 ---
 
-<img :src="$withBase('./art/markwon_logo.png')" alt="Markwon Logo" width="50%">
+<img :src="$withBase('/art/markwon_logo.png')" alt="Markwon Logo" width="50%">
 
 <br><br>
-<MavenBadges2xx/>
+[![markwon](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=markwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20)
+[![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
 
 **Markwon** is a markdown library for Android. It parses markdown following 
 <Link name="commonmark-spec" /> with the help of amazing <Link name="commonmark-java" /> library
@@ -20,22 +21,23 @@ but also gives all the means to tweak the appearance if desired. All markdown fe
 listed in <Link name="commonmark-spec" /> are supported (including support for **inlined/block HTML code**, 
 **markdown tables**, **images** and **syntax highlight**).
 
-## Supported markdown features:
+## Supported markdown features
 
 * Emphasis (`*`, `_`)
 * Strong emphasis (`**`, `__`)
-* Strike-through (`~~`)
 * Headers (`#{1,6}`)
 * Links (`[]()` && `[][]`)
-* [Images](/docs/image-loader.md)
+* [Images](/docs/v3/core/images.md)
 * Thematic break (`---`, `***`, `___`)
 * Quotes & nested quotes (`>{1,}`)
 * Ordered & non-ordered lists & nested ones
 * Inline code
 * Code blocks
-* Tables (*with limitations*)
-* [Syntax highlight](/docs/syntax-highlight.md)
-* [HTML](/docs/html.md)
+* [Strike-through](/docs/v3/ext-strikethrough/) (`~~`)
+* [Tables](/docs/v3/ext-tables/) (*with limitations*)
+* [Syntax highlight](/docs/v3/syntax-highlight/)
+* [LaTeX](/docs/v3/ext-latex/) formulas
+* [HTML](/docs/v3/html/)
   * Emphasis (`<i>`, `<em>`, `<cite>`, `<dfn>`)
   * Strong emphasis (`<b>`, `<strong>`)
   * SuperScript (`<sup>`)
@@ -48,8 +50,8 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
   * Blockquote (`blockquote`)
   * Heading (`h1`, `h2`, `h3`, `h4`, `h5`, `h6`)
   * there is support to render any HTML tag, but it will require to create a special `TagHandler`,
-    more information can be found in [HTML section](/docs/html.md#custom-tag-handler)
-* Task lists:
+    more information can be found in [HTML section](/docs/v3/html/custom-tag-handler.md)
+* [Task lists](/docs/v3/ext-tasklist/):
 - [ ] Not _done_
   - [X] **Done** with `X`
   - [x] ~~and~~ **or** small `x`

@@ -1,5 +1,3 @@
-<LegacyWarning />
-
 # MarkwonView
 
 <MavenBadge2xx artifact="markwon-view" />

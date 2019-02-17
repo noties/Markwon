@@ -1,5 +1,3 @@
-<LegacyWarning />
-
 # Images
 
 By default `Markwon` doesn't handle images. Although `AsyncDrawable.Loader` is
@@ -23,7 +21,7 @@ public interface Loader {
 `AsyncDrawableLoader` from `markwon-image-loader` artifact can be used.
 
 :::tip Install
-[Learn how to add](/docs/v2/README.md#image-loader) `markwon-image-loader` to your project
+[Learn how to add](/docs/install.md#image-loader) `markwon-image-loader` to your project
 :::
 
 Default instance of `AsyncDrawableLoader` can be obtain like this:

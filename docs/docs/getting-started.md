@@ -1,5 +1,3 @@
-<LegacyWarning />
-
 # Getting started
 
 ## Quick one
@@ -22,7 +20,7 @@ Toast.makeText(context, markdown, Toast.LENGTH_LONG).show();
 
 ## Longer one
 
-When you need to customize markdown parsing/rendering you can use [SpannableConfiguration](/docs/v2/configure.md):
+When you need to customize markdown parsing/rendering you can use [SpannableConfiguration](/docs/configure.md):
 
 ```java
 final SpannableConfiguration configuration = SpannableConfiguration.builder(context)

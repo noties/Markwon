@@ -98,6 +98,6 @@ final Markwon markwon = Markwon.builder(this)
 :::warning
 Please note that `CorePlugin` will implicitly set a `LinkMovementMethod` on a TextView
 if one is not present. If you wish to customize a MovementMethod that is used, apply
-one manually to a TextView (before applying markdown) or use the [MovementMethodPlugin](/docs/core/movement-method-plugin.md)
+one manually to a TextView (before applying markdown) or use the [MovementMethodPlugin](/docs/v3/core/movement-method-plugin.md)
 which accepts a MovementMethod as an argument.
 :::
