@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.FencedCodeBlock;
+import org.commonmark.node.Heading;
+import org.commonmark.node.SoftLineBreak;
 import org.commonmark.parser.Parser;
 
 import java.io.BufferedReader;
@@ -27,7 +29,9 @@ import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.core.CoreProps;
 import ru.noties.markwon.html.HtmlPlugin;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.svg.SvgPlugin;
@@ -47,6 +51,36 @@ public class RecyclerActivity extends Activity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler);
+
+        {
+final Markwon markwon = Markwon.builder(contex)
+        .usePlugin(new AbstractMarkwonPlugin() {
+@Override
+public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+    builder.on(Heading.class, new MarkwonVisitor.NodeVisitor<Heading>() {
+        @Override
+        public void visit(@NonNull MarkwonVisitor visitor, @NonNull Heading heading) {
+
+            // or just `visitor.length()`
+            final int start = visitor.builder().length();
+
+            visitor.visitChildren(heading);
+
+            // or just `visitor.setSpansForNodeOptional(heading, start)`
+            final SpanFactory factory = visitor.configuration().spansFactory().get(heading.getClass());
+            if (factory != null) {
+                visitor.setSpans(start, factory.getSpans(visitor.configuration(), visitor.renderProps()));
+            }
+
+            if (visitor.hasNext(heading)) {
+                visitor.ensureNewLine();
+                visitor.forceNewLine();
+            }
+        }
+    });
+}
+        });
+        }
 
         // create MarkwonAdapter and register two blocks that will be rendered differently
         // * fenced code block (can also specify the same Entry for indended code block)

@@ -113,6 +113,40 @@ be used.
 
 ## MediaDecoder
 
+By default `core` artifact comes with _default image decoder_ only. It's called
+`ImageMediaDecoder` and it can decode all the formats that `BitmapFactory#decodeStream(InputStream)`
+can.
+
+```java
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(ImagesPlugin.create(this))
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
+                builder.addMediaDecoder("text/plain", new TextPlainMediaDecoder());
+            }
+        })
+        .build();
+
+```
+
+`MediaDecoder` is a class to turn `InputStream` into a `Drawable`:
+
+```java
+public abstract class MediaDecoder {
+
+    @Nullable
+    public abstract Drawable decode(@NonNull InputStream inputStream);
+}
+```
+
+:::tip
+If you want to display GIF or SVG images also, you can use [image-gif](/docs/v3/image/gif.md)
+and [image-svg](/docs/v3/image/svg.md) modules.
+:::
+
+## 
+
 :::tip
 If you are using [html](/docs/v3/html/) you do not have to additionally setup
 images displayed via `<img>` tag, as `HtmlPlugin` automatically uses configured

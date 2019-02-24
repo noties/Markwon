@@ -86,7 +86,7 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 
 ---
 
-[Help to improve][awesome_link] this section by submitting your application/library/anything
+[Help to improve][awesome_link] this section by submitting your application or library
 that is using `Markwon`
 
 

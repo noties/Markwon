@@ -425,7 +425,7 @@ queried directly from a TextView.
 
 ## What happens underneath
 
-Here is an approximation of how a `Markwon` instance will handle plugins:
+Here is what happens inside `Markwon` when `setMarkdown` method is called:
 
 ```java
 // `Markwon#create` implicitly uses CorePlugin

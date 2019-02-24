@@ -75,6 +75,8 @@ Beware of this if you would like to override only one of the list types. This is
 done to correspond to `commonmark-java` implementation.
 :::
 
+More information about props can be found [here](/docs/v3/core/render-props.md)
+
 ---
 
 :::tip Soft line break

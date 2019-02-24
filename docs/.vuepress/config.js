@@ -40,7 +40,8 @@ module.exports = {
                         '/docs/v3/core/spans-factory.md',
                         '/docs/v3/core/html-renderer.md',
                         '/docs/v3/core/core-plugin.md',
-                        '/docs/v3/core/movement-method-plugin.md'
+                        '/docs/v3/core/movement-method-plugin.md',
+                        '/docs/v3/core/render-props.md'
                     ]
                 },
                 '/docs/v3/ext-latex/',

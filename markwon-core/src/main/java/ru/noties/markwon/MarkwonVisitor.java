@@ -80,6 +80,11 @@ public interface MarkwonVisitor extends Visitor {
     int length();
 
     /**
+     * Clears state of visitor (both {@link RenderProps} and {@link SpannableBuilder} will be cleared
+     */
+    void clear();
+
+    /**
      * Sets <code>spans</code> to underlying {@link SpannableBuilder} from <em>start</em>
      * to <em>{@link SpannableBuilder#length()}</em>.
      *
@@ -87,11 +92,6 @@ public interface MarkwonVisitor extends Visitor {
      * @param spans to apply
      */
     void setSpans(int start, @Nullable Object spans);
-
-    /**
-     * Clears state of visitor (both {@link RenderProps} and {@link SpannableBuilder} will be cleared
-     */
-    void clear();
 
     /**
      * Helper method to obtain and apply spans for supplied Node. Internally queries {@link SpanFactory}
