@@ -108,7 +108,7 @@ public class MarkwonTheme {
 
         final Dip dip = Dip.create(context);
         return new Builder()
-                .codeMultilineMargin(dip.toPx(8))
+                .codeBlockMargin(dip.toPx(8))
                 .blockMargin(dip.toPx(24))
                 .blockQuoteWidth(dip.toPx(4))
                 .bulletListItemStrokeWidth(dip.toPx(1))
@@ -165,14 +165,18 @@ public class MarkwonTheme {
 
     // by default `width` of a space char... it's fun and games, but span doesn't have access to paint in `getLeadingMargin`
     // so, we need to set this value explicitly (think of an utility method, that takes TextView/TextPaint and measures space char)
-    protected final int codeMultilineMargin;
+    protected final int codeBlockMargin;
 
     // by default Typeface.MONOSPACE
     protected final Typeface codeTypeface;
 
+    protected final Typeface codeBlockTypeface;
+
     // by default a bit (how much?!) smaller than normal text
     // applied ONLY if default typeface was used, otherwise, not applied
     protected final int codeTextSize;
+
+    protected final int codeBlockTextSize;
 
     // by default paint.getStrokeWidth
     protected final int headingBreakHeight;
@@ -207,9 +211,11 @@ public class MarkwonTheme {
         this.codeBlockTextColor = builder.codeBlockTextColor;
         this.codeBackgroundColor = builder.codeBackgroundColor;
         this.codeBlockBackgroundColor = builder.codeBlockBackgroundColor;
-        this.codeMultilineMargin = builder.codeMultilineMargin;
+        this.codeBlockMargin = builder.codeBlockMargin;
         this.codeTypeface = builder.codeTypeface;
+        this.codeBlockTypeface = builder.codeBlockTypeface;
         this.codeTextSize = builder.codeTextSize;
+        this.codeBlockTextSize = builder.codeBlockTextSize;
         this.headingBreakHeight = builder.headingBreakHeight;
         this.headingBreakColor = builder.headingBreakColor;
         this.headingTypeface = builder.headingTypeface;
@@ -301,64 +307,115 @@ public class MarkwonTheme {
     }
 
     /**
-     * Modified in 1.0.5 to accept `multiline` argument
+     * @since 3.0.0
      */
-    public void applyCodeTextStyle(@NonNull Paint paint, boolean multiline) {
+    public void applyCodeTextStyle(@NonNull Paint paint) {
 
-        // @since 1.0.5 added handling of multiline code blocks
-        if (multiline
-                && codeBlockTextColor != 0) {
-            paint.setColor(codeBlockTextColor);
-        } else if (codeTextColor != 0) {
+        if (codeTextColor != 0) {
             paint.setColor(codeTextColor);
         }
 
-        // custom typeface was set
         if (codeTypeface != null) {
 
             paint.setTypeface(codeTypeface);
 
-            // please note that we won't be calculating textSize
-            // (like we do when no Typeface is provided), if it's some specific typeface
-            // we would confuse users about textSize
-            if (codeTextSize != 0) {
+            if (codeTextSize > 0) {
                 paint.setTextSize(codeTextSize);
             }
 
         } else {
+
             paint.setTypeface(Typeface.MONOSPACE);
-            final float textSize;
-            if (codeTextSize != 0) {
-                textSize = codeTextSize;
+
+            if (codeTextSize > 0) {
+                paint.setTextSize(codeTextSize);
             } else {
-                textSize = paint.getTextSize() * CODE_DEF_TEXT_SIZE_RATIO;
+                paint.setTextSize(paint.getTextSize() * CODE_DEF_TEXT_SIZE_RATIO);
             }
-            paint.setTextSize(textSize);
         }
     }
 
-    public int getCodeMultilineMargin() {
-        return codeMultilineMargin;
+    /**
+     * @since 3.0.0
+     */
+    public void applyCodeBlockTextStyle(@NonNull Paint paint) {
+
+        // apply text color, first check for block specific value,
+        // then check for code (inline), else do nothing (keep original color of text)
+        final int textColor = codeBlockTextColor != 0
+                ? codeBlockTextColor
+                : codeTextColor;
+
+        if (textColor != 0) {
+            paint.setColor(textColor);
+        }
+
+        final Typeface typeface = codeBlockTypeface != null
+                ? codeBlockTypeface
+                : codeTypeface;
+
+        if (typeface != null) {
+
+            paint.setTypeface(typeface);
+
+            // please note that we won't be calculating textSize
+            // (like we do when no Typeface is provided), if it's some specific typeface
+            // we would confuse users about textSize
+            final int textSize = codeBlockTextSize > 0
+                    ? codeBlockTextSize
+                    : codeTextSize;
+
+            if (textSize > 0) {
+                paint.setTextSize(textSize);
+            }
+        } else {
+
+            // by default use monospace
+            paint.setTypeface(Typeface.MONOSPACE);
+
+            final int textSize = codeBlockTextSize > 0
+                    ? codeBlockTextSize
+                    : codeTextSize;
+
+            if (textSize > 0) {
+                paint.setTextSize(textSize);
+            } else {
+                // calculate default value
+                paint.setTextSize(paint.getTextSize() * CODE_DEF_TEXT_SIZE_RATIO);
+            }
+        }
+    }
+
+
+    public int getCodeBlockMargin() {
+        return codeBlockMargin;
     }
 
     /**
-     * Modified in 1.0.5 to accept `multiline` argument
+     * @since 3.0.0
      */
-    public int getCodeBackgroundColor(@NonNull Paint paint, boolean multiline) {
-
+    public int getCodeBackgroundColor(@NonNull Paint paint) {
         final int color;
-
-        // @since 1.0.5 added handling of multiline code blocks
-        if (multiline
-                && codeBlockBackgroundColor != 0) {
-            color = codeBlockBackgroundColor;
-        } else if (codeBackgroundColor != 0) {
+        if (codeBackgroundColor != 0) {
             color = codeBackgroundColor;
         } else {
             color = ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
         }
-
         return color;
+    }
+
+    /**
+     * @since 3.0.0
+     */
+    public int getCodeBlockBackgroundColor(@NonNull Paint paint) {
+
+        final int color = codeBlockBackgroundColor != 0
+                ? codeBlockBackgroundColor
+                : codeBackgroundColor;
+
+        return color != 0
+                ? color
+                : ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
     }
 
     public void applyHeadingTextStyle(@NonNull Paint paint, @IntRange(from = 1, to = 6) int level) {
@@ -426,9 +483,11 @@ public class MarkwonTheme {
         private int codeBlockTextColor; // @since 1.0.5
         private int codeBackgroundColor;
         private int codeBlockBackgroundColor; // @since 1.0.5
-        private int codeMultilineMargin;
+        private int codeBlockMargin;
         private Typeface codeTypeface;
+        private Typeface codeBlockTypeface; // @since 3.0.0
         private int codeTextSize;
+        private int codeBlockTextSize; // @since 3.0.0
         private int headingBreakHeight = -1;
         private int headingBreakColor;
         private Typeface headingTypeface;
@@ -451,7 +510,7 @@ public class MarkwonTheme {
             this.codeBlockTextColor = theme.codeBlockTextColor;
             this.codeBackgroundColor = theme.codeBackgroundColor;
             this.codeBlockBackgroundColor = theme.codeBlockBackgroundColor;
-            this.codeMultilineMargin = theme.codeMultilineMargin;
+            this.codeBlockMargin = theme.codeBlockMargin;
             this.codeTypeface = theme.codeTypeface;
             this.codeTextSize = theme.codeTextSize;
             this.headingBreakHeight = theme.headingBreakHeight;
@@ -537,8 +596,8 @@ public class MarkwonTheme {
         }
 
         @NonNull
-        public Builder codeMultilineMargin(@Px int codeMultilineMargin) {
-            this.codeMultilineMargin = codeMultilineMargin;
+        public Builder codeBlockMargin(@Px int codeBlockMargin) {
+            this.codeBlockMargin = codeBlockMargin;
             return this;
         }
 
@@ -548,9 +607,27 @@ public class MarkwonTheme {
             return this;
         }
 
+        /**
+         * @since 3.0.0
+         */
+        @NonNull
+        public Builder codeBlockTypeface(@NonNull Typeface typeface) {
+            this.codeBlockTypeface = typeface;
+            return this;
+        }
+
         @NonNull
         public Builder codeTextSize(@Px int codeTextSize) {
             this.codeTextSize = codeTextSize;
+            return this;
+        }
+
+        /**
+         * @since 3.0.0
+         */
+        @NonNull
+        public Builder codeBlockTextSize(@Px int codeTextSize) {
+            this.codeBlockTextSize = codeTextSize;
             return this;
         }
 

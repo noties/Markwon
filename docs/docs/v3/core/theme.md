@@ -120,7 +120,7 @@ The color of background of code block text
 
 Leading margin for the block code content
 
-<ThemeProperty name="codeMultilineMargin" type="@Px int" defaults="Width of the space character" />
+<ThemeProperty name="codeMultilineMargin" type="@Px int" defaults="8dip" />
 
 ### Code typeface
 
