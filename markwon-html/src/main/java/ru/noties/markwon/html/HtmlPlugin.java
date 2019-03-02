@@ -45,37 +45,37 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
 
         builder
-                .addHandler(
+                .setHandler(
                         "img",
                         ImageHandler.create())
-                .addHandler(
+                .setHandler(
                         "a",
                         new LinkHandler())
-                .addHandler(
+                .setHandler(
                         "blockquote",
                         new BlockquoteHandler())
-                .addHandler(
+                .setHandler(
                         "sub",
                         new SubScriptHandler())
-                .addHandler(
+                .setHandler(
                         "sup",
                         new SuperScriptHandler())
-                .addHandler(
+                .setHandler(
                         asList("b", "strong"),
                         new StrongEmphasisHandler())
-                .addHandler(
+                .setHandler(
                         asList("s", "del"),
                         new StrikeHandler())
-                .addHandler(
+                .setHandler(
                         asList("u", "ins"),
                         new UnderlineHandler())
-                .addHandler(
+                .setHandler(
                         asList("ul", "ol"),
                         new ListHandler())
-                .addHandler(
+                .setHandler(
                         asList("i", "em", "cite", "dfn"),
                         new EmphasisHandler())
-                .addHandler(
+                .setHandler(
                         asList("h1", "h2", "h3", "h4", "h5", "h6"),
                         new HeadingHandler());
     }

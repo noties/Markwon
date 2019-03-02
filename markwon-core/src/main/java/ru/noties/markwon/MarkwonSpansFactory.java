@@ -32,7 +32,7 @@ public interface MarkwonSpansFactory {
     interface Builder {
 
         @NonNull
-        <N extends Node> Builder setFactory(@NonNull Class<N> node, @NonNull SpanFactory factory);
+        <N extends Node> Builder setFactory(@NonNull Class<N> node, @Nullable SpanFactory factory);
 
         @NonNull
         MarkwonSpansFactory build();

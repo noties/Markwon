@@ -100,14 +100,14 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
         @NonNull
         @Override
-        public Builder addHandler(@NonNull String tagName, @NonNull TagHandler tagHandler) {
+        public Builder setHandler(@NonNull String tagName, @NonNull TagHandler tagHandler) {
             tagHandlers.put(tagName, tagHandler);
             return this;
         }
 
         @NonNull
         @Override
-        public Builder addHandler(@NonNull Collection<String> tagNames, @NonNull TagHandler tagHandler) {
+        public Builder setHandler(@NonNull Collection<String> tagNames, @NonNull TagHandler tagHandler) {
             for (String tagName : tagNames) {
                 if (tagName != null) {
                     tagHandlers.put(tagName, tagHandler);

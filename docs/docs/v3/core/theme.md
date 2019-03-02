@@ -128,11 +128,23 @@ Typeface of code content
 
 <ThemeProperty name="codeTypeface" type="android.graphics.Typeface" defaults="Typeface.MONOSPACE" />
 
+### Block code typeface <Badge text="3.0.0" />
+
+Typeface of block code content
+
+<ThemeProperty name="codeBlockTypeface" type="android.graphics.Typeface" defaults="<code>codeTypeface</code> if set or Typeface.MONOSPACE" />
+
 ### Code text size
 
 Text size of code content
 
 <ThemeProperty name="codeTextSize" type="@Px int" defaults="(Content text size) * 0.87 if no custom <a href='#code-typeface'>Typeface</a> was set, otherwise (content text size)" />
+
+### Block code text size <Badge text="3.0.0" />
+
+Text size of block code content
+
+<ThemeProperty name="codeBlockTextSize" type="@Px int" defaults="<code>codeTextSize</code> if set or (content text size) * 0.87 if no custom <a href='#code-typeface'>Typeface</a> was set, otherwise (content text size)" />
 
 ## Heading
 

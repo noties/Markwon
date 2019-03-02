@@ -43,8 +43,12 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
         @NonNull
         @Override
-        public <N extends Node> Builder setFactory(@NonNull Class<N> node, @NonNull SpanFactory factory) {
-            factories.put(node, factory);
+        public <N extends Node> Builder setFactory(@NonNull Class<N> node, @Nullable SpanFactory factory) {
+            if (factory == null) {
+                factories.remove(node);
+            } else {
+                factories.put(node, factory);
+            }
             return this;
         }
 
