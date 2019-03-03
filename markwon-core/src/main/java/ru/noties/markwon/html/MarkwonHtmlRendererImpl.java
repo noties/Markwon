@@ -100,35 +100,25 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
         @NonNull
         @Override
-        public Builder setHandler(@NonNull String tagName, @NonNull TagHandler tagHandler) {
-            tagHandlers.put(tagName, tagHandler);
-            return this;
-        }
-
-        @NonNull
-        @Override
-        public Builder setHandler(@NonNull Collection<String> tagNames, @NonNull TagHandler tagHandler) {
-            for (String tagName : tagNames) {
-                if (tagName != null) {
-                    tagHandlers.put(tagName, tagHandler);
-                }
+        public Builder setHandler(@NonNull String tagName, @Nullable TagHandler tagHandler) {
+            if (tagHandler == null) {
+                tagHandlers.remove(tagName);
+            } else {
+                tagHandlers.put(tagName, tagHandler);
             }
             return this;
         }
 
         @NonNull
         @Override
-        public Builder removeHandler(@NonNull String tagName) {
-            tagHandlers.remove(tagName);
-            return this;
-        }
-
-        @NonNull
-        @Override
-        public Builder removeHandlers(@NonNull String... tagNames) {
-            for (String tagName : tagNames) {
-                if (tagName != null) {
+        public Builder setHandler(@NonNull Collection<String> tagNames, @Nullable TagHandler tagHandler) {
+            if (tagHandler == null) {
+                for (String tagName : tagNames) {
                     tagHandlers.remove(tagName);
+                }
+            } else {
+                for (String tagName : tagNames) {
+                    tagHandlers.put(tagName, tagHandler);
                 }
             }
             return this;

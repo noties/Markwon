@@ -19,7 +19,7 @@
       @click="selectAll"
     >
       <div class="selected-artifact-script">
-        <span class="token keyword">final def</span>&nbsp;markwon_version =&nbsp;<span class="token string">'latest_version'</span>
+        <span class="token keyword">final def</span>&nbsp;markwon_version =&nbsp;<span class="token string">'{{latestVersion}}'</span>
       </div>
       <br>
       <div class="selected-artifact-script" v-for="artifact in selectedArtifacts">
@@ -42,7 +42,8 @@ export default {
   data() {
     return {
       artifacts,
-      selected: ['core']
+      selected: ['core'],
+      latestVersion: 'latest_version'
     };
   },
   methods: {

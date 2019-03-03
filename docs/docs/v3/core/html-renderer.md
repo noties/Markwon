@@ -15,8 +15,8 @@ Markwon.builder(context)
 
 :::danger
 Customizing `MarkwonHtmlRenderer` is not enough to include HTML content in your application.
-You must explicitly include [markwon-html](/docs/v3/html/) artifact (include HtmlParser) 
-to you project and register `HtmlPlugin`:
+You must explicitly include [markwon-html](/docs/v3/html/) artifact (includes HtmlParser) 
+to your project and register `HtmlPlugin`:
 
 ```java
 Markwon.builder(context)

@@ -42,16 +42,10 @@ public abstract class MarkwonHtmlRenderer {
         Builder allowNonClosedTags(boolean allowNonClosedTags);
 
         @NonNull
-        Builder setHandler(@NonNull String tagName, @NonNull TagHandler tagHandler);
+        Builder setHandler(@NonNull String tagName, @Nullable TagHandler tagHandler);
 
         @NonNull
-        Builder setHandler(@NonNull Collection<String> tagNames, @NonNull TagHandler tagHandler);
-
-        @NonNull
-        Builder removeHandler(@NonNull String tagName);
-
-        @NonNull
-        Builder removeHandlers(@NonNull String... tagNames);
+        Builder setHandler(@NonNull Collection<String> tagNames, @Nullable TagHandler tagHandler);
 
         @NonNull
         MarkwonHtmlRenderer build();

@@ -14,6 +14,7 @@ import org.commonmark.node.Node;
 import java.util.List;
 
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.MarkwonReducer;
 
 /**
  * Adapter to display markdown in a RecyclerView. It is done by extracting root blocks from a
@@ -92,7 +93,7 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
      * @see #include(Class, Entry)
      * @see #defaultEntry(int)
      * @see #defaultEntry(Entry)
-     * @see #reducer(Reducer)
+     * @see #reducer(MarkwonReducer)
      */
     public interface Builder {
 
@@ -136,15 +137,15 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
 
         /**
          * Specify how root Node will be <em>reduced</em> to a list of nodes. There is a default
-         * {@link Reducer} that will be used if not provided explicitly (there is no need to
+         * {@link MarkwonReducer} that will be used if not provided explicitly (there is no need to
          * register your own unless you require it).
          *
-         * @param reducer {@link Reducer}
+         * @param reducer {@link MarkwonReducer}
          * @return self
-         * @see Reducer
+         * @see MarkwonReducer
          */
         @NonNull
-        Builder reducer(@NonNull Reducer reducer);
+        Builder reducer(@NonNull MarkwonReducer reducer);
 
         /**
          * @return {@link MarkwonAdapter}
@@ -167,12 +168,6 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
 
         // will be called when new content is available (clear internal cache if any)
         void clear();
-    }
-
-    public interface Reducer {
-
-        @NonNull
-        List<Node> reduce(@NonNull Node root);
     }
 
     public abstract void setMarkdown(@NonNull Markwon markwon, @NonNull String markdown);

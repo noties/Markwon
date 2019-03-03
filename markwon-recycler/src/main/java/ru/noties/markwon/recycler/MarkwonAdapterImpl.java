@@ -7,17 +7,17 @@ import android.view.ViewGroup;
 
 import org.commonmark.node.Node;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.MarkwonReducer;
 
 class MarkwonAdapterImpl extends MarkwonAdapter {
 
     private final SparseArray<Entry<Node, Holder>> entries;
     private final Entry<Node, Holder> defaultEntry;
-    private final Reducer reducer;
+    private final MarkwonReducer reducer;
 
     private LayoutInflater layoutInflater;
 
@@ -28,7 +28,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     MarkwonAdapterImpl(
             @NonNull SparseArray<Entry<Node, Holder>> entries,
             @NonNull Entry<Node, Holder> defaultEntry,
-            @NonNull Reducer reducer) {
+            @NonNull MarkwonReducer reducer) {
         this.entries = entries;
         this.defaultEntry = defaultEntry;
         this.reducer = reducer;
@@ -133,7 +133,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         private final SparseArray<Entry<Node, Holder>> entries = new SparseArray<>(3);
 
         private Entry<Node, Holder> defaultEntry;
-        private Reducer reducer;
+        private MarkwonReducer reducer;
 
         @NonNull
         @Override
@@ -163,7 +163,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
         @NonNull
         @Override
-        public Builder reducer(@NonNull Reducer reducer) {
+        public Builder reducer(@NonNull MarkwonReducer reducer) {
             this.reducer = reducer;
             return this;
         }
@@ -178,33 +178,10 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
             }
 
             if (reducer == null) {
-                reducer = new ReducerImpl();
+                reducer = MarkwonReducer.directChildren();
             }
 
             return new MarkwonAdapterImpl(entries, defaultEntry, reducer);
-        }
-    }
-
-    static class ReducerImpl implements Reducer {
-
-        @NonNull
-        @Override
-        public List<Node> reduce(@NonNull Node root) {
-
-            final List<Node> list = new ArrayList<>();
-
-            // we will extract all blocks that are direct children of Document
-            Node node = root.getFirstChild();
-            Node temp;
-
-            while (node != null) {
-                list.add(node);
-                temp = node.getNext();
-                node.unlink();
-                node = temp;
-            }
-
-            return list;
         }
     }
 }

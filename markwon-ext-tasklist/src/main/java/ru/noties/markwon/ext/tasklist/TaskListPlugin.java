@@ -15,6 +15,7 @@ import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.core.SimpleBlockNodeVisitor;
 
 /**
  * @since 3.0.0
@@ -75,20 +76,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder
-                .on(TaskListBlock.class, new MarkwonVisitor.NodeVisitor<TaskListBlock>() {
-                    @Override
-                    public void visit(@NonNull MarkwonVisitor visitor, @NonNull TaskListBlock taskListBlock) {
-
-                        visitor.ensureNewLine();
-
-                        visitor.visitChildren(taskListBlock);
-
-                        if (visitor.hasNext(taskListBlock)) {
-                            visitor.ensureNewLine();
-                            visitor.forceNewLine();
-                        }
-                    }
-                })
+                .on(TaskListBlock.class, new SimpleBlockNodeVisitor())
                 .on(TaskListItem.class, new MarkwonVisitor.NodeVisitor<TaskListItem>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull TaskListItem taskListItem) {
