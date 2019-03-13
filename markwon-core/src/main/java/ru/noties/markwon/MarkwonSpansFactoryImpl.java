@@ -52,6 +52,12 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
             return this;
         }
 
+        @Nullable
+        @Override
+        public <N extends Node> SpanFactory getFactory(@NonNull Class<N> node) {
+            return factories.get(node);
+        }
+
         @NonNull
         @Override
         public MarkwonSpansFactory build() {

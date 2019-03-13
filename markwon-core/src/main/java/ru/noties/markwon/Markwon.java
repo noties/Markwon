@@ -2,6 +2,7 @@ package ru.noties.markwon;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.widget.TextView;
 
@@ -100,6 +101,9 @@ public abstract class Markwon {
      * @return true if a plugin is used when configuring this {@link Markwon} instance
      */
     public abstract boolean hasPlugin(@NonNull Class<? extends MarkwonPlugin> plugin);
+
+    @Nullable
+    public abstract <P extends MarkwonPlugin> P getPlugin(@NonNull Class<P> type);
 
     /**
      * Builder for {@link Markwon}.

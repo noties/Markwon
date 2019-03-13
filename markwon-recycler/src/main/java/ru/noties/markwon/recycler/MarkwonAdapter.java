@@ -18,17 +18,13 @@ import ru.noties.markwon.MarkwonReducer;
 
 /**
  * Adapter to display markdown in a RecyclerView. It is done by extracting root blocks from a
- * parsed markdown document and rendering each block in a standalone RecyclerView entry. Provides
+ * parsed markdown document (via {@link MarkwonReducer} and rendering each block in a standalone RecyclerView entry. Provides
  * ability to customize rendering of blocks. For example display certain blocks in a horizontal
  * scrolling container or display tables in a specific widget designed for it ({@link Builder#include(Class, Entry)}).
- * <p>
- * By default each node will be rendered in a TextView provided by this artifact. It has no styling
- * information and thus must be replaced with your own layout ({@link Builder#defaultEntry(int)} or
- * {@link Builder#defaultEntry(Entry)}).
  *
- * @see #builder()
- * @see #create()
- * @see #create(int)
+ * @see #builder(int, int)
+ * @see #builder(Entry)
+ * @see #create(int, int)
  * @see #create(Entry)
  * @see #setMarkdown(Markwon, String)
  * @see #setParsedMarkdown(Markwon, Node)
@@ -37,14 +33,34 @@ import ru.noties.markwon.MarkwonReducer;
  */
 public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter.Holder> {
 
+    @NonNull
+    public static Builder builderTextViewIsRoot(@LayoutRes int defaultEntryLayoutResId) {
+        return builder(SimpleEntry.createTextViewIsRoot(defaultEntryLayoutResId));
+    }
+
     /**
      * Factory method to obtain {@link Builder} instance.
      *
      * @see Builder
      */
     @NonNull
-    public static Builder builder() {
-        return new MarkwonAdapterImpl.BuilderImpl();
+    public static Builder builder(
+            @LayoutRes int defaultEntryLayoutResId,
+            @IdRes int defaultEntryTextViewResId
+    ) {
+        return builder(SimpleEntry.create(defaultEntryLayoutResId, defaultEntryTextViewResId));
+    }
+
+    @NonNull
+    public static Builder builder(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
+        //noinspection unchecked
+        return new MarkwonAdapterImpl.BuilderImpl((Entry<Node, Holder>) defaultEntry);
+    }
+
+    @NonNull
+    public static MarkwonAdapter createTextViewIsRoot(@LayoutRes int defaultEntryLayoutResId) {
+        return builderTextViewIsRoot(defaultEntryLayoutResId)
+                .build();
     }
 
     /**
@@ -52,12 +68,16 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
      * adapter will use default layout for all blocks. Default layout has no styling and should
      * be specified explicitly.
      *
-     * @see #create(int)
      * @see #create(Entry)
+     * @see #builder(int, int)
+     * @see SimpleEntry
      */
     @NonNull
-    public static MarkwonAdapter create() {
-        return new MarkwonAdapterImpl.BuilderImpl().build();
+    public static MarkwonAdapter create(
+            @LayoutRes int defaultEntryLayoutResId,
+            @IdRes int defaultEntryTextViewResId
+    ) {
+        return builder(defaultEntryLayoutResId, defaultEntryTextViewResId).build();
     }
 
     /**
@@ -65,35 +85,19 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
      * nodes.
      *
      * @param defaultEntry {@link Entry} to be used for node rendering
-     * @see SimpleEntry
+     * @see #builder(Entry)
      */
     @NonNull
     public static MarkwonAdapter create(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
-        return new MarkwonAdapterImpl.BuilderImpl().defaultEntry(defaultEntry).build();
-    }
-
-    /**
-     * Factory method to create a {@link MarkwonAdapter} that will use supplied layoutResId view
-     * to display all nodes.
-     *
-     * <strong>Please note</strong> that supplied layout must have a TextView inside
-     * with {@code android:id="@+id/text"}
-     *
-     * @param layoutResId layout to be used to display all nodes
-     * @see SimpleEntry
-     */
-    @NonNull
-    public static MarkwonAdapter create(@LayoutRes int layoutResId) {
-        return new MarkwonAdapterImpl.BuilderImpl().defaultEntry(layoutResId).build();
+        return builder(defaultEntry).build();
     }
 
     /**
      * Builder to create an instance of {@link MarkwonAdapter}
      *
      * @see #include(Class, Entry)
-     * @see #defaultEntry(int)
-     * @see #defaultEntry(Entry)
      * @see #reducer(MarkwonReducer)
+     * @see #build()
      */
     public interface Builder {
 
@@ -111,29 +115,6 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
         <N extends Node> Builder include(
                 @NonNull Class<N> node,
                 @NonNull Entry<? super N, ? extends Holder> entry);
-
-        /**
-         * Specify which {@link Entry} to use for all non-explicitly registered nodes
-         *
-         * @param defaultEntry {@link Entry}
-         * @return self
-         * @see SimpleEntry
-         */
-        @NonNull
-        Builder defaultEntry(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry);
-
-        /**
-         * Specify which layout {@link SimpleEntry} will use to render all non-explicitly
-         * registered nodes.
-         *
-         * <strong>Please note</strong> that supplied layout must have a TextView inside
-         * with {@code android:id="@+id/text"}
-         *
-         * @return self
-         * @see SimpleEntry
-         */
-        @NonNull
-        Builder defaultEntry(@LayoutRes int layoutResId);
 
         /**
          * Specify how root Node will be <em>reduced</em> to a list of nodes. There is a default
@@ -157,17 +138,27 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
     /**
      * @see SimpleEntry
      */
-    public interface Entry<N extends Node, H extends Holder> {
+    public static abstract class Entry<N extends Node, H extends Holder> {
 
         @NonNull
-        H createHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
+        public abstract H createHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
 
-        void bindHolder(@NonNull Markwon markwon, @NonNull H holder, @NonNull N node);
+        public abstract void bindHolder(@NonNull Markwon markwon, @NonNull H holder, @NonNull N node);
 
-        long id(@NonNull N node);
+        /**
+         * Will be called when new content is available (clear internal cache if any)
+         */
+        public void clear() {
 
-        // will be called when new content is available (clear internal cache if any)
-        void clear();
+        }
+
+        public long id(@NonNull N node) {
+            return node.hashCode();
+        }
+
+        public void onViewRecycled(@NonNull H holder) {
+
+        }
     }
 
     public abstract void setMarkdown(@NonNull Markwon markwon, @NonNull String markdown);
@@ -196,7 +187,15 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
         protected <V extends View> V requireView(@IdRes int id) {
             final V v = itemView.findViewById(id);
             if (v == null) {
-                throw new NullPointerException();
+                final String name;
+                if (id == 0
+                        || id == View.NO_ID) {
+                    name = String.valueOf(id);
+                } else {
+                    name = "R.id." + itemView.getResources().getResourceName(id);
+                }
+                throw new NullPointerException(String.format("No view with id(R.id.%s) is found " +
+                        "in layout: %s", name, itemView));
             }
             return v;
         }

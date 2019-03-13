@@ -34,6 +34,12 @@ public interface MarkwonSpansFactory {
         @NonNull
         <N extends Node> Builder setFactory(@NonNull Class<N> node, @Nullable SpanFactory factory);
 
+        /**
+         * Can be useful when <em>enhancing</em> an already defined SpanFactory with another one.
+         */
+        @Nullable
+        <N extends Node> SpanFactory getFactory(@NonNull Class<N> node);
+
         @NonNull
         MarkwonSpansFactory build();
     }

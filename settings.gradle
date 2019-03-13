@@ -10,5 +10,6 @@ include ':app', ':sample',
         ':markwon-image-okhttp',
         ':markwon-image-svg',
         ':markwon-recycler',
+        ':markwon-recycler-table',
         ':markwon-syntax-highlight',
         ':markwon-test-span'

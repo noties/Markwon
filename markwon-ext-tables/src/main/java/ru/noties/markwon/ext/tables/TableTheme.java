@@ -13,15 +13,19 @@ public class TableTheme {
 
     @NonNull
     public static TableTheme create(@NonNull Context context) {
-        final Dip dip = Dip.create(context);
-        return builder()
-                .tableCellPadding(dip.toPx(4))
-                .tableBorderWidth(dip.toPx(1))
-                .build();
+        return buildWithDefaults(context).build();
     }
 
     @NonNull
-    public static Builder builder() {
+    public static Builder buildWithDefaults(@NonNull Context context) {
+        final Dip dip = Dip.create(context);
+        return emptyBuilder()
+                .tableCellPadding(dip.toPx(4))
+                .tableBorderWidth(dip.toPx(1));
+    }
+
+    @NonNull
+    public static Builder emptyBuilder() {
         return new Builder();
     }
 
@@ -56,6 +60,20 @@ public class TableTheme {
         this.tableOddRowBackgroundColor = builder.tableOddRowBackgroundColor;
         this.tableEvenRowBackgroundColor = builder.tableEvenRowBackgroundColor;
         this.tableHeaderRowBackgroundColor = builder.tableHeaderRowBackgroundColor;
+    }
+
+    /**
+     * @since 3.0.0
+     */
+    @NonNull
+    public Builder asBuilder() {
+        return new Builder()
+                .tableCellPadding(tableCellPadding)
+                .tableBorderColor(tableBorderColor)
+                .tableBorderWidth(tableBorderWidth)
+                .tableOddRowBackgroundColor(tableOddRowBackgroundColor)
+                .tableEvenRowBackgroundColor(tableEvenRowBackgroundColor)
+                .tableHeaderRowBackgroundColor(tableHeaderRowBackgroundColor);
     }
 
     public int tableCellPadding() {

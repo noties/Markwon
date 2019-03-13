@@ -1,6 +1,7 @@
 package ru.noties.markwon;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.widget.TextView;
 
@@ -91,13 +92,19 @@ class MarkwonImpl extends Markwon {
 
     @Override
     public boolean hasPlugin(@NonNull Class<? extends MarkwonPlugin> type) {
-        boolean result = false;
+        return getPlugin(type) != null;
+    }
+
+    @Nullable
+    @Override
+    public <P extends MarkwonPlugin> P getPlugin(@NonNull Class<P> type) {
+        MarkwonPlugin out = null;
         for (MarkwonPlugin plugin : plugins) {
             if (type.isAssignableFrom(plugin.getClass())) {
-                result = true;
-                break;
+                out = plugin;
             }
         }
-        return result;
+        //noinspection unchecked
+        return (P) out;
     }
 }

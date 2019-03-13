@@ -11,15 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
-import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.FencedCodeBlock;
-import org.commonmark.parser.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
 
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;
@@ -33,6 +30,8 @@ import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.svg.SvgPlugin;
 import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.recycler.SimpleEntry;
+import ru.noties.markwon.recycler.table.TableEntry;
+import ru.noties.markwon.recycler.table.TableEntryPlugin;
 import ru.noties.markwon.sample.R;
 import ru.noties.markwon.urlprocessor.UrlProcessor;
 import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
@@ -51,14 +50,12 @@ public class RecyclerActivity extends Activity {
         // create MarkwonAdapter and register two blocks that will be rendered differently
         // * fenced code block (can also specify the same Entry for indended code block)
         // * table block
-        final MarkwonAdapter adapter = MarkwonAdapter.builder()
-                // we can simply use bundled SimpleEntry, that will lookup a TextView
-                // with `@+id/text` id
-                .include(FencedCodeBlock.class, new SimpleEntry(R.layout.adapter_fenced_code_block))
-                // create own implementation of entry for different rendering
-                .include(TableBlock.class, new TableEntry2())
-                // specify default entry (for all other blocks)
-                .defaultEntry(new SimpleEntry(R.layout.adapter_default_entry))
+        final MarkwonAdapter adapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+                // we can simply use bundled SimpleEntry
+                .include(FencedCodeBlock.class, SimpleEntry.create(R.layout.adapter_fenced_code_block, R.id.text))
+                .include(TableBlock.class, TableEntry.create(builder -> builder
+                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
+                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -71,10 +68,6 @@ public class RecyclerActivity extends Activity {
 
         // please note that we should notify updates (adapter doesn't do it implicitly)
         adapter.notifyDataSetChanged();
-
-        // NB, there is no currently available widget to render tables gracefully
-        // TableEntryView is here for demonstration purposes only (to show that rendering
-        // tables
     }
 
     @NonNull
@@ -83,14 +76,8 @@ public class RecyclerActivity extends Activity {
                 .usePlugin(CorePlugin.create())
                 .usePlugin(ImagesPlugin.createWithAssets(context))
                 .usePlugin(SvgPlugin.create(context.getResources()))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configureParser(@NonNull Parser.Builder builder) {
-                        // it's important NOT to use TablePlugin
-                        // the only thing we want from it is commonmark-java parser extension
-                        builder.extensions(Collections.singleton(TablesExtension.create()));
-                    }
-                })
+                // important to use TableEntryPlugin instead of TablePlugin
+                .usePlugin(TableEntryPlugin.create(context))
                 .usePlugin(HtmlPlugin.create())
 //                .usePlugin(SyntaxHighlightPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {

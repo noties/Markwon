@@ -13,6 +13,10 @@ import java.util.List;
  */
 public abstract class MarkwonReducer {
 
+    /**
+     * @return direct children of supplied Node. In the most usual case
+     * will return all BlockNodes of a Document
+     */
     @NonNull
     public static MarkwonReducer directChildren() {
         return new DirectChildren();

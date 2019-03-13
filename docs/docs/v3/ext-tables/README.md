@@ -54,8 +54,11 @@ final Table table = Table.parse(Markwon, TableBlock);
 myTableWidget.setTable(table);
 ```
 
-Unfortunately Markwon does not provide a widget that can be used for tables. But it does
-provide API that can be used to achieve desired result.
+:::tip
+To take advantage of this functionality and render tables without limitations (including
+horizontally scrollable layout when its contents exceed screen width), refer to [recycler-table](/docs/v3/recycler-table)
+module documentation that adds support for rendering `TableBlock` markdown node inside Android-native `TableLayout` widget.
+:::
 
 ## Theme
 

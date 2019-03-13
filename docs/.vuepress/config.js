@@ -60,6 +60,7 @@ module.exports = {
                 '/docs/v3/image/okhttp.md',
                 '/docs/v3/image/svg.md',
                 '/docs/v3/recycler/',
+                '/docs/v3/recycler-table/',
                 '/docs/v3/syntax-highlight/',
                 '/docs/v3/migration-2-3.md'
             ],

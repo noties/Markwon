@@ -54,11 +54,18 @@ public class TablePlugin extends AbstractMarkwonPlugin {
         return new TablePlugin(builder.build());
     }
 
+    private final TableTheme theme;
     private final TableVisitor visitor;
 
     @SuppressWarnings("WeakerAccess")
     TablePlugin(@NonNull TableTheme tableTheme) {
+        this.theme = tableTheme;
         this.visitor = new TableVisitor(tableTheme);
+    }
+
+    @NonNull
+    public TableTheme theme() {
+        return theme;
     }
 
     @Override

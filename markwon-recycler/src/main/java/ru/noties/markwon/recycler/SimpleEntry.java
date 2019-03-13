@@ -1,9 +1,8 @@
 package ru.noties.markwon.recycler;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,32 +15,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.utils.NoCopySpannableFactory;
 
 /**
  * @since 3.0.0
  */
 @SuppressWarnings("WeakerAccess")
-public class SimpleEntry implements MarkwonAdapter.Entry<Node, SimpleEntry.Holder> {
+public class SimpleEntry extends MarkwonAdapter.Entry<Node, SimpleEntry.Holder> {
 
-    public static final Spannable.Factory NO_COPY_SPANNABLE_FACTORY = new NoCopySpannableFactory();
+    /**
+     * Create {@link SimpleEntry} that has TextView as the root view of
+     * specified layout.
+     */
+    @NonNull
+    public static SimpleEntry createTextViewIsRoot(@LayoutRes int layoutResId) {
+        return new SimpleEntry(layoutResId, 0);
+    }
+
+    @NonNull
+    public static SimpleEntry create(@LayoutRes int layoutResId, @IdRes int textViewIdRes) {
+        return new SimpleEntry(layoutResId, textViewIdRes);
+    }
 
     // small cache for already rendered nodes
     private final Map<Node, Spanned> cache = new HashMap<>();
 
     private final int layoutResId;
+    private final int textViewIdRes;
 
-    public SimpleEntry() {
-        this(R.layout.markwon_adapter_simple_entry);
-    }
-
-    public SimpleEntry(@LayoutRes int layoutResId) {
+    public SimpleEntry(@LayoutRes int layoutResId, @IdRes int textViewIdRes) {
         this.layoutResId = layoutResId;
+        this.textViewIdRes = textViewIdRes;
     }
 
     @NonNull
     @Override
     public Holder createHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        return new Holder(inflater.inflate(layoutResId, parent, false));
+        return new Holder(textViewIdRes, inflater.inflate(layoutResId, parent, false));
     }
 
     @Override
@@ -55,11 +65,6 @@ public class SimpleEntry implements MarkwonAdapter.Entry<Node, SimpleEntry.Holde
     }
 
     @Override
-    public long id(@NonNull Node node) {
-        return node.hashCode();
-    }
-
-    @Override
     public void clear() {
         cache.clear();
     }
@@ -68,21 +73,21 @@ public class SimpleEntry implements MarkwonAdapter.Entry<Node, SimpleEntry.Holde
 
         final TextView textView;
 
-        protected Holder(@NonNull View itemView) {
+        protected Holder(@IdRes int textViewIdRes, @NonNull View itemView) {
             super(itemView);
 
-            this.textView = requireView(R.id.text);
-            this.textView.setSpannableFactory(NO_COPY_SPANNABLE_FACTORY);
-        }
-    }
-
-    private static class NoCopySpannableFactory extends Spannable.Factory {
-
-        @Override
-        public Spannable newSpannable(CharSequence source) {
-            return source instanceof Spannable
-                    ? (Spannable) source
-                    : new SpannableString(source);
+            final TextView textView;
+            if (textViewIdRes == 0) {
+                if (!(itemView instanceof TextView)) {
+                    throw new IllegalStateException("TextView is not root of layout " +
+                            "(specify TextView ID explicitly): " + itemView);
+                }
+                textView = (TextView) itemView;
+            } else {
+                textView = requireView(textViewIdRes);
+            }
+            this.textView = textView;
+            this.textView.setSpannableFactory(NoCopySpannableFactory.getInstance());
         }
     }
 }

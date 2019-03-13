@@ -32,6 +32,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         this.entries = entries;
         this.defaultEntry = defaultEntry;
         this.reducer = reducer;
+
         setHasStableIds(true);
     }
 
@@ -90,6 +91,14 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
                 : 0;
     }
 
+    @Override
+    public void onViewRecycled(@NonNull Holder holder) {
+        super.onViewRecycled(holder);
+
+        final Entry<Node, Holder> entry = getEntry(holder.getItemViewType());
+        entry.onViewRecycled(holder);
+    }
+
     @SuppressWarnings("unused")
     @NonNull
     public List<Node> getItems() {
@@ -132,8 +141,13 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
         private final SparseArray<Entry<Node, Holder>> entries = new SparseArray<>(3);
 
-        private Entry<Node, Holder> defaultEntry;
+        private final Entry<Node, Holder> defaultEntry;
+
         private MarkwonReducer reducer;
+
+        BuilderImpl(@NonNull Entry<Node, Holder> defaultEntry) {
+            this.defaultEntry = defaultEntry;
+        }
 
         @NonNull
         @Override
@@ -147,22 +161,6 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
         @NonNull
         @Override
-        public Builder defaultEntry(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
-            //noinspection unchecked
-            this.defaultEntry = (Entry<Node, Holder>) defaultEntry;
-            return this;
-        }
-
-        @NonNull
-        @Override
-        public Builder defaultEntry(int layoutResId) {
-            //noinspection unchecked
-            this.defaultEntry = (Entry<Node, Holder>) (Entry) new SimpleEntry(layoutResId);
-            return this;
-        }
-
-        @NonNull
-        @Override
         public Builder reducer(@NonNull MarkwonReducer reducer) {
             this.reducer = reducer;
             return this;
@@ -171,11 +169,6 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         @NonNull
         @Override
         public MarkwonAdapter build() {
-
-            if (defaultEntry == null) {
-                //noinspection unchecked
-                defaultEntry = (Entry<Node, Holder>) (Entry) new SimpleEntry();
-            }
 
             if (reducer == null) {
                 reducer = MarkwonReducer.directChildren();
