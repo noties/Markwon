@@ -1,0 +1,57 @@
+input: |-
+  - [ ] First
+  - [x] Second
+  - [X] Third
+  * [ ] First star
+  * [x] Second star
+  * [X] Third star
+  + [ ] First plus
+  + [x] Second plus
+  + [X] Third plus
+  1. [x] Number with dot
+  3) [ ] Number
+
+output:
+  - task-list: "First"
+    blockIdent: 1
+    done: false
+  - text: "\n"
+  - task-list: "Second"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "Third"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "First star"
+    blockIdent: 1
+    done: false
+  - text: "\n"
+  - task-list: "Second star"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "Third star"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "First plus"
+    blockIdent: 1
+    done: false
+  - text: "\n"
+  - task-list: "Second plus"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "Third plus"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "Number with dot"
+    blockIdent: 1
+    done: true
+  - text: "\n"
+  - task-list: "Number"
+    blockIdent: 1
+    done: false
