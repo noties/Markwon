@@ -47,6 +47,9 @@ public abstract class MarkwonHtmlRenderer {
         @NonNull
         Builder setHandler(@NonNull Collection<String> tagNames, @Nullable TagHandler tagHandler);
 
+        @Nullable
+        TagHandler getHandler(@NonNull String tagName);
+
         @NonNull
         MarkwonHtmlRenderer build();
     }

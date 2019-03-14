@@ -48,14 +48,7 @@ module.exports = {
                 '/docs/v3/ext-strikethrough/',
                 '/docs/v3/ext-tables/',
                 '/docs/v3/ext-tasklist/',
-                {
-                    title: 'HTML',
-                    collapsable: false,
-                    children: [
-                        '/docs/v3/html/',
-                        '/docs/v3/html/custom-tag-handler.md'
-                    ]
-                },
+                '/docs/v3/html/',
                 '/docs/v3/image/gif.md',
                 '/docs/v3/image/okhttp.md',
                 '/docs/v3/image/svg.md',

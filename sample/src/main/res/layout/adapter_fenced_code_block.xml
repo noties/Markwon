@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
@@ -22,7 +21,6 @@
         android:paddingRight="16dip"
         android:paddingBottom="8dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="14sp"
-        tools:text="# Hello there! and tasks" />
+        android:textSize="14sp" />
 
 </HorizontalScrollView>

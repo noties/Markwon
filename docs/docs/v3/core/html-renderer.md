@@ -80,3 +80,22 @@ builder.setHandler("a", new TagHandler() {
     }
 });
 ```
+
+:::tip
+Sometimes HTML content might include tags that are not closed (although 
+they are required to be by the spec, for example a `div`).
+Markwon by default disallows such tags and ignores them. Still,
+there is an option to allow them _explicitly_ via builder method:
+```java
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
+                builder.allowNonClosedTags(true);
+            }
+        })
+        .build();
+```
+Please note that if `allowNonClosedTags=true` then all non-closed tags will be closed
+at the end of a document.
+:::

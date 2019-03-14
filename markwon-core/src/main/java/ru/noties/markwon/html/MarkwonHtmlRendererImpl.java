@@ -124,6 +124,12 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             return this;
         }
 
+        @Nullable
+        @Override
+        public TagHandler getHandler(@NonNull String tagName) {
+            return tagHandlers.get(tagName);
+        }
+
         @NonNull
         @Override
         public MarkwonHtmlRenderer build() {

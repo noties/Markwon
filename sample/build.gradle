@@ -40,6 +40,7 @@ dependencies {
     implementation project(':markwon-ext-tasklist')
     implementation project(':markwon-html')
     implementation project(':markwon-image-gif')
+    implementation project(':markwon-image-okhttp')
     implementation project(':markwon-image-svg')
     implementation project(':markwon-syntax-highlight')
     implementation project(':markwon-recycler')
