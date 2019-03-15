@@ -50,7 +50,7 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
   * Blockquote (`blockquote`)
   * Heading (`h1`, `h2`, `h3`, `h4`, `h5`, `h6`)
   * there is support to render any HTML tag, but it will require to create a special `TagHandler`,
-    more information can be found in [HTML section](/docs/v3/html/custom-tag-handler.md)
+    more information can be found in [HTML section](/docs/v3/core/html-renderer.md)
 * [Task lists](/docs/v3/ext-tasklist/):
 - [ ] Not _done_
   - [X] **Done** with `X`

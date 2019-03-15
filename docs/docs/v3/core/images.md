@@ -145,8 +145,6 @@ If you want to display GIF or SVG images also, you can use [image-gif](/docs/v3/
 and [image-svg](/docs/v3/image/svg.md) modules.
 :::
 
-## 
-
 :::tip
 If you are using [html](/docs/v3/html/) you do not have to additionally setup
 images displayed via `<img>` tag, as `HtmlPlugin` automatically uses configured
@@ -156,4 +154,52 @@ sizes, which is not supported natively by markdown, allowing absolute or relativ
 ```html
 <img src="./assets/my-image" width="100%">
 ```
+:::
+
+## Placeholder drawable <Badge text="3.0.0" />
+
+It's possible to provide a custom placeholder for an image (whilst it's loading).
+
+```java
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(ImagesPlugin.create(context))
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
+                builder.placeholderDrawableProvider(new AsyncDrawableLoader.DrawableProvider() {
+                    @Override
+                    public Drawable provide() {
+                        // your custom placeholder drawable
+                        return new PlaceholderDrawable();
+                    }
+                });
+            }
+        });
+```
+
+## Error drawable <Badge text="3.0.0" />
+
+To fallback in case of error whilst loading an image, an `error drawable` can be used:
+
+
+```java
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(ImagesPlugin.create(context))
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
+                builder.errorDrawableProvider(new AsyncDrawableLoader.DrawableProvider() {
+                    @Override
+                    public Drawable provide() {
+                        // your custom error drawable
+                        return new MyErrorDrawable();
+                    }
+                });
+            }
+        });
+```
+
+:::warning
+Before `3.0.0` `AsyncDrawableLoader` accepted a simple `Drawable` as error drawable
+argument. Starting `3.0.0` it accepts a `DrawableProvider` instead.
 :::
