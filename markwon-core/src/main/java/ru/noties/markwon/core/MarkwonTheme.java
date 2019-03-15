@@ -47,25 +47,7 @@ public class MarkwonTheme {
     public static MarkwonTheme create(@NonNull Context context) {
         return builderWithDefaults(context).build();
     }
-
-    /**
-     * Factory method to obtain an instance of {@link Builder}. Please note, that no default
-     * values are set. This might be useful if you require a lot of special styling that differs
-     * a lot with default one
-     *
-     * @return {@link Builder instance}
-     * @see #builderWithDefaults(Context)
-     * @see #builder(MarkwonTheme)
-     * @see #emptyBuilder()
-     * @since 1.0.0
-     * @deprecated 3.0.0
-     */
-    @NonNull
-    @Deprecated
-    public static Builder builder() {
-        return new Builder();
-    }
-
+    
     /**
      * Create an <strong>empty</strong> instance of {@link Builder} with no default values applied
      * <p>
