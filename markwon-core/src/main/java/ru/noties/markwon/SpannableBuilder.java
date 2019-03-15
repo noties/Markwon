@@ -208,7 +208,11 @@ public class SpannableBuilder implements Appendable, CharSequence {
     /**
      * This method will return all {@link Span} spans that <em>overlap</em> specified range,
      * so if for example a 1..9 range is specified some spans might have 0..6 or 0..10 start/end ranges.
+     * <<<<<<< HEAD:markwon-core/src/main/java/ru/noties/markwon/SpannableBuilder.java
      * NB spans are returned in reversed order (not in order that we store them internally)
+     * =======
+     * NB spans are returned in reversed order (no in order that we store them internally)
+     * >>>>>>> master:markwon/src/main/java/ru/noties/markwon/SpannableBuilder.java
      *
      * @since 2.0.1
      */

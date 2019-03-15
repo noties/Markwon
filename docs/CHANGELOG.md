@@ -12,7 +12,6 @@
 * Fix DataUri scheme handler in image-loader (<GithubIssue id="74" />)
 * Introduced a "copy" builder for SpannableThem <br>Thanks <GithubUser name="c-b-h" />
 
-
 ## 2.0.0
 * Add `html-parser-api` and `html-parser-impl` modules
 * Add `HtmlEmptyTagReplacement`

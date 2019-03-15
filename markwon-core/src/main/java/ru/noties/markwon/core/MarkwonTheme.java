@@ -47,7 +47,7 @@ public class MarkwonTheme {
     public static MarkwonTheme create(@NonNull Context context) {
         return builderWithDefaults(context).build();
     }
-    
+
     /**
      * Create an <strong>empty</strong> instance of {@link Builder} with no default values applied
      * <p>
