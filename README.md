@@ -2,9 +2,6 @@
 
 # Markwon
 
-![stable](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=stable)
-![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties.markwon/core.svg?label=snapshot)
-
 [![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
 
 **Markwon** is a markdown library for Android. It parses markdown
@@ -30,6 +27,10 @@ features listed in [commonmark-spec] are supported
 [sample-apk]: https://github.com/noties/Markwon/releases
 
 ## Installation
+
+![stable](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=stable)
+![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties.markwon/core.svg?label=snapshot)
+
 ```groovy
 implementation "ru.noties.markwon:core:${markwonVersion}"
 ```

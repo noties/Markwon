@@ -3,38 +3,36 @@
     <div class="artifact-container">
       <div v-for="artifact in artifacts" class="artifact" @click="toggleSelection(artifact)">
         <div class="artifact-header">
-          <input
-            type="checkbox"
-            v-model="selected"
-            :value="artifact.id"
-            :id="artifact.id" />
-          <strong><label :for="artifact.id">{{artifact.name}}</label></strong>
+          <input type="checkbox" v-model="selected" :value="artifact.id" :id="artifact.id">
+          <strong>
+            <label :for="artifact.id">{{artifact.name}}</label>
+          </strong>
         </div>
         <div class="artifact-description" v-if="artifact.description">{{artifact.description}}</div>
       </div>
     </div>
-    <div
-      class="extra-class language-gradle selected-artifacts"
-      v-if="selected.length > 0"
-      @click="selectAll"
-    >
+    <div class="extra-class language-gradle selected-artifacts" v-if="selected.length > 0">
       <div class="selected-artifact-script">
-        <span class="token keyword">final def</span>&nbsp;markwon_version =&nbsp;<span class="token string">'{{latestVersion}}'</span>
+        <span class="token keyword">final def</span>
+        <span>&nbsp;markwon_version =&nbsp;</span>
+        <span class="token string">'{{latestVersion}}'</span>
       </div>
       <br>
       <div class="selected-artifact-script" v-for="artifact in selectedArtifacts">
-        <span>implementation&nbsp;</span><span class="token string">"{{artifact.group}}:{{artifact.id}}:</span><span>$markwon_version</span><span class="token string">"</span>
+        <span>implementation&nbsp;</span>
+        <span class="token string">"{{artifact.group}}:{{artifact.id}}:</span>
+        <span>$markwon_version</span>
+        <span class="token string">"</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
-import {artifacts} from '../.artifacts.js';
+import { artifacts } from "../.artifacts.js";
 
 if (!artifacts) {
-    throw 'Artifacts not found. Use `collectArtifacts.js` script to obtain artifacts metadata.'
+  throw "Artifacts not found. Use `collectArtifacts.js` script to obtain artifacts metadata.";
 }
 
 export default {
@@ -42,36 +40,18 @@ export default {
   data() {
     return {
       artifacts,
-      selected: ['core'],
-      latestVersion: 'latest_version'
+      selected: ["core"],
+      latestVersion: "latest_version"
     };
   },
   methods: {
-    selectAll(e) {
-      let el = e.target;
-      while (!el.classList.contains("selected-artifacts")) {
-        el = el.parentElement;
-      }
-
-      if (document.body.createTextRange) {
-        const range = document.body.createTextRange();
-        range.moveToElementText(el);
-        range.select();
-      } else if (window.getSelection) {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-    },
     toggleSelection(artifact) {
-        const index = this.selected.indexOf(artifact.id)
-        if (index < 0) {
-            this.selected.push(artifact.id);
-        } else {
-            this.selected.splice(index, 1);
-        }
+      const index = this.selected.indexOf(artifact.id);
+      if (index < 0) {
+        this.selected.push(artifact.id);
+      } else {
+        this.selected.splice(index, 1);
+      }
     }
   },
   computed: {
@@ -100,8 +80,8 @@ export default {
   max-width: 10em;
 }
 .artifact-description {
-    font-size: 0.85em;
-    margin-top: 0.5em;
+  font-size: 0.85em;
+  margin-top: 0.5em;
 }
 .selected-artifacts {
   color: white;
@@ -119,6 +99,7 @@ export default {
   margin-top: 0.5em;
 }
 .selected-artifact-script {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

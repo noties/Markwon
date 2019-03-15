@@ -70,10 +70,5 @@ module.exports = {
         },
         sidebarDepth: 2,
         lastUpdated: true
-    },
-    markdown: {
-        config: md => {
-            md.use(require('markdown-it-task-lists'));
-        }
     }
 }

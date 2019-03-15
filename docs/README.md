@@ -52,11 +52,11 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
   * there is support to render any HTML tag, but it will require to create a special `TagHandler`,
     more information can be found in [HTML section](/docs/v3/core/html-renderer.md)
 * [Task lists](/docs/v3/ext-tasklist/):
-- [ ] Not _done_
-  - [X] **Done** with `X`
-  - [x] ~~and~~ **or** small `x`
-
-<small><em><sup>*</sup> Task-lists are not properly displayed on this web-site, library renders them correctly</em></small>
+<ul style="list-style-type: none; margin: 0; padding: 0;">
+<li><input type="checkbox" disabled>Not <i>done</i></li>
+<li><input type="checkbox" disabled checked><strong>Done</strong> with <code>X</code></li>
+<li><input type="checkbox" disabled checked><del>and</del> <strong>or</strong> small <code>x</code></li>    
+</ul>
 
 ## Screenshots
 
