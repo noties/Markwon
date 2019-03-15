@@ -39,6 +39,26 @@ public class AsyncDrawable extends Drawable {
         this.loader = loader;
         this.imageSizeResolver = imageSizeResolver;
         this.imageSize = imageSize;
+
+        final Drawable placeholder = loader.placeholder();
+        if (placeholder != null) {
+
+            // process placeholder bounds
+            final Rect bounds = placeholder.getBounds();
+            if (bounds.isEmpty()) {
+                // set intrinsic bounds
+                final Rect rect = new Rect(
+                        0,
+                        0,
+                        placeholder.getIntrinsicWidth(),
+                        placeholder.getIntrinsicHeight());
+                placeholder.setBounds(rect);
+                setBounds(rect);
+            }
+
+            // apply placeholder immediately if we have one
+            setResult(placeholder);
+        }
     }
 
     @NonNull
@@ -66,6 +86,15 @@ public class AsyncDrawable extends Drawable {
 
         // if not null -> means we are attached
         if (callback != null) {
+
+            // as we have a placeholder now, it's important to check it our placeholder
+            // has a proper callback at this point. This is not required in most cases,
+            // as placeholder should be static, but if it's not -> it can operate as usual
+            if (result != null
+                    && result.getCallback() == null) {
+                result.setCallback(callback);
+            }
+
             loader.load(destination, this);
         } else {
             if (result != null) {

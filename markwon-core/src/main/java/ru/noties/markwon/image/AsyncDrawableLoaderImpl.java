@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,8 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
     private final Map<String, SchemeHandler> schemeHandlers;
     private final Map<String, MediaDecoder> mediaDecoders;
     private final MediaDecoder defaultMediaDecoder;
-    private final Drawable errorDrawable;
+    private final DrawableProvider placeholderDrawableProvider;
+    private final DrawableProvider errorDrawableProvider;
 
     private final Handler mainThread;
 
@@ -31,7 +33,8 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
         this.schemeHandlers = builder.schemeHandlers;
         this.mediaDecoders = builder.mediaDecoders;
         this.defaultMediaDecoder = builder.defaultMediaDecoder;
-        this.errorDrawable = builder.errorDrawable;
+        this.placeholderDrawableProvider = builder.placeholderDrawableProvider;
+        this.errorDrawableProvider = builder.errorDrawableProvider;
         this.mainThread = new Handler(Looper.getMainLooper());
     }
 
@@ -47,6 +50,14 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
         if (request != null) {
             request.cancel(true);
         }
+    }
+
+    @Nullable
+    @Override
+    public Drawable placeholder() {
+        return placeholderDrawableProvider != null
+                ? placeholderDrawableProvider.provide()
+                : null;
     }
 
     private Future<?> execute(@NonNull final String destination, @NonNull AsyncDrawable drawable) {
@@ -109,7 +120,9 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
                 // if result is null, we assume it's an error
                 if (result == null) {
-                    result = errorDrawable;
+                    result = errorDrawableProvider != null
+                            ? errorDrawableProvider.provide()
+                            : null;
                 }
 
                 if (result != null) {

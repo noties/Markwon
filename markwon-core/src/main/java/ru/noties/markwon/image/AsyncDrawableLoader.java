@@ -15,6 +15,14 @@ public abstract class AsyncDrawableLoader {
     /**
      * @since 3.0.0
      */
+    public interface DrawableProvider {
+        @Nullable
+        Drawable provide();
+    }
+
+    /**
+     * @since 3.0.0
+     */
     @NonNull
     public static Builder builder() {
         return new Builder();
@@ -33,6 +41,8 @@ public abstract class AsyncDrawableLoader {
 
     public abstract void cancel(@NonNull String destination);
 
+    @Nullable
+    public abstract Drawable placeholder();
 
     public static class Builder {
 
@@ -40,7 +50,8 @@ public abstract class AsyncDrawableLoader {
         final Map<String, SchemeHandler> schemeHandlers = new HashMap<>(3);
         final Map<String, MediaDecoder> mediaDecoders = new HashMap<>(3);
         MediaDecoder defaultMediaDecoder;
-        Drawable errorDrawable;
+        DrawableProvider placeholderDrawableProvider;
+        DrawableProvider errorDrawableProvider;
 
         @NonNull
         public Builder executorService(@NonNull ExecutorService executorService) {
@@ -94,9 +105,21 @@ public abstract class AsyncDrawableLoader {
             return this;
         }
 
+        /**
+         * @since 3.0.0
+         */
         @NonNull
-        public Builder errorDrawable(Drawable errorDrawable) {
-            this.errorDrawable = errorDrawable;
+        public Builder placeholderDrawableProvider(@NonNull DrawableProvider placeholderDrawableProvider) {
+            this.placeholderDrawableProvider = placeholderDrawableProvider;
+            return this;
+        }
+
+        /**
+         * @since 3.0.0
+         */
+        @NonNull
+        public Builder errorDrawableProvider(@NonNull DrawableProvider errorDrawableProvider) {
+            this.errorDrawableProvider = errorDrawableProvider;
             return this;
         }
 
