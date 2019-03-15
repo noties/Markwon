@@ -15,6 +15,15 @@ android {
 
 dependencies {
     api project(':markwon-core')
+
+    deps['test'].with {
+
+        testImplementation project(':markwon-test-span')
+
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['commons-io']
+    }
 }
 
 registerArtifact(this)

@@ -3,8 +3,9 @@ package ru.noties.markwon.test;
 import android.support.annotation.NonNull;
 import android.text.Spanned;
 
-import junit.framework.Assert;
-import junit.framework.ComparisonFailure;
+
+import org.junit.Assert;
+import org.junit.ComparisonFailure;
 
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -106,8 +107,8 @@ public abstract class TestSpanMatcher {
             }
 
             throw new AssertionError(
-                    String.format(Locale.US, "Expected span{%s} at {start: %d, end: %d}, found: %s",
-                            expectedSpan, start, end, actualSpan));
+                    String.format(Locale.US, "Expected span{%s} at {start: %d, end: %d}, found: %s, text: \"%s\"",
+                            expectedSpan, start, end, actualSpan, spanned.subSequence(start, end)));
         }
     }
 
