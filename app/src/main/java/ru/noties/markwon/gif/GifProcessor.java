@@ -115,12 +115,13 @@ public abstract class GifProcessor {
             }
 
             @Override
-            public void onClick(View widget) {
+            public void onClick(@NonNull View widget) {
                 if (gifDrawable.isPlaying()) {
                     gifDrawable.pause();
                 } else {
                     gifDrawable.start();
                 }
+                widget.invalidate();
             }
         }
     }

@@ -24,13 +24,13 @@ values as they will be applied automatically
 If you plan on using images inside your markdown/HTML, you will have to **explicitly**
 register an implementation of `AsyncDrawable.Loader` via `#asyncDrawableLoader` builder method.
 `Markwon` comes with ready implementation for that and it can be found in
-`markwon-image-loader` module. Refer to module [documentation](/docs/image-loader.md)
+`markwon-image-loader` module. Refer to module [documentation](/docs/v2/image-loader.md)
 :::
 
 ## Theme
 
 `SpannableTheme` controls how markdown is rendered. It has pretty extensive number of
-options that can be found [here](/docs/theme.md)
+options that can be found [here](/docs/v2/theme.md)
 
 ```java
 SpannableConfiguration.builder(context)
@@ -56,7 +56,7 @@ If `AsyncDrawable.Loader` is not provided explicitly, default **no-op** implemen
 
 :::tip Implementation
 There are no restrictions on what implementation to use, but `Markwon` has artifact that can
-answer the most common needs of displaying SVG, GIF and other image formats. It can be found [here](/docs/image-loader.md)
+answer the most common needs of displaying SVG, GIF and other image formats. It can be found [here](/docs/v2/image-loader.md)
 :::
 
 ### Size resolver <Badge text="1.0.1" />
@@ -107,7 +107,7 @@ If not provided explicitly, default **no-op** implementation will be used.
 Although `SyntaxHighlight` interface was included with the very first version
 of `Markwon` there were no ready-to-use implementations. But starting with <Badge text="1.1.0" /> 
 `Markwon` provides one. It can be found in `markwon-syntax-highlight` artifact. Refer
-to module [documentation](/docs/syntax-highlight.md)
+to module [documentation](/docs/v2/syntax-highlight.md)
 :::
 
 ## Link resolver
@@ -166,7 +166,7 @@ SpannableConfiguration.builder(context)
 ```
 
 If not provided explicitly, default `SpannableFactoryDef` implementation will be used. It is documented
-in [this section](/docs/factory.md)
+in [this section](/docs/v2/factory.md)
 
 ## Soft line break <Badge text="1.1.1" />
 
@@ -197,7 +197,7 @@ SpannableConfiguration.builder(context)
 
 if not provided explicitly, default `MarkwonHtmlParserImpl` will be used
 **if** it can be found in classpath, otherwise default **no-op** implementation
-wiil be used. Refer to [HTML](/docs/html.md#parser) document for more information about this behavior.
+wiil be used. Refer to [HTML](/docs/v2/html.md#parser) document for more information about this behavior.
 
 ### Renderer
 
@@ -210,7 +210,7 @@ SpannableConfiguration.builder(context)
 ```
 
 If not provided explicitly, default `MarkwonHtmlRenderer` implementation will be used.
-It is documented [here](/docs/html.md#renderer)
+It is documented [here](/docs/v2/html.md#renderer)
 
 ### HTML allow non-closed tags
 

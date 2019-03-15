@@ -56,7 +56,7 @@ myTableWidget.setTable(table);
 
 :::tip
 To take advantage of this functionality and render tables without limitations (including
-horizontally scrollable layout when its contents exceed screen width), refer to [recycler-table](/docs/v3/recycler-table)
+horizontally scrollable layout when its contents exceed screen width), refer to [recycler-table](/docs/v3/recycler-table/)
 module documentation that adds support for rendering `TableBlock` markdown node inside Android-native `TableLayout` widget.
 :::
 

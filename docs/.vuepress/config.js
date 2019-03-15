@@ -12,20 +12,30 @@ module.exports = {
     ],
     themeConfig: {
         nav: [
-            { text: 'Install', link: '/docs/install.md' },
+            { text: 'Install', link: '/docs/v3/install.md' },
             { text: 'Changelog', link: '/CHANGELOG.md' },
             {
                 text: 'API Version',
                 items: [
-                    { text: 'Current (2.x.x)', link: '/' },
-                    { text: 'BETA (3.x.x)', link: '/docs/v3/' }
+                    { text: 'Current (3.x.x)', link: '/' },
+                    { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
                 ]
             },
             { text: 'Sandbox', link: '/sandbox.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: {
-            '/docs/v3/': [
+            '/docs/v2': [
+                '/docs/v2/getting-started.md',
+                '/docs/v2/configure.md',
+                '/docs/v2/theme.md',
+                '/docs/v2/factory.md',
+                '/docs/v2/image-loader.md',
+                '/docs/v2/syntax-highlight.md',
+                '/docs/v2/html.md',
+                '/docs/v2/view.md'
+            ],
+            '/': [
                 '',
                 {
                     title: 'Core',
@@ -56,17 +66,6 @@ module.exports = {
                 '/docs/v3/recycler-table/',
                 '/docs/v3/syntax-highlight/',
                 '/docs/v3/migration-2-3.md'
-            ],
-            '/': [
-                '',
-                '/docs/getting-started.md',
-                '/docs/configure.md',
-                '/docs/theme.md',
-                '/docs/factory.md',
-                '/docs/image-loader.md',
-                '/docs/syntax-highlight.md',
-                '/docs/html.md',
-                '/docs/view.md'
             ]
         },
         sidebarDepth: 2,

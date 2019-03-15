@@ -59,3 +59,5 @@ So, if your `Markwon` instance was configured to, for example, render Emphasis
 nodes as a <span style="color: #FF0000">red text</span> then HTML tag handler will
 use the same span. This includes images, links, UrlResolver, LinkProcessor, etc
 :::
+
+To learn more about defining own TagHandlers, please refer to [html-renderer docs](/docs/v3/core/html-renderer.md)

@@ -2,10 +2,8 @@
 
 # Markwon
 
-[![markwon](https://img.shields.io/maven-central/v/ru.noties/markwon.svg?label=markwon)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon%22)
-[![markwon-image-loader](https://img.shields.io/maven-central/v/ru.noties/markwon-image-loader.svg?label=markwon-image-loader)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-image-loader%22)
-[![markwon-syntax-highlight](https://img.shields.io/maven-central/v/ru.noties/markwon-syntax-highlight.svg?label=markwon-syntax-highlight)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-syntax-highlight%22)
-[![markwon-view](https://img.shields.io/maven-central/v/ru.noties/markwon-view.svg?label=markwon-view)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties%22%20AND%20a%3A%22markwon-view%22)
+![stable](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=stable)
+![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties.markwon/core.svg?label=snapshot)
 
 [![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
 
@@ -33,13 +31,11 @@ features listed in [commonmark-spec] are supported
 
 ## Installation
 ```groovy
-implementation "ru.noties:markwon:${markwonVersion}"
-implementation "ru.noties:markwon-image-loader:${markwonVersion}" // optional
-implementation "ru.noties:markwon-syntax-highlight:${markwonVersion}" // optional
-implementation "ru.noties:markwon-view:${markwonVersion}" // optional
+implementation "ru.noties.markwon:core:${markwonVersion}"
 ```
 
 Please visit [documentation] web-site for further reference
+
 
 ## Supported markdown features:
 * Emphasis (`*`, `_`)
@@ -55,6 +51,7 @@ Please visit [documentation] web-site for further reference
 * Code blocks
 * Tables (*with limitations*)
 * Syntax highlight
+* LaTeX formulas
 * HTML
   * Emphasis (`<i>`, `<em>`, `<cite>`, `<dfn>`)
   * Strong emphasis (`<b>`, `<strong>`)

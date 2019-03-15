@@ -5,7 +5,7 @@ next: /docs/v3/core/getting-started.md
 
 # Installation
 
-![release](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=release)
+![stable](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=stable)
 ![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties.markwon/core.svg?label=snapshot)
 
 <ArtifactPicker />

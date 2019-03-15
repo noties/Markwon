@@ -39,7 +39,7 @@ Provides implementation of `AsyncDrawable.Loader` and comes with support for:
 * GIF
 * Other image formats
 
-Please refer to documentation for [image loader](/docs/image-loader.md) module
+Please refer to documentation for [image loader](/docs/v2/image-loader.md) module
 
 ### Syntax highlight
 
@@ -49,7 +49,7 @@ implementation "ru.noties:markwon-syntax-highlight:${markwonVersion}"
 
 Provides implementation of `SyntaxHighlight` and allows various syntax highlighting
 in your markdown based Android applications. Comes with 2 ready-to-be-used themes: `light` and `dark`.
-Please refer to documentation for [syntax highlight](/docs/syntax-highlight.md) module
+Please refer to documentation for [syntax highlight](/docs/v2/syntax-highlight.md) module
 
 ### View
 
@@ -59,7 +59,7 @@ implementation "ru.noties:markwon-view:${markwonVersion}"
 
 Provides 2 widgets to display markdown: `MarkwonView` and `MarkwonViewCompat` (subclasses
 of `TextView` and `AppCompatTextView` respectively).
-Please refer to documentation for [view](/docs/view.md) module
+Please refer to documentation for [view](/docs/v2/view.md) module
 
 ## Proguard
 
