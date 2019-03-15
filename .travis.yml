@@ -10,7 +10,7 @@ android:
       - tools
 
       - build-tools-28.0.3
-      - android-27
+      - android-28
 
 branches:
   except:

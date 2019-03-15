@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -47,15 +47,13 @@ ext {
     // NB, updating build-tools or compile-sdk will require updating Travis config (.travis.yml)
     config = [
             'build-tools'    : '28.0.3',
-            'compile-sdk'    : 27,
-            'target-sdk'     : 27,
+            'compile-sdk'    : 28,
+            'target-sdk'     : 28,
             'min-sdk'        : 16,
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
-    // for now 27.1.1 is used because it's the last one distributed with source files
-    // next version with sources is androidx one (we wait until migration)
-    final def supportVersion = '27.1.1'
+    final def supportVersion = '28.0.0'
     final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
 
