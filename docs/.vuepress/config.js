@@ -27,6 +27,7 @@ module.exports = {
         sidebar: {
             '/docs/v2': [
                 '/docs/v2/getting-started.md',
+                '/docs/v2/install.md',
                 '/docs/v2/configure.md',
                 '/docs/v2/theme.md',
                 '/docs/v2/factory.md',

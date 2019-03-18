@@ -1,8 +1,3 @@
----
-prev: false
-next: /docs/getting-started.md
----
-
 # Installation
 
 <MavenBadges2xx />
