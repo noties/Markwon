@@ -35,7 +35,10 @@ features listed in [commonmark-spec] are supported
 implementation "ru.noties.markwon:core:${markwonVersion}"
 ```
 
-Please visit [documentation] web-site for further reference
+Full list of available artifacts is present in the [install section](http://noties.gihub.io/Markwon/v3/install.html)
+of the [documentation] web-site.
+
+Please visit [documentation] web-site for further reference.
 
 
 > You can find previous version of Markwon in [2.x.x](https://github.com/noties/Markwon/tree/2.x.x) branch
