@@ -38,6 +38,9 @@ implementation "ru.noties.markwon:core:${markwonVersion}"
 Please visit [documentation] web-site for further reference
 
 
+> You can find previous version of Markwon in [2.x.x](https://github.com/noties/Markwon/tree/2.x.x) branch
+
+
 ## Supported markdown features:
 * Emphasis (`*`, `_`)
 * Strong emphasis (`**`, `__`)

@@ -2,7 +2,6 @@ package ru.noties.markwon.sample;
 
 import android.support.annotation.NonNull;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +13,21 @@ import java.util.EnumMap;
 import ru.noties.adapt.Holder;
 import ru.noties.adapt.ItemView;
 import ru.noties.markwon.Markwon;
+import ru.noties.markwon.utils.NoCopySpannableFactory;
 
 class SampleItemView extends ItemView<SampleItem, SampleItemView.SampleHolder> {
 
     private final Markwon markwon;
 
     // instance specific factory
-    private final NoCopySpannableFactory factory;
+    private final Spannable.Factory factory;
 
     // instance specific cache
     private final EnumMap<SampleItem, Spanned> cache;
 
     SampleItemView(@NonNull Markwon markwon) {
         this.markwon = markwon;
-        this.factory = new NoCopySpannableFactory();
+        this.factory = NoCopySpannableFactory.getInstance();
         this.cache = new EnumMap<>(SampleItem.class);
     }
 
@@ -70,15 +70,6 @@ class SampleItemView extends ItemView<SampleItem, SampleItemView.SampleHolder> {
             super(view);
 
             this.textView = requireView(R.id.text);
-        }
-    }
-
-    private static class NoCopySpannableFactory extends Spannable.Factory {
-        @Override
-        public Spannable newSpannable(CharSequence source) {
-            return source instanceof Spannable
-                    ? (Spannable) source
-                    : new SpannableString(source);
         }
     }
 }
