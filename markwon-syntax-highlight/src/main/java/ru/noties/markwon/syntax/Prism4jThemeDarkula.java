@@ -1,23 +1,39 @@
 package ru.noties.markwon.syntax;
 
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
-import ru.noties.markwon.spans.EmphasisSpan;
-import ru.noties.markwon.spans.StrongEmphasisSpan;
+import ru.noties.markwon.core.spans.EmphasisSpan;
+import ru.noties.markwon.core.spans.StrongEmphasisSpan;
 
 public class Prism4jThemeDarkula extends Prism4jThemeBase {
 
     @NonNull
     public static Prism4jThemeDarkula create() {
-        return new Prism4jThemeDarkula();
+        return new Prism4jThemeDarkula(0xFF2d2d2d);
+    }
+
+    /**
+     * @param background color
+     * @since 3.0.0
+     */
+    @NonNull
+    public static Prism4jThemeDarkula create(@ColorInt int background) {
+        return new Prism4jThemeDarkula(background);
+    }
+
+    private final int background;
+
+    public Prism4jThemeDarkula(@ColorInt int background) {
+        this.background = background;
     }
 
     @Override
     public int background() {
-        return 0xFF2d2d2d;
+        return background;
     }
 
     @Override

@@ -1,5 +1,0 @@
-input: "1. ol"
-
-output:
-  - ol: "ol"
-    start: 1

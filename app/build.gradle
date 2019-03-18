@@ -11,7 +11,7 @@ android {
         targetSdkVersion config['target-sdk']
         versionCode 1
         versionName version
-        setProperty("archivesBaseName", "markwon-sample-$versionName")
+        setProperty("archivesBaseName", "markwon-$versionName")
     }
 
     lintOptions {
@@ -28,8 +28,13 @@ android {
 
 dependencies {
 
-    implementation project(':markwon')
-    implementation project(':markwon-image-loader')
+    implementation project(':markwon-core')
+    implementation project(':markwon-ext-strikethrough')
+    implementation project(':markwon-ext-tables')
+    implementation project(':markwon-ext-tasklist')
+    implementation project(':markwon-html')
+    implementation project(':markwon-image-gif')
+    implementation project(':markwon-image-svg')
     implementation project(':markwon-syntax-highlight')
 
     deps.with {

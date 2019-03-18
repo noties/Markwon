@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="app_name">MarkwonSample</string>
+
+    <!--do not indent (will be treated as code block otherwise)-->
+    <string name="input"><![CDATA[
+# Hello! @ic-android-black-24\n\n
+Home 36 black: @ic-home-black-36\n\n
+Memory 48 black: @ic-memory-black-48\n\n
+### I AM ANOTHER HEADER\n\n
+Sentiment Satisfied 64 red: @ic-sentiment_satisfied-red-64
+    ]]>
+    </string>
+
+</resources>

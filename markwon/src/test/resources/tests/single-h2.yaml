@@ -1,4 +1,0 @@
-input: "## head2"
-
-output:
-  - h2: "head2"

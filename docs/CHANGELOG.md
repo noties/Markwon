@@ -1,17 +1,54 @@
 # Changelog
 
-# 2.0.1
+# 3.0.0
+* Plugins, plugins, plugins
+* Split basic functionality blocks into standalone modules
+* Maven artifacts group changed to `ru.noties.markwon` (previously had been `ru.noties`)
+* removed `markwon`, `markwon-image-loader`, `markwon-html-pareser-api`, `markwon-html-parser-impl`, `markwon-view` modules
+* new module system: `core`, `ext-latex`, `ext-strikethrough`, `ext-tables`, `ext-tasklist`, `html`, `image-gif`, `image-okhttp`, `image-svg`, `recycler`, `recycler-table`, `syntax-highlight`
+* Add BufferType option for Markwon configuration
+* Fix typo in AsyncDrawable waitingForDimensions
+* New tests format
+* `Markwon.render` returns `Spanned` instance of generic `CharSequence`
+* LinkMovementMethod is applied implicitly if not set on a TextView explicitly
+* Split code and codeBlock spans and factories
+* Add CustomTypefaceSpan 
+* Add NoCopySpansFactory
+* Add placeholder to image loading
+
+Generally speaking there are a lot of changes. Most of them are not backwards-compatible.
+The main point of this release is the `Plugin` system that allows more fluent configuration
+and opens the possibility of extending `Markwon` with 3rd party functionality in a simple
+and intuitive fashion. Please refer to the [documentation web-site](https://noties.github.io/Markwon)
+that has information on how to start migration.
+
+The shortest excerpt of this release can be expressed like this:
+
+```java
+// previous v2.x.x way
+Markwon.setMarkdown(textView, "**Hello there!**");
+```
+
+```java
+// 3.x.x
+Markwon.create(context)
+        .setMarkdown(textView, "**Hello there!**");
+```
+
+But there is much more to it, please visit documentation web-site
+to get the full picture of latest changes.
+
+## 2.0.1
 * `SpannableMarkdownVisitor` Rename blockQuoteIndent to blockIndent
-* Fixed block new lines logic for block quote and paragraph (#82)
-* AsyncDrawable fix no dimensions bug (#81)
+* Fixed block new lines logic for block quote and paragraph (<GithubIssue id="82" />)
+* AsyncDrawable fix no dimensions bug (<GithubIssue id="81" />)
 * Update SpannableTheme to use Px instead of Dimension annotation
 * Allow TaskListSpan isDone mutation
 * Updated commonmark-java to 0.12.1
-* Add OrderedListItemSpan measure utility method (#78)
+* Add OrderedListItemSpan measure utility method (<GithubIssue id="78" />)
 * Add SpannableBuilder#getSpans method
-* Fix DataUri scheme handler in image-loader (#74)
-* Introduced a "copy" builder for SpannableThem
-  Thanks @c-b-h 🙌
+* Fix DataUri scheme handler in image-loader (<GithubIssue id="74" />)
+* Introduced a "copy" builder for SpannableThem <br>Thanks <GithubUser name="c-b-h" />
 
 ## 2.0.0
 * Add `html-parser-api` and `html-parser-impl` modules

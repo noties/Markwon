@@ -1,0 +1,35 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
+
+    defaultConfig {
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+
+    deps.with {
+        api it['support-annotations']
+        api it['commonmark']
+    }
+
+    deps['test'].with {
+
+        testImplementation project(':markwon-test-span')
+
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
+
+        testImplementation it['commons-io']
+    }
+}
+
+registerArtifact(this)

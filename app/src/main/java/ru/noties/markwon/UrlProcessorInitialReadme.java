@@ -4,6 +4,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import ru.noties.markwon.urlprocessor.UrlProcessor;
+import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
+
 class UrlProcessorInitialReadme implements UrlProcessor {
 
     private static final String GITHUB_BASE = "https://github.com/noties/Markwon/raw/master/";

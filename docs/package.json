@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "docs:build": "vuepress build"
+    "docs:build": "node ./collectArtifacts.js && vuepress build"
   },
   "dependencies": {
-    "markdown-it-task-lists": "^2.1.1",
+    "commonmark": "^0.28.1",
     "vuepress": "^0.14.2"
   }
 }

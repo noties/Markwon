@@ -23,8 +23,8 @@ abstract class AppBarItem {
         final TextView subtitle;
 
         Renderer(@NonNull View view, @NonNull View.OnClickListener themeChangeClicked) {
-            this.title = Views.findView(view, R.id.app_bar_title);
-            this.subtitle = Views.findView(view, R.id.app_bar_subtitle);
+            this.title = view.findViewById(R.id.app_bar_title);
+            this.subtitle = view.findViewById(R.id.app_bar_subtitle);
             view.findViewById(R.id.app_bar_theme_changer)
                     .setOnClickListener(themeChangeClicked);
         }

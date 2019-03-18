@@ -1,4 +1,0 @@
-input: "*italic*"
-
-output:
-  - i: "italic"

@@ -1,4 +1,0 @@
-input: "~~strike~~"
-
-output:
-  - s: "strike"

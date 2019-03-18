@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spanned;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -13,23 +14,29 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
-import ru.noties.markwon.spans.AsyncDrawable;
-import ru.noties.markwon.spans.SpannableTheme;
-import ru.noties.markwon.syntax.Prism4jSyntaxHighlight;
+import ru.noties.markwon.core.CorePlugin;
+import ru.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import ru.noties.markwon.ext.tables.TablePlugin;
+import ru.noties.markwon.ext.tasklist.TaskListPlugin;
+import ru.noties.markwon.gif.GifAwarePlugin;
+import ru.noties.markwon.html.HtmlPlugin;
+import ru.noties.markwon.image.ImagesPlugin;
+import ru.noties.markwon.image.gif.GifPlugin;
+import ru.noties.markwon.image.svg.SvgPlugin;
 import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
+import ru.noties.markwon.syntax.SyntaxHighlightPlugin;
+import ru.noties.markwon.urlprocessor.UrlProcessor;
+import ru.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
 public class MarkdownRenderer {
 
     interface MarkdownReadyListener {
-        void onMarkdownReady(CharSequence markdown);
+        void onMarkdownReady(@NonNull Markwon markwon, Spanned markdown);
     }
-
-    @Inject
-    AsyncDrawable.Loader loader;
 
     @Inject
     ExecutorService service;
@@ -64,9 +71,17 @@ public class MarkdownRenderer {
         cancel();
 
         task = service.submit(new Runnable() {
+
             @Override
             public void run() {
+                try {
+                    execute();
+                } catch (Throwable t) {
+                    Debug.e(t);
+                }
+            }
 
+            private void execute() {
                 final UrlProcessor urlProcessor;
                 if (uri == null) {
                     urlProcessor = new UrlProcessorInitialReadme();
@@ -78,29 +93,28 @@ public class MarkdownRenderer {
                         ? prism4jThemeDefault
                         : prism4JThemeDarkula;
 
-                final int background = isLightTheme
-                        ? prism4jTheme.background()
-                        : 0x0Fffffff;
-
-                final GifPlaceholder gifPlaceholder = new GifPlaceholder(
-                        context.getResources().getDrawable(R.drawable.ic_play_circle_filled_18dp_white),
-                        0x20000000
-                );
-
-                final SpannableConfiguration configuration = SpannableConfiguration.builder(context)
-                        .asyncDrawableLoader(loader)
-                        .urlProcessor(urlProcessor)
-                        .syntaxHighlight(Prism4jSyntaxHighlight.create(prism4j, prism4jTheme))
-                        .theme(SpannableTheme.builderWithDefaults(context)
-                                .codeBackgroundColor(background)
-                                .codeTextColor(prism4jTheme.textColor())
-                                .build())
-                        .factory(new GifAwareSpannableFactory(gifPlaceholder))
+                final Markwon markwon = Markwon.builder(context)
+                        .usePlugin(CorePlugin.create())
+                        .usePlugin(ImagesPlugin.createWithAssets(context))
+                        .usePlugin(SvgPlugin.create(context.getResources()))
+                        .usePlugin(GifPlugin.create(false))
+                        .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
+                        .usePlugin(GifAwarePlugin.create(context))
+                        .usePlugin(TablePlugin.create(context))
+                        .usePlugin(TaskListPlugin.create(context))
+                        .usePlugin(StrikethroughPlugin.create())
+                        .usePlugin(HtmlPlugin.create())
+                        .usePlugin(new AbstractMarkwonPlugin() {
+                            @Override
+                            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                                builder.urlProcessor(urlProcessor);
+                            }
+                        })
                         .build();
 
                 final long start = SystemClock.uptimeMillis();
 
-                final CharSequence text = Markwon.markdown(configuration, markdown);
+                final Spanned text = markwon.toMarkdown(markdown);
 
                 final long end = SystemClock.uptimeMillis();
 
@@ -111,7 +125,7 @@ public class MarkdownRenderer {
                         @Override
                         public void run() {
                             if (!isCancelled()) {
-                                listener.onMarkdownReady(text);
+                                listener.onMarkdownReady(markwon, text);
                                 task = null;
                             }
                         }

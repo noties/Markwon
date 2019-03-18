@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -19,6 +19,10 @@ allprojects {
     }
     version = VERSION_NAME
     group = GROUP
+
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 }
 
 task clean(type: Delete) {
@@ -43,27 +47,30 @@ ext {
     // NB, updating build-tools or compile-sdk will require updating Travis config (.travis.yml)
     config = [
             'build-tools'    : '28.0.3',
-            'compile-sdk'    : 27,
-            'target-sdk'     : 27,
+            'compile-sdk'    : 28,
+            'target-sdk'     : 28,
             'min-sdk'        : 16,
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
-    final def supportVersion = '27.1.1'
+    final def supportVersion = '28.0.0'
     final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
 
     deps = [
             'support-annotations'     : "com.android.support:support-annotations:$supportVersion",
             'support-app-compat'      : "com.android.support:appcompat-v7:$supportVersion",
+            'support-recycler-view'   : "com.android.support:recyclerview-v7:$supportVersion",
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
             'android-svg'             : 'com.caverock:androidsvg:1.2.1',
             'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.14',
+            'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'ru.noties:prism4j:1.1.0',
             'debug'                   : 'ru.noties:debug:3.0.0@jar',
+            'adapt'                   : 'ru.noties:adapt:1.1.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion"
     ]
 
@@ -73,14 +80,11 @@ ext {
     ]
 
     deps['test'] = [
-            'junit'           : 'junit:junit:4.12',
-            'robolectric'     : 'org.robolectric:robolectric:3.8',
-            'ix-java'         : 'com.github.akarnokd:ixjava:1.0.0',
-            'jackson-yaml'    : 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0',
-            'jackson-databind': 'com.fasterxml.jackson.core:jackson-databind:2.9.6',
-            'gson'            : 'com.google.code.gson:gson:2.8.5',
-            'commons-io'      : 'commons-io:commons-io:2.6',
-            'mockito'         : 'org.mockito:mockito-core:2.21.0'
+            'junit'      : 'junit:junit:4.12',
+            'robolectric': 'org.robolectric:robolectric:3.8',
+            'ix-java'    : 'com.github.akarnokd:ixjava:1.0.0',
+            'commons-io' : 'commons-io:commons-io:2.6',
+            'mockito'    : 'org.mockito:mockito-core:2.21.0'
     ]
 
     registerArtifact = this.&registerArtifact
