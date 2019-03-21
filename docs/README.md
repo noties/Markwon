@@ -80,6 +80,7 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 
 * [Partico](https://partiko.app/) - Partiko is a censorship free social network.
 * [FairNote](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote) - simple and intuitive notepad app. It gives you speed and efficiency when you write notes, to-do lists, e-mails, or jot down quick ideas.
+* [Boxcryptor](https://www.boxcryptor.com) - A software that adds AES-256 and RSA encryption to Dropbox, Google Drive, OneDrive and many other clouds.
 
 
 <u>Extension/plugins</u>:
