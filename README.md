@@ -103,6 +103,7 @@ Please visit [documentation] web-site for reference
 
 * [Partiko](https://partiko.app)
 * [FairNote Notepad](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote)
+* [Boxcryptor](https://www.boxcryptor.com)
 
 
 ---
