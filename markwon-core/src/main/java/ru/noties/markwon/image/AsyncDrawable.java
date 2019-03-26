@@ -44,14 +44,9 @@ public class AsyncDrawable extends Drawable {
         if (placeholder != null) {
 
             // process placeholder bounds
-            final Rect bounds = placeholder.getBounds();
-            if (bounds.isEmpty()) {
-                // set intrinsic bounds
-                final Rect rect = new Rect(
-                        0,
-                        0,
-                        placeholder.getIntrinsicWidth(),
-                        placeholder.getIntrinsicHeight());
+            if (placeholder.getBounds().isEmpty()) {
+                // set intrinsic bounds for both drawables (this one and placeholder)
+                final Rect rect = DrawableUtils.intrinsicBounds(placeholder);
                 placeholder.setBounds(rect);
                 setBounds(rect);
             }
@@ -121,6 +116,24 @@ public class AsyncDrawable extends Drawable {
         this.result.setCallback(callback);
 
         initBounds();
+    }
+
+    /**
+     * Remove result from this drawable (for example, in case of cancellation)
+     *
+     * @since 3.0.1-SNAPSHOT
+     */
+    public void clearResult() {
+
+        final Drawable result = this.result;
+
+        if (result != null) {
+            result.setCallback(null);
+            this.result = null;
+
+            // clear bounds
+            setBounds(0, 0, 0, 0);
+        }
     }
 
     private void initBounds() {
