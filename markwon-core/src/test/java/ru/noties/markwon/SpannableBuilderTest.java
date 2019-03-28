@@ -224,22 +224,30 @@ public class SpannableBuilderTest {
 
         assertTrue(builder.getSpans(0, builder.length()).isEmpty());
 
+        final Object[] flatSpans = {
+                new Object(),
+                new Object(),
+                new Object(),
+                new Object(),
+                new Object()
+        };
+
         final Object[] spans = {
                 new Object[]{
-                        new Object(), new Object()
+                        flatSpans[0], flatSpans[1]
                 },
                 new Object[]{
-                        new Object(), new Object(), new Object()
+                        flatSpans[2], flatSpans[3], flatSpans[4]
                 }
         };
 
         setSpans(builder, spans, 0, 1);
 
         final List<SpannableBuilder.Span> actual = builder.getSpans(0, builder.length());
-        assertEquals(2, actual.size());
+        assertEquals(flatSpans.length, actual.size());
 
         for (int i = 0, length = spans.length; i < length; i++) {
-            assertEquals(spans[i], actual.get(i).what);
+            assertEquals(flatSpans[i], actual.get(i).what);
         }
     }
 
