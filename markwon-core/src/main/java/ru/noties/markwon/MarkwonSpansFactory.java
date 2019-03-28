@@ -40,6 +40,17 @@ public interface MarkwonSpansFactory {
         @Nullable
         <N extends Node> SpanFactory getFactory(@NonNull Class<N> node);
 
+        /**
+         * To obtain current {@link SpanFactory} associated with specified node. Can be used
+         * when SpanFactory must be present for node. If it\'s not added/registered a runtime
+         * exception will be thrown
+         *
+         * @see #getFactory(Class)
+         * @since 3.0.1-SNAPSHOT
+         */
+        @NonNull
+        <N extends Node> SpanFactory requireFactory(@NonNull Class<N> node);
+
         @NonNull
         MarkwonSpansFactory build();
     }

@@ -60,6 +60,16 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
         @NonNull
         @Override
+        public <N extends Node> SpanFactory requireFactory(@NonNull Class<N> node) {
+            final SpanFactory factory = getFactory(node);
+            if (factory == null) {
+                throw new NullPointerException(node.getName());
+            }
+            return factory;
+        }
+
+        @NonNull
+        @Override
         public MarkwonSpansFactory build() {
             return new MarkwonSpansFactoryImpl(Collections.unmodifiableMap(factories));
         }
