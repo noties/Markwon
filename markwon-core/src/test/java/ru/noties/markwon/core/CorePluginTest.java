@@ -164,6 +164,12 @@ public class CorePluginTest {
 
             @NonNull
             @Override
+            public <N extends Node> SpanFactory requireFactory(@NonNull Class<N> node) {
+                throw new RuntimeException();
+            }
+
+            @NonNull
+            @Override
             public MarkwonSpansFactory build() {
                 throw new RuntimeException();
             }
