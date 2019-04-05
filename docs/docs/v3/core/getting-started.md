@@ -63,5 +63,3 @@ This section is kept due to historical reasons. Starting with version <Badge tex
 the amount of magic is reduced. To leverage your `Markwon` usage a concept of `Plugin`
 is introduced which helps to extend default behavior in a simple and _no-breaking-the-flow_ manner.
 Head to the [next section](/docs/v3/core/plugins.md) to know more.
-
-<Comments />
