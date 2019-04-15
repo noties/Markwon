@@ -45,10 +45,8 @@ public class AsyncDrawable extends Drawable {
 
             // process placeholder bounds
             if (placeholder.getBounds().isEmpty()) {
-                // set intrinsic bounds for both drawables (this one and placeholder)
                 final Rect rect = DrawableUtils.intrinsicBounds(placeholder);
                 placeholder.setBounds(rect);
-                setBounds(rect);
             }
 
             // apply placeholder immediately if we have one
