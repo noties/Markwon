@@ -42,12 +42,7 @@ public class AsyncDrawable extends Drawable {
 
         final Drawable placeholder = loader.placeholder();
         if (placeholder != null) {
-
-            // process placeholder bounds (if it's not empty -> ignore, use whatever bounds that were set)
-            DrawableUtils.applyIntrinsicBoundsIfEmpty(placeholder);
-
-            // apply placeholder immediately if we have one
-            setResult(placeholder);
+            setPlaceholderResult(placeholder);
         }
     }
 
@@ -97,6 +92,38 @@ public class AsyncDrawable extends Drawable {
                 }
             }
             loader.cancel(destination);
+        }
+    }
+
+    /**
+     * @since 3.0.1-SNAPSHOT
+     */
+    protected void setPlaceholderResult(@NonNull Drawable placeholder) {
+        // okay, if placeholder has bounds -> use it, otherwise use original imageSize
+
+        final Rect rect = placeholder.getBounds();
+
+        if (rect.isEmpty()) {
+            // if bounds are empty -> just use placeholder as a regular result
+            DrawableUtils.applyIntrinsicBounds(placeholder);
+            setResult(placeholder);
+        } else {
+
+            // this condition should not be true for placeholder (at least for now)
+            if (result != null) {
+                // but it is, unregister current result
+                result.setCallback(null);
+            }
+
+            // placeholder has bounds specified -> use them until we have real result
+            this.result = placeholder;
+            this.result.setCallback(callback);
+
+            // use bounds directly
+            setBounds(rect);
+
+            // just in case -> so we do not update placeholder when we have canvas dimensions
+            waitingForDimensions = false;
         }
     }
 
