@@ -10,8 +10,6 @@ import android.support.annotation.Nullable;
 
 import java.io.InputStream;
 
-import ru.noties.markwon.utils.DrawableUtils;
-
 /**
  * This class can be used as the last {@link MediaDecoder} to _try_ to handle all rest cases.
  * Here we just assume that supplied InputStream is of image type and try to decode it.
@@ -42,7 +40,7 @@ public class ImageMediaDecoder extends MediaDecoder {
         final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
         if (bitmap != null) {
             out = new BitmapDrawable(resources, bitmap);
-            DrawableUtils.intrinsicBounds(out);
+            DrawableUtils.applyIntrinsicBounds(out);
         } else {
             out = null;
         }

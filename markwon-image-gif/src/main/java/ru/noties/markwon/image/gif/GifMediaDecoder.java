@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import pl.droidsonroids.gif.GifDrawable;
+import ru.noties.markwon.image.DrawableUtils;
 import ru.noties.markwon.image.MediaDecoder;
-import ru.noties.markwon.utils.DrawableUtils;
 
 /**
  * @since 1.1.0
@@ -41,7 +41,7 @@ public class GifMediaDecoder extends MediaDecoder {
         if (bytes != null) {
             try {
                 out = newGifDrawable(bytes);
-                DrawableUtils.intrinsicBounds(out);
+                DrawableUtils.applyIntrinsicBounds(out);
 
                 if (!autoPlayGif) {
                     ((GifDrawable) out).pause();
