@@ -13,13 +13,18 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.Arrays;
 import java.util.Collections;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -86,5 +91,59 @@ public class MarkwonSpansFactoryImplTest {
         for (Class<? extends Node> type : types) {
             assertNull(factory.get(type));
         }
+    }
+
+    @Test
+    public void composite_span_factory() {
+        // validate that composite span factory returns (calls) all span-factories
+
+        final SpanFactory first = mock(SpanFactory.class);
+        final SpanFactory second = mock(SpanFactory.class);
+
+        final MarkwonSpansFactoryImpl.CompositeSpanFactory factory =
+                new MarkwonSpansFactoryImpl.CompositeSpanFactory(first, second);
+
+        final Object spans = factory.getSpans(mock(MarkwonConfiguration.class), mock(RenderProps.class));
+        assertNotNull(spans);
+        assertTrue(spans.getClass().isArray());
+        assertEquals(2, ((Object[]) spans).length);
+
+        verify(first, times(1)).getSpans(any(MarkwonConfiguration.class), any(RenderProps.class));
+        verify(second, times(1)).getSpans(any(MarkwonConfiguration.class), any(RenderProps.class));
+    }
+
+    @Test
+    public void builder_add_factory() {
+        // here is what we should validate:
+        // * if we call addFactory and there is none already -> supplied factory
+        // * if there is
+        // * * if not composite -> make composite
+        // * * if composite -> add to it
+
+        final MarkwonSpansFactoryImpl.BuilderImpl builder = new MarkwonSpansFactoryImpl.BuilderImpl();
+
+        final SpanFactory first = mock(SpanFactory.class);
+        final SpanFactory second = mock(SpanFactory.class);
+        final SpanFactory third = mock(SpanFactory.class);
+
+        final Class<Node> node = Node.class;
+
+        // assert none yet
+        assertNull(builder.getFactory(node));
+
+        // add first, none yet -> it should be added without modifications
+        builder.addFactory(node, first);
+        assertEquals(first, builder.getFactory(node));
+
+        // add second -> composite factory will be created
+        builder.addFactory(node, second);
+        final MarkwonSpansFactoryImpl.CompositeSpanFactory compositeSpanFactory =
+                (MarkwonSpansFactoryImpl.CompositeSpanFactory) builder.getFactory(node);
+        assertNotNull(compositeSpanFactory);
+        assertEquals(Arrays.asList(first, second), compositeSpanFactory.factories);
+
+        builder.addFactory(node, third);
+        assertEquals(compositeSpanFactory, builder.getFactory(node));
+        assertEquals(Arrays.asList(first, second, third), compositeSpanFactory.factories);
     }
 }
