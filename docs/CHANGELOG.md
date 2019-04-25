@@ -1,6 +1,16 @@
 # Changelog
 
-# 3.0.0
+# 3.0.1
+* Add `AsyncDrawableLoader.Builder#implementation` method (<GithubIssue id="109" />)
+* AsyncDrawable allow placeholder to have independent size (<GithubIssue id="115" />)
+* `addFactory` method for MarkwonSpansFactory
+* Add optional spans for list blocks (bullet and ordered)
+* AsyncDrawable placeholder bounds fix
+* SpannableBuilder setSpans allow array of arrays
+* Add `requireFactory` method to MarkwonSpansFactory
+* Add DrawableUtils
+
+## 3.0.0
 * Plugins, plugins, plugins
 * Split basic functionality blocks into standalone modules
 * Maven artifacts group changed to `ru.noties.markwon` (previously had been `ru.noties`)
