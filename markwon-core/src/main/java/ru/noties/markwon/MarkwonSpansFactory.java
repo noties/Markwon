@@ -38,7 +38,7 @@ public interface MarkwonSpansFactory {
          * Helper method to add a {@link SpanFactory} for a Node. This method will merge existing
          * {@link SpanFactory} with the specified one.
          *
-         * @since 3.0.1-SNAPSHOT
+         * @since 3.0.1
          */
         @NonNull
         <N extends Node> Builder addFactory(@NonNull Class<N> node, @NonNull SpanFactory factory);
@@ -55,7 +55,7 @@ public interface MarkwonSpansFactory {
          * exception will be thrown
          *
          * @see #getFactory(Class)
-         * @since 3.0.1-SNAPSHOT
+         * @since 3.0.1
          */
         @NonNull
         <N extends Node> SpanFactory requireFactory(@NonNull Class<N> node);

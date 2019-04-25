@@ -38,7 +38,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
                 return;
             }
 
-            // @since 3.0.1-SNAPSHOT we introduce another method that recursively applies spans
+            // @since 3.0.1 we introduce another method that recursively applies spans
             // allowing array of arrays (and more)
             setSpansInternal(builder, spans, start, end);
         }
@@ -404,7 +404,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
     }
 
     /**
-     * @since 3.0.1-SNAPSHOT
+     * @since 3.0.1
      */
     private static void setSpansInternal(
             @NonNull SpannableBuilder builder,
@@ -414,7 +414,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
         if (spans != null) {
             if (spans.getClass().isArray()) {
                 for (Object o : ((Object[]) spans)) {
-                    // @since 3.0.1-SNAPSHOT recursively apply spans (allow array of arrays)
+                    // @since 3.0.1 recursively apply spans (allow array of arrays)
                     setSpansInternal(builder, o, start, end);
                 }
             } else {

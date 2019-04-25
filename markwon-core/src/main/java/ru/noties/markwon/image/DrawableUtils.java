@@ -6,7 +6,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 /**
- * @since 3.0.1-SNAPSHOT
+ * @since 3.0.1
  */
 public abstract class DrawableUtils {
 

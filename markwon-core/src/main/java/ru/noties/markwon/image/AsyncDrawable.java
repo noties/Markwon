@@ -96,7 +96,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.0.1-SNAPSHOT
+     * @since 3.0.1
      */
     protected void setPlaceholderResult(@NonNull Drawable placeholder) {
         // okay, if placeholder has bounds -> use it, otherwise use original imageSize
@@ -143,7 +143,7 @@ public class AsyncDrawable extends Drawable {
     /**
      * Remove result from this drawable (for example, in case of cancellation)
      *
-     * @since 3.0.1-SNAPSHOT
+     * @since 3.0.1
      */
     public void clearResult() {
 

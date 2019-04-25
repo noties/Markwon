@@ -17,14 +17,14 @@ public class SimpleBlockNodeVisitor implements MarkwonVisitor.NodeVisitor<Node> 
     @Override
     public void visit(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
 
-        // @since 3.0.1-SNAPSHOT we keep track of start in order to apply spans (optionally)
+        // @since 3.0.1 we keep track of start in order to apply spans (optionally)
         final int length = visitor.length();
 
         visitor.ensureNewLine();
 
         visitor.visitChildren(node);
 
-        // @since 3.0.1-SNAPSHOT we apply optional spans
+        // @since 3.0.1 we apply optional spans
         visitor.setSpansForNodeOptional(node, length);
 
         if (visitor.hasNext(node)) {

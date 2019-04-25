@@ -131,7 +131,7 @@ public abstract class AsyncDrawableLoader {
          * will be ignored.
          *
          * @param implementation {@link AsyncDrawableLoader} implementation to be used.
-         * @since 3.0.1-SNAPSHOT
+         * @since 3.0.1
          */
         @NonNull
         public Builder implementation(@NonNull AsyncDrawableLoader implementation) {
