@@ -42,22 +42,7 @@ public class AsyncDrawable extends Drawable {
 
         final Drawable placeholder = loader.placeholder();
         if (placeholder != null) {
-
-            // process placeholder bounds
-            final Rect bounds = placeholder.getBounds();
-            if (bounds.isEmpty()) {
-                // set intrinsic bounds
-                final Rect rect = new Rect(
-                        0,
-                        0,
-                        placeholder.getIntrinsicWidth(),
-                        placeholder.getIntrinsicHeight());
-                placeholder.setBounds(rect);
-                setBounds(rect);
-            }
-
-            // apply placeholder immediately if we have one
-            setResult(placeholder);
+            setPlaceholderResult(placeholder);
         }
     }
 
@@ -110,6 +95,38 @@ public class AsyncDrawable extends Drawable {
         }
     }
 
+    /**
+     * @since 3.0.1
+     */
+    protected void setPlaceholderResult(@NonNull Drawable placeholder) {
+        // okay, if placeholder has bounds -> use it, otherwise use original imageSize
+
+        final Rect rect = placeholder.getBounds();
+
+        if (rect.isEmpty()) {
+            // if bounds are empty -> just use placeholder as a regular result
+            DrawableUtils.applyIntrinsicBounds(placeholder);
+            setResult(placeholder);
+        } else {
+
+            // this condition should not be true for placeholder (at least for now)
+            if (result != null) {
+                // but it is, unregister current result
+                result.setCallback(null);
+            }
+
+            // placeholder has bounds specified -> use them until we have real result
+            this.result = placeholder;
+            this.result.setCallback(callback);
+
+            // use bounds directly
+            setBounds(rect);
+
+            // just in case -> so we do not update placeholder when we have canvas dimensions
+            waitingForDimensions = false;
+        }
+    }
+
     public void setResult(@NonNull Drawable result) {
 
         // if we have previous one, detach it
@@ -121,6 +138,24 @@ public class AsyncDrawable extends Drawable {
         this.result.setCallback(callback);
 
         initBounds();
+    }
+
+    /**
+     * Remove result from this drawable (for example, in case of cancellation)
+     *
+     * @since 3.0.1
+     */
+    public void clearResult() {
+
+        final Drawable result = this.result;
+
+        if (result != null) {
+            result.setCallback(null);
+            this.result = null;
+
+            // clear bounds
+            setBounds(0, 0, 0, 0);
+        }
     }
 
     private void initBounds() {

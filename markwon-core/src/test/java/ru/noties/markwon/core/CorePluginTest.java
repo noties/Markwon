@@ -156,9 +156,21 @@ public class CorePluginTest {
                 return this;
             }
 
+            @NonNull
+            @Override
+            public <N extends Node> MarkwonSpansFactory.Builder addFactory(@NonNull Class<N> node, @NonNull SpanFactory factory) {
+                throw new RuntimeException();
+            }
+
             @Nullable
             @Override
             public <N extends Node> SpanFactory getFactory(@NonNull Class<N> node) {
+                throw new RuntimeException();
+            }
+
+            @NonNull
+            @Override
+            public <N extends Node> SpanFactory requireFactory(@NonNull Class<N> node) {
                 throw new RuntimeException();
             }
 

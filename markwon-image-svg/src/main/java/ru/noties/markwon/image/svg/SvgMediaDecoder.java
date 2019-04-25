@@ -13,8 +13,8 @@ import com.caverock.androidsvg.SVGParseException;
 
 import java.io.InputStream;
 
+import ru.noties.markwon.image.DrawableUtils;
 import ru.noties.markwon.image.MediaDecoder;
-import ru.noties.markwon.utils.DrawableUtils;
 
 /**
  * @since 1.1.0
@@ -65,7 +65,7 @@ public class SvgMediaDecoder extends MediaDecoder {
             svg.renderToCanvas(canvas);
 
             out = new BitmapDrawable(resources, bitmap);
-            DrawableUtils.intrinsicBounds(out);
+            DrawableUtils.applyIntrinsicBounds(out);
         }
 
         return out;

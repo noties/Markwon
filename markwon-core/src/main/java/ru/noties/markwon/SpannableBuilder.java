@@ -38,13 +38,9 @@ public class SpannableBuilder implements Appendable, CharSequence {
                 return;
             }
 
-            if (spans.getClass().isArray()) {
-                for (Object o : ((Object[]) spans)) {
-                    builder.setSpan(o, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            } else {
-                builder.setSpan(spans, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            // @since 3.0.1 we introduce another method that recursively applies spans
+            // allowing array of arrays (and more)
+            setSpansInternal(builder, spans, start, end);
         }
     }
 
@@ -404,6 +400,26 @@ public class SpannableBuilder implements Appendable, CharSequence {
     static class SpannableStringBuilderReversed extends SpannableStringBuilder {
         SpannableStringBuilderReversed(CharSequence text) {
             super(text);
+        }
+    }
+
+    /**
+     * @since 3.0.1
+     */
+    private static void setSpansInternal(
+            @NonNull SpannableBuilder builder,
+            @Nullable Object spans,
+            int start,
+            int end) {
+        if (spans != null) {
+            if (spans.getClass().isArray()) {
+                for (Object o : ((Object[]) spans)) {
+                    // @since 3.0.1 recursively apply spans (allow array of arrays)
+                    setSpansInternal(builder, o, start, end);
+                }
+            } else {
+                builder.setSpan(spans, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         }
     }
 }

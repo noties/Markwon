@@ -53,6 +53,8 @@ public abstract class AsyncDrawableLoader {
         DrawableProvider placeholderDrawableProvider;
         DrawableProvider errorDrawableProvider;
 
+        AsyncDrawableLoader implementation;
+
         @NonNull
         public Builder executorService(@NonNull ExecutorService executorService) {
             this.executorService = executorService;
@@ -123,8 +125,28 @@ public abstract class AsyncDrawableLoader {
             return this;
         }
 
+        /**
+         * Please note that if implementation is supplied, all configuration properties
+         * (scheme-handlers, media-decoders, placeholder, etc) of this builder instance
+         * will be ignored.
+         *
+         * @param implementation {@link AsyncDrawableLoader} implementation to be used.
+         * @since 3.0.1
+         */
+        @NonNull
+        public Builder implementation(@NonNull AsyncDrawableLoader implementation) {
+            this.implementation = implementation;
+            return this;
+        }
+
         @NonNull
         public AsyncDrawableLoader build() {
+
+            // NB, all other configuration properties will be ignored if
+            // implementation is specified
+            if (implementation != null) {
+                return implementation;
+            }
 
             // if we have no schemeHandlers -> we cannot show anything
             // OR if we have no media decoders
