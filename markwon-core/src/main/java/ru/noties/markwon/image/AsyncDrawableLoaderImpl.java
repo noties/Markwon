@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -26,7 +27,9 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
     private final Handler mainThread;
 
-    private final Map<String, Future<?>> requests = new HashMap<>(2);
+    // @since 3.1.0-SNAPSHOT use a hash-map with a weak AsyncDrawable as key for multiple requests
+    //  for the same destination
+    private final Map<WeakReference<AsyncDrawable>, Future<?>> requests = new HashMap<>(2);
 
     AsyncDrawableLoaderImpl(@NonNull Builder builder) {
         this.executorService = builder.executorService;
@@ -39,18 +42,138 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
     }
 
     @Override
-    public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
-        // if drawable is not a link -> show loading placeholder...
-        requests.put(destination, execute(destination, drawable));
+    public void load(@NonNull final AsyncDrawable drawable) {
+
+        // primitive synchronization via main-thread
+        if (!isMainThread()) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    load(drawable);
+                }
+            });
+            return;
+        }
+
+        // okay, if by some chance requested drawable already has a future associated -> no-op
+        // as AsyncDrawable cannot change `destination` (immutable field)
+        // @since 3.1.0-SNAPSHOT
+        if (hasTaskAssociated(drawable)) {
+            return;
+        }
+
+        final WeakReference<AsyncDrawable> reference = new WeakReference<>(drawable);
+        requests.put(reference, execute(drawable.getDestination(), reference));
     }
 
     @Override
-    public void cancel(@NonNull String destination) {
-        final Future<?> request = requests.remove(destination);
-        if (request != null) {
-            request.cancel(true);
+    public void cancel(@NonNull final AsyncDrawable drawable) {
+
+        if (!isMainThread()) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    cancel(drawable);
+                }
+            });
+            return;
+        }
+
+        final Iterator<Map.Entry<WeakReference<AsyncDrawable>, Future<?>>> iterator =
+                requests.entrySet().iterator();
+
+        AsyncDrawable key;
+        Map.Entry<WeakReference<AsyncDrawable>, Future<?>> entry;
+
+        while (iterator.hasNext()) {
+
+            entry = iterator.next();
+            key = entry.getKey().get();
+
+            // if key is null or it contains requested AsyncDrawable -> cancel
+            if (shouldCleanUp(key) || key == drawable) {
+                entry.getValue().cancel(true);
+                iterator.remove();
+            }
         }
     }
+
+    private boolean hasTaskAssociated(@NonNull AsyncDrawable drawable) {
+
+        final Iterator<Map.Entry<WeakReference<AsyncDrawable>, Future<?>>> iterator =
+                requests.entrySet().iterator();
+
+        boolean result = false;
+
+        AsyncDrawable key;
+        Map.Entry<WeakReference<AsyncDrawable>, Future<?>> entry;
+
+        while (iterator.hasNext()) {
+
+            entry = iterator.next();
+            key = entry.getKey().get();
+
+            // clean-up
+            if (shouldCleanUp(key)) {
+                entry.getValue().cancel(true);
+                iterator.remove();
+            } else if (key == drawable) {
+                result = true;
+                // do not break, let iteration continue to possibly clean-up the rest references
+            }
+        }
+
+        return result;
+    }
+
+    private void cleanUp() {
+
+        final Iterator<Map.Entry<WeakReference<AsyncDrawable>, Future<?>>> iterator =
+                requests.entrySet().iterator();
+
+        AsyncDrawable key;
+        Map.Entry<WeakReference<AsyncDrawable>, Future<?>> entry;
+
+        while (iterator.hasNext()) {
+
+            entry = iterator.next();
+            key = entry.getKey().get();
+
+            // clean-up of already referenced or detached drawables
+            if (shouldCleanUp(key)) {
+                entry.getValue().cancel(true);
+                iterator.remove();
+            }
+        }
+    }
+
+//    @Override
+//    public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
+//
+//        // todo: we cannot reliably identify request by the destination, as if
+//        //  markdown input has multiple images with the same destination as source
+//        //  we will be tracking only one of them (the one appears the last). We should
+//        //  move to AsyncDrawable based identification. This method also _maybe_
+//        //  should include the ImageSize (comment @since 3.1.0-SNAPSHOT)
+//
+//        requests.put(destination, execute(destination, drawable));
+//    }
+//
+//    @Override
+//    public void cancel(@NonNull String destination) {
+//
+//        // todo: as we are moving away from a single request for a destination,
+//        //  we should re-evaluate this cancellation logic, as if there are multiple images
+//        //  in markdown input all of them will be cancelled (won't delivered), even if
+//        //  only a single drawable is detached. Cancellation must also take
+//        //  the AsyncDrawable argument (comment @since 3.1.0-SNAPSHOT)
+//
+//        //
+//        final Future<?> request = requests.remove(destination);
+//        if (request != null) {
+//            request.cancel(true);
+//        }
+//    }
 
     @Nullable
     @Override
@@ -60,12 +183,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
                 : null;
     }
 
-    private Future<?> execute(@NonNull final String destination, @NonNull AsyncDrawable drawable) {
-
-        final WeakReference<AsyncDrawable> reference = new WeakReference<AsyncDrawable>(drawable);
-
-        // todo: should we cancel pending request for the same destination?
-        //      we _could_ but there is possibility that one resource is request in multiple places
+    private Future<?> execute(@NonNull final String destination, @NonNull final WeakReference<AsyncDrawable> reference) {
 
         // todo: error handing (simply applying errorDrawable is not a good solution
         //      as reason for an error is unclear (no scheme handler, no input data, error decoding, etc)
@@ -125,24 +243,48 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
                             : null;
                 }
 
-                if (result != null) {
-                    final Drawable out = result;
-                    mainThread.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            final boolean canDeliver = requests.remove(destination) != null;
-                            if (canDeliver) {
-                                final AsyncDrawable asyncDrawable = reference.get();
-                                if (asyncDrawable != null && asyncDrawable.isAttached()) {
-                                    asyncDrawable.setResult(out);
-                                }
+                final Drawable out = result;
+
+                mainThread.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (out != null) {
+
+                            // this doesn't work with markdown input with multiple images with the
+                            // same source (comment @since 3.1.0-SNAPSHOT)
+//                            final boolean canDeliver = requests.remove(destination) != null;
+//                            if (canDeliver) {
+//                                final AsyncDrawable asyncDrawable = reference.get();
+//                                if (asyncDrawable != null && asyncDrawable.isAttached()) {
+//                                    asyncDrawable.setResult(out);
+//                                }
+//                            }
+
+                            // todo: AsyncDrawable cannot change destination, so if it's
+                            //  attached and not garbage-collected, we can deliver the result.
+                            //  Note that there is no cache, so attach/detach of drawables
+                            //  will always request a new entry.. (comment @since 3.1.0-SNAPSHOT)
+                            final AsyncDrawable asyncDrawable = reference.get();
+                            if (asyncDrawable != null && asyncDrawable.isAttached()) {
+                                asyncDrawable.setResult(out);
                             }
                         }
-                    });
-                } else {
-                    requests.remove(destination);
-                }
+
+                        requests.remove(reference);
+                        cleanUp();
+                    }
+                });
             }
         });
+    }
+
+    private static boolean shouldCleanUp(@Nullable AsyncDrawable drawable) {
+        return drawable == null || !drawable.isAttached();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private static boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }
