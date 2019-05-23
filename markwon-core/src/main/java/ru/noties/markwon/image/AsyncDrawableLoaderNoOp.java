@@ -6,12 +6,12 @@ import android.support.annotation.Nullable;
 
 class AsyncDrawableLoaderNoOp extends AsyncDrawableLoader {
     @Override
-    public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
+    public void load(@NonNull AsyncDrawable drawable) {
 
     }
 
     @Override
-    public void cancel(@NonNull String destination) {
+    public void cancel(@NonNull AsyncDrawable drawable) {
 
     }
 

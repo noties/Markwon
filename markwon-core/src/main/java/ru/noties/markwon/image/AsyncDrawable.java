@@ -32,7 +32,7 @@ public class AsyncDrawable extends Drawable {
     public AsyncDrawable(
             @NonNull String destination,
             @NonNull AsyncDrawableLoader loader,
-            @Nullable ImageSizeResolver imageSizeResolver,
+            @NonNull ImageSizeResolver imageSizeResolver,
             @Nullable ImageSize imageSize
     ) {
         this.destination = destination;
@@ -49,6 +49,45 @@ public class AsyncDrawable extends Drawable {
     @NonNull
     public String getDestination() {
         return destination;
+    }
+
+    /**
+     * @since 3.1.0-SNAPSHOT
+     */
+    @Nullable
+    public ImageSize getImageSize() {
+        return imageSize;
+    }
+
+    /**
+     * @since 3.1.0-SNAPSHOT
+     */
+    @NonNull
+    public ImageSizeResolver getImageSizeResolver() {
+        return imageSizeResolver;
+    }
+
+    /**
+     * @since 3.1.0-SNAPSHOT
+     */
+    public boolean hasKnownDimentions() {
+        return canvasWidth > 0;
+    }
+
+    /**
+     * @see #hasKnownDimentions()
+     * @since 3.1.0-SNAPSHOT
+     */
+    public int getLastKnownCanvasWidth() {
+        return canvasWidth;
+    }
+
+    /**
+     * @see #hasKnownDimentions()
+     * @since 3.1.0-SNAPSHOT
+     */
+    public float getLastKnowTextSize() {
+        return textSize;
     }
 
     public Drawable getResult() {
@@ -80,7 +119,7 @@ public class AsyncDrawable extends Drawable {
                 result.setCallback(callback);
             }
 
-            loader.load(destination, this);
+            loader.load(this);
         } else {
             if (result != null) {
 
@@ -91,7 +130,7 @@ public class AsyncDrawable extends Drawable {
                     ((Animatable) result).stop();
                 }
             }
-            loader.cancel(destination);
+            loader.cancel(this);
         }
     }
 
