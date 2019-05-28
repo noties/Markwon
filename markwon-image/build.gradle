@@ -22,6 +22,17 @@ dependencies {
         compileOnly it['android-svg']
         compileOnly it['okhttp']
     }
+
+    deps['test'].with {
+
+        testImplementation project(':markwon-test-span')
+
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
+
+        testImplementation it['commons-io']
+    }
 }
 
 registerArtifact(this)

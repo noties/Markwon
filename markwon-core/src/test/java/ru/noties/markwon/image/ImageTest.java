@@ -2,7 +2,6 @@ package ru.noties.markwon.image;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.commonmark.node.Image;
 import org.junit.Test;
@@ -18,7 +17,6 @@ import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.core.CorePlugin;
-import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.test.TestSpan.Document;
 import ru.noties.markwon.test.TestSpanMatcher;
 
@@ -39,7 +37,6 @@ public class ImageTest {
         final Context context = RuntimeEnvironment.application;
         final Markwon markwon = Markwon.builder(context)
                 .usePlugin(CorePlugin.create())
-                .usePlugin(new ImagesPlugin(context, false))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {

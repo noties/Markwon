@@ -192,13 +192,6 @@ public class CorePluginTest {
     }
 
     @Test
-    public void priority_none() {
-        // CorePlugin returns none as priority (thus 0)
-
-        assertEquals(0, CorePlugin.create().priority().after().size());
-    }
-
-    @Test
     public void plugin_methods() {
         // checks that only expected plugin methods are overridden
 

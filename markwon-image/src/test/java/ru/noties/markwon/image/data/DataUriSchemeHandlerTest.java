@@ -14,9 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import ru.noties.markwon.image.ImageItem;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -31,48 +33,33 @@ public class DataUriSchemeHandlerTest {
 
     @Test
     public void scheme_specific_part_is_empty() {
-        assertNull(handler.handle("data:", Uri.parse("data:")));
+        try {
+            handler.handle("data:", Uri.parse("data:"));
+        } catch (Throwable t) {
+            assertTrue(t.getMessage(), t.getMessage().contains("Invalid data-uri"));
+        }
     }
 
     @Test
     public void data_uri_is_empty() {
-        assertNull(handler.handle("data://whatever", Uri.parse("data://whatever")));
+        try {
+            handler.handle("data:whatever", Uri.parse("data:whatever"));
+        } catch (Throwable t) {
+            assertTrue(t.getMessage(), t.getMessage().contains("Invalid data-uri"));
+        }
     }
 
     @Test
     public void no_data() {
-        assertNull(handler.handle("data://,", Uri.parse("data://,")));
+        try {
+            handler.handle("data:,", Uri.parse("data:,"));
+        } catch (Throwable t) {
+            assertTrue(t.getMessage(), t.getMessage().contains("Decoding data-uri failed"));
+        }
     }
 
     @Test
     public void correct() {
-
-        final class Item {
-
-            final String contentType;
-            final String data;
-
-            Item(String contentType, String data) {
-                this.contentType = contentType;
-                this.data = data;
-            }
-        }
-
-        final Map<String, Item> expected = new HashMap<String, Item>() {{
-            put("data://text/plain;,123", new Item("text/plain", "123"));
-            put("data://image/svg+xml;base64,MTIz", new Item("image/svg+xml", "123"));
-        }};
-
-        for (Map.Entry<String, Item> entry : expected.entrySet()) {
-            final ImageItem item = handler.handle(entry.getKey(), Uri.parse(entry.getKey()));
-            assertNotNull(entry.getKey(), item);
-            assertEquals(entry.getKey(), entry.getValue().contentType, item.contentType());
-            assertEquals(entry.getKey(), entry.getValue().data, readStream(item.inputStream()));
-        }
-    }
-
-    @Test
-    public void correct_real() {
 
         final class Item {
 
@@ -93,8 +80,11 @@ public class DataUriSchemeHandlerTest {
         for (Map.Entry<String, Item> entry : expected.entrySet()) {
             final ImageItem item = handler.handle(entry.getKey(), Uri.parse(entry.getKey()));
             assertNotNull(entry.getKey(), item);
-            assertEquals(entry.getKey(), entry.getValue().contentType, item.contentType());
-            assertEquals(entry.getKey(), entry.getValue().data, readStream(item.inputStream()));
+            assertTrue(item.hasDecodingNeeded());
+
+            final ImageItem.WithDecodingNeeded withDecodingNeeded = item.getAsWithDecodingNeeded();
+            assertEquals(entry.getKey(), entry.getValue().contentType, withDecodingNeeded.contentType());
+            assertEquals(entry.getKey(), entry.getValue().data, readStream(withDecodingNeeded.inputStream()));
         }
     }
 
