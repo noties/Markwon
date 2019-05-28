@@ -23,17 +23,17 @@ import ru.noties.markwon.priority.Priority;
 public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
 
     @Override
+    public void configure(@NonNull Registry registry) {
+
+    }
+
+    @Override
     public void configureParser(@NonNull Parser.Builder builder) {
 
     }
 
     @Override
     public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-
-    }
-
-    @Override
-    public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
 
     }
 
@@ -55,13 +55,6 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
     @Override
     public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
 
-    }
-
-    @NonNull
-    @Override
-    public Priority priority() {
-        // by default all come after CorePlugin
-        return Priority.after(CorePlugin.class);
     }
 
     @NonNull

@@ -9,10 +9,6 @@ import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.html.MarkwonHtmlRenderer;
-import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.MediaDecoder;
-import ru.noties.markwon.image.SchemeHandler;
-import ru.noties.markwon.priority.Priority;
 
 /**
  * Class represents a plugin (extension) to Markwon to configure how parsing and rendering
@@ -24,6 +20,35 @@ import ru.noties.markwon.priority.Priority;
  * @since 3.0.0
  */
 public interface MarkwonPlugin {
+
+    /**
+     * @see Registry#require(Class, Action)
+     * @since 4.0.0-SNAPSHOT
+     */
+    interface Action<P extends MarkwonPlugin> {
+        void apply(@NonNull P p);
+    }
+
+    /**
+     * @see #configure(Registry)
+     * @since 4.0.0-SNAPSHOT
+     */
+    interface Registry {
+
+        @NonNull
+        <P extends MarkwonPlugin> P require(@NonNull Class<P> plugin);
+
+        <P extends MarkwonPlugin> void require(
+                @NonNull Class<P> plugin,
+                @NonNull Action<? super P> action);
+    }
+
+    /**
+     * This method will be called before any other during {@link Markwon} instance construction.
+     *
+     * @since 4.0.0-SNAPSHOT
+     */
+    void configure(@NonNull Registry registry);
 
     /**
      * Method to configure <code>org.commonmark.parser.Parser</code> (for example register custom
@@ -38,17 +63,6 @@ public interface MarkwonPlugin {
      * @see MarkwonTheme.Builder
      */
     void configureTheme(@NonNull MarkwonTheme.Builder builder);
-
-    /**
-     * Configure image loading functionality. For example add new content-types
-     * {@link AsyncDrawableLoader.Builder#addMediaDecoder(String, MediaDecoder)}, a transport
-     * layer (network, file, etc) {@link AsyncDrawableLoader.Builder#addSchemeHandler(String, SchemeHandler)}
-     * or modify existing properties.
-     *
-     * @see AsyncDrawableLoader
-     * @see AsyncDrawableLoader.Builder
-     */
-    void configureImages(@NonNull AsyncDrawableLoader.Builder builder);
 
     /**
      * Configure {@link MarkwonConfiguration}
@@ -81,9 +95,6 @@ public interface MarkwonPlugin {
      * @see MarkwonHtmlRenderer.Builder
      */
     void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder);
-
-    @NonNull
-    Priority priority();
 
     /**
      * Process input markdown and return new string to be used in parsing stage further.

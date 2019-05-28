@@ -37,13 +37,26 @@ public abstract class Markwon {
     }
 
     /**
-     * Factory method to obtain an instance of {@link Builder}.
+     * Factory method to obtain an instance of {@link Builder} with {@link CorePlugin} added.
      *
      * @see Builder
+     * @see #builderNoCore(Context)
      * @since 3.0.0
      */
     @NonNull
     public static Builder builder(@NonNull Context context) {
+        return new MarkwonBuilderImpl(context)
+                // @since 4.0.0-SNAPSHOT add CorePlugin
+                .usePlugin(CorePlugin.create());
+    }
+
+    /**
+     * Factory method to obtain an instance of {@link Builder} without {@link CorePlugin}.
+     *
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public static Builder builderNoCore(@NonNull Context context) {
         return new MarkwonBuilderImpl(context);
     }
 

@@ -17,6 +17,7 @@ import ru.noties.markwon.MarkwonPlugin;
  * @see MarkwonPlugin#priority()
  * @since 3.0.0
  */
+@Deprecated
 public abstract class Priority {
 
     @NonNull

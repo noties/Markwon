@@ -113,6 +113,15 @@ public class MarkwonConfiguration {
         Builder() {
         }
 
+        /**
+         * @since 4.0.0-SNAPSHOT
+         */
+        @NonNull
+        public Builder asyncDrawableLoader(@NonNull AsyncDrawableLoader asyncDrawableLoader) {
+            this.asyncDrawableLoader = asyncDrawableLoader;
+            return this;
+        }
+
         @NonNull
         public Builder syntaxHighlight(@NonNull SyntaxHighlight syntaxHighlight) {
             this.syntaxHighlight = syntaxHighlight;
@@ -149,14 +158,17 @@ public class MarkwonConfiguration {
         @NonNull
         public MarkwonConfiguration build(
                 @NonNull MarkwonTheme theme,
-                @NonNull AsyncDrawableLoader asyncDrawableLoader,
                 @NonNull MarkwonHtmlRenderer htmlRenderer,
                 @NonNull MarkwonSpansFactory spansFactory) {
 
             this.theme = theme;
-            this.asyncDrawableLoader = asyncDrawableLoader;
             this.htmlRenderer = htmlRenderer;
             this.spansFactory = spansFactory;
+
+            // @since 4.0.0-SNAPSHOT
+            if (asyncDrawableLoader == null) {
+                asyncDrawableLoader = AsyncDrawableLoader.noOp();
+            }
 
             if (syntaxHighlight == null) {
                 syntaxHighlight = new SyntaxHighlightNoOp();

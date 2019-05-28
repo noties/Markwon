@@ -95,12 +95,6 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 .setFactory(ThematicBreak.class, new ThematicBreakSpanFactory());
     }
 
-    @NonNull
-    @Override
-    public Priority priority() {
-        return Priority.none();
-    }
-
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         OrderedListItemSpan.measure(textView, markdown);
