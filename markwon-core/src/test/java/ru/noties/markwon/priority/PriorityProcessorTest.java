@@ -18,7 +18,6 @@ import java.util.List;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonPlugin;
 import ru.noties.markwon.core.CorePlugin;
-import ru.noties.markwon.image.ImagesPlugin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

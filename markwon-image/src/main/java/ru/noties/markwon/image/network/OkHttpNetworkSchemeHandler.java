@@ -3,8 +3,9 @@ package ru.noties.markwon.image.network;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,7 +17,7 @@ import ru.noties.markwon.image.SchemeHandler;
 /**
  * @since 4.0.0-SNAPSHOT
  */
-class OkHttpNetworkSchemeHandler extends SchemeHandler {
+public class OkHttpNetworkSchemeHandler extends SchemeHandler {
 
     /**
      * @see #create(OkHttpClient)
@@ -51,8 +52,8 @@ class OkHttpNetworkSchemeHandler extends SchemeHandler {
         final Response response;
         try {
             response = client.newCall(request).execute();
-        } catch (IOException e) {
-            throw new IllegalStateException("Exception obtaining network resource: " + raw, e);
+        } catch (Throwable t) {
+            throw new IllegalStateException("Exception obtaining network resource: " + raw, t);
         }
 
         if (response == null) {
@@ -68,8 +69,18 @@ class OkHttpNetworkSchemeHandler extends SchemeHandler {
             throw new IllegalStateException("Response does not contain body: " + raw);
         }
 
-        final String contentType = response.header(HEADER_CONTENT_TYPE);
+        // important to process content-type as it can have encoding specified (which we should remove)
+        final String contentType =
+                NetworkSchemeHandler.contentType(response.header(HEADER_CONTENT_TYPE));
 
         return ImageItem.withDecodingNeeded(contentType, inputStream);
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedSchemes() {
+        return Arrays.asList(
+                NetworkSchemeHandler.SCHEME_HTTP,
+                NetworkSchemeHandler.SCHEME_HTTPS);
     }
 }

@@ -1,6 +1,5 @@
 package ru.noties.markwon.image;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,88 +9,69 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AsyncDrawableLoaderBuilder {
+class AsyncDrawableLoaderBuilder {
 
     ExecutorService executorService;
     final Map<String, SchemeHandler> schemeHandlers = new HashMap<>(3);
     final Map<String, MediaDecoder> mediaDecoders = new HashMap<>(3);
     MediaDecoder defaultMediaDecoder;
-    DrawableProvider placeholderDrawableProvider;
-    DrawableProvider errorDrawableProvider;
+    ImagesPlugin.PlaceholderProvider placeholderProvider;
+    ImagesPlugin.ErrorHandler errorHandler;
 
-    @NonNull
-    public AsyncDrawableLoaderBuilder executorService(@NonNull ExecutorService executorService) {
+    boolean isBuilt;
+
+    void executorService(@NonNull ExecutorService executorService) {
         this.executorService = executorService;
-        return this;
     }
 
-    @NonNull
-    public AsyncDrawableLoaderBuilder addSchemeHandler(@NonNull String scheme, @NonNull SchemeHandler schemeHandler) {
-        schemeHandlers.put(scheme, schemeHandler);
-        return this;
-    }
-
-    @NonNull
-    public AsyncDrawableLoaderBuilder addSchemeHandler(@NonNull Collection<String> schemes, @NonNull SchemeHandler schemeHandler) {
-        for (String scheme : schemes) {
+    void addSchemeHandler(@NonNull SchemeHandler schemeHandler) {
+        for (String scheme : schemeHandler.supportedSchemes()) {
             schemeHandlers.put(scheme, schemeHandler);
         }
-        return this;
     }
 
-    @NonNull
-    public AsyncDrawableLoaderBuilder addMediaDecoder(@NonNull String contentType, @NonNull MediaDecoder mediaDecoder) {
-        mediaDecoders.put(contentType, mediaDecoder);
-        return this;
-    }
-
-    @NonNull
-    public AsyncDrawableLoaderBuilder addMediaDecoder(@NonNull Collection<String> contentTypes, @NonNull MediaDecoder mediaDecoder) {
-        for (String contentType : contentTypes) {
-            mediaDecoders.put(contentType, mediaDecoder);
+    void addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
+        final Collection<String> supportedTypes = mediaDecoder.supportedTypes();
+        if (supportedTypes.isEmpty()) {
+            // todo: we should think about this little _side-effect_... does it worth it?
+            defaultMediaDecoder = mediaDecoder;
+        } else {
+            for (String type : supportedTypes) {
+                mediaDecoders.put(type, mediaDecoder);
+            }
         }
-        return this;
     }
 
-    @NonNull
-    public AsyncDrawableLoaderBuilder removeSchemeHandler(@NonNull String scheme) {
-        schemeHandlers.remove(scheme);
-        return this;
-    }
-
-    @NonNull
-    public AsyncDrawableLoaderBuilder removeMediaDecoder(@NonNull String contentType) {
-        mediaDecoders.remove(contentType);
-        return this;
-    }
-
-    @NonNull
-    public AsyncDrawableLoaderBuilder defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
+    void defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
         this.defaultMediaDecoder = mediaDecoder;
-        return this;
+    }
+
+    void removeSchemeHandler(@NonNull String scheme) {
+        schemeHandlers.remove(scheme);
+    }
+
+    void removeMediaDecoder(@NonNull String contentType) {
+        mediaDecoders.remove(contentType);
     }
 
     /**
      * @since 3.0.0
      */
-    @NonNull
-    public AsyncDrawableLoaderBuilder placeholderDrawableProvider(@NonNull DrawableProvider placeholderDrawableProvider) {
-        this.placeholderDrawableProvider = placeholderDrawableProvider;
-        return this;
+    void placeholderProvider(@NonNull ImagesPlugin.PlaceholderProvider placeholderDrawableProvider) {
+        this.placeholderProvider = placeholderDrawableProvider;
     }
 
     /**
      * @since 3.0.0
      */
-    @NonNull
-    public AsyncDrawableLoaderBuilder errorDrawableProvider(@NonNull DrawableProvider errorDrawableProvider) {
-        this.errorDrawableProvider = errorDrawableProvider;
-        return this;
+    void errorHandler(@NonNull ImagesPlugin.ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
 
-
     @NonNull
-    public AsyncDrawableLoader build() {
+    AsyncDrawableLoader build() {
+
+        isBuilt = true;
 
         // if we have no schemeHandlers -> we cannot show anything
         // OR if we have no media decoders

@@ -7,11 +7,8 @@ import android.widget.TextView;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
-import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.html.MarkwonHtmlRenderer;
-import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.priority.Priority;
 
 /**
  * Class that extends {@link MarkwonPlugin} with all methods implemented (empty body)

@@ -12,6 +12,8 @@ import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
 
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 import ru.noties.markwon.image.DrawableUtils;
 import ru.noties.markwon.image.MediaDecoder;
@@ -70,5 +72,11 @@ public class SvgMediaDecoder extends MediaDecoder {
         final Drawable drawable = new BitmapDrawable(resources, bitmap);
         DrawableUtils.applyIntrinsicBounds(drawable);
         return drawable;
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTypes() {
+        return Collections.singleton(CONTENT_TYPE);
     }
 }

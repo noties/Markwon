@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 import pl.droidsonroids.gif.GifDrawable;
 import ru.noties.markwon.image.DrawableUtils;
@@ -56,6 +58,12 @@ public class GifMediaDecoder extends MediaDecoder {
         }
 
         return drawable;
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTypes() {
+        return Collections.singleton(CONTENT_TYPE);
     }
 
     @NonNull

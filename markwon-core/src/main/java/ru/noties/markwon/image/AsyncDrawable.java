@@ -40,7 +40,7 @@ public class AsyncDrawable extends Drawable {
         this.imageSizeResolver = imageSizeResolver;
         this.imageSize = imageSize;
 
-        final Drawable placeholder = loader.placeholder();
+        final Drawable placeholder = loader.placeholder(this);
         if (placeholder != null) {
             setPlaceholderResult(placeholder);
         }

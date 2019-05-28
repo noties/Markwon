@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.priority.Priority;
 
 public class GifPlugin extends AbstractMarkwonPlugin {

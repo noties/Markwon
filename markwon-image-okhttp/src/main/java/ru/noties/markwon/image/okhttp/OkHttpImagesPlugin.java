@@ -7,8 +7,6 @@ import java.util.Arrays;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.image.network.NetworkSchemeHandler;
 import ru.noties.markwon.priority.Priority;
 
 /**

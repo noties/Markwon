@@ -14,7 +14,6 @@ import com.caverock.androidsvg.SVGParseException;
 import java.io.InputStream;
 
 import ru.noties.markwon.image.DrawableUtils;
-import ru.noties.markwon.image.MediaDecoder;
 
 /**
  * @since 1.1.0

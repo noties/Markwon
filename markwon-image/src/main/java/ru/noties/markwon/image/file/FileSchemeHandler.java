@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import ru.noties.markwon.image.ImageItem;
@@ -110,5 +112,11 @@ public class FileSchemeHandler extends SchemeHandler {
                 .getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(fileName));
 
         return ImageItem.withDecodingNeeded(contentType, inputStream);
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedSchemes() {
+        return Collections.singleton(SCHEME);
     }
 }

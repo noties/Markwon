@@ -7,8 +7,6 @@ import org.commonmark.parser.Parser;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.priority.Priority;
 
 public class IconPlugin extends AbstractMarkwonPlugin {
 

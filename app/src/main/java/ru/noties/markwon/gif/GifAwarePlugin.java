@@ -14,8 +14,6 @@ import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.image.AsyncDrawableSpan;
 import ru.noties.markwon.image.ImageProps;
-import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.priority.Priority;
 
 public class GifAwarePlugin extends AbstractMarkwonPlugin {
 
@@ -57,12 +55,6 @@ public class GifAwarePlugin extends AbstractMarkwonPlugin {
                 );
             }
         });
-    }
-
-    @NonNull
-    @Override
-    public Priority priority() {
-        return Priority.after(ImagesPlugin.class);
     }
 
     @Override

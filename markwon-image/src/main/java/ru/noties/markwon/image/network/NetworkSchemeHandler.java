@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 
 import ru.noties.markwon.image.ImageItem;
 import ru.noties.markwon.image.SchemeHandler;
@@ -54,6 +56,12 @@ public class NetworkSchemeHandler extends SchemeHandler {
         }
 
         return imageItem;
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedSchemes() {
+        return Arrays.asList(SCHEME_HTTP, SCHEME_HTTPS);
     }
 
     @Nullable

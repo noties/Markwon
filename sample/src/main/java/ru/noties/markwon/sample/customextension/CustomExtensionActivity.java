@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import ru.noties.markwon.Markwon;
-import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.sample.R;
 
 public class CustomExtensionActivity extends Activity {

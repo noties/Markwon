@@ -40,7 +40,6 @@ import ru.noties.markwon.core.factory.ListItemSpanFactory;
 import ru.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import ru.noties.markwon.core.factory.ThematicBreakSpanFactory;
 import ru.noties.markwon.core.spans.OrderedListItemSpan;
-import ru.noties.markwon.priority.Priority;
 
 /**
  * @see CoreProps

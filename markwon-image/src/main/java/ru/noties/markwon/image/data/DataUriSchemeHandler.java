@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 import ru.noties.markwon.image.ImageItem;
 import ru.noties.markwon.image.SchemeHandler;
@@ -60,5 +62,11 @@ public class DataUriSchemeHandler extends SchemeHandler {
         return ImageItem.withDecodingNeeded(
                 dataUri.contentType(),
                 new ByteArrayInputStream(bytes));
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedSchemes() {
+        return Collections.singleton(SCHEME);
     }
 }

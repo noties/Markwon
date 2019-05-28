@@ -14,15 +14,18 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import ru.noties.debug.Debug;
-import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import ru.noties.markwon.ext.tables.TablePlugin;
 import ru.noties.markwon.ext.tasklist.TaskListPlugin;
 import ru.noties.markwon.gif.GifAwarePlugin;
 import ru.noties.markwon.html.HtmlPlugin;
+import ru.noties.markwon.image.DefaultImageMediaDecoder;
 import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.image.gif.GifPlugin;
-import ru.noties.markwon.image.svg.SvgPlugin;
+import ru.noties.markwon.image.data.DataUriSchemeHandler;
+import ru.noties.markwon.image.file.FileSchemeHandler;
+import ru.noties.markwon.image.gif.GifMediaDecoder;
+import ru.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
+import ru.noties.markwon.image.svg.SvgMediaDecoder;
 import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
@@ -94,10 +97,18 @@ public class MarkdownRenderer {
                         : prism4JThemeDarkula;
 
                 final Markwon markwon = Markwon.builder(context)
-                        .usePlugin(CorePlugin.create())
-                        .usePlugin(ImagesPlugin.createWithAssets(context))
-                        .usePlugin(SvgPlugin.create(context.getResources()))
-                        .usePlugin(GifPlugin.create(false))
+                        .usePlugin(ImagesPlugin.create(new ImagesPlugin.ImagesConfigure() {
+                            @Override
+                            public void configureImages(@NonNull ImagesPlugin plugin) {
+                                plugin
+                                        .addSchemeHandler(DataUriSchemeHandler.create())
+                                        .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
+                                        .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()))
+                                        .addMediaDecoder(GifMediaDecoder.create(false))
+                                        .addMediaDecoder(SvgMediaDecoder.create())
+                                        .defaultMediaDecoder(DefaultImageMediaDecoder.create());
+                            }
+                        }))
                         .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
                         .usePlugin(GifAwarePlugin.create(context))
                         .usePlugin(TablePlugin.create(context))

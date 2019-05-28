@@ -19,13 +19,7 @@ import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImageItem;
-import ru.noties.markwon.image.ImageProps;
 import ru.noties.markwon.image.ImageSize;
-import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.image.MediaDecoder;
-import ru.noties.markwon.image.SchemeHandler;
-import ru.noties.markwon.priority.Priority;
 
 /**
  * @since 3.0.0

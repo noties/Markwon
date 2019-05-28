@@ -8,7 +8,6 @@ import org.robolectric.annotation.Config;
 import java.util.List;
 
 import ru.noties.markwon.core.CorePlugin;
-import ru.noties.markwon.priority.Priority;
 
 import static org.junit.Assert.assertEquals;
 

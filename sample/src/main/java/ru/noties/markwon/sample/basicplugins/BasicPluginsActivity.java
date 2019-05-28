@@ -22,10 +22,6 @@ import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.movement.MovementMethodPlugin;
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.image.AsyncDrawableLoader;
-import ru.noties.markwon.image.ImageItem;
-import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.image.SchemeHandler;
-import ru.noties.markwon.image.network.NetworkSchemeHandler;
 
 public class BasicPluginsActivity extends Activity {
 
