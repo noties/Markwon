@@ -2,6 +2,8 @@ package ru.noties.markwon.sample.recycler;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +11,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.node.FencedCodeBlock;
@@ -26,11 +31,8 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.html.HtmlPlugin;
-import ru.noties.markwon.image.DefaultImageMediaDecoder;
-import ru.noties.markwon.image.ImagesPlugin;
-import ru.noties.markwon.image.file.FileSchemeHandler;
-import ru.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
-import ru.noties.markwon.image.svg.SvgMediaDecoder;
+import ru.noties.markwon.image.AsyncDrawable;
+import ru.noties.markwon.image.picasso.PicassoImagesPlugin;
 import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.recycler.SimpleEntry;
 import ru.noties.markwon.recycler.table.TableEntry;
@@ -77,13 +79,13 @@ public class RecyclerActivity extends Activity {
     private static Markwon markwon(@NonNull Context context) {
         return Markwon.builder(context)
                 .usePlugin(CorePlugin.create())
-                .usePlugin(ImagesPlugin.create(plugin -> {
-                    plugin
-                            .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()))
-                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
-                            .addMediaDecoder(SvgMediaDecoder.create())
-                            .defaultMediaDecoder(DefaultImageMediaDecoder.create());
-                }))
+//                .usePlugin(ImagesPlugin.create(plugin -> {
+//                    plugin
+//                            .addSchemeHandler(FileSchemeHandler.createWithAssets(context))
+//                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
+//                            .addMediaDecoder(SvgMediaDecoder.create());
+//                }))
+                .usePlugin(PicassoImagesPlugin.create(context))
                 // important to use TableEntryPlugin instead of TablePlugin
                 .usePlugin(TableEntryPlugin.create(context))
                 .usePlugin(HtmlPlugin.create())

@@ -23,6 +23,7 @@ public abstract class AsyncDrawableScheduler {
         // hm... we need the same thing for unschedule then... we can check if last hash is !null,
         // if it's not -> unschedule, else ignore
 
+        // @since 4.0.0-SNAPSHOT
         final Integer lastTextHashCode =
                 (Integer) textView.getTag(R.id.markwon_drawables_scheduler_last_text_hashcode);
         final int textHashCode = textView.getText().hashCode();
@@ -67,6 +68,7 @@ public abstract class AsyncDrawableScheduler {
     // must be called when text manually changed in TextView
     public static void unschedule(@NonNull TextView view) {
 
+        // @since 4.0.0-SNAPSHOT
         if (view.getTag(R.id.markwon_drawables_scheduler_last_text_hashcode) == null) {
             return;
         }

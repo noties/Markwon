@@ -14,6 +14,7 @@ import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
+import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
 import org.commonmark.node.ListBlock;
@@ -30,6 +31,8 @@ import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.SpanFactory;
 import ru.noties.markwon.core.factory.BlockQuoteSpanFactory;
 import ru.noties.markwon.core.factory.CodeBlockSpanFactory;
 import ru.noties.markwon.core.factory.CodeSpanFactory;
@@ -40,6 +43,7 @@ import ru.noties.markwon.core.factory.ListItemSpanFactory;
 import ru.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import ru.noties.markwon.core.factory.ThematicBreakSpanFactory;
 import ru.noties.markwon.core.spans.OrderedListItemSpan;
+import ru.noties.markwon.image.ImageProps;
 
 /**
  * @see CoreProps
@@ -64,6 +68,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         code(builder);
         fencedCodeBlock(builder);
         indentedCodeBlock(builder);
+        image(builder);
         bulletList(builder);
         orderedList(builder);
         listItem(builder);
@@ -193,6 +198,53 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull IndentedCodeBlock indentedCodeBlock) {
                 visitCodeBlock(visitor, null, indentedCodeBlock.getLiteral(), indentedCodeBlock);
+            }
+        });
+    }
+
+    // @since 4.0.0-SNAPSHOT
+    // his method is moved from ImagesPlugin. Alternative implementations must set SpanFactory
+    // for Image node in order for this visitor to function
+    private static void image(MarkwonVisitor.Builder builder) {
+        builder.on(Image.class, new MarkwonVisitor.NodeVisitor<Image>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Image image) {
+
+                // if there is no image spanFactory, ignore
+                final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Image.class);
+                if (spanFactory == null) {
+                    visitor.visitChildren(image);
+                    return;
+                }
+
+                final int length = visitor.length();
+
+                visitor.visitChildren(image);
+
+                // we must check if anything _was_ added, as we need at least one char to render
+                if (length == visitor.length()) {
+                    visitor.builder().append('\uFFFC');
+                }
+
+                final MarkwonConfiguration configuration = visitor.configuration();
+
+                final Node parent = image.getParent();
+                final boolean link = parent instanceof Link;
+
+                final String destination = configuration
+                        .urlProcessor()
+                        .process(image.getDestination());
+
+                final RenderProps props = visitor.renderProps();
+
+                // apply image properties
+                // Please note that we explicitly set IMAGE_SIZE to null as we do not clear
+                // properties after we applied span (we could though)
+                ImageProps.DESTINATION.set(props, destination);
+                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
+                ImageProps.IMAGE_SIZE.set(props, null);
+
+                visitor.setSpans(length, spanFactory.getSpans(configuration, props));
             }
         });
     }

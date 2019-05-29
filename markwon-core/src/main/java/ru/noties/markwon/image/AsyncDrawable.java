@@ -261,7 +261,8 @@ public class AsyncDrawable extends Drawable {
         if (hasResult()) {
             out = result.getIntrinsicWidth();
         } else {
-            out = 0;
+            // @since 4.0.0-SNAPSHOT, must not be zero in order to receive canvas dimensions
+            out = 1;
         }
         return out;
     }
@@ -272,7 +273,8 @@ public class AsyncDrawable extends Drawable {
         if (hasResult()) {
             out = result.getIntrinsicHeight();
         } else {
-            out = 0;
+            // @since 4.0.0-SNAPSHOT, must not be zero in order to receive canvas dimensions
+            out = 1;
         }
         return out;
     }
@@ -289,5 +291,17 @@ public class AsyncDrawable extends Drawable {
         return imageSizeResolver != null
                 ? imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize)
                 : result.getBounds();
+    }
+
+    @Override
+    public String toString() {
+        return "AsyncDrawable{" +
+                "destination='" + destination + '\'' +
+                ", imageSize=" + imageSize +
+                ", result=" + result +
+                ", canvasWidth=" + canvasWidth +
+                ", textSize=" + textSize +
+                ", waitingForDimensions=" + waitingForDimensions +
+                '}';
     }
 }

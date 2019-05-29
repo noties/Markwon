@@ -1,5 +1,6 @@
 package ru.noties.markwon.image.file;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -33,6 +34,16 @@ public class FileSchemeHandler extends SchemeHandler {
     @NonNull
     public static FileSchemeHandler createWithAssets(@NonNull AssetManager assetManager) {
         return new FileSchemeHandler(assetManager);
+    }
+
+    /**
+     * @see #createWithAssets(AssetManager)
+     * @see ru.noties.markwon.urlprocessor.UrlProcessorAndroidAssets
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public static FileSchemeHandler createWithAssets(@NonNull Context context) {
+        return new FileSchemeHandler(context.getAssets());
     }
 
     @NonNull

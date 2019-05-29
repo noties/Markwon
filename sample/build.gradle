@@ -44,6 +44,8 @@ dependencies {
     implementation project(':markwon-recycler')
     implementation project(':markwon-recycler-table')
 
+    implementation project(':markwon-image-picasso')
+
     deps.with {
         implementation it['support-recycler-view']
         implementation it['okhttp']

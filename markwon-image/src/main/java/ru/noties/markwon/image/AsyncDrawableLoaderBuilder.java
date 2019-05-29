@@ -73,11 +73,15 @@ class AsyncDrawableLoaderBuilder {
 
         isBuilt = true;
 
-        // if we have no schemeHandlers -> we cannot show anything
-        // OR if we have no media decoders
-        if (schemeHandlers.size() == 0
-                || (mediaDecoders.size() == 0 && defaultMediaDecoder == null)) {
+        // we must have schemeHandlers registered (we will provide
+        // default media decoder if it's absent)
+        if (schemeHandlers.size() == 0) {
             return new AsyncDrawableLoaderNoOp();
+        }
+
+        // @since 4.0.0-SNAPSHOT
+        if (defaultMediaDecoder == null) {
+            defaultMediaDecoder = DefaultImageMediaDecoder.create();
         }
 
         if (executorService == null) {

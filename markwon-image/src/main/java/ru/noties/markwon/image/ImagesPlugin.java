@@ -7,17 +7,12 @@ import android.text.Spanned;
 import android.widget.TextView;
 
 import org.commonmark.node.Image;
-import org.commonmark.node.Link;
-import org.commonmark.node.Node;
 
 import java.util.concurrent.ExecutorService;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonSpansFactory;
-import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.RenderProps;
-import ru.noties.markwon.SpanFactory;
 
 public class ImagesPlugin extends AbstractMarkwonPlugin {
 
@@ -145,51 +140,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
         builder.setFactory(Image.class, new ImageSpanFactory());
-    }
-
-    @Override
-    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        builder.on(Image.class, new MarkwonVisitor.NodeVisitor<Image>() {
-            @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Image image) {
-
-                // if there is no image spanFactory, ignore
-                final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Image.class);
-                if (spanFactory == null) {
-                    visitor.visitChildren(image);
-                    return;
-                }
-
-                final int length = visitor.length();
-
-                visitor.visitChildren(image);
-
-                // we must check if anything _was_ added, as we need at least one char to render
-                if (length == visitor.length()) {
-                    visitor.builder().append('\uFFFC');
-                }
-
-                final MarkwonConfiguration configuration = visitor.configuration();
-
-                final Node parent = image.getParent();
-                final boolean link = parent instanceof Link;
-
-                final String destination = configuration
-                        .urlProcessor()
-                        .process(image.getDestination());
-
-                final RenderProps props = visitor.renderProps();
-
-                // apply image properties
-                // Please note that we explicitly set IMAGE_SIZE to null as we do not clear
-                // properties after we applied span (we could though)
-                ImageProps.DESTINATION.set(props, destination);
-                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
-                ImageProps.IMAGE_SIZE.set(props, null);
-
-                visitor.setSpans(length, spanFactory.getSpans(configuration, props));
-            }
-        });
     }
 
     @Override
