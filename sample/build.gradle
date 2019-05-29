@@ -44,6 +44,11 @@ dependencies {
     implementation project(':markwon-recycler')
     implementation project(':markwon-recycler-table')
 
+    // these are for glide
+    implementation 'com.android.support:animated-vector-drawable:28.0.0'
+    implementation 'com.android.support:support-fragment:28.0.0'
+
+    implementation project(':markwon-image-glide')
     implementation project(':markwon-image-picasso')
 
     deps.with {

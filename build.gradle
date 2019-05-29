@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -29,8 +29,8 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion '4.10.2'
+wrapper {
+    gradleVersion '5.1.1'
     distributionType 'all'
 }
 
@@ -72,7 +72,8 @@ ext {
             'debug'                   : 'ru.noties:debug:3.0.0@jar',
             'adapt'                   : 'ru.noties:adapt:1.1.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
-            'picasso'                 : "com.squareup.picasso:picasso:2.71828"
+            'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
+            'glide'                   : 'com.github.bumptech.glide:glide:4.9.0'
     ]
 
     deps['annotationProcessor'] = [

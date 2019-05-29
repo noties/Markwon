@@ -32,6 +32,7 @@ import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.html.HtmlPlugin;
 import ru.noties.markwon.image.AsyncDrawable;
+import ru.noties.markwon.image.glide.GlideImagesPlugin;
 import ru.noties.markwon.image.picasso.PicassoImagesPlugin;
 import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.recycler.SimpleEntry;
@@ -85,7 +86,8 @@ public class RecyclerActivity extends Activity {
 //                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
 //                            .addMediaDecoder(SvgMediaDecoder.create());
 //                }))
-                .usePlugin(PicassoImagesPlugin.create(context))
+//                .usePlugin(PicassoImagesPlugin.create(context))
+                .usePlugin(GlideImagesPlugin.create(context))
                 // important to use TableEntryPlugin instead of TablePlugin
                 .usePlugin(TableEntryPlugin.create(context))
                 .usePlugin(HtmlPlugin.create())

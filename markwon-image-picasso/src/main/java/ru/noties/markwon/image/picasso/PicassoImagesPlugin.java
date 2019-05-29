@@ -70,6 +70,7 @@ public class PicassoImagesPlugin extends AbstractMarkwonPlugin {
 
     private final PicassoAsyncDrawableLoader picassoAsyncDrawableLoader;
 
+    @SuppressWarnings("WeakerAccess")
     PicassoImagesPlugin(@NonNull PicassoStore picassoStore) {
         this.picassoAsyncDrawableLoader = new PicassoAsyncDrawableLoader(picassoStore);
     }
