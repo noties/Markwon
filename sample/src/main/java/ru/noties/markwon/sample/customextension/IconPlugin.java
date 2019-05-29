@@ -21,12 +21,12 @@ public class IconPlugin extends AbstractMarkwonPlugin {
         this.iconSpanProvider = iconSpanProvider;
     }
 
-    @NonNull
-    @Override
-    public Priority priority() {
-        // define images dependency
-        return Priority.after(ImagesPlugin.class);
-    }
+//    @NonNull
+//    @Override
+//    public Priority priority() {
+//        // define images dependency
+//        return Priority.after(ImagesPlugin.class);
+//    }
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {

@@ -26,7 +26,11 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.core.CorePlugin;
 import ru.noties.markwon.html.HtmlPlugin;
-import ru.noties.markwon.image.svg.SvgPlugin;
+import ru.noties.markwon.image.DefaultImageMediaDecoder;
+import ru.noties.markwon.image.ImagesPlugin;
+import ru.noties.markwon.image.file.FileSchemeHandler;
+import ru.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
+import ru.noties.markwon.image.svg.SvgMediaDecoder;
 import ru.noties.markwon.recycler.MarkwonAdapter;
 import ru.noties.markwon.recycler.SimpleEntry;
 import ru.noties.markwon.recycler.table.TableEntry;
@@ -73,8 +77,13 @@ public class RecyclerActivity extends Activity {
     private static Markwon markwon(@NonNull Context context) {
         return Markwon.builder(context)
                 .usePlugin(CorePlugin.create())
-                .usePlugin(ImagesPlugin.createWithAssets(context))
-                .usePlugin(SvgPlugin.create(context.getResources()))
+                .usePlugin(ImagesPlugin.create(plugin -> {
+                    plugin
+                            .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()))
+                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
+                            .addMediaDecoder(SvgMediaDecoder.create())
+                            .defaultMediaDecoder(DefaultImageMediaDecoder.create());
+                }))
                 // important to use TableEntryPlugin instead of TablePlugin
                 .usePlugin(TableEntryPlugin.create(context))
                 .usePlugin(HtmlPlugin.create())

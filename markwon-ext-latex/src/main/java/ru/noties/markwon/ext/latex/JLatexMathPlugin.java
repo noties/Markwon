@@ -1,24 +1,31 @@
 package ru.noties.markwon.ext.latex;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Px;
+import android.text.Spanned;
+import android.widget.TextView;
 
-import org.commonmark.node.Image;
 import org.commonmark.parser.Parser;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import ru.noties.jlatexmath.JLatexMathDrawable;
 import ru.noties.markwon.AbstractMarkwonPlugin;
+import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.RenderProps;
+import ru.noties.markwon.image.AsyncDrawable;
 import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.image.AsyncDrawableScheduler;
+import ru.noties.markwon.image.AsyncDrawableSpan;
 import ru.noties.markwon.image.ImageSize;
 
 /**
@@ -65,27 +72,29 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final int padding;
 
+        // @since 4.0.0-SNAPSHOT
+        private final ExecutorService executorService;
+
         Config(@NonNull Builder builder) {
             this.textSize = builder.textSize;
             this.background = builder.background;
             this.align = builder.align;
             this.fitCanvas = builder.fitCanvas;
             this.padding = builder.padding;
+
+            // @since 4.0.0-SNAPSHOT
+            ExecutorService executorService = builder.executorService;
+            if (executorService == null) {
+                executorService = Executors.newCachedThreadPool();
+            }
+            this.executorService = executorService;
         }
     }
 
-    @NonNull
-    public static String makeDestination(@NonNull String latex) {
-        return SCHEME + "://" + latex;
-    }
-
-    private static final String SCHEME = "jlatexmath";
-    private static final String CONTENT_TYPE = "text/jlatexmath";
-
-    private final Config config;
+    private final JLatextAsyncDrawableLoader jLatextAsyncDrawableLoader;
 
     JLatexMathPlugin(@NonNull Config config) {
-        this.config = config;
+        this.jLatextAsyncDrawableLoader = new JLatextAsyncDrawableLoader(config);
     }
 
     @Override
@@ -102,70 +111,36 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                 final String latex = jLatexMathBlock.latex();
 
                 final int length = visitor.length();
+
                 visitor.builder().append(latex);
 
-                final RenderProps renderProps = visitor.renderProps();
+                final MarkwonConfiguration configuration = visitor.configuration();
 
-                ImageProps.DESTINATION.set(renderProps, makeDestination(latex));
-                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(renderProps, false);
-                ImageProps.IMAGE_SIZE.set(renderProps, new ImageSize(new ImageSize.Dimension(100, "%"), null));
+                final AsyncDrawableSpan span = new AsyncDrawableSpan(
+                        configuration.theme(),
+                        new AsyncDrawable(
+                                latex,
+                                jLatextAsyncDrawableLoader,
+                                configuration.imageSizeResolver(),
+                                new ImageSize(
+                                        new ImageSize.Dimension(100, "%"),
+                                        null)),
+                        AsyncDrawableSpan.ALIGN_BOTTOM,
+                        false);
 
-                visitor.setSpansForNode(Image.class, length);
+                visitor.setSpans(length, span);
             }
         });
     }
 
     @Override
-    public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
-        builder
-                .addSchemeHandler(SCHEME, new SchemeHandler() {
-                    @Nullable
-                    @Override
-                    public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
-
-                        ImageItem item = null;
-
-                        try {
-                            final byte[] bytes = raw.substring(SCHEME.length()).getBytes("UTF-8");
-                            item = new ImageItem(
-                                    CONTENT_TYPE,
-                                    new ByteArrayInputStream(bytes));
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-
-                        return item;
-                    }
-                })
-                .addMediaDecoder(CONTENT_TYPE, new MediaDecoder() {
-                    @Nullable
-                    @Override
-                    public Drawable decode(@NonNull InputStream inputStream) {
-
-                        final Scanner scanner = new Scanner(inputStream, "UTF-8").useDelimiter("\\A");
-                        final String latex = scanner.hasNext()
-                                ? scanner.next()
-                                : null;
-
-                        if (latex == null) {
-                            return null;
-                        }
-
-                        return JLatexMathDrawable.builder(latex)
-                                .textSize(config.textSize)
-                                .background(config.background)
-                                .align(config.align)
-                                .fitCanvas(config.fitCanvas)
-                                .padding(config.padding)
-                                .build();
-                    }
-                });
+    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+        AsyncDrawableScheduler.unschedule(textView);
     }
 
-    @NonNull
     @Override
-    public Priority priority() {
-        return Priority.after(ImagesPlugin.class);
+    public void afterSetText(@NonNull TextView textView) {
+        AsyncDrawableScheduler.schedule(textView);
     }
 
     public static class Builder {
@@ -180,6 +155,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         private boolean fitCanvas = true;
 
         private int padding;
+
+        // @since 4.0.0-SNAPSHOT
+        private ExecutorService executorService;
 
         Builder(float textSize) {
             this.textSize = textSize;
@@ -209,9 +187,95 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             return this;
         }
 
+        /**
+         * @since 4.0.0-SNAPSHOT
+         */
+        @NonNull
+        public Builder executorService(@NonNull ExecutorService executorService) {
+            this.executorService = executorService;
+            return this;
+        }
+
         @NonNull
         public Config build() {
             return new Config(this);
+        }
+    }
+
+    // @since 4.0.0-SNAPSHOT
+    private static class JLatextAsyncDrawableLoader extends AsyncDrawableLoader {
+
+        private final Config config;
+        private final Handler handler = new Handler(Looper.getMainLooper());
+        private final Map<AsyncDrawable, Future<?>> cache = new HashMap<>(3);
+
+        JLatextAsyncDrawableLoader(@NonNull Config config) {
+            this.config = config;
+        }
+
+        @Override
+        public void load(@NonNull final AsyncDrawable drawable) {
+
+            // this method must be called from main-thread only (thus synchronization can be skipped)
+
+            // check for currently running tasks associated with provided drawable
+            final Future<?> future = cache.get(drawable);
+
+            // if it's present -> proceed with new execution
+            // as asyncDrawable is immutable, it won't have destination changed (so there is no need
+            // to cancel any started tasks)
+            if (future == null) {
+
+                cache.put(drawable, config.executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // create JLatexMathDrawable
+                        final JLatexMathDrawable jLatexMathDrawable =
+                                JLatexMathDrawable.builder(drawable.getDestination())
+                                        .textSize(config.textSize)
+                                        .background(config.background)
+                                        .align(config.align)
+                                        .fitCanvas(config.fitCanvas)
+                                        .padding(config.padding)
+                                        .build();
+
+                        // we must post to handler, but also have a way to identify the drawable
+                        // for which we are posting (in case of cancellation)
+                        handler.postAtTime(new Runnable() {
+                            @Override
+                            public void run() {
+                                // remove entry from cache (it will be present if task is not cancelled)
+                                if (cache.remove(drawable) != null
+                                        && drawable.isAttached()) {
+                                    drawable.setResult(jLatexMathDrawable);
+                                }
+
+                            }
+                        }, drawable, SystemClock.uptimeMillis());
+                    }
+                }));
+            }
+        }
+
+        @Override
+        public void cancel(@NonNull AsyncDrawable drawable) {
+
+            // this method also must be called from main thread only
+
+            final Future<?> future = cache.remove(drawable);
+            if (future != null) {
+                future.cancel(true);
+            }
+
+            // remove all callbacks (via runnable) and messages posted for this drawable
+            handler.removeCallbacksAndMessages(drawable);
+        }
+
+        @Nullable
+        @Override
+        public Drawable placeholder(@NonNull AsyncDrawable drawable) {
+            return null;
         }
     }
 }

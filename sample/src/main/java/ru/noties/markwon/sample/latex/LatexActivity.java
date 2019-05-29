@@ -42,7 +42,7 @@ public class LatexActivity extends Activity {
                 + latex + "$$\n\n something like **this**";
 
         final Markwon markwon = Markwon.builder(this)
-                .usePlugin(ImagesPlugin.create(this))
+//                .usePlugin(ImagesPlugin.create(this))
                 .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
                 .build();
 

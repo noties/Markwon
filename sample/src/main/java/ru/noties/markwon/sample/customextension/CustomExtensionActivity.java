@@ -26,7 +26,7 @@ public class CustomExtensionActivity extends Activity {
         // `usePlugin` call
         final Markwon markwon = Markwon.builder(this)
                 // try commenting out this line to see runtime dependency resolution
-                .usePlugin(ImagesPlugin.create(this))
+//                .usePlugin(ImagesPlugin.create(this))
                 .usePlugin(IconPlugin.create(IconSpanProvider.create(this, 0)))
                 .build();
 

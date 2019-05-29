@@ -50,6 +50,7 @@ dependencies {
         implementation it['prism4j']
         implementation it['debug']
         implementation it['adapt']
+        implementation it['android-svg']
     }
 
     deps['annotationProcessor'].with {

@@ -19,9 +19,8 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonPlugin;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.movement.MovementMethodPlugin;
 import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.image.AsyncDrawableLoader;
+import ru.noties.markwon.movement.MovementMethodPlugin;
 
 public class BasicPluginsActivity extends Activity {
 
@@ -168,25 +167,25 @@ public class BasicPluginsActivity extends Activity {
         final String markdown = "![image](myownscheme://en.wikipedia.org/static/images/project-logos/enwiki-2x.png)";
 
         final Markwon markwon = Markwon.builder(this)
-                .usePlugin(ImagesPlugin.create(this))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
-                        // we can have a custom SchemeHandler
-                        // here we will just use networkSchemeHandler to redirect call
-                        builder.addSchemeHandler("myownscheme", new SchemeHandler() {
-
-                            final NetworkSchemeHandler networkSchemeHandler = NetworkSchemeHandler.create();
-
-                            @Nullable
-                            @Override
-                            public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
-                                raw = raw.replace("myownscheme", "https");
-                                return networkSchemeHandler.handle(raw, Uri.parse(raw));
-                            }
-                        });
-                    }
-                })
+//                .usePlugin(ImagesPlugin.create(this))
+//                .usePlugin(new AbstractMarkwonPlugin() {
+//                    @Override
+//                    public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
+//                        // we can have a custom SchemeHandler
+//                        // here we will just use networkSchemeHandler to redirect call
+//                        builder.addSchemeHandler("myownscheme", new SchemeHandler() {
+//
+//                            final NetworkSchemeHandler networkSchemeHandler = NetworkSchemeHandler.create();
+//
+//                            @Nullable
+//                            @Override
+//                            public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
+//                                raw = raw.replace("myownscheme", "https");
+//                                return networkSchemeHandler.handle(raw, Uri.parse(raw));
+//                            }
+//                        });
+//                    }
+//                })
                 .build();
 
         markwon.setMarkdown(textView, markdown);

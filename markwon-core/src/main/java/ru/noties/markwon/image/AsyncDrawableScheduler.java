@@ -5,14 +5,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Spanned;
-import android.text.style.DynamicDrawableSpan;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import ru.noties.markwon.renderer.R;
 
@@ -20,8 +16,26 @@ public abstract class AsyncDrawableScheduler {
 
     public static void schedule(@NonNull final TextView textView) {
 
-        final List<AsyncDrawable> list = extract(textView);
-        if (list.size() > 0) {
+        // we need a simple check if current text has already scheduled drawables
+        // we need this in order to allow multiple calls to schedule (different plugins
+        // might use AsyncDrawable), but we do not want to repeat the task
+        //
+        // hm... we need the same thing for unschedule then... we can check if last hash is !null,
+        // if it's not -> unschedule, else ignore
+
+        final Integer lastTextHashCode =
+                (Integer) textView.getTag(R.id.markwon_drawables_scheduler_last_text_hashcode);
+        final int textHashCode = textView.getText().hashCode();
+        if (lastTextHashCode != null
+                && lastTextHashCode == textHashCode) {
+            return;
+        }
+        textView.setTag(R.id.markwon_drawables_scheduler_last_text_hashcode, textHashCode);
+
+
+        final AsyncDrawableSpan[] spans = extractSpans(textView);
+        if (spans != null
+                && spans.length > 0) {
 
             if (textView.getTag(R.id.markwon_drawables_scheduler) == null) {
                 final View.OnAttachStateChangeListener listener = new View.OnAttachStateChangeListener() {
@@ -41,7 +55,10 @@ public abstract class AsyncDrawableScheduler {
                 textView.setTag(R.id.markwon_drawables_scheduler, listener);
             }
 
-            for (AsyncDrawable drawable : list) {
+            AsyncDrawable drawable;
+
+            for (AsyncDrawableSpan span : spans) {
+                drawable = span.getDrawable();
                 drawable.setCallback2(new DrawableCallbackImpl(textView, drawable.getBounds()));
             }
         }
@@ -49,57 +66,39 @@ public abstract class AsyncDrawableScheduler {
 
     // must be called when text manually changed in TextView
     public static void unschedule(@NonNull TextView view) {
-        for (AsyncDrawable drawable : extract(view)) {
-            drawable.setCallback2(null);
+
+        if (view.getTag(R.id.markwon_drawables_scheduler_last_text_hashcode) == null) {
+            return;
+        }
+        view.setTag(R.id.markwon_drawables_scheduler_last_text_hashcode, null);
+
+
+        final AsyncDrawableSpan[] spans = extractSpans(view);
+        if (spans != null
+                && spans.length > 0) {
+            for (AsyncDrawableSpan span : spans) {
+                span.getDrawable().setCallback2(null);
+            }
         }
     }
 
-    private static List<AsyncDrawable> extract(@NonNull TextView view) {
+    @Nullable
+    private static AsyncDrawableSpan[] extractSpans(@NonNull TextView textView) {
 
-        final List<AsyncDrawable> list;
-
-        final CharSequence cs = view.getText();
+        final CharSequence cs = textView.getText();
         final int length = cs != null
                 ? cs.length()
                 : 0;
 
-        if (length == 0 || !(cs instanceof Spanned)) {
-            //noinspection unchecked
-            list = Collections.EMPTY_LIST;
-        } else {
-
-            final List<AsyncDrawable> drawables = new ArrayList<>(2);
-
-            final Spanned spanned = (Spanned) cs;
-            final AsyncDrawableSpan[] asyncDrawableSpans = spanned.getSpans(0, length, AsyncDrawableSpan.class);
-            if (asyncDrawableSpans != null
-                    && asyncDrawableSpans.length > 0) {
-                for (AsyncDrawableSpan span : asyncDrawableSpans) {
-                    drawables.add(span.getDrawable());
-                }
-            }
-
-            final DynamicDrawableSpan[] dynamicDrawableSpans = spanned.getSpans(0, length, DynamicDrawableSpan.class);
-            if (dynamicDrawableSpans != null
-                    && dynamicDrawableSpans.length > 0) {
-                for (DynamicDrawableSpan span : dynamicDrawableSpans) {
-                    final Drawable d = span.getDrawable();
-                    if (d != null
-                            && d instanceof AsyncDrawable) {
-                        drawables.add((AsyncDrawable) d);
-                    }
-                }
-            }
-
-            if (drawables.size() == 0) {
-                //noinspection unchecked
-                list = Collections.EMPTY_LIST;
-            } else {
-                list = drawables;
-            }
+        if (length == 0
+                || !(cs instanceof Spanned)) {
+            return null;
         }
 
-        return list;
+        // we also could've tried the `nextSpanTransition`, but strangely it leads to worse performance
+        // then direct getSpans
+
+        return ((Spanned) cs).getSpans(0, length, AsyncDrawableSpan.class);
     }
 
     private AsyncDrawableScheduler() {
