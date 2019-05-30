@@ -31,6 +31,11 @@ public class NetworkSchemeHandler extends SchemeHandler {
         return new NetworkSchemeHandler();
     }
 
+    @SuppressWarnings("WeakerAccess")
+    NetworkSchemeHandler() {
+
+    }
+
     @NonNull
     @Override
     public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {

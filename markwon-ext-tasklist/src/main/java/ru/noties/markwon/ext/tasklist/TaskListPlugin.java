@@ -101,7 +101,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
     private static int resolve(@NonNull Context context, @AttrRes int attr) {
         final TypedValue typedValue = new TypedValue();
-        final int attrs[] = new int[]{attr};
+        final int[] attrs = new int[]{attr};
         final TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, attrs);
         try {
             return typedArray.getColor(0, 0);

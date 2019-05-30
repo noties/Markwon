@@ -31,6 +31,9 @@ public class GifMediaDecoder extends MediaDecoder {
 
     protected GifMediaDecoder(boolean autoPlayGif) {
         this.autoPlayGif = autoPlayGif;
+
+        // @since 4.0.0-SNAPSHOT
+        Holder.validate();
     }
 
     @NonNull
@@ -81,5 +84,29 @@ public class GifMediaDecoder extends MediaDecoder {
             outputStream.write(buffer, 0, read);
         }
         return outputStream.toByteArray();
+    }
+
+    // @since 4.0.0-SNAPSHOT
+    private static class Holder {
+
+        private static final boolean HAS_GIF;
+
+        static {
+            boolean result = true;
+            try {
+                GifDrawable.class.getName();
+            } catch (Throwable t) {
+                result = false;
+                t.printStackTrace();
+            }
+            HAS_GIF = result;
+        }
+
+        static void validate() {
+            if (!HAS_GIF) {
+                throw new IllegalStateException("`pl.droidsonroids.gif:android-gif-drawable:*` " +
+                        "dependency is missing, please add to your project explicitly");
+            }
+        }
     }
 }

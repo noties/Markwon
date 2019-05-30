@@ -44,6 +44,9 @@ public class SvgMediaDecoder extends MediaDecoder {
     @SuppressWarnings("WeakerAccess")
     SvgMediaDecoder(Resources resources) {
         this.resources = resources;
+
+        // @since 4.0.0-SNAPSHOT
+        Holder.validate();
     }
 
     @NonNull
@@ -78,5 +81,29 @@ public class SvgMediaDecoder extends MediaDecoder {
     @Override
     public Collection<String> supportedTypes() {
         return Collections.singleton(CONTENT_TYPE);
+    }
+
+    // @since 4.0.0-SNAPSHOT
+    private static class Holder {
+
+        private static final boolean HAS_SVG;
+
+        static {
+            boolean result = true;
+            try {
+                SVG.class.getName();
+            } catch (Throwable t) {
+                result = false;
+                t.printStackTrace();
+            }
+            HAS_SVG = result;
+        }
+
+        static void validate() {
+            if (!HAS_SVG) {
+                throw new IllegalStateException("`com.caverock:androidsvg:*` dependency is missing, " +
+                        "please add to your project explicitly");
+            }
+        }
     }
 }

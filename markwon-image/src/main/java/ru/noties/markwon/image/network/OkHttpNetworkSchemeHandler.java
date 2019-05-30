@@ -36,6 +36,7 @@ public class OkHttpNetworkSchemeHandler extends SchemeHandler {
 
     private final OkHttpClient client;
 
+    @SuppressWarnings("WeakerAccess")
     OkHttpNetworkSchemeHandler(@NonNull OkHttpClient client) {
         this.client = client;
     }

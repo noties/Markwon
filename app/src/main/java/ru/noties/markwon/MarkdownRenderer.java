@@ -19,7 +19,6 @@ import ru.noties.markwon.ext.tables.TablePlugin;
 import ru.noties.markwon.ext.tasklist.TaskListPlugin;
 import ru.noties.markwon.gif.GifAwarePlugin;
 import ru.noties.markwon.html.HtmlPlugin;
-import ru.noties.markwon.image.DefaultImageMediaDecoder;
 import ru.noties.markwon.image.ImagesPlugin;
 import ru.noties.markwon.image.data.DataUriSchemeHandler;
 import ru.noties.markwon.image.file.FileSchemeHandler;
@@ -105,8 +104,7 @@ public class MarkdownRenderer {
                                         .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
                                         .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()))
                                         .addMediaDecoder(GifMediaDecoder.create(false))
-                                        .addMediaDecoder(SvgMediaDecoder.create())
-                                        .defaultMediaDecoder(DefaultImageMediaDecoder.create());
+                                        .addMediaDecoder(SvgMediaDecoder.create());
                             }
                         }))
                         .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))

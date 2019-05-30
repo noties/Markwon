@@ -3,7 +3,6 @@ package ru.noties.markwon.image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -31,14 +30,8 @@ class AsyncDrawableLoaderBuilder {
     }
 
     void addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
-        final Collection<String> supportedTypes = mediaDecoder.supportedTypes();
-        if (supportedTypes.isEmpty()) {
-            // todo: we should think about this little _side-effect_... does it worth it?
-            defaultMediaDecoder = mediaDecoder;
-        } else {
-            for (String type : supportedTypes) {
-                mediaDecoders.put(type, mediaDecoder);
-            }
+        for (String type : mediaDecoder.supportedTypes()) {
+            mediaDecoders.put(type, mediaDecoder);
         }
     }
 

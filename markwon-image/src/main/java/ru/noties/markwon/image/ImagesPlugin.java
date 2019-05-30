@@ -47,9 +47,11 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      * Factory method to create an empty {@link ImagesPlugin} instance with no {@link SchemeHandler}s
      * nor {@link MediaDecoder}s registered. Can be used to further configure via instance methods or
      * via {@link ru.noties.markwon.MarkwonPlugin#configure(Registry)}
+     *
+     * @see #create(ImagesConfigure)
      */
     @NonNull
-    public static ImagesPlugin createEmpty() {
+    public static ImagesPlugin create() {
         return new ImagesPlugin();
     }
 
