@@ -4,3 +4,6 @@
   also accepts a ExecutorService (optional, by default cachedThreadPool is used)
 * AsyncDrawableScheduler now can be called by multiple plugins without penalty
   internally caches latest state and skips scheduling if drawables are already processed
+* configure with registry
+* removed priority
+* images-plugin moved to standalone again

@@ -8,11 +8,11 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dip"
-        android:clipToPadding="false"
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:clipChildren="false"
-        android:scrollbarStyle="outsideOverlay"
-        android:layout_marginTop="?android:attr/actionBarSize">
+        android:clipToPadding="false"
+        android:padding="16dip"
+        android:scrollbarStyle="outsideOverlay">
 
         <TextView
             android:id="@+id/text"

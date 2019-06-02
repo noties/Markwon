@@ -27,6 +27,9 @@ import org.commonmark.node.StrongEmphasis;
 import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonSpansFactory;
@@ -51,12 +54,55 @@ import ru.noties.markwon.image.ImageProps;
  */
 public class CorePlugin extends AbstractMarkwonPlugin {
 
+    /**
+     * @see #addOnTextAddedListener(OnTextAddedListener)
+     * @since 4.0.0-SNAPSHOT
+     */
+    public interface OnTextAddedListener {
+
+        /**
+         * Will be called when new text is added to resulting {@link ru.noties.markwon.SpannableBuilder}.
+         * Please note that only text represented by {@link Text} node will trigger this callback
+         * (text inside code and code-blocks won\'t trigger it).
+         * <p>
+         * Please note that if you wish to add spans you must use {@code start} parameter
+         * in order to place spans correctly ({@code start} represents the index at which {@code text}
+         * was added). So, to set a span for the whole length of the text added one should use:
+         * <p>
+         * {@code
+         * visitor.builder().setSpan(new MySpan(), start, start + text.length(), 0);
+         * }
+         *
+         * @param visitor {@link MarkwonVisitor}
+         * @param text    literal that had been added
+         * @param start   index in {@code visitor} as which text had been added
+         * @see #addOnTextAddedListener(OnTextAddedListener)
+         */
+        void onTextAdded(@NonNull MarkwonVisitor visitor, @NonNull String text, int start);
+    }
+
     @NonNull
     public static CorePlugin create() {
         return new CorePlugin();
     }
 
+    // @since 4.0.0-SNAPSHOT
+    private final List<OnTextAddedListener> onTextAddedListeners = new ArrayList<>(0);
+
     protected CorePlugin() {
+    }
+
+    /**
+     * Can be useful to post-process text added. For example for auto-linking capabilities.
+     *
+     * @see OnTextAddedListener
+     * @since 4.0.0-SNAPSHOT
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    @NonNull
+    public CorePlugin addOnTextAddedListener(@NonNull OnTextAddedListener onTextAddedListener) {
+        onTextAddedListeners.add(onTextAddedListener);
+        return this;
     }
 
     @Override
@@ -114,11 +160,20 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         }
     }
 
-    private static void text(@NonNull MarkwonVisitor.Builder builder) {
+    private void text(@NonNull MarkwonVisitor.Builder builder) {
         builder.on(Text.class, new MarkwonVisitor.NodeVisitor<Text>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Text text) {
-                visitor.builder().append(text.getLiteral());
+
+                final int length = visitor.length();
+                final String literal = text.getLiteral();
+
+                visitor.builder().append(literal);
+
+                // @since 4.0.0-SNAPSHOT
+                for (OnTextAddedListener onTextAddedListener : onTextAddedListeners) {
+                    onTextAddedListener.onTextAdded(visitor, literal, length);
+                }
             }
         });
     }
