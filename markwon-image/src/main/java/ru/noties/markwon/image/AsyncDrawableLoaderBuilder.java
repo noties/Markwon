@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import ru.noties.markwon.image.data.DataUriSchemeHandler;
+import ru.noties.markwon.image.network.NetworkSchemeHandler;
+
 class AsyncDrawableLoaderBuilder {
 
     ExecutorService executorService;
@@ -18,6 +21,15 @@ class AsyncDrawableLoaderBuilder {
     ImagesPlugin.ErrorHandler errorHandler;
 
     boolean isBuilt;
+
+    AsyncDrawableLoaderBuilder() {
+
+        // @since 4.0.0-SNAPSHOT
+        // okay, let's add supported schemes at the start, this would be : data-uri and default network
+        // we should not use file-scheme as it's a bit complicated to assume file usage (lack of permissions)
+        addSchemeHandler(DataUriSchemeHandler.create());
+        addSchemeHandler(NetworkSchemeHandler.create());
+    }
 
     void executorService(@NonNull ExecutorService executorService) {
         this.executorService = executorService;
@@ -66,12 +78,6 @@ class AsyncDrawableLoaderBuilder {
 
         isBuilt = true;
 
-        // we must have schemeHandlers registered (we will provide
-        // default media decoder if it's absent)
-        if (schemeHandlers.size() == 0) {
-            return new AsyncDrawableLoaderNoOp();
-        }
-
         // @since 4.0.0-SNAPSHOT
         if (defaultMediaDecoder == null) {
             defaultMediaDecoder = DefaultImageMediaDecoder.create();
@@ -83,5 +89,4 @@ class AsyncDrawableLoaderBuilder {
 
         return new AsyncDrawableLoaderImpl(this);
     }
-
 }

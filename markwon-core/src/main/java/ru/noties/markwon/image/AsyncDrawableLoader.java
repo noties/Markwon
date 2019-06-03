@@ -27,6 +27,4 @@ public abstract class AsyncDrawableLoader {
     @Nullable
     public abstract Drawable placeholder(@NonNull AsyncDrawable drawable);
 
-
-
 }

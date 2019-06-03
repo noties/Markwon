@@ -165,14 +165,17 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Text text) {
 
-                final int length = visitor.length();
                 final String literal = text.getLiteral();
 
                 visitor.builder().append(literal);
 
                 // @since 4.0.0-SNAPSHOT
-                for (OnTextAddedListener onTextAddedListener : onTextAddedListeners) {
-                    onTextAddedListener.onTextAdded(visitor, literal, length);
+                if (!onTextAddedListeners.isEmpty()) {
+                    // calculate the start position
+                    final int length = visitor.length() - literal.length();
+                    for (OnTextAddedListener onTextAddedListener : onTextAddedListeners) {
+                        onTextAddedListener.onTextAdded(visitor, literal, length);
+                    }
                 }
             }
         });

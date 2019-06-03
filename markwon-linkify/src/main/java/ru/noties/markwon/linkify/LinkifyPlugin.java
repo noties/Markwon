@@ -18,8 +18,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
     @IntDef(flag = true, value = {
             Linkify.EMAIL_ADDRESSES,
             Linkify.PHONE_NUMBERS,
-            Linkify.WEB_URLS,
-            Linkify.ALL
+            Linkify.WEB_URLS
     })
     @Retention(RetentionPolicy.SOURCE)
     @interface LinkifyMask {

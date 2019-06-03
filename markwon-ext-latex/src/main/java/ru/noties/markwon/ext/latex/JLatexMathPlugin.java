@@ -93,6 +93,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     private final JLatextAsyncDrawableLoader jLatextAsyncDrawableLoader;
 
+    @SuppressWarnings("WeakerAccess")
     JLatexMathPlugin(@NonNull Config config) {
         this.jLatextAsyncDrawableLoader = new JLatextAsyncDrawableLoader(config);
     }

@@ -14,6 +14,7 @@ import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonSpansFactory;
 
+@SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
 public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     /**
@@ -91,6 +92,12 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return this;
     }
 
+    /**
+     * @see DefaultImageMediaDecoder
+     * @see ru.noties.markwon.image.svg.SvgMediaDecoder
+     * @see ru.noties.markwon.image.gif.GifMediaDecoder
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
     public ImagesPlugin addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
         checkBuilderState();
@@ -98,13 +105,23 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return this;
     }
 
+    /**
+     * Please note that if not specified a {@link DefaultImageMediaDecoder} will be used. So
+     * if you need to disable default-image-media-decoder specify here own no-op implementation.
+     *
+     * @see DefaultImageMediaDecoder
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
-    public ImagesPlugin defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
+    public ImagesPlugin defaultMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
         checkBuilderState();
         builder.defaultMediaDecoder(mediaDecoder);
         return this;
     }
 
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
     public ImagesPlugin removeSchemeHandler(@NonNull String scheme) {
         checkBuilderState();
@@ -112,6 +129,9 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return this;
     }
 
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
     public ImagesPlugin removeMediaDecoder(@NonNull String contentType) {
         checkBuilderState();
@@ -119,6 +139,9 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return this;
     }
 
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
     public ImagesPlugin placeholderProvider(@NonNull PlaceholderProvider placeholderProvider) {
         checkBuilderState();
@@ -126,6 +149,10 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return this;
     }
 
+    /**
+     * @see ErrorHandler
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
     public ImagesPlugin errorHandler(@NonNull ErrorHandler errorHandler) {
         checkBuilderState();
