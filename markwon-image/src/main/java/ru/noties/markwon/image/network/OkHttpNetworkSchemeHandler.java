@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,21 +25,31 @@ public class OkHttpNetworkSchemeHandler extends SchemeHandler {
      */
     @NonNull
     public static OkHttpNetworkSchemeHandler create() {
-        return new OkHttpNetworkSchemeHandler(new OkHttpClient());
+        return create(new OkHttpClient());
     }
 
     @NonNull
     public static OkHttpNetworkSchemeHandler create(@NonNull OkHttpClient client) {
-        return new OkHttpNetworkSchemeHandler(client);
+        // explicit cast, otherwise a recursive call
+        return create((Call.Factory) client);
+    }
+
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public static OkHttpNetworkSchemeHandler create(@NonNull Call.Factory factory) {
+        return new OkHttpNetworkSchemeHandler(factory);
     }
 
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
 
-    private final OkHttpClient client;
+    // @since 4.0.0-SNAPSHOT, previously just OkHttpClient
+    private final Call.Factory factory;
 
     @SuppressWarnings("WeakerAccess")
-    OkHttpNetworkSchemeHandler(@NonNull OkHttpClient client) {
-        this.client = client;
+    OkHttpNetworkSchemeHandler(@NonNull Call.Factory factory) {
+        this.factory = factory;
     }
 
     @NonNull
@@ -52,7 +63,7 @@ public class OkHttpNetworkSchemeHandler extends SchemeHandler {
 
         final Response response;
         try {
-            response = client.newCall(request).execute();
+            response = factory.newCall(request).execute();
         } catch (Throwable t) {
             throw new IllegalStateException("Exception obtaining network resource: " + raw, t);
         }

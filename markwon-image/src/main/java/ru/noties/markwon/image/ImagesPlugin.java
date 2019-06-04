@@ -107,13 +107,13 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     /**
      * Please note that if not specified a {@link DefaultImageMediaDecoder} will be used. So
-     * if you need to disable default-image-media-decoder specify here own no-op implementation.
+     * if you need to disable default-image-media-decoder specify here own no-op implementation or null.
      *
      * @see DefaultImageMediaDecoder
      * @since 4.0.0-SNAPSHOT
      */
     @NonNull
-    public ImagesPlugin defaultMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
+    public ImagesPlugin defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
         checkBuilderState();
         builder.defaultMediaDecoder(mediaDecoder);
         return this;

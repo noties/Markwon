@@ -4,8 +4,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
@@ -24,126 +26,45 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
     private final ImagesPlugin.PlaceholderProvider placeholderProvider;
     private final ImagesPlugin.ErrorHandler errorHandler;
 
-    private final Handler mainThread;
+    private final Handler handler;
 
-    // @since 3.1.0-SNAPSHOT use a hash-map with a weak AsyncDrawable as key for multiple requests
+    // @since 4.0.0-SNAPSHOT use a hash-map with a AsyncDrawable as key for multiple requests
     //  for the same destination
-    private final Map<WeakReference<AsyncDrawable>, Future<?>> requests = new HashMap<>(2);
+    private final Map<AsyncDrawable, Future<?>> requests = new HashMap<>(2);
 
     AsyncDrawableLoaderImpl(@NonNull AsyncDrawableLoaderBuilder builder) {
+        this(builder, new Handler(Looper.getMainLooper()));
+    }
+
+    // @since 4.0.0-SNAPSHOT
+    @VisibleForTesting
+    AsyncDrawableLoaderImpl(@NonNull AsyncDrawableLoaderBuilder builder, @NonNull Handler handler) {
         this.executorService = builder.executorService;
         this.schemeHandlers = builder.schemeHandlers;
         this.mediaDecoders = builder.mediaDecoders;
         this.defaultMediaDecoder = builder.defaultMediaDecoder;
         this.placeholderProvider = builder.placeholderProvider;
         this.errorHandler = builder.errorHandler;
-        this.mainThread = new Handler(Looper.getMainLooper());
+        this.handler = handler;
     }
 
     @Override
     public void load(@NonNull final AsyncDrawable drawable) {
-
-        // primitive synchronization via main-thread
-        if (!isMainThread()) {
-            mainThread.post(new Runnable() {
-                @Override
-                public void run() {
-                    load(drawable);
-                }
-            });
-            return;
+        final Future<?> future = requests.get(drawable);
+        if (future == null) {
+            requests.put(drawable, execute(drawable));
         }
-
-        // okay, if by some chance requested drawable already has a future associated -> no-op
-        // as AsyncDrawable cannot change `destination` (immutable field)
-        // @since 3.1.0-SNAPSHOT
-        if (hasTaskAssociated(drawable)) {
-            return;
-        }
-
-        final WeakReference<AsyncDrawable> reference = new WeakReference<>(drawable);
-        requests.put(reference, execute(drawable.getDestination(), reference));
     }
 
     @Override
     public void cancel(@NonNull final AsyncDrawable drawable) {
 
-        if (!isMainThread()) {
-            mainThread.post(new Runnable() {
-                @Override
-                public void run() {
-                    cancel(drawable);
-                }
-            });
-            return;
+        final Future<?> future = requests.remove(drawable);
+        if (future != null) {
+            future.cancel(true);
         }
 
-        final Iterator<Map.Entry<WeakReference<AsyncDrawable>, Future<?>>> iterator =
-                requests.entrySet().iterator();
-
-        AsyncDrawable key;
-        Map.Entry<WeakReference<AsyncDrawable>, Future<?>> entry;
-
-        while (iterator.hasNext()) {
-
-            entry = iterator.next();
-            key = entry.getKey().get();
-
-            // if key is null or it contains requested AsyncDrawable -> cancel
-            if (shouldCleanUp(key) || key == drawable) {
-                entry.getValue().cancel(true);
-                iterator.remove();
-            }
-        }
-    }
-
-    private boolean hasTaskAssociated(@NonNull AsyncDrawable drawable) {
-
-        final Iterator<Map.Entry<WeakReference<AsyncDrawable>, Future<?>>> iterator =
-                requests.entrySet().iterator();
-
-        boolean result = false;
-
-        AsyncDrawable key;
-        Map.Entry<WeakReference<AsyncDrawable>, Future<?>> entry;
-
-        while (iterator.hasNext()) {
-
-            entry = iterator.next();
-            key = entry.getKey().get();
-
-            // clean-up
-            if (shouldCleanUp(key)) {
-                entry.getValue().cancel(true);
-                iterator.remove();
-            } else if (key == drawable) {
-                result = true;
-                // do not break, let iteration continue to possibly clean-up the rest references
-            }
-        }
-
-        return result;
-    }
-
-    private void cleanUp() {
-
-        final Iterator<Map.Entry<WeakReference<AsyncDrawable>, Future<?>>> iterator =
-                requests.entrySet().iterator();
-
-        AsyncDrawable key;
-        Map.Entry<WeakReference<AsyncDrawable>, Future<?>> entry;
-
-        while (iterator.hasNext()) {
-
-            entry = iterator.next();
-            key = entry.getKey().get();
-
-            // clean-up of already referenced or detached drawables
-            if (shouldCleanUp(key)) {
-                entry.getValue().cancel(true);
-                iterator.remove();
-            }
-        }
+        handler.removeCallbacksAndMessages(drawable);
     }
 
     @Nullable
@@ -155,7 +76,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
     }
 
     @NonNull
-    private Future<?> execute(@NonNull final String destination, @NonNull final WeakReference<AsyncDrawable> reference) {
+    private Future<?> execute(@NonNull final AsyncDrawable asyncDrawable) {
 
         // todo: more efficient DefaultImageMediaDecoder... BitmapFactory.decodeStream is a bit not optimal
         //      for big images for sure. We _could_ introduce internal Drawable that will check for
@@ -165,6 +86,8 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
         return executorService.submit(new Runnable() {
             @Override
             public void run() {
+
+                final String destination = asyncDrawable.getDestination();
 
                 final Uri uri = Uri.parse(destination);
 
@@ -214,35 +137,22 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
                 final Drawable out = drawable;
 
-                mainThread.post(new Runnable() {
+                handler.postAtTime(new Runnable() {
                     @Override
                     public void run() {
-
-                        if (out != null) {
-                            // AsyncDrawable cannot change destination, so if it's
-                            //  attached and not garbage-collected, we can deliver the result.
-                            //  Note that there is no cache, so attach/detach of drawables
-                            //  will always request a new entry.. (comment @since 3.1.0-SNAPSHOT)
-                            final AsyncDrawable asyncDrawable = reference.get();
-                            if (asyncDrawable != null && asyncDrawable.isAttached()) {
-                                asyncDrawable.setResult(out);
-                            }
+                        // validate that
+                        // * request was not cancelled
+                        // * out-result is present
+                        // * async-drawable is attached
+                        final Future<?> future = requests.remove(asyncDrawable);
+                        if (future != null
+                                && out != null
+                                && asyncDrawable.isAttached()) {
+                            asyncDrawable.setResult(out);
                         }
-
-                        requests.remove(reference);
-                        cleanUp();
                     }
-                });
+                }, asyncDrawable, SystemClock.uptimeMillis());
             }
         });
-    }
-
-    private static boolean shouldCleanUp(@Nullable AsyncDrawable drawable) {
-        return drawable == null || !drawable.isAttached();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean isMainThread() {
-        return Looper.myLooper() == Looper.getMainLooper();
     }
 }

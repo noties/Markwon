@@ -29,6 +29,8 @@ class AsyncDrawableLoaderBuilder {
         // we should not use file-scheme as it's a bit complicated to assume file usage (lack of permissions)
         addSchemeHandler(DataUriSchemeHandler.create());
         addSchemeHandler(NetworkSchemeHandler.create());
+
+        defaultMediaDecoder = DefaultImageMediaDecoder.create();
     }
 
     void executorService(@NonNull ExecutorService executorService) {
@@ -77,11 +79,6 @@ class AsyncDrawableLoaderBuilder {
     AsyncDrawableLoader build() {
 
         isBuilt = true;
-
-        // @since 4.0.0-SNAPSHOT
-        if (defaultMediaDecoder == null) {
-            defaultMediaDecoder = DefaultImageMediaDecoder.create();
-        }
 
         if (executorService == null) {
             executorService = Executors.newCachedThreadPool();
