@@ -6,7 +6,7 @@ android {
     buildToolsVersion config['build-tools']
 
     defaultConfig {
-        applicationId "ru.noties.markwon.sample"
+        applicationId "io.noties.markwon.sample"
         minSdkVersion config['min-sdk']
         targetSdkVersion config['target-sdk']
         versionCode 1

@@ -28,11 +28,11 @@ features listed in [commonmark-spec] are supported
 
 ## Installation
 
-![stable](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=stable)
-![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.noties.markwon/core.svg?label=snapshot)
+![stable](https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=stable)
+![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.noties.markwon/core.svg?label=snapshot)
 
 ```groovy
-implementation "ru.noties.markwon:core:${markwonVersion}"
+implementation "io.noties.markwon:core:${markwonVersion}"
 ```
 
 Full list of available artifacts is present in the [install section](https://noties.github.io/Markwon/docs/v3/install.html)
@@ -217,7 +217,6 @@ public static Parser createParser() {
     android:layout_margin="16dip"
     android:lineSpacingExtra="2dip"
     android:textSize="16sp"
-    tools:context="ru.noties.markwon.MainActivity"
     tools:text="yo\nman" />
 
 </ScrollView>
@@ -296,7 +295,7 @@ Underscores (`_`)
 ## License
 
 ```
-  Copyright 2017 Dimitry Ivanov (mail@dimitryivanov.ru)
+  Copyright 2019 Dimitry Ivanov (legal@noties.io)
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.

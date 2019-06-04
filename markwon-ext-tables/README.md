@@ -1,6 +1,6 @@
 # Tables
 
-[![ext-tables](https://img.shields.io/maven-central/v/ru.noties.markwon/ext-tables.svg?label=ext-tables)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20AND%20a%3A%22ext-tables%22)
+[![ext-tables](https://img.shields.io/maven-central/v/io.noties.markwon/ext-tables.svg?label=ext-tables)](http://search.maven.org/#search|ga|1|g%3A%22io.noties.markwon%22%20AND%20a%3A%22ext-tables%22)
 
 This extension adds support for GFM tables.
 

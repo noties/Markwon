@@ -1,6 +1,6 @@
 # Strikethrough
 
-[![ext-strikethrough](https://img.shields.io/maven-central/v/ru.noties.markwon/ext-strikethrough.svg?label=ext-strikethrough)](http://search.maven.org/#search|ga|1|g%3A%22ru.noties.markwon%22%20AND%20a%3A%22ext-strikethrough%22)
+[![ext-strikethrough](https://img.shields.io/maven-central/v/io.noties.markwon/ext-strikethrough.svg?label=ext-strikethrough)](http://search.maven.org/#search|ga|1|g%3A%22io.noties.markwon%22%20AND%20a%3A%22ext-strikethrough%22)
 
 This module adds `strikethrough` functionality to `Markwon` via `StrikethroughPlugin`:
 
