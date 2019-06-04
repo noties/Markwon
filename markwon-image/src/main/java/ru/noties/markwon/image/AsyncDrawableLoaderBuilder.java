@@ -34,30 +34,36 @@ class AsyncDrawableLoaderBuilder {
     }
 
     void executorService(@NonNull ExecutorService executorService) {
+        checkState();
         this.executorService = executorService;
     }
 
     void addSchemeHandler(@NonNull SchemeHandler schemeHandler) {
+        checkState();
         for (String scheme : schemeHandler.supportedSchemes()) {
             schemeHandlers.put(scheme, schemeHandler);
         }
     }
 
     void addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
+        checkState();
         for (String type : mediaDecoder.supportedTypes()) {
             mediaDecoders.put(type, mediaDecoder);
         }
     }
 
     void defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
+        checkState();
         this.defaultMediaDecoder = mediaDecoder;
     }
 
     void removeSchemeHandler(@NonNull String scheme) {
+        checkState();
         schemeHandlers.remove(scheme);
     }
 
     void removeMediaDecoder(@NonNull String contentType) {
+        checkState();
         mediaDecoders.remove(contentType);
     }
 
@@ -65,6 +71,7 @@ class AsyncDrawableLoaderBuilder {
      * @since 3.0.0
      */
     void placeholderProvider(@NonNull ImagesPlugin.PlaceholderProvider placeholderDrawableProvider) {
+        checkState();
         this.placeholderProvider = placeholderDrawableProvider;
     }
 
@@ -72,11 +79,14 @@ class AsyncDrawableLoaderBuilder {
      * @since 3.0.0
      */
     void errorHandler(@NonNull ImagesPlugin.ErrorHandler errorHandler) {
+        checkState();
         this.errorHandler = errorHandler;
     }
 
     @NonNull
     AsyncDrawableLoader build() {
+
+        checkState();
 
         isBuilt = true;
 
@@ -85,5 +95,12 @@ class AsyncDrawableLoaderBuilder {
         }
 
         return new AsyncDrawableLoaderImpl(this);
+    }
+
+    private void checkState() {
+        if (isBuilt) {
+            throw new IllegalStateException("ImagesPlugin has already been configured " +
+                    "and cannot be modified any further");
+        }
     }
 }

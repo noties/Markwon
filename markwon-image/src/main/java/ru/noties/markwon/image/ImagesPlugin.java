@@ -72,7 +72,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin executorService(@NonNull ExecutorService executorService) {
-        checkBuilderState();
         builder.executorService(executorService);
         return this;
     }
@@ -87,7 +86,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin addSchemeHandler(@NonNull SchemeHandler schemeHandler) {
-        checkBuilderState();
         builder.addSchemeHandler(schemeHandler);
         return this;
     }
@@ -100,7 +98,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
-        checkBuilderState();
         builder.addMediaDecoder(mediaDecoder);
         return this;
     }
@@ -114,7 +111,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
-        checkBuilderState();
         builder.defaultMediaDecoder(mediaDecoder);
         return this;
     }
@@ -124,7 +120,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin removeSchemeHandler(@NonNull String scheme) {
-        checkBuilderState();
         builder.removeSchemeHandler(scheme);
         return this;
     }
@@ -134,7 +129,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin removeMediaDecoder(@NonNull String contentType) {
-        checkBuilderState();
         builder.removeMediaDecoder(contentType);
         return this;
     }
@@ -144,7 +138,6 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin placeholderProvider(@NonNull PlaceholderProvider placeholderProvider) {
-        checkBuilderState();
         builder.placeholderProvider(placeholderProvider);
         return this;
     }
@@ -155,14 +148,12 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      */
     @NonNull
     public ImagesPlugin errorHandler(@NonNull ErrorHandler errorHandler) {
-        checkBuilderState();
         builder.errorHandler(errorHandler);
         return this;
     }
 
     @Override
     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-        checkBuilderState();
         builder.asyncDrawableLoader(this.builder.build());
     }
 
@@ -179,12 +170,5 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     @Override
     public void afterSetText(@NonNull TextView textView) {
         AsyncDrawableScheduler.schedule(textView);
-    }
-
-    private void checkBuilderState() {
-        if (builder.isBuilt) {
-            throw new IllegalStateException("ImagesPlugin has already been configured " +
-                    "and cannot be modified any further");
-        }
     }
 }

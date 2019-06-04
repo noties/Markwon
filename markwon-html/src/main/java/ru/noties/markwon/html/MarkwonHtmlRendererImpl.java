@@ -9,17 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.html.tag.BlockquoteHandler;
-import ru.noties.markwon.html.tag.EmphasisHandler;
-import ru.noties.markwon.html.tag.HeadingHandler;
-import ru.noties.markwon.html.tag.ImageHandler;
-import ru.noties.markwon.html.tag.LinkHandler;
-import ru.noties.markwon.html.tag.ListHandler;
-import ru.noties.markwon.html.tag.StrikeHandler;
-import ru.noties.markwon.html.tag.StrongEmphasisHandler;
-import ru.noties.markwon.html.tag.SubScriptHandler;
-import ru.noties.markwon.html.tag.SuperScriptHandler;
-import ru.noties.markwon.html.tag.UnderlineHandler;
 
 class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
@@ -127,6 +116,10 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             checkState();
             this.excludeDefaults = excludeDefaults;
         }
+        
+        boolean excludeDefaults() {
+            return excludeDefaults;
+        }
 
         @NonNull
         public MarkwonHtmlRenderer build() {
@@ -134,11 +127,6 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             checkState();
 
             isBuilt = true;
-
-            if (!excludeDefaults) {
-                // register default handlers, check if a handler is present already for specified tag
-                registerDefaultHandlers();
-            }
 
             // okay, let's validate that we have at least one tagHandler registered
             // if we have none -> return no-op implementation
@@ -153,21 +141,7 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
             }
         }
 
-        private void registerDefaultHandlers() {
-            add(ImageHandler.create());
-            add(new LinkHandler());
-            add(new BlockquoteHandler());
-            add(new SubScriptHandler());
-            add(new SuperScriptHandler());
-            add(new StrongEmphasisHandler());
-            add(new StrikeHandler());
-            add(new UnderlineHandler());
-            add(new ListHandler());
-            add(new EmphasisHandler());
-            add(new HeadingHandler());
-        }
-
-        private void add(@NonNull TagHandler tagHandler) {
+        void addDefaultTagHandler(@NonNull TagHandler tagHandler) {
             for (String tag : tagHandler.supportedTags()) {
                 if (!tagHandlers.containsKey(tag)) {
                     tagHandlers.put(tag, tagHandler);

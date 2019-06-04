@@ -10,6 +10,17 @@ import org.commonmark.node.Node;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.html.tag.BlockquoteHandler;
+import ru.noties.markwon.html.tag.EmphasisHandler;
+import ru.noties.markwon.html.tag.HeadingHandler;
+import ru.noties.markwon.html.tag.ImageHandler;
+import ru.noties.markwon.html.tag.LinkHandler;
+import ru.noties.markwon.html.tag.ListHandler;
+import ru.noties.markwon.html.tag.StrikeHandler;
+import ru.noties.markwon.html.tag.StrongEmphasisHandler;
+import ru.noties.markwon.html.tag.SubScriptHandler;
+import ru.noties.markwon.html.tag.SuperScriptHandler;
+import ru.noties.markwon.html.tag.UnderlineHandler;
 
 /**
  * @since 3.0.0
@@ -73,9 +84,29 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
-    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-        builder
-                .htmlRenderer(this.builder.build())
+    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder configurationBuilder) {
+
+        final MarkwonHtmlRendererImpl.Builder builder = this.builder;
+
+        if (!builder.excludeDefaults()) {
+            // please note that it's better to not checkState for
+            // this method call (minor optimization), final `build` method call
+            // will check for the state and throw an exception if applicable
+            builder.addDefaultTagHandler(ImageHandler.create());
+            builder.addDefaultTagHandler(new LinkHandler());
+            builder.addDefaultTagHandler(new BlockquoteHandler());
+            builder.addDefaultTagHandler(new SubScriptHandler());
+            builder.addDefaultTagHandler(new SuperScriptHandler());
+            builder.addDefaultTagHandler(new StrongEmphasisHandler());
+            builder.addDefaultTagHandler(new StrikeHandler());
+            builder.addDefaultTagHandler(new UnderlineHandler());
+            builder.addDefaultTagHandler(new ListHandler());
+            builder.addDefaultTagHandler(new EmphasisHandler());
+            builder.addDefaultTagHandler(new HeadingHandler());
+        }
+
+        configurationBuilder
+                .htmlRenderer(builder.build())
                 .htmlParser(MarkwonHtmlParserImpl.create());
     }
 
