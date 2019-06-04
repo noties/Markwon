@@ -1,6 +1,6 @@
 package ru.noties.markwon.sample;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.view.LayoutInflater;

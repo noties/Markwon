@@ -2,7 +2,7 @@ package ru.noties.markwon;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.noties.debug.AndroidLogDebugOutput;
 import ru.noties.debug.Debug;

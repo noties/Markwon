@@ -2,9 +2,9 @@ package ru.noties.markwon.ext.latex;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.Px;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.Px;
 
 import org.commonmark.node.Image;
 import org.commonmark.parser.Parser;

@@ -1,6 +1,6 @@
 package ru.noties.markwon.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableString;
 

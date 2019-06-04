@@ -1,6 +1,6 @@
 package ru.noties.markwon.priority;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

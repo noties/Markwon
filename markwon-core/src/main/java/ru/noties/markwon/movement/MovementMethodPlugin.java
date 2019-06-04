@@ -1,6 +1,6 @@
 package ru.noties.markwon.movement;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;

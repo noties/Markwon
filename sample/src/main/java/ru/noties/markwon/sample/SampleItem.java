@@ -1,6 +1,6 @@
 package ru.noties.markwon.sample;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 public enum SampleItem {
 

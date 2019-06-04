@@ -1,6 +1,6 @@
 package ru.noties.markwon.sample.customextension;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Delimited;

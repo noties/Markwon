@@ -1,6 +1,6 @@
 package ru.noties.markwon.image.okhttp;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 

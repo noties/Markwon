@@ -3,7 +3,7 @@ package ru.noties.markwon.core.spans;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
 

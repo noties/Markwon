@@ -1,6 +1,6 @@
 package ru.noties.markwon;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.noties.markwon.core.MarkwonTheme;
 import ru.noties.markwon.core.spans.LinkSpan;

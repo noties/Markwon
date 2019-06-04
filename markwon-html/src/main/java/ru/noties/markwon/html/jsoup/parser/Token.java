@@ -1,6 +1,6 @@
 package ru.noties.markwon.html.jsoup.parser;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.noties.markwon.html.jsoup.helper.Validate;
 import ru.noties.markwon.html.jsoup.nodes.Attributes;

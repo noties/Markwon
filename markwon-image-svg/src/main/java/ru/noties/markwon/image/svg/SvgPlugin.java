@@ -1,7 +1,7 @@
 package ru.noties.markwon.image.svg;
 
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.image.AsyncDrawableLoader;

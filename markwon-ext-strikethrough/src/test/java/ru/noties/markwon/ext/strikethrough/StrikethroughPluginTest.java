@@ -1,6 +1,6 @@
 package ru.noties.markwon.ext.strikethrough;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.style.StrikethroughSpan;
 
 import org.commonmark.Extension;

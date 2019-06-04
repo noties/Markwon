@@ -48,14 +48,12 @@ ext {
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
-    final def supportVersion = '28.0.0'
     final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
 
     deps = [
-            'support-annotations'     : "com.android.support:support-annotations:$supportVersion",
-            'support-app-compat'      : "com.android.support:appcompat-v7:$supportVersion",
-            'support-recycler-view'   : "com.android.support:recyclerview-v7:$supportVersion",
+            'support-annotations'     : "androidx.annotation:annotation:1.0.2",
+            'support-recycler-view'   : "androidx.recyclerview:recyclerview:1.0.0",
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",

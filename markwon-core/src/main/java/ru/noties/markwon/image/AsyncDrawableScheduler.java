@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Spanned;
 import android.text.style.DynamicDrawableSpan;
 import android.view.View;

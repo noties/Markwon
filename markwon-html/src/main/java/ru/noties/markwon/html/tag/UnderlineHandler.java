@@ -1,6 +1,6 @@
 package ru.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.style.UnderlineSpan;
 
 import ru.noties.markwon.MarkwonVisitor;

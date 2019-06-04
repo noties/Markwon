@@ -3,10 +3,10 @@ package ru.noties.markwon.sample;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Px;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import androidx.annotation.ColorInt;
+import androidx.annotation.Px;
+import androidx.recyclerview.widget.RecyclerView;
 
 class SampleItemDecoration extends RecyclerView.ItemDecoration {
 

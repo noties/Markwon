@@ -1,6 +1,6 @@
 package ru.noties.markwon.ext.tasklist;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;

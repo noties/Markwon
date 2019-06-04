@@ -3,11 +3,11 @@ package ru.noties.markwon.core;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Px;
-import android.support.annotation.Size;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Px;
+import androidx.annotation.Size;
 import android.text.TextPaint;
 
 import java.util.Arrays;

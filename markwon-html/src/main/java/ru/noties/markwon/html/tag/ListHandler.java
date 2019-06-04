@@ -1,6 +1,6 @@
 package ru.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.ListItem;
 

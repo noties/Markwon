@@ -1,7 +1,7 @@
 package ru.noties.markwon.html;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * This class will be used to append some text to output in order to

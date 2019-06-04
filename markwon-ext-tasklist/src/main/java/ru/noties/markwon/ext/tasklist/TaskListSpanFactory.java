@@ -1,8 +1,8 @@
 package ru.noties.markwon.ext.tasklist;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.RenderProps;

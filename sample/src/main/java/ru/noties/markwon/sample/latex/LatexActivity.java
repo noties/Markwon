@@ -2,7 +2,7 @@ package ru.noties.markwon.sample.latex;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.TextView;
 
 import ru.noties.markwon.Markwon;

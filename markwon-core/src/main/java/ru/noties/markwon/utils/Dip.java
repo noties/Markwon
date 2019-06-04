@@ -1,7 +1,7 @@
 package ru.noties.markwon.utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class Dip {
 
