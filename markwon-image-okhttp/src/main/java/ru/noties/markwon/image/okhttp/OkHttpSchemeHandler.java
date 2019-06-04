@@ -3,11 +3,9 @@ package ru.noties.markwon.image.okhttp;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import java.io.IOException;
 import java.io.InputStream;
-
-import okhttp3.OkHttpClient;
+import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -18,10 +16,10 @@ class OkHttpSchemeHandler extends SchemeHandler {
 
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
 
-    private final OkHttpClient client;
+    private final Call.Factory callFactory;
 
-    OkHttpSchemeHandler(@NonNull OkHttpClient client) {
-        this.client = client;
+    OkHttpSchemeHandler(@NonNull Call.Factory callFactory) {
+        this.callFactory = callFactory;
     }
 
     @Nullable
@@ -36,7 +34,7 @@ class OkHttpSchemeHandler extends SchemeHandler {
 
         Response response = null;
         try {
-            response = client.newCall(request).execute();
+            response = callFactory.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }

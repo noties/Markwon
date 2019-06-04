@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Arrays;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.image.AsyncDrawableLoader;
@@ -28,20 +29,25 @@ public class OkHttpImagesPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static OkHttpImagesPlugin create(@NonNull OkHttpClient okHttpClient) {
-        return new OkHttpImagesPlugin(okHttpClient);
+        return create(okHttpClient);
     }
 
-    private final OkHttpClient client;
+    @NonNull
+    public static OkHttpImagesPlugin create(@NonNull Call.Factory callFactory) {
+        return new OkHttpImagesPlugin(callFactory);
+    }
 
-    OkHttpImagesPlugin(@NonNull OkHttpClient client) {
-        this.client = client;
+    private final Call.Factory callFactory;
+
+    OkHttpImagesPlugin(@NonNull Call.Factory callFactory) {
+        this.callFactory = callFactory;
     }
 
     @Override
     public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
         builder.addSchemeHandler(
                 Arrays.asList(NetworkSchemeHandler.SCHEME_HTTP, NetworkSchemeHandler.SCHEME_HTTPS),
-                new OkHttpSchemeHandler(client)
+                new OkHttpSchemeHandler(callFactory)
         );
     }
 
