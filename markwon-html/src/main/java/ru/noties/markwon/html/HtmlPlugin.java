@@ -27,9 +27,27 @@ import ru.noties.markwon.html.tag.UnderlineHandler;
  */
 public class HtmlPlugin extends AbstractMarkwonPlugin {
 
+    /**
+     * @see #create(HtmlConfigure)
+     * @since 4.0.0-SNAPSHOT
+     */
+    public interface HtmlConfigure {
+        void configureHtml(@NonNull HtmlPlugin plugin);
+    }
+
     @NonNull
     public static HtmlPlugin create() {
         return new HtmlPlugin();
+    }
+
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public static HtmlPlugin create(@NonNull HtmlConfigure configure) {
+        final HtmlPlugin plugin = create();
+        configure.configureHtml(plugin);
+        return plugin;
     }
 
     public static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;

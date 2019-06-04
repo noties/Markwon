@@ -6,12 +6,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Layout;
 import android.text.TextUtils;
+import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
 import org.commonmark.node.Heading;
 import org.commonmark.node.Paragraph;
+
+import java.util.Collection;
+import java.util.Collections;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
@@ -19,7 +24,15 @@ import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonPlugin;
 import ru.noties.markwon.MarkwonSpansFactory;
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.core.MarkwonTheme;
+import ru.noties.markwon.html.HtmlPlugin;
+import ru.noties.markwon.html.HtmlTag;
+import ru.noties.markwon.html.tag.SimpleTagHandler;
+import ru.noties.markwon.image.ImageItem;
+import ru.noties.markwon.image.ImagesPlugin;
+import ru.noties.markwon.image.SchemeHandler;
+import ru.noties.markwon.image.network.NetworkSchemeHandler;
 import ru.noties.markwon.movement.MovementMethodPlugin;
 
 public class BasicPluginsActivity extends Activity {
@@ -42,6 +55,8 @@ public class BasicPluginsActivity extends Activity {
         step_4();
 
         step_5();
+
+        step_6();
     }
 
     /**
@@ -167,28 +182,65 @@ public class BasicPluginsActivity extends Activity {
         final String markdown = "![image](myownscheme://en.wikipedia.org/static/images/project-logos/enwiki-2x.png)";
 
         final Markwon markwon = Markwon.builder(this)
-//                .usePlugin(ImagesPlugin.create(this))
-//                .usePlugin(new AbstractMarkwonPlugin() {
-//                    @Override
-//                    public void configureImages(@NonNull AsyncDrawableLoader.Builder builder) {
-//                        // we can have a custom SchemeHandler
-//                        // here we will just use networkSchemeHandler to redirect call
-//                        builder.addSchemeHandler("myownscheme", new SchemeHandler() {
-//
-//                            final NetworkSchemeHandler networkSchemeHandler = NetworkSchemeHandler.create();
-//
-//                            @Nullable
-//                            @Override
-//                            public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
-//                                raw = raw.replace("myownscheme", "https");
-//                                return networkSchemeHandler.handle(raw, Uri.parse(raw));
-//                            }
-//                        });
-//                    }
-//                })
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+
+                        // use registry.require to obtain a plugin, does also
+                        // a runtime validation if this plugin is registered
+                        registry.require(ImagesPlugin.class, plugin -> plugin.addSchemeHandler(new SchemeHandler() {
+
+                            // it's a sample only, most likely you won't need to
+                            // use existing scheme-handler, this for demonstration purposes only
+                            final NetworkSchemeHandler handler = NetworkSchemeHandler.create();
+
+                            @NonNull
+                            @Override
+                            public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
+                                final String url = raw.replace("myownscheme", "https");
+                                return handler.handle(url, Uri.parse(url));
+                            }
+
+                            @NonNull
+                            @Override
+                            public Collection<String> supportedSchemes() {
+                                return Collections.singleton("myownscheme");
+                            }
+                        }));
+                    }
+                })
+                // or we can init plugin with this factory method
+//                .usePlugin(ImagesPlugin.create(plugin -> {
+//                    plugin.addSchemeHandler(/**/)
+//                }))
                 .build();
 
         markwon.setMarkdown(textView, markdown);
+    }
+
+    public void step_6() {
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(HtmlPlugin.class, plugin -> plugin.addHandler(new SimpleTagHandler() {
+                            @Override
+                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
+                                return new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+                            }
+
+                            @NonNull
+                            @Override
+                            public Collection<String> supportedTags() {
+                                return Collections.singleton("center");
+                            }
+                        }));
+                    }
+                })
+                .build();
     }
 
     // text lifecycle (after/before)

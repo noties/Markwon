@@ -86,8 +86,8 @@ public class RecyclerActivity extends Activity {
 //                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
 //                            .addMediaDecoder(SvgMediaDecoder.create());
 //                }))
-//                .usePlugin(PicassoImagesPlugin.create(context))
-                .usePlugin(GlideImagesPlugin.create(context))
+                .usePlugin(PicassoImagesPlugin.create(context))
+//                .usePlugin(GlideImagesPlugin.create(context))
                 // important to use TableEntryPlugin instead of TablePlugin
                 .usePlugin(TableEntryPlugin.create(context))
                 .usePlugin(HtmlPlugin.create())
