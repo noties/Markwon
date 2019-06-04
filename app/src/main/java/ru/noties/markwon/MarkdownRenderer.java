@@ -25,7 +25,6 @@ import ru.noties.markwon.image.file.FileSchemeHandler;
 import ru.noties.markwon.image.gif.GifMediaDecoder;
 import ru.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
 import ru.noties.markwon.image.svg.SvgMediaDecoder;
-import ru.noties.markwon.linkify.LinkifyPlugin;
 import ru.noties.markwon.syntax.Prism4jTheme;
 import ru.noties.markwon.syntax.Prism4jThemeDarkula;
 import ru.noties.markwon.syntax.Prism4jThemeDefault;
@@ -108,7 +107,6 @@ public class MarkdownRenderer {
                                         .addMediaDecoder(SvgMediaDecoder.create());
                             }
                         }))
-                        .usePlugin(LinkifyPlugin.create())
                         .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
                         .usePlugin(GifAwarePlugin.create(context))
                         .usePlugin(TablePlugin.create(context))
