@@ -3,6 +3,9 @@ package ru.noties.markwon.html.tag;
 import android.support.annotation.NonNull;
 import android.text.style.UnderlineSpan;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.SpannableBuilder;
 import ru.noties.markwon.html.HtmlTag;
@@ -30,5 +33,11 @@ public class UnderlineHandler extends TagHandler {
                 tag.start(),
                 tag.end()
         );
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Arrays.asList("u", "ins");
     }
 }

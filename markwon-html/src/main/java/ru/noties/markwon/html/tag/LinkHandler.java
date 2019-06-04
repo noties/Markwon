@@ -6,6 +6,9 @@ import android.text.TextUtils;
 
 import org.commonmark.node.Link;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.SpanFactory;
@@ -29,5 +32,11 @@ public class LinkHandler extends SimpleTagHandler {
             }
         }
         return null;
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Collections.singleton("a");
     }
 }

@@ -3,6 +3,9 @@ package ru.noties.markwon.html.tag;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.html.HtmlTag;
@@ -13,5 +16,11 @@ public class SuperScriptHandler extends SimpleTagHandler {
     @Override
     public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
         return new SuperScriptSpan();
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Collections.singleton("sup");
     }
 }

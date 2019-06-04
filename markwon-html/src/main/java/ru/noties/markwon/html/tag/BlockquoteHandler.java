@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import org.commonmark.node.BlockQuote;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.SpanFactory;
@@ -34,5 +37,11 @@ public class BlockquoteHandler extends TagHandler {
                     tag.end()
             );
         }
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Collections.singleton("blockquote");
     }
 }

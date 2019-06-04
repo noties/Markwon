@@ -49,11 +49,6 @@ public abstract class AbstractMarkwonPlugin implements MarkwonPlugin {
 
     }
 
-    @Override
-    public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
-
-    }
-
     @NonNull
     @Override
     public String processMarkdown(@NonNull String markdown) {

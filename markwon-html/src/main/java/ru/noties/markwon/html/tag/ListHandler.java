@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import org.commonmark.node.ListItem;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.RenderProps;
@@ -63,6 +66,12 @@ public class ListHandler extends TagHandler {
                         child.end());
             }
         }
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Arrays.asList("ol", "ul");
     }
 
     private static int currentBulletListLevel(@NonNull HtmlTag.Block block) {

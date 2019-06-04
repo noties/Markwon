@@ -10,19 +10,6 @@ import org.commonmark.node.Node;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
-import ru.noties.markwon.html.tag.BlockquoteHandler;
-import ru.noties.markwon.html.tag.EmphasisHandler;
-import ru.noties.markwon.html.tag.HeadingHandler;
-import ru.noties.markwon.html.tag.ImageHandler;
-import ru.noties.markwon.html.tag.LinkHandler;
-import ru.noties.markwon.html.tag.ListHandler;
-import ru.noties.markwon.html.tag.StrikeHandler;
-import ru.noties.markwon.html.tag.StrongEmphasisHandler;
-import ru.noties.markwon.html.tag.SubScriptHandler;
-import ru.noties.markwon.html.tag.SuperScriptHandler;
-import ru.noties.markwon.html.tag.UnderlineHandler;
-
-import static java.util.Arrays.asList;
 
 /**
  * @since 3.0.0
@@ -36,48 +23,60 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
 
     public static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
-    @Override
-    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-        builder.htmlParser(MarkwonHtmlParserImpl.create());
+    private final MarkwonHtmlRendererImpl.Builder builder;
+
+    @SuppressWarnings("WeakerAccess")
+    HtmlPlugin() {
+        this.builder = new MarkwonHtmlRendererImpl.Builder();
+    }
+
+    /**
+     * @param allowNonClosedTags whether or not non-closed tags should be closed
+     *                           at the document end. By default `false`
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public HtmlPlugin allowNonClosedTags(boolean allowNonClosedTags) {
+        builder.allowNonClosedTags(allowNonClosedTags);
+        return this;
+    }
+
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public HtmlPlugin addHandler(@NonNull TagHandler tagHandler) {
+        builder.addHandler(tagHandler);
+        return this;
+    }
+
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
+    @Nullable
+    public TagHandler getHandler(@NonNull String tagName) {
+        return builder.getHandler(tagName);
+    }
+
+    /**
+     * Indicate if HtmlPlugin should register default HTML tag handlers. Pass `true` to <strong>not</strong>
+     * include default handlers. By default default handlers are included. You can use
+     * {@link TagHandlerNoOp} to no-op certain default tags.
+     *
+     * @see TagHandlerNoOp
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public HtmlPlugin excludeDefaults(boolean excludeDefaults) {
+        builder.excludeDefaults(excludeDefaults);
+        return this;
     }
 
     @Override
-    public void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder) {
-
+    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
         builder
-                .setHandler(
-                        "img",
-                        ImageHandler.create())
-                .setHandler(
-                        "a",
-                        new LinkHandler())
-                .setHandler(
-                        "blockquote",
-                        new BlockquoteHandler())
-                .setHandler(
-                        "sub",
-                        new SubScriptHandler())
-                .setHandler(
-                        "sup",
-                        new SuperScriptHandler())
-                .setHandler(
-                        asList("b", "strong"),
-                        new StrongEmphasisHandler())
-                .setHandler(
-                        asList("s", "del"),
-                        new StrikeHandler())
-                .setHandler(
-                        asList("u", "ins"),
-                        new UnderlineHandler())
-                .setHandler(
-                        asList("ul", "ol"),
-                        new ListHandler())
-                .setHandler(
-                        asList("i", "em", "cite", "dfn"),
-                        new EmphasisHandler())
-                .setHandler(
-                        asList("h1", "h2", "h3", "h4", "h5", "h6"),
-                        new HeadingHandler());
+                .htmlRenderer(this.builder.build())
+                .htmlParser(MarkwonHtmlParserImpl.create());
     }
 
     @Override

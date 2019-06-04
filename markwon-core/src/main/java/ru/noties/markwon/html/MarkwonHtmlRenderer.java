@@ -3,8 +3,6 @@ package ru.noties.markwon.html;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.Collection;
-
 import ru.noties.markwon.MarkwonVisitor;
 
 /**
@@ -12,9 +10,12 @@ import ru.noties.markwon.MarkwonVisitor;
  */
 public abstract class MarkwonHtmlRenderer {
 
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
     @NonNull
-    public static Builder builder() {
-        return new MarkwonHtmlRendererImpl.BuilderImpl();
+    public static MarkwonHtmlRenderer noOp() {
+        return new MarkwonHtmlRendererNoOp();
     }
 
     public abstract void render(
@@ -24,33 +25,4 @@ public abstract class MarkwonHtmlRenderer {
 
     @Nullable
     public abstract TagHandler tagHandler(@NonNull String tagName);
-
-
-    /**
-     * @since 3.0.0
-     */
-    public interface Builder {
-
-        /**
-         * @param allowNonClosedTags parameter to indicate that all non-closed HTML tags should be
-         *                           closed at the end of a document. if {@code true} all non-closed
-         *                           tags will be force-closed at the end. Otherwise these tags will be
-         *                           ignored and thus not rendered.
-         * @return self
-         */
-        @NonNull
-        Builder allowNonClosedTags(boolean allowNonClosedTags);
-
-        @NonNull
-        Builder setHandler(@NonNull String tagName, @Nullable TagHandler tagHandler);
-
-        @NonNull
-        Builder setHandler(@NonNull Collection<String> tagNames, @Nullable TagHandler tagHandler);
-
-        @Nullable
-        TagHandler getHandler(@NonNull String tagName);
-
-        @NonNull
-        MarkwonHtmlRenderer build();
-    }
 }

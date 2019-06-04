@@ -16,7 +16,7 @@ import ru.noties.markwon.html.MarkwonHtmlRenderer;
  *
  * @see AbstractMarkwonPlugin
  * @see ru.noties.markwon.core.CorePlugin
- * @see ru.noties.markwon.image.ImagesPlugin
+ * @see ru.noties.markwon.movement.MovementMethodPlugin
  * @since 3.0.0
  */
 public interface MarkwonPlugin {
@@ -88,13 +88,13 @@ public interface MarkwonPlugin {
      */
     void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder);
 
-    /**
-     * Configure {@link MarkwonHtmlRenderer} to add or remove HTML {@link ru.noties.markwon.html.TagHandler}s
-     *
-     * @see MarkwonHtmlRenderer
-     * @see MarkwonHtmlRenderer.Builder
-     */
-    void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder);
+//    /**
+//     * Configure {@link MarkwonHtmlRenderer} to add or remove HTML {@link ru.noties.markwon.html.TagHandler}s
+//     *
+//     * @see MarkwonHtmlRenderer
+//     * @see MarkwonHtmlRenderer.Builder
+//     */
+//    void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder);
 
     /**
      * Process input markdown and return new string to be used in parsing stage further.
@@ -128,7 +128,7 @@ public interface MarkwonPlugin {
     /**
      * This method will be called <strong>before</strong> calling <code>TextView#setText</code>.
      * <p>
-     * It can be useful to prepare a TextView for markdown. For example {@link ru.noties.markwon.image.ImagesPlugin}
+     * It can be useful to prepare a TextView for markdown. For example {@code ru.noties.markwon.image.ImagesPlugin}
      * uses this method to unregister previously registered {@link ru.noties.markwon.image.AsyncDrawableSpan}
      * (if there are such spans in this TextView at this point). Or {@link ru.noties.markwon.core.CorePlugin}
      * which measures ordered list numbers
@@ -141,7 +141,7 @@ public interface MarkwonPlugin {
     /**
      * This method will be called <strong>after</strong> markdown was applied.
      * <p>
-     * It can be useful to trigger certain action on spans/textView. For example {@link ru.noties.markwon.image.ImagesPlugin}
+     * It can be useful to trigger certain action on spans/textView. For example {@code ru.noties.markwon.image.ImagesPlugin}
      * uses this method to register {@link ru.noties.markwon.image.AsyncDrawableSpan} and start
      * asynchronously loading images.
      * <p>

@@ -2,6 +2,8 @@ package ru.noties.markwon.html;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonVisitor;
 
 public abstract class TagHandler {
@@ -11,6 +13,13 @@ public abstract class TagHandler {
             @NonNull MarkwonHtmlRenderer renderer,
             @NonNull HtmlTag tag
     );
+
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
+    @NonNull
+    public abstract Collection<String> supportedTags();
+
 
     protected static void visitChildren(
             @NonNull MarkwonVisitor visitor,

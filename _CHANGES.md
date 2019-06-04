@@ -7,3 +7,5 @@
 * configure with registry
 * removed priority
 * images-plugin moved to standalone again
+* removed MarkwonPlugin#configureHtmlRenderer -> now part of HtmlPlugin
+* TagHandler now has `supportedTags()` method

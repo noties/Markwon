@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.style.StrikethroughSpan;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.MarkwonVisitor;
 import ru.noties.markwon.SpanFactory;
@@ -45,6 +48,12 @@ public class StrikeHandler extends TagHandler {
                 tag.start(),
                 tag.end()
         );
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Arrays.asList("s", "del");
     }
 
     @Nullable

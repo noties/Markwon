@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import ru.noties.markwon.core.MarkwonTheme;
-import ru.noties.markwon.html.MarkwonHtmlRenderer;
 
 /**
  * @since 3.0.0
@@ -84,7 +83,6 @@ class MarkwonBuilderImpl implements Markwon.Builder {
         final MarkwonConfiguration.Builder configurationBuilder = new MarkwonConfiguration.Builder();
         final MarkwonVisitor.Builder visitorBuilder = new MarkwonVisitorImpl.BuilderImpl();
         final MarkwonSpansFactory.Builder spanFactoryBuilder = new MarkwonSpansFactoryImpl.BuilderImpl();
-        final MarkwonHtmlRenderer.Builder htmlRendererBuilder = MarkwonHtmlRenderer.builder();
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.configureParser(parserBuilder);
@@ -92,12 +90,10 @@ class MarkwonBuilderImpl implements Markwon.Builder {
             plugin.configureConfiguration(configurationBuilder);
             plugin.configureVisitor(visitorBuilder);
             plugin.configureSpansFactory(spanFactoryBuilder);
-            plugin.configureHtmlRenderer(htmlRendererBuilder);
         }
 
         final MarkwonConfiguration configuration = configurationBuilder.build(
                 themeBuilder.build(),
-                htmlRendererBuilder.build(),
                 spanFactoryBuilder.build());
 
         final RenderProps renderProps = new RenderPropsImpl();

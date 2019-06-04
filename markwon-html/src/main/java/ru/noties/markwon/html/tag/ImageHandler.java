@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import org.commonmark.node.Image;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import ru.noties.markwon.MarkwonConfiguration;
@@ -17,6 +19,12 @@ import ru.noties.markwon.image.ImageProps;
 import ru.noties.markwon.image.ImageSize;
 
 public class ImageHandler extends SimpleTagHandler {
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Collections.singleton("img");
+    }
 
     interface ImageSizeParser {
         @Nullable
@@ -30,6 +38,7 @@ public class ImageHandler extends SimpleTagHandler {
 
     private final ImageSizeParser imageSizeParser;
 
+    @SuppressWarnings("WeakerAccess")
     ImageHandler(@NonNull ImageSizeParser imageSizeParser) {
         this.imageSizeParser = imageSizeParser;
     }

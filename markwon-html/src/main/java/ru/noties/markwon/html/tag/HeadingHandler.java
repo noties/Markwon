@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 
 import org.commonmark.node.Heading;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.SpanFactory;
@@ -40,5 +43,11 @@ public class HeadingHandler extends SimpleTagHandler {
         CoreProps.HEADING_LEVEL.set(renderProps, level);
 
         return factory.getSpans(configuration, renderProps);
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Arrays.asList("h1", "h2", "h3", "h4", "h5", "h6");
     }
 }

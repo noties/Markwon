@@ -3,19 +3,30 @@ package ru.noties.markwon.html;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ru.noties.markwon.MarkwonVisitor;
+import ru.noties.markwon.html.tag.BlockquoteHandler;
+import ru.noties.markwon.html.tag.EmphasisHandler;
+import ru.noties.markwon.html.tag.HeadingHandler;
+import ru.noties.markwon.html.tag.ImageHandler;
+import ru.noties.markwon.html.tag.LinkHandler;
+import ru.noties.markwon.html.tag.ListHandler;
+import ru.noties.markwon.html.tag.StrikeHandler;
+import ru.noties.markwon.html.tag.StrongEmphasisHandler;
+import ru.noties.markwon.html.tag.SubScriptHandler;
+import ru.noties.markwon.html.tag.SuperScriptHandler;
+import ru.noties.markwon.html.tag.UnderlineHandler;
 
 class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
 
     private final boolean allowNonClosedTags;
     private final Map<String, TagHandler> tagHandlers;
 
+    @SuppressWarnings("WeakerAccess")
     MarkwonHtmlRendererImpl(boolean allowNonClosedTags, @NonNull Map<String, TagHandler> tagHandlers) {
         this.allowNonClosedTags = allowNonClosedTags;
         this.tagHandlers = tagHandlers;
@@ -86,58 +97,82 @@ class MarkwonHtmlRendererImpl extends MarkwonHtmlRenderer {
         return tagHandlers.get(tagName);
     }
 
-    static class BuilderImpl implements Builder {
+    static class Builder {
 
         private final Map<String, TagHandler> tagHandlers = new HashMap<>(2);
         private boolean allowNonClosedTags;
+        private boolean excludeDefaults;
 
-        @NonNull
-        @Override
-        public Builder allowNonClosedTags(boolean allowNonClosedTags) {
+        private boolean isBuilt;
+
+        void allowNonClosedTags(boolean allowNonClosedTags) {
+            checkState();
             this.allowNonClosedTags = allowNonClosedTags;
-            return this;
         }
 
-        @NonNull
-        @Override
-        public Builder setHandler(@NonNull String tagName, @Nullable TagHandler tagHandler) {
-            if (tagHandler == null) {
-                tagHandlers.remove(tagName);
-            } else {
-                tagHandlers.put(tagName, tagHandler);
+        void addHandler(@NonNull TagHandler tagHandler) {
+            checkState();
+            for (String tag : tagHandler.supportedTags()) {
+                tagHandlers.put(tag, tagHandler);
             }
-            return this;
-        }
-
-        @NonNull
-        @Override
-        public Builder setHandler(@NonNull Collection<String> tagNames, @Nullable TagHandler tagHandler) {
-            if (tagHandler == null) {
-                for (String tagName : tagNames) {
-                    tagHandlers.remove(tagName);
-                }
-            } else {
-                for (String tagName : tagNames) {
-                    tagHandlers.put(tagName, tagHandler);
-                }
-            }
-            return this;
         }
 
         @Nullable
-        @Override
-        public TagHandler getHandler(@NonNull String tagName) {
+        TagHandler getHandler(@NonNull String tagName) {
+            checkState();
             return tagHandlers.get(tagName);
         }
 
+        public void excludeDefaults(boolean excludeDefaults) {
+            checkState();
+            this.excludeDefaults = excludeDefaults;
+        }
+
         @NonNull
-        @Override
         public MarkwonHtmlRenderer build() {
+
+            checkState();
+
+            isBuilt = true;
+
+            if (!excludeDefaults) {
+                // register default handlers, check if a handler is present already for specified tag
+                registerDefaultHandlers();
+            }
+
             // okay, let's validate that we have at least one tagHandler registered
             // if we have none -> return no-op implementation
             return tagHandlers.size() > 0
                     ? new MarkwonHtmlRendererImpl(allowNonClosedTags, Collections.unmodifiableMap(tagHandlers))
                     : new MarkwonHtmlRendererNoOp();
+        }
+
+        private void checkState() {
+            if (isBuilt) {
+                throw new IllegalStateException("Builder has been already built");
+            }
+        }
+
+        private void registerDefaultHandlers() {
+            add(ImageHandler.create());
+            add(new LinkHandler());
+            add(new BlockquoteHandler());
+            add(new SubScriptHandler());
+            add(new SuperScriptHandler());
+            add(new StrongEmphasisHandler());
+            add(new StrikeHandler());
+            add(new UnderlineHandler());
+            add(new ListHandler());
+            add(new EmphasisHandler());
+            add(new HeadingHandler());
+        }
+
+        private void add(@NonNull TagHandler tagHandler) {
+            for (String tag : tagHandler.supportedTags()) {
+                if (!tagHandlers.containsKey(tag)) {
+                    tagHandlers.put(tag, tagHandler);
+                }
+            }
         }
     }
 }

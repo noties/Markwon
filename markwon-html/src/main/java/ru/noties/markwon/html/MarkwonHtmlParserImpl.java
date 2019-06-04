@@ -195,7 +195,6 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
                 }
             }
 
-            //noinspection unchecked
             action.apply(Collections.unmodifiableList((List<? extends Inline>) inlineTags));
             inlineTags.clear();
         } else {

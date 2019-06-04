@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 
 import org.commonmark.node.Emphasis;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.RenderProps;
 import ru.noties.markwon.SpanFactory;
@@ -22,5 +25,11 @@ public class EmphasisHandler extends SimpleTagHandler {
             return null;
         }
         return spanFactory.getSpans(configuration, renderProps);
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Arrays.asList("i", "em", "cite", "dfn");
     }
 }
