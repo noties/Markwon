@@ -17,7 +17,7 @@ public class MainActivityTest {
     @Test
     public void all_sample_items_have_activity_associated() {
         final Context context = RuntimeEnvironment.application;
-        for (SampleItem item : SampleItem.values()) {
+        for (Sample item : Sample.values()) {
             // we assert as not null, but in case of an error this method should throw
             assertNotNull(MainActivity.sampleItemIntent(context, item));
         }

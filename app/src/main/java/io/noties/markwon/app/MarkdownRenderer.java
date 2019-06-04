@@ -33,7 +33,7 @@ import io.noties.markwon.syntax.Prism4jThemeDefault;
 import io.noties.markwon.syntax.SyntaxHighlightPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessor;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
-import ru.noties.debug.Debug;
+import io.noties.debug.Debug;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope

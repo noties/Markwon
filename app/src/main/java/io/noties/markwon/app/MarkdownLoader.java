@@ -24,7 +24,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import ru.noties.debug.Debug;
+import io.noties.debug.Debug;
 
 @ActivityScope
 public class MarkdownLoader {

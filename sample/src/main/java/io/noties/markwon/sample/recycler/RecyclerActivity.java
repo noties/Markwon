@@ -32,8 +32,8 @@ import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.sample.R;
 import io.noties.markwon.urlprocessor.UrlProcessor;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
-import ru.noties.debug.AndroidLogDebugOutput;
-import ru.noties.debug.Debug;
+import io.noties.debug.AndroidLogDebugOutput;
+import io.noties.debug.Debug;
 
 public class RecyclerActivity extends Activity {
 

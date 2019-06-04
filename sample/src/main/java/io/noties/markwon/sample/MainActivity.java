@@ -8,20 +8,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
+import io.noties.adapt.Adapt;
+import io.noties.adapt.Item;
+import io.noties.debug.AndroidLogDebugOutput;
+import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.sample.basicplugins.BasicPluginsActivity;
 import io.noties.markwon.sample.core.CoreActivity;
 import io.noties.markwon.sample.customextension.CustomExtensionActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
 import io.noties.markwon.sample.recycler.RecyclerActivity;
-import ru.noties.adapt.Adapt;
-import ru.noties.adapt.OnClickViewProcessor;
-import ru.noties.debug.AndroidLogDebugOutput;
-import ru.noties.debug.Debug;
 
 public class MainActivity extends Activity {
 
@@ -38,21 +38,20 @@ public class MainActivity extends Activity {
         // here we are creating as core markwon (no additional plugins are registered)
         final Markwon markwon = Markwon.create(this);
 
-        final Adapt<SampleItem> adapt = Adapt.builder(SampleItem.class)
-                .include(SampleItem.class, new SampleItemView(markwon), new OnClickViewProcessor<SampleItem>() {
-                    @Override
-                    public void onClick(@NonNull SampleItem item, @NonNull View view) {
-                        showSample(item);
-                    }
-                })
-                .build();
-        adapt.setItems(Arrays.asList(SampleItem.values()));
+        final Adapt adapt = Adapt.create();
+
+        final List<Item> items = new ArrayList<>();
+        final SampleItem.OnClickListener onClickListener = this::showSample;
+        for (Sample sample : Sample.values()) {
+            items.add(new SampleItem(sample, markwon, onClickListener));
+        }
+        adapt.setItems(items);
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(createSampleItemDecoration());
-        recyclerView.setAdapter(adapt.recyclerViewAdapter());
+        recyclerView.setAdapter(adapt);
     }
 
     @NonNull
@@ -66,12 +65,12 @@ public class MainActivity extends Activity {
         );
     }
 
-    private void showSample(@NonNull SampleItem item) {
+    private void showSample(@NonNull Sample item) {
         startActivity(sampleItemIntent(this, item));
     }
 
     @VisibleForTesting
-    static Intent sampleItemIntent(@NonNull Context context, @NonNull SampleItem item) {
+    static Intent sampleItemIntent(@NonNull Context context, @NonNull Sample item) {
 
         final Class<? extends Activity> activity;
 

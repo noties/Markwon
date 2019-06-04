@@ -13,7 +13,7 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import io.noties.markwon.Markwon;
-import ru.noties.debug.Debug;
+import io.noties.debug.Debug;
 
 public class MainActivity extends Activity {
 

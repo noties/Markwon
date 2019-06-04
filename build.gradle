@@ -69,8 +69,8 @@ ext {
             'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'ru.noties:prism4j:1.1.0',
-            'debug'                   : 'ru.noties:debug:3.0.0@jar',
-            'adapt'                   : 'ru.noties:adapt:1.1.0',
+            'debug'                   : 'io.noties:debug:5.0.0@jar',
+            'adapt'                   : 'io.noties:adapt:2.0.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
             'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
             'glide'                   : 'com.github.bumptech.glide:glide:4.9.0'
