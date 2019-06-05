@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutorService;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.SpanFactory;
-import ru.noties.markwon.image.R;
 import io.noties.markwon.image.data.DataUriSchemeHandler;
 
 import static org.junit.Assert.assertNotNull;

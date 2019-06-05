@@ -92,8 +92,15 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
                 Drawable drawable = null;
 
                 try {
+
+                    final String scheme = uri.getScheme();
+                    if (scheme == null
+                            || scheme.length() == 0) {
+                        throw new IllegalStateException("No scheme is found: " + destination);
+                    }
+
                     // obtain scheme handler
-                    final SchemeHandler schemeHandler = schemeHandlers.get(uri.getScheme());
+                    final SchemeHandler schemeHandler = schemeHandlers.get(scheme);
                     if (schemeHandler != null) {
 
                         // handle scheme

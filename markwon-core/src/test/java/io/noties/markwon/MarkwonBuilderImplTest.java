@@ -88,7 +88,6 @@ public class MarkwonBuilderImplTest {
         verify(plugin, times(1)).configureConfiguration(any(MarkwonConfiguration.Builder.class));
         verify(plugin, times(1)).configureVisitor(any(MarkwonVisitor.Builder.class));
         verify(plugin, times(1)).configureSpansFactory(any(MarkwonSpansFactory.Builder.class));
-        verify(plugin, times(1)).configureHtmlRenderer(any(MarkwonHtmlRenderer.Builder.class));
 
         // note, no render props -> they must be configured on render stage
         verify(plugin, times(0)).processMarkdown(anyString());

@@ -1,6 +1,12 @@
 # Strikethrough
 
-[![ext-strikethrough](https://img.shields.io/maven-central/v/io.noties.markwon/ext-strikethrough.svg?label=ext-strikethrough)](http://search.maven.org/#search|ga|1|g%3A%22io.noties.markwon%22%20AND%20a%3A%22ext-strikethrough%22)
+![stable](https://img.shields.io/maven-central/v/io.noties.markwon/ext-strikethrough.svg)
+![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.noties.markwon/ext-strikethrough.svg)
+
+```kotlin
+implementation "io.noties.markwon:ext-strikethrough:${markwonVersion}"
+```
+
 
 This module adds `strikethrough` functionality to `Markwon` via `StrikethroughPlugin`:
 

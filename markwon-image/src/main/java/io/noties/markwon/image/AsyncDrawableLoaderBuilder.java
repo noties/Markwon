@@ -9,7 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.noties.markwon.image.data.DataUriSchemeHandler;
+import io.noties.markwon.image.gif.GifMediaDecoder;
 import io.noties.markwon.image.network.NetworkSchemeHandler;
+import io.noties.markwon.image.svg.SvgMediaDecoder;
 
 class AsyncDrawableLoaderBuilder {
 
@@ -29,6 +31,15 @@ class AsyncDrawableLoaderBuilder {
         // we should not use file-scheme as it's a bit complicated to assume file usage (lack of permissions)
         addSchemeHandler(DataUriSchemeHandler.create());
         addSchemeHandler(NetworkSchemeHandler.create());
+
+        // add SVG and GIF, but only if they are present in the class-path
+        if (SvgMediaDecoder.available()) {
+            addMediaDecoder(SvgMediaDecoder.create());
+        }
+
+        if (GifMediaDecoder.available()) {
+            addMediaDecoder(GifMediaDecoder.create());
+        }
 
         defaultMediaDecoder = DefaultImageMediaDecoder.create();
     }

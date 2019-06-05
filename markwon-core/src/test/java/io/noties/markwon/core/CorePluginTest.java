@@ -3,6 +3,7 @@ package io.noties.markwon.core;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.method.MovementMethod;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.commonmark.node.BlockQuote;
@@ -12,6 +13,7 @@ import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
+import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
 import org.commonmark.node.ListItem;
@@ -84,7 +86,8 @@ public class CorePluginTest {
                 SoftLineBreak.class,
                 StrongEmphasis.class,
                 Text.class,
-                ThematicBreak.class
+                ThematicBreak.class,
+                Image.class
         };
 
         final CorePlugin plugin = CorePlugin.create();
@@ -202,6 +205,7 @@ public class CorePluginTest {
             add("beforeSetText");
             add("afterSetText");
             add("priority");
+            add("addOnTextAddedListener");
         }};
 
         // we will use declaredMethods because it won't return inherited ones

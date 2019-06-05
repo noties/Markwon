@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 
-import io.noties.markwon.image.network.NetworkSchemeHandler;
 import io.noties.markwon.image.data.DataUriSchemeHandler;
+import io.noties.markwon.image.network.NetworkSchemeHandler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -62,13 +62,25 @@ public class AsyncDrawableLoaderBuilderTest {
     public void defaults_initialized() {
         // default-media-decoder and executor-service must be initialized
 
-        assertNull(builder.defaultMediaDecoder);
+        assertNotNull(builder.defaultMediaDecoder);
         assertNull(builder.executorService);
 
         builder.build();
 
         assertNotNull(builder.defaultMediaDecoder);
         assertNotNull(builder.executorService);
+    }
+
+    @Test
+    public void default_media_decoder_removed() {
+        // we init default-media-decoder right away, but further it can be removed (nulled-out)
+
+        assertNotNull(builder.defaultMediaDecoder);
+
+        builder.defaultMediaDecoder(null);
+        builder.build();
+
+        assertNull(builder.defaultMediaDecoder);
     }
 
     @Test
@@ -155,7 +167,7 @@ public class AsyncDrawableLoaderBuilderTest {
     @Test
     public void default_media_decoder() {
 
-        assertNull(builder.defaultMediaDecoder);
+        assertNotNull(builder.defaultMediaDecoder);
 
         final MediaDecoder mediaDecoder = mock(MediaDecoder.class);
         builder.defaultMediaDecoder(mediaDecoder);

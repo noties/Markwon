@@ -26,7 +26,6 @@ import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
 import io.noties.markwon.core.CorePluginBridge;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -83,7 +82,7 @@ public class SyntaxHighlightTest {
 
         final MarkwonConfiguration configuration = MarkwonConfiguration.builder()
                 .syntaxHighlight(highlight)
-                .build(mock(MarkwonTheme.class), mock(MarkwonHtmlRenderer.class), spansFactory);
+                .build(mock(MarkwonTheme.class), spansFactory);
 
         final Map<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>> visitorMap = Collections.emptyMap();
 

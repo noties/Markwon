@@ -15,8 +15,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.image.MediaDecoder;
 import io.noties.markwon.image.DrawableUtils;
+import io.noties.markwon.image.MediaDecoder;
 
 /**
  * @since 1.1.0
@@ -31,12 +31,20 @@ public class SvgMediaDecoder extends MediaDecoder {
      */
     @NonNull
     public static SvgMediaDecoder create() {
-        return new SvgMediaDecoder(Resources.getSystem());
+        return create(Resources.getSystem());
     }
 
     @NonNull
     public static SvgMediaDecoder create(@NonNull Resources resources) {
         return new SvgMediaDecoder(resources);
+    }
+
+    /**
+     * @return boolean indicating if SVG dependency is satisfied
+     * @since 4.0.0-SNAPSHOT
+     */
+    public static boolean available() {
+        return Holder.HAS_SVG;
     }
 
     private final Resources resources;
@@ -102,7 +110,7 @@ public class SvgMediaDecoder extends MediaDecoder {
         static void validate() {
             if (!HAS_SVG) {
                 throw new IllegalStateException("`com.caverock:androidsvg:*` dependency is missing, " +
-                        "please add to your project explicitly");
+                        "please add to your project explicitly if you wish to use SVG media decoder");
             }
         }
     }
