@@ -10,14 +10,6 @@ import io.noties.markwon.MarkwonVisitor;
  */
 public abstract class MarkwonHtmlRenderer {
 
-    /**
-     * @since 4.0.0-SNAPSHOT
-     */
-    @NonNull
-    public static MarkwonHtmlRenderer noOp() {
-        return new MarkwonHtmlRendererNoOp();
-    }
-
     public abstract void render(
             @NonNull MarkwonVisitor visitor,
             @NonNull MarkwonHtmlParser parser

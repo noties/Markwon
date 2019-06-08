@@ -7,13 +7,13 @@ import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Node;
 
-import io.noties.markwon.html.tag.ImageHandler;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.html.tag.BlockquoteHandler;
 import io.noties.markwon.html.tag.EmphasisHandler;
 import io.noties.markwon.html.tag.HeadingHandler;
+import io.noties.markwon.html.tag.ImageHandler;
 import io.noties.markwon.html.tag.LinkHandler;
 import io.noties.markwon.html.tag.ListHandler;
 import io.noties.markwon.html.tag.StrikeHandler;
@@ -53,10 +53,13 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     public static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
     private final MarkwonHtmlRendererImpl.Builder builder;
+    private final MarkwonHtmlParser htmlParser;
+    private MarkwonHtmlRenderer htmlRenderer;
 
     @SuppressWarnings("WeakerAccess")
     HtmlPlugin() {
         this.builder = new MarkwonHtmlRendererImpl.Builder();
+        this.htmlParser = MarkwonHtmlParserImpl.create();
     }
 
     /**
@@ -104,6 +107,8 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder configurationBuilder) {
 
+        // @since 4.0.0-SNAPSHOT we init internal html-renderer here (marks the end of configuration)
+
         final MarkwonHtmlRendererImpl.Builder builder = this.builder;
 
         if (!builder.excludeDefaults()) {
@@ -123,15 +128,17 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
             builder.addDefaultTagHandler(new HeadingHandler());
         }
 
-        configurationBuilder
-                .htmlRenderer(builder.build())
-                .htmlParser(MarkwonHtmlParserImpl.create());
+        htmlRenderer = builder.build();
     }
 
     @Override
     public void afterRender(@NonNull Node node, @NonNull MarkwonVisitor visitor) {
-        final MarkwonConfiguration configuration = visitor.configuration();
-        configuration.htmlRenderer().render(visitor, configuration.htmlParser());
+        final MarkwonHtmlRenderer htmlRenderer = this.htmlRenderer;
+        if (htmlRenderer != null) {
+            htmlRenderer.render(visitor, htmlParser);
+        } else {
+            throw new IllegalStateException("Unexpected state, html-renderer is not defined");
+        }
     }
 
     @Override
@@ -153,7 +160,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
 
     private void visitHtml(@NonNull MarkwonVisitor visitor, @Nullable String html) {
         if (html != null) {
-            visitor.configuration().htmlParser().processFragment(visitor.builder(), html);
+            htmlParser.processFragment(visitor.builder(), html);
         }
     }
 }

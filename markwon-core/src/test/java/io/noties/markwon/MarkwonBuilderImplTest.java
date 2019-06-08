@@ -12,7 +12,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -26,39 +25,6 @@ import static org.mockito.Mockito.verify;
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
 public class MarkwonBuilderImplTest {
-
-    @Test
-    public void prepare_plugins() {
-        // validate that prepare plugins is calling `ensureImplicitCoreIfHasDependents` and
-        // priority processor
-
-//        final PriorityProcessor priorityProcessor = mock(PriorityProcessor.class);
-//        when(priorityProcessor.process(ArgumentMatchers.<MarkwonPlugin>anyList()))
-//                .thenAnswer(new Answer<Object>() {
-//                    @Override
-//                    public Object answer(InvocationOnMock invocation) {
-//                        return invocation.getArgument(0);
-//                    }
-//                });
-//
-//        final MarkwonPlugin plugin = new AbstractMarkwonPlugin() {
-//            @NonNull
-//            @Override
-//            public Priority priority() {
-//                return Priority.after(CorePlugin.class);
-//            }
-//        };
-//
-//        final List<MarkwonPlugin> plugins = preparePlugins(priorityProcessor, Collections.singletonList(plugin));
-//        assertThat(plugins, hasSize(2));
-//        assertThat(plugins, hasItem(plugin));
-//        assertThat(plugins, hasItem(isA(CorePlugin.class)));
-//
-//        verify(priorityProcessor, times(1))
-//                .process(ArgumentMatchers.<MarkwonPlugin>anyList());
-
-        fail();
-    }
 
     @Test
     public void no_plugins_added_throws() {

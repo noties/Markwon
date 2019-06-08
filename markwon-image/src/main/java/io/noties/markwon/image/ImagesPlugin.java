@@ -3,6 +3,7 @@ package io.noties.markwon.image;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.text.Spanned;
 import android.widget.TextView;
 
@@ -10,16 +11,16 @@ import org.commonmark.node.Image;
 
 import java.util.concurrent.ExecutorService;
 
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
+import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.image.data.DataUriSchemeHandler;
 import io.noties.markwon.image.file.FileSchemeHandler;
 import io.noties.markwon.image.gif.GifMediaDecoder;
 import io.noties.markwon.image.network.NetworkSchemeHandler;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
 import io.noties.markwon.image.svg.SvgMediaDecoder;
-import io.noties.markwon.AbstractMarkwonPlugin;
-import io.noties.markwon.MarkwonConfiguration;
-import io.noties.markwon.MarkwonSpansFactory;
 
 @SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
 public class ImagesPlugin extends AbstractMarkwonPlugin {
@@ -70,7 +71,18 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
         return plugin;
     }
 
-    private final AsyncDrawableLoaderBuilder builder = new AsyncDrawableLoaderBuilder();
+    private final AsyncDrawableLoaderBuilder builder;
+
+    // @since 4.0.0-SNAPSHOT
+    ImagesPlugin() {
+        this(new AsyncDrawableLoaderBuilder());
+    }
+
+    // @since 4.0.0-SNAPSHOT
+    @VisibleForTesting
+    ImagesPlugin(@NonNull AsyncDrawableLoaderBuilder builder) {
+        this.builder = builder;
+    }
 
     /**
      * Optional (by default new cached thread executor will be used)

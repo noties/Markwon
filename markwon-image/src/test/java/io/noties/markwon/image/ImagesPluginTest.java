@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -174,5 +175,71 @@ public class ImagesPluginTest {
 
         verify(textView, times(1))
                 .getTag(eq(R.id.markwon_drawables_scheduler_last_text_hashcode));
+    }
+
+    @Test
+    public void methods_redirected_to_builder() {
+
+        final AsyncDrawableLoaderBuilder builder = mock(AsyncDrawableLoaderBuilder.class);
+        final ImagesPlugin plugin = new ImagesPlugin(builder);
+
+        // executor service
+        {
+            final ExecutorService executorService = mock(ExecutorService.class);
+            plugin.executorService(executorService);
+            verify(builder, times(1)).executorService(eq(executorService));
+        }
+
+        // add scheme-handler
+        {
+            final SchemeHandler schemeHandler = mock(SchemeHandler.class);
+            plugin.addSchemeHandler(schemeHandler);
+            verify(builder, times(1)).addSchemeHandler(eq(schemeHandler));
+        }
+
+        // add media-decoder
+        {
+            final MediaDecoder mediaDecoder = mock(MediaDecoder.class);
+            plugin.addMediaDecoder(mediaDecoder);
+            verify(builder, times(1)).addMediaDecoder(eq(mediaDecoder));
+        }
+
+        // default-media-decoder
+        {
+            final MediaDecoder mediaDecoder = mock(MediaDecoder.class);
+            plugin.defaultMediaDecoder(mediaDecoder);
+            verify(builder, times(1)).defaultMediaDecoder(eq(mediaDecoder));
+        }
+
+        // remove scheme-handler
+        {
+            final String scheme = "yo";
+            plugin.removeSchemeHandler(scheme);
+            verify(builder, times(1)).removeSchemeHandler(eq(scheme));
+        }
+
+        // remove media-decoder
+        {
+            final String contentType = "fa/ke";
+            plugin.removeMediaDecoder(contentType);
+            verify(builder, times(1)).removeMediaDecoder(eq(contentType));
+        }
+
+        // placeholder provider
+        {
+            final ImagesPlugin.PlaceholderProvider placeholderProvider =
+                    mock(ImagesPlugin.PlaceholderProvider.class);
+            plugin.placeholderProvider(placeholderProvider);
+            verify(builder, times(1)).placeholderProvider(eq(placeholderProvider));
+        }
+
+        // error-handler
+        {
+            final ImagesPlugin.ErrorHandler errorHandler = mock(ImagesPlugin.ErrorHandler.class);
+            plugin.errorHandler(errorHandler);
+            verify(builder, times(1)).errorHandler(eq(errorHandler));
+        }
+
+        verifyNoMoreInteractions(builder);
     }
 }

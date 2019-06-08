@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.core.spans.LinkSpan;
-import io.noties.markwon.html.MarkwonHtmlParser;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.ImageSizeResolver;
 import io.noties.markwon.image.ImageSizeResolverDef;
@@ -31,8 +29,6 @@ public class MarkwonConfiguration {
     private final LinkSpan.Resolver linkResolver;
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
-    private final MarkwonHtmlParser htmlParser;
-    private final MarkwonHtmlRenderer htmlRenderer;
 
     // @since 3.0.0
     private final MarkwonSpansFactory spansFactory;
@@ -45,8 +41,6 @@ public class MarkwonConfiguration {
         this.urlProcessor = builder.urlProcessor;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.spansFactory = builder.spansFactory;
-        this.htmlParser = builder.htmlParser;
-        this.htmlRenderer = builder.htmlRenderer;
     }
 
     @NonNull
@@ -79,16 +73,6 @@ public class MarkwonConfiguration {
         return imageSizeResolver;
     }
 
-    @NonNull
-    public MarkwonHtmlParser htmlParser() {
-        return htmlParser;
-    }
-
-    @NonNull
-    public MarkwonHtmlRenderer htmlRenderer() {
-        return htmlRenderer;
-    }
-
     /**
      * @since 3.0.0
      */
@@ -106,8 +90,6 @@ public class MarkwonConfiguration {
         private LinkSpan.Resolver linkResolver;
         private UrlProcessor urlProcessor;
         private ImageSizeResolver imageSizeResolver;
-        private MarkwonHtmlParser htmlParser;
-        private MarkwonHtmlRenderer htmlRenderer;
         private MarkwonSpansFactory spansFactory;
 
         Builder() {
@@ -119,15 +101,6 @@ public class MarkwonConfiguration {
         @NonNull
         public Builder asyncDrawableLoader(@NonNull AsyncDrawableLoader asyncDrawableLoader) {
             this.asyncDrawableLoader = asyncDrawableLoader;
-            return this;
-        }
-
-        /**
-         * @since 4.0.0-SNAPSHOT
-         */
-        @NonNull
-        public Builder htmlRenderer(@NonNull MarkwonHtmlRenderer htmlRenderer) {
-            this.htmlRenderer = htmlRenderer;
             return this;
         }
 
@@ -146,12 +119,6 @@ public class MarkwonConfiguration {
         @NonNull
         public Builder urlProcessor(@NonNull UrlProcessor urlProcessor) {
             this.urlProcessor = urlProcessor;
-            return this;
-        }
-
-        @NonNull
-        public Builder htmlParser(@NonNull MarkwonHtmlParser htmlParser) {
-            this.htmlParser = htmlParser;
             return this;
         }
 
@@ -177,11 +144,6 @@ public class MarkwonConfiguration {
                 asyncDrawableLoader = AsyncDrawableLoader.noOp();
             }
 
-            // @since 4.0.0-SNAPSHOT
-            if (htmlRenderer == null) {
-                htmlRenderer = MarkwonHtmlRenderer.noOp();
-            }
-
             if (syntaxHighlight == null) {
                 syntaxHighlight = new SyntaxHighlightNoOp();
             }
@@ -196,10 +158,6 @@ public class MarkwonConfiguration {
 
             if (imageSizeResolver == null) {
                 imageSizeResolver = new ImageSizeResolverDef();
-            }
-
-            if (htmlParser == null) {
-                htmlParser = MarkwonHtmlParser.noOp();
             }
 
             return new MarkwonConfiguration(this);

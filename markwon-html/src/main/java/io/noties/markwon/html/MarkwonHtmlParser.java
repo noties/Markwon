@@ -9,14 +9,6 @@ import java.util.List;
  */
 public abstract class MarkwonHtmlParser {
 
-    /**
-     * Factory method to create a `no-op` implementation (no parsing)
-     */
-    @NonNull
-    public static MarkwonHtmlParser noOp() {
-        return new MarkwonHtmlParserNoOp();
-    }
-
     public interface FlushAction<T> {
         void apply(@NonNull List<T> tags);
     }

@@ -13,27 +13,24 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
+import io.noties.debug.Debug;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.app.gif.GifAwarePlugin;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
-import io.noties.markwon.app.gif.GifAwarePlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.ImagesPlugin;
-import io.noties.markwon.image.data.DataUriSchemeHandler;
 import io.noties.markwon.image.file.FileSchemeHandler;
-import io.noties.markwon.image.gif.GifMediaDecoder;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
-import io.noties.markwon.image.svg.SvgMediaDecoder;
 import io.noties.markwon.syntax.Prism4jTheme;
 import io.noties.markwon.syntax.Prism4jThemeDarkula;
 import io.noties.markwon.syntax.Prism4jThemeDefault;
 import io.noties.markwon.syntax.SyntaxHighlightPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessor;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
-import io.noties.debug.Debug;
 import ru.noties.prism4j.Prism4j;
 
 @ActivityScope
@@ -102,12 +99,12 @@ public class MarkdownRenderer {
                         .usePlugin(ImagesPlugin.create(new ImagesPlugin.ImagesConfigure() {
                             @Override
                             public void configureImages(@NonNull ImagesPlugin plugin) {
+                                // data uri scheme handler is added automatically
+                                // SVG & GIF will be added if required dependencies are present in the classpath
+                                // default-media-decoder is also added automatically
                                 plugin
-                                        .addSchemeHandler(DataUriSchemeHandler.create())
                                         .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
-                                        .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()))
-                                        .addMediaDecoder(GifMediaDecoder.create(false))
-                                        .addMediaDecoder(SvgMediaDecoder.create());
+                                        .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()));
                             }
                         }))
                         .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
