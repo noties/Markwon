@@ -4,12 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Px;
-import android.support.annotation.VisibleForTesting;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +12,23 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Px;
+import androidx.annotation.VisibleForTesting;
+
 import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.utils.NoCopySpannableFactory;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.ext.tables.Table;
+import io.noties.markwon.recycler.MarkwonAdapter;
+import io.noties.markwon.utils.NoCopySpannableFactory;
 
 /**
  * @since 3.0.0

@@ -17,11 +17,10 @@ dependencies {
 
     api project(':markwon-core')
 
-    // todo: note that it includes these implicitly
     deps.with {
-        api it['android-gif']
-        api it['android-svg']
-        api it['okhttp']
+        compileOnly it['android-gif']
+        compileOnly it['android-svg']
+        compileOnly it['okhttp']
     }
 
     deps['test'].with {

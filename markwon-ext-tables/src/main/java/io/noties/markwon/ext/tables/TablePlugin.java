@@ -1,9 +1,10 @@
 package io.noties.markwon.ext.tables;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.commonmark.ext.gfm.tables.TableBody;
 import org.commonmark.ext.gfm.tables.TableCell;

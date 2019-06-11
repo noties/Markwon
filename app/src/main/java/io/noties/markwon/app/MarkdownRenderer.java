@@ -4,9 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Spanned;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -31,7 +32,7 @@ import io.noties.markwon.syntax.Prism4jThemeDefault;
 import io.noties.markwon.syntax.SyntaxHighlightPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessor;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
-import ru.noties.prism4j.Prism4j;
+import io.noties.prism4j.Prism4j;
 
 @ActivityScope
 public class MarkdownRenderer {

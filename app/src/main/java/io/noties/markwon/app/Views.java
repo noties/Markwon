@@ -1,8 +1,9 @@
 package io.noties.markwon.app;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class Views {

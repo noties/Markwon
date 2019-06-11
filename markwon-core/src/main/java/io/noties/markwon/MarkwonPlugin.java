@@ -1,8 +1,9 @@
 package io.noties.markwon;
 
-import android.support.annotation.NonNull;
 import android.text.Spanned;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;

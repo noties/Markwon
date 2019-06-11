@@ -1,8 +1,8 @@
 package io.noties.markwon.test;
 
-import android.support.annotation.NonNull;
 import android.text.Spanned;
 
+import androidx.annotation.NonNull;
 
 import org.junit.Assert;
 import org.junit.ComparisonFailure;

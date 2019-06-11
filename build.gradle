@@ -53,14 +53,12 @@ ext {
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
-    final def supportVersion = '28.0.0'
     final def commonMarkVersion = '0.12.1'
     final def daggerVersion = '2.10'
 
     deps = [
-            'support-annotations'     : "com.android.support:support-annotations:$supportVersion",
-            'support-app-compat'      : "com.android.support:appcompat-v7:$supportVersion",
-            'support-recycler-view'   : "com.android.support:recyclerview-v7:$supportVersion",
+            'x-annotations'           : 'androidx.annotation:annotation:1.1.0',
+            'x-recycler-view'         : 'androidx.recyclerview:recyclerview:1.0.0',
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
@@ -68,7 +66,7 @@ ext {
             'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.14',
             'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
-            'prism4j'                 : 'ru.noties:prism4j:1.1.0',
+            'prism4j'                 : 'io.noties:prism4j:2.0.0',
             'debug'                   : 'io.noties:debug:5.0.0@jar',
             'adapt'                   : 'io.noties:adapt:2.0.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
@@ -77,7 +75,7 @@ ext {
     ]
 
     deps['annotationProcessor'] = [
-            'prism4j-bundler': 'ru.noties:prism4j-bundler:1.1.0',
+            'prism4j-bundler': 'io.noties:prism4j-bundler:2.0.0',
             'dagger-compiler': "com.google.dagger:dagger-compiler:$daggerVersion"
     ]
 

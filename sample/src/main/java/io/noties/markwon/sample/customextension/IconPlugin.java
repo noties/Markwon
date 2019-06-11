@@ -1,7 +1,8 @@
 package io.noties.markwon.sample.customextension;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import org.commonmark.parser.Parser;
 

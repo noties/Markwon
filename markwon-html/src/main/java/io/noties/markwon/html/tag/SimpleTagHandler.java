@@ -1,17 +1,17 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Collection;
 
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
-import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.html.HtmlTag;
+import io.noties.markwon.html.MarkwonHtmlRenderer;
+import io.noties.markwon.html.TagHandler;
 
 public abstract class SimpleTagHandler extends TagHandler {
 

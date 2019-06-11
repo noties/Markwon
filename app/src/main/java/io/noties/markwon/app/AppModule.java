@@ -16,8 +16,8 @@ import io.noties.markwon.syntax.Prism4jThemeDarkula;
 import io.noties.markwon.syntax.Prism4jThemeDefault;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import ru.noties.prism4j.Prism4j;
-import ru.noties.prism4j.annotations.PrismBundle;
+import io.noties.prism4j.Prism4j;
+import io.noties.prism4j.annotations.PrismBundle;
 
 @Module
 @PrismBundle(includeAll = true)

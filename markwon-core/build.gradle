@@ -16,7 +16,7 @@ android {
 dependencies {
 
     deps.with {
-        api it['support-annotations']
+        api it['x-annotations']
         api it['commonmark']
     }
 

@@ -1,19 +1,19 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.BlockQuote;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
-import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.html.HtmlTag;
+import io.noties.markwon.html.MarkwonHtmlRenderer;
+import io.noties.markwon.html.TagHandler;
 
 public class BlockquoteHandler extends TagHandler {
 

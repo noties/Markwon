@@ -1,14 +1,14 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.RenderProps;
+import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.span.SubScriptSpan;
 
 public class SubScriptHandler extends SimpleTagHandler {

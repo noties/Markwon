@@ -1,8 +1,8 @@
 package io.noties.markwon.image.gif;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -112,7 +112,7 @@ public class GifMediaDecoder extends MediaDecoder {
         static {
             boolean result = true;
             try {
-                GifDrawable.class.getName();
+                pl.droidsonroids.gif.GifDrawable.class.getName();
             } catch (Throwable t) {
                 result = false;
                 t.printStackTrace();

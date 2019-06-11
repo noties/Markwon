@@ -1,19 +1,20 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.commonmark.node.Link;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.core.CoreProps;
-import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
+import io.noties.markwon.core.CoreProps;
+import io.noties.markwon.html.HtmlTag;
 
 public class LinkHandler extends SimpleTagHandler {
     @Nullable

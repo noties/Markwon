@@ -1,12 +1,13 @@
 package io.noties.markwon.app.gif;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import io.noties.markwon.image.AsyncDrawableSpan;
 import pl.droidsonroids.gif.GifDrawable;

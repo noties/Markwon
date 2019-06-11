@@ -1,9 +1,10 @@
 package io.noties.markwon.recycler;
 
-import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.Node;
 

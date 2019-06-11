@@ -1,6 +1,6 @@
 package io.noties.markwon.html.jsoup.nodes;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.commonmark.internal.util.Html5Entities;
 

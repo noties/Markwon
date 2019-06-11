@@ -2,7 +2,8 @@ package io.noties.markwon.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

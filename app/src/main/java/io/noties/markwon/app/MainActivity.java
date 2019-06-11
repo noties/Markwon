@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import javax.inject.Inject;
 
-import io.noties.markwon.Markwon;
 import io.noties.debug.Debug;
+import io.noties.markwon.Markwon;
 
 public class MainActivity extends Activity {
 

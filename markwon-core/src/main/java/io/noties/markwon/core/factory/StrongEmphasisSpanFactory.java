@@ -1,12 +1,12 @@
 package io.noties.markwon.core.factory;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import io.noties.markwon.core.spans.StrongEmphasisSpan;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
+import io.noties.markwon.core.spans.StrongEmphasisSpan;
 
 public class StrongEmphasisSpanFactory implements SpanFactory {
     @Nullable

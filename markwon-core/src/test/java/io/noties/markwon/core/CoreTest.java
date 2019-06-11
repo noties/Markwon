@@ -1,6 +1,6 @@
 package io.noties.markwon.core;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Spanned;
 
 import org.commonmark.node.Emphasis;

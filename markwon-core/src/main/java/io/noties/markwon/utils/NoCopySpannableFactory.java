@@ -1,8 +1,9 @@
 package io.noties.markwon.utils;
 
-import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableString;
+
+import androidx.annotation.NonNull;
 
 /**
  * Utility SpannableFactory that re-uses Spannable instance between multiple

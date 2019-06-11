@@ -31,7 +31,7 @@ features listed in [commonmark-spec] are supported
 ![stable](https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=stable)
 ![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.noties.markwon/core.svg?label=snapshot)
 
-```groovy
+```kotlin
 implementation "io.noties.markwon:core:${markwonVersion}"
 ```
 

@@ -4,11 +4,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.Px;
 import android.text.Spanned;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.Px;
 
 import org.commonmark.parser.Parser;
 
@@ -18,15 +19,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import io.noties.markwon.image.AsyncDrawable;
-import io.noties.markwon.image.AsyncDrawableScheduler;
-import io.noties.markwon.image.AsyncDrawableSpan;
-import ru.noties.jlatexmath.JLatexMathDrawable;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
+import io.noties.markwon.image.AsyncDrawableScheduler;
+import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImageSize;
+import ru.noties.jlatexmath.JLatexMathDrawable;
 
 /**
  * @since 3.0.0

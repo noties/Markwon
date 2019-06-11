@@ -1,8 +1,9 @@
 package io.noties.markwon.app;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.urlprocessor.UrlProcessor;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;

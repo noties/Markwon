@@ -3,9 +3,10 @@ package io.noties.markwon.ext.tasklist;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
+
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.utils.LeadingMarginUtils;

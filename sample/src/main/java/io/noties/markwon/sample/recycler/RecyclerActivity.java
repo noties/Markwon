@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.node.FencedCodeBlock;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import io.noties.debug.AndroidLogDebugOutput;
+import io.noties.debug.Debug;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -32,8 +35,6 @@ import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.sample.R;
 import io.noties.markwon.urlprocessor.UrlProcessor;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
-import io.noties.debug.AndroidLogDebugOutput;
-import io.noties.debug.Debug;
 
 public class RecyclerActivity extends Activity {
 

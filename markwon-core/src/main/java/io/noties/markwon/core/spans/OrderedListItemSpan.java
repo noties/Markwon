@@ -2,12 +2,13 @@ package io.noties.markwon.core.spans;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.LeadingMarginSpan;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.utils.LeadingMarginUtils;

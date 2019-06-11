@@ -2,9 +2,10 @@ package io.noties.markwon.ext.tables;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Px;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Px;
 
 import io.noties.markwon.utils.ColorUtils;
 import io.noties.markwon.utils.Dip;

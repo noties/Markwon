@@ -1,7 +1,7 @@
 package io.noties.markwon.image;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.Image;
 import org.junit.Test;

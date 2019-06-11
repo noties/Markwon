@@ -2,8 +2,9 @@ package io.noties.markwon.image;
 
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 
 /**
  * @since 3.0.1

@@ -1,16 +1,17 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
 import android.text.style.UnderlineSpan;
+
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.Collection;
 
+import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.SpannableBuilder;
 import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.MarkwonHtmlRenderer;
 import io.noties.markwon.html.TagHandler;
-import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.SpannableBuilder;
 
 public class UnderlineHandler extends TagHandler {
 

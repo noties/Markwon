@@ -1,21 +1,21 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.commonmark.node.ListItem;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import io.noties.markwon.core.CoreProps;
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
-import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.core.CoreProps;
+import io.noties.markwon.html.HtmlTag;
+import io.noties.markwon.html.MarkwonHtmlRenderer;
+import io.noties.markwon.html.TagHandler;
 
 public class ListHandler extends TagHandler {
 

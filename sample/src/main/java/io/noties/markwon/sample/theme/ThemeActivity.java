@@ -2,7 +2,8 @@ package io.noties.markwon.sample.theme;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import io.noties.markwon.sample.R;
 

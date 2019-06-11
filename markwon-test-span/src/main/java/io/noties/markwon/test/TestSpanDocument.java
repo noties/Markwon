@@ -1,6 +1,6 @@
 package io.noties.markwon.test;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

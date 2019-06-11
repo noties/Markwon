@@ -1,6 +1,6 @@
 package io.noties.markwon.image;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * @since 1.0.1

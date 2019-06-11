@@ -1,12 +1,12 @@
 package io.noties.markwon.syntax;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
-import ru.noties.prism4j.Prism4j;
+import io.noties.prism4j.Prism4j;
 
 public class SyntaxHighlightPlugin extends AbstractMarkwonPlugin {
 

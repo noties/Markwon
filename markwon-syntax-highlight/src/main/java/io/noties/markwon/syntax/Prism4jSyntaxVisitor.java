@@ -1,10 +1,11 @@
 package io.noties.markwon.syntax;
 
-import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 
-import ru.noties.prism4j.AbsVisitor;
-import ru.noties.prism4j.Prism4j;
+import androidx.annotation.NonNull;
+
+import io.noties.prism4j.AbsVisitor;
+import io.noties.prism4j.Prism4j;
 
 class Prism4jSyntaxVisitor extends AbsVisitor {
 

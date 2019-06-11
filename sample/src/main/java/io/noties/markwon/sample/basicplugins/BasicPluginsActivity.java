@@ -4,13 +4,14 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.commonmark.node.Heading;
 import org.commonmark.node.Paragraph;
@@ -18,13 +19,6 @@ import org.commonmark.node.Paragraph;
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.image.ImageItem;
-import io.noties.markwon.image.ImagesPlugin;
-import io.noties.markwon.image.SchemeHandler;
-import io.noties.markwon.image.network.NetworkSchemeHandler;
-import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -32,8 +26,15 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
+import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.tag.SimpleTagHandler;
+import io.noties.markwon.image.ImageItem;
+import io.noties.markwon.image.ImagesPlugin;
+import io.noties.markwon.image.SchemeHandler;
+import io.noties.markwon.image.network.NetworkSchemeHandler;
+import io.noties.markwon.movement.MovementMethodPlugin;
 
 public class BasicPluginsActivity extends Activity {
 

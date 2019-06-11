@@ -1,7 +1,8 @@
 package io.noties.markwon.app;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ class UriProcessorImpl implements UriProcessor {
                         .fragment(uri.getFragment())
                         .query(uri.getQuery());
 
-                for (String segment: segments) {
+                for (String segment : segments) {
                     final String part;
                     if ("blob".equals(segment)) {
                         part = "raw";

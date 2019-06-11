@@ -1,11 +1,12 @@
 package io.noties.markwon.core;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
@@ -30,15 +31,13 @@ import org.commonmark.node.ThematicBreak;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.noties.markwon.SpannableBuilder;
-import io.noties.markwon.core.spans.OrderedListItemSpan;
-import io.noties.markwon.image.ImageProps;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
+import io.noties.markwon.SpannableBuilder;
 import io.noties.markwon.core.factory.BlockQuoteSpanFactory;
 import io.noties.markwon.core.factory.CodeBlockSpanFactory;
 import io.noties.markwon.core.factory.CodeSpanFactory;
@@ -48,6 +47,8 @@ import io.noties.markwon.core.factory.LinkSpanFactory;
 import io.noties.markwon.core.factory.ListItemSpanFactory;
 import io.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import io.noties.markwon.core.factory.ThematicBreakSpanFactory;
+import io.noties.markwon.core.spans.OrderedListItemSpan;
+import io.noties.markwon.image.ImageProps;
 
 /**
  * @see CoreProps

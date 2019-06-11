@@ -1,7 +1,8 @@
 package io.noties.markwon.utils;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * @deprecated Please use {@link io.noties.markwon.image.DrawableUtils}

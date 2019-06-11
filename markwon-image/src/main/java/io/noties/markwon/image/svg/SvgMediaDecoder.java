@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
@@ -99,7 +99,7 @@ public class SvgMediaDecoder extends MediaDecoder {
         static {
             boolean result = true;
             try {
-                SVG.class.getName();
+                com.caverock.androidsvg.SVG.class.getName();
             } catch (Throwable t) {
                 result = false;
                 t.printStackTrace();

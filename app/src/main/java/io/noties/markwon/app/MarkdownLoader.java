@@ -4,9 +4,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,11 +21,11 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
+import io.noties.debug.Debug;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import io.noties.debug.Debug;
 
 @ActivityScope
 public class MarkdownLoader {

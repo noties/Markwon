@@ -1,8 +1,9 @@
 package io.noties.markwon.html.span;
 
-import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
+
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.html.HtmlPlugin;
 

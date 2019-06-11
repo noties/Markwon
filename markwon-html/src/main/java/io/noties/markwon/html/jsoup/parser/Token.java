@@ -1,6 +1,6 @@
 package io.noties.markwon.html.jsoup.parser;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.html.jsoup.helper.Validate;
 import io.noties.markwon.html.jsoup.nodes.Attributes;
@@ -251,7 +251,7 @@ public abstract class Token {
         }
     }
 
-    public final static class EndTag extends Tag{
+    public final static class EndTag extends Tag {
         EndTag() {
             super(TokenType.EndTag);
         }

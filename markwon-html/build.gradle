@@ -18,9 +18,6 @@ dependencies {
     api project(':markwon-core')
 
     deps.with {
-        api it['support-annotations']
-        api it['commonmark']
-
         // add a compileOnly dependency, so if this artifact is present
         // we will try to obtain a SpanFactory for a Strikethrough node and use
         // it to be consistent with markdown (please note that we do not use markwon plugin

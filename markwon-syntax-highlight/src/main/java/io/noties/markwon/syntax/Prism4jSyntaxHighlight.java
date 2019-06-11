@@ -1,11 +1,12 @@
 package io.noties.markwon.syntax;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
-import ru.noties.prism4j.Prism4j;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import io.noties.prism4j.Prism4j;
 
 public class Prism4jSyntaxHighlight implements SyntaxHighlight {
 

@@ -1,7 +1,7 @@
 package io.noties.markwon;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,8 +12,6 @@ import io.noties.markwon.core.CorePlugin;
 
 // @since 4.0.0-SNAPSHOT
 class RegistryImpl implements MarkwonPlugin.Registry {
-
-    // todo: core-plugin must be (better be) first any way
 
     private final List<MarkwonPlugin> origin;
     private final List<MarkwonPlugin> plugins;

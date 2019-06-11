@@ -2,10 +2,11 @@ package io.noties.markwon.image.glide;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -19,12 +20,12 @@ import org.commonmark.node.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.noties.markwon.image.AsyncDrawable;
-import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
+import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
+import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageSpanFactory;
 

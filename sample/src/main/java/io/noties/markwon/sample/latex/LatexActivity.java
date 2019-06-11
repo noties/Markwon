@@ -2,11 +2,12 @@ package io.noties.markwon.sample.latex;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-import io.noties.markwon.ext.latex.JLatexMathPlugin;
+import androidx.annotation.Nullable;
+
 import io.noties.markwon.Markwon;
+import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.sample.R;
 
 public class LatexActivity extends Activity {

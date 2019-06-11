@@ -1,9 +1,10 @@
 package io.noties.markwon.core.spans;
 
-import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.core.MarkwonTheme;
 

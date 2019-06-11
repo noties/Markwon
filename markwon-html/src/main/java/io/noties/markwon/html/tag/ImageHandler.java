@@ -1,8 +1,9 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.commonmark.node.Image;
 
@@ -10,13 +11,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import io.noties.markwon.image.ImageSize;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.html.CssInlineStyleParser;
 import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.image.ImageProps;
+import io.noties.markwon.image.ImageSize;
 
 public class ImageHandler extends SimpleTagHandler {
 

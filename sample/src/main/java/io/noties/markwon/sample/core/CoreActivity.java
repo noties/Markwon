@@ -2,15 +2,16 @@ package io.noties.markwon.sample.core;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Spanned;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import org.commonmark.node.Node;
 
-import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.core.CorePlugin;
 
 public class CoreActivity extends Activity {
 

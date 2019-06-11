@@ -1,6 +1,6 @@
 package io.noties.markwon.html;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import static io.noties.markwon.html.AppendableUtils.appendQuietly;
 

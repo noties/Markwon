@@ -2,8 +2,9 @@ package io.noties.markwon.sample.customextension;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.sample.R;

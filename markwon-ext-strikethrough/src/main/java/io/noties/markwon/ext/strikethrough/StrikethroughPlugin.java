@@ -1,7 +1,8 @@
 package io.noties.markwon.ext.strikethrough;
 
-import android.support.annotation.NonNull;
 import android.text.style.StrikethroughSpan;
+
+import androidx.annotation.NonNull;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;

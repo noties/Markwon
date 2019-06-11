@@ -1,6 +1,6 @@
 package io.noties.markwon.urlprocessor;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class UrlProcessorNoOp implements UrlProcessor {
     @NonNull

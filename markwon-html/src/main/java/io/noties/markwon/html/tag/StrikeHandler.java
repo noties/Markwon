@@ -1,19 +1,20 @@
 package io.noties.markwon.html.tag;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.style.StrikethroughSpan;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.html.MarkwonHtmlRenderer;
-import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.html.HtmlTag;
+import io.noties.markwon.html.MarkwonHtmlRenderer;
+import io.noties.markwon.html.TagHandler;
 
 public class StrikeHandler extends TagHandler {
 

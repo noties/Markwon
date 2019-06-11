@@ -1,14 +1,14 @@
 package io.noties.markwon.core.factory;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import io.noties.markwon.core.CoreProps;
-import io.noties.markwon.core.spans.BulletListItemSpan;
-import io.noties.markwon.core.spans.OrderedListItemSpan;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
+import io.noties.markwon.core.CoreProps;
+import io.noties.markwon.core.spans.BulletListItemSpan;
+import io.noties.markwon.core.spans.OrderedListItemSpan;
 
 public class ListItemSpanFactory implements SpanFactory {
 

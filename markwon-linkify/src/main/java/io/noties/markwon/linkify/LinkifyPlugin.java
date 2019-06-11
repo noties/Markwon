@@ -1,9 +1,10 @@
 package io.noties.markwon.linkify;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.util.Linkify;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

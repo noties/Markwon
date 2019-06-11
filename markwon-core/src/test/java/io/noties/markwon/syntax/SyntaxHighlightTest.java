@@ -1,10 +1,11 @@
 package io.noties.markwon.syntax;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.Node;
