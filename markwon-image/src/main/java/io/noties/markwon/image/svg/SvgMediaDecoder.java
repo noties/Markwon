@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -39,14 +40,6 @@ public class SvgMediaDecoder extends MediaDecoder {
         return new SvgMediaDecoder(resources);
     }
 
-    /**
-     * @return boolean indicating if SVG dependency is satisfied
-     * @since 4.0.0-SNAPSHOT
-     */
-    public static boolean available() {
-        return Holder.HAS_SVG;
-    }
-
     private final Resources resources;
 
     @SuppressWarnings("WeakerAccess")
@@ -54,7 +47,7 @@ public class SvgMediaDecoder extends MediaDecoder {
         this.resources = resources;
 
         // @since 4.0.0-SNAPSHOT
-        Holder.validate();
+        validate();
     }
 
     @NonNull
@@ -91,27 +84,10 @@ public class SvgMediaDecoder extends MediaDecoder {
         return Collections.singleton(CONTENT_TYPE);
     }
 
-    // @since 4.0.0-SNAPSHOT
-    private static class Holder {
-
-        private static final boolean HAS_SVG;
-
-        static {
-            boolean result = true;
-            try {
-                com.caverock.androidsvg.SVG.class.getName();
-            } catch (Throwable t) {
-                result = false;
-                t.printStackTrace();
-            }
-            HAS_SVG = result;
-        }
-
-        static void validate() {
-            if (!HAS_SVG) {
-                throw new IllegalStateException("`com.caverock:androidsvg:*` dependency is missing, " +
-                        "please add to your project explicitly if you wish to use SVG media decoder");
-            }
+    private static void validate() {
+        if (!SvgSupport.hasSvgSupport()) {
+            throw new IllegalStateException("`com.caverock:androidsvg:*` dependency is missing, " +
+                    "please add to your project explicitly if you wish to use SVG media decoder");
         }
     }
 }

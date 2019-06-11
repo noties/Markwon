@@ -1,6 +1,7 @@
 package io.noties.markwon.image.gif;
 
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -37,21 +38,13 @@ public class GifMediaDecoder extends MediaDecoder {
         return new GifMediaDecoder(autoPlayGif);
     }
 
-    /**
-     * @return boolean indicating if GIF dependency is satisfied
-     * @since 4.0.0-SNAPSHOT
-     */
-    public static boolean available() {
-        return Holder.HAS_GIF;
-    }
-
     private final boolean autoPlayGif;
 
     protected GifMediaDecoder(boolean autoPlayGif) {
         this.autoPlayGif = autoPlayGif;
 
         // @since 4.0.0-SNAPSHOT
-        Holder.validate();
+        validate();
     }
 
     @NonNull
@@ -104,28 +97,11 @@ public class GifMediaDecoder extends MediaDecoder {
         return outputStream.toByteArray();
     }
 
-    // @since 4.0.0-SNAPSHOT
-    private static class Holder {
-
-        private static final boolean HAS_GIF;
-
-        static {
-            boolean result = true;
-            try {
-                pl.droidsonroids.gif.GifDrawable.class.getName();
-            } catch (Throwable t) {
-                result = false;
-                t.printStackTrace();
-            }
-            HAS_GIF = result;
-        }
-
-        static void validate() {
-            if (!HAS_GIF) {
-                throw new IllegalStateException("`pl.droidsonroids.gif:android-gif-drawable:*` " +
-                        "dependency is missing, please add to your project explicitly if you " +
-                        "wish to use GIF media decoder");
-            }
+    private static void validate() {
+        if (!GifSupport.hasGifSupport()) {
+            throw new IllegalStateException("`pl.droidsonroids.gif:android-gif-drawable:*` " +
+                    "dependency is missing, please add to your project explicitly if you " +
+                    "wish to use GIF media decoder");
         }
     }
 }
