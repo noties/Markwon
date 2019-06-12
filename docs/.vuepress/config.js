@@ -18,10 +18,10 @@ module.exports = {
                 text: 'API Version',
                 items: [
                     { text: 'Current (3.x.x)', link: '/' },
+                    { text: 'Beta (4.x.x)', link: '/docs/v4/install.md' },
                     { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
                 ]
             },
-            { text: 'Sandbox', link: '/sandbox.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: {
@@ -35,6 +35,27 @@ module.exports = {
                 '/docs/v2/syntax-highlight.md',
                 '/docs/v2/html.md',
                 '/docs/v2/view.md'
+            ],
+            '/docs/v4': [
+                '/docs/v4/install.md',
+                {
+                    title: 'Core',
+                    collapsable: false,
+                    children: [
+                        '/docs/v4/core/getting-started.md',
+                        '/docs/v4/core/plugins.md',
+                        '/docs/v4/core/registry.md',
+                        '/docs/v4/core/theme.md',
+                        '/docs/v4/core/configuration.md',
+                        '/docs/v4/core/visitor.md',
+                        '/docs/v4/core/spans-factory.md',
+                        '/docs/v4/core/core-plugin.md',
+                        '/docs/v4/core/movement-method-plugin.md',
+                        '/docs/v4/core/render-props.md'
+                    ]
+                },
+                '/docs/v4/recipes.md',
+                '/docs/v4/migration-3-4.md'
             ],
             '/': [
                 '',
