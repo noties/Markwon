@@ -82,6 +82,9 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 * [FairNote](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote) - simple and intuitive notepad app. It gives you speed and efficiency when you write notes, to-do lists, e-mails, or jot down quick ideas.
 * [Boxcryptor](https://www.boxcryptor.com) - A software that adds AES-256 and RSA encryption to Dropbox, Google Drive, OneDrive and many other clouds.
 
+<AwesomeGroup :apps="[
+    {name: 'Cinopsys: Movies and Shows', image: 'http://drive.google.com/uc?export=view&id=1rD0HLd8tDUCe8QcVEG_iGvsJbFyozRhC', link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'}
+]" />
 
 <u>Extension/plugins</u>:
 

@@ -62,7 +62,7 @@ ext {
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
-            'android-svg'             : 'com.caverock:androidsvg:1.2.1',
+            'android-svg'             : 'com.caverock:androidsvg:1.4',
             'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.14',
             'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
