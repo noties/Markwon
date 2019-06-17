@@ -108,7 +108,7 @@ which accepts a MovementMethod as an argument.
 ## OnTextAddedListener <Badge text="4.0.0"/>
 
 Since `4.0.0` `CorePlugin` provides ability to receive text-added event. This can
-be useful in order to process raw text (for example to [linkify](/docs/v4/linkify.md) it):
+be useful in order to process raw text (for example to [linkify](/docs/v4/linkify/) it):
 
 ```java
 final Markwon markwon = Markwon.builder(context)

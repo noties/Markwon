@@ -43,7 +43,7 @@ class AsyncDrawableLoaderBuilder {
             addMediaDecoder(GifMediaDecoder.create());
         }
 
-        defaultMediaDecoder = DefaultImageMediaDecoder.create();
+        defaultMediaDecoder = DefaultMediaDecoder.create();
     }
 
     void executorService(@NonNull ExecutorService executorService) {

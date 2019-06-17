@@ -19,22 +19,22 @@ import java.util.Collections;
  *
  * @since 1.1.0
  */
-public class DefaultImageMediaDecoder extends MediaDecoder {
+public class DefaultMediaDecoder extends MediaDecoder {
 
     @NonNull
-    public static DefaultImageMediaDecoder create() {
-        return new DefaultImageMediaDecoder(Resources.getSystem());
+    public static DefaultMediaDecoder create() {
+        return new DefaultMediaDecoder(Resources.getSystem());
     }
 
     @NonNull
-    public static DefaultImageMediaDecoder create(@NonNull Resources resources) {
-        return new DefaultImageMediaDecoder(resources);
+    public static DefaultMediaDecoder create(@NonNull Resources resources) {
+        return new DefaultMediaDecoder(resources);
     }
 
     private final Resources resources;
 
     @SuppressWarnings("WeakerAccess")
-    DefaultImageMediaDecoder(Resources resources) {
+    DefaultMediaDecoder(Resources resources) {
         this.resources = resources;
     }
 

@@ -66,7 +66,7 @@ FileSchemeHandler.createWithAssets(context);
 ```
 
 :::warning
-Assets loading will work when your URL will include `android_asset` the the path,
+Assets loading will work when your URL will include `android_asset` in the path,
 for example: `file:///android_asset/image.png` (mind the 3 slashes `///`). If you wish
 to _assume_ all images without proper scheme to point to assets folder, then you can use
 [UrlProcessorAndroidAssets](/docs/v4/core/configuration.html#urlprocessorandroidassets)
@@ -136,8 +136,9 @@ final Markwon markwon = Markwon.builder(context)
                     @Override
                     public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
 
+                        // will handle URLs like `drawable://ic_account_24dp_white`
                         final int resourceId = context.getResources().getIdentifier(
-                                raw.substring("resources://".length()),
+                                raw.substring("drawable://".length()),
                                 "drawable",
                                 context.getPackageName());
 
@@ -146,19 +147,65 @@ final Markwon markwon = Markwon.builder(context)
 
                         // it's important to apply bounds to resulting drawable
                         DrawableUtils.applyIntrinsicBounds(drawable);
-                        
+
                         return ImageItem.withResult(drawable);
                     }
 
                     @NonNull
                     @Override
                     public Collection<String> supportedSchemes() {
-                        return Collections.singleton("resources");
+                        return Collections.singleton("drawable");
                     }
                 });
             }
         }))
 ```
+
+Otherwise `SchemeHandler` must return an `InputStream` with proper `content-type` information
+for further processing by a `MediaDecoder`:
+
+```java
+imagesPlugin.addSchemeHandler(new SchemeHandler() {
+    @NonNull
+    @Override
+    public ImageItem handle(@NonNull String raw, @NonNull Uri uri) {
+        return ImageItem.withDecodingNeeded("image/png", load(raw));
+    }
+
+    @NonNull
+    private InputStream load(@NonNull String raw) {...}
+});
+```
+
+## MediaDecoder
+
+`ImagesPlugin` comes with predefined media-decoders:
+* `GifMediaDecoder` adds support for GIF
+* `SvgMediaDecoder` adds support for SVG
+* `DefaultMediaDecoder`
+
+:::warning
+If you wish to add support for **SVG** or **GIF** you must explicitly add these dependencies
+to your project:
+* for `SVG`: `com.caverock:androidsvg:1.4`
+* for `GIF`: `pl.droidsonroids.gif:android-gif-drawable:1.2.14`
+
+You can try more recent versions of these libraries, but make sure that they doesn't 
+introduce any unexpected behavior.
+:::
+
+
+### GifMediaDecoder
+
+### SvgMediaDecoder
+
+### DefaultMediaDecoder
+
+## AsyncDrawableScheduler
+
+## ErrorHandler
+
+## Placeholder
 
 :::tip
 If you are using [html](/docs/v4/html/) you do not have to additionally setup

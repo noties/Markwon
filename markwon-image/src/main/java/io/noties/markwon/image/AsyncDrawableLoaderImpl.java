@@ -77,7 +77,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
     @NonNull
     private Future<?> execute(@NonNull final AsyncDrawable asyncDrawable) {
 
-        // todo: more efficient DefaultImageMediaDecoder... BitmapFactory.decodeStream is a bit not optimal
+        // todo: more efficient DefaultMediaDecoder... BitmapFactory.decodeStream is a bit not optimal
         //      for big images for sure. We _could_ introduce internal Drawable that will check for
         //      image bounds (but we will need to cache inputStream in order to inspect and optimize
         //      input image...)

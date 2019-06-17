@@ -111,7 +111,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @see DefaultImageMediaDecoder
+     * @see DefaultMediaDecoder
      * @see SvgMediaDecoder
      * @see GifMediaDecoder
      * @since 4.0.0-SNAPSHOT
@@ -123,10 +123,10 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * Please note that if not specified a {@link DefaultImageMediaDecoder} will be used. So
+     * Please note that if not specified a {@link DefaultMediaDecoder} will be used. So
      * if you need to disable default-image-media-decoder specify here own no-op implementation or null.
      *
-     * @see DefaultImageMediaDecoder
+     * @see DefaultMediaDecoder
      * @since 4.0.0-SNAPSHOT
      */
     @NonNull
