@@ -1,5 +1,7 @@
 # Theme
 
+<LegacyWarning />
+
 Here is the list of properties that can be configured via `SpannableTheme`. If you wish to control what 
 is out of this list, you can use [SpannableFactory](/docs/v2/factory.md)
 abstraction which lets you to gather full control of Spans that are used to display markdown.

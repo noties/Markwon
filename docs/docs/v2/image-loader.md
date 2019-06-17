@@ -1,5 +1,7 @@
 # Images
 
+<LegacyWarning />
+
 By default `Markwon` doesn't handle images. Although `AsyncDrawable.Loader` is
 defined in main artifact, it does not provide implementation.
 

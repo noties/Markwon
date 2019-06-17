@@ -1,5 +1,7 @@
 # Configuration
 
+<LegacyWarning />
+
 `SpannableConfiguration` is the core component that controls how markdown is parsed and rendered.
 It can be obtained via factory methods:
 

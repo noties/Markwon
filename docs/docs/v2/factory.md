@@ -1,5 +1,7 @@
 # Factory <Badge text="1.1.0" />
 
+<LegacyWarning />
+
 `SpannableFactory` is used to create Span implementations.
 
 ```java

@@ -1,10 +1,8 @@
 # Syntax highlight
 
-<LegacyWarning />
+<MavenBadge4 :artifact="'syntax-highlight'" />
 
-<MavenBadge2xx artifact="markwon-syntax-highlight" />
-
-This is a simple module to add **syntax highlight** functionality to your markdown rendered with `Markwon` library. It is based on [Prism4j](https://github.com/noties/Prism4j) so lead there to understand how to configure `Prism4j` instance.
+This is a module to add **syntax highlight** functionality to your markdown rendered with `Markwon` library. It is based on [Prism4j](https://github.com/noties/Prism4j) so lead there to understand how to configure `Prism4j` instance.
 
 <img :src="$withBase('/art/markwon-syntax-default.png')" alt="theme-default" width="80%">
 
@@ -69,3 +67,8 @@ public interface Prism4jTheme {
 :::tip
 You can extend `Prism4jThemeBase` which has some helper methods
 :::
+
+```java
+final Markwon markwon = Markwon.builder(context)
+        .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
+```

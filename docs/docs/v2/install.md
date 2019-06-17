@@ -1,5 +1,7 @@
 # Installation
 
+<LegacyWarning />
+
 <MavenBadges2xx />
 
 In order to start using `Markwon` add this to your dependencies block

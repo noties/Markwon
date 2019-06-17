@@ -1,5 +1,7 @@
 # Getting started
 
+<LegacyWarning />
+
 ## Quick one
 
 This is the most simple way to set markdown to a `TextView` or any of its siblings:

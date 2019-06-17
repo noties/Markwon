@@ -54,6 +54,17 @@ module.exports = {
                         '/docs/v4/core/render-props.md'
                     ]
                 },
+                '/docs/v4/ext-latex/',
+                '/docs/v4/ext-strikethrough/',
+                '/docs/v4/ext-tables/',
+                '/docs/v4/ext-tasklist/',
+                '/docs/v4/html/',
+                '/docs/v4/image/',
+                '/docs/v4/image-glide/',
+                '/docs/v4/image-picasso/',
+                '/docs/v4/recycler/',
+                '/docs/v4/recycler-table/',
+                '/docs/v4/syntax-highlight/',
                 '/docs/v4/recipes.md',
                 '/docs/v4/migration-3-4.md'
             ],
