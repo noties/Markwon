@@ -29,7 +29,7 @@ public class OkHttpImagesPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static OkHttpImagesPlugin create(@NonNull OkHttpClient okHttpClient) {
-        return create(okHttpClient);
+        return create((Call.Factory) okHttpClient);
     }
 
     @NonNull
