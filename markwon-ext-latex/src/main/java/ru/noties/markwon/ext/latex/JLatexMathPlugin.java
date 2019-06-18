@@ -132,7 +132,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         ImageItem item = null;
 
                         try {
-                            final byte[] bytes = raw.substring(SCHEME.length()).getBytes("UTF-8");
+                            // temp workaround for leading `://` in latex
+                            final byte[] bytes = raw.substring(SCHEME.length() + 3).getBytes("UTF-8");
                             item = new ImageItem(
                                     CONTENT_TYPE,
                                     new ByteArrayInputStream(bytes));
