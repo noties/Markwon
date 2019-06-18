@@ -50,9 +50,7 @@ public class DefaultMediaDecoder extends MediaDecoder {
             throw new IllegalStateException("Exception decoding input-stream", t);
         }
 
-        final Drawable drawable = new BitmapDrawable(resources, bitmap);
-        DrawableUtils.applyIntrinsicBounds(drawable);
-        return drawable;
+        return new BitmapDrawable(resources, bitmap);
     }
 
     @NonNull

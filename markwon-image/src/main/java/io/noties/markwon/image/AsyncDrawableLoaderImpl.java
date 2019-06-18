@@ -143,6 +143,12 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
                 final Drawable out = drawable;
 
+                // @since 4.0.0-SNAPSHOT apply intrinsic bounds (but only if they are empty)
+                if (out != null
+                        && out.getBounds().isEmpty()) {
+                    DrawableUtils.applyIntrinsicBounds(out);
+                }
+
                 handler.postAtTime(new Runnable() {
                     @Override
                     public void run() {

@@ -145,9 +145,6 @@ final Markwon markwon = Markwon.builder(context)
                         // it's fine if it throws, async-image-loader will catch exception
                         final Drawable drawable = context.getDrawable(resourceId);
 
-                        // it's important to apply bounds to resulting drawable
-                        DrawableUtils.applyIntrinsicBounds(drawable);
-
                         return ImageItem.withResult(drawable);
                     }
 

@@ -1,7 +1,6 @@
 package io.noties.markwon.app;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -10,8 +9,6 @@ import android.text.Spanned;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.InputStream;
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -26,10 +23,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
-import io.noties.markwon.image.MediaDecoder;
-import io.noties.markwon.image.SchemeHandler;
 import io.noties.markwon.image.file.FileSchemeHandler;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
 import io.noties.markwon.syntax.Prism4jTheme;
@@ -124,29 +118,6 @@ public class MarkdownRenderer {
                             @Override
                             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                                 builder.urlProcessor(urlProcessor);
-                            }
-                        })
-                        .usePlugin(new AbstractMarkwonPlugin() {
-                            @Override
-                            public void configure(@NonNull Registry registry) {
-                                registry.require(ImagesPlugin.class, new Action<ImagesPlugin>() {
-                                    @Override
-                                    public void apply(@NonNull ImagesPlugin imagesPlugin) {
-                                        imagesPlugin.addMediaDecoder(new MediaDecoder() {
-                                            @NonNull
-                                            @Override
-                                            public Drawable decode(@Nullable String contentType, @NonNull InputStream inputStream) {
-                                                return null;
-                                            }
-
-                                            @NonNull
-                                            @Override
-                                            public Collection<String> supportedTypes() {
-                                                return null;
-                                            }
-                                        });
-                                    }
-                                });
                             }
                         })
                         .build();

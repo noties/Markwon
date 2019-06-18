@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.MediaDecoder;
 
 /**
@@ -73,9 +72,7 @@ public class SvgMediaDecoder extends MediaDecoder {
         canvas.scale(density, density);
         svg.renderToCanvas(canvas);
 
-        final Drawable drawable = new BitmapDrawable(resources, bitmap);
-        DrawableUtils.applyIntrinsicBounds(drawable);
-        return drawable;
+        return new BitmapDrawable(resources, bitmap);
     }
 
     @NonNull

@@ -15,7 +15,7 @@ textView.setSpannableFactory(NoCopySpannableFactory.getInstance());
 ## Autolink
 
 Do not use `autolink` XML attribute on your `TextView` as it will remove all links except autolinked ones.
-Consider using [linkify plugin](/docs/v4/linkify.md) or commonmark-java [autolink extension](https://github.com/atlassian/commonmark-java)
+Consider using [linkify plugin](/docs/v4/linkify/) or commonmark-java [autolink extension](https://github.com/atlassian/commonmark-java)
 
 
 

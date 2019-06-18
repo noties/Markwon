@@ -65,8 +65,6 @@ public class GifMediaDecoder extends MediaDecoder {
             throw new IllegalStateException("Exception creating GifDrawable", e);
         }
 
-        DrawableUtils.applyIntrinsicBounds(drawable);
-
         if (!autoPlayGif) {
             drawable.pause();
         }
