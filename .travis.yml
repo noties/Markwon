@@ -1,5 +1,6 @@
 # https://docs.travis-ci.com/user/languages/android/
 language: android
+dist: trusty
 jdk: openjdk8
 sudo: false
 
