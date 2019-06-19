@@ -80,12 +80,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
     }
 
-    @NonNull
-    public static String makeDestination(@NonNull String latex) {
-        return SCHEME + "://" + latex;
-    }
-
     private static final String SCHEME = "jlatexmath";
+    private static final String SCHEME_START = SCHEME + "://";
     private static final String CONTENT_TYPE = "text/jlatexmath";
 
     private final Config config;
@@ -112,9 +108,11 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 final RenderProps renderProps = visitor.renderProps();
 
-                ImageProps.DESTINATION.set(renderProps, makeDestination(latex));
+                ImageProps.DESTINATION.set(renderProps, SCHEME_START + latex);
                 ImageProps.REPLACEMENT_TEXT_IS_LINK.set(renderProps, false);
-                ImageProps.IMAGE_SIZE.set(renderProps, new ImageSize(new ImageSize.Dimension(100, "%"), null));
+                ImageProps.IMAGE_SIZE.set(
+                        renderProps,
+                        new ImageSize(new ImageSize.Dimension(100, "%"), null));
 
                 visitor.setSpansForNode(Image.class, length);
             }
@@ -132,8 +130,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         ImageItem item = null;
 
                         try {
-                            // temp workaround for leading `://` in latex
-                            final byte[] bytes = raw.substring(SCHEME.length() + 3).getBytes("UTF-8");
+                            final byte[] bytes = raw.substring(SCHEME_START.length()).getBytes("UTF-8");
                             item = new ImageItem(
                                     CONTENT_TYPE,
                                     new ByteArrayInputStream(bytes));
