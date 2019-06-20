@@ -34,6 +34,14 @@ import ru.noties.jlatexmath.JLatexMathDrawable;
  */
 public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
+    /**
+     * @since 4.0.0-SNAPSHOT
+     */
+    public interface BackgroundProvider {
+        @NonNull
+        Drawable provide();
+    }
+
     public interface BuilderConfigure {
         void configureBuilder(@NonNull Builder builder);
     }
@@ -64,7 +72,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final float textSize;
 
-        private final Drawable background;
+        // @since 4.0.0-SNAPSHOT
+        private final BackgroundProvider backgroundProvider;
 
         @JLatexMathDrawable.Align
         private final int align;
@@ -78,7 +87,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         Config(@NonNull Builder builder) {
             this.textSize = builder.textSize;
-            this.background = builder.background;
+            this.backgroundProvider = builder.backgroundProvider;
             this.align = builder.align;
             this.fitCanvas = builder.fitCanvas;
             this.padding = builder.padding;
@@ -149,7 +158,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final float textSize;
 
-        private Drawable background;
+        // @since 4.0.0-SNAPSHOT
+        private BackgroundProvider backgroundProvider;
 
         @JLatexMathDrawable.Align
         private int align = JLatexMathDrawable.ALIGN_CENTER;
@@ -166,8 +176,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
 
         @NonNull
-        public Builder background(@NonNull Drawable background) {
-            this.background = background;
+        public Builder backgroundProvider(@NonNull BackgroundProvider backgroundProvider) {
+            this.backgroundProvider = backgroundProvider;
             return this;
         }
 
@@ -236,7 +246,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         final JLatexMathDrawable jLatexMathDrawable =
                                 JLatexMathDrawable.builder(drawable.getDestination())
                                         .textSize(config.textSize)
-                                        .background(config.background)
+                                        .background(config.backgroundProvider.provide())
                                         .align(config.align)
                                         .fitCanvas(config.fitCanvas)
                                         .padding(config.padding)

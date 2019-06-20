@@ -1,9 +1,12 @@
 package io.noties.markwon.sample.latex;
 
 import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import io.noties.markwon.Markwon;
@@ -44,8 +47,39 @@ public class LatexActivity extends Activity {
 
         final Markwon markwon = Markwon.builder(this)
 //                .usePlugin(ImagesPlugin.create(this))
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
+                    @Override
+                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+                        builder.backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
+                            @NonNull
+                            @Override
+                            public Drawable provide() {
+                                return new ColorDrawable(0x40ff0000);
+                            }
+                        });
+                    }
+                }))
                 .build();
+
+        if (true) {
+            final String l = "$$\n" +
+                    "  P(X=r)=\\frac{\\lambda^r e^{-\\lambda}}{r!}\n" +
+                    "$$\n" +
+                    "\n" +
+                    "$$\n" +
+                    "  P(X<r)=P(X<r-1)\n" +
+                    "$$\n" +
+                    "\n" +
+                    "$$\n" +
+                    "  P(X>r)=1-P(X<r=1)\n" +
+                    "$$\n" +
+                    "\n" +
+                    "$$\n" +
+                    "  \\text{Variance} = \\lambda\n" +
+                    "$$";
+            markwon.setMarkdown(textView, l);
+            return;
+        }
 
         markwon.setMarkdown(textView, markdown);
     }
