@@ -1,5 +1,6 @@
 package io.noties.markwon.image;
 
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -144,9 +145,13 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
                 final Drawable out = drawable;
 
                 // @since 4.0.0-SNAPSHOT apply intrinsic bounds (but only if they are empty)
-                if (out != null
-                        && out.getBounds().isEmpty()) {
-                    DrawableUtils.applyIntrinsicBounds(out);
+                if (out != null) {
+                    final Rect bounds = out.getBounds();
+                    //noinspection ConstantConditions
+                    if (bounds == null
+                            || bounds.isEmpty()) {
+                        DrawableUtils.applyIntrinsicBounds(out);
+                    }
                 }
 
                 handler.postAtTime(new Runnable() {

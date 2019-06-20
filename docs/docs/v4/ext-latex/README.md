@@ -32,10 +32,11 @@ final Markwon markwon = Markwon.builder(context)
             @Override
             public void configureBuilder(@NonNull Builder builder) {
                 builder
-                        .background(backgroundDrawable)
                         .align(JLatexMathDrawable.ALIGN_CENTER)
                         .fitCanvas(true)
                         .padding(paddingPx)
+                        // @since 4.0.0 - change to provider
+                        .backgroundProvider(() -> new MyDrawable()))
                         // @since 4.0.0 - optional, by default cached-thread-pool will be used
                         .executorService(Executors.newCachedThreadPool());
             }
