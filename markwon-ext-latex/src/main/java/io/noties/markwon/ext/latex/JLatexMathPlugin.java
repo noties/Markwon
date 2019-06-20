@@ -1,5 +1,6 @@
 package io.noties.markwon.ext.latex;
 
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +28,7 @@ import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImageSize;
+import io.noties.markwon.image.ImageSizeResolver;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
 /**
@@ -102,10 +104,12 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     private final JLatextAsyncDrawableLoader jLatextAsyncDrawableLoader;
+    private final JLatexImageSizeResolver jLatexImageSizeResolver;
 
     @SuppressWarnings("WeakerAccess")
     JLatexMathPlugin(@NonNull Config config) {
         this.jLatextAsyncDrawableLoader = new JLatextAsyncDrawableLoader(config);
+        this.jLatexImageSizeResolver = new JLatexImageSizeResolver(config.fitCanvas);
     }
 
     @Override
@@ -132,10 +136,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         new AsyncDrawable(
                                 latex,
                                 jLatextAsyncDrawableLoader,
-                                configuration.imageSizeResolver(),
-                                new ImageSize(
-                                        new ImageSize.Dimension(100, "%"),
-                                        null)),
+                                jLatexImageSizeResolver,
+                                null),
                         AsyncDrawableSpan.ALIGN_BOTTOM,
                         false);
 
@@ -288,6 +290,34 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @Override
         public Drawable placeholder(@NonNull AsyncDrawable drawable) {
             return null;
+        }
+    }
+
+    // we must make drawable fit canvas (if specified), but do not keep the ratio whilst scaling up
+    // @since 4.0.0-SNAPSHOT
+    private static class JLatexImageSizeResolver extends ImageSizeResolver {
+
+        private final boolean fitCanvas;
+
+        JLatexImageSizeResolver(boolean fitCanvas) {
+            this.fitCanvas = fitCanvas;
+        }
+
+        @NonNull
+        @Override
+        public Rect resolveImageSize(
+                @Nullable ImageSize imageSize,
+                @NonNull Rect imageBounds,
+                int canvasWidth,
+                float textSize) {
+
+            if (fitCanvas
+                    && imageBounds.width() < canvasWidth) {
+                // we increase only width (keep height as-is)
+                return new Rect(0, 0, canvasWidth, imageBounds.height());
+            }
+
+            return imageBounds;
         }
     }
 }

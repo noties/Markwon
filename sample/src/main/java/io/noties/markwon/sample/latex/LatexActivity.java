@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.sample.R;
+import ru.noties.jlatexmath.JLatexMathDrawable;
 
 public class LatexActivity extends Activity {
 
@@ -50,13 +51,18 @@ public class LatexActivity extends Activity {
                 .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
                     @Override
                     public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
-                        builder.backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
-                            @NonNull
-                            @Override
-                            public Drawable provide() {
-                                return new ColorDrawable(0x40ff0000);
-                            }
-                        });
+                        builder
+                                .backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
+                                    @NonNull
+                                    @Override
+                                    public Drawable provide() {
+                                        return new ColorDrawable(0x40ff0000);
+                                    }
+                                })
+                                .fitCanvas(true)
+                                .align(JLatexMathDrawable.ALIGN_LEFT)
+                                .padding(48)
+                        ;
                     }
                 }))
                 .build();
