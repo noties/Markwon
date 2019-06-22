@@ -6,19 +6,19 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import io.noties.markwon.LinkResolver;
 import io.noties.markwon.core.MarkwonTheme;
 
 public class LinkSpan extends URLSpan {
 
-    public interface Resolver {
-        void resolve(View view, @NonNull String link);
-    }
-
     private final MarkwonTheme theme;
     private final String link;
-    private final Resolver resolver;
+    private final LinkResolver resolver;
 
-    public LinkSpan(@NonNull MarkwonTheme theme, @NonNull String link, @NonNull Resolver resolver) {
+    public LinkSpan(
+            @NonNull MarkwonTheme theme,
+            @NonNull String link,
+            @NonNull LinkResolver resolver) {
         super(link);
         this.theme = theme;
         this.link = link;

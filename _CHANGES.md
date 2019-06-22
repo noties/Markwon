@@ -10,6 +10,7 @@
 * removed MarkwonPlugin#configureHtmlRenderer -> now part of HtmlPlugin
 * TagHandler now has `supportedTags()` method
 * html is moved completely to html-plugin
-* OnTextAddedListener
+* OnTextAddedListener (CorePlugin)
 * ImageSizeResolver signature change (accept AsyncDrawable)
 * JLatexMathPlugin builder has vertical & horizontal padding
+* LinkResolver is now an independent entity (previously part of LinkSpan)

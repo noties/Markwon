@@ -5,9 +5,10 @@ import android.graphics.Rect;
 import androidx.annotation.NonNull;
 
 /**
+ * @see ImageSizeResolverDef
+ * @see io.noties.markwon.MarkwonConfiguration.Builder#imageSizeResolver(ImageSizeResolver)
  * @since 1.0.1
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class ImageSizeResolver {
 
     /**

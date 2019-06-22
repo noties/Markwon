@@ -3,7 +3,6 @@ package io.noties.markwon;
 import androidx.annotation.NonNull;
 
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.core.spans.LinkSpan;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.ImageSizeResolver;
 import io.noties.markwon.image.ImageSizeResolverDef;
@@ -26,7 +25,7 @@ public class MarkwonConfiguration {
     private final MarkwonTheme theme;
     private final AsyncDrawableLoader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
-    private final LinkSpan.Resolver linkResolver;
+    private final LinkResolver linkResolver;
     private final UrlProcessor urlProcessor;
     private final ImageSizeResolver imageSizeResolver;
 
@@ -59,7 +58,7 @@ public class MarkwonConfiguration {
     }
 
     @NonNull
-    public LinkSpan.Resolver linkResolver() {
+    public LinkResolver linkResolver() {
         return linkResolver;
     }
 
@@ -87,7 +86,7 @@ public class MarkwonConfiguration {
         private MarkwonTheme theme;
         private AsyncDrawableLoader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
-        private LinkSpan.Resolver linkResolver;
+        private LinkResolver linkResolver;
         private UrlProcessor urlProcessor;
         private ImageSizeResolver imageSizeResolver;
         private MarkwonSpansFactory spansFactory;
@@ -111,7 +110,7 @@ public class MarkwonConfiguration {
         }
 
         @NonNull
-        public Builder linkResolver(@NonNull LinkSpan.Resolver linkResolver) {
+        public Builder linkResolver(@NonNull LinkResolver linkResolver) {
             this.linkResolver = linkResolver;
             return this;
         }

@@ -1,16 +1,22 @@
 package io.noties.markwon.image;
 
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.assertEquals;
 import static io.noties.markwon.image.ImageSizeResolverDef.UNIT_EM;
 import static io.noties.markwon.image.ImageSizeResolverDef.UNIT_PERCENT;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -21,6 +27,42 @@ public class ImageSizeResolverDefTest {
     @Before
     public void before() {
         def = new ImageSizeResolverDef();
+    }
+
+    @Test
+    public void correct_redirect() {
+        // @since 4.0.0-SNAPSHOT the main method is changed to accept AsyncDrawable
+
+        final ImageSizeResolverDef def = mock(ImageSizeResolverDef.class, Mockito.CALLS_REAL_METHODS);
+        final AsyncDrawable drawable = mock(AsyncDrawable.class);
+
+        final ImageSize imageSize = mock(ImageSize.class);
+        final Drawable result = mock(Drawable.class);
+        final Rect rect = mock(Rect.class);
+        when(result.getBounds()).thenReturn(rect);
+
+        when(drawable.getImageSize()).thenReturn(imageSize);
+        when(drawable.getResult()).thenReturn(result);
+        when(drawable.getLastKnownCanvasWidth()).thenReturn(111);
+        when(drawable.getLastKnowTextSize()).thenReturn(24.0F);
+
+        def.resolveImageSize(drawable);
+
+        final ArgumentCaptor<ImageSize> imageSizeArgumentCaptor = ArgumentCaptor.forClass(ImageSize.class);
+        final ArgumentCaptor<Rect> rectArgumentCaptor = ArgumentCaptor.forClass(Rect.class);
+        final ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        final ArgumentCaptor<Float> floatArgumentCaptor = ArgumentCaptor.forClass(Float.class);
+
+        verify(def).resolveImageSize(
+                imageSizeArgumentCaptor.capture(),
+                rectArgumentCaptor.capture(),
+                integerArgumentCaptor.capture(),
+                floatArgumentCaptor.capture());
+
+        assertEquals(imageSize, imageSizeArgumentCaptor.getValue());
+        assertEquals(rect, rectArgumentCaptor.getValue());
+        assertEquals((Integer) 111, integerArgumentCaptor.getValue());
+        assertEquals((Float) 24.0F, floatArgumentCaptor.getValue());
     }
 
     @Test

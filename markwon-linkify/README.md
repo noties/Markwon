@@ -6,4 +6,4 @@ existing links and keep only the ones it creates.
 
 Please note that usage of this plugin introduces significant performance drop due to not
 optimal implementation of underlying `android.text.util.Linkify`. If you have any ideas of how
-to improve this - PR are welcome!
+to improve this - PRs are welcome!

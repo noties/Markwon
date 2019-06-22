@@ -10,11 +10,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import io.noties.markwon.core.spans.LinkSpan;
-
-public class LinkResolverDef implements LinkSpan.Resolver {
+public class LinkResolverDef implements LinkResolver {
     @Override
-    public void resolve(View view, @NonNull String link) {
+    public void resolve(@NonNull View view, @NonNull String link) {
         final Uri uri = Uri.parse(link);
         final Context context = view.getContext();
         final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
