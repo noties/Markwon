@@ -11,3 +11,5 @@
 * TagHandler now has `supportedTags()` method
 * html is moved completely to html-plugin
 * OnTextAddedListener
+* ImageSizeResolver signature change (accept AsyncDrawable)
+* JLatexMathPlugin builder has vertical & horizontal padding

@@ -3,7 +3,6 @@ package io.noties.markwon.image;
 import android.graphics.Rect;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * @since 1.0.1
@@ -12,19 +11,8 @@ import androidx.annotation.Nullable;
 public abstract class ImageSizeResolver {
 
     /**
-     * We do not expose canvas height deliberately. As we cannot rely on this value very much
-     *
-     * @param imageSize   {@link ImageSize} parsed from HTML
-     * @param imageBounds original image bounds
-     * @param canvasWidth width of the canvas
-     * @param textSize    current font size
-     * @return resolved image bounds
+     * @since 4.0.0-SNAPSHOT
      */
     @NonNull
-    public abstract Rect resolveImageSize(
-            @Nullable ImageSize imageSize,
-            @NonNull Rect imageBounds,
-            int canvasWidth,
-            float textSize
-    );
+    public abstract Rect resolveImageSize(@NonNull AsyncDrawable drawable);
 }

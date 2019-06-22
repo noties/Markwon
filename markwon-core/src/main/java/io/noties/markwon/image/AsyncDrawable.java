@@ -53,7 +53,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0-SNAPSHOT
      */
     @Nullable
     public ImageSize getImageSize() {
@@ -61,7 +61,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0-SNAPSHOT
      */
     @NonNull
     public ImageSizeResolver getImageSizeResolver() {
@@ -69,7 +69,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0-SNAPSHOT
      */
     public boolean hasKnownDimentions() {
         return canvasWidth > 0;
@@ -77,7 +77,7 @@ public class AsyncDrawable extends Drawable {
 
     /**
      * @see #hasKnownDimentions()
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0-SNAPSHOT
      */
     public int getLastKnownCanvasWidth() {
         return canvasWidth;
@@ -85,7 +85,7 @@ public class AsyncDrawable extends Drawable {
 
     /**
      * @see #hasKnownDimentions()
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0-SNAPSHOT
      */
     public float getLastKnowTextSize() {
         return textSize;
@@ -285,13 +285,10 @@ public class AsyncDrawable extends Drawable {
      */
     @NonNull
     private Rect resolveBounds() {
-
         // @since 2.0.0 previously we were checking if image is greater than canvas width here
         //          but as imageSizeResolver won't be null anymore, we should transfer this logic
         //          there
-        return imageSizeResolver != null
-                ? imageSizeResolver.resolveImageSize(imageSize, result.getBounds(), canvasWidth, textSize)
-                : result.getBounds();
+        return imageSizeResolver.resolveImageSize(this);
     }
 
     @Override

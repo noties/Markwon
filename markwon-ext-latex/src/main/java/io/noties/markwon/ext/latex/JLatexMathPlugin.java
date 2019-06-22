@@ -27,7 +27,6 @@ import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
-import io.noties.markwon.image.ImageSize;
 import io.noties.markwon.image.ImageSizeResolver;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
@@ -82,7 +81,11 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final boolean fitCanvas;
 
-        private final int padding;
+        // @since 4.0.0-SNAPSHOT
+        private final int paddingHorizontal;
+        // @since 4.0.0-SNAPSHOT
+
+        private final int paddingVertical;
 
         // @since 4.0.0-SNAPSHOT
         private final ExecutorService executorService;
@@ -92,7 +95,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             this.backgroundProvider = builder.backgroundProvider;
             this.align = builder.align;
             this.fitCanvas = builder.fitCanvas;
-            this.padding = builder.padding;
+            this.paddingHorizontal = builder.paddingHorizontal;
+            this.paddingVertical = builder.paddingVertical;
 
             // @since 4.0.0-SNAPSHOT
             ExecutorService executorService = builder.executorService;
@@ -168,7 +172,11 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private boolean fitCanvas = true;
 
-        private int padding;
+        // @since 4.0.0-SNAPSHOT
+        private int paddingHorizontal;
+
+        // @since 4.0.0-SNAPSHOT
+        private int paddingVertical;
 
         // @since 4.0.0-SNAPSHOT
         private ExecutorService executorService;
@@ -197,7 +205,18 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         @NonNull
         public Builder padding(@Px int padding) {
-            this.padding = padding;
+            this.paddingHorizontal = padding;
+            this.paddingVertical = padding;
+            return this;
+        }
+
+        /**
+         * @since 4.0.0-SNAPSHOT
+         */
+        @NonNull
+        public Builder builder(@Px int paddingHorizontal, @Px int paddingVertical) {
+            this.paddingHorizontal = paddingHorizontal;
+            this.paddingVertical = paddingVertical;
             return this;
         }
 
@@ -251,7 +270,11 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                                         .background(config.backgroundProvider.provide())
                                         .align(config.align)
                                         .fitCanvas(config.fitCanvas)
-                                        .padding(config.padding)
+                                        .padding(
+                                                config.paddingHorizontal,
+                                                config.paddingVertical,
+                                                config.paddingHorizontal,
+                                                config.paddingVertical)
                                         .build();
 
                         // we must post to handler, but also have a way to identify the drawable
@@ -305,11 +328,10 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         @NonNull
         @Override
-        public Rect resolveImageSize(
-                @Nullable ImageSize imageSize,
-                @NonNull Rect imageBounds,
-                int canvasWidth,
-                float textSize) {
+        public Rect resolveImageSize(@NonNull AsyncDrawable drawable) {
+
+            final Rect imageBounds = drawable.getResult().getBounds();
+            final int canvasWidth = drawable.getLastKnownCanvasWidth();
 
             if (fitCanvas
                     && imageBounds.width() < canvasWidth) {

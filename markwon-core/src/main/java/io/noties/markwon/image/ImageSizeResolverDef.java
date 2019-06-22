@@ -17,7 +17,16 @@ public class ImageSizeResolverDef extends ImageSizeResolver {
 
     @NonNull
     @Override
-    public Rect resolveImageSize(
+    public Rect resolveImageSize(@NonNull AsyncDrawable drawable) {
+        return resolveImageSize(
+                drawable.getImageSize(),
+                drawable.getResult().getBounds(),
+                drawable.getLastKnownCanvasWidth(),
+                drawable.getLastKnowTextSize());
+    }
+
+    @NonNull
+    protected Rect resolveImageSize(
             @Nullable ImageSize imageSize,
             @NonNull Rect imageBounds,
             int canvasWidth,
