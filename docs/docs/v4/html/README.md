@@ -104,4 +104,132 @@ If you wish to exclude some of them `TagHandlerNoOp` can be used:
 
 ## TagHandler
 
+To define a tag-handler that applies style for the whole tag content (from start to end),
+a `SimpleTagHandler` can be used. For example, let's define `<align>` tag, which can be used
+like this:
 
+* `<align center>centered text</align>`
+* `<align end>this should be aligned at the end (right for LTR locales)</align>`
+* `<align>regular alignment</align>`
+
+```java
+public class AlignTagHandler extends SimpleTagHandler {
+
+    @Nullable
+    @Override
+    public Object getSpans(
+            @NonNull MarkwonConfiguration configuration,
+            @NonNull RenderProps renderProps,
+            @NonNull HtmlTag tag) {
+
+        final Layout.Alignment alignment;
+
+        // html attribute without value, <align center></align>
+        if (tag.attributes().containsKey("center")) {
+            alignment = Layout.Alignment.ALIGN_CENTER;
+        } else if (tag.attributes().containsKey("end")) {
+            alignment = Layout.Alignment.ALIGN_OPPOSITE;
+        } else {
+            // empty value or any other will make regular alignment
+            alignment = Layout.Alignment.ALIGN_NORMAL;
+        }
+
+        return new AlignmentSpan.Standard(alignment);
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Collections.singleton("align");
+    }
+}
+```
+
+:::tip
+`SimpleTagHandler` can return an array of spans from `getSpans` method
+:::
+
+Then register `AlignTagHandler`:
+
+```java
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(HtmlPlugin.create())
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configure(@NonNull Registry registry) {
+                registry.require(HtmlPlugin.class, htmlPlugin -> htmlPlugin
+                        .addHandler(new AlignTagHandler());
+            }
+        })
+        .build();
+```
+
+or directly on `HtmlPlugin`:
+
+```java
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(HtmlPlugin.create(plugin -> plugin.addHandler(new AlignTagHandler())))
+        .build();
+```
+
+---
+
+If a tag requires special handling `TagHandler` can be used directly. For example
+let's define an `<enhance>` tag with `start` and `end` arguments, that will mark
+start and end positions of the text that needs to be enlarged:
+
+```html
+<enhance start="5" end="12">This is text that must be enhanced, at least a part of it</enhance>
+```
+
+
+```java
+public class EnhanceTagHandler extends TagHandler {
+
+    private final int enhanceTextSize;
+
+    EnhanceTagHandler(@Px int enhanceTextSize) {
+        this.enhanceTextSize = enhanceTextSize;
+    }
+
+    @Override
+    public void handle(
+            @NonNull MarkwonVisitor visitor,
+            @NonNull MarkwonHtmlRenderer renderer,
+            @NonNull HtmlTag tag) {
+
+        // we require start and end to be present
+        final int start = parsePosition(tag.attributes().get("start"));
+        final int end = parsePosition(tag.attributes().get("end"));
+
+        if (start > -1 && end > -1) {
+            visitor.builder().setSpan(
+                    new AbsoluteSizeSpan(enhanceTextSize),
+                    tag.start() + start,
+                    tag.start() + end
+            );
+        }
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTags() {
+        return Collections.singleton("enhance");
+    }
+
+    private static int parsePosition(@Nullable String value) {
+        int position;
+        if (!TextUtils.isEmpty(value)) {
+            try {
+                position = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                position = -1;
+            }
+        } else {
+            position = -1;
+        }
+        return position;
+    }
+}
+```

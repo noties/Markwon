@@ -4,7 +4,7 @@
 These are _configurable_ properties:
 * `AsyncDrawableLoader` (back here since <Badge text="4.0.0" />)
 * `SyntaxHighlight`
-* `LinkSpan.Resolver`
+* `LinkResolver` (since <Badge text="4.0.0" />, before &mdash; `LinkSpan.Resolver`)
 * `UrlProcessor`
 * `ImageSizeResolver`
 
@@ -37,9 +37,9 @@ final Markwon markwon = Markwon.builder(context)
 ```
 
 Currently `Markwon` provides 3 implementations for loading images:
-* [own implementation](/docs/v4/image.md) with SVG, GIF, data uri and android_assets support
-* [based on Picasso](/docs/v4/image-picasso.md)
-* [based on Glide](/docs/v4/image-glide.md)
+* [markwon implementation](/docs/v4/image/) with SVG, GIF, data uri and android_assets support
+* [based on Picasso](/docs/v4/image-picasso/)
+* [based on Glide](/docs/v4/image-glide/)
 
 ## SyntaxHighlight
 
@@ -59,7 +59,7 @@ Use [syntax-highlight](/docs/v4/syntax-highlight/) to add syntax highlighting
 to your application
 :::
 
-## LinkSpan.Resolver
+## LinkResolver
 
 React to a link click event. By default `LinkResolverDef` is used,
 which tries to start an Activity given the `link` argument. If no
@@ -70,9 +70,9 @@ final Markwon markwon = Markwon.builder(this)
         .usePlugin(new AbstractMarkwonPlugin() {
             @Override
             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                builder.linkResolver(new LinkSpan.Resolver() {
+                builder.linkResolver(new LinkResolver() {
                     @Override
-                    public void resolve(View view, @NonNull String link) {
+                    public void resolve(@NonNull View view, @NonNull String link) {
                         // react to link click here
                     }
                 });
@@ -119,8 +119,7 @@ will be kept as-is.
 
 ## ImageSizeResolver
 
-`ImageSizeResolver` controls the size of an image to be displayed. Currently it
-handles only HTML images (specified via `img` tag).
+`ImageSizeResolver` controls the size of an image to be displayed. 
 
 ```java
 final Markwon markwon = Markwon.builder(this)
@@ -130,12 +129,9 @@ final Markwon markwon = Markwon.builder(this)
                 builder.imageSizeResolver(new ImageSizeResolver() {
                     @NonNull
                     @Override
-                    public Rect resolveImageSize(
-                            @Nullable ImageSize imageSize,
-                            @NonNull Rect imageBounds,
-                            int canvasWidth,
-                            float textSize) {
-                        return null;
+                    public Rect resolveImageSize(@NonNull AsyncDrawable drawable) {
+                        final ImageSize imageSize = drawable.getImageSize();
+                        return drawable.getResult().getBounds();
                     }
                 });
             }
@@ -168,6 +164,5 @@ so we will have no point-of-reference from which to _calculate_ image height.
 `ImageSizeResolverDef` also takes care for an image to **not** exceed
 canvas width. If an image has greater width than a TextView Canvas, then
 image will be _scaled-down_ to fit the canvas. Please note that this rule
-applies only if image has no absolute sizes (for example width is specified
-in pixels).
+applies only if image has no sizes specified (`ImageSize == null`).
 :::

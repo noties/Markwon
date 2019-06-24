@@ -15,4 +15,6 @@
     <string name="sample_recycler"># \# Recycler\n\nShow how to render markdown in a RecyclerView.
         Renders code blocks wrapped in a HorizontalScrollView. Renders tables in a custom view.</string>
 
+    <string name="sample_html"># \# Html\n\nShows how to define own tag handlers</string>
+
 </resources>

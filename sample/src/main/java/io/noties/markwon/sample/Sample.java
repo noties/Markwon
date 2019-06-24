@@ -15,7 +15,7 @@ public enum Sample {
 
     RECYCLER(R.string.sample_recycler),
 
-    ;
+    HTML(R.string.sample_html);
 
     private final int textResId;
 

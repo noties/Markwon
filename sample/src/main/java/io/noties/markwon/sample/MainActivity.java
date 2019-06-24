@@ -21,6 +21,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.sample.basicplugins.BasicPluginsActivity;
 import io.noties.markwon.sample.core.CoreActivity;
 import io.noties.markwon.sample.customextension.CustomExtensionActivity;
+import io.noties.markwon.sample.html.HtmlActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
 import io.noties.markwon.sample.recycler.RecyclerActivity;
 
@@ -95,6 +96,10 @@ public class MainActivity extends Activity {
 
             case RECYCLER:
                 activity = RecyclerActivity.class;
+                break;
+
+            case HTML:
+                activity = HtmlActivity.class;
                 break;
 
             default:

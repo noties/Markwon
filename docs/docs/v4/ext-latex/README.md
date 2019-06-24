@@ -35,6 +35,8 @@ final Markwon markwon = Markwon.builder(context)
                         .align(JLatexMathDrawable.ALIGN_CENTER)
                         .fitCanvas(true)
                         .padding(paddingPx)
+                        // @since 4.0.0 - horizontal and vertical padding
+                        .padding(paddingHorizontalPx, paddingVerticalPx)
                         // @since 4.0.0 - change to provider
                         .backgroundProvider(() -> new MyDrawable()))
                         // @since 4.0.0 - optional, by default cached-thread-pool will be used
