@@ -43,6 +43,7 @@ dependencies {
     implementation project(':markwon-syntax-highlight')
     implementation project(':markwon-recycler')
     implementation project(':markwon-recycler-table')
+    implementation project(':markwon-simple-ext')
 
     implementation project(':markwon-image-picasso')
 

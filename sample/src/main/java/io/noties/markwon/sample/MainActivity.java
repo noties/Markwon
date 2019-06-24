@@ -24,6 +24,7 @@ import io.noties.markwon.sample.customextension.CustomExtensionActivity;
 import io.noties.markwon.sample.html.HtmlActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
 import io.noties.markwon.sample.recycler.RecyclerActivity;
+import io.noties.markwon.sample.simpleext.SimpleExtActivity;
 
 public class MainActivity extends Activity {
 
@@ -100,6 +101,10 @@ public class MainActivity extends Activity {
 
             case HTML:
                 activity = HtmlActivity.class;
+                break;
+
+            case SIMPLE_EXT:
+                activity = SimpleExtActivity.class;
                 break;
 
             default:

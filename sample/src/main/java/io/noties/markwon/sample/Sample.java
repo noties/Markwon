@@ -15,7 +15,9 @@ public enum Sample {
 
     RECYCLER(R.string.sample_recycler),
 
-    HTML(R.string.sample_html);
+    HTML(R.string.sample_html),
+
+    SIMPLE_EXT(R.string.sample_simple_ext);
 
     private final int textResId;
 

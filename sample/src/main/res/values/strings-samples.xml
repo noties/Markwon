@@ -17,4 +17,7 @@
 
     <string name="sample_html"># \# Html\n\nShows how to define own tag handlers</string>
 
+    <string name="sample_simple_ext"># \# SimpleExt\n\nShows how to use SimpleExtPlugin module
+        to create own delimited parser extensions</string>
+
 </resources>

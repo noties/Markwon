@@ -25,6 +25,7 @@
         <activity android:name="io.noties.markwon.sample.recycler.RecyclerActivity" />
         <activity android:name="io.noties.markwon.sample.theme.ThemeActivity" />
         <activity android:name=".html.HtmlActivity" />
+        <activity android:name=".simpleext.SimpleExtActivity" />
 
     </application>
 

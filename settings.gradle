@@ -12,5 +12,6 @@ include ':app', ':sample',
         ':markwon-linkify',
         ':markwon-recycler',
         ':markwon-recycler-table',
+        ':markwon-simple-ext',
         ':markwon-syntax-highlight',
         ':markwon-test-span'
