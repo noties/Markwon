@@ -65,6 +65,7 @@ module.exports = {
                 '/docs/v4/linkify/',
                 '/docs/v4/recycler/',
                 '/docs/v4/recycler-table/',
+                '/docs/v4/simple-ext/',
                 '/docs/v4/syntax-highlight/',
                 '/docs/v4/recipes.md',
                 '/docs/v4/migration-3-4.md'
