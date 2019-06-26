@@ -3,7 +3,7 @@
 # 4.0.0
 * maven group-id change to `io.noties.markwon` (was `ru.noties.markwon`)
 * package name change to `io.notier.markwon.*` (was `ru.noties.markwon.*`)
-* androidx artifacts (#76)
+* androidx artifacts ([#76])
 * `Markwon#builder` does not require explicit `CorePlugin` (added automatically), 
 use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
 * Removed `Priority` abstraction and `MarkwonPlugin#priority` (use `MarkwonPlugin.Registry`)
@@ -27,24 +27,37 @@ use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
 * `ImageItem` is now abstract, has 2 implementations: `withResult`, `withDecodingNeeded`
 * Add `images-glide`, `images-picasso`, `linkify`, `simple-ext` modules
 * `JLatexMathPlugin` is now independent of `ImagesPlugin`
-* Fix wrong `JLatexMathPlugin` formulas sizes (#138)
+* Fix wrong `JLatexMathPlugin` formulas sizes ([#138])
 * `JLatexMathPlugin` has `backgroundProvider`, `executorService` configuration
 * `HtmlPlugin` is self-contained (all configuration is moved in the plugin itself)
 
+[#76]: https://github.com/noties/Markwon/issues/76
+[#138]: https://github.com/noties/Markwon/issues/138
+
+
 ## 3.0.2
-* Fix `latex` plugin (#136)
-* Add `#create(Call.Factory)` factory method to `OkHttpImagesPlugin` (#129)
-<br>Thanks to @ZacSweers 
+* Fix `latex` plugin ([#136])
+* Add `#create(Call.Factory)` factory method to `OkHttpImagesPlugin` ([#129])
+<br>Thanks to [@ZacSweers] 
+
+[#136]: https://github.com/noties/Markwon/issues/136
+[#129]: https://github.com/noties/Markwon/issues/129
+[@ZacSweers]: https://github.com/ZacSweers
+
 
 ## 3.0.1
-* Add `AsyncDrawableLoader.Builder#implementation` method (#109)
-* AsyncDrawable allow placeholder to have independent size (#115)
+* Add `AsyncDrawableLoader.Builder#implementation` method ([#109])
+* AsyncDrawable allow placeholder to have independent size ([#115])
 * `addFactory` method for MarkwonSpansFactory
 * Add optional spans for list blocks (bullet and ordered)
 * AsyncDrawable placeholder bounds fix
 * SpannableBuilder setSpans allow array of arrays
 * Add `requireFactory` method to MarkwonSpansFactory
 * Add DrawableUtils
+
+[#109]: https://github.com/noties/Markwon/issues/109
+[#115]: https://github.com/noties/Markwon/issues/115
+
 
 ## 3.0.0
 * Plugins, plugins, plugins
@@ -86,16 +99,23 @@ to get the full picture of latest changes.
 
 ## 2.0.1
 * `SpannableMarkdownVisitor` Rename blockQuoteIndent to blockIndent
-* Fixed block new lines logic for block quote and paragraph (#82)
-* AsyncDrawable fix no dimensions bug (#81)
+* Fixed block new lines logic for block quote and paragraph ([#82])
+* AsyncDrawable fix no dimensions bug ([#81])
 * Update SpannableTheme to use Px instead of Dimension annotation
 * Allow TaskListSpan isDone mutation
 * Updated commonmark-java to 0.12.1
-* Add OrderedListItemSpan measure utility method (#78)
+* Add OrderedListItemSpan measure utility method ([#78])
 * Add SpannableBuilder#getSpans method
-* Fix DataUri scheme handler in image-loader (#74)
+* Fix DataUri scheme handler in image-loader ([#74])
 * Introduced a "copy" builder for SpannableThem
-<br>Thanks @c-b-h
+<br>Thanks [@c-b-h]
+
+[#82]: https://github.com/noties/Markwon/issues/82
+[#81]: https://github.com/noties/Markwon/issues/81
+[#78]: https://github.com/noties/Markwon/issues/78
+[#74]: https://github.com/noties/Markwon/issues/74
+[@c-b-h]: https://github.com/c-b-h
+
 
 ## 2.0.0
 * Add `html-parser-api` and `html-parser-impl` modules
@@ -118,23 +138,34 @@ to get the full picture of latest changes.
 * Add sample-latex-math module
 
 ## v1.1.1
-* Fix OrderedListItemSpan text position (baseline) (#55)
-* Add softBreakAddsNewLine option for SpannableConfiguration (#54)
-* Paragraph text can now explicitly be spanned (#58)
-<br>Thanks to @c-b-h
-* Fix table border color if odd background is specified (#56)
+* Fix OrderedListItemSpan text position (baseline) ([#55])
+* Add softBreakAddsNewLine option for SpannableConfiguration ([#54])
+* Paragraph text can now explicitly be spanned ([#58])
+<br>Thanks to [@c-b-h]
+* Fix table border color if odd background is specified ([#56])
 * Add table customizations (even and header rows)
+
+[#55]: https://github.com/noties/Markwon/issues/55
+[#54]: https://github.com/noties/Markwon/issues/54
+[#58]: https://github.com/noties/Markwon/issues/58
+[#56]: https://github.com/noties/Markwon/issues/56
+[@c-b-h]: https://github.com/c-b-h
+
 
 ## v1.1.0
 * Update commonmark to 0.11.0 and android-gif to 1.2.14
 * Add syntax highlight functionality (`library-syntax` module and `markwon-syntax` artifact)
 * Add headingTypeface, headingTextSizes to SpannableTheme
-<br>Thanks to @edenman
+<br>Thanks to [@edenman]
 * Introduce `MediaDecoder` abstraction to `image-loader` module
 * Introduce `SpannableFactory`
-<br>Thanks for idea to @c-b-h
+<br>Thanks for idea to [@c-b-h]
 * Update sample application to use syntax-highlight
 * Update sample application to use clickable placeholder for GIF media
+
+[@edenman]: https://github.com/edenman
+[@c-b-h]: https://github.com/c-b-h
+
 
 ## v1.0.6
 * Fix bullet list item size (depend on text size and not top-bottom arguments)
@@ -146,13 +177,21 @@ to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.mar
 ## v1.0.5
 * Change LinkSpan to extend URLSpan. Allow default linkColor (if not set explicitly)
 * Fit an image without dimensions to canvas width (and keep ratio)
-* Add support for separate color for code blocks (#37)
-<br>Thanks to @Arcnor
+* Add support for separate color for code blocks ([#37])
+<br>Thanks to [@Arcnor]
+
+[#37]: https://github.com/noties/Markwon/issues/37
+[@Arcnor]: https://github.com/Arcnor
+
 
 ## v1.0.4
-* Fixes #28 (tables are not rendered when at the end of the markdown)
+* Fixes [#28] (tables are not rendered when at the end of the markdown)
 * Adds support for `indented code blocks`
-<br>Thanks to @dlew
+<br>Thanks to [@dlew]
+
+[#28]: https://github.com/noties/Markwon/issues/
+[@dlew]: https://github.com/dlew
+
 
 ## v1.0.3
 * Fixed ordered lists (when number width is greater than block margin)
@@ -163,11 +202,17 @@ to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.mar
 * Tables can have no borders
 
 ## v1.0.1
-* Support for task-lists (#2)
-* Spans now are applied in reverse order (#5 #10)
+* Support for task-lists ([#2])
+* Spans now are applied in reverse order ([#5] [#10])
 * Added `SpannableBuilder` to follow the reverse order of spans
 * Updated `commonmark-java` to `0.10.0`
-* Fixes #1
+* Fixes [#1]
+
+[#1]: https://github.com/noties/Markwon/issues/1
+[#2]: https://github.com/noties/Markwon/issues/2
+[#5]: https://github.com/noties/Markwon/issues/5
+[#10]: https://github.com/noties/Markwon/issues/10
+
 
 ## v1.0.0
 
