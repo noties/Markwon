@@ -13,7 +13,6 @@ module.exports = {
     themeConfig: {
         nav: [
             { text: 'Install', link: '/docs/v3/install.md' },
-            { text: 'Changelog', link: '/CHANGELOG.md' },
             {
                 text: 'API Version',
                 items: [
@@ -22,6 +21,7 @@ module.exports = {
                     { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
                 ]
             },
+            { text: 'Changelog', link: 'https://github.com/noties/Markwon/blob/master/CHANGELOG.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: {
