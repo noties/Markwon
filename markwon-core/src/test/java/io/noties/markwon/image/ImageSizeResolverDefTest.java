@@ -31,7 +31,7 @@ public class ImageSizeResolverDefTest {
 
     @Test
     public void correct_redirect() {
-        // @since 4.0.0-SNAPSHOT the main method is changed to accept AsyncDrawable
+        // @since 4.0.0 the main method is changed to accept AsyncDrawable
 
         final ImageSizeResolverDef def = mock(ImageSizeResolverDef.class, Mockito.CALLS_REAL_METHODS);
         final AsyncDrawable drawable = mock(AsyncDrawable.class);

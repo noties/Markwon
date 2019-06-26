@@ -9,7 +9,7 @@ import java.util.Collections;
 import io.noties.markwon.MarkwonVisitor;
 
 /**
- * @since 4.0.0-SNAPSHOT
+ * @since 4.0.0
  */
 public class TagHandlerNoOp extends TagHandler {
 

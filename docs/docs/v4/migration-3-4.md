@@ -2,5 +2,6 @@
 
 * maven group-id is changed: `io.noties.markwon` (was `ru.noties.markwon`)
 * root package-name is changed: `io.noties.markwon` (was `ru.noties.markwon`)
+* `androidx` packages
 
 todo

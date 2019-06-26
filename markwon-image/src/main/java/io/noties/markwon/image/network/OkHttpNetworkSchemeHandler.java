@@ -16,7 +16,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * @since 4.0.0-SNAPSHOT
+ * @since 4.0.0
  */
 public class OkHttpNetworkSchemeHandler extends SchemeHandler {
 
@@ -35,7 +35,7 @@ public class OkHttpNetworkSchemeHandler extends SchemeHandler {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static OkHttpNetworkSchemeHandler create(@NonNull Call.Factory factory) {
@@ -44,7 +44,7 @@ public class OkHttpNetworkSchemeHandler extends SchemeHandler {
 
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
 
-    // @since 4.0.0-SNAPSHOT, previously just OkHttpClient
+    // @since 4.0.0, previously just OkHttpClient
     private final Call.Factory factory;
 
     @SuppressWarnings("WeakerAccess")

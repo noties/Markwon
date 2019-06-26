@@ -27,7 +27,7 @@ public abstract class MediaDecoder {
     );
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public abstract Collection<String> supportedTypes();

@@ -26,7 +26,7 @@ public class GifMediaDecoder extends MediaDecoder {
     /**
      * Creates a {@link GifMediaDecoder} with {@code autoPlayGif = true}
      *
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static GifMediaDecoder create() {
@@ -43,7 +43,7 @@ public class GifMediaDecoder extends MediaDecoder {
     protected GifMediaDecoder(boolean autoPlayGif) {
         this.autoPlayGif = autoPlayGif;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         validate();
     }
 

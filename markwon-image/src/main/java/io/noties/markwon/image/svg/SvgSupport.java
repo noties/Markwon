@@ -1,7 +1,7 @@
 package io.noties.markwon.image.svg;
 
 /**
- * @since 4.0.0-SNAPSHOT
+ * @since 4.0.0
  */
 public abstract class SvgSupport {
 

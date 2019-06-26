@@ -1,9 +1,40 @@
 # Changelog
 
-# 3.0.2
+# 4.0.0
+* maven group-id change to `io.noties.markwon` (was `ru.noties.markwon`)
+* package name change to `io.notier.markwon.*` (was `ru.noties.markwon.*`)
+* androidx artifacts (#76)
+* `Markwon#builder` does not require explicit `CorePlugin` (added automatically), 
+use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
+* Removed `Priority` abstraction and `MarkwonPlugin#priority` (use `MarkwonPlugin.Registry`)
+* Removed `MarkwonPlugin#configureHtmlRenderer` (for configuration use `HtmlPlugin` directly)
+* Removed `MarkwonPlugin#configureImages` (for configuration use `ImagesPlugin` directly)
+* Added `MarkwonPlugin.Registry` and `MarkwonPlugin#configure(Registry)` method
+* `CorePlugin#addOnTextAddedListener` (process raw text added)
+* `ImageSizeResolver` signature change (accept `AsyncDrawable`)
+* `LinkResolver` is now an independent entity (previously part of `LinkSpan`)
+* `AsyncDrawableScheduler` can now be called multiple times without performance penalty
+* `AsyncDrawable` now exposes its destination, image-size, last known dimensions (canvas, text-size)
+* `AsyncDrawableLoader` signature change (accept `AsyncDrawable`)
+* Add `LastLineSpacingSpan`
+* Add `MarkwonConfiguration.Builder#asyncDrawableLoader` method
+* `ImagesPlugin` removed from `core` artifact 
+(also removed `images-gif`, `images-okhttp` and `images-svg` artifacts and their plugins)
+* `ImagesPlugin` exposes configuration (adding scheme-handler, media-decoder, etc)
+* `ImagesPlugin` allows multiple images with the same source (URL)
+* Add `PlaceholderProvider` and `ErrorHandler` to `ImagesPlugin`
+* `GIF` and `SVG` media-decoders are automatically added to `ImagesPlugin` if required libraries are found in the classpath
+* `ImageItem` is now abstract, has 2 implementations: `withResult`, `withDecodingNeeded`
+* Add `images-glide`, `images-picasso`, `linkify`, `simple-ext` modules
+* `JLatexMathPlugin` is now independent of `ImagesPlugin`
+* Fix wrong `JLatexMathPlugin` formulas sizes (#138)
+* `JLatexMathPlugin` has `backgroundProvider`, `executorService` configuration
+* `HtmlPlugin` is self-contained (all configuration is moved in the plugin itself)
+
+## 3.0.2
 * Fix `latex` plugin (#136)
 * Add `#create(Call.Factory)` factory method to `OkHttpImagesPlugin` (#129)
-  thanks to @ZacSweers 
+<br>Thanks to @ZacSweers 
 
 ## 3.0.1
 * Add `AsyncDrawableLoader.Builder#implementation` method (#109)
@@ -64,7 +95,7 @@ to get the full picture of latest changes.
 * Add SpannableBuilder#getSpans method
 * Fix DataUri scheme handler in image-loader (#74)
 * Introduced a "copy" builder for SpannableThem
-  Thanks @c-b-h
+<br>Thanks @c-b-h
 
 ## 2.0.0
 * Add `html-parser-api` and `html-parser-impl` modules
@@ -90,7 +121,7 @@ to get the full picture of latest changes.
 * Fix OrderedListItemSpan text position (baseline) (#55)
 * Add softBreakAddsNewLine option for SpannableConfiguration (#54)
 * Paragraph text can now explicitly be spanned (#58)
-  Thanks to @c-b-h
+<br>Thanks to @c-b-h
 * Fix table border color if odd background is specified (#56)
 * Add table customizations (even and header rows)
 
@@ -98,10 +129,10 @@ to get the full picture of latest changes.
 * Update commonmark to 0.11.0 and android-gif to 1.2.14
 * Add syntax highlight functionality (`library-syntax` module and `markwon-syntax` artifact)
 * Add headingTypeface, headingTextSizes to SpannableTheme
-  Thanks to @edenman
+<br>Thanks to @edenman
 * Introduce `MediaDecoder` abstraction to `image-loader` module
 * Introduce `SpannableFactory`
-  Thanks for idea to @c-b-h
+<br>Thanks for idea to @c-b-h
 * Update sample application to use syntax-highlight
 * Update sample application to use clickable placeholder for GIF media
 
@@ -116,12 +147,12 @@ to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.mar
 * Change LinkSpan to extend URLSpan. Allow default linkColor (if not set explicitly)
 * Fit an image without dimensions to canvas width (and keep ratio)
 * Add support for separate color for code blocks (#37)
-  Thanks to @Arcnor
+<br>Thanks to @Arcnor
 
 ## v1.0.4
 * Fixes #28 (tables are not rendered when at the end of the markdown)
 * Adds support for `indented code blocks`
-  Thanks to @dlew
+<br>Thanks to @dlew
 
 ## v1.0.3
 * Fixed ordered lists (when number width is greater than block margin)

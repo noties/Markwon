@@ -11,7 +11,7 @@ import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
 
 /**
- * @since 4.0.0-SNAPSHOT
+ * @since 4.0.0
  */
 public class SimpleExtPlugin extends AbstractMarkwonPlugin {
 

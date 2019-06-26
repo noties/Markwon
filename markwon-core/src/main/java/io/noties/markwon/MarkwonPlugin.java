@@ -26,7 +26,7 @@ public interface MarkwonPlugin {
 
     /**
      * @see Registry#require(Class, Action)
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     interface Action<P extends MarkwonPlugin> {
         void apply(@NonNull P p);
@@ -34,7 +34,7 @@ public interface MarkwonPlugin {
 
     /**
      * @see #configure(Registry)
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     interface Registry {
 
@@ -49,7 +49,7 @@ public interface MarkwonPlugin {
     /**
      * This method will be called before any other during {@link Markwon} instance construction.
      *
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     void configure(@NonNull Registry registry);
 
@@ -90,14 +90,6 @@ public interface MarkwonPlugin {
      * @see MarkwonSpansFactory.Builder
      */
     void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder);
-
-//    /**
-//     * Configure {@link MarkwonHtmlRenderer} to add or remove HTML {@link TagHandler}s
-//     *
-//     * @see MarkwonHtmlRenderer
-//     * @see MarkwonHtmlRenderer.Builder
-//     */
-//    void configureHtmlRenderer(@NonNull MarkwonHtmlRenderer.Builder builder);
 
     /**
      * Process input markdown and return new string to be used in parsing stage further.

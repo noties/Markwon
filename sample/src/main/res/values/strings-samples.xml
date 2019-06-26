@@ -20,4 +20,7 @@
     <string name="sample_simple_ext"># \# SimpleExt\n\nShows how to use SimpleExtPlugin module
         to create own delimited parser extensions</string>
 
+    <string name="sample_custom_extension_2"># \# Custom extension 2\n\nAutomatically
+        convert `#1` and `@user` to Github links</string>
+
 </resources>

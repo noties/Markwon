@@ -17,7 +17,9 @@ public enum Sample {
 
     HTML(R.string.sample_html),
 
-    SIMPLE_EXT(R.string.sample_simple_ext);
+    SIMPLE_EXT(R.string.sample_simple_ext),
+
+    CUSTOM_EXTENSION_2(R.string.sample_custom_extension_2);
 
     private final int textResId;
 

@@ -9,7 +9,7 @@ import org.commonmark.parser.delimiter.DelimiterRun;
 
 import io.noties.markwon.SpanFactory;
 
-// @since 4.0.0-SNAPSHOT
+// @since 4.0.0
 class SimpleExtDelimiterProcessor implements DelimiterProcessor {
 
     private final char open;

@@ -60,3 +60,11 @@ This extension will be applied to a text like this:
 ```md
 @@we are inside different delimiter characters$$
 ```
+
+:::warning
+Space character cannot be used as a delimiter (from either side). So,
+```java
+plugin.addExtension(1, '@', ' ', /*spanFactory*/);
+```
+won't work for `@some-text ` text
+:::

@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 public abstract class ImageSizeResolver {
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public abstract Rect resolveImageSize(@NonNull AsyncDrawable drawable);

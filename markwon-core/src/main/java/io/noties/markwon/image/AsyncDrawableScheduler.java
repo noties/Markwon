@@ -24,7 +24,7 @@ public abstract class AsyncDrawableScheduler {
         // hm... we need the same thing for unschedule then... we can check if last hash is !null,
         // if it's not -> unschedule, else ignore
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         final Integer lastTextHashCode =
                 (Integer) textView.getTag(R.id.markwon_drawables_scheduler_last_text_hashcode);
         final int textHashCode = textView.getText().hashCode();
@@ -69,7 +69,7 @@ public abstract class AsyncDrawableScheduler {
     // must be called when text manually changed in TextView
     public static void unschedule(@NonNull TextView view) {
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         if (view.getTag(R.id.markwon_drawables_scheduler_last_text_hashcode) == null) {
             return;
         }
@@ -99,7 +99,7 @@ public abstract class AsyncDrawableScheduler {
         }
 
         // we also could've tried the `nextSpanTransition`, but strangely it leads to worse performance
-        // then direct getSpans
+        // than direct getSpans
 
         return ((Spanned) cs).getSpans(0, length, AsyncDrawableSpan.class);
     }

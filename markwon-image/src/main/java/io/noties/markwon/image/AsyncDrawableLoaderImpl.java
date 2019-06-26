@@ -28,7 +28,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
     private final Handler handler;
 
-    // @since 4.0.0-SNAPSHOT use a hash-map with a AsyncDrawable as key for multiple requests
+    // @since 4.0.0 use a hash-map with a AsyncDrawable as key for multiple requests
     //  for the same destination
     private final Map<AsyncDrawable, Future<?>> requests = new HashMap<>(2);
 
@@ -36,7 +36,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
         this(builder, new Handler(Looper.getMainLooper()));
     }
 
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     @VisibleForTesting
     AsyncDrawableLoaderImpl(@NonNull AsyncDrawableLoaderBuilder builder, @NonNull Handler handler) {
         this.executorService = builder.executorService;
@@ -144,7 +144,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
                 final Drawable out = drawable;
 
-                // @since 4.0.0-SNAPSHOT apply intrinsic bounds (but only if they are empty)
+                // @since 4.0.0 apply intrinsic bounds (but only if they are empty)
                 if (out != null) {
                     final Rect bounds = out.getBounds();
                     //noinspection ConstantConditions

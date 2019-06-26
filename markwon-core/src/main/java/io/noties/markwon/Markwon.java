@@ -47,14 +47,14 @@ public abstract class Markwon {
     @NonNull
     public static Builder builder(@NonNull Context context) {
         return new MarkwonBuilderImpl(context)
-                // @since 4.0.0-SNAPSHOT add CorePlugin
+                // @since 4.0.0 add CorePlugin
                 .usePlugin(CorePlugin.create());
     }
 
     /**
      * Factory method to obtain an instance of {@link Builder} without {@link CorePlugin}.
      *
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static Builder builderNoCore(@NonNull Context context) {

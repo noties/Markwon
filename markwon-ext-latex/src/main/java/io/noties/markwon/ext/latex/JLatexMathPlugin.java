@@ -36,7 +36,7 @@ import ru.noties.jlatexmath.JLatexMathDrawable;
 public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public interface BackgroundProvider {
         @NonNull
@@ -73,7 +73,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final float textSize;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private final BackgroundProvider backgroundProvider;
 
         @JLatexMathDrawable.Align
@@ -81,13 +81,13 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final boolean fitCanvas;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private final int paddingHorizontal;
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
 
         private final int paddingVertical;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private final ExecutorService executorService;
 
         Config(@NonNull Builder builder) {
@@ -98,7 +98,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             this.paddingHorizontal = builder.paddingHorizontal;
             this.paddingVertical = builder.paddingVertical;
 
-            // @since 4.0.0-SNAPSHOT
+            // @since 4.0.0
             ExecutorService executorService = builder.executorService;
             if (executorService == null) {
                 executorService = Executors.newCachedThreadPool();
@@ -164,7 +164,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private final float textSize;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private BackgroundProvider backgroundProvider;
 
         @JLatexMathDrawable.Align
@@ -172,13 +172,13 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         private boolean fitCanvas = true;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private int paddingHorizontal;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private int paddingVertical;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         private ExecutorService executorService;
 
         Builder(float textSize) {
@@ -211,7 +211,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
 
         /**
-         * @since 4.0.0-SNAPSHOT
+         * @since 4.0.0
          */
         @NonNull
         public Builder builder(@Px int paddingHorizontal, @Px int paddingVertical) {
@@ -221,7 +221,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
 
         /**
-         * @since 4.0.0-SNAPSHOT
+         * @since 4.0.0
          */
         @NonNull
         public Builder executorService(@NonNull ExecutorService executorService) {
@@ -235,7 +235,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
     }
 
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     private static class JLatextAsyncDrawableLoader extends AsyncDrawableLoader {
 
         private final Config config;
@@ -317,7 +317,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     // we must make drawable fit canvas (if specified), but do not keep the ratio whilst scaling up
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     private static class JLatexImageSizeResolver extends ImageSizeResolver {
 
         private final boolean fitCanvas;

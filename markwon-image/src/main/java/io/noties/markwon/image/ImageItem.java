@@ -17,7 +17,7 @@ public abstract class ImageItem {
      *
      * @see #withDecodingNeeded(String, InputStream)
      * @see WithResult
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static ImageItem withResult(@NonNull Drawable drawable) {
@@ -29,7 +29,7 @@ public abstract class ImageItem {
      *
      * @see #withResult(Drawable)
      * @see WithDecodingNeeded
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static ImageItem withDecodingNeeded(
@@ -43,31 +43,31 @@ public abstract class ImageItem {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public abstract boolean hasResult();
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public abstract boolean hasDecodingNeeded();
 
     /**
      * @see #hasResult()
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public abstract WithResult getAsWithResult();
 
     /**
      * @see #hasDecodingNeeded()
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public abstract WithDecodingNeeded getAsWithDecodingNeeded();
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public static class WithResult extends ImageItem {
 
@@ -106,7 +106,7 @@ public abstract class ImageItem {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public static class WithDecodingNeeded extends ImageItem {
 

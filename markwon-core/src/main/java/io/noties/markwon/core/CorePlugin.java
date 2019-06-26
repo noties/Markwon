@@ -58,7 +58,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
     /**
      * @see #addOnTextAddedListener(OnTextAddedListener)
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public interface OnTextAddedListener {
 
@@ -88,7 +88,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         return new CorePlugin();
     }
 
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     private final List<OnTextAddedListener> onTextAddedListeners = new ArrayList<>(0);
 
     protected CorePlugin() {
@@ -98,7 +98,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
      * Can be useful to post-process text added. For example for auto-linking capabilities.
      *
      * @see OnTextAddedListener
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @SuppressWarnings("UnusedReturnValue")
     @NonNull
@@ -171,7 +171,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 visitor.builder().append(literal);
 
-                // @since 4.0.0-SNAPSHOT
+                // @since 4.0.0
                 if (!onTextAddedListeners.isEmpty()) {
                     // calculate the start position
                     final int length = visitor.length() - literal.length();
@@ -262,7 +262,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         });
     }
 
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     // his method is moved from ImagesPlugin. Alternative implementations must set SpanFactory
     // for Image node in order for this visitor to function
     private static void image(MarkwonVisitor.Builder builder) {

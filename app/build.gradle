@@ -34,7 +34,6 @@ dependencies {
     implementation project(':markwon-ext-tasklist')
     implementation project(':markwon-html')
     implementation project(':markwon-image')
-    implementation project(':markwon-linkify')
     implementation project(':markwon-syntax-highlight')
 
     deps.with {

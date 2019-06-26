@@ -10,7 +10,7 @@ import java.util.Set;
 
 import io.noties.markwon.core.CorePlugin;
 
-// @since 4.0.0-SNAPSHOT
+// @since 4.0.0
 class RegistryImpl implements MarkwonPlugin.Registry {
 
     private final List<MarkwonPlugin> origin;

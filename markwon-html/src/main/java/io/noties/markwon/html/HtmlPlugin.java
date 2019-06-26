@@ -29,7 +29,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
 
     /**
      * @see #create(HtmlConfigure)
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public interface HtmlConfigure {
         void configureHtml(@NonNull HtmlPlugin plugin);
@@ -41,7 +41,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static HtmlPlugin create(@NonNull HtmlConfigure configure) {
@@ -65,7 +65,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     /**
      * @param allowNonClosedTags whether or not non-closed tags should be closed
      *                           at the document end. By default `false`
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public HtmlPlugin allowNonClosedTags(boolean allowNonClosedTags) {
@@ -74,7 +74,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public HtmlPlugin addHandler(@NonNull TagHandler tagHandler) {
@@ -83,7 +83,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @Nullable
     public TagHandler getHandler(@NonNull String tagName) {
@@ -96,7 +96,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
      * {@link TagHandlerNoOp} to no-op certain default tags.
      *
      * @see TagHandlerNoOp
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public HtmlPlugin excludeDefaults(boolean excludeDefaults) {
@@ -107,7 +107,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder configurationBuilder) {
 
-        // @since 4.0.0-SNAPSHOT we init internal html-renderer here (marks the end of configuration)
+        // @since 4.0.0 we init internal html-renderer here (marks the end of configuration)
 
         final MarkwonHtmlRendererImpl.Builder builder = this.builder;
 

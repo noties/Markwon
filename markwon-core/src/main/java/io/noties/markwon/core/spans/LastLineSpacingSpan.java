@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Px;
 
 /**
- * @since 4.0.0-SNAPSHOT
+ * @since 4.0.0
  */
 public class LastLineSpacingSpan implements LineHeightSpan {
 

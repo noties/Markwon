@@ -27,14 +27,14 @@ import io.noties.markwon.image.svg.SvgMediaDecoder;
 public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public interface ImagesConfigure {
         void configureImages(@NonNull ImagesPlugin plugin);
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public interface PlaceholderProvider {
         @Nullable
@@ -42,7 +42,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public interface ErrorHandler {
 
@@ -74,12 +74,12 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     private final AsyncDrawableLoaderBuilder builder;
 
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     ImagesPlugin() {
         this(new AsyncDrawableLoaderBuilder());
     }
 
-    // @since 4.0.0-SNAPSHOT
+    // @since 4.0.0
     @VisibleForTesting
     ImagesPlugin(@NonNull AsyncDrawableLoaderBuilder builder) {
         this.builder = builder;
@@ -88,7 +88,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     /**
      * Optional (by default new cached thread executor will be used)
      *
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin executorService(@NonNull ExecutorService executorService) {
@@ -102,7 +102,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      * @see FileSchemeHandler
      * @see NetworkSchemeHandler
      * @see OkHttpNetworkSchemeHandler
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin addSchemeHandler(@NonNull SchemeHandler schemeHandler) {
@@ -114,7 +114,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      * @see DefaultMediaDecoder
      * @see SvgMediaDecoder
      * @see GifMediaDecoder
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin addMediaDecoder(@NonNull MediaDecoder mediaDecoder) {
@@ -127,7 +127,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
      * if you need to disable default-image-media-decoder specify here own no-op implementation or null.
      *
      * @see DefaultMediaDecoder
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin defaultMediaDecoder(@Nullable MediaDecoder mediaDecoder) {
@@ -136,7 +136,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin removeSchemeHandler(@NonNull String scheme) {
@@ -145,7 +145,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin removeMediaDecoder(@NonNull String contentType) {
@@ -154,7 +154,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin placeholderProvider(@NonNull PlaceholderProvider placeholderProvider) {
@@ -164,7 +164,7 @@ public class ImagesPlugin extends AbstractMarkwonPlugin {
 
     /**
      * @see ErrorHandler
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImagesPlugin errorHandler(@NonNull ErrorHandler errorHandler) {

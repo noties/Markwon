@@ -95,7 +95,7 @@ public class MarkwonConfiguration {
         }
 
         /**
-         * @since 4.0.0-SNAPSHOT
+         * @since 4.0.0
          */
         @NonNull
         public Builder asyncDrawableLoader(@NonNull AsyncDrawableLoader asyncDrawableLoader) {
@@ -138,7 +138,7 @@ public class MarkwonConfiguration {
             this.theme = theme;
             this.spansFactory = spansFactory;
 
-            // @since 4.0.0-SNAPSHOT
+            // @since 4.0.0
             if (asyncDrawableLoader == null) {
                 asyncDrawableLoader = AsyncDrawableLoader.noOp();
             }

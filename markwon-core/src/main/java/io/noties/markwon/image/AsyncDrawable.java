@@ -53,7 +53,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @Nullable
     public ImageSize getImageSize() {
@@ -61,7 +61,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public ImageSizeResolver getImageSizeResolver() {
@@ -69,7 +69,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public boolean hasKnownDimentions() {
         return canvasWidth > 0;
@@ -77,7 +77,7 @@ public class AsyncDrawable extends Drawable {
 
     /**
      * @see #hasKnownDimentions()
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public int getLastKnownCanvasWidth() {
         return canvasWidth;
@@ -85,7 +85,7 @@ public class AsyncDrawable extends Drawable {
 
     /**
      * @see #hasKnownDimentions()
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     public float getLastKnowTextSize() {
         return textSize;
@@ -262,7 +262,7 @@ public class AsyncDrawable extends Drawable {
         if (hasResult()) {
             out = result.getIntrinsicWidth();
         } else {
-            // @since 4.0.0-SNAPSHOT, must not be zero in order to receive canvas dimensions
+            // @since 4.0.0, must not be zero in order to receive canvas dimensions
             out = 1;
         }
         return out;
@@ -274,7 +274,7 @@ public class AsyncDrawable extends Drawable {
         if (hasResult()) {
             out = result.getIntrinsicHeight();
         } else {
-            // @since 4.0.0-SNAPSHOT, must not be zero in order to receive canvas dimensions
+            // @since 4.0.0, must not be zero in order to receive canvas dimensions
             out = 1;
         }
         return out;

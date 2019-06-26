@@ -40,7 +40,7 @@ public class FileSchemeHandler extends SchemeHandler {
     /**
      * @see #createWithAssets(AssetManager)
      * @see UrlProcessorAndroidAssets
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static FileSchemeHandler createWithAssets(@NonNull Context context) {

@@ -24,7 +24,7 @@ public abstract class SchemeHandler {
     public abstract ImageItem handle(@NonNull String raw, @NonNull Uri uri);
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public abstract Collection<String> supportedSchemes();

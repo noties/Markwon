@@ -15,7 +15,7 @@ public abstract class TagHandler {
     );
 
     /**
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public abstract Collection<String> supportedTags();

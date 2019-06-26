@@ -30,7 +30,7 @@ import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageSpanFactory;
 
 /**
- * @since 4.0.0-SNAPSHOT
+ * @since 4.0.0
  */
 public class GlideImagesPlugin extends AbstractMarkwonPlugin {
 

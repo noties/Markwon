@@ -27,7 +27,7 @@ public class SvgMediaDecoder extends MediaDecoder {
 
     /**
      * @see #create(Resources)
-     * @since 4.0.0-SNAPSHOT
+     * @since 4.0.0
      */
     @NonNull
     public static SvgMediaDecoder create() {
@@ -45,7 +45,7 @@ public class SvgMediaDecoder extends MediaDecoder {
     SvgMediaDecoder(Resources resources) {
         this.resources = resources;
 
-        // @since 4.0.0-SNAPSHOT
+        // @since 4.0.0
         validate();
     }
 

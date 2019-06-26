@@ -9,7 +9,7 @@ import java.util.List;
 
 import io.noties.markwon.SpanFactory;
 
-// @since 4.0.0-SNAPSHOT
+// @since 4.0.0
 class SimpleExtBuilder {
 
     private final List<DelimiterProcessor> extensions = new ArrayList<>(2);

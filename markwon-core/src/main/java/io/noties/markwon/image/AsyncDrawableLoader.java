@@ -16,12 +16,12 @@ public abstract class AsyncDrawableLoader {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0
      */
     public abstract void load(@NonNull AsyncDrawable drawable);
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 4.0.0
      */
     public abstract void cancel(@NonNull AsyncDrawable drawable);
 

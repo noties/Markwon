@@ -7,7 +7,7 @@ import org.commonmark.node.Visitor;
 
 import io.noties.markwon.SpanFactory;
 
-// @since 4.0.0-SNAPSHOT
+// @since 4.0.0
 class SimpleExtNode extends CustomNode {
 
     private final SpanFactory spanFactory;

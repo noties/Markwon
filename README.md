@@ -35,13 +35,14 @@ features listed in [commonmark-spec] are supported
 implementation "io.noties.markwon:core:${markwonVersion}"
 ```
 
-Full list of available artifacts is present in the [install section](https://noties.github.io/Markwon/docs/v3/install.html)
+Full list of available artifacts is present in the [install section](https://noties.github.io/Markwon/docs/v4/install.html)
 of the [documentation] web-site.
 
 Please visit [documentation] web-site for further reference.
 
 
-> You can find previous version of Markwon in [2.x.x](https://github.com/noties/Markwon/tree/2.x.x) branch
+> You can find previous version of Markwon in [2.x.x](https://github.com/noties/Markwon/tree/2.x.x)
+and [3.x.x](https://github.com/noties/Markwon/tree/3.x.x) branches
 
 
 ## Supported markdown features:
