@@ -12,16 +12,16 @@ module.exports = {
     ],
     themeConfig: {
         nav: [
-            { text: 'Install', link: '/docs/v3/install.md' },
-            { text: 'Changelog', link: '/CHANGELOG.md' },
+            { text: 'Install', link: '/docs/v4/install.md' },
             {
                 text: 'API Version',
                 items: [
-                    { text: 'Current (3.x.x)', link: '/' },
+                    { text: 'Current (4.x.x)', link: '/' },
+                    { text: 'Legacy (3.x.x)', link: '/docs/v3/install.md' },
                     { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
                 ]
             },
-            { text: 'Sandbox', link: '/sandbox.md' },
+            { text: 'Changelog', link: 'https://github.com/noties/Markwon/blob/master/CHANGELOG.md' },
             { text: 'Github', link: 'https://github.com/noties/Markwon' }
         ],
         sidebar: {
@@ -36,8 +36,8 @@ module.exports = {
                 '/docs/v2/html.md',
                 '/docs/v2/view.md'
             ],
-            '/': [
-                '',
+            '/docs/v3': [
+                '/docs/v3/install.md',
                 {
                     title: 'Core',
                     collapsable: false,
@@ -67,7 +67,40 @@ module.exports = {
                 '/docs/v3/recycler-table/',
                 '/docs/v3/syntax-highlight/',
                 '/docs/v3/migration-2-3.md'
-            ]
+            ],
+            '/': [
+                '',
+                {
+                    title: 'Core',
+                    collapsable: false,
+                    children: [
+                        '/docs/v4/core/getting-started.md',
+                        '/docs/v4/core/plugins.md',
+                        '/docs/v4/core/registry.md',
+                        '/docs/v4/core/theme.md',
+                        '/docs/v4/core/configuration.md',
+                        '/docs/v4/core/visitor.md',
+                        '/docs/v4/core/spans-factory.md',
+                        '/docs/v4/core/core-plugin.md',
+                        '/docs/v4/core/movement-method-plugin.md',
+                        '/docs/v4/core/render-props.md'
+                    ]
+                },
+                '/docs/v4/ext-latex/',
+                '/docs/v4/ext-strikethrough/',
+                '/docs/v4/ext-tables/',
+                '/docs/v4/ext-tasklist/',
+                '/docs/v4/html/',
+                '/docs/v4/image/',
+                '/docs/v4/image-glide/',
+                '/docs/v4/image-picasso/',
+                '/docs/v4/linkify/',
+                '/docs/v4/recycler/',
+                '/docs/v4/recycler-table/',
+                '/docs/v4/simple-ext/',
+                '/docs/v4/syntax-highlight/',
+                '/docs/v4/recipes.md'
+            ],
         },
         sidebarDepth: 2,
         lastUpdated: true

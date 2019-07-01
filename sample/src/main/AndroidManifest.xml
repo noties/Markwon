@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="ru.noties.markwon.sample">
+    package="io.noties.markwon.sample">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,19 +11,22 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon">
 
-        <activity android:name=".MainActivity">
+        <activity android:name="io.noties.markwon.sample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".core.CoreActivity" />
-        <activity android:name=".latex.LatexActivity" />
-        <activity android:name=".customextension.CustomExtensionActivity" />
-        <activity android:name=".basicplugins.BasicPluginsActivity" />
-        <activity android:name=".recycler.RecyclerActivity" />
-        <activity android:name=".theme.ThemeActivity" />
+        <activity android:name="io.noties.markwon.sample.core.CoreActivity" />
+        <activity android:name="io.noties.markwon.sample.latex.LatexActivity" />
+        <activity android:name="io.noties.markwon.sample.customextension.CustomExtensionActivity" />
+        <activity android:name="io.noties.markwon.sample.basicplugins.BasicPluginsActivity" />
+        <activity android:name="io.noties.markwon.sample.recycler.RecyclerActivity" />
+        <activity android:name="io.noties.markwon.sample.theme.ThemeActivity" />
+        <activity android:name=".html.HtmlActivity" />
+        <activity android:name=".simpleext.SimpleExtActivity" />
+        <activity android:name=".customextension2.CustomExtensionActivity2" />
 
     </application>
 

@@ -15,4 +15,12 @@
     <string name="sample_recycler"># \# Recycler\n\nShow how to render markdown in a RecyclerView.
         Renders code blocks wrapped in a HorizontalScrollView. Renders tables in a custom view.</string>
 
+    <string name="sample_html"># \# Html\n\nShows how to define own tag handlers</string>
+
+    <string name="sample_simple_ext"># \# SimpleExt\n\nShows how to use SimpleExtPlugin module
+        to create own delimited parser extensions</string>
+
+    <string name="sample_custom_extension_2"># \# Custom extension 2\n\nAutomatically
+        convert `#1` and `@user` to Github links</string>
+
 </resources>

@@ -1,3 +1,3 @@
-# LaTeX
+# LaTeX Extension
 
-[Documentation](https://noties.github.io/Markwon/docs/ext-latex)
+https://noties.io/Markwon/docs/v4/ext-latex/

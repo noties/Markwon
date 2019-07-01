@@ -6,7 +6,7 @@ android {
     buildToolsVersion config['build-tools']
 
     defaultConfig {
-        applicationId "ru.noties.markwon.sample"
+        applicationId "io.noties.markwon.sample"
         minSdkVersion config['min-sdk']
         targetSdkVersion config['target-sdk']
         versionCode 1
@@ -39,19 +39,21 @@ dependencies {
     implementation project(':markwon-ext-tables')
     implementation project(':markwon-ext-tasklist')
     implementation project(':markwon-html')
-    implementation project(':markwon-image-gif')
-    implementation project(':markwon-image-okhttp')
-    implementation project(':markwon-image-svg')
+    implementation project(':markwon-image')
     implementation project(':markwon-syntax-highlight')
     implementation project(':markwon-recycler')
     implementation project(':markwon-recycler-table')
+    implementation project(':markwon-simple-ext')
+
+    implementation project(':markwon-image-picasso')
 
     deps.with {
-        implementation it['support-recycler-view']
+        implementation it['x-recycler-view']
         implementation it['okhttp']
         implementation it['prism4j']
         implementation it['debug']
         implementation it['adapt']
+        implementation it['android-svg']
     }
 
     deps['annotationProcessor'].with {

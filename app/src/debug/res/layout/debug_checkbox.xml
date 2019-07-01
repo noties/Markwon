@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ru.noties.markwon.debug.DebugCheckboxDrawableView
+    <io.noties.markwon.debug.DebugCheckboxDrawableView
         android:layout_width="128dip"
         android:layout_height="128dip"
         android:layout_gravity="center"

@@ -1,5 +1,7 @@
 # HTML <Badge text="2.0.0" />
 
+<LegacyWarning />
+
 Starting with version `2.0.0` `Markwon` brings the whole HTML parsing/rendering
 stack _on-site_. The main reason for this are _special_ definitions of HTML nodes
 by <Link name="commonmark-spec" />. More specifically: <Link name="commonmark-spec#inline" displayName="inline" /> 

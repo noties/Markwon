@@ -18,7 +18,6 @@ dependencies {
     api project(':markwon-core')
 
     deps.with {
-        api it['support-annotations']
         api it['prism4j']
     }
 }

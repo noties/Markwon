@@ -2,5 +2,6 @@
 <resources>
 
     <item name="markwon_drawables_scheduler" type="id" />
+    <item name="markwon_drawables_scheduler_last_text_hashcode" type="id" />
 
 </resources>

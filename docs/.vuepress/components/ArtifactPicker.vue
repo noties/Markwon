@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { artifacts } from "../.artifacts.js";
+import { artifacts } from "../.artifacts.v3.js";
 
 if (!artifacts) {
   throw "Artifacts not found. Use `collectArtifacts.js` script to obtain artifacts metadata.";

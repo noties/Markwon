@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
+
+    defaultConfig {
+        minSdkVersion config['min-sdk']
+        targetSdkVersion config['target-sdk']
+        versionCode 1
+        versionName version
+    }
+}
+
+dependencies {
+
+    api project(':markwon-core')
+
+    deps.with {
+        compileOnly it['android-gif']
+        compileOnly it['android-svg']
+        compileOnly it['okhttp']
+    }
+
+    deps['test'].with {
+
+        testImplementation project(':markwon-test-span')
+
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
+
+        testImplementation it['commons-io']
+    }
+}
+
+registerArtifact(this)

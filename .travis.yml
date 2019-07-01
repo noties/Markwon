@@ -1,5 +1,9 @@
 # https://docs.travis-ci.com/user/languages/android/
+
 language: android
+
+# so, out of blue travis requires this now (without it build would not even execute, immediate failure when downloading jdk)
+dist: trusty
 jdk: openjdk8
 sudo: false
 

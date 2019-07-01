@@ -7,6 +7,8 @@ title: 'Overview'
 <br><br>
 <MavenBadges2xx/>
 
+<LegacyWarning />
+
 **Markwon** is a markdown library for Android. It parses markdown following 
 <Link name="commonmark-spec" /> with the help of amazing <Link name="commonmark-java" /> library
 and renders result as _Android-native_ Spannables. **No HTML** is involved

@@ -1,5 +1,7 @@
 # MarkwonView
 
+<LegacyWarning />
+
 <MavenBadge2xx artifact="markwon-view" />
 
 This is simple library containing 2 views that are able to display markdown:
