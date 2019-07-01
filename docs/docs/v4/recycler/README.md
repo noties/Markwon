@@ -149,5 +149,5 @@ parsed only once and each subsequent adapter binding call will reuse previously 
 
 :::tip Tables
 There is a standalone artifact that adds support for displaying markdown tables
-natively via `TableLayout`. Please refer to its [documentation](/docs/v3/recycler-table/)
+natively via `TableLayout`. Please refer to its [documentation](/docs/v4/recycler-table/)
 :::

@@ -2,7 +2,7 @@
 
 <MavenBadge4 :artifact="'recycler-table'" />
 
-Artifact that provides [MarkwonAdapter.Entry](/docs/v3/recycler/) to render `TableBlock` inside 
+Artifact that provides [MarkwonAdapter.Entry](/docs/v4/recycler/) to render `TableBlock` inside 
 Android-native `TableLayout` widget.
 
 <img :src="$withBase('/assets/recycler-table-screenshot.png')" alt="screenshot" width="45%">
