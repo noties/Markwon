@@ -26,7 +26,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
 
-    // @since 3.1.0-SNAPSHOT use a hash-map with an AsyncDrawable (allows multiple drawables
+    // @since 3.1.0 use a hash-map with an AsyncDrawable (allows multiple drawables
     // referencing the same source)
     private final Map<AsyncDrawable, Future<?>> requests = new HashMap<>(2);
 

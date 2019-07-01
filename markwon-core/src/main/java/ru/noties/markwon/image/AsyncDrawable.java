@@ -52,7 +52,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     @Nullable
     public ImageSize getImageSize() {
@@ -60,7 +60,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     @NonNull
     public ImageSizeResolver getImageSizeResolver() {
@@ -68,7 +68,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     public boolean hasKnownDimentions() {
         return canvasWidth > 0;
@@ -76,7 +76,7 @@ public class AsyncDrawable extends Drawable {
 
     /**
      * @see #hasKnownDimentions()
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     public int getLastKnownCanvasWidth() {
         return canvasWidth;
@@ -84,7 +84,7 @@ public class AsyncDrawable extends Drawable {
 
     /**
      * @see #hasKnownDimentions()
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     public float getLastKnowTextSize() {
         return textSize;

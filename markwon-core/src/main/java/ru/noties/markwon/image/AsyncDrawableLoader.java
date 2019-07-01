@@ -38,18 +38,18 @@ public abstract class AsyncDrawableLoader {
     }
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     public abstract void load(@NonNull AsyncDrawable drawable);
 
     /**
-     * @since 3.1.0-SNAPSHOT
+     * @since 3.1.0
      */
     public abstract void cancel(@NonNull AsyncDrawable drawable);
 
     /**
      * @see #load(AsyncDrawable)
-     * @deprecated 3.1.0-SNAPSHOT
+     * @deprecated 3.1.0
      */
     @Deprecated
     public void load(@NonNull String destination, @NonNull AsyncDrawable drawable) {
@@ -60,7 +60,7 @@ public abstract class AsyncDrawableLoader {
      * Method is deprecated because cancellation won\'t work for markdown input
      * with multiple images with the same source
      *
-     * @deprecated 3.1.0-SNAPSHOT
+     * @deprecated 3.1.0
      */
     @Deprecated
     public void cancel(@NonNull String destination) {
