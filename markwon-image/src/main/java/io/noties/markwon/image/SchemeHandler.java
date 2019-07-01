@@ -12,7 +12,7 @@ import java.util.Collection;
 public abstract class SchemeHandler {
 
     /**
-     * Changes since 4.0.0-SNAPSHOT:
+     * Changes since 4.0.0:
      * <ul>
      * <li>Returns `non-null` image-item</li>
      * </ul>
