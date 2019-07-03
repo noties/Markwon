@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.text.Spanned;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -262,12 +263,28 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                 cache.put(drawable, config.executorService.submit(new Runnable() {
                     @Override
                     public void run() {
+                        // @since 4.0.1 wrap in try-catch block and add error logging
+                        try {
+                            execute();
+                        } catch (Throwable t) {
+                            Log.e(
+                                    "JLatexMathPlugin",
+                                    "Error displaying latex: `" + drawable.getDestination() + "`",
+                                    t);
+                        }
+                    }
+
+                    private void execute() {
+
+                        // @since 4.0.1 (background provider can be null)
+                        final BackgroundProvider backgroundProvider = config.backgroundProvider;
 
                         // create JLatexMathDrawable
+                        //noinspection ConstantConditions
                         final JLatexMathDrawable jLatexMathDrawable =
                                 JLatexMathDrawable.builder(drawable.getDestination())
                                         .textSize(config.textSize)
-                                        .background(config.backgroundProvider.provide())
+                                        .background(backgroundProvider != null ? backgroundProvider.provide() : null)
                                         .align(config.align)
                                         .fitCanvas(config.fitCanvas)
                                         .padding(

@@ -47,24 +47,24 @@ public class LatexActivity extends Activity {
                 + latex + "$$\n\n something like **this**";
 
         final Markwon markwon = Markwon.builder(this)
-//                .usePlugin(ImagesPlugin.create(this))
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
-                    @Override
-                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
-                        builder
-                                .backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
-                                    @NonNull
-                                    @Override
-                                    public Drawable provide() {
-                                        return new ColorDrawable(0x40ff0000);
-                                    }
-                                })
-                                .fitCanvas(true)
-                                .align(JLatexMathDrawable.ALIGN_LEFT)
-                                .padding(48)
-                        ;
-                    }
-                }))
+//                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
+//                    @Override
+//                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+//                        builder
+//                                .backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
+//                                    @NonNull
+//                                    @Override
+//                                    public Drawable provide() {
+//                                        return new ColorDrawable(0x40ff0000);
+//                                    }
+//                                })
+//                                .fitCanvas(true)
+//                                .align(JLatexMathDrawable.ALIGN_LEFT)
+//                                .padding(48)
+//                        ;
+//                    }
+//                }))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
                 .build();
 
         if (true) {
