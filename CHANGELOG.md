@@ -1,6 +1,11 @@
 # Changelog
 
-# 4.0.0
+# 4.0.1
+* Fix `JLatexMathPlugin` (background-provider null) ([#147])
+
+[#147]: https://github.com/noties/Markwon/issues/147
+
+## 4.0.0
 * maven group-id change to `io.noties.markwon` (was `ru.noties.markwon`)
 * package name change to `io.notier.markwon.*` (was `ru.noties.markwon.*`)
 * androidx artifacts ([#76])
@@ -33,6 +38,14 @@ use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
 
 [#76]: https://github.com/noties/Markwon/issues/76
 [#138]: https://github.com/noties/Markwon/issues/138
+
+## 3.1.0
+* `AsyncDrawable` exposes `ImageSize`, `ImageSizeResolver` and last known dimensions (canvas width and text size)
+* `AsyncDrawableLoader` `load` and `cancel` signatures change - both accept an `AsyncDrawable`
+* Fix for multiple images with the same source in `AsyncDrawableLoader` 
+
+With this release `Markwon` `3.x.x` version goes into maintenance mode. 
+No new features will be added in `3.x.x` version, development is focused on `4.x.x` version.
 
 
 ## 3.0.2
