@@ -1,5 +1,12 @@
 # Changelog
 
+# 4.0.2-SNAPSHOT
+* Fix `JLatexMathPlugin` formula placeholder (cannot have line breaks) ([#149])
+* Fix `JLatexMathPlugin` to update resulting formula bounds when `fitCanvas=true` and 
+formula exceed canvas width (scale down keeping formula width/height ratio)
+
+[#149]: https://github.com/noties/Markwon/issues/149
+
 # 4.0.1
 * Fix `JLatexMathPlugin` (background-provider null) ([#147])
 
