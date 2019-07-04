@@ -66,29 +66,29 @@ public class LatexActivity extends Activity {
 //                }))
                 .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
                 .build();
-
-        if (true) {
-//            final String l = "$$\n" +
-//                    "  P(X=r)=\\frac{\\lambda^r e^{-\\lambda}}{r!}\n" +
-//                    "$$\n" +
-//                    "\n" +
-//                    "$$\n" +
-//                    "  P(X<r)=P(X<r-1)\n" +
-//                    "$$\n" +
-//                    "\n" +
-//                    "$$\n" +
-//                    "  P(X>r)=1-P(X<r=1)\n" +
-//                    "$$\n" +
-//                    "\n" +
-//                    "$$\n" +
-//                    "  \\text{Variance} = \\lambda\n" +
+//
+//        if (true) {
+////            final String l = "$$\n" +
+////                    "  P(X=r)=\\frac{\\lambda^r e^{-\\lambda}}{r!}\n" +
+////                    "$$\n" +
+////                    "\n" +
+////                    "$$\n" +
+////                    "  P(X<r)=P(X<r-1)\n" +
+////                    "$$\n" +
+////                    "\n" +
+////                    "$$\n" +
+////                    "  P(X>r)=1-P(X<r=1)\n" +
+////                    "$$\n" +
+////                    "\n" +
+////                    "$$\n" +
+////                    "  \\text{Variance} = \\lambda\n" +
+////                    "$$";
+//            final String l = "$$ \n" +
+//                    "    \\sigma_T^2 = \\frac{1-p}{p^2}\n" +
 //                    "$$";
-            final String l = "$$ \n" +
-                    "    \\sigma_T^2 = \\frac{1-p}{p^2}\n" +
-                    "$$";
-            markwon.setMarkdown(textView, l);
-            return;
-        }
+//            markwon.setMarkdown(textView, l);
+//            return;
+//        }
 
         markwon.setMarkdown(textView, markdown);
     }
