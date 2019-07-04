@@ -16,8 +16,14 @@ android {
 dependencies {
 
     api project(':markwon-core')
-    api project(':markwon-image')
+
     api deps['jlatexmath-android']
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
+    }
 }
 
 registerArtifact(this)

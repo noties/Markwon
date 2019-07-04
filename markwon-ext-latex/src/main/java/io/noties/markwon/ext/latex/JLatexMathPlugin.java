@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
+import androidx.annotation.VisibleForTesting;
 
 import org.commonmark.parser.Parser;
 
@@ -84,8 +85,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         // @since 4.0.0
         private final int paddingHorizontal;
-        // @since 4.0.0
 
+        // @since 4.0.0
         private final int paddingVertical;
 
         // @since 4.0.0
@@ -132,7 +133,10 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 final int length = visitor.length();
 
-                visitor.builder().append(latex);
+                // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
+                // because Android will draw formula for each line of text, thus
+                // leading to formula duplicated (drawn on each line of text)
+                visitor.builder().append(prepareLatexTextPlaceholder(latex));
 
                 final MarkwonConfiguration configuration = visitor.configuration();
 
@@ -159,6 +163,13 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     @Override
     public void afterSetText(@NonNull TextView textView) {
         AsyncDrawableScheduler.schedule(textView);
+    }
+
+    // @since 4.0.2
+    @VisibleForTesting
+    @NonNull
+    static String prepareLatexTextPlaceholder(@NonNull String latex) {
+        return latex.replace('\n', ' ').trim();
     }
 
     public static class Builder {
@@ -349,6 +360,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             final Rect imageBounds = drawable.getResult().getBounds();
             final int canvasWidth = drawable.getLastKnownCanvasWidth();
+
+            // todo: scale down when formula is greater than width (keep ratio and apply height)
 
             if (fitCanvas
                     && imageBounds.width() < canvasWidth) {
