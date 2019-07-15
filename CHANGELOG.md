@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.0.2-SNAPSHOT
+# 4.0.2
 * Fix `JLatexMathPlugin` formula placeholder (cannot have line breaks) ([#149])
 * Fix `JLatexMathPlugin` to update resulting formula bounds when `fitCanvas=true` and 
 formula exceed canvas width (scale down keeping formula width/height ratio)
@@ -12,7 +12,7 @@ formula exceed canvas width (scale down keeping formula width/height ratio)
 
 [#147]: https://github.com/noties/Markwon/issues/147
 
-## 4.0.0
+# 4.0.0
 * maven group-id change to `io.noties.markwon` (was `ru.noties.markwon`)
 * package name change to `io.notier.markwon.*` (was `ru.noties.markwon.*`)
 * androidx artifacts ([#76])
@@ -46,7 +46,7 @@ use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
 [#76]: https://github.com/noties/Markwon/issues/76
 [#138]: https://github.com/noties/Markwon/issues/138
 
-## 3.1.0
+# 3.1.0
 * `AsyncDrawable` exposes `ImageSize`, `ImageSizeResolver` and last known dimensions (canvas width and text size)
 * `AsyncDrawableLoader` `load` and `cancel` signatures change - both accept an `AsyncDrawable`
 * Fix for multiple images with the same source in `AsyncDrawableLoader` 
@@ -55,7 +55,7 @@ With this release `Markwon` `3.x.x` version goes into maintenance mode.
 No new features will be added in `3.x.x` version, development is focused on `4.x.x` version.
 
 
-## 3.0.2
+# 3.0.2
 * Fix `latex` plugin ([#136])
 * Add `#create(Call.Factory)` factory method to `OkHttpImagesPlugin` ([#129])
 <br>Thanks to [@ZacSweers] 
@@ -65,7 +65,7 @@ No new features will be added in `3.x.x` version, development is focused on `4.x
 [@ZacSweers]: https://github.com/ZacSweers
 
 
-## 3.0.1
+# 3.0.1
 * Add `AsyncDrawableLoader.Builder#implementation` method ([#109])
 * AsyncDrawable allow placeholder to have independent size ([#115])
 * `addFactory` method for MarkwonSpansFactory
@@ -79,7 +79,7 @@ No new features will be added in `3.x.x` version, development is focused on `4.x
 [#115]: https://github.com/noties/Markwon/issues/115
 
 
-## 3.0.0
+# 3.0.0
 * Plugins, plugins, plugins
 * Split basic functionality blocks into standalone modules
 * Maven artifacts group changed to `ru.noties.markwon` (previously had been `ru.noties`)
@@ -117,7 +117,7 @@ Markwon.create(context)
 But there is much more to it, please visit documentation web-site
 to get the full picture of latest changes.
 
-## 2.0.1
+# 2.0.1
 * `SpannableMarkdownVisitor` Rename blockQuoteIndent to blockIndent
 * Fixed block new lines logic for block quote and paragraph ([#82])
 * AsyncDrawable fix no dimensions bug ([#81])
@@ -137,7 +137,7 @@ to get the full picture of latest changes.
 [@c-b-h]: https://github.com/c-b-h
 
 
-## 2.0.0
+# 2.0.0
 * Add `html-parser-api` and `html-parser-impl` modules
 * Add `HtmlEmptyTagReplacement`
 * Implement Appendable and CharSequence in SpannableBuilder
@@ -157,7 +157,7 @@ to get the full picture of latest changes.
 * image-loader add SchemeHandler abstraction
 * Add sample-latex-math module
 
-## v1.1.1
+# 1.1.1
 * Fix OrderedListItemSpan text position (baseline) ([#55])
 * Add softBreakAddsNewLine option for SpannableConfiguration ([#54])
 * Paragraph text can now explicitly be spanned ([#58])
@@ -172,7 +172,7 @@ to get the full picture of latest changes.
 [@c-b-h]: https://github.com/c-b-h
 
 
-## v1.1.0
+# 1.1.0
 * Update commonmark to 0.11.0 and android-gif to 1.2.14
 * Add syntax highlight functionality (`library-syntax` module and `markwon-syntax` artifact)
 * Add headingTypeface, headingTextSizes to SpannableTheme
@@ -187,14 +187,14 @@ to get the full picture of latest changes.
 [@c-b-h]: https://github.com/c-b-h
 
 
-## v1.0.6
+# 1.0.6
 * Fix bullet list item size (depend on text size and not top-bottom arguments)
 * Add ability to specify MovementMethod when applying markdown to a TextView
 * Markdown images size is also resolved via ImageSizeResolver
 * Moved `ImageSize`, `ImageSizeResolver` and `ImageSizeResolverDef` 
 to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.markwon.renderer.html`)
 
-## v1.0.5
+# 1.0.5
 * Change LinkSpan to extend URLSpan. Allow default linkColor (if not set explicitly)
 * Fit an image without dimensions to canvas width (and keep ratio)
 * Add support for separate color for code blocks ([#37])
@@ -204,7 +204,7 @@ to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.mar
 [@Arcnor]: https://github.com/Arcnor
 
 
-## v1.0.4
+# 1.0.4
 * Fixes [#28] (tables are not rendered when at the end of the markdown)
 * Adds support for `indented code blocks`
 <br>Thanks to [@dlew]
@@ -213,15 +213,15 @@ to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.mar
 [@dlew]: https://github.com/dlew
 
 
-## v1.0.3
+# 1.0.3
 * Fixed ordered lists (when number width is greater than block margin)
 
-## v1.0.2
+# 1.0.2
 * Fixed additional white spaces at the end of parsed markdown
 * Fixed headings with no underline (levels 1 &amp; 2)
 * Tables can have no borders
 
-## v1.0.1
+# 1.0.1
 * Support for task-lists ([#2])
 * Spans now are applied in reverse order ([#5] [#10])
 * Added `SpannableBuilder` to follow the reverse order of spans
@@ -234,6 +234,6 @@ to `ru.noties.markwon.renderer` package (one level up, previously `ru.noties.mar
 [#10]: https://github.com/noties/Markwon/issues/10
 
 
-## v1.0.0
+# 1.0.0
 
 Initial release
