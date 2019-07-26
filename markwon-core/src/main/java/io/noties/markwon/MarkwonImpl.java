@@ -21,12 +21,18 @@ class MarkwonImpl extends Markwon {
     private final MarkwonVisitor visitor;
     private final List<MarkwonPlugin> plugins;
 
+    // @since 4.1.0-SNAPSHOT
+    @Nullable
+    private final TextSetter textSetter;
+
     MarkwonImpl(
             @NonNull TextView.BufferType bufferType,
+            @Nullable TextSetter textSetter,
             @NonNull Parser parser,
             @NonNull MarkwonVisitor visitor,
             @NonNull List<MarkwonPlugin> plugins) {
         this.bufferType = bufferType;
+        this.textSetter = textSetter;
         this.parser = parser;
         this.visitor = visitor;
         this.plugins = plugins;
@@ -78,16 +84,31 @@ class MarkwonImpl extends Markwon {
     }
 
     @Override
-    public void setParsedMarkdown(@NonNull TextView textView, @NonNull Spanned markdown) {
+    public void setParsedMarkdown(@NonNull final TextView textView, @NonNull Spanned markdown) {
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.beforeSetText(textView, markdown);
         }
 
-        textView.setText(markdown, bufferType);
+        // @since 4.1.0-SNAPSHOT
+        if (textSetter != null) {
+            textSetter.setText(textView, markdown, bufferType, new Runnable() {
+                @Override
+                public void run() {
+                    // on-complete we just must call `afterSetText` on all plugins
+                    for (MarkwonPlugin plugin : plugins) {
+                        plugin.afterSetText(textView);
+                    }
+                }
+            });
+        } else {
 
-        for (MarkwonPlugin plugin : plugins) {
-            plugin.afterSetText(textView);
+            // if no text-setter is specified -> just a regular sync operation
+            textView.setText(markdown, bufferType);
+
+            for (MarkwonPlugin plugin : plugins) {
+                plugin.afterSetText(textView);
+            }
         }
     }
 

@@ -25,6 +25,8 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
     private TextView.BufferType bufferType = TextView.BufferType.SPANNABLE;
 
+    private Markwon.TextSetter textSetter;
+
     MarkwonBuilderImpl(@NonNull Context context) {
         this.context = context;
     }
@@ -33,6 +35,13 @@ class MarkwonBuilderImpl implements Markwon.Builder {
     @Override
     public Markwon.Builder bufferType(@NonNull TextView.BufferType bufferType) {
         this.bufferType = bufferType;
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public Markwon.Builder textSetter(@NonNull Markwon.TextSetter textSetter) {
+        this.textSetter = textSetter;
         return this;
     }
 
@@ -97,6 +106,7 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
         return new MarkwonImpl(
                 bufferType,
+                textSetter,
                 parserBuilder.build(),
                 visitorBuilder.build(configuration, renderProps),
                 Collections.unmodifiableList(plugins)

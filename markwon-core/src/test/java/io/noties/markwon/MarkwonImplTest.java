@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,6 +43,7 @@ public class MarkwonImplTest {
         final MarkwonPlugin plugin = mock(MarkwonPlugin.class);
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
+                null,
                 mock(Parser.class),
                 mock(MarkwonVisitor.class),
                 Collections.singletonList(plugin));
@@ -64,6 +66,7 @@ public class MarkwonImplTest {
 
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
+                null,
                 parser,
                 mock(MarkwonVisitor.class),
                 Arrays.asList(first, second));
@@ -89,6 +92,7 @@ public class MarkwonImplTest {
 
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
+                null,
                 mock(Parser.class),
                 visitor,
                 Collections.singletonList(plugin));
@@ -130,6 +134,7 @@ public class MarkwonImplTest {
 
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
+                null,
                 mock(Parser.class),
                 visitor,
                 Collections.<MarkwonPlugin>emptyList());
@@ -160,6 +165,7 @@ public class MarkwonImplTest {
 
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
+                null,
                 mock(Parser.class),
                 visitor,
                 Collections.singletonList(plugin));
@@ -195,6 +201,7 @@ public class MarkwonImplTest {
         final MarkwonPlugin plugin = mock(MarkwonPlugin.class);
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.EDITABLE,
+                null,
                 mock(Parser.class),
                 mock(MarkwonVisitor.class, RETURNS_MOCKS),
                 Collections.singletonList(plugin));
@@ -241,6 +248,7 @@ public class MarkwonImplTest {
 
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
+                null,
                 mock(Parser.class),
                 mock(MarkwonVisitor.class),
                 plugins);
@@ -252,5 +260,44 @@ public class MarkwonImplTest {
         // but it was subclassed, we would still have true returned from this method
         assertTrue("AbstractMarkwonPlugin", impl.hasPlugin(AbstractMarkwonPlugin.class));
         assertTrue("MarkwonPlugin", impl.hasPlugin(MarkwonPlugin.class));
+    }
+
+    @Test
+    public void text_setter() {
+
+        final Markwon.TextSetter textSetter = mock(Markwon.TextSetter.class);
+        final MarkwonPlugin plugin = mock(MarkwonPlugin.class);
+
+        final MarkwonImpl impl = new MarkwonImpl(
+                TextView.BufferType.EDITABLE,
+                textSetter,
+                mock(Parser.class),
+                mock(MarkwonVisitor.class),
+                Collections.singletonList(plugin));
+
+        final TextView textView = mock(TextView.class);
+        final Spanned spanned = mock(Spanned.class);
+
+        impl.setParsedMarkdown(textView, spanned);
+
+        final ArgumentCaptor<TextView> textViewArgumentCaptor =
+                ArgumentCaptor.forClass(TextView.class);
+        final ArgumentCaptor<Spanned> spannedArgumentCaptor =
+                ArgumentCaptor.forClass(Spanned.class);
+        final ArgumentCaptor<TextView.BufferType> bufferTypeArgumentCaptor =
+                ArgumentCaptor.forClass(TextView.BufferType.class);
+        final ArgumentCaptor<Runnable> runnableArgumentCaptor =
+                ArgumentCaptor.forClass(Runnable.class);
+
+        verify(textSetter, times(1)).setText(
+                textViewArgumentCaptor.capture(),
+                spannedArgumentCaptor.capture(),
+                bufferTypeArgumentCaptor.capture(),
+                runnableArgumentCaptor.capture());
+
+        assertEquals(textView, textViewArgumentCaptor.getValue());
+        assertEquals(spanned, spannedArgumentCaptor.getValue());
+        assertEquals(TextView.BufferType.EDITABLE, bufferTypeArgumentCaptor.getValue());
+        assertNotNull(runnableArgumentCaptor.getValue());
     }
 }
