@@ -106,7 +106,6 @@ public class PrecomputedTextSetterCompat implements Markwon.TextSetter {
             @NonNull final Spanned text,
             @NonNull final TextView.BufferType bufferType,
             @NonNull final Runnable onComplete) {
-        Log.e("TXT", String.format("thread: %s, attached: %s", Thread.currentThread(), textView.isAttachedToWindow()));
         if (textView != null) {
             textView.post(new Runnable() {
                 @Override
