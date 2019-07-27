@@ -18,6 +18,10 @@ dependencies {
     deps.with {
         api it['x-annotations']
         api it['commonmark']
+
+        // @since 4.1.0-SNAPSHOT to allow PrecomputedTextSetterCompat
+        // note that this dependency must be added on a client side explicitly
+        compileOnly it['x-core']
     }
 
     deps['test'].with {

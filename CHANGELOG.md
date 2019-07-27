@@ -1,5 +1,10 @@
 # Changelog
 
+# 4.1.0-SNAPSHOT
+* Add `Markwon.TextSetter` interface to be able to use PrecomputedText/PrecomputedTextCompat
+* Add `PrecomputedTextSetterCompat` and `compileOnly` dependency on `androidx.core:core` 
+(clients must have this dependency in the classpath)
+
 # 4.0.2
 * Fix `JLatexMathPlugin` formula placeholder (cannot have line breaks) ([#149])
 * Fix `JLatexMathPlugin` to update resulting formula bounds when `fitCanvas=true` and 

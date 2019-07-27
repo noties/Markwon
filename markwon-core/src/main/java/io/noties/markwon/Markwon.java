@@ -123,7 +123,7 @@ public abstract class Markwon {
      * Interface to set text on a TextView. Primary goal is to give a way to use PrecomputedText
      * functionality
      *
-     * @see PrecomputedTextSetter
+     * @see PrecomputedTextSetterCompat
      * @since 4.1.0-SNAPSHOT
      */
     public interface TextSetter {
