@@ -14,6 +14,7 @@ import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -299,5 +301,65 @@ public class MarkwonImplTest {
         assertEquals(spanned, spannedArgumentCaptor.getValue());
         assertEquals(TextView.BufferType.EDITABLE, bufferTypeArgumentCaptor.getValue());
         assertNotNull(runnableArgumentCaptor.getValue());
+    }
+
+    @Test
+    public void require_plugin_throws() {
+        // if plugin is `required`, but it's not added -> an exception is thrown
+
+        final class NotPresent extends AbstractMarkwonPlugin {
+        }
+
+        final List<MarkwonPlugin> plugins =
+                Arrays.asList(mock(MarkwonPlugin.class), mock(MarkwonPlugin.class));
+
+        final MarkwonImpl impl = new MarkwonImpl(
+                TextView.BufferType.SPANNABLE,
+                null,
+                mock(Parser.class),
+                mock(MarkwonVisitor.class), plugins);
+
+        // should be returned
+        assertNotNull(impl.requirePlugin(MarkwonPlugin.class));
+
+        try {
+            impl.requirePlugin(NotPresent.class);
+            fail();
+        } catch (Throwable t) {
+            assertTrue(t.getMessage(), t.getMessage().contains(NotPresent.class.getName()));
+        }
+    }
+
+    @Test
+    public void plugins_unmodifiable() {
+        // returned plugins list must not be modifiable
+
+        // modifiable list (created from Arrays.asList -> which returns non)
+        final List<MarkwonPlugin> plugins = new ArrayList<>(
+                Arrays.asList(mock(MarkwonPlugin.class), mock(MarkwonPlugin.class)));
+
+        // validate that list is modifiable
+        plugins.add(mock(MarkwonPlugin.class));
+        assertEquals(3, plugins.size());
+
+        final MarkwonImpl impl = new MarkwonImpl(
+                TextView.BufferType.SPANNABLE,
+                null,
+                mock(Parser.class),
+                mock(MarkwonVisitor.class),
+                plugins);
+
+        final List<? extends MarkwonPlugin> list = impl.getPlugins();
+
+        // instance check (different list)
+        //noinspection SimplifiableJUnitAssertion
+        assertTrue(plugins != list);
+
+        try {
+            list.add(null);
+            fail();
+        } catch (UnsupportedOperationException e) {
+            assertTrue(e.getMessage(), true);
+        }
     }
 }

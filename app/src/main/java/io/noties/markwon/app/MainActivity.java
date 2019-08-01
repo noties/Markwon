@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 
 import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.utils.NoCopySpannableFactory;
 
 public class MainActivity extends Activity {
 
@@ -59,6 +61,9 @@ public class MainActivity extends Activity {
         final View progress = findViewById(R.id.progress);
 
         appBarRenderer.render(appBarState());
+
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setSpannableFactory(NoCopySpannableFactory.getInstance());
 
         markdownLoader.load(uri(), new MarkdownLoader.OnMarkdownTextLoaded() {
             @Override

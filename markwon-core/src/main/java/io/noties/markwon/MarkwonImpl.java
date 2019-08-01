@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @since 3.0.0
@@ -128,5 +130,22 @@ class MarkwonImpl extends Markwon {
         }
         //noinspection unchecked
         return (P) out;
+    }
+
+    @NonNull
+    @Override
+    public <P extends MarkwonPlugin> P requirePlugin(@NonNull Class<P> type) {
+        final P plugin = getPlugin(type);
+        if (plugin == null) {
+            throw new IllegalStateException(String.format(Locale.US, "Requested plugin `%s` is not " +
+                    "registered with this Markwon instance", type.getName()));
+        }
+        return plugin;
+    }
+
+    @NonNull
+    @Override
+    public List<? extends MarkwonPlugin> getPlugins() {
+        return Collections.unmodifiableList(plugins);
     }
 }

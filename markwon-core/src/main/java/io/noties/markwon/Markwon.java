@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 
 import org.commonmark.node.Node;
 
+import java.util.List;
+
 import io.noties.markwon.core.CorePlugin;
 
 /**
@@ -118,6 +120,19 @@ public abstract class Markwon {
 
     @Nullable
     public abstract <P extends MarkwonPlugin> P getPlugin(@NonNull Class<P> type);
+
+    /**
+     * @since 4.1.0-SNAPSHOT
+     */
+    @NonNull
+    public abstract <P extends MarkwonPlugin> P requirePlugin(@NonNull Class<P> type);
+
+    /**
+     * @return a list of registered {@link MarkwonPlugin}
+     * @since 4.1.0-SNAPSHOT
+     */
+    @NonNull
+    public abstract List<? extends MarkwonPlugin> getPlugins();
 
     /**
      * Interface to set text on a TextView. Primary goal is to give a way to use PrecomputedText
