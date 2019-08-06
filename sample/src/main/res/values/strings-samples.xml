@@ -23,4 +23,6 @@
     <string name="sample_custom_extension_2"># \# Custom extension 2\n\nAutomatically
         convert `#1` and `@user` to Github links</string>
 
+    <string name="sample_precomputed_text"># \# PrecomputedText\n\nUsage of TextSetter and PrecomputedTextCompat</string>
+
 </resources>

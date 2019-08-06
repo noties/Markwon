@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 
 import org.commonmark.node.Node;
 
+import java.util.List;
+
 import io.noties.markwon.core.CorePlugin;
 
 /**
@@ -120,6 +122,42 @@ public abstract class Markwon {
     public abstract <P extends MarkwonPlugin> P getPlugin(@NonNull Class<P> type);
 
     /**
+     * @since 4.1.0
+     */
+    @NonNull
+    public abstract <P extends MarkwonPlugin> P requirePlugin(@NonNull Class<P> type);
+
+    /**
+     * @return a list of registered {@link MarkwonPlugin}
+     * @since 4.1.0
+     */
+    @NonNull
+    public abstract List<? extends MarkwonPlugin> getPlugins();
+
+    /**
+     * Interface to set text on a TextView. Primary goal is to give a way to use PrecomputedText
+     * functionality
+     *
+     * @see PrecomputedTextSetterCompat
+     * @since 4.1.0
+     */
+    public interface TextSetter {
+        /**
+         * @param textView   TextView
+         * @param markdown   prepared markdown
+         * @param bufferType BufferType specified when building {@link Markwon} instance
+         *                   via {@link Builder#bufferType(TextView.BufferType)}
+         * @param onComplete action to run when set-text is finished (required to call in order
+         *                   to execute {@link MarkwonPlugin#afterSetText(TextView)})
+         */
+        void setText(
+                @NonNull TextView textView,
+                @NonNull Spanned markdown,
+                @NonNull TextView.BufferType bufferType,
+                @NonNull Runnable onComplete);
+    }
+
+    /**
      * Builder for {@link Markwon}.
      * <p>
      * Please note that the order in which plugins are supplied is important as this order will be
@@ -137,6 +175,13 @@ public abstract class Markwon {
          */
         @NonNull
         Builder bufferType(@NonNull TextView.BufferType bufferType);
+
+        /**
+         * @param textSetter {@link TextSetter} to apply text to a TextView
+         * @since 4.1.0
+         */
+        @NonNull
+        Builder textSetter(@NonNull TextSetter textSetter);
 
         @NonNull
         Builder usePlugin(@NonNull MarkwonPlugin plugin);

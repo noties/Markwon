@@ -24,6 +24,7 @@ import io.noties.markwon.sample.customextension.CustomExtensionActivity;
 import io.noties.markwon.sample.customextension2.CustomExtensionActivity2;
 import io.noties.markwon.sample.html.HtmlActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
+import io.noties.markwon.sample.precomputed.PrecomputedActivity;
 import io.noties.markwon.sample.recycler.RecyclerActivity;
 import io.noties.markwon.sample.simpleext.SimpleExtActivity;
 
@@ -110,6 +111,10 @@ public class MainActivity extends Activity {
 
             case CUSTOM_EXTENSION_2:
                 activity = CustomExtensionActivity2.class;
+                break;
+
+            case PRECOMPUTED_TEXT:
+                activity = PrecomputedActivity.class;
                 break;
 
             default:

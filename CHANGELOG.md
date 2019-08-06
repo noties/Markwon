@@ -1,5 +1,14 @@
 # Changelog
 
+# 4.1.0
+* Add `Markwon.TextSetter` interface to be able to use PrecomputedText/PrecomputedTextCompat
+* Add `PrecomputedTextSetterCompat` and `compileOnly` dependency on `androidx.core:core` 
+(clients must have this dependency in the classpath)
+* Add `requirePlugin(Class)` and `getPlugins` for `Markwon` instance
+* TablePlugin -&gt; defer table invalidation (via `View.post`), so only one invalidation 
+happens with each draw-call
+* AsyncDrawableSpan -&gt; defer invalidation
+
 # 4.0.2
 * Fix `JLatexMathPlugin` formula placeholder (cannot have line breaks) ([#149])
 * Fix `JLatexMathPlugin` to update resulting formula bounds when `fitCanvas=true` and 

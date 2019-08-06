@@ -27,6 +27,7 @@
         <activity android:name=".html.HtmlActivity" />
         <activity android:name=".simpleext.SimpleExtActivity" />
         <activity android:name=".customextension2.CustomExtensionActivity2" />
+        <activity android:name=".precomputed.PrecomputedActivity" />
 
     </application>
 

@@ -19,7 +19,9 @@ public enum Sample {
 
     SIMPLE_EXT(R.string.sample_simple_ext),
 
-    CUSTOM_EXTENSION_2(R.string.sample_custom_extension_2);
+    CUSTOM_EXTENSION_2(R.string.sample_custom_extension_2),
+
+    PRECOMPUTED_TEXT(R.string.sample_precomputed_text);
 
     private final int textResId;
 

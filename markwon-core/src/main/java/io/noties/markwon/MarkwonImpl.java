@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @since 3.0.0
@@ -21,12 +23,18 @@ class MarkwonImpl extends Markwon {
     private final MarkwonVisitor visitor;
     private final List<MarkwonPlugin> plugins;
 
+    // @since 4.1.0
+    @Nullable
+    private final TextSetter textSetter;
+
     MarkwonImpl(
             @NonNull TextView.BufferType bufferType,
+            @Nullable TextSetter textSetter,
             @NonNull Parser parser,
             @NonNull MarkwonVisitor visitor,
             @NonNull List<MarkwonPlugin> plugins) {
         this.bufferType = bufferType;
+        this.textSetter = textSetter;
         this.parser = parser;
         this.visitor = visitor;
         this.plugins = plugins;
@@ -78,16 +86,31 @@ class MarkwonImpl extends Markwon {
     }
 
     @Override
-    public void setParsedMarkdown(@NonNull TextView textView, @NonNull Spanned markdown) {
+    public void setParsedMarkdown(@NonNull final TextView textView, @NonNull Spanned markdown) {
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.beforeSetText(textView, markdown);
         }
 
-        textView.setText(markdown, bufferType);
+        // @since 4.1.0
+        if (textSetter != null) {
+            textSetter.setText(textView, markdown, bufferType, new Runnable() {
+                @Override
+                public void run() {
+                    // on-complete we just must call `afterSetText` on all plugins
+                    for (MarkwonPlugin plugin : plugins) {
+                        plugin.afterSetText(textView);
+                    }
+                }
+            });
+        } else {
 
-        for (MarkwonPlugin plugin : plugins) {
-            plugin.afterSetText(textView);
+            // if no text-setter is specified -> just a regular sync operation
+            textView.setText(markdown, bufferType);
+
+            for (MarkwonPlugin plugin : plugins) {
+                plugin.afterSetText(textView);
+            }
         }
     }
 
@@ -107,5 +130,22 @@ class MarkwonImpl extends Markwon {
         }
         //noinspection unchecked
         return (P) out;
+    }
+
+    @NonNull
+    @Override
+    public <P extends MarkwonPlugin> P requirePlugin(@NonNull Class<P> type) {
+        final P plugin = getPlugin(type);
+        if (plugin == null) {
+            throw new IllegalStateException(String.format(Locale.US, "Requested plugin `%s` is not " +
+                    "registered with this Markwon instance", type.getName()));
+        }
+        return plugin;
+    }
+
+    @NonNull
+    @Override
+    public List<? extends MarkwonPlugin> getPlugins() {
+        return Collections.unmodifiableList(plugins);
     }
 }
