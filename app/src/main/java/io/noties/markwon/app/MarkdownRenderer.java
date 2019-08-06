@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
@@ -19,7 +18,6 @@ import io.noties.debug.Debug;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
-import io.noties.markwon.PrecomputedTextSetterCompat;
 import io.noties.markwon.app.gif.GifAwarePlugin;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
@@ -74,11 +72,6 @@ public class MarkdownRenderer {
         // todo: create prism4j theme factory (accepting light/dark argument)
 
         cancel();
-
-final Markwon markwon = Markwon.builder(context)
-        .usePlugin(/**/)
-        .textSetter(PrecomputedTextSetterCompat.create(Executors.newCachedThreadPool()))
-        .build();
 
         task = service.submit(new Runnable() {
 
