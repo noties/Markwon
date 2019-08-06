@@ -1,5 +1,7 @@
 # Visitor
 
+<LegacyWarning />
+
 Starting with <Badge text="3.0.0" /> _visiting_ of parsed markdown
 nodes does not require creating own instance of commonmark-java `Visitor`,
 instead a composable/configurable `MarkwonVisitor` is used.

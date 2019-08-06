@@ -3,6 +3,8 @@ prev: false
 next: /docs/v3/core/getting-started.md
 ---
 
+<LegacyWarning />
+
 # Installation
 
 ![stable](https://img.shields.io/maven-central/v/ru.noties.markwon/core.svg?label=stable)

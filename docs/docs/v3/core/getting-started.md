@@ -1,5 +1,7 @@
 # Getting started
 
+<LegacyWarning />
+
 :::tip Installation
 Please follow [installation](/docs/v3/install.md) instructions
 to learn how to add `Markwon` to your project

@@ -1,5 +1,7 @@
 # Tables extension
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'ext-tables'" />
 
 This extension adds support for GFM tables.

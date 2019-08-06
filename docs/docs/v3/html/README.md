@@ -1,5 +1,7 @@
 # HTML
 
+<LegacyWarning />
+
 This artifact encapsulates HTML parsing from the core artifact and provides
 few predefined `TagHandlers`
 

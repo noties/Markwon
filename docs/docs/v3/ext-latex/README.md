@@ -1,5 +1,7 @@
 # LaTeX extension
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'ext-latex'" />
 
 This is an extension that will help you display LaTeX formulas in your markdown.

@@ -1,5 +1,7 @@
 # Recycler <Badge text="3.0.0" />
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'recycler'" />
 
 This artifact allows displaying markdown in a set of Android widgets

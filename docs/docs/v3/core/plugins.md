@@ -1,5 +1,7 @@
 # Plugins <Badge text="3.0.0" />
 
+<LegacyWarning />
+
 Since <Badge text="3.0.0" /> `MarkwonPlugin` takes the key role in
 processing and rendering markdown. Even **core** functionaly is abstracted
 into a `CorePlugin`. So it's still possible to use `Markwon` with a completely

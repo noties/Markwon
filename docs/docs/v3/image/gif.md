@@ -1,5 +1,7 @@
 # Image GIF
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'image-gif'" />
 
 Adds support for GIF images inside markdown. 

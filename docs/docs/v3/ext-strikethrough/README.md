@@ -1,5 +1,7 @@
 # Strikethrough extension
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'ext-strikethrough'" />
 
 This module adds `strikethrough` functionality to `Markwon` via `StrikethroughPlugin`:

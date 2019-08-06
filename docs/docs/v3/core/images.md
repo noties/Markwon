@@ -1,5 +1,7 @@
 # Images
 
+<LegacyWarning />
+
 Starting with <Badge text="3.0.0" /> `Markwon` comes with `ImagesPlugin`
 which supports `http(s)`, `file` and `data` schemes and default media
 decoder (for simple images, no [SVG](/docs/v3/image/svg.md) or [GIF](/docs/v3/image/gif.md) which

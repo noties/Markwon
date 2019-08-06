@@ -1,5 +1,7 @@
 # Image OkHttp
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'image-okhttp'" />
 
 Uses [okhttp library](https://github.com/square/okhttp) as the network transport fro images. Since <Badge text="3.0.0" />
