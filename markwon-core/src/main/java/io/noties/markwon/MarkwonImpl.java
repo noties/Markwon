@@ -23,7 +23,7 @@ class MarkwonImpl extends Markwon {
     private final MarkwonVisitor visitor;
     private final List<MarkwonPlugin> plugins;
 
-    // @since 4.1.0-SNAPSHOT
+    // @since 4.1.0
     @Nullable
     private final TextSetter textSetter;
 
@@ -92,7 +92,7 @@ class MarkwonImpl extends Markwon {
             plugin.beforeSetText(textView, markdown);
         }
 
-        // @since 4.1.0-SNAPSHOT
+        // @since 4.1.0
         if (textSetter != null) {
             textSetter.setText(textView, markdown, bufferType, new Runnable() {
                 @Override

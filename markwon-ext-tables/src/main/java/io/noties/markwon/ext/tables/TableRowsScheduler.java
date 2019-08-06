@@ -35,7 +35,7 @@ abstract class TableRowsScheduler {
 
             final TableRowSpan.Invalidator invalidator = new TableRowSpan.Invalidator() {
 
-                // @since 4.1.0-SNAPSHOT
+                // @since 4.1.0
                 // let's stack-up invalidation calls (so invalidation happens,
                 // but not with each table-row-span draw call)
                 final Runnable runnable = new Runnable() {
@@ -47,7 +47,7 @@ abstract class TableRowsScheduler {
 
                 @Override
                 public void invalidate() {
-                    // @since 4.1.0-SNAPSHOT post invalidation (combine multiple calls)
+                    // @since 4.1.0 post invalidation (combine multiple calls)
                     view.removeCallbacks(runnable);
                     view.post(runnable);
                 }

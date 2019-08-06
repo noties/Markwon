@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.1.0-SNAPSHOT
+# 4.1.0
 * Add `Markwon.TextSetter` interface to be able to use PrecomputedText/PrecomputedTextCompat
 * Add `PrecomputedTextSetterCompat` and `compileOnly` dependency on `androidx.core:core` 
 (clients must have this dependency in the classpath)

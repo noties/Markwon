@@ -122,14 +122,14 @@ public abstract class Markwon {
     public abstract <P extends MarkwonPlugin> P getPlugin(@NonNull Class<P> type);
 
     /**
-     * @since 4.1.0-SNAPSHOT
+     * @since 4.1.0
      */
     @NonNull
     public abstract <P extends MarkwonPlugin> P requirePlugin(@NonNull Class<P> type);
 
     /**
      * @return a list of registered {@link MarkwonPlugin}
-     * @since 4.1.0-SNAPSHOT
+     * @since 4.1.0
      */
     @NonNull
     public abstract List<? extends MarkwonPlugin> getPlugins();
@@ -139,7 +139,7 @@ public abstract class Markwon {
      * functionality
      *
      * @see PrecomputedTextSetterCompat
-     * @since 4.1.0-SNAPSHOT
+     * @since 4.1.0
      */
     public interface TextSetter {
         /**
@@ -178,7 +178,7 @@ public abstract class Markwon {
 
         /**
          * @param textSetter {@link TextSetter} to apply text to a TextView
-         * @since 4.1.0-SNAPSHOT
+         * @since 4.1.0
          */
         @NonNull
         Builder textSetter(@NonNull TextSetter textSetter);

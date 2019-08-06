@@ -17,7 +17,7 @@ import java.util.concurrent.Executor;
  * Please do not use with `markwon-recycler` as it will lead to bad item rendering (due to async nature)
  *
  * @see io.noties.markwon.Markwon.TextSetter
- * @since 4.1.0-SNAPSHOT
+ * @since 4.1.0
  */
 public class PrecomputedTextSetterCompat implements Markwon.TextSetter {
 

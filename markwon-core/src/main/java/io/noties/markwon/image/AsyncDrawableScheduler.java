@@ -57,7 +57,7 @@ public abstract class AsyncDrawableScheduler {
                 textView.setTag(R.id.markwon_drawables_scheduler, listener);
             }
 
-            // @since 4.1.0-SNAPSHOT
+            // @since 4.1.0
             final DrawableCallbackImpl.Invalidator invalidator = new TextViewInvalidator(textView);
 
             AsyncDrawable drawable;
@@ -112,14 +112,14 @@ public abstract class AsyncDrawableScheduler {
 
     private static class DrawableCallbackImpl implements Drawable.Callback {
 
-        // @since 4.1.0-SNAPSHOT
+        // @since 4.1.0
         // interface to be used when bounds change and view must be invalidated
         interface Invalidator {
             void invalidate();
         }
 
         private final TextView view;
-        private final Invalidator invalidator; // @since 4.1.0-SNAPSHOT
+        private final Invalidator invalidator; // @since 4.1.0
 
         private Rect previousBounds;
 
@@ -151,7 +151,7 @@ public abstract class AsyncDrawableScheduler {
             // but if the size has changed, then we need to update the whole layout...
 
             if (!previousBounds.equals(rect)) {
-                // @since 4.1.0-SNAPSHOT
+                // @since 4.1.0
                 // invalidation moved to upper level (so invalidation can be deferred,
                 // and multiple calls combined)
                 invalidator.invalidate();

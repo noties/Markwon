@@ -19,7 +19,7 @@ dependencies {
         api it['x-annotations']
         api it['commonmark']
 
-        // @since 4.1.0-SNAPSHOT to allow PrecomputedTextSetterCompat
+        // @since 4.1.0 to allow PrecomputedTextSetterCompat
         // note that this dependency must be added on a client side explicitly
         compileOnly it['x-core']
     }
