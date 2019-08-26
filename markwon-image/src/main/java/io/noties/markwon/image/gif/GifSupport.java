@@ -13,7 +13,8 @@ public abstract class GifSupport {
             pl.droidsonroids.gif.GifDrawable.class.getName();
             result = true;
         } catch (Throwable t) {
-            t.printStackTrace();
+            //  @since 4.1.1-SNAPSHOT do not print stacktrace (it can become noisy)
+//            t.printStackTrace();
             result = false;
         }
         HAS_GIF = result;
