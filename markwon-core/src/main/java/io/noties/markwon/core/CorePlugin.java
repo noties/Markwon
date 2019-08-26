@@ -328,6 +328,9 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
         visitor.builder().append('\u00a0');
 
+        // @since 4.1.1-SNAPSHOT
+        CoreProps.CODE_BLOCK_INFO.set(visitor.renderProps(), info);
+
         visitor.setSpansForNodeOptional(node, length);
 
         if (visitor.hasNext(node)) {
