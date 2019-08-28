@@ -20,7 +20,7 @@ class MarkwonImpl extends Markwon {
 
     private final TextView.BufferType bufferType;
     private final Parser parser;
-    private final MarkwonVisitor visitor;
+    private final MarkwonVisitorFactory visitorFactory; // @since 4.1.1-SNAPSHOT
     private final List<MarkwonPlugin> plugins;
 
     // @since 4.1.0
@@ -31,12 +31,12 @@ class MarkwonImpl extends Markwon {
             @NonNull TextView.BufferType bufferType,
             @Nullable TextSetter textSetter,
             @NonNull Parser parser,
-            @NonNull MarkwonVisitor visitor,
+            @NonNull MarkwonVisitorFactory visitorFactory,
             @NonNull List<MarkwonPlugin> plugins) {
         this.bufferType = bufferType;
         this.textSetter = textSetter;
         this.parser = parser;
-        this.visitor = visitor;
+        this.visitorFactory = visitorFactory;
         this.plugins = plugins;
     }
 
@@ -60,16 +60,22 @@ class MarkwonImpl extends Markwon {
             plugin.beforeRender(node);
         }
 
+        // @since 4.1.1-SNAPSHOT obtain visitor via factory
+        final MarkwonVisitor visitor = visitorFactory.create();
+
         node.accept(visitor);
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.afterRender(node, visitor);
         }
 
+        //noinspection UnnecessaryLocalVariable
         final Spanned spanned = visitor.builder().spannableStringBuilder();
 
         // clear render props and builder after rendering
-        visitor.clear();
+        // @since 4.1.1-SNAPSHOT as we no longer reuse visitor - there is no need to clean it
+        //  we might still do it if we introduce a thread-local storage though
+//        visitor.clear();
 
         return spanned;
     }
