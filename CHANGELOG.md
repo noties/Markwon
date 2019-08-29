@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.1.1-SNAPSHOT
+# 4.1.1
 * `markwon-ext-tables`: fix padding between subsequent table blocks ([#159])
 * `markwon-images`: print a single warning instead full stacktrace in case when SVG or GIF 
 are not present in the classpath ([#160])

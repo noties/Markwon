@@ -20,7 +20,7 @@ public abstract class CoreProps {
     public static final Prop<Boolean> PARAGRAPH_IS_IN_TIGHT_LIST = Prop.of("paragraph-is-in-tight-list");
 
     /**
-     * @since 4.1.1-SNAPSHOT
+     * @since 4.1.1
      */
     public static final Prop<String> CODE_BLOCK_INFO = Prop.of("code-block-info");
 

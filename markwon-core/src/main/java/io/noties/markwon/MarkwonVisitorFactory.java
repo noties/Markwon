@@ -3,7 +3,7 @@ package io.noties.markwon;
 import androidx.annotation.NonNull;
 
 /**
- * @since 4.1.1-SNAPSHOT
+ * @since 4.1.1
  */
 abstract class MarkwonVisitorFactory {
 

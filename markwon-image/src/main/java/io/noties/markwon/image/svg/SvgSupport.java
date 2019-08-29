@@ -17,7 +17,7 @@ public abstract class SvgSupport {
             com.caverock.androidsvg.SVG.class.getName();
             result = true;
         } catch (Throwable t) {
-            // @since 4.1.1-SNAPSHOT instead of printing full stacktrace of the exception,
+            // @since 4.1.1 instead of printing full stacktrace of the exception,
             // just print a warning to the console
             Log.w("MarkwonImagesPlugin", missingMessage());
             result = false;
@@ -30,7 +30,7 @@ public abstract class SvgSupport {
     }
 
     /**
-     * @since 4.1.1-SNAPSHOT
+     * @since 4.1.1
      */
     @NonNull
     static String missingMessage() {

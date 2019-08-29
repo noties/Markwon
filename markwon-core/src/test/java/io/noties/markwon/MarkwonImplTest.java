@@ -149,7 +149,7 @@ public class MarkwonImplTest {
 
         impl.render(mock(Node.class));
 
-        // obsolete starting with 4.1.1-SNAPSHOT
+        // obsolete starting with 4.1.1
 //        verify(visitor, times(1)).clear();
         verify(visitor, never()).clear();
     }
@@ -201,7 +201,7 @@ public class MarkwonImplTest {
 
         assertTrue(flag.get());
 
-        // obsolete starting with 4.1.1-SNAPSHOT
+        // obsolete starting with 4.1.1
 //        verify(renderProps, times(1)).clearAll();
         verify(renderProps, never()).clearAll();
     }

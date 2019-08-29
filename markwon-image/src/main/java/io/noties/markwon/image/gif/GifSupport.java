@@ -17,7 +17,7 @@ public abstract class GifSupport {
             pl.droidsonroids.gif.GifDrawable.class.getName();
             result = true;
         } catch (Throwable t) {
-            // @since 4.1.1-SNAPSHOT instead of printing full stacktrace of the exception,
+            // @since 4.1.1 instead of printing full stacktrace of the exception,
             // just print a warning to the console
             Log.w("MarkwonImagesPlugin", missingMessage());
             result = false;
@@ -30,7 +30,7 @@ public abstract class GifSupport {
     }
 
     /**
-     * @since 4.1.1-SNAPSHOT
+     * @since 4.1.1
      */
     @NonNull
     static String missingMessage() {

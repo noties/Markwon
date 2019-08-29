@@ -104,7 +104,7 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
         final RenderProps renderProps = new RenderPropsImpl();
 
-        // @since 4.1.1-SNAPSHOT
+        // @since 4.1.1
         final MarkwonVisitorFactory visitorFactory = MarkwonVisitorFactory.create(
                 visitorBuilder,
                 configuration,

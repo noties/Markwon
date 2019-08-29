@@ -116,7 +116,7 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
         void configure(@NonNull MarkwonVisitor.Builder builder) {
             builder
-                    // @since 4.1.1-SNAPSHOT we use TableBlock instead of TableBody to add new lines
+                    // @since 4.1.1 we use TableBlock instead of TableBody to add new lines
                     .on(TableBlock.class, new MarkwonVisitor.NodeVisitor<TableBlock>() {
                         @Override
                         public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableBlock tableBlock) {

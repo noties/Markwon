@@ -270,7 +270,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
         @Override
         public <N extends Node> Builder on(@NonNull Class<N> node, @Nullable NodeVisitor<? super N> nodeVisitor) {
 
-            // @since 4.1.1-SNAPSHOT we might actually introduce a local flag to check if it's been built
+            // @since 4.1.1 we might actually introduce a local flag to check if it's been built
             //  and throw an exception here if some modification is requested
             //  NB, as we might be built from different threads this flag must be synchronized
 
