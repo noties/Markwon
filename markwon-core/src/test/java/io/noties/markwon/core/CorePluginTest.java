@@ -1,10 +1,10 @@
 package io.noties.markwon.core;
 
+import android.text.method.MovementMethod;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.text.method.MovementMethod;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
@@ -38,15 +38,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ix.Ix;
-import ix.IxFunction;
-import ix.IxPredicate;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
+import ix.Ix;
+import ix.IxFunction;
+import ix.IxPredicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -54,6 +54,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -299,5 +300,46 @@ public class CorePluginTest {
         plugin.afterSetText(textView);
 
         verify(textView, times(0)).setMovementMethod(any(MovementMethod.class));
+    }
+
+    @Test
+    public void code_block_info_prop() {
+        final CorePlugin plugin = CorePlugin.create();
+        final MarkwonVisitor.Builder builder = mock(MarkwonVisitor.Builder.class);
+        plugin.configureVisitor(builder);
+
+        final ArgumentCaptor<MarkwonVisitor.NodeVisitor> fencedCaptor =
+                ArgumentCaptor.forClass(MarkwonVisitor.NodeVisitor.class);
+        final ArgumentCaptor<MarkwonVisitor.NodeVisitor> indendedCaptor =
+                ArgumentCaptor.forClass(MarkwonVisitor.NodeVisitor.class);
+
+        //noinspection unchecked
+        verify(builder, times(1)).on(eq(FencedCodeBlock.class), fencedCaptor.capture());
+        //noinspection unchecked
+        verify(builder, times(1)).on(eq(IndentedCodeBlock.class), indendedCaptor.capture());
+
+        final RenderProps renderProps = mock(RenderProps.class);
+        final MarkwonVisitor visitor = mock(MarkwonVisitor.class, RETURNS_MOCKS);
+
+        when(visitor.renderProps()).thenReturn(renderProps);
+
+        // fenced
+        {
+            final FencedCodeBlock block = new FencedCodeBlock();
+            block.setInfo("testing-fenced");
+            //noinspection unchecked
+            fencedCaptor.getValue().visit(visitor, block);
+
+            verify(renderProps, times(1)).set(eq(CoreProps.CODE_BLOCK_INFO), eq("testing-fenced"));
+        }
+
+        // indended
+        {
+            final IndentedCodeBlock block = new IndentedCodeBlock();
+            //noinspection unchecked
+            indendedCaptor.getValue().visit(visitor, block);
+
+            verify(renderProps, times(1)).set(eq(CoreProps.CODE_BLOCK_INFO), eq((String) null));
+        }
     }
 }

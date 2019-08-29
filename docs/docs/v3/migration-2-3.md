@@ -1,5 +1,7 @@
 # Migration 2.x.x -> 3.x.x
 
+<LegacyWarning />
+
 * strikethrough moved to standalone module
 * tables moved to standalone module
 * core functionality of `AsyncDrawableLoader` moved to `core` module

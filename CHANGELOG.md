@@ -1,5 +1,16 @@
 # Changelog
 
+# 4.1.1
+* `markwon-ext-tables`: fix padding between subsequent table blocks ([#159])
+* `markwon-images`: print a single warning instead full stacktrace in case when SVG or GIF 
+are not present in the classpath ([#160])
+* Make `Markwon` instance thread-safe by using a single `MarkwonVisitor` for each `render` call ([#157])
+* Add `CoreProps.CODE_BLOCK_INFO` with code-block info (language)
+
+[#159]: https://github.com/noties/Markwon/issues/159
+[#160]: https://github.com/noties/Markwon/issues/160
+[#157]: https://github.com/noties/Markwon/issues/157
+
 # 4.1.0
 * Add `Markwon.TextSetter` interface to be able to use PrecomputedText/PrecomputedTextCompat
 * Add `PrecomputedTextSetterCompat` and `compileOnly` dependency on `androidx.core:core` 

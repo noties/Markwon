@@ -1,5 +1,7 @@
 # Spans Factory
 
+<LegacyWarning />
+
 Starting with <Badge text="3.0.0" /> `MarkwonSpansFactory` controls what spans are displayed
 for markdown nodes.
 

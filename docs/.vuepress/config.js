@@ -16,9 +16,17 @@ module.exports = {
             {
                 text: 'API Version',
                 items: [
-                    { text: 'Current (4.x.x)', link: '/' },
-                    { text: 'Legacy (3.x.x)', link: '/docs/v3/install.md' },
-                    { text: 'Legacy (2.x.x)', link: '/docs/v2/' }
+                    {
+                        text: 'Latest', items: [
+                            { text: '4.x.x', link: '/' },
+                        ]
+                    },
+                    {
+                        text: 'Legacy', items: [
+                            { text: '3.x.x', link: '/docs/v3/install.md' },
+                            { text: '2.x.x', link: '/docs/v2/' }
+                        ]
+                    }
                 ]
             },
             { text: 'Changelog', link: 'https://github.com/noties/Markwon/blob/master/CHANGELOG.md' },
@@ -83,7 +91,8 @@ module.exports = {
                         '/docs/v4/core/spans-factory.md',
                         '/docs/v4/core/core-plugin.md',
                         '/docs/v4/core/movement-method-plugin.md',
-                        '/docs/v4/core/render-props.md'
+                        '/docs/v4/core/render-props.md',
+                        '/docs/v4/core/text-setter.md'
                     ]
                 },
                 '/docs/v4/ext-latex/',

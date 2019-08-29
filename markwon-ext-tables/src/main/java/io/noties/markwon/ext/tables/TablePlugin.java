@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.ext.gfm.tables.TableBody;
 import org.commonmark.ext.gfm.tables.TableCell;
 import org.commonmark.ext.gfm.tables.TableHead;
@@ -115,17 +116,24 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
         void configure(@NonNull MarkwonVisitor.Builder builder) {
             builder
-                    .on(TableBody.class, new MarkwonVisitor.NodeVisitor<TableBody>() {
+                    // @since 4.1.1 we use TableBlock instead of TableBody to add new lines
+                    .on(TableBlock.class, new MarkwonVisitor.NodeVisitor<TableBlock>() {
                         @Override
-                        public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableBody tableBody) {
+                        public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableBlock tableBlock) {
 
-                            visitor.visitChildren(tableBody);
-                            tableRows = 0;
+                            visitor.visitChildren(tableBlock);
 
-                            if (visitor.hasNext(tableBody)) {
+                            if (visitor.hasNext(tableBlock)) {
                                 visitor.ensureNewLine();
                                 visitor.forceNewLine();
                             }
+                        }
+                    })
+                    .on(TableBody.class, new MarkwonVisitor.NodeVisitor<TableBody>() {
+                        @Override
+                        public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableBody tableBody) {
+                            visitor.visitChildren(tableBody);
+                            tableRows = 0;
                         }
                     })
                     .on(TableRow.class, new MarkwonVisitor.NodeVisitor<TableRow>() {

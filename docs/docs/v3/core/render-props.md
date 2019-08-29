@@ -1,5 +1,7 @@
 # RenderProps <Badge text="3.0.0" />
 
+<LegacyWarning />
+
 `RenderProps` encapsulates passing arguments from a node visitor to a node renderer.
 Without hardcoding arguments into an API method calls.
 

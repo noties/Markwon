@@ -1,5 +1,7 @@
 # Task list extension
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'ext-tasklist'" />
 
 Adds support for GFM (Github-flavored markdown) task-lists:

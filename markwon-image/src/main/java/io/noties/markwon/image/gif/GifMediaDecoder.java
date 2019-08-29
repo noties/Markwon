@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 
-import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.MediaDecoder;
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -97,9 +96,7 @@ public class GifMediaDecoder extends MediaDecoder {
 
     private static void validate() {
         if (!GifSupport.hasGifSupport()) {
-            throw new IllegalStateException("`pl.droidsonroids.gif:android-gif-drawable:*` " +
-                    "dependency is missing, please add to your project explicitly if you " +
-                    "wish to use GIF media decoder");
+            throw new IllegalStateException(GifSupport.missingMessage());
         }
     }
 }

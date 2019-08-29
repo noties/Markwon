@@ -1,5 +1,7 @@
 # Core plugin <Badge text="3.0.0" />
 
+<LegacyWarning />
+
 Since <Badge text="3.0.0" /> with introduction of _plugins_, Markwon
 **core** functionality was moved to a dedicated plugin.
 

@@ -1,5 +1,7 @@
 # Movement method plugin
 
+<LegacyWarning />
+
 `MovementMethodPlugin` can be used to apply a `MovementMethod` to a TextView
 (important if you have links inside your markdown). By default `CorePlugin`
 will set a `LinkMovementMethod` on a TextView if one is missing. If you have

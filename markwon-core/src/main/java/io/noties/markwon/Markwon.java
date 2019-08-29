@@ -141,21 +141,21 @@ public abstract class Markwon {
      * @see PrecomputedTextSetterCompat
      * @since 4.1.0
      */
-    public interface TextSetter {
-        /**
-         * @param textView   TextView
-         * @param markdown   prepared markdown
-         * @param bufferType BufferType specified when building {@link Markwon} instance
-         *                   via {@link Builder#bufferType(TextView.BufferType)}
-         * @param onComplete action to run when set-text is finished (required to call in order
-         *                   to execute {@link MarkwonPlugin#afterSetText(TextView)})
-         */
-        void setText(
-                @NonNull TextView textView,
-                @NonNull Spanned markdown,
-                @NonNull TextView.BufferType bufferType,
-                @NonNull Runnable onComplete);
-    }
+public interface TextSetter {
+    /**
+     * @param textView   TextView
+     * @param markdown   prepared markdown
+     * @param bufferType BufferType specified when building {@link Markwon} instance
+     *                   via {@link Builder#bufferType(TextView.BufferType)}
+     * @param onComplete action to run when set-text is finished (required to call in order
+     *                   to execute {@link MarkwonPlugin#afterSetText(TextView)})
+     */
+    void setText(
+            @NonNull TextView textView,
+            @NonNull Spanned markdown,
+            @NonNull TextView.BufferType bufferType,
+            @NonNull Runnable onComplete);
+}
 
     /**
      * Builder for {@link Markwon}.

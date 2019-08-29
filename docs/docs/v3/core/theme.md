@@ -1,5 +1,7 @@
 # Theme
 
+<LegacyWarning />
+
 Here is the list of properties that can be configured via `MarkwonTheme.Builder` class. 
 
 :::tip

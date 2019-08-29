@@ -1,5 +1,7 @@
 # Image SVG
 
+<LegacyWarning />
+
 <MavenBadge :artifact="'image-svg'" />
 
 Adds support for SVG images inside markdown. 

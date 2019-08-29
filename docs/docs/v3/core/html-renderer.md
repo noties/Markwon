@@ -1,5 +1,7 @@
 # HTML Renderer
 
+<LegacyWarning />
+
 Starting with <Badge text="3.0.0" /> `MarkwonHtmlRenderer` controls how HTML
 is rendered:
 

@@ -1,5 +1,7 @@
 # Configuration
 
+<LegacyWarning />
+
 `MarkwonConfiguration` class holds common Markwon functionality.
 These are _configurable_ properties:
 * `SyntaxHighlight`

@@ -31,6 +31,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,7 +48,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                mock(MarkwonVisitor.class),
+                mock(MarkwonVisitorFactory.class),
                 Collections.singletonList(plugin));
 
         impl.parse("whatever");
@@ -70,7 +71,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 parser,
-                mock(MarkwonVisitor.class),
+                mock(MarkwonVisitorFactory.class),
                 Arrays.asList(first, second));
 
         impl.parse("zero");
@@ -89,6 +90,7 @@ public class MarkwonImplTest {
 
         final MarkwonPlugin plugin = mock(MarkwonPlugin.class);
 
+        final MarkwonVisitorFactory visitorFactory = mock(MarkwonVisitorFactory.class);
         final MarkwonVisitor visitor = mock(MarkwonVisitor.class);
         final SpannableBuilder builder = mock(SpannableBuilder.class);
 
@@ -96,9 +98,10 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                visitor,
+                visitorFactory,
                 Collections.singletonList(plugin));
 
+        when(visitorFactory.create()).thenReturn(visitor);
         when(visitor.builder()).thenReturn(builder);
 
         final Node node = mock(Node.class);
@@ -132,24 +135,30 @@ public class MarkwonImplTest {
     public void render_clears_visitor() {
         // each render call should have empty-state visitor (no previous rendering info)
 
+        final MarkwonVisitorFactory visitorFactory = mock(MarkwonVisitorFactory.class);
         final MarkwonVisitor visitor = mock(MarkwonVisitor.class, RETURNS_MOCKS);
+
+        when(visitorFactory.create()).thenReturn(visitor);
 
         final MarkwonImpl impl = new MarkwonImpl(
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                visitor,
+                visitorFactory,
                 Collections.<MarkwonPlugin>emptyList());
 
         impl.render(mock(Node.class));
 
-        verify(visitor, times(1)).clear();
+        // obsolete starting with 4.1.1
+//        verify(visitor, times(1)).clear();
+        verify(visitor, never()).clear();
     }
 
     @Test
     public void render_props() {
         // render props are configured properly and cleared after render function
 
+        final MarkwonVisitorFactory visitorFactory = mock(MarkwonVisitorFactory.class);
         final MarkwonVisitor visitor = mock(MarkwonVisitor.class, RETURNS_MOCKS);
 
         final RenderProps renderProps = mock(RenderProps.class);
@@ -161,6 +170,7 @@ public class MarkwonImplTest {
             }
         }).when(visitor).clear();
 
+        when(visitorFactory.create()).thenReturn(visitor);
         when(visitor.renderProps()).thenReturn(renderProps);
 
         final MarkwonPlugin plugin = mock(MarkwonPlugin.class);
@@ -169,7 +179,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                visitor,
+                visitorFactory,
                 Collections.singletonList(plugin));
 
         final AtomicBoolean flag = new AtomicBoolean(false);
@@ -191,7 +201,9 @@ public class MarkwonImplTest {
 
         assertTrue(flag.get());
 
-        verify(renderProps, times(1)).clearAll();
+        // obsolete starting with 4.1.1
+//        verify(renderProps, times(1)).clearAll();
+        verify(renderProps, never()).clearAll();
     }
 
     @Test
@@ -205,7 +217,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.EDITABLE,
                 null,
                 mock(Parser.class),
-                mock(MarkwonVisitor.class, RETURNS_MOCKS),
+                mock(MarkwonVisitorFactory.class, RETURNS_MOCKS),
                 Collections.singletonList(plugin));
 
         final TextView textView = mock(TextView.class);
@@ -252,7 +264,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                mock(MarkwonVisitor.class),
+                mock(MarkwonVisitorFactory.class),
                 plugins);
 
         assertTrue("First", impl.hasPlugin(First.class));
@@ -274,7 +286,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.EDITABLE,
                 textSetter,
                 mock(Parser.class),
-                mock(MarkwonVisitor.class),
+                mock(MarkwonVisitorFactory.class),
                 Collections.singletonList(plugin));
 
         final TextView textView = mock(TextView.class);
@@ -317,7 +329,8 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                mock(MarkwonVisitor.class), plugins);
+                mock(MarkwonVisitorFactory.class),
+                plugins);
 
         // should be returned
         assertNotNull(impl.requirePlugin(MarkwonPlugin.class));
@@ -346,7 +359,7 @@ public class MarkwonImplTest {
                 TextView.BufferType.SPANNABLE,
                 null,
                 mock(Parser.class),
-                mock(MarkwonVisitor.class),
+                mock(MarkwonVisitorFactory.class),
                 plugins);
 
         final List<? extends MarkwonPlugin> list = impl.getPlugins();

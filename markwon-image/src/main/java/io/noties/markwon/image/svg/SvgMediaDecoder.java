@@ -83,8 +83,7 @@ public class SvgMediaDecoder extends MediaDecoder {
 
     private static void validate() {
         if (!SvgSupport.hasSvgSupport()) {
-            throw new IllegalStateException("`com.caverock:androidsvg:*` dependency is missing, " +
-                    "please add to your project explicitly if you wish to use SVG media decoder");
+            throw new IllegalStateException(SvgSupport.missingMessage());
         }
     }
 }
