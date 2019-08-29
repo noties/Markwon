@@ -18,8 +18,3 @@ jobs:
           java-version: 1.8
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Publish snapshot
-        env:
-          USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          PASSWORD: ${{ secrets.NEXUS_PASSSWORD }}
-        run: ./gradlew upA -Prelease -PNEXUS_USERNAME=$USERNAME -PNEXUS_PASSWORD=$PASSWORD
