@@ -1,9 +1,6 @@
-name: Other build checks
+name: Pull request checks
 
-on:
-  push:
-    branches:
-      - '!master'
+on: pull_request
 
 jobs:
   build:
