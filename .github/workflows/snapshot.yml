@@ -20,6 +20,6 @@ jobs:
         run: ./gradlew build
       - name: Publish snapshot
         env:
-          username: ${{ secrets.NEXUS_USERNAME }}
-          password: ${{ secrets.NEXUS_PASSSWORD }}
-        run: ./gradlew upA -Prelease -PNEXUS_USERNAME=$username -PNEXUS_PASSWORD=$password
+          USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          PASSWORD: ${{ secrets.NEXUS_PASSSWORD }}
+        run: ./gradlew upA -Prelease -PNEXUS_USERNAME=$USERNAME -PNEXUS_PASSWORD=$PASSWORD
