@@ -18,6 +18,7 @@ version name). Then a pull-request is issued from this branch to `master`.
 
 After a pull-request is resolved (merged to `master`) all changes must be reflected in `develop`
 branch (merge with `master`) and `-SNAPSHOT` suffix must be added to the `VERSION_NAME`.
+The issuer branch (with version name) should be deleted.
 
 A new version must be pushed to MavenCentral and new git-tag with version name must be
 created in the repository.
