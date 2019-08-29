@@ -1,9 +1,9 @@
-name: Build
+name: Other build checks
 
 on:
   push:
     branches:
-      - master
+      - '!master'
 
 jobs:
   build:
