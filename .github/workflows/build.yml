@@ -1,9 +1,6 @@
-name: Snapshot
+name: Build
 
-on:
-  push:
-    branches:
-      - develop
+on: push
 
 jobs:
   build:

@@ -2,7 +2,7 @@
 
 # Markwon
 
-[![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
+[![Build](https://github.com/noties/Markwon/workflows/Build/badge.svg)](https://github.com/noties/Markwon/actions)
 
 **Markwon** is a markdown library for Android. It parses markdown
 following [commonmark-spec] with the help of amazing [commonmark-java]
