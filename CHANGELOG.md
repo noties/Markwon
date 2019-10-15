@@ -1,5 +1,10 @@
 # Changelog
 
+# 4.1.2-SNAPSHOT
+* Do not re-use RenderProps when creating a new visitor (fixes [#171])
+
+[#171]: https://github.com/noties/Markwon/issues/171
+
 # 4.1.1
 * `markwon-ext-tables`: fix padding between subsequent table blocks ([#159])
 * `markwon-images`: print a single warning instead full stacktrace in case when SVG or GIF 
