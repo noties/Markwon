@@ -28,6 +28,6 @@ jobs:
           java-version: 1.8
       - name: deploy snapshot
         env:
-          NEXUS_USERNAME: {{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: {{ secrets.NEXUS_PASSWORD }}
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         run: ./gradlew upA -Prelease -PCI
