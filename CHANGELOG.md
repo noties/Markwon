@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.1.2-SNAPSHOT
+# 4.1.2
 * Do not re-use RenderProps when creating a new visitor (fixes [#171])
 
 [#171]: https://github.com/noties/Markwon/issues/171
