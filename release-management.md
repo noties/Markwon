@@ -17,7 +17,9 @@ should all release preparations be done (removing all mentions of SNAPSHOT and u
 version name). Then a pull-request is issued from this branch to `master`.
 
 After a pull-request is resolved (merged to `master`) all changes must be reflected in `develop`
-branch (merge with `master`) and `-SNAPSHOT` suffix must be added to the `VERSION_NAME`.
+branch (merge with `master`), next `VERSION_NAME` must be assigned with `-SNAPSHOT` suffix and published to snapshot Maven repo 
+(snapshot users will see an update available).
+The issuer branch (with version name) should be deleted.
 
 A new version must be pushed to MavenCentral and new git-tag with version name must be
 created in the repository.

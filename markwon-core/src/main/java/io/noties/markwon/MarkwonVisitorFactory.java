@@ -13,13 +13,12 @@ abstract class MarkwonVisitorFactory {
     @NonNull
     static MarkwonVisitorFactory create(
             @NonNull final MarkwonVisitorImpl.Builder builder,
-            @NonNull final MarkwonConfiguration configuration,
-            @NonNull final RenderProps renderProps) {
+            @NonNull final MarkwonConfiguration configuration) {
         return new MarkwonVisitorFactory() {
             @NonNull
             @Override
             MarkwonVisitor create() {
-                return builder.build(configuration, renderProps);
+                return builder.build(configuration, new RenderPropsImpl());
             }
         };
     }

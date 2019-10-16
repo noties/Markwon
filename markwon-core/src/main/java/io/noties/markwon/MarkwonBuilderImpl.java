@@ -102,13 +102,11 @@ class MarkwonBuilderImpl implements Markwon.Builder {
                 themeBuilder.build(),
                 spanFactoryBuilder.build());
 
-        final RenderProps renderProps = new RenderPropsImpl();
-
         // @since 4.1.1
+        // @since 4.1.2 - do not reuse render-props (each render call should have own render-props)
         final MarkwonVisitorFactory visitorFactory = MarkwonVisitorFactory.create(
                 visitorBuilder,
-                configuration,
-                renderProps);
+                configuration);
 
         return new MarkwonImpl(
                 bufferType,

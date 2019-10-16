@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
     }
 }
@@ -99,6 +99,14 @@ task checkUpdates {
 def registerArtifact(project) {
 
     if (hasProperty('release')) {
+
+        // to be used in github actions (to publish a snapshot)
+        // but only if we have snapshot in the version name
+        if (hasProperty('CI') && VERSION_NAME.contains('SNAPSHOT')) {
+            ext.NEXUS_USERNAME = System.getenv('NEXUS_USERNAME')
+            ext.NEXUS_PASSWORD = System.getenv('NEXUS_PASSWORD')
+        }
+
         project.apply from: config['push-aar-gradle']
     }
 
