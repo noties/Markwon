@@ -21,6 +21,7 @@ class MarkwonImpl extends Markwon {
     private final TextView.BufferType bufferType;
     private final Parser parser;
     private final MarkwonVisitorFactory visitorFactory; // @since 4.1.1
+    private final MarkwonConfiguration configuration;
     private final List<MarkwonPlugin> plugins;
 
     // @since 4.1.0
@@ -32,11 +33,13 @@ class MarkwonImpl extends Markwon {
             @Nullable TextSetter textSetter,
             @NonNull Parser parser,
             @NonNull MarkwonVisitorFactory visitorFactory,
+            @NonNull MarkwonConfiguration configuration,
             @NonNull List<MarkwonPlugin> plugins) {
         this.bufferType = bufferType;
         this.textSetter = textSetter;
         this.parser = parser;
         this.visitorFactory = visitorFactory;
+        this.configuration = configuration;
         this.plugins = plugins;
     }
 
@@ -153,5 +156,11 @@ class MarkwonImpl extends Markwon {
     @Override
     public List<? extends MarkwonPlugin> getPlugins() {
         return Collections.unmodifiableList(plugins);
+    }
+
+    @NonNull
+    @Override
+    public MarkwonConfiguration configuration() {
+        return configuration;
     }
 }

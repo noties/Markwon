@@ -52,6 +52,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         });
     }
 
+    // todo: thread safety (builder is reused)
     private static class LinkifyTextAddedListener implements CorePlugin.OnTextAddedListener {
 
         private final int mask;

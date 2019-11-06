@@ -53,6 +53,11 @@
 
         </activity>
 
+        <activity
+            android:name=".edit.EditActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>

@@ -1,5 +1,10 @@
 # Changelog
 
+# 4.2.0-SNAPSHOT
+* `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
+* `Markwon#configuration` method to expose `MarkwonConfiguration` via public API
+* `HeadingSpan#getLevel` getter
+
 # 4.1.2
 * Do not re-use RenderProps when creating a new visitor (fixes [#171])
 

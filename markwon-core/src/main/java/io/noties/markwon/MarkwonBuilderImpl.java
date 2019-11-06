@@ -113,6 +113,7 @@ class MarkwonBuilderImpl implements Markwon.Builder {
                 textSetter,
                 parserBuilder.build(),
                 visitorFactory,
+                configuration,
                 Collections.unmodifiableList(plugins)
         );
     }
