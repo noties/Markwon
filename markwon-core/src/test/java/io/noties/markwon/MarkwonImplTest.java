@@ -49,6 +49,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
+                mock(MarkwonConfiguration.class),
                 Collections.singletonList(plugin));
 
         impl.parse("whatever");
@@ -72,6 +73,7 @@ public class MarkwonImplTest {
                 null,
                 parser,
                 mock(MarkwonVisitorFactory.class),
+                mock(MarkwonConfiguration.class),
                 Arrays.asList(first, second));
 
         impl.parse("zero");
@@ -99,6 +101,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 visitorFactory,
+                mock(MarkwonConfiguration.class),
                 Collections.singletonList(plugin));
 
         when(visitorFactory.create()).thenReturn(visitor);
@@ -145,6 +148,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 visitorFactory,
+                mock(MarkwonConfiguration.class),
                 Collections.<MarkwonPlugin>emptyList());
 
         impl.render(mock(Node.class));
@@ -180,6 +184,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 visitorFactory,
+                mock(MarkwonConfiguration.class),
                 Collections.singletonList(plugin));
 
         final AtomicBoolean flag = new AtomicBoolean(false);
@@ -218,6 +223,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class, RETURNS_MOCKS),
+                mock(MarkwonConfiguration.class),
                 Collections.singletonList(plugin));
 
         final TextView textView = mock(TextView.class);
@@ -265,6 +271,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
+                mock(MarkwonConfiguration.class),
                 plugins);
 
         assertTrue("First", impl.hasPlugin(First.class));
@@ -287,6 +294,7 @@ public class MarkwonImplTest {
                 textSetter,
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
+                mock(MarkwonConfiguration.class),
                 Collections.singletonList(plugin));
 
         final TextView textView = mock(TextView.class);
@@ -330,6 +338,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
+                mock(MarkwonConfiguration.class),
                 plugins);
 
         // should be returned
@@ -360,6 +369,7 @@ public class MarkwonImplTest {
                 null,
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
+                mock(MarkwonConfiguration.class),
                 plugins);
 
         final List<? extends MarkwonPlugin> list = impl.getPlugins();

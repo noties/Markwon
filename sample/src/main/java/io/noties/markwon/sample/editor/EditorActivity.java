@@ -64,13 +64,13 @@ public class EditorActivity extends Activity {
     private void simple_process() {
         // Process highlight in-place (right after text has changed)
 
-// obtain Markwon instance
+        // obtain Markwon instance
         final Markwon markwon = Markwon.create(this);
 
-// create editor
+        // create editor
         final MarkwonEditor editor = MarkwonEditor.create(markwon);
 
-// set edit listener
+        // set edit listener
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }
 
@@ -79,25 +79,6 @@ public class EditorActivity extends Activity {
 
         final Markwon markwon = Markwon.create(this);
         final MarkwonEditor editor = MarkwonEditor.create(markwon);
-
-editor.process(editText.getText());
-
-// please note that MarkwonEditor operates on caller thread,
-// fi you wish to execute this operation in background - this method
-// must be called from background thread
-editor.preRender(editText.getText(), new MarkwonEditor.PreRenderResultListener() {
-    @Override
-    public void onPreRenderResult(@NonNull MarkwonEditor.PreRenderResult result) {
-        // it's wise to check if rendered result is for the same input,
-        // for example by matching raw input
-        if (editText.getText().toString().equals(result.resultEditable().toString())) {
-
-            // if you are in background thread do not forget
-            // to execute dispatch in main thread
-            result.dispatchTo(editText.getText());
-        }
-    }
-});
 
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
                 editor,
@@ -108,9 +89,9 @@ editor.preRender(editText.getText(), new MarkwonEditor.PreRenderResultListener()
     private void custom_punctuation_span() {
         // Use own punctuation span
 
-final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-        .withPunctuationSpan(CustomPunctuationSpan.class, CustomPunctuationSpan::new)
-        .build();
+        final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
+                .withPunctuationSpan(CustomPunctuationSpan.class, CustomPunctuationSpan::new)
+                .build();
 
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }
@@ -118,35 +99,35 @@ final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
     private void additional_edit_span() {
         // An additional span is used to highlight strong-emphasis
 
-final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-        // This is required for edit-span cache
-        // We could use Markwon `StrongEmphasisSpan` here, but I use a different
-        //  one to indicate that those are completely unrelated spans and must be
-        //  treated differently.
-        .includeEditSpan(Bold.class, Bold::new)
-        .withEditSpanHandler(new MarkwonEditor.EditSpanHandler() {
-            @Override
-            public void handle(
-                    @NonNull MarkwonEditor.EditSpanStore store,
-                    @NonNull Editable editable,
-                    @NonNull String input,
-                    @NonNull Object span,
-                    int spanStart,
-                    int spanTextLength) {
-                if (span instanceof StrongEmphasisSpan) {
-                    editable.setSpan(
-                            // `includeEditSpan(Bold.class, Bold::new)` ensured that we have
-                            //      a span here to use (either reuse existing or create a new one)
-                            store.get(Bold.class),
-                            spanStart,
-                            // we know that strong emphasis is delimited with 2 characters on both sides
-                            spanStart + spanTextLength + 4,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    );
-                }
-            }
-        })
-        .build();
+        final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
+                // This is required for edit-span cache
+                // We could use Markwon `StrongEmphasisSpan` here, but I use a different
+                //  one to indicate that those are completely unrelated spans and must be
+                //  treated differently.
+                .includeEditSpan(Bold.class, Bold::new)
+                .withEditSpanHandler(new MarkwonEditor.EditSpanHandler() {
+                    @Override
+                    public void handle(
+                            @NonNull MarkwonEditor.EditSpanStore store,
+                            @NonNull Editable editable,
+                            @NonNull String input,
+                            @NonNull Object span,
+                            int spanStart,
+                            int spanTextLength) {
+                        if (span instanceof StrongEmphasisSpan) {
+                            editable.setSpan(
+                                    // `includeEditSpan(Bold.class, Bold::new)` ensured that we have
+                                    //      a span here to use (either reuse existing or create a new one)
+                                    store.get(Bold.class),
+                                    spanStart,
+                                    // we know that strong emphasis is delimited with 2 characters on both sides
+                                    spanStart + spanTextLength + 4,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            );
+                        }
+                    }
+                })
+                .build();
 
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }
@@ -335,11 +316,11 @@ final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
         }
     }
 
-private static class CustomPunctuationSpan extends ForegroundColorSpan {
-    CustomPunctuationSpan() {
-        super(0xFFFF0000); // RED
+    private static class CustomPunctuationSpan extends ForegroundColorSpan {
+        CustomPunctuationSpan() {
+            super(0xFFFF0000); // RED
+        }
     }
-}
 
     private static class Bold extends MetricAffectingSpan {
         public Bold() {
