@@ -22,7 +22,7 @@ listed in <Link name="commonmark-spec" /> are supported (including support for *
 **markdown tables**, **images** and **syntax highlight**).
 
 Since version <Badge text="4.2.0" /> **Markwon** comes with an [editor] to _highlight_ markdown input
-as user types for example in **EditText**.
+as user types (for example in **EditText**).
 
 [editor]: /docs/v4/editor/
 
