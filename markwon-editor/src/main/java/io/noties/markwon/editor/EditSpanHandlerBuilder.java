@@ -31,7 +31,7 @@ public class EditSpanHandlerBuilder {
     private final Map<Class<?>, EditSpanHandlerTyped> map = new HashMap<>(3);
 
     @NonNull
-    public <T> EditSpanHandlerBuilder include(
+    public <T> EditSpanHandlerBuilder handleMarkdownSpan(
             @NonNull Class<T> type,
             @NonNull EditSpanHandlerTyped<T> handler) {
         map.put(type, handler);

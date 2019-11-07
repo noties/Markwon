@@ -95,6 +95,7 @@ module.exports = {
                         '/docs/v4/core/text-setter.md'
                     ]
                 },
+                '/docs/v4/editor/',
                 '/docs/v4/ext-latex/',
                 '/docs/v4/ext-strikethrough/',
                 '/docs/v4/ext-tables/',

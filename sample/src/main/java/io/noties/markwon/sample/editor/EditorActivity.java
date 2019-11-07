@@ -3,17 +3,23 @@ package io.noties.markwon.sample.editor;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.StrikethroughSpan;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import io.noties.markwon.Markwon;
@@ -40,7 +46,7 @@ public class EditorActivity extends Activity {
         setContentView(R.layout.activity_editor);
 
         this.editText = findViewById(R.id.edit_text);
-
+        initBottomBar();
 
 //        simple_process();
 
@@ -164,7 +170,7 @@ public class EditorActivity extends Activity {
     private static MarkwonEditor.EditSpanHandler createEditSpanHandler() {
         // Please note that here we specify spans THAT ARE USED IN MARKDOWN
         return EditSpanHandlerBuilder.create()
-                .include(StrongEmphasisSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(StrongEmphasisSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     editable.setSpan(
                             store.get(StrongEmphasisSpan.class),
                             spanStart,
@@ -172,7 +178,7 @@ public class EditorActivity extends Activity {
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     );
                 })
-                .include(EmphasisSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(EmphasisSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     editable.setSpan(
                             store.get(EmphasisSpan.class),
                             spanStart,
@@ -180,7 +186,7 @@ public class EditorActivity extends Activity {
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     );
                 })
-                .include(StrikethroughSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(StrikethroughSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     editable.setSpan(
                             store.get(StrikethroughSpan.class),
                             spanStart,
@@ -188,7 +194,7 @@ public class EditorActivity extends Activity {
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     );
                 })
-                .include(CodeSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(CodeSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     // we do not add offset here because markwon (by default) adds spaces
                     // around inline code
                     editable.setSpan(
@@ -198,7 +204,7 @@ public class EditorActivity extends Activity {
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     );
                 })
-                .include(CodeBlockSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(CodeBlockSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     // we do not handle indented code blocks here
                     if (input.charAt(spanStart) == '`') {
                         final int firstLineEnd = input.indexOf('\n', spanStart);
@@ -214,7 +220,7 @@ public class EditorActivity extends Activity {
                         );
                     }
                 })
-                .include(BlockQuoteSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(BlockQuoteSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     editable.setSpan(
                             store.get(BlockQuoteSpan.class),
                             spanStart,
@@ -222,7 +228,7 @@ public class EditorActivity extends Activity {
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     );
                 })
-                .include(LinkSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
+                .handleMarkdownSpan(LinkSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
                     editable.setSpan(
                             store.get(EditLinkSpan.class),
                             // add underline only for link text
@@ -233,6 +239,81 @@ public class EditorActivity extends Activity {
                 })
                 // returns nullable type
                 .build();
+    }
+
+    private void initBottomBar() {
+        // all except block-quote wraps if have selection, or inserts at current cursor position
+
+        final Button bold = findViewById(R.id.bold);
+        final Button italic = findViewById(R.id.italic);
+        final Button strike = findViewById(R.id.strike);
+        final Button quote = findViewById(R.id.quote);
+        final Button code = findViewById(R.id.code);
+
+        addSpan(bold, new StrongEmphasisSpan());
+        addSpan(italic, new EmphasisSpan());
+        addSpan(strike, new StrikethroughSpan());
+
+        bold.setOnClickListener(new InsertOrWrapClickListener(editText, "**"));
+        italic.setOnClickListener(new InsertOrWrapClickListener(editText, "_"));
+        strike.setOnClickListener(new InsertOrWrapClickListener(editText, "~~"));
+        code.setOnClickListener(new InsertOrWrapClickListener(editText, "`"));
+
+        quote.setOnClickListener(v -> {
+            final int start = editText.getSelectionStart();
+            final int end = editText.getSelectionEnd();
+            if (start == end) {
+                editText.getText().insert(start, "> ");
+            } else {
+                // wrap the whole selected area in a quote
+                final List<Integer> newLines = new ArrayList<>(3);
+                newLines.add(start);
+
+                final String text = editText.getText().subSequence(start, end).toString();
+                int index = text.indexOf('\n');
+                while (index != -1) {
+                    newLines.add(start + index);
+                    index = text.indexOf('\n', index + 1);
+                }
+
+                for (int i = newLines.size() - 1; i >= 0; i--) {
+                    editText.getText().insert(newLines.get(i), "> ");
+                }
+            }
+        });
+    }
+
+    private static void addSpan(@NonNull TextView textView, Object... spans) {
+        final SpannableStringBuilder builder = new SpannableStringBuilder(textView.getText());
+        final int end = builder.length();
+        for (Object span : spans) {
+            builder.setSpan(span, 0, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        textView.setText(builder);
+    }
+
+    private static class InsertOrWrapClickListener implements View.OnClickListener {
+
+        private final EditText editText;
+        private final String text;
+
+        InsertOrWrapClickListener(@NonNull EditText editText, @NonNull String text) {
+            this.editText = editText;
+            this.text = text;
+        }
+
+        @Override
+        public void onClick(View v) {
+            final int start = editText.getSelectionStart();
+            final int end = editText.getSelectionEnd();
+            if (start == end) {
+                // insert at current position
+                editText.getText().insert(start, text);
+            } else {
+                editText.getText().insert(end, text);
+                editText.getText().insert(start, text);
+            }
+        }
     }
 
     private static class CustomPunctuationSpan extends ForegroundColorSpan {

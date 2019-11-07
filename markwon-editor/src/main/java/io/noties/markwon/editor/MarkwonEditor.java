@@ -10,11 +10,6 @@ import java.util.Map;
 
 import io.noties.markwon.Markwon;
 
-// todo: how to reuse existing spanFactories? to obtain a value they require render-props....
-//  maybe.. mock them? plus, spanFactory can return multiple spans
-
-// todo: as we do text-diff, then images, latex and tables won't be handled... they will be treated as punctuation as-whole..
-
 /**
  * @see #builder(Markwon)
  * @see #create(Markwon)
@@ -24,6 +19,9 @@ import io.noties.markwon.Markwon;
  */
 public abstract class MarkwonEditor {
 
+    /**
+     * Represents cache of spans that are used during highlight
+     */
     public interface EditSpanStore {
 
         /**
