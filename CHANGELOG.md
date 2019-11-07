@@ -4,6 +4,9 @@
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
 * `Markwon#configuration` method to expose `MarkwonConfiguration` via public API
 * `HeadingSpan#getLevel` getter
+* Add `SvgPictureMediaDecoder` in `image` module to deal with SVG without dimensions ([#165])
+
+[#165]: https://github.com/noties/Markwon/issues/165
 
 # 4.1.2
 * Do not re-use RenderProps when creating a new visitor (fixes [#171])
