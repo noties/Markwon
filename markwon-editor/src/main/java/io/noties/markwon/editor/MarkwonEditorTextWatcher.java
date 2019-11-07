@@ -17,6 +17,8 @@ import java.util.concurrent.Future;
  *
  * @see MarkwonEditor#process(Editable)
  * @see MarkwonEditor#preRender(Editable, MarkwonEditor.PreRenderResultListener)
+ * @see #withProcess(MarkwonEditor)
+ * @see #withPreRender(MarkwonEditor, ExecutorService, EditText)
  * @since 4.2.0-SNAPSHOT
  */
 public abstract class MarkwonEditorTextWatcher implements TextWatcher {
@@ -54,7 +56,7 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
 
         private boolean selfChange;
 
-        public WithProcess(@NonNull MarkwonEditor editor) {
+        WithProcess(@NonNull MarkwonEditor editor) {
             this.editor = editor;
         }
 
@@ -84,6 +86,8 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
 
         private Future<?> future;
 
+        private boolean selfChange;
+
         WithPreRender(
                 @NonNull MarkwonEditor editor,
                 @NonNull ExecutorService executorService,
@@ -107,6 +111,10 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
         @Override
         public void afterTextChanged(final Editable s) {
 
+            if (selfChange) {
+                return;
+            }
+
             // todo: maybe checking hash is not so performant?
             //   what if we create a atomic reference and use it (with tag applied to editText)?
 
@@ -121,12 +129,17 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
                         @Override
                         public void onPreRenderResult(@NonNull final MarkwonEditor.PreRenderResult result) {
                             if (editText != null) {
-                                final int key = result.resultEditable().toString().hashCode();
+                                final int key = key(result.resultEditable());
                                 editText.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (key == editText.getText().toString().hashCode()) {
-                                            result.dispatchTo(editText.getText());
+                                        if (key == key(editText.getText())) {
+                                            selfChange = true;
+                                            try {
+                                                result.dispatchTo(editText.getText());
+                                            } finally {
+                                                selfChange = false;
+                                            }
                                         }
                                     }
                                 });
@@ -135,6 +148,13 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
                     });
                 }
             });
+        }
+
+        static int key(@NonNull Editable editable) {
+            // toString is important here, as using #hashCode directly
+            // would also check for spans (and some spans can be added/removed). This is why
+            // we are checking for exact match of text
+            return editable.toString().hashCode();
         }
     }
 }

@@ -8,16 +8,38 @@ import androidx.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-class EditSpanHandlerBuilder {
+/**
+ * @since 4.2.0-SNAPSHOT
+ */
+public class EditSpanHandlerBuilder {
 
-    private final Map<Class<?>, MarkwonEditor.EditSpanHandler> map = new HashMap<>(3);
+    public interface EditSpanHandlerTyped<T> {
+        void handle(
+                @NonNull MarkwonEditor.EditSpanStore store,
+                @NonNull Editable editable,
+                @NonNull String input,
+                @NonNull T span,
+                int spanStart,
+                int spanTextLength);
+    }
 
-    <T> void include(@NonNull Class<T> type, @NonNull MarkwonEditor.EditSpanHandler<T> handler) {
+    @NonNull
+    public static EditSpanHandlerBuilder create() {
+        return new EditSpanHandlerBuilder();
+    }
+
+    private final Map<Class<?>, EditSpanHandlerTyped> map = new HashMap<>(3);
+
+    @NonNull
+    public <T> EditSpanHandlerBuilder include(
+            @NonNull Class<T> type,
+            @NonNull EditSpanHandlerTyped<T> handler) {
         map.put(type, handler);
+        return this;
     }
 
     @Nullable
-    MarkwonEditor.EditSpanHandler build() {
+    public MarkwonEditor.EditSpanHandler build() {
         if (map.size() == 0) {
             return null;
         }
@@ -26,15 +48,21 @@ class EditSpanHandlerBuilder {
 
     private static class EditSpanHandlerImpl implements MarkwonEditor.EditSpanHandler {
 
-        private final Map<Class<?>, MarkwonEditor.EditSpanHandler> map;
+        private final Map<Class<?>, EditSpanHandlerTyped> map;
 
-        EditSpanHandlerImpl(@NonNull Map<Class<?>, MarkwonEditor.EditSpanHandler> map) {
+        EditSpanHandlerImpl(@NonNull Map<Class<?>, EditSpanHandlerTyped> map) {
             this.map = map;
         }
 
         @Override
-        public void handle(@NonNull MarkwonEditor.SpanStore store, @NonNull Editable editable, @NonNull String input, @NonNull Object span, int spanStart, int spanTextLength) {
-            final MarkwonEditor.EditSpanHandler handler = map.get(span.getClass());
+        public void handle(
+                @NonNull MarkwonEditor.EditSpanStore store,
+                @NonNull Editable editable,
+                @NonNull String input,
+                @NonNull Object span,
+                int spanStart,
+                int spanTextLength) {
+            final EditSpanHandlerTyped handler = map.get(span.getClass());
             if (handler != null) {
                 //noinspection unchecked
                 handler.handle(store, editable, input, span, spanStart, spanTextLength);

@@ -20,7 +20,7 @@ import io.noties.markwon.editor.diff_match_patch.Diff;
 class MarkwonEditorImpl extends MarkwonEditor {
 
     private final Markwon markwon;
-    private final Map<Class<?>, SpanFactory> spans;
+    private final Map<Class<?>, EditSpanFactory> spans;
     private final Class<?> punctuationSpanType;
 
     @Nullable
@@ -28,7 +28,7 @@ class MarkwonEditorImpl extends MarkwonEditor {
 
     MarkwonEditorImpl(
             @NonNull Markwon markwon,
-            @NonNull Map<Class<?>, SpanFactory> spans,
+            @NonNull Map<Class<?>, EditSpanFactory> spans,
             @NonNull Class<?> punctuationSpanType,
             @Nullable EditSpanHandler editSpanHandler) {
         this.markwon = markwon;
@@ -47,7 +47,7 @@ class MarkwonEditorImpl extends MarkwonEditor {
         final EditSpanHandler editSpanHandler = this.editSpanHandler;
         final boolean hasAdditionalSpans = editSpanHandler != null;
 
-        final SpanStoreImpl store = new SpanStoreImpl(editable, spans);
+        final EditSpanStoreImpl store = new EditSpanStoreImpl(editable, spans);
         try {
 
             final List<Diff> diffs = diff_match_patch.diff_main(input, markdown);
@@ -81,6 +81,9 @@ class MarkwonEditorImpl extends MarkwonEditor {
                                             span,
                                             start,
                                             renderedMarkdown.getSpanEnd(span) - markdownLength);
+                                    // NB, we do not break here in case of SpanFactory
+                                    // returns multiple spans for a markdown node, this way
+                                    // we will handle all of them
                                 }
                             }
                         }
@@ -153,13 +156,13 @@ class MarkwonEditorImpl extends MarkwonEditor {
         return map;
     }
 
-    static class SpanStoreImpl implements SpanStore {
+    static class EditSpanStoreImpl implements EditSpanStore {
 
         private final Spannable spannable;
-        private final Map<Class<?>, SpanFactory> spans;
+        private final Map<Class<?>, EditSpanFactory> spans;
         private final Map<Class<?>, List<Object>> map;
 
-        SpanStoreImpl(@NonNull Spannable spannable, @NonNull Map<Class<?>, SpanFactory> spans) {
+        EditSpanStoreImpl(@NonNull Spannable spannable, @NonNull Map<Class<?>, EditSpanFactory> spans) {
             this.spannable = spannable;
             this.spans = spans;
             this.map = extractSpans(spannable, spans.keySet());
@@ -175,7 +178,7 @@ class MarkwonEditorImpl extends MarkwonEditor {
             if (list != null && list.size() > 0) {
                 span = list.remove(0);
             } else {
-                final SpanFactory spanFactory = spans.get(type);
+                final EditSpanFactory spanFactory = spans.get(type);
                 if (spanFactory == null) {
                     throw new IllegalStateException("Requested type `" + type.getName() + "` was " +
                             "not registered, use Builder#includeEditSpan method to register");

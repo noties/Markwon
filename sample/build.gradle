@@ -34,6 +34,7 @@ android {
 dependencies {
 
     implementation project(':markwon-core')
+    implementation project(':markwon-editor')
     implementation project(':markwon-ext-latex')
     implementation project(':markwon-ext-strikethrough')
     implementation project(':markwon-ext-tables')
