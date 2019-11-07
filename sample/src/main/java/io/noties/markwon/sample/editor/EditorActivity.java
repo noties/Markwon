@@ -272,7 +272,7 @@ public class EditorActivity extends Activity {
                 final String text = editText.getText().subSequence(start, end).toString();
                 int index = text.indexOf('\n');
                 while (index != -1) {
-                    newLines.add(start + index);
+                    newLines.add(start + index + 1);
                     index = text.indexOf('\n', index + 1);
                 }
 
