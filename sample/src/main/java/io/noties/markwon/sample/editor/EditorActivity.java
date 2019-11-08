@@ -35,6 +35,7 @@ import io.noties.markwon.editor.MarkwonEditor;
 import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 import io.noties.markwon.editor.MarkwonEditorUtils;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.sample.R;
 
 public class EditorActivity extends Activity {
@@ -154,7 +155,7 @@ public class EditorActivity extends Activity {
 
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(StrikethroughPlugin.create())
-//                .usePlugin(LinkifyPlugin.create())
+                .usePlugin(LinkifyPlugin.create())
                 .build();
 
         final MarkwonTheme theme = markwon.configuration().theme();

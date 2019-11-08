@@ -58,15 +58,12 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         });
     }
 
-    // todo: thread safety (builder is reused)
     private static class LinkifyTextAddedListener implements CorePlugin.OnTextAddedListener {
 
         private final int mask;
-        private final SpannableStringBuilder builder;
 
         LinkifyTextAddedListener(int mask) {
             this.mask = mask;
-            this.builder = new SpannableStringBuilder();
         }
 
         @Override
@@ -79,12 +76,9 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
                 return;
             }
 
-            // clear previous state
-            builder.clear();
-            builder.clearSpans();
-
-            // append text to process
-            builder.append(text);
+            // @since 4.2.0-SNAPSHOT we no longer re-use builder (thread safety achieved for
+            //  render calls from different threads and ... better performance)
+            final SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
             if (Linkify.addLinks(builder, mask)) {
                 // target URL span specifically

@@ -7,6 +7,7 @@
 * Add `SvgPictureMediaDecoder` in `image` module to deal with SVG without dimensions ([#165])
 * `LinkSpan#getLink` method
 * `LinkifyPlugin` applies link span that is configured by `Markwon` (obtain via span factory)
+* `LinkifyPlugin` is thread-safe
 
 [#165]: https://github.com/noties/Markwon/issues/165
 
