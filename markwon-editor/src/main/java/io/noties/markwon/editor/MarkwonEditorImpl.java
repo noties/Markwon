@@ -41,7 +41,12 @@ class MarkwonEditorImpl extends MarkwonEditor {
     public void process(@NonNull Editable editable) {
 
         final String input = editable.toString();
-        final Spanned renderedMarkdown = markwon.toMarkdown(input);
+
+        // NB, we cast to Spannable here without prior checks
+        //  if by some occasion Markwon stops returning here a Spannable our tests will catch that
+        //  (we need Spannable in order to remove processed spans, so they do not appear multiple times)
+        final Spannable renderedMarkdown = (Spannable) markwon.toMarkdown(input);
+
         final String markdown = renderedMarkdown.toString();
 
         final EditSpanHandler editSpanHandler = this.editSpanHandler;
@@ -71,9 +76,14 @@ class MarkwonEditorImpl extends MarkwonEditor {
                         );
 
                         if (hasAdditionalSpans) {
+                            // obtain spans for a single character of renderedMarkdown
+                            //  editable here should return all spans that are contained in specified
+                            //  region. Later we match if span starts at current position
+                            //  and notify additional span handler about it
                             final Object[] spans = renderedMarkdown.getSpans(markdownLength, markdownLength + 1, Object.class);
                             for (Object span : spans) {
                                 if (markdownLength == renderedMarkdown.getSpanStart(span)) {
+
                                     editSpanHandler.handle(
                                             store,
                                             editable,
@@ -84,19 +94,53 @@ class MarkwonEditorImpl extends MarkwonEditor {
                                     // NB, we do not break here in case of SpanFactory
                                     // returns multiple spans for a markdown node, this way
                                     // we will handle all of them
+
+                                    // It is important to remove span after we have processed it
+                                    //  as we process them in 2 places: here and in EQUAL
+                                    renderedMarkdown.removeSpan(span);
                                 }
                             }
                         }
                         break;
 
                     case INSERT:
+                        // no special handling here, but still we must advance the markdownLength
                         markdownLength += diff.text.length();
                         break;
 
                     case EQUAL:
                         final int length = diff.text.length();
+                        final int inputStart = inputLength;
+                        final int markdownStart = markdownLength;
                         inputLength += length;
                         markdownLength += length;
+
+                        // it is possible that there are spans for the text that is the same
+                        //  for example, if some links were _autolinked_ (text is the same,
+                        //  but there is an additional URLSpan)
+                        if (hasAdditionalSpans) {
+                            final Object[] spans = renderedMarkdown.getSpans(markdownStart, markdownLength, Object.class);
+                            for (Object span : spans) {
+                                final int spanStart = renderedMarkdown.getSpanStart(span);
+                                if (spanStart >= markdownStart) {
+                                    final int end = renderedMarkdown.getSpanEnd(span);
+                                    if (end <= markdownLength) {
+
+                                        editSpanHandler.handle(
+                                                store,
+                                                editable,
+                                                input,
+                                                span,
+                                                // shift span to input position (can be different from the text itself)
+                                                inputStart + (spanStart - markdownStart),
+                                                end - spanStart
+                                        );
+
+                                        renderedMarkdown.removeSpan(span);
+                                    }
+                                }
+                            }
+                        }
                         break;
 
                     default:

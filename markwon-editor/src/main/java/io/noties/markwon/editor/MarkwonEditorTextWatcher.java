@@ -81,6 +81,10 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
         private final MarkwonEditor editor;
         private final ExecutorService executorService;
 
+        // As we operate on a single thread (main) we are fine with a regular int
+        //  for marking current _generation_
+        private int generator;
+
         @Nullable
         private EditText editText;
 
@@ -115,8 +119,8 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
                 return;
             }
 
-            // todo: maybe checking hash is not so performant?
-            //   what if we create a atomic reference and use it (with tag applied to editText)?
+            // both will be the same here (generator incremented and key assigned incremented value)
+            final int key = ++this.generator;
 
             if (future != null) {
                 future.cancel(true);
@@ -129,11 +133,10 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
                         @Override
                         public void onPreRenderResult(@NonNull final MarkwonEditor.PreRenderResult result) {
                             if (editText != null) {
-                                final int key = key(result.resultEditable());
                                 editText.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (key == key(editText.getText())) {
+                                        if (key == generator) {
                                             selfChange = true;
                                             try {
                                                 result.dispatchTo(editText.getText());
@@ -148,13 +151,6 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
                     });
                 }
             });
-        }
-
-        static int key(@NonNull Editable editable) {
-            // toString is important here, as using #hashCode directly
-            // would also check for spans (and some spans can be added/removed). This is why
-            // we are checking for exact match of text
-            return editable.toString().hashCode();
         }
     }
 }

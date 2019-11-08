@@ -5,6 +5,8 @@
 * `Markwon#configuration` method to expose `MarkwonConfiguration` via public API
 * `HeadingSpan#getLevel` getter
 * Add `SvgPictureMediaDecoder` in `image` module to deal with SVG without dimensions ([#165])
+* `LinkSpan#getLink` method
+* `LinkifyPlugin` applies link span that is configured by `Markwon` (obtain via span factory)
 
 [#165]: https://github.com/noties/Markwon/issues/165
 
