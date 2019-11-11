@@ -9,10 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.editor.diff_match_patch.Diff;
@@ -20,21 +17,21 @@ import io.noties.markwon.editor.diff_match_patch.Diff;
 class MarkwonEditorImpl extends MarkwonEditor {
 
     private final Markwon markwon;
-    private final Map<Class<?>, EditSpanFactory> spans;
+    private final PersistedSpans.Provider persistedSpansProvider;
     private final Class<?> punctuationSpanType;
 
     @Nullable
-    private final EditSpanHandler editSpanHandler;
+    private final SpansHandler spansHandler;
 
     MarkwonEditorImpl(
             @NonNull Markwon markwon,
-            @NonNull Map<Class<?>, EditSpanFactory> spans,
+            @NonNull PersistedSpans.Provider persistedSpansProvider,
             @NonNull Class<?> punctuationSpanType,
-            @Nullable EditSpanHandler editSpanHandler) {
+            @Nullable SpansHandler spansHandler) {
         this.markwon = markwon;
-        this.spans = spans;
+        this.persistedSpansProvider = persistedSpansProvider;
         this.punctuationSpanType = punctuationSpanType;
-        this.editSpanHandler = editSpanHandler;
+        this.spansHandler = spansHandler;
     }
 
     @Override
@@ -49,10 +46,10 @@ class MarkwonEditorImpl extends MarkwonEditor {
 
         final String markdown = renderedMarkdown.toString();
 
-        final EditSpanHandler editSpanHandler = this.editSpanHandler;
-        final boolean hasAdditionalSpans = editSpanHandler != null;
+        final SpansHandler spansHandler = this.spansHandler;
+        final boolean hasAdditionalSpans = spansHandler != null;
 
-        final EditSpanStoreImpl store = new EditSpanStoreImpl(editable, spans);
+        final PersistedSpans persistedSpans = persistedSpansProvider.provide(editable);
         try {
 
             final List<Diff> diffs = diff_match_patch.diff_main(input, markdown);
@@ -68,8 +65,9 @@ class MarkwonEditorImpl extends MarkwonEditor {
 
                         final int start = inputLength;
                         inputLength += diff.text.length();
+
                         editable.setSpan(
-                                store.get(punctuationSpanType),
+                                persistedSpans.get(punctuationSpanType),
                                 start,
                                 inputLength,
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -84,8 +82,8 @@ class MarkwonEditorImpl extends MarkwonEditor {
                             for (Object span : spans) {
                                 if (markdownLength == renderedMarkdown.getSpanStart(span)) {
 
-                                    editSpanHandler.handle(
-                                            store,
+                                    spansHandler.handle(
+                                            persistedSpans,
                                             editable,
                                             input,
                                             span,
@@ -126,8 +124,8 @@ class MarkwonEditorImpl extends MarkwonEditor {
                                     final int end = renderedMarkdown.getSpanEnd(span);
                                     if (end <= markdownLength) {
 
-                                        editSpanHandler.handle(
-                                                store,
+                                        spansHandler.handle(
+                                                persistedSpans,
                                                 editable,
                                                 input,
                                                 span,
@@ -149,7 +147,7 @@ class MarkwonEditorImpl extends MarkwonEditor {
             }
 
         } finally {
-            store.removeUnused();
+            persistedSpans.removeUnused();
         }
     }
 
@@ -175,75 +173,6 @@ class MarkwonEditorImpl extends MarkwonEditor {
                 }
             }
         });
-    }
-
-    @NonNull
-    static Map<Class<?>, List<Object>> extractSpans(@NonNull Spanned spanned, @NonNull Collection<Class<?>> types) {
-
-        final Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
-        final Map<Class<?>, List<Object>> map = new HashMap<>(3);
-
-        Class<?> type;
-
-        for (Object span : spans) {
-            type = span.getClass();
-            if (types.contains(type)) {
-                List<Object> list = map.get(type);
-                if (list == null) {
-                    list = new ArrayList<>(3);
-                    map.put(type, list);
-                }
-                list.add(span);
-            }
-        }
-
-        return map;
-    }
-
-    static class EditSpanStoreImpl implements EditSpanStore {
-
-        private final Spannable spannable;
-        private final Map<Class<?>, EditSpanFactory> spans;
-        private final Map<Class<?>, List<Object>> map;
-
-        EditSpanStoreImpl(@NonNull Spannable spannable, @NonNull Map<Class<?>, EditSpanFactory> spans) {
-            this.spannable = spannable;
-            this.spans = spans;
-            this.map = extractSpans(spannable, spans.keySet());
-        }
-
-        @NonNull
-        @Override
-        public <T> T get(Class<T> type) {
-
-            final Object span;
-
-            final List<Object> list = map.get(type);
-            if (list != null && list.size() > 0) {
-                span = list.remove(0);
-            } else {
-                final EditSpanFactory spanFactory = spans.get(type);
-                if (spanFactory == null) {
-                    throw new IllegalStateException("Requested type `" + type.getName() + "` was " +
-                            "not registered, use Builder#includeEditSpan method to register");
-                }
-                span = spanFactory.create();
-            }
-
-            //noinspection unchecked
-            return (T) span;
-        }
-
-        void removeUnused() {
-            for (List<Object> spans : map.values()) {
-                if (spans != null
-                        && spans.size() > 0) {
-                    for (Object span : spans) {
-                        spannable.removeSpan(span);
-                    }
-                }
-            }
-        }
     }
 
     private static class Span {

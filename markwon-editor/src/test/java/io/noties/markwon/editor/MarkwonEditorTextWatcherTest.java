@@ -16,8 +16,11 @@ import java.util.concurrent.ExecutorService;
 import io.noties.markwon.editor.MarkwonEditor.PreRenderResult;
 import io.noties.markwon.editor.MarkwonEditor.PreRenderResultListener;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -88,7 +91,49 @@ public class MarkwonEditorTextWatcherTest {
 
         listener.onPreRenderResult(result);
 
-        verify(result, times(1)).resultEditable();
+        // if we would check for hashCode then this method would've been invoked
+//        verify(result, times(1)).resultEditable();
         verify(result, times(1)).dispatchTo(eq(editable));
+    }
+
+    @Test
+    public void pre_render_posts_exception_to_main_thread() {
+
+        final RuntimeException e = new RuntimeException();
+
+        final MarkwonEditor editor = mock(MarkwonEditor.class);
+        final ExecutorService service = mock(ExecutorService.class);
+        final EditText editText = mock(EditText.class, RETURNS_MOCKS);
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                throw e;
+            }
+        }).when(editor).preRender(any(Editable.class), any(PreRenderResultListener.class));
+
+        when(service.submit(any(Runnable.class))).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                ((Runnable) invocation.getArgument(0)).run();
+                return null;
+            }
+        });
+
+        final ArgumentCaptor<Runnable> captor = ArgumentCaptor.forClass(Runnable.class);
+
+        final MarkwonEditorTextWatcher textWatcher =
+                MarkwonEditorTextWatcher.withPreRender(editor, service, editText);
+
+        textWatcher.afterTextChanged(mock(Editable.class));
+
+        verify(editText, times(1)).post(captor.capture());
+
+        try {
+            captor.getValue().run();
+            fail();
+        } catch (Throwable t) {
+            assertEquals(e, t.getCause());
+        }
     }
 }

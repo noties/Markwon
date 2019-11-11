@@ -3,7 +3,6 @@ package io.noties.markwon.editor;
 import android.text.Editable;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,44 +19,8 @@ import io.noties.markwon.Markwon;
 public abstract class MarkwonEditor {
 
     /**
-     * Represents cache of spans that are used during highlight
+     * @see #preRender(Editable, PreRenderResultListener)
      */
-    public interface EditSpanStore {
-
-        /**
-         * If a span of specified type was not registered with {@link Builder#includeEditSpan(Class, EditSpanFactory)}
-         * then an exception is raised.
-         *
-         * @param type of a span to obtain
-         * @return cached or newly created span
-         */
-        @NonNull
-        <T> T get(Class<T> type);
-    }
-
-    public interface EditSpanFactory<T> {
-        @NonNull
-        T create();
-    }
-
-    /**
-     * Interface to handle _original_ span that is present in rendered markdown. Can be useful
-     * to add specific spans for EditText (for example, make text bold to better indicate
-     * strong emphasis used in markdown input).
-     *
-     * @see Builder#withEditSpanHandler(EditSpanHandler)
-     * @see EditSpanHandlerBuilder
-     */
-    public interface EditSpanHandler {
-        void handle(
-                @NonNull EditSpanStore store,
-                @NonNull Editable editable,
-                @NonNull String input,
-                @NonNull Object span,
-                int spanStart,
-                int spanTextLength);
-    }
-
     public interface PreRenderResult {
 
         /**
@@ -116,7 +79,7 @@ public abstract class MarkwonEditor {
      * thread.
      * <p>
      * Please note that currently only `setSpan` and `removeSpan` actions will be recorded (and thus dispatched).
-     * Make sure you use only these methods in your {@link EditSpanHandler}, or implement the required
+     * Make sure you use only these methods in your {@link EditHandler}, or implement the required
      * functionality some other way.
      *
      * @param editable          to process and pre-render
@@ -129,14 +92,21 @@ public abstract class MarkwonEditor {
     public static class Builder {
 
         private final Markwon markwon;
+        private final PersistedSpans.Provider persistedSpansProvider = PersistedSpans.provider();
+        private final Map<Class<?>, EditHandler> editHandlers = new HashMap<>(0);
 
         private Class<?> punctuationSpanType;
-        private Map<Class<?>, EditSpanFactory> spans = new HashMap<>(3);
-        private EditSpanHandler editSpanHandler;
 
         Builder(@NonNull Markwon markwon) {
             this.markwon = markwon;
         }
+
+        @NonNull
+        public <T> Builder useEditHandler(@NonNull EditHandler<T> handler) {
+            this.editHandlers.put(handler.markdownSpanType(), handler);
+            return this;
+        }
+
 
         /**
          * Specify which punctuation span will be used.
@@ -145,43 +115,9 @@ public abstract class MarkwonEditor {
          * @param factory to create a new instance of the span
          */
         @NonNull
-        public <T> Builder withPunctuationSpan(@NonNull Class<T> type, @NonNull EditSpanFactory<T> factory) {
+        public <T> Builder punctuationSpan(@NonNull Class<T> type, @NonNull PersistedSpans.SpanFactory<T> factory) {
             this.punctuationSpanType = type;
-            this.spans.put(type, factory);
-            return this;
-        }
-
-        /**
-         * Include additional span handling that is used in highlighting. It is important to understand
-         * that it is not the span that is used by Markwon, but instead your own span that you
-         * apply in a custom {@link EditSpanHandler} specified by {@link #withEditSpanHandler(EditSpanHandler)}.
-         * You can apply a Markwon bundled span (or any other) but it must be still explicitly
-         * included by this method.
-         * <p>
-         * The span will be exposed via {@link EditSpanStore} in your custom {@link EditSpanHandler}.
-         * If you do not use a custom {@link EditSpanHandler} you do not need to specify any span here.
-         *
-         * @param type    of a span to include
-         * @param factory to create a new instance of a span if one is missing from processed Editable
-         */
-        @NonNull
-        public <T> Builder includeEditSpan(
-                @NonNull Class<T> type,
-                @NonNull EditSpanFactory<T> factory) {
-            this.spans.put(type, factory);
-            return this;
-        }
-
-        /**
-         * Additional handling of markdown spans.
-         *
-         * @param editSpanHandler handler for additional highlight spans
-         * @see EditSpanHandler
-         * @see EditSpanHandlerBuilder
-         */
-        @NonNull
-        public Builder withEditSpanHandler(@Nullable EditSpanHandler editSpanHandler) {
-            this.editSpanHandler = editSpanHandler;
+            this.persistedSpansProvider.persistSpan(type, factory);
             return this;
         }
 
@@ -190,7 +126,7 @@ public abstract class MarkwonEditor {
 
             Class<?> punctuationSpanType = this.punctuationSpanType;
             if (punctuationSpanType == null) {
-                withPunctuationSpan(PunctuationSpan.class, new EditSpanFactory<PunctuationSpan>() {
+                punctuationSpan(PunctuationSpan.class, new PersistedSpans.SpanFactory<PunctuationSpan>() {
                     @NonNull
                     @Override
                     public PunctuationSpan create() {
@@ -200,17 +136,54 @@ public abstract class MarkwonEditor {
                 punctuationSpanType = this.punctuationSpanType;
             }
 
-            // if we have no editSpanHandler, but spans are registered -> throw an error
-            if (spans.size() > 1 && editSpanHandler == null) {
-                throw new IllegalStateException("There is no need to include edit spans " +
-                        "when you do not use custom EditSpanHandler");
+            for (EditHandler handler : editHandlers.values()) {
+                handler.init(markwon);
+                handler.configurePersistedSpans(persistedSpansProvider);
             }
+
+            final SpansHandler spansHandler = editHandlers.size() == 0
+                    ? null
+                    : new SpansHandlerImpl(editHandlers);
 
             return new MarkwonEditorImpl(
                     markwon,
-                    spans,
+                    persistedSpansProvider,
                     punctuationSpanType,
-                    editSpanHandler);
+                    spansHandler);
+        }
+    }
+
+    interface SpansHandler {
+        void handle(
+                @NonNull PersistedSpans spans,
+                @NonNull Editable editable,
+                @NonNull String input,
+                @NonNull Object span,
+                int spanStart,
+                int spanTextLength);
+    }
+
+    static class SpansHandlerImpl implements SpansHandler {
+
+        private final Map<Class<?>, EditHandler> spanHandlers;
+
+        SpansHandlerImpl(@NonNull Map<Class<?>, EditHandler> spanHandlers) {
+            this.spanHandlers = spanHandlers;
+        }
+
+        @Override
+        public void handle(
+                @NonNull PersistedSpans spans,
+                @NonNull Editable editable,
+                @NonNull String input,
+                @NonNull Object span,
+                int spanStart,
+                int spanTextLength) {
+            final EditHandler handler = spanHandlers.get(span.getClass());
+            if (handler != null) {
+                //noinspection unchecked
+                handler.handleMarkdownSpan(spans, editable, input, span, spanStart, spanTextLength);
+            }
         }
     }
 }

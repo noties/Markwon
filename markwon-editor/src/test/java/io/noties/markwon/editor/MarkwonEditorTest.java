@@ -27,19 +27,4 @@ public class MarkwonEditorTest {
             fail(t.getMessage());
         }
     }
-
-    @Test
-    public void builder_with_edit_spans_but_no_handler() {
-        // if edit spans are specified, but no edit span handler is present -> exception is thrown
-
-        try {
-            //noinspection unchecked
-            new Builder(mock(Markwon.class))
-                    .includeEditSpan(Object.class, mock(MarkwonEditor.EditSpanFactory.class))
-                    .build();
-            fail();
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("There is no need to include edit spans "));
-        }
-    }
 }

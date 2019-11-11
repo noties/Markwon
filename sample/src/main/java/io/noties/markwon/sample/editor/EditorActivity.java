@@ -7,7 +7,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.StrikethroughSpan;
@@ -19,21 +18,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.commonmark.parser.Parser;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.core.spans.BlockQuoteSpan;
-import io.noties.markwon.core.spans.CodeSpan;
 import io.noties.markwon.core.spans.EmphasisSpan;
-import io.noties.markwon.core.spans.LinkSpan;
 import io.noties.markwon.core.spans.StrongEmphasisSpan;
-import io.noties.markwon.editor.EditSpanHandlerBuilder;
+import io.noties.markwon.editor.AbstractEditHandler;
 import io.noties.markwon.editor.MarkwonEditor;
 import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 import io.noties.markwon.editor.MarkwonEditorUtils;
+import io.noties.markwon.editor.PersistedSpans;
+import io.noties.markwon.editor.handler.EmphasisEditHandler;
+import io.noties.markwon.editor.handler.StrongEmphasisEditHandler;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.sample.R;
@@ -92,7 +93,7 @@ public class EditorActivity extends Activity {
         // Use own punctuation span
 
         final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-                .withPunctuationSpan(CustomPunctuationSpan.class, CustomPunctuationSpan::new)
+                .punctuationSpan(CustomPunctuationSpan.class, CustomPunctuationSpan::new)
                 .build();
 
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
@@ -102,31 +103,45 @@ public class EditorActivity extends Activity {
         // An additional span is used to highlight strong-emphasis
 
         final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-                // This is required for edit-span cache
-                // We could use Markwon `StrongEmphasisSpan` here, but I use a different
-                //  one to indicate that those are completely unrelated spans and must be
-                //  treated differently.
-                .includeEditSpan(Bold.class, Bold::new)
-                .withEditSpanHandler(new MarkwonEditor.EditSpanHandler() {
+                .useEditHandler(new AbstractEditHandler<StrongEmphasisSpan>() {
                     @Override
-                    public void handle(
-                            @NonNull MarkwonEditor.EditSpanStore store,
+                    public void configurePersistedSpans(@NonNull PersistedSpans.Builder builder) {
+                        // Here we define which span is _persisted_ in EditText, it is not removed
+                        //  from EditText between text changes, but instead - reused (by changing
+                        //  position). Consider it as a cache for spans. We could use `StrongEmphasisSpan`
+                        //  here also, but I chose Bold to indicate that this span is not the same
+                        //  as in off-screen rendered markdown
+                        builder.persistSpan(Bold.class, Bold::new);
+                    }
+
+                    @Override
+                    public void handleMarkdownSpan(
+                            @NonNull PersistedSpans persistedSpans,
                             @NonNull Editable editable,
                             @NonNull String input,
-                            @NonNull Object span,
+                            @NonNull StrongEmphasisSpan span,
                             int spanStart,
                             int spanTextLength) {
-                        if (span instanceof StrongEmphasisSpan) {
+                        // Unfortunately we cannot hardcode delimiters length here (aka spanTextLength + 4)
+                        //  because multiple inline markdown nodes can refer to the same text.
+                        //  For example, `**_~~hey~~_**` - we will receive `**_~~` in this method,
+                        //  and thus will have to manually find actual position in raw user input
+                        final MarkwonEditorUtils.Match match =
+                                MarkwonEditorUtils.findDelimited(input, spanStart, "**", "__");
+                        if (match != null) {
                             editable.setSpan(
-                                    // `includeEditSpan(Bold.class, Bold::new)` ensured that we have
-                                    //      a span here to use (either reuse existing or create a new one)
-                                    store.get(Bold.class),
-                                    spanStart,
-                                    // we know that strong emphasis is delimited with 2 characters on both sides
-                                    spanStart + spanTextLength + 4,
+                                    persistedSpans.get(Bold.class),
+                                    match.start(),
+                                    match.end(),
                                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                             );
                         }
+                    }
+
+                    @NonNull
+                    @Override
+                    public Class<StrongEmphasisSpan> markdownSpanType() {
+                        return StrongEmphasisSpan.class;
                     }
                 })
                 .build();
@@ -156,119 +171,29 @@ public class EditorActivity extends Activity {
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureParser(@NonNull Parser.Builder builder) {
+                        // disable all commonmark-java blocks, only inlines will be parsed
+//                        builder.enabledBlockTypes(Collections.emptySet());
+                    }
+                })
                 .build();
 
-        final MarkwonTheme theme = markwon.configuration().theme();
-
-        final EditLinkSpan.OnClick onClick = (widget, link) -> markwon.configuration().linkResolver().resolve(widget, link);
+        final LinkEditHandler.OnClick onClick = (widget, link) -> markwon.configuration().linkResolver().resolve(widget, link);
 
         final MarkwonEditor editor = MarkwonEditor.builder(markwon)
-                .includeEditSpan(StrongEmphasisSpan.class, StrongEmphasisSpan::new)
-                .includeEditSpan(EmphasisSpan.class, EmphasisSpan::new)
-                .includeEditSpan(StrikethroughSpan.class, StrikethroughSpan::new)
-                .includeEditSpan(CodeSpan.class, () -> new CodeSpan(theme))
-                .includeEditSpan(BlockQuoteSpan.class, () -> new BlockQuoteSpan(theme))
-                .includeEditSpan(EditLinkSpan.class, () -> new EditLinkSpan(onClick))
-                .withEditSpanHandler(createEditSpanHandler())
+                .useEditHandler(new EmphasisEditHandler())
+                .useEditHandler(new StrongEmphasisEditHandler())
+                .useEditHandler(new StrikethroughEditHandler())
+                .useEditHandler(new CodeEditHandler())
+                .useEditHandler(new BlockQuoteEditHandler())
+                .useEditHandler(new LinkEditHandler(onClick))
                 .build();
 
 //        editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
                 editor, Executors.newSingleThreadExecutor(), editText));
-    }
-
-    private static MarkwonEditor.EditSpanHandler createEditSpanHandler() {
-        // Please note that here we specify spans THAT ARE USED IN MARKDOWN
-        return EditSpanHandlerBuilder.create()
-                .handleMarkdownSpan(StrongEmphasisSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
-                    // inline spans can delimit other inline spans,
-                    //  for example: `**_~~hey~~_**`, this is why we must additionally find delimiter used
-                    //  and its actual start/end positions
-                    final MarkwonEditorUtils.Match match =
-                            MarkwonEditorUtils.findDelimited(input, spanStart, "**", "__");
-                    if (match != null) {
-                        editable.setSpan(
-                                store.get(StrongEmphasisSpan.class),
-                                match.start(),
-                                match.end(),
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        );
-                    }
-                })
-                .handleMarkdownSpan(EmphasisSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
-                    final MarkwonEditorUtils.Match match =
-                            MarkwonEditorUtils.findDelimited(input, spanStart, "*", "_");
-                    if (match != null) {
-                        editable.setSpan(
-                                store.get(EmphasisSpan.class),
-                                match.start(),
-                                match.end(),
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        );
-                    }
-                })
-                .handleMarkdownSpan(StrikethroughSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
-                    final MarkwonEditorUtils.Match match =
-                            MarkwonEditorUtils.findDelimited(input, spanStart, "~~");
-                    if (match != null) {
-                        editable.setSpan(
-                                store.get(StrikethroughSpan.class),
-                                match.start(),
-                                match.end(),
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        );
-                    }
-                })
-                .handleMarkdownSpan(CodeSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
-                    // we do not add offset here because markwon (by default) adds spaces
-                    // around inline code
-                    final MarkwonEditorUtils.Match match =
-                            MarkwonEditorUtils.findDelimited(input, spanStart, "`");
-                    if (match != null) {
-                        editable.setSpan(
-                                store.get(CodeSpan.class),
-                                match.start(),
-                                match.end(),
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        );
-                    }
-                })
-                .handleMarkdownSpan(BlockQuoteSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
-                    // todo: here we should actually find a proper ending of a block quote...
-                    editable.setSpan(
-                            store.get(BlockQuoteSpan.class),
-                            spanStart,
-                            spanStart + spanTextLength,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    );
-                })
-                .handleMarkdownSpan(LinkSpan.class, (store, editable, input, span, spanStart, spanTextLength) -> {
-
-                    final EditLinkSpan editLinkSpan = store.get(EditLinkSpan.class);
-                    editLinkSpan.link = span.getLink();
-
-                    final int s;
-                    final int e;
-
-                    // markdown link vs. autolink
-                    if ('[' == input.charAt(spanStart)) {
-                        s = spanStart + 1;
-                        e = spanStart + 1 + spanTextLength;
-                    } else {
-                        s = spanStart;
-                        e = spanStart + spanTextLength;
-                    }
-
-                    editable.setSpan(
-                            editLinkSpan,
-                            // add underline only for link text
-                            s,
-                            e,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    );
-                })
-                // returns nullable type
-                .build();
     }
 
     private void initBottomBar() {
@@ -380,28 +305,6 @@ public class EditorActivity extends Activity {
 
         private void update(@NonNull TextPaint paint) {
             paint.setFakeBoldText(true);
-        }
-    }
-
-    private static class EditLinkSpan extends ClickableSpan {
-
-        interface OnClick {
-            void onClick(@NonNull View widget, @NonNull String link);
-        }
-
-        private final OnClick onClick;
-
-        String link;
-
-        EditLinkSpan(@NonNull OnClick onClick) {
-            this.onClick = onClick;
-        }
-
-        @Override
-        public void onClick(@NonNull View widget) {
-            if (link != null) {
-                onClick.onClick(widget, link);
-            }
         }
     }
 }

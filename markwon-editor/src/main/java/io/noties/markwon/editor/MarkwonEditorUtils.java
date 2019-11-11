@@ -1,12 +1,43 @@
 package io.noties.markwon.editor;
 
+import android.text.Spanned;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @since 4.2.0-SNAPSHOT
  */
 public abstract class MarkwonEditorUtils {
+
+    @NonNull
+    public static Map<Class<?>, List<Object>> extractSpans(@NonNull Spanned spanned, @NonNull Collection<Class<?>> types) {
+
+        final Object[] spans = spanned.getSpans(0, spanned.length(), Object.class);
+        final Map<Class<?>, List<Object>> map = new HashMap<>(3);
+
+        Class<?> type;
+
+        for (Object span : spans) {
+            type = span.getClass();
+            if (types.contains(type)) {
+                List<Object> list = map.get(type);
+                if (list == null) {
+                    list = new ArrayList<>(3);
+                    map.put(type, list);
+                }
+                list.add(span);
+            }
+        }
+
+        return map;
+    }
 
     public interface Match {
 

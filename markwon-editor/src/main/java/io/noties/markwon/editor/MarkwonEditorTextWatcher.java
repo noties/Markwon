@@ -129,26 +129,43 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
             future = executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    editor.preRender(s, new MarkwonEditor.PreRenderResultListener() {
-                        @Override
-                        public void onPreRenderResult(@NonNull final MarkwonEditor.PreRenderResult result) {
-                            if (editText != null) {
-                                editText.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (key == generator) {
-                                            selfChange = true;
-                                            try {
-                                                result.dispatchTo(editText.getText());
-                                            } finally {
-                                                selfChange = false;
+                    try {
+                        editor.preRender(s, new MarkwonEditor.PreRenderResultListener() {
+                            @Override
+                            public void onPreRenderResult(@NonNull final MarkwonEditor.PreRenderResult result) {
+                                final EditText et = editText;
+                                if (et != null) {
+                                    et.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (key == generator) {
+                                                final EditText et = editText;
+                                                if (et != null) {
+                                                    selfChange = true;
+                                                    try {
+                                                        result.dispatchTo(editText.getText());
+                                                    } finally {
+                                                        selfChange = false;
+                                                    }
+                                                }
                                             }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
+                        });
+                    } catch (final Throwable t) {
+                        final EditText et = editText;
+                        if (et != null) {
+                            // propagate exception to main thread
+                            et.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    throw new RuntimeException(t);
+                                }
+                            });
                         }
-                    });
+                    }
                 }
             });
         }
