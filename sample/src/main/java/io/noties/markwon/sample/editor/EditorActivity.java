@@ -102,49 +102,52 @@ public class EditorActivity extends Activity {
     private void additional_edit_span() {
         // An additional span is used to highlight strong-emphasis
 
-        final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-                .useEditHandler(new AbstractEditHandler<StrongEmphasisSpan>() {
-                    @Override
-                    public void configurePersistedSpans(@NonNull PersistedSpans.Builder builder) {
-                        // Here we define which span is _persisted_ in EditText, it is not removed
-                        //  from EditText between text changes, but instead - reused (by changing
-                        //  position). Consider it as a cache for spans. We could use `StrongEmphasisSpan`
-                        //  here also, but I chose Bold to indicate that this span is not the same
-                        //  as in off-screen rendered markdown
-                        builder.persistSpan(Bold.class, Bold::new);
-                    }
+final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
+        .useEditHandler(new AbstractEditHandler<StrongEmphasisSpan>() {
+            @Override
+            public void configurePersistedSpans(@NonNull PersistedSpans.Builder builder) {
+                // Here we define which span is _persisted_ in EditText, it is not removed
+                //  from EditText between text changes, but instead - reused (by changing
+                //  position). Consider it as a cache for spans. We could use `StrongEmphasisSpan`
+                //  here also, but I chose Bold to indicate that this span is not the same
+                //  as in off-screen rendered markdown
+                builder.persistSpan(Bold.class, Bold::new);
+            }
 
-                    @Override
-                    public void handleMarkdownSpan(
-                            @NonNull PersistedSpans persistedSpans,
-                            @NonNull Editable editable,
-                            @NonNull String input,
-                            @NonNull StrongEmphasisSpan span,
-                            int spanStart,
-                            int spanTextLength) {
-                        // Unfortunately we cannot hardcode delimiters length here (aka spanTextLength + 4)
-                        //  because multiple inline markdown nodes can refer to the same text.
-                        //  For example, `**_~~hey~~_**` - we will receive `**_~~` in this method,
-                        //  and thus will have to manually find actual position in raw user input
-                        final MarkwonEditorUtils.Match match =
-                                MarkwonEditorUtils.findDelimited(input, spanStart, "**", "__");
-                        if (match != null) {
-                            editable.setSpan(
-                                    persistedSpans.get(Bold.class),
-                                    match.start(),
-                                    match.end(),
-                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                            );
-                        }
-                    }
+            @Override
+            public void handleMarkdownSpan(
+                    @NonNull PersistedSpans persistedSpans,
+                    @NonNull Editable editable,
+                    @NonNull String input,
+                    @NonNull StrongEmphasisSpan span,
+                    int spanStart,
+                    int spanTextLength) {
+                // Unfortunately we cannot hardcode delimiters length here (aka spanTextLength + 4)
+                //  because multiple inline markdown nodes can refer to the same text.
+                //  For example, `**_~~hey~~_**` - we will receive `**_~~` in this method,
+                //  and thus will have to manually find actual position in raw user input
+                final MarkwonEditorUtils.Match match =
+                        MarkwonEditorUtils.findDelimited(input, spanStart, "**", "__");
+                if (match != null) {
+                    editable.setSpan(
+                            // we handle StrongEmphasisSpan and represent it with Bold in EditText
+                            //  we still could use StrongEmphasisSpan, but it must be accessed
+                            //  via persistedSpans
+                            persistedSpans.get(Bold.class),
+                            match.start(),
+                            match.end(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    );
+                }
+            }
 
-                    @NonNull
-                    @Override
-                    public Class<StrongEmphasisSpan> markdownSpanType() {
-                        return StrongEmphasisSpan.class;
-                    }
-                })
-                .build();
+            @NonNull
+            @Override
+            public Class<StrongEmphasisSpan> markdownSpanType() {
+                return StrongEmphasisSpan.class;
+            }
+        })
+        .build();
 
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }

@@ -79,11 +79,11 @@ in final result as text and thus cannot be _diffed_.
 ## Custom punctuation span
 
 By default `MarkwonEditor` uses lighter text color of widget to customize punctuation.
-If you wish to use a different span you can use `withPunctuationSpan` configuration step:
+If you wish to use a different span you can use `punctuationSpan` configuration step:
 
 ```java
 final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-        .withPunctuationSpan(CustomPunctuationSpan.class, CustomPunctuationSpan::new)
+        .punctuationSpan(CustomPunctuationSpan.class, CustomPunctuationSpan::new)
         .build();
 ```
 
@@ -98,35 +98,52 @@ public class CustomPunctuationSpan extends ForegroundColorSpan {
 ## Additional handling
 
 In order to additionally highlight portions of markdown input (for example make text wrapped with `**`
-symbols **bold**) `EditSpanHandler` can be used:
+symbols **bold**) `EditHandler` can be used:
 
 ```java
 final MarkwonEditor editor = MarkwonEditor.builder(Markwon.create(this))
-        // This is required for edit-span cache
-        // We could use Markwon `StrongEmphasisSpan` here, but I use a different
-        //  one to indicate that those are completely unrelated spans and must be
-        //  treated differently.
-        .includeEditSpan(Bold.class, Bold::new)
-        .withEditSpanHandler(new MarkwonEditor.EditSpanHandler() {
+        .useEditHandler(new AbstractEditHandler<StrongEmphasisSpan>() {
             @Override
-            public void handle(
-                    @NonNull MarkwonEditor.EditSpanStore store,
+            public void configurePersistedSpans(@NonNull PersistedSpans.Builder builder) {
+                // Here we define which span is _persisted_ in EditText, it is not removed
+                //  from EditText between text changes, but instead - reused (by changing
+                //  position). Consider it as a cache for spans. We could use `StrongEmphasisSpan`
+                //  here also, but I chose Bold to indicate that this span is not the same
+                //  as in off-screen rendered markdown
+                builder.persistSpan(Bold.class, Bold::new);
+            }
+
+            @Override
+            public void handleMarkdownSpan(
+                    @NonNull PersistedSpans persistedSpans,
                     @NonNull Editable editable,
                     @NonNull String input,
-                    @NonNull Object span,
+                    @NonNull StrongEmphasisSpan span,
                     int spanStart,
                     int spanTextLength) {
-                if (span instanceof StrongEmphasisSpan) {
+                // Unfortunately we cannot hardcode delimiters length here (aka spanTextLength + 4)
+                //  because multiple inline markdown nodes can refer to the same text.
+                //  For example, `**_~~hey~~_**` - we will receive `**_~~` in this method,
+                //  and thus will have to manually find actual position in raw user input
+                final MarkwonEditorUtils.Match match =
+                        MarkwonEditorUtils.findDelimited(input, spanStart, "**", "__");
+                if (match != null) {
                     editable.setSpan(
-                            // `includeEditSpan(Bold.class, Bold::new)` ensured that we have
-                            //      a span here to use (either reuse existing or create a new one)
-                            store.get(Bold.class),
-                            spanStart,
-                            // we know that strong emphasis is delimited with 2 characters on both sides
-                            spanStart + spanTextLength + 4,
+                            // we handle StrongEmphasisSpan and represent it with Bold in EditText
+                            //  we still could use StrongEmphasisSpan, but it must be accessed
+                            //  via persistedSpans
+                            persistedSpans.get(Bold.class),
+                            match.start(),
+                            match.end(),
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     );
                 }
+            }
+
+            @NonNull
+            @Override
+            public Class<StrongEmphasisSpan> markdownSpanType() {
+                return StrongEmphasisSpan.class;
             }
         })
         .build();
