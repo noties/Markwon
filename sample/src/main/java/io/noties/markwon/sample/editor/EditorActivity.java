@@ -18,18 +18,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.internal.inline.AsteriskDelimiterProcessor;
-import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
-import org.commonmark.node.Link;
-import org.commonmark.node.Text;
+import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.Parser;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
@@ -43,17 +37,12 @@ import io.noties.markwon.editor.PersistedSpans;
 import io.noties.markwon.editor.handler.EmphasisEditHandler;
 import io.noties.markwon.editor.handler.StrongEmphasisEditHandler;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.inlineparser.BangInlineProcessor;
+import io.noties.markwon.inlineparser.EntityInlineProcessor;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.sample.R;
-import io.noties.markwon.sample.editor.inline.AutolinkInline;
-import io.noties.markwon.sample.editor.inline.BackslashInline;
-import io.noties.markwon.sample.editor.inline.BackticksInline;
-import io.noties.markwon.sample.editor.inline.CloseBracketInline;
-import io.noties.markwon.sample.editor.inline.EntityInline;
-import io.noties.markwon.sample.editor.inline.HtmlInline;
-import io.noties.markwon.sample.editor.inline.Inline;
-import io.noties.markwon.sample.editor.inline.InlineParserImpl;
-import io.noties.markwon.sample.editor.inline.NewLineInline;
 
 public class EditorActivity extends Activity {
 
@@ -187,66 +176,15 @@ public class EditorActivity extends Activity {
         // for links to be clickable
         editText.setMovementMethod(LinkMovementMethod.getInstance());
 
-        // provider?
-        final InlineParserImpl.Builder inlineParserFactoryBuilder = InlineParserImpl.builder()
-                .addDelimiterProcessor(new AsteriskDelimiterProcessor())
-                .addDelimiterProcessor(new UnderscoreDelimiterProcessor())
-                .addInlineProcessor(new AutolinkInline())
-                .addInlineProcessor(new BackslashInline())
-                .addInlineProcessor(new BackticksInline())
-//                .addInlineProcessor(new BangInline()) // no images then
-                .addInlineProcessor(new CloseBracketInline())
-                .addInlineProcessor(new EntityInline())
-                .addInlineProcessor(new HtmlInline())
-                .addInlineProcessor(new NewLineInline())
-                .addInlineProcessor(new Inline() {
-
-                    private final Pattern RE = Pattern.compile("\\d+");
-
-                    @NonNull
-                    @Override
-                    public Collection<Character> characters() {
-                        return Collections.singleton('#');
-                    }
-
-                    @Override
-                    public boolean parse() {
-                        final String id = match(RE);
-                        if (id != null) {
-                            final Link link = new Link("https://github.com/noties/Markwon/issues/" + id, null);
-                            final Text text = new Text("#" + id);
-                            link.appendChild(text);
-                            appendNode(link);
-                            return true;
-                        }
-                        return false;
-                    }
-                })
-                .addInlineProcessor(new Inline() {
-
-                    private final Pattern RE = Pattern.compile("\\w+");
-
-                    @NonNull
-                    @Override
-                    public Collection<Character> characters() {
-                        return Collections.singleton('#');
-                    }
-
-                    @Override
-                    public boolean parse() {
-                        final String s = match(RE);
-                        if (s != null) {
-                            final Link link = new Link("https://noties.io", null);
-                            final Text text = new Text("#" + s);
-                            link.appendChild(text);
-                            appendNode(link);
-                            return true;
-                        }
-                        return false;
-                    }
-                })
-//                .addInlineProcessor(new OpenBracketInline())
-                ;
+        final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
+                .includeDefaults()
+                // no inline images will be parsed
+                .excludeInlineProcessor(BangInlineProcessor.class)
+                // no html tags will be parsed
+                .excludeInlineProcessor(HtmlInlineProcessor.class)
+                // no entities will be parsed (aka `&amp;` etc)
+                .excludeInlineProcessor(EntityInlineProcessor.class)
+                .build();
 
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(StrikethroughPlugin.create())
@@ -254,9 +192,11 @@ public class EditorActivity extends Activity {
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureParser(@NonNull Parser.Builder builder) {
+
                         // disable all commonmark-java blocks, only inlines will be parsed
 //                        builder.enabledBlockTypes(Collections.emptySet());
-                        builder.inlineParserFactory(inlineParserFactoryBuilder.build());
+
+                        builder.inlineParserFactory(inlineParserFactory);
                     }
                 })
                 .build();

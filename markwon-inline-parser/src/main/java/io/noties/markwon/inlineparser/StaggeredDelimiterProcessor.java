@@ -1,4 +1,4 @@
-package io.noties.markwon.sample.editor.inline;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.Text;
 import org.commonmark.parser.delimiter.DelimiterProcessor;
@@ -16,7 +16,6 @@ class StaggeredDelimiterProcessor implements DelimiterProcessor {
     StaggeredDelimiterProcessor(char delim) {
         this.delim = delim;
     }
-
 
     @Override
     public char getOpeningCharacter() {

@@ -1,27 +1,29 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.Code;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
-public class BackticksInline extends Inline {
+/**
+ * Parses inline code surrounded with {@code `} chars {@code `code`}
+ *
+ * @since 4.2.0-SNAPSHOT
+ */
+public class BackticksInlineProcessor extends InlineProcessor {
 
     private static final Pattern TICKS = Pattern.compile("`+");
 
     private static final Pattern TICKS_HERE = Pattern.compile("^`+");
 
-    @NonNull
+    private static final Pattern WHITESPACE = MarkwonInlineParser.WHITESPACE;
+
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton('`');
+    public char specialCharacter() {
+        return '`';
     }
 
     @Override
-    public boolean parse() {
+    protected boolean parse() {
         String ticks = match(TICKS_HERE);
         if (ticks == null) {
             return false;

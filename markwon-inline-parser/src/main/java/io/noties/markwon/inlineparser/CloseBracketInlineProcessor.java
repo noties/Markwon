@@ -1,6 +1,4 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.util.Escaping;
@@ -8,18 +6,27 @@ import org.commonmark.node.Image;
 import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.regex.Pattern;
 
-public class CloseBracketInline extends Inline {
-    @NonNull
+import static io.noties.markwon.inlineparser.InlineParserUtils.mergeChildTextNodes;
+
+/**
+ * Parses markdown link or image, relies on {@link OpenBracketInlineProcessor}
+ * to handle start of these elements
+ *
+ * @since 4.2.0-SNAPSHOT
+ */
+public class CloseBracketInlineProcessor extends InlineProcessor {
+
+    private static final Pattern WHITESPACE = MarkwonInlineParser.WHITESPACE;
+
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton(']');
+    public char specialCharacter() {
+        return ']';
     }
 
     @Override
-    public boolean parse() {
+    protected boolean parse() {
         index++;
         int startIndex = index;
 

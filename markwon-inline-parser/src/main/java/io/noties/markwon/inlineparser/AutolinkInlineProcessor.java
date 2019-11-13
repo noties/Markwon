@@ -1,15 +1,16 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.Link;
 import org.commonmark.node.Text;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
-public class AutolinkInline extends Inline {
+/**
+ * Parses autolinks, for example {@code <me@mydoma.in>}
+ *
+ * @since 4.2.0-SNAPSHOT
+ */
+public class AutolinkInlineProcessor extends InlineProcessor {
 
     private static final Pattern EMAIL_AUTOLINK = Pattern
             .compile("^<([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>");
@@ -17,14 +18,13 @@ public class AutolinkInline extends Inline {
     private static final Pattern AUTOLINK = Pattern
             .compile("^<[a-zA-Z][a-zA-Z0-9.+-]{1,31}:[^<>\u0000-\u0020]*>");
 
-    @NonNull
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton('<');
+    public char specialCharacter() {
+        return '<';
     }
 
     @Override
-    public boolean parse() {
+    protected boolean parse() {
         String m;
         if ((m = match(EMAIL_AUTOLINK)) != null) {
             String dest = m.substring(1, m.length() - 1);

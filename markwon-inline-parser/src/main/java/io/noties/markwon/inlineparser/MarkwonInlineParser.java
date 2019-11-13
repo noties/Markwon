@@ -1,27 +1,21 @@
-package io.noties.markwon.sample.editor.inline;
+package io.noties.markwon.inlineparser;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.Delimiter;
 import org.commonmark.internal.ReferenceParser;
-import org.commonmark.internal.inline.AsteriskDelimiterProcessor;
-import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
 import org.commonmark.internal.util.Escaping;
-import org.commonmark.internal.util.Html5Entities;
-import org.commonmark.internal.util.Parsing;
-import org.commonmark.node.Code;
-import org.commonmark.node.HardLineBreak;
-import org.commonmark.node.HtmlInline;
-import org.commonmark.node.Image;
 import org.commonmark.node.Link;
 import org.commonmark.node.Node;
-import org.commonmark.node.SoftLineBreak;
 import org.commonmark.node.Text;
 import org.commonmark.parser.InlineParser;
+import org.commonmark.parser.InlineParserContext;
 import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.delimiter.DelimiterProcessor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -31,27 +25,65 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InlineParserOriginal implements InlineParser, ReferenceParser {
+import static io.noties.markwon.inlineparser.InlineParserUtils.mergeChildTextNodes;
+import static io.noties.markwon.inlineparser.InlineParserUtils.mergeTextNodesBetweenExclusive;
+
+/**
+ * @see #factoryBuilder()
+ * @see FactoryBuilder
+ * @since 4.2.0-SNAPSHOT
+ */
+public class MarkwonInlineParser implements InlineParser, ReferenceParser, MarkwonInlineParserContext {
+
+    public interface FactoryBuilder {
+
+        /**
+         * @see InlineProcessor
+         */
+        @NonNull
+        FactoryBuilder addInlineProcessor(@NonNull InlineProcessor processor);
+
+        /**
+         * @see AsteriskDelimiterProcessor
+         * @see UnderscoreDelimiterProcessor
+         */
+        @NonNull
+        FactoryBuilder addDelimiterProcessor(@NonNull DelimiterProcessor processor);
+
+        /**
+         * Indicate if markdown references are enabled. {@code referencesEnabled=true} if {@link #includeDefaults()}
+         * was called
+         */
+        @NonNull
+        FactoryBuilder referencesEnabled(boolean referencesEnabled);
+
+        /**
+         * Includes all default delimiter and inline processors, and sets {@code referencesEnabled=true}.
+         * Useful with subsequent calls to {@link #excludeInlineProcessor(Class)} or {@link #excludeDelimiterProcessor(Class)}
+         */
+        @NonNull
+        FactoryBuilder includeDefaults();
+
+        @NonNull
+        FactoryBuilder excludeInlineProcessor(@NonNull Class<? extends InlineProcessor> processor);
+
+        @NonNull
+        FactoryBuilder excludeDelimiterProcessor(@NonNull Class<? extends DelimiterProcessor> processor);
+
+        @NonNull
+        InlineParserFactory build();
+    }
 
     @NonNull
-    public static InlineParserFactory factory() {
-        return context -> new InlineParserOriginal(context.getCustomDelimiterProcessors());
+    public static FactoryBuilder factoryBuilder() {
+        return new FactoryBuilderImpl();
     }
 
     private static final String ESCAPED_CHAR = "\\\\" + Escaping.ESCAPABLE;
-    private static final String HTMLCOMMENT = "<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->";
-    private static final String PROCESSINGINSTRUCTION = "[<][?].*?[?][>]";
-    private static final String DECLARATION = "<![A-Z]+\\s+[^>]*>";
-    private static final String CDATA = "<!\\[CDATA\\[[\\s\\S]*?\\]\\]>";
-    private static final String HTMLTAG = "(?:" + Parsing.OPENTAG + "|" + Parsing.CLOSETAG + "|" + HTMLCOMMENT
-            + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA + ")";
-    private static final String ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
 
     private static final String ASCII_PUNCTUATION = "!\"#\\$%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?@\\[\\\\\\]\\^_`\\{\\|\\}~";
     private static final Pattern PUNCTUATION = Pattern
             .compile("^[" + ASCII_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]");
-
-    private static final Pattern HTML_TAG = Pattern.compile('^' + HTMLTAG, Pattern.CASE_INSENSITIVE);
 
     private static final Pattern LINK_TITLE = Pattern.compile(
             "^(?:\"(" + ESCAPED_CHAR + "|[^\"\\x00])*\"" +
@@ -64,43 +96,29 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
 
     private static final Pattern LINK_LABEL = Pattern.compile("^\\[(?:[^\\\\\\[\\]]|\\\\.)*\\]");
 
-    private static final Pattern ESCAPABLE = Pattern.compile('^' + Escaping.ESCAPABLE);
-
-    private static final Pattern ENTITY_HERE = Pattern.compile('^' + ENTITY, Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern TICKS = Pattern.compile("`+");
-
-    private static final Pattern TICKS_HERE = Pattern.compile("^`+");
-
-    private static final Pattern EMAIL_AUTOLINK = Pattern
-            .compile("^<([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>");
-
-    private static final Pattern AUTOLINK = Pattern
-            .compile("^<[a-zA-Z][a-zA-Z0-9.+-]{1,31}:[^<>\u0000-\u0020]*>");
-
     private static final Pattern SPNL = Pattern.compile("^ *(?:\n *)?");
 
     private static final Pattern UNICODE_WHITESPACE_CHAR = Pattern.compile("^[\\p{Zs}\t\r\n\f]");
 
-    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-
-    private static final Pattern FINAL_SPACE = Pattern.compile(" *$");
-
     private static final Pattern LINE_END = Pattern.compile("^ *(?:\n|$)");
 
+    static final Pattern ESCAPABLE = Pattern.compile('^' + Escaping.ESCAPABLE);
+    static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
+    private final boolean referencesEnabled;
+
     private final BitSet specialCharacters;
-    private final BitSet delimiterCharacters;
+    private final Map<Character, List<InlineProcessor>> inlineProcessors;
     private final Map<Character, DelimiterProcessor> delimiterProcessors;
+
+    private Node block;
+    private String input;
+    private int index;
 
     /**
      * Link references by ID, needs to be built up using parseReference before calling parse.
      */
-    private Map<String, Link> referenceMap = new HashMap<>();
-
-    private Node block;
-
-    private String input;
-    private int index;
+    private Map<String, Link> referenceMap = new HashMap<>(1);
 
     /**
      * Top delimiter (emphasis, strong emphasis or custom emphasis). (Brackets are on a separate stack, different
@@ -113,37 +131,49 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
      */
     private Bracket lastBracket;
 
-    public InlineParserOriginal(List<DelimiterProcessor> delimiterProcessors) {
+    // might we construct these in factory?
+    public MarkwonInlineParser(
+            boolean referencesEnabled,
+            @NonNull List<InlineProcessor> inlineProcessors,
+            @NonNull List<DelimiterProcessor> delimiterProcessors) {
+        this.referencesEnabled = referencesEnabled;
+        this.inlineProcessors = calculateInlines(inlineProcessors);
         this.delimiterProcessors = calculateDelimiterProcessors(delimiterProcessors);
-        this.delimiterCharacters = calculateDelimiterCharacters(this.delimiterProcessors.keySet());
-        this.specialCharacters = calculateSpecialCharacters(delimiterCharacters);
+        this.specialCharacters = calculateSpecialCharacters(
+                this.inlineProcessors.keySet(),
+                this.delimiterProcessors.keySet());
     }
 
-    public static BitSet calculateDelimiterCharacters(Set<Character> characters) {
-        BitSet bitSet = new BitSet();
-        for (Character character : characters) {
-            bitSet.set(character);
+    @NonNull
+    private static Map<Character, List<InlineProcessor>> calculateInlines(@NonNull List<InlineProcessor> inlines) {
+        final Map<Character, List<InlineProcessor>> map = new HashMap<>(inlines.size());
+        List<InlineProcessor> list;
+        for (InlineProcessor inlineProcessor : inlines) {
+            final char character = inlineProcessor.specialCharacter();
+            list = map.get(character);
+            if (list == null) {
+                list = new ArrayList<>(1);
+                map.put(character, list);
+            }
+            list.add(inlineProcessor);
+        }
+        return map;
+    }
+
+    @NonNull
+    private static BitSet calculateSpecialCharacters(Set<Character> inlineCharacters, Set<Character> delimiterCharacters) {
+        final BitSet bitSet = new BitSet();
+        for (Character c : inlineCharacters) {
+            bitSet.set(c);
+        }
+        for (Character c : delimiterCharacters) {
+            bitSet.set(c);
         }
         return bitSet;
     }
 
-    public static BitSet calculateSpecialCharacters(BitSet delimiterCharacters) {
-        BitSet bitSet = new BitSet();
-        bitSet.or(delimiterCharacters);
-        bitSet.set('\n');
-        bitSet.set('`');
-        bitSet.set('[');
-        bitSet.set(']');
-        bitSet.set('\\');
-        bitSet.set('!');
-        bitSet.set('<');
-        bitSet.set('&');
-        return bitSet;
-    }
-
-    public static Map<Character, DelimiterProcessor> calculateDelimiterProcessors(List<DelimiterProcessor> delimiterProcessors) {
+    private static Map<Character, DelimiterProcessor> calculateDelimiterProcessors(List<DelimiterProcessor> delimiterProcessors) {
         Map<Character, DelimiterProcessor> map = new HashMap<>();
-        addDelimiterProcessors(Arrays.<DelimiterProcessor>asList(new AsteriskDelimiterProcessor(), new UnderscoreDelimiterProcessor()), map);
         addDelimiterProcessors(delimiterProcessors, map);
         return map;
     }
@@ -206,6 +236,11 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
      */
     @Override
     public int parseReference(String s) {
+
+        if (!referencesEnabled) {
+            return 0;
+        }
+
         this.input = s;
         this.index = 0;
         String dest;
@@ -275,17 +310,22 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
         return index - startIndex;
     }
 
-    private Text appendText(CharSequence text, int beginIndex, int endIndex) {
+    @Override
+    @NonNull
+    public Text appendText(@NonNull CharSequence text, int beginIndex, int endIndex) {
         return appendText(text.subSequence(beginIndex, endIndex));
     }
 
-    private Text appendText(CharSequence text) {
+    @Override
+    @NonNull
+    public Text appendText(@NonNull CharSequence text) {
         Text node = new Text(text.toString());
         appendNode(node);
         return node;
     }
 
-    private void appendNode(Node node) {
+    @Override
+    public void appendNode(@NonNull Node node) {
         block.appendChild(node);
     }
 
@@ -295,46 +335,33 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
      * On failure, return false.
      */
     private boolean parseInline() {
-        boolean res;
-        char c = peek();
+
+        final char c = peek();
+
         if (c == '\0') {
             return false;
         }
-        switch (c) {
-            case '\n':
-                res = parseNewline();
-                break;
-            case '\\':
-                res = parseBackslash();
-                break;
-            case '`':
-                res = parseBackticks();
-                break;
-            case '[':
-                res = parseOpenBracket();
-                break;
-            case '!':
-                res = parseBang();
-                break;
-            case ']':
-                res = parseCloseBracket();
-                break;
-            case '<':
-                res = parseAutolink() || parseHtmlInline();
-                break;
-            case '&':
-                res = parseEntity();
-                break;
-            default:
-                boolean isDelimiter = delimiterCharacters.get(c);
-                if (isDelimiter) {
-                    DelimiterProcessor delimiterProcessor = delimiterProcessors.get(c);
-                    res = parseDelimiters(delimiterProcessor, c);
-                } else {
-                    res = parseString();
+
+        boolean res = false;
+
+        final List<InlineProcessor> inlines = this.inlineProcessors.get(c);
+
+        if (inlines != null) {
+            for (InlineProcessor inline : inlines) {
+                res = inline.parse(this);
+                if (res) {
+                    break;
                 }
-                break;
+            }
+        } else {
+            final DelimiterProcessor delimiterProcessor = delimiterProcessors.get(c);
+            if (delimiterProcessor != null) {
+                res = parseDelimiters(delimiterProcessor, c);
+            } else {
+                res = parseString();
+            }
         }
+
         if (!res) {
             index++;
             // When we get here, it's only for a single special character that turned out to not have a special meaning.
@@ -349,7 +376,9 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
     /**
      * If RE matches at current index in the input, advance index and return the match; otherwise return null.
      */
-    private String match(Pattern re) {
+    @Override
+    @Nullable
+    public String match(@NonNull Pattern re) {
         if (index >= input.length()) {
             return null;
         }
@@ -367,7 +396,8 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
     /**
      * Returns the char at the current input index, or {@code '\0'} in case there are no more characters.
      */
-    private char peek() {
+    @Override
+    public char peek() {
         if (index < input.length()) {
             return input.charAt(index);
         } else {
@@ -375,84 +405,63 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
         }
     }
 
+    @NonNull
+    @Override
+    public Node block() {
+        return block;
+    }
+
+    @NonNull
+    @Override
+    public String input() {
+        return input;
+    }
+
+    @Override
+    public int index() {
+        return index;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public Bracket lastBracket() {
+        return lastBracket;
+    }
+
+    @Override
+    public Delimiter lastDelimiter() {
+        return lastDelimiter;
+    }
+
+    @NonNull
+    @Override
+    public Map<String, Link> referenceMap() {
+        return referenceMap;
+    }
+
+    @Override
+    public void addBracket(Bracket bracket) {
+        if (lastBracket != null) {
+            lastBracket.bracketAfter = true;
+        }
+        lastBracket = bracket;
+    }
+
+    @Override
+    public void removeLastBracket() {
+        lastBracket = lastBracket.previous;
+    }
+
     /**
      * Parse zero or more space characters, including at most one newline.
      */
-    private boolean spnl() {
+    @Override
+    public boolean spnl() {
         match(SPNL);
-        return true;
-    }
-
-    /**
-     * Parse a newline. If it was preceded by two spaces, return a hard line break; otherwise a soft line break.
-     */
-    private boolean parseNewline() {
-        index++; // assume we're at a \n
-
-        Node lastChild = block.getLastChild();
-        // Check previous text for trailing spaces.
-        // The "endsWith" is an optimization to avoid an RE match in the common case.
-        if (lastChild != null && lastChild instanceof Text && ((Text) lastChild).getLiteral().endsWith(" ")) {
-            Text text = (Text) lastChild;
-            String literal = text.getLiteral();
-            Matcher matcher = FINAL_SPACE.matcher(literal);
-            int spaces = matcher.find() ? matcher.end() - matcher.start() : 0;
-            if (spaces > 0) {
-                text.setLiteral(literal.substring(0, literal.length() - spaces));
-            }
-            appendNode(spaces >= 2 ? new HardLineBreak() : new SoftLineBreak());
-        } else {
-            appendNode(new SoftLineBreak());
-        }
-
-        // gobble leading spaces in next line
-        while (peek() == ' ') {
-            index++;
-        }
-        return true;
-    }
-
-    /**
-     * Parse a backslash-escaped special character, adding either the escaped  character, a hard line break
-     * (if the backslash is followed by a newline), or a literal backslash to the block's children.
-     */
-    private boolean parseBackslash() {
-        index++;
-        if (peek() == '\n') {
-            appendNode(new HardLineBreak());
-            index++;
-        } else if (index < input.length() && ESCAPABLE.matcher(input.substring(index, index + 1)).matches()) {
-            appendText(input, index, index + 1);
-            index++;
-        } else {
-            appendText("\\");
-        }
-        return true;
-    }
-
-    /**
-     * Attempt to parse backticks, adding either a backtick code span or a literal sequence of backticks.
-     */
-    private boolean parseBackticks() {
-        String ticks = match(TICKS_HERE);
-        if (ticks == null) {
-            return false;
-        }
-        int afterOpenTicks = index;
-        String matched;
-        while ((matched = match(TICKS)) != null) {
-            if (matched.equals(ticks)) {
-                Code node = new Code();
-                String content = input.substring(afterOpenTicks, index - ticks.length());
-                String literal = WHITESPACE.matcher(content.trim()).replaceAll(" ");
-                node.setLiteral(literal);
-                appendNode(node);
-                return true;
-            }
-        }
-        // If we got here, we didn't match a closing backtick sequence.
-        index = afterOpenTicks;
-        appendText(ticks);
         return true;
     }
 
@@ -482,173 +491,11 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
     }
 
     /**
-     * Add open bracket to delimiter stack and add a text node to block's children.
-     */
-    private boolean parseOpenBracket() {
-        int startIndex = index;
-        index++;
-
-        Text node = appendText("[");
-
-        // Add entry to stack for this opener
-        addBracket(Bracket.link(node, startIndex, lastBracket, lastDelimiter));
-
-        return true;
-    }
-
-    /**
-     * If next character is [, and ! delimiter to delimiter stack and add a text node to block's children.
-     * Otherwise just add a text node.
-     */
-    private boolean parseBang() {
-        int startIndex = index;
-        index++;
-        if (peek() == '[') {
-            index++;
-
-            Text node = appendText("![");
-
-            // Add entry to stack for this opener
-            addBracket(Bracket.image(node, startIndex + 1, lastBracket, lastDelimiter));
-        } else {
-            appendText("!");
-        }
-        return true;
-    }
-
-    /**
-     * Try to match close bracket against an opening in the delimiter stack. Add either a link or image, or a
-     * plain [ character, to block's children. If there is a matching delimiter, remove it from the delimiter stack.
-     */
-    private boolean parseCloseBracket() {
-        index++;
-        int startIndex = index;
-
-        // Get previous `[` or `![`
-        Bracket opener = lastBracket;
-        if (opener == null) {
-            // No matching opener, just return a literal.
-            appendText("]");
-            return true;
-        }
-
-        if (!opener.allowed) {
-            // Matching opener but it's not allowed, just return a literal.
-            appendText("]");
-            removeLastBracket();
-            return true;
-        }
-
-        // Check to see if we have a link/image
-
-        String dest = null;
-        String title = null;
-        boolean isLinkOrImage = false;
-
-        // Maybe a inline link like `[foo](/uri "title")`
-        if (peek() == '(') {
-            index++;
-            spnl();
-            if ((dest = parseLinkDestination()) != null) {
-                spnl();
-                // title needs a whitespace before
-                if (WHITESPACE.matcher(input.substring(index - 1, index)).matches()) {
-                    title = parseLinkTitle();
-                    spnl();
-                }
-                if (peek() == ')') {
-                    index++;
-                    isLinkOrImage = true;
-                } else {
-                    index = startIndex;
-                }
-            }
-        }
-
-        // Maybe a reference link like `[foo][bar]`, `[foo][]` or `[foo]`
-        if (!isLinkOrImage) {
-
-            // See if there's a link label like `[bar]` or `[]`
-            int beforeLabel = index;
-            int labelLength = parseLinkLabel();
-            String ref = null;
-            if (labelLength > 2) {
-                ref = input.substring(beforeLabel, beforeLabel + labelLength);
-            } else if (!opener.bracketAfter) {
-                // If the second label is empty `[foo][]` or missing `[foo]`, then the first label is the reference.
-                // But it can only be a reference when there's no (unescaped) bracket in it.
-                // If there is, we don't even need to try to look up the reference. This is an optimization.
-                ref = input.substring(opener.index, startIndex);
-            }
-
-            if (ref != null) {
-                Link link = referenceMap.get(Escaping.normalizeReference(ref));
-                if (link != null) {
-                    dest = link.getDestination();
-                    title = link.getTitle();
-                    isLinkOrImage = true;
-                }
-            }
-        }
-
-        if (isLinkOrImage) {
-            // If we got here, open is a potential opener
-            Node linkOrImage = opener.image ? new Image(dest, title) : new Link(dest, title);
-
-            Node node = opener.node.getNext();
-            while (node != null) {
-                Node next = node.getNext();
-                linkOrImage.appendChild(node);
-                node = next;
-            }
-            appendNode(linkOrImage);
-
-            // Process delimiters such as emphasis inside link/image
-            processDelimiters(opener.previousDelimiter);
-            mergeChildTextNodes(linkOrImage);
-            // We don't need the corresponding text node anymore, we turned it into a link/image node
-            opener.node.unlink();
-            removeLastBracket();
-
-            // Links within links are not allowed. We found this link, so there can be no other link around it.
-            if (!opener.image) {
-                Bracket bracket = lastBracket;
-                while (bracket != null) {
-                    if (!bracket.image) {
-                        // Disallow link opener. It will still get matched, but will not result in a link.
-                        bracket.allowed = false;
-                    }
-                    bracket = bracket.previous;
-                }
-            }
-
-            return true;
-
-        } else { // no link or image
-
-            appendText("]");
-            removeLastBracket();
-
-            index = startIndex;
-            return true;
-        }
-    }
-
-    private void addBracket(Bracket bracket) {
-        if (lastBracket != null) {
-            lastBracket.bracketAfter = true;
-        }
-        lastBracket = bracket;
-    }
-
-    private void removeLastBracket() {
-        lastBracket = lastBracket.previous;
-    }
-
-    /**
      * Attempt to parse link destination, returning the string or null if no match.
      */
-    private String parseLinkDestination() {
+    @Override
+    @Nullable
+    public String parseLinkDestination() {
         String res = match(LINK_DESTINATION_BRACES);
         if (res != null) { // chop off surrounding <..>:
             if (res.length() == 2) {
@@ -705,7 +552,9 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
     /**
      * Attempt to parse link title (sans quotes), returning the string or null if no match.
      */
-    private String parseLinkTitle() {
+    @Override
+    @Nullable
+    public String parseLinkTitle() {
         String title = match(LINK_TITLE);
         if (title != null) {
             // chop off quotes from title and unescape:
@@ -718,63 +567,14 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
     /**
      * Attempt to parse a link label, returning number of characters parsed.
      */
-    private int parseLinkLabel() {
+    @Override
+    public int parseLinkLabel() {
         String m = match(LINK_LABEL);
         // Spec says "A link label can have at most 999 characters inside the square brackets"
         if (m == null || m.length() > 1001) {
             return 0;
         } else {
             return m.length();
-        }
-    }
-
-    /**
-     * Attempt to parse an autolink (URL or email in pointy brackets).
-     */
-    private boolean parseAutolink() {
-        String m;
-        if ((m = match(EMAIL_AUTOLINK)) != null) {
-            String dest = m.substring(1, m.length() - 1);
-            Link node = new Link("mailto:" + dest, null);
-            node.appendChild(new Text(dest));
-            appendNode(node);
-            return true;
-        } else if ((m = match(AUTOLINK)) != null) {
-            String dest = m.substring(1, m.length() - 1);
-            Link node = new Link(dest, null);
-            node.appendChild(new Text(dest));
-            appendNode(node);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Attempt to parse inline HTML.
-     */
-    private boolean parseHtmlInline() {
-        String m = match(HTML_TAG);
-        if (m != null) {
-            HtmlInline node = new HtmlInline();
-            node.setLiteral(m);
-            appendNode(node);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Attempt to parse an entity, return Entity object if successful.
-     */
-    private boolean parseEntity() {
-        String m;
-        if ((m = match(ENTITY_HERE)) != null) {
-            appendText(Html5Entities.entityToString(m));
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -849,7 +649,8 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
         return new DelimiterData(delimiterCount, canOpen, canClose);
     }
 
-    private void processDelimiters(Delimiter stackBottom) {
+    @Override
+    public void processDelimiters(Delimiter stackBottom) {
 
         Map<Character, Delimiter> openersBottom = new HashMap<>();
 
@@ -981,70 +782,6 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
         }
     }
 
-    private void mergeTextNodesBetweenExclusive(Node fromNode, Node toNode) {
-        // No nodes between them
-        if (fromNode == toNode || fromNode.getNext() == toNode) {
-            return;
-        }
-
-        mergeTextNodesInclusive(fromNode.getNext(), toNode.getPrevious());
-    }
-
-    private void mergeChildTextNodes(Node node) {
-        // No children or just one child node, no need for merging
-        if (node.getFirstChild() == node.getLastChild()) {
-            return;
-        }
-
-        mergeTextNodesInclusive(node.getFirstChild(), node.getLastChild());
-    }
-
-    private void mergeTextNodesInclusive(Node fromNode, Node toNode) {
-        Text first = null;
-        Text last = null;
-        int length = 0;
-
-        Node node = fromNode;
-        while (node != null) {
-            if (node instanceof Text) {
-                Text text = (Text) node;
-                if (first == null) {
-                    first = text;
-                }
-                length += text.getLiteral().length();
-                last = text;
-            } else {
-                mergeIfNeeded(first, last, length);
-                first = null;
-                last = null;
-                length = 0;
-            }
-            if (node == toNode) {
-                break;
-            }
-            node = node.getNext();
-        }
-
-        mergeIfNeeded(first, last, length);
-    }
-
-    private void mergeIfNeeded(Text first, Text last, int textLength) {
-        if (first != null && last != null && first != last) {
-            StringBuilder sb = new StringBuilder(textLength);
-            sb.append(first.getLiteral());
-            Node node = first.getNext();
-            Node stop = last.getNext();
-            while (node != stop) {
-                sb.append(((Text) node).getLiteral());
-                Node unlink = node;
-                node = node.getNext();
-                unlink.unlink();
-            }
-            String literal = sb.toString();
-            first.setLiteral(literal);
-        }
-    }
-
     private static class DelimiterData {
 
         final int count;
@@ -1055,6 +792,122 @@ public class InlineParserOriginal implements InlineParser, ReferenceParser {
             this.count = count;
             this.canOpen = canOpen;
             this.canClose = canClose;
+        }
+    }
+
+    static class FactoryBuilderImpl implements FactoryBuilder {
+
+        private final List<InlineProcessor> inlineProcessors = new ArrayList<>(3);
+        private final List<DelimiterProcessor> delimiterProcessors = new ArrayList<>(3);
+        private boolean referencesEnabled;
+
+        @NonNull
+        @Override
+        public FactoryBuilder addInlineProcessor(@NonNull InlineProcessor processor) {
+            this.inlineProcessors.add(processor);
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public FactoryBuilder addDelimiterProcessor(@NonNull DelimiterProcessor processor) {
+            this.delimiterProcessors.add(processor);
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public FactoryBuilder referencesEnabled(boolean referencesEnabled) {
+            this.referencesEnabled = referencesEnabled;
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public FactoryBuilder includeDefaults() {
+
+            // by default enabled
+            this.referencesEnabled = true;
+
+            this.inlineProcessors.addAll(Arrays.asList(
+                    new AutolinkInlineProcessor(),
+                    new BackslashInlineProcessor(),
+                    new BackticksInlineProcessor(),
+                    new BangInlineProcessor(),
+                    new CloseBracketInlineProcessor(),
+                    new EntityInlineProcessor(),
+                    new HtmlInlineProcessor(),
+                    new NewLineInlineProcessor(),
+                    new OpenBracketInlineProcessor()));
+
+            this.delimiterProcessors.addAll(Arrays.asList(
+                    new AsteriskDelimiterProcessor(),
+                    new UnderscoreDelimiterProcessor()));
+
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public FactoryBuilder excludeInlineProcessor(@NonNull Class<? extends InlineProcessor> type) {
+            for (int i = 0, size = inlineProcessors.size(); i < size; i++) {
+                if (type.equals(inlineProcessors.get(i).getClass())) {
+                    inlineProcessors.remove(i);
+                    break;
+                }
+            }
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public FactoryBuilder excludeDelimiterProcessor(@NonNull Class<? extends DelimiterProcessor> type) {
+            for (int i = 0, size = delimiterProcessors.size(); i < size; i++) {
+                if (type.equals(delimiterProcessors.get(i).getClass())) {
+                    delimiterProcessors.remove(i);
+                    break;
+                }
+            }
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public InlineParserFactory build() {
+            return new InlineParserFactoryImpl(referencesEnabled, inlineProcessors, delimiterProcessors);
+        }
+    }
+
+    static class InlineParserFactoryImpl implements InlineParserFactory {
+
+        private final boolean referencesEnabled;
+        private final List<InlineProcessor> inlineProcessors;
+        private final List<DelimiterProcessor> delimiterProcessors;
+
+        InlineParserFactoryImpl(
+                boolean referencesEnabled,
+                @NonNull List<InlineProcessor> inlineProcessors,
+                @NonNull List<DelimiterProcessor> delimiterProcessors) {
+            this.referencesEnabled = referencesEnabled;
+            this.inlineProcessors = inlineProcessors;
+            this.delimiterProcessors = delimiterProcessors;
+        }
+
+        @Override
+        public InlineParser create(InlineParserContext inlineParserContext) {
+            final List<DelimiterProcessor> delimiterProcessors;
+            final List<DelimiterProcessor> customDelimiterProcessors = inlineParserContext.getCustomDelimiterProcessors();
+            final int size = customDelimiterProcessors != null
+                    ? customDelimiterProcessors.size()
+                    : 0;
+            if (size > 0) {
+                delimiterProcessors = new ArrayList<>(size + this.delimiterProcessors.size());
+                delimiterProcessors.addAll(this.delimiterProcessors);
+                delimiterProcessors.addAll(customDelimiterProcessors);
+            } else {
+                delimiterProcessors = this.delimiterProcessors;
+            }
+            return new MarkwonInlineParser(referencesEnabled, inlineProcessors, delimiterProcessors);
         }
     }
 }

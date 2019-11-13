@@ -1,14 +1,16 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.internal.util.Parsing;
+import org.commonmark.node.HtmlInline;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
-public class HtmlInline extends Inline {
+/**
+ * Parses inline HTML tags
+ *
+ * @since 4.2.0-SNAPSHOT
+ */
+public class HtmlInlineProcessor extends InlineProcessor {
 
     private static final String HTMLCOMMENT = "<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->";
     private static final String PROCESSINGINSTRUCTION = "[<][?].*?[?][>]";
@@ -18,17 +20,16 @@ public class HtmlInline extends Inline {
             + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA + ")";
     private static final Pattern HTML_TAG = Pattern.compile('^' + HTMLTAG, Pattern.CASE_INSENSITIVE);
 
-    @NonNull
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton('<');
+    public char specialCharacter() {
+        return '<';
     }
 
     @Override
-    public boolean parse() {
+    protected boolean parse() {
         String m = match(HTML_TAG);
         if (m != null) {
-            org.commonmark.node.HtmlInline node = new org.commonmark.node.HtmlInline();
+            HtmlInline node = new HtmlInline();
             node.setLiteral(m);
             appendNode(node);
             return true;

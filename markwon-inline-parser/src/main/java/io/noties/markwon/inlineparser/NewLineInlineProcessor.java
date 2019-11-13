@@ -1,29 +1,27 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Node;
 import org.commonmark.node.SoftLineBreak;
 import org.commonmark.node.Text;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NewLineInline extends Inline {
+/**
+ * @since 4.2.0-SNAPSHOT
+ */
+public class NewLineInlineProcessor extends InlineProcessor {
 
     private static final Pattern FINAL_SPACE = Pattern.compile(" *$");
 
-    @NonNull
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton('\n');
+    public char specialCharacter() {
+        return '\n';
     }
 
     @Override
-    public boolean parse() {
+    protected boolean parse() {
         index++; // assume we're at a \n
 
         Node lastChild = block.getLastChild();

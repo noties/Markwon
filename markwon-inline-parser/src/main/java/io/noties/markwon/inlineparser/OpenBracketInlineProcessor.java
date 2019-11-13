@@ -1,23 +1,21 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.internal.Bracket;
 import org.commonmark.node.Text;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public class OpenBracketInline extends Inline {
-    @NonNull
+/**
+ * Parses markdown links {@code [link](#href)}
+ *
+ * @since 4.2.0-SNAPSHOT
+ */
+public class OpenBracketInlineProcessor extends InlineProcessor {
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton('[');
+    public char specialCharacter() {
+        return '[';
     }
 
     @Override
-    public boolean parse() {
-
+    protected boolean parse() {
         int startIndex = index;
         index++;
 

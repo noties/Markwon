@@ -1,21 +1,23 @@
-package io.noties.markwon.sample.editor.inline;
-
-import androidx.annotation.NonNull;
+package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.HardLineBreak;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.regex.Pattern;
 
-public class BackslashInline extends Inline {
-    @NonNull
+/**
+ * @since 4.2.0-SNAPSHOT
+ */
+public class BackslashInlineProcessor extends InlineProcessor {
+
+    private static final Pattern ESCAPABLE = MarkwonInlineParser.ESCAPABLE;
+
     @Override
-    public Collection<Character> characters() {
-        return Collections.singleton('\\');
+    public char specialCharacter() {
+        return '\\';
     }
 
     @Override
-    public boolean parse() {
+    protected boolean parse() {
         index++;
         if (peek() == '\n') {
             appendNode(new HardLineBreak());
