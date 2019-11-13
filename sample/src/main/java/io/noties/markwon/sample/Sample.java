@@ -23,7 +23,9 @@ public enum Sample {
 
     PRECOMPUTED_TEXT(R.string.sample_precomputed_text),
 
-    EDITOR(R.string.sample_editor);
+    EDITOR(R.string.sample_editor),
+
+    INLINE_PARSER(R.string.sample_inline_parser);
 
     private final int textResId;
 

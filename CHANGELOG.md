@@ -2,6 +2,7 @@
 
 # 4.2.0-SNAPSHOT
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
+* `MarkwonInlineParser` to customize inline parsing (new module: `markwon-inline-parser`)
 * `Markwon#configuration` method to expose `MarkwonConfiguration` via public API
 * `HeadingSpan#getLevel` getter
 * Add `SvgPictureMediaDecoder` in `image` module to deal with SVG without dimensions ([#165])

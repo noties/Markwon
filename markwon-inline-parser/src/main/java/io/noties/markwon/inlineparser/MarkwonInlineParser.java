@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.Delimiter;
 import org.commonmark.internal.ReferenceParser;
+import org.commonmark.internal.inline.AsteriskDelimiterProcessor;
+import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
 import org.commonmark.internal.util.Escaping;
 import org.commonmark.node.Link;
 import org.commonmark.node.Node;
