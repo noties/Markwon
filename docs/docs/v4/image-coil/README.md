@@ -9,7 +9,7 @@ val markwon = Markwon.builder(context)
         // automatically create Coil instance
         .usePlugin(CoilImagesPlugin.create(context))
         // if you need more control
-        .usePlugin(CoilImagesPlugin.create(object : CoilImagesPlugin.CoilStore() {
+        .usePlugin(CoilImagesPlugin.create(object : CoilImagesPlugin.CoilStore {
             override load(drawable: AsyncDrawable, target: Target): RequestDisposable {
                 return Coil.load(context, drawable.destination) {
                     target(target)

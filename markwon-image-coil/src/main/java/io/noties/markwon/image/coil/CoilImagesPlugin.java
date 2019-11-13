@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import coil.Coil;
-import coil.ImageLoader;
 import coil.api.ImageLoaders;
 import coil.request.LoadRequest;
 import coil.request.LoadRequestBuilder;
@@ -37,7 +36,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
     public interface CoilStore {
 
         @NonNull
-        RequestDisposable load(@NonNull AsyncDrawable drawable, @NonNull Target target);
+        LoadRequestBuilder load(@NonNull AsyncDrawable drawable);
 
         void cancel(@NonNull RequestDisposable disposable);
     }
@@ -47,13 +46,9 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
         return create(new CoilStore() {
             @NonNull
             @Override
-            public RequestDisposable load(@NonNull AsyncDrawable drawable, @NonNull Target target) {
-                ImageLoader imageLoader = Coil.loader();
-                LoadRequest request = ImageLoaders.newLoadBuilder(imageLoader, context)
-                        .data(drawable.getDestination())
-                        .target(target)
-                        .build();
-                return imageLoader.load(request);
+            public LoadRequestBuilder load(@NonNull AsyncDrawable drawable) {
+                return ImageLoaders.newLoadBuilder(Coil.loader(), context)
+                        .data(drawable.getDestination());
             }
 
             @Override
@@ -107,7 +102,10 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
         @Override
         public void load(@NonNull AsyncDrawable drawable) {
             final Target target = new AsyncDrawableTarget(drawable);
-            RequestDisposable disposable = coilStore.load(drawable, target);
+            LoadRequest request = coilStore.load(drawable)
+                    .target(target)
+                    .build();
+            RequestDisposable disposable = Coil.loader().load(request);
             cache.put(drawable, disposable);
         }
 
