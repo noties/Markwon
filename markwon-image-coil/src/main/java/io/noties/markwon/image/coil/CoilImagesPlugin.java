@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import coil.Coil;
+import coil.ImageLoader;
 import coil.api.ImageLoaders;
 import coil.request.LoadRequest;
 import coil.request.RequestDisposable;
@@ -47,6 +48,25 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
             @Override
             public LoadRequest load(@NonNull AsyncDrawable drawable) {
                 return ImageLoaders.newLoadBuilder(Coil.loader(), context)
+                        .data(drawable.getDestination())
+                        .build();
+            }
+
+            @Override
+            public void cancel(@NonNull RequestDisposable disposable) {
+                disposable.dispose();
+            }
+        });
+    }
+
+    @NonNull
+    public static CoilImagesPlugin create(@NonNull final Context context,
+                                          @NonNull final ImageLoader imageLoader) {
+        return create(new CoilStore() {
+            @NonNull
+            @Override
+            public LoadRequest load(@NonNull AsyncDrawable drawable) {
+                return ImageLoaders.newLoadBuilder(imageLoader, context)
                         .data(drawable.getDestination())
                         .build();
             }
