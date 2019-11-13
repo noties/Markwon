@@ -4,7 +4,7 @@
 
 Image loading based on `Coil` library
 
-```kt
+```kotlin
 val markwon = Markwon.builder(context)
         // automatically create Coil instance
         .usePlugin(CoilImagesPlugin.create(context))
