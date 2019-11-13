@@ -17,8 +17,8 @@ val markwon = Markwon.builder(context)
                 }
             }
 
-            override cancel(requestDisposable: RequestDisposable) {
-                requestDisposable.dispose()
+            override cancel(disposable: RequestDisposable) {
+                disposable.dispose()
             }
         }))
         .build()
