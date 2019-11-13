@@ -64,27 +64,6 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
     }
 
     @NonNull
-    public static CoilImagesPlugin create(@NonNull final LoadRequestBuilder loadRequestBuilder) {
-        return create(new CoilStore() {
-            @NonNull
-            @Override
-            public RequestDisposable load(@NonNull AsyncDrawable drawable, @NonNull Target target) {
-                ImageLoader imageLoader = Coil.loader();
-                LoadRequest request = loadRequestBuilder
-                        .data(drawable.getDestination())
-                        .target(target)
-                        .build();
-                return imageLoader.load(request);
-            }
-
-            @Override
-            public void cancel(@NonNull RequestDisposable disposable) {
-                disposable.dispose();
-            }
-        });
-    }
-
-    @NonNull
     public static CoilImagesPlugin create(@NonNull CoilStore coilStore) {
         return new CoilImagesPlugin(coilStore);
     }
