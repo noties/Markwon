@@ -56,7 +56,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
             public void cancel(@NonNull RequestDisposable disposable) {
                 disposable.dispose();
             }
-        });
+        }, Coil.loader());
     }
 
     @NonNull
@@ -75,19 +75,20 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
             public void cancel(@NonNull RequestDisposable disposable) {
                 disposable.dispose();
             }
-        });
+        }, imageLoader);
     }
 
     @NonNull
-    public static CoilImagesPlugin create(@NonNull CoilStore coilStore) {
-        return new CoilImagesPlugin(coilStore);
+    public static CoilImagesPlugin create(@NonNull final CoilStore coilStore,
+                                          @NonNull final ImageLoader imageLoader) {
+        return new CoilImagesPlugin(coilStore, imageLoader);
     }
 
     private final CoilAsyncDrawableLoader coilAsyncDrawableLoader;
 
     @SuppressWarnings("WeakerAccess")
-    CoilImagesPlugin(@NonNull CoilStore coilStore) {
-        this.coilAsyncDrawableLoader = new CoilAsyncDrawableLoader(coilStore);
+    CoilImagesPlugin(@NonNull CoilStore coilStore, @NonNull ImageLoader imageLoader) {
+        this.coilAsyncDrawableLoader = new CoilAsyncDrawableLoader(coilStore, imageLoader);
     }
 
     @Override
@@ -113,10 +114,12 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
     private static class CoilAsyncDrawableLoader extends AsyncDrawableLoader {
 
         private final CoilStore coilStore;
+        private final ImageLoader imageLoader;
         private final Map<AsyncDrawable, RequestDisposable> cache = new HashMap<>(2);
 
-        CoilAsyncDrawableLoader(@NonNull CoilStore coilStore) {
+        CoilAsyncDrawableLoader(@NonNull CoilStore coilStore, @NonNull ImageLoader imageLoader) {
             this.coilStore = coilStore;
+            this.imageLoader = imageLoader;
         }
 
         @Override
@@ -125,7 +128,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
             LoadRequest request = coilStore.load(drawable).newBuilder()
                     .target(target)
                     .build();
-            RequestDisposable disposable = Coil.loader().load(request);
+            RequestDisposable disposable = imageLoader.load(request);
             cache.put(drawable, disposable);
         }
 

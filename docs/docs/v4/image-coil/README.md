@@ -20,7 +20,8 @@ val markwon = Markwon.builder(context)
         // if you need more control
         .usePlugin(CoilImagesPlugin.create(object : CoilImagesPlugin.CoilStore {
             override fun load(drawable: AsyncDrawable): LoadRequest {
-                return LoadRequest(context, Coil.loader().defaults) {
+                return LoadRequest(context, customImageLoader.defaults) {
+                    data(drawable.destination)
                     crossfade(true)
                     transformations(CircleCropTransformation())
                 }
@@ -29,6 +30,6 @@ val markwon = Markwon.builder(context)
             override cancel(disposable: RequestDisposable) {
                 disposable.dispose()
             }
-        }))
+        }, customImageLoader))
         .build()
 ```
