@@ -81,11 +81,12 @@ ext {
     ]
 
     deps['test'] = [
-            'junit'      : 'junit:junit:4.12',
-            'robolectric': 'org.robolectric:robolectric:3.8',
-            'ix-java'    : 'com.github.akarnokd:ixjava:1.0.0',
-            'commons-io' : 'commons-io:commons-io:2.6',
-            'mockito'    : 'org.mockito:mockito-core:2.21.0'
+            'junit'               : 'junit:junit:4.12',
+            'robolectric'         : 'org.robolectric:robolectric:3.8',
+            'ix-java'             : 'com.github.akarnokd:ixjava:1.0.0',
+            'commons-io'          : 'commons-io:commons-io:2.6',
+            'mockito'             : 'org.mockito:mockito-core:2.21.0',
+            'commonmark-test-util': "com.atlassian.commonmark:commonmark-test-util:$commonMarkVersion",
     ]
 
     registerArtifact = this.&registerArtifact
