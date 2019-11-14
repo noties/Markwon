@@ -19,6 +19,7 @@ import io.noties.markwon.editor.MarkwonEditor.PreRenderResultListener;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.doAnswer;
@@ -52,6 +53,8 @@ public class MarkwonEditorTextWatcherTest {
         final ExecutorService service = mock(ExecutorService.class);
         final EditText editText = mock(EditText.class);
 
+        when(editable.getSpans(anyInt(), anyInt(), any(Class.class))).thenReturn(new Object[0]);
+
         when(editText.getText()).thenReturn(editable);
 
         when(service.submit(any(Runnable.class))).thenAnswer(new Answer<Object>() {
@@ -81,7 +84,7 @@ public class MarkwonEditorTextWatcherTest {
                 ArgumentCaptor.forClass(PreRenderResultListener.class);
 
         verify(service, times(1)).submit(any(Runnable.class));
-        verify(editor, times(1)).preRender(eq(editable), captor.capture());
+        verify(editor, times(1)).preRender(any(Editable.class), captor.capture());
 
         final PreRenderResultListener listener = captor.getValue();
         final PreRenderResult result = mock(PreRenderResult.class);
@@ -125,7 +128,7 @@ public class MarkwonEditorTextWatcherTest {
         final MarkwonEditorTextWatcher textWatcher =
                 MarkwonEditorTextWatcher.withPreRender(editor, service, editText);
 
-        textWatcher.afterTextChanged(mock(Editable.class));
+        textWatcher.afterTextChanged(mock(Editable.class, RETURNS_MOCKS));
 
         verify(editText, times(1)).post(captor.capture());
 

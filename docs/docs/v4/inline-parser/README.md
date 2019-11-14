@@ -7,9 +7,9 @@ Usage of _internal_ classes:
 ```java
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.Delimiter;
-import org.commonmark.internal.ReferenceParser;
 import org.commonmark.internal.util.Escaping;
 import org.commonmark.internal.util.Html5Entities;
+import org.commonmark.internal.util.LinkScanner;
 import org.commonmark.internal.util.Parsing;
 import org.commonmark.internal.inline.AsteriskDelimiterProcessor;
 import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
@@ -20,14 +20,12 @@ import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
 ```java
 // all default (like current commonmark-java InlineParserImpl) 
 final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
-        .includeDefaults()
         .build();
 ```
 
 ```java
 // disable images (current markdown images will be considered as links):
 final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
-        .includeDefaults()
         .excludeInlineProcessor(BangInlineProcessor.class)
         .build();
 ```
@@ -35,7 +33,6 @@ final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
 ```java
 // disable core delimiter processors for `*`|`_` and `**`|`__`
 final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
-        .includeDefaults()
         .excludeDelimiterProcessor(AsteriskDelimiterProcessor.class)
         .excludeDelimiterProcessor(UnderscoreDelimiterProcessor.class)
         .build();
@@ -43,7 +40,7 @@ final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
 
 ```java
 // disable _all_ markdown inlines except for links (open and close bracket handling `[` & `]`)
-final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
+final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilderNoDefaults()
         // note that there is no `includeDefaults` method call
         .referencesEnabled(true)
         .addInlineProcessor(new OpenBracketInlineProcessor())
