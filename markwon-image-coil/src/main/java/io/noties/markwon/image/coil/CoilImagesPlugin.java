@@ -29,8 +29,8 @@ import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageSpanFactory;
 
 /**
- * @since 4.0.0
  * @author Tyler Wong
+ * @since 4.2.0-SNAPSHOT
  */
 public class CoilImagesPlugin extends AbstractMarkwonPlugin {
 

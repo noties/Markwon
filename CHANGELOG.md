@@ -2,6 +2,8 @@
 
 # 4.2.0-SNAPSHOT
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
+* `CoilImagesPlugin` image loader based on [Coil] library (new module: `markwon-image-coil`) ([#166], [#174])
+<br>Thanks to [@tylerbwong]
 * `Markwon#configuration` method to expose `MarkwonConfiguration` via public API
 * `HeadingSpan#getLevel` getter
 * Add `SvgPictureMediaDecoder` in `image` module to deal with SVG without dimensions ([#165])
@@ -9,7 +11,11 @@
 * `LinkifyPlugin` applies link span that is configured by `Markwon` (obtain via span factory)
 * `LinkifyPlugin` is thread-safe
 
+[@tylerbwong]: https://github.com/tylerbwong
+[Coil]: https://github.com/coil-kt/coil
 [#165]: https://github.com/noties/Markwon/issues/165
+[#166]: https://github.com/noties/Markwon/issues/166
+[#174]: https://github.com/noties/Markwon/pull/174
 
 # 4.1.2
 * Do not re-use RenderProps when creating a new visitor (fixes [#171])

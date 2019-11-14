@@ -102,6 +102,7 @@ module.exports = {
                 '/docs/v4/ext-tasklist/',
                 '/docs/v4/html/',
                 '/docs/v4/image/',
+                '/docs/v4/image-coil/',
                 '/docs/v4/image-glide/',
                 '/docs/v4/image-picasso/',
                 '/docs/v4/linkify/',
