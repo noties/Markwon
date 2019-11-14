@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
     }
 }
@@ -44,7 +44,6 @@ if (hasProperty('local')) {
 
 ext {
 
-    // NB, updating build-tools or compile-sdk will require updating Travis config (.travis.yml)
     config = [
             'build-tools'    : '28.0.3',
             'compile-sdk'    : 28,

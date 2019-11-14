@@ -17,23 +17,9 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFile 'proguard.pro'
-        }
-    }
-
-    compileOptions {
-        targetCompatibility '1.8'
-        sourceCompatibility '1.8'
-    }
 }
 
 dependencies {
-
-    implementation project(':markwon-editor')
 
     implementation project(':markwon-core')
     implementation project(':markwon-ext-strikethrough')
