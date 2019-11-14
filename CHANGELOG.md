@@ -4,6 +4,7 @@
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
 * `CoilImagesPlugin` image loader based on [Coil] library (new module: `markwon-image-coil`) ([#166], [#174])
 <br>Thanks to [@tylerbwong]
+* `MarkwonInlineParser` to customize inline parsing (new module: `markwon-inline-parser`)
 * `Markwon#configuration` method to expose `MarkwonConfiguration` via public API
 * `HeadingSpan#getLevel` getter
 * Add `SvgPictureMediaDecoder` in `image` module to deal with SVG without dimensions ([#165])

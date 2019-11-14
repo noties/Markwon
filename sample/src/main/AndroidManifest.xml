@@ -33,6 +33,8 @@
             android:name=".editor.EditorActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity android:name=".inlineparser.InlineParserActivity" />
+
     </application>
 
 </manifest>
