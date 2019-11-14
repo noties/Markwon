@@ -21,29 +21,28 @@ public class NewLineInlineProcessor extends InlineProcessor {
     }
 
     @Override
-    protected boolean parse() {
+    protected Node parse() {
         index++; // assume we're at a \n
 
-        Node lastChild = block.getLastChild();
+        final Node previous = block.getLastChild();
+
         // Check previous text for trailing spaces.
         // The "endsWith" is an optimization to avoid an RE match in the common case.
-        if (lastChild != null && lastChild instanceof Text && ((Text) lastChild).getLiteral().endsWith(" ")) {
-            Text text = (Text) lastChild;
+        if (previous instanceof Text && ((Text) previous).getLiteral().endsWith(" ")) {
+            Text text = (Text) previous;
             String literal = text.getLiteral();
             Matcher matcher = FINAL_SPACE.matcher(literal);
             int spaces = matcher.find() ? matcher.end() - matcher.start() : 0;
             if (spaces > 0) {
                 text.setLiteral(literal.substring(0, literal.length() - spaces));
             }
-            appendNode(spaces >= 2 ? new HardLineBreak() : new SoftLineBreak());
+            if (spaces >= 2) {
+                return new HardLineBreak();
+            } else {
+                return new SoftLineBreak();
+            }
         } else {
-            appendNode(new SoftLineBreak());
+            return new SoftLineBreak();
         }
-
-        // gobble leading spaces in next line
-        while (peek() == ' ') {
-            index++;
-        }
-        return true;
     }
 }

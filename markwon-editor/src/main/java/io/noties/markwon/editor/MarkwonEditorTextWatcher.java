@@ -1,6 +1,7 @@
 package io.noties.markwon.editor;
 
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -113,7 +114,7 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
         }
 
         @Override
-        public void afterTextChanged(final Editable s) {
+        public void afterTextChanged(Editable s) {
 
             if (selfChange) {
                 return;
@@ -126,11 +127,14 @@ public abstract class MarkwonEditorTextWatcher implements TextWatcher {
                 future.cancel(true);
             }
 
+            // copy current content (it's not good to pass EditText editable to other thread)
+            final SpannableStringBuilder builder = new SpannableStringBuilder(s);
+
             future = executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        editor.preRender(s, new MarkwonEditor.PreRenderResultListener() {
+                        editor.preRender(builder, new MarkwonEditor.PreRenderResultListener() {
                             @Override
                             public void onPreRenderResult(@NonNull final MarkwonEditor.PreRenderResult result) {
                                 final EditText et = editText;

@@ -2,6 +2,7 @@ package io.noties.markwon.inlineparser;
 
 import org.commonmark.internal.util.Parsing;
 import org.commonmark.node.HtmlInline;
+import org.commonmark.node.Node;
 
 import java.util.regex.Pattern;
 
@@ -26,15 +27,14 @@ public class HtmlInlineProcessor extends InlineProcessor {
     }
 
     @Override
-    protected boolean parse() {
+    protected Node parse() {
         String m = match(HTML_TAG);
         if (m != null) {
             HtmlInline node = new HtmlInline();
             node.setLiteral(m);
-            appendNode(node);
-            return true;
+            return node;
         } else {
-            return false;
+            return null;
         }
     }
 }

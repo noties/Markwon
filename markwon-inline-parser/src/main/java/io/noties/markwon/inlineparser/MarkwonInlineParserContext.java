@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.Delimiter;
 import org.commonmark.node.Link;
+import org.commonmark.node.LinkReferenceDefinition;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 
@@ -28,14 +29,11 @@ public interface MarkwonInlineParserContext {
 
     Delimiter lastDelimiter();
 
-    @NonNull
-    Map<String, Link> referenceMap();
-
     void addBracket(Bracket bracket);
 
     void removeLastBracket();
 
-    boolean spnl();
+    void spnl();
 
     /**
      * Returns the char at the current input index, or {@code '\0'} in case there are no more characters.
@@ -45,13 +43,14 @@ public interface MarkwonInlineParserContext {
     @Nullable
     String match(@NonNull Pattern re);
 
-    void appendNode(@NonNull Node node);
+    @NonNull
+    Text text(@NonNull String text);
 
     @NonNull
-    Text appendText(@NonNull CharSequence text, int beginIndex, int endIndex);
+    Text text(@NonNull String text, int beginIndex, int endIndex);
 
-    @NonNull
-    Text appendText(@NonNull CharSequence text);
+    @Nullable
+    LinkReferenceDefinition getLinkReferenceDefinition(String label);
 
     @Nullable
     String parseLinkDestination();

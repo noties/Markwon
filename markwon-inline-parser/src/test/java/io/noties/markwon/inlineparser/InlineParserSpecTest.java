@@ -8,7 +8,7 @@ import org.commonmark.testutil.example.Example;
 public class InlineParserSpecTest extends SpecTestCase {
 
     private static final Parser PARSER = Parser.builder()
-            .inlineParserFactory(MarkwonInlineParser.factoryBuilder().includeDefaults().build())
+            .inlineParserFactory(MarkwonInlineParser.factoryBuilder().build())
             .build();
 
     // The spec says URL-escaping is optional, but the examples assume that it's enabled.

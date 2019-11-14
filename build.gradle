@@ -52,7 +52,7 @@ ext {
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
-    final def commonMarkVersion = '0.12.1'
+    final def commonMarkVersion = '0.13.0'
     final def daggerVersion = '2.10'
 
     deps = [

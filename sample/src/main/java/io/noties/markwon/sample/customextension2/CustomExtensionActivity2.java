@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.commonmark.node.Link;
-import org.commonmark.node.Text;
+import org.commonmark.node.Node;
 import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.Parser;
 
@@ -71,7 +71,8 @@ public class CustomExtensionActivity2 extends Activity {
 
         final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
                 // include all current defaults (otherwise will be empty - contain only our inline-processors)
-                .includeDefaults()
+                //  included by default, to create factory-builder without defaults call `factoryBuilderNoDefaults`
+//                .includeDefaults()
                 .addInlineProcessor(new IssueInlineProcessor())
                 .addInlineProcessor(new UserInlineProcessor())
                 .build();
@@ -98,15 +99,14 @@ public class CustomExtensionActivity2 extends Activity {
         }
 
         @Override
-        protected boolean parse() {
+        protected Node parse() {
             final String id = match(RE);
             if (id != null) {
                 final Link link = new Link(createIssueOrPullRequestLinkDestination(id), null);
-                link.appendChild(new Text("#" + id));
-                appendNode(link);
-                return true;
+                link.appendChild(text("#" + id));
+                return link;
             }
-            return false;
+            return null;
         }
 
         @NonNull
@@ -125,15 +125,14 @@ public class CustomExtensionActivity2 extends Activity {
         }
 
         @Override
-        protected boolean parse() {
+        protected Node parse() {
             final String user = match(RE);
             if (user != null) {
                 final Link link = new Link(createUserLinkDestination(user), null);
-                link.appendChild(new Text("@" + user));
-                appendNode(link);
-                return true;
+                link.appendChild(text("@" + user));
+                return link;
             }
-            return false;
+            return null;
         }
 
         @NonNull

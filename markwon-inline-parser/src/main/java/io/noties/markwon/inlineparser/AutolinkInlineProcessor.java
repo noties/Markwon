@@ -1,6 +1,7 @@
 package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.Link;
+import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 
 import java.util.regex.Pattern;
@@ -24,22 +25,20 @@ public class AutolinkInlineProcessor extends InlineProcessor {
     }
 
     @Override
-    protected boolean parse() {
+    protected Node parse() {
         String m;
         if ((m = match(EMAIL_AUTOLINK)) != null) {
             String dest = m.substring(1, m.length() - 1);
             Link node = new Link("mailto:" + dest, null);
             node.appendChild(new Text(dest));
-            appendNode(node);
-            return true;
+            return node;
         } else if ((m = match(AUTOLINK)) != null) {
             String dest = m.substring(1, m.length() - 1);
             Link node = new Link(dest, null);
             node.appendChild(new Text(dest));
-            appendNode(node);
-            return true;
+            return node;
         } else {
-            return false;
+            return null;
         }
     }
 }

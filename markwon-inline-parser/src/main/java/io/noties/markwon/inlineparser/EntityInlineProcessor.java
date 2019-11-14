@@ -1,6 +1,8 @@
 package io.noties.markwon.inlineparser;
 
+import org.commonmark.internal.util.Escaping;
 import org.commonmark.internal.util.Html5Entities;
+import org.commonmark.node.Node;
 
 import java.util.regex.Pattern;
 
@@ -11,8 +13,7 @@ import java.util.regex.Pattern;
  */
 public class EntityInlineProcessor extends InlineProcessor {
 
-    private static final String ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
-    private static final Pattern ENTITY_HERE = Pattern.compile('^' + ENTITY, Pattern.CASE_INSENSITIVE);
+    private static final Pattern ENTITY_HERE = Pattern.compile('^' + Escaping.ENTITY, Pattern.CASE_INSENSITIVE);
 
     @Override
     public char specialCharacter() {
@@ -20,13 +21,12 @@ public class EntityInlineProcessor extends InlineProcessor {
     }
 
     @Override
-    protected boolean parse() {
+    protected Node parse() {
         String m;
         if ((m = match(ENTITY_HERE)) != null) {
-            appendText(Html5Entities.entityToString(m));
-            return true;
+            return text(Html5Entities.entityToString(m));
         } else {
-            return false;
+            return null;
         }
     }
 }

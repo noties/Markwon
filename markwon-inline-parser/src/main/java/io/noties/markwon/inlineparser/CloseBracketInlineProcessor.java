@@ -4,6 +4,7 @@ import org.commonmark.internal.Bracket;
 import org.commonmark.internal.util.Escaping;
 import org.commonmark.node.Image;
 import org.commonmark.node.Link;
+import org.commonmark.node.LinkReferenceDefinition;
 import org.commonmark.node.Node;
 
 import java.util.regex.Pattern;
@@ -26,7 +27,7 @@ public class CloseBracketInlineProcessor extends InlineProcessor {
     }
 
     @Override
-    protected boolean parse() {
+    protected Node parse() {
         index++;
         int startIndex = index;
 
@@ -34,15 +35,13 @@ public class CloseBracketInlineProcessor extends InlineProcessor {
         Bracket opener = lastBracket();
         if (opener == null) {
             // No matching opener, just return a literal.
-            appendText("]");
-            return true;
+            return text("]");
         }
 
         if (!opener.allowed) {
             // Matching opener but it's not allowed, just return a literal.
-            appendText("]");
             removeLastBracket();
-            return true;
+            return text("]");
         }
 
         // Check to see if we have a link/image
@@ -76,7 +75,8 @@ public class CloseBracketInlineProcessor extends InlineProcessor {
 
             // See if there's a link label like `[bar]` or `[]`
             int beforeLabel = index;
-            int labelLength = parseLinkLabel();
+            parseLinkLabel();
+            int labelLength = index - beforeLabel;
             String ref = null;
             if (labelLength > 2) {
                 ref = input.substring(beforeLabel, beforeLabel + labelLength);
@@ -88,10 +88,11 @@ public class CloseBracketInlineProcessor extends InlineProcessor {
             }
 
             if (ref != null) {
-                Link link = referenceMap().get(Escaping.normalizeReference(ref));
-                if (link != null) {
-                    dest = link.getDestination();
-                    title = link.getTitle();
+                String label = Escaping.normalizeReference(ref);
+                LinkReferenceDefinition definition = context.getLinkReferenceDefinition(label);
+                if (definition != null) {
+                    dest = definition.getDestination();
+                    title = definition.getTitle();
                     isLinkOrImage = true;
                 }
             }
@@ -107,7 +108,6 @@ public class CloseBracketInlineProcessor extends InlineProcessor {
                 linkOrImage.appendChild(node);
                 node = next;
             }
-            appendNode(linkOrImage);
 
             // Process delimiters such as emphasis inside link/image
             processDelimiters(opener.previousDelimiter);
@@ -128,15 +128,13 @@ public class CloseBracketInlineProcessor extends InlineProcessor {
                 }
             }
 
-            return true;
+            return linkOrImage;
 
         } else { // no link or image
-
-            appendText("]");
+            index = startIndex;
             removeLastBracket();
 
-            index = startIndex;
-            return true;
+            return text("]");
         }
     }
 }

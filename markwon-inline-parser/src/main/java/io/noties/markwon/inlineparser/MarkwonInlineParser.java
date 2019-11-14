@@ -5,11 +5,11 @@ import androidx.annotation.Nullable;
 
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.Delimiter;
-import org.commonmark.internal.ReferenceParser;
 import org.commonmark.internal.inline.AsteriskDelimiterProcessor;
 import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
 import org.commonmark.internal.util.Escaping;
-import org.commonmark.node.Link;
+import org.commonmark.internal.util.LinkScanner;
+import org.commonmark.node.LinkReferenceDefinition;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 import org.commonmark.parser.InlineParser;
@@ -32,11 +32,13 @@ import static io.noties.markwon.inlineparser.InlineParserUtils.mergeTextNodesBet
 
 /**
  * @see #factoryBuilder()
+ * @see #factoryBuilderNoDefaults()
  * @see FactoryBuilder
  * @since 4.2.0-SNAPSHOT
  */
-public class MarkwonInlineParser implements InlineParser, ReferenceParser, MarkwonInlineParserContext {
+public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserContext {
 
+    @SuppressWarnings("unused")
     public interface FactoryBuilder {
 
         /**
@@ -76,36 +78,38 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
         InlineParserFactory build();
     }
 
+    /**
+     * Creates an instance of {@link FactoryBuilder} and includes all defaults.
+     *
+     * @see #factoryBuilderNoDefaults()
+     */
     @NonNull
     public static FactoryBuilder factoryBuilder() {
-        return new FactoryBuilderImpl();
+        return new FactoryBuilderImpl().includeDefaults();
     }
 
-    private static final String ESCAPED_CHAR = "\\\\" + Escaping.ESCAPABLE;
+    /**
+     * NB, this return an <em>empty</em> builder, so if no {@link FactoryBuilder#includeDefaults()}
+     * is called, it means effectively <strong>no inline parsing</strong> (unless further calls
+     * to {@link FactoryBuilder#addInlineProcessor(InlineProcessor)} or {@link FactoryBuilder#addDelimiterProcessor(DelimiterProcessor)}).
+     */
+    @NonNull
+    public static FactoryBuilder factoryBuilderNoDefaults() {
+        return new FactoryBuilderImpl();
+    }
 
     private static final String ASCII_PUNCTUATION = "!\"#\\$%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?@\\[\\\\\\]\\^_`\\{\\|\\}~";
     private static final Pattern PUNCTUATION = Pattern
             .compile("^[" + ASCII_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]");
 
-    private static final Pattern LINK_TITLE = Pattern.compile(
-            "^(?:\"(" + ESCAPED_CHAR + "|[^\"\\x00])*\"" +
-                    '|' +
-                    "'(" + ESCAPED_CHAR + "|[^'\\x00])*'" +
-                    '|' +
-                    "\\((" + ESCAPED_CHAR + "|[^)\\x00])*\\))");
-
-    private static final Pattern LINK_DESTINATION_BRACES = Pattern.compile("^(?:[<](?:[^<> \\t\\n\\\\]|\\\\.)*[>])");
-
-    private static final Pattern LINK_LABEL = Pattern.compile("^\\[(?:[^\\\\\\[\\]]|\\\\.)*\\]");
-
     private static final Pattern SPNL = Pattern.compile("^ *(?:\n *)?");
 
     private static final Pattern UNICODE_WHITESPACE_CHAR = Pattern.compile("^[\\p{Zs}\t\r\n\f]");
 
-    private static final Pattern LINE_END = Pattern.compile("^ *(?:\n|$)");
-
     static final Pattern ESCAPABLE = Pattern.compile('^' + Escaping.ESCAPABLE);
     static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
+    private final InlineParserContext inlineParserContext;
 
     private final boolean referencesEnabled;
 
@@ -113,14 +117,11 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
     private final Map<Character, List<InlineProcessor>> inlineProcessors;
     private final Map<Character, DelimiterProcessor> delimiterProcessors;
 
+    // currently we still hold a reference to it because we decided not to
+    //  pass previous node argument to inline-processors (current usage is limited with NewLineInlineProcessor)
     private Node block;
     private String input;
     private int index;
-
-    /**
-     * Link references by ID, needs to be built up using parseReference before calling parse.
-     */
-    private Map<String, Link> referenceMap = new HashMap<>(1);
 
     /**
      * Top delimiter (emphasis, strong emphasis or custom emphasis). (Brackets are on a separate stack, different
@@ -135,9 +136,11 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
 
     // might we construct these in factory?
     public MarkwonInlineParser(
+            @NonNull InlineParserContext inlineParserContext,
             boolean referencesEnabled,
             @NonNull List<InlineProcessor> inlineProcessors,
             @NonNull List<DelimiterProcessor> delimiterProcessors) {
+        this.inlineParserContext = inlineParserContext;
         this.referencesEnabled = referencesEnabled;
         this.inlineProcessors = calculateInlines(inlineProcessors);
         this.delimiterProcessors = calculateDelimiterProcessors(delimiterProcessors);
@@ -218,117 +221,29 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
      */
     @Override
     public void parse(String content, Node block) {
-        this.block = block;
-        this.input = content.trim();
-        this.index = 0;
-        this.lastDelimiter = null;
-        this.lastBracket = null;
+        reset(content.trim());
 
-        boolean moreToParse;
-        do {
-            moreToParse = parseInline();
-        } while (moreToParse);
+        // we still reference it
+        this.block = block;
+
+        while (true) {
+            Node node = parseInline();
+            if (node != null) {
+                block.appendChild(node);
+            } else {
+                break;
+            }
+        }
 
         processDelimiters(null);
         mergeChildTextNodes(block);
     }
 
-    /**
-     * Attempt to parse a link reference, modifying the internal reference map.
-     */
-    @Override
-    public int parseReference(String s) {
-
-        if (!referencesEnabled) {
-            return 0;
-        }
-
-        this.input = s;
+    private void reset(String content) {
+        this.input = content;
         this.index = 0;
-        String dest;
-        String title;
-        int matchChars;
-        int startIndex = index;
-
-        // label:
-        matchChars = parseLinkLabel();
-        if (matchChars == 0) {
-            return 0;
-        }
-
-        String rawLabel = input.substring(0, matchChars);
-
-        // colon:
-        if (peek() != ':') {
-            return 0;
-        }
-        index++;
-
-        // link url
-        spnl();
-
-        dest = parseLinkDestination();
-        if (dest == null || dest.length() == 0) {
-            return 0;
-        }
-
-        int beforeTitle = index;
-        spnl();
-        title = parseLinkTitle();
-        if (title == null) {
-            // rewind before spaces
-            index = beforeTitle;
-        }
-
-        boolean atLineEnd = true;
-        if (index != input.length() && match(LINE_END) == null) {
-            if (title == null) {
-                atLineEnd = false;
-            } else {
-                // the potential title we found is not at the line end,
-                // but it could still be a legal link reference if we
-                // discard the title
-                title = null;
-                // rewind before spaces
-                index = beforeTitle;
-                // and instead check if the link URL is at the line end
-                atLineEnd = match(LINE_END) != null;
-            }
-        }
-
-        if (!atLineEnd) {
-            return 0;
-        }
-
-        String normalizedLabel = Escaping.normalizeReference(rawLabel);
-        if (normalizedLabel.isEmpty()) {
-            return 0;
-        }
-
-        if (!referenceMap.containsKey(normalizedLabel)) {
-            Link link = new Link(dest, title);
-            referenceMap.put(normalizedLabel, link);
-        }
-        return index - startIndex;
-    }
-
-    @Override
-    @NonNull
-    public Text appendText(@NonNull CharSequence text, int beginIndex, int endIndex) {
-        return appendText(text.subSequence(beginIndex, endIndex));
-    }
-
-    @Override
-    @NonNull
-    public Text appendText(@NonNull CharSequence text) {
-        Text node = new Text(text.toString());
-        appendNode(node);
-        return node;
-    }
-
-    @Override
-    public void appendNode(@NonNull Node node) {
-        block.appendChild(node);
+        this.lastDelimiter = null;
+        this.lastBracket = null;
     }
 
     /**
@@ -336,43 +251,44 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
      * On success, add the result to block's children and return true.
      * On failure, return false.
      */
-    private boolean parseInline() {
+    @Nullable
+    private Node parseInline() {
 
         final char c = peek();
 
         if (c == '\0') {
-            return false;
+            return null;
         }
 
-        boolean res = false;
+        Node node = null;
 
         final List<InlineProcessor> inlines = this.inlineProcessors.get(c);
 
         if (inlines != null) {
             for (InlineProcessor inline : inlines) {
-                res = inline.parse(this);
-                if (res) {
+                node = inline.parse(this);
+                if (node != null) {
                     break;
                 }
             }
         } else {
             final DelimiterProcessor delimiterProcessor = delimiterProcessors.get(c);
             if (delimiterProcessor != null) {
-                res = parseDelimiters(delimiterProcessor, c);
+                node = parseDelimiters(delimiterProcessor, c);
             } else {
-                res = parseString();
+                node = parseString();
             }
         }
 
-        if (!res) {
+        if (node != null) {
+            return node;
+        } else {
             index++;
             // When we get here, it's only for a single special character that turned out to not have a special meaning.
             // So we shouldn't have a single surrogate here, hence it should be ok to turn it into a String.
             String literal = String.valueOf(c);
-            appendText(literal);
+            return text(literal);
         }
-
-        return true;
     }
 
     /**
@@ -393,6 +309,26 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
         } else {
             return null;
         }
+    }
+
+    @NonNull
+    @Override
+    public Text text(@NonNull String text) {
+        return new Text(text);
+    }
+
+    @NonNull
+    @Override
+    public Text text(@NonNull String text, int beginIndex, int endIndex) {
+        return new Text(text.substring(beginIndex, endIndex));
+    }
+
+    @Nullable
+    @Override
+    public LinkReferenceDefinition getLinkReferenceDefinition(String label) {
+        return referencesEnabled
+                ? inlineParserContext.getLinkReferenceDefinition(label)
+                : null;
     }
 
     /**
@@ -439,12 +375,6 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
         return lastDelimiter;
     }
 
-    @NonNull
-    @Override
-    public Map<String, Link> referenceMap() {
-        return referenceMap;
-    }
-
     @Override
     public void addBracket(Bracket bracket) {
         if (lastBracket != null) {
@@ -462,24 +392,24 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
      * Parse zero or more space characters, including at most one newline.
      */
     @Override
-    public boolean spnl() {
+    public void spnl() {
         match(SPNL);
-        return true;
     }
 
     /**
      * Attempt to parse delimiters like emphasis, strong emphasis or custom delimiters.
      */
-    private boolean parseDelimiters(DelimiterProcessor delimiterProcessor, char delimiterChar) {
+    @Nullable
+    private Node parseDelimiters(DelimiterProcessor delimiterProcessor, char delimiterChar) {
         DelimiterData res = scanDelimiters(delimiterProcessor, delimiterChar);
         if (res == null) {
-            return false;
+            return null;
         }
         int length = res.count;
         int startIndex = index;
 
         index += length;
-        Text node = appendText(input, startIndex, index);
+        Text node = text(input, startIndex, index);
 
         // Add entry to stack for this opener
         lastDelimiter = new Delimiter(node, delimiterChar, res.canOpen, res.canClose, lastDelimiter);
@@ -489,7 +419,7 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
             lastDelimiter.previous.next = lastDelimiter;
         }
 
-        return true;
+        return node;
     }
 
     /**
@@ -498,57 +428,21 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
     @Override
     @Nullable
     public String parseLinkDestination() {
-        String res = match(LINK_DESTINATION_BRACES);
-        if (res != null) { // chop off surrounding <..>:
-            if (res.length() == 2) {
-                return "";
-            } else {
-                return Escaping.unescapeString(res.substring(1, res.length() - 1));
-            }
-        } else {
-            int startIndex = index;
-            parseLinkDestinationWithBalancedParens();
-            return Escaping.unescapeString(input.substring(startIndex, index));
+        int afterDest = LinkScanner.scanLinkDestination(input, index);
+        if (afterDest == -1) {
+            return null;
         }
-    }
 
-    private void parseLinkDestinationWithBalancedParens() {
-        int parens = 0;
-        while (true) {
-            char c = peek();
-            switch (c) {
-                case '\0':
-                    return;
-                case '\\':
-                    // check if we have an escapable character
-                    if (index + 1 < input.length() && ESCAPABLE.matcher(input.substring(index + 1, index + 2)).matches()) {
-                        // skip over the escaped character (after switch)
-                        index++;
-                        break;
-                    }
-                    // otherwise, we treat this as a literal backslash
-                    break;
-                case '(':
-                    parens++;
-                    break;
-                case ')':
-                    if (parens == 0) {
-                        return;
-                    } else {
-                        parens--;
-                    }
-                    break;
-                case ' ':
-                    // ASCII space
-                    return;
-                default:
-                    // or control character
-                    if (Character.isISOControl(c)) {
-                        return;
-                    }
-            }
-            index++;
+        String dest;
+        if (peek() == '<') {
+            // chop off surrounding <..>:
+            dest = input.substring(index + 1, afterDest - 1);
+        } else {
+            dest = input.substring(index, afterDest);
         }
+
+        index = afterDest;
+        return Escaping.unescapeString(dest);
     }
 
     /**
@@ -557,13 +451,15 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
     @Override
     @Nullable
     public String parseLinkTitle() {
-        String title = match(LINK_TITLE);
-        if (title != null) {
-            // chop off quotes from title and unescape:
-            return Escaping.unescapeString(title.substring(1, title.length() - 1));
-        } else {
+        int afterTitle = LinkScanner.scanLinkTitle(input, index);
+        if (afterTitle == -1) {
             return null;
         }
+
+        // chop off ', " or parens
+        String title = input.substring(index + 1, afterTitle - 1);
+        index = afterTitle;
+        return Escaping.unescapeString(title);
     }
 
     /**
@@ -571,19 +467,28 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
      */
     @Override
     public int parseLinkLabel() {
-        String m = match(LINK_LABEL);
-        // Spec says "A link label can have at most 999 characters inside the square brackets"
-        if (m == null || m.length() > 1001) {
+        if (index >= input.length() || input.charAt(index) != '[') {
             return 0;
-        } else {
-            return m.length();
         }
+
+        int startContent = index + 1;
+        int endContent = LinkScanner.scanLinkLabelContent(input, startContent);
+        // spec: A link label can have at most 999 characters inside the square brackets.
+        int contentLength = endContent - startContent;
+        if (endContent == -1 || contentLength > 999) {
+            return 0;
+        }
+        if (endContent >= input.length() || input.charAt(endContent) != ']') {
+            return 0;
+        }
+        index = endContent + 1;
+        return contentLength + 2;
     }
 
     /**
      * Parse a run of ordinary characters, or a single character with a special meaning in markdown, as a plain string.
      */
-    private boolean parseString() {
+    private Node parseString() {
         int begin = index;
         int length = input.length();
         while (index != length) {
@@ -593,10 +498,9 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
             index++;
         }
         if (begin != index) {
-            appendText(input, begin, index);
-            return true;
+            return text(input, begin, index);
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -909,7 +813,11 @@ public class MarkwonInlineParser implements InlineParser, ReferenceParser, Markw
             } else {
                 delimiterProcessors = this.delimiterProcessors;
             }
-            return new MarkwonInlineParser(referencesEnabled, inlineProcessors, delimiterProcessors);
+            return new MarkwonInlineParser(
+                    inlineParserContext,
+                    referencesEnabled,
+                    inlineProcessors,
+                    delimiterProcessors);
         }
     }
 }

@@ -54,7 +54,7 @@ public class InlineParserActivity extends Activity {
         //  * no HTML entities (&amp;)
         //  * no HTML tags
         // markdown blocks are still parsed
-        final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
+        final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilderNoDefaults()
                 .referencesEnabled(true)
                 .addInlineProcessor(new OpenBracketInlineProcessor())
                 .addInlineProcessor(new CloseBracketInlineProcessor())
@@ -78,7 +78,6 @@ public class InlineParserActivity extends Activity {
         // parses all as usual, but ignores code (inline and block)
 
         final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
-                .includeDefaults()
                 .excludeInlineProcessor(BackticksInlineProcessor.class)
                 .build();
 

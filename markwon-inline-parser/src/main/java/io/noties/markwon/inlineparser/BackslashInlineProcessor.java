@@ -1,6 +1,7 @@
 package io.noties.markwon.inlineparser;
 
 import org.commonmark.node.HardLineBreak;
+import org.commonmark.node.Node;
 
 import java.util.regex.Pattern;
 
@@ -17,17 +18,18 @@ public class BackslashInlineProcessor extends InlineProcessor {
     }
 
     @Override
-    protected boolean parse() {
+    protected Node parse() {
         index++;
+        Node node;
         if (peek() == '\n') {
-            appendNode(new HardLineBreak());
+            node = new HardLineBreak();
             index++;
         } else if (index < input.length() && ESCAPABLE.matcher(input.substring(index, index + 1)).matches()) {
-            appendText(input, index, index + 1);
+            node = text(input, index, index + 1);
             index++;
         } else {
-            appendText("\\");
+            node = text("\\");
         }
-        return true;
+        return node;
     }
 }

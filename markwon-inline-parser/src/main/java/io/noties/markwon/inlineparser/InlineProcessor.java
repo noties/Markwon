@@ -36,7 +36,8 @@ public abstract class InlineProcessor {
     /**
      * @return boolean indicating if parsing succeeded
      */
-    protected abstract boolean parse();
+    @Nullable
+    protected abstract Node parse();
 
 
     protected MarkwonInlineParserContext context;
@@ -44,13 +45,14 @@ public abstract class InlineProcessor {
     protected String input;
     protected int index;
 
-    public boolean parse(@NonNull MarkwonInlineParserContext context) {
+    @Nullable
+    public Node parse(@NonNull MarkwonInlineParserContext context) {
         this.context = context;
         this.block = context.block();
         this.input = context.input();
         this.index = context.index();
 
-        final boolean result = parse();
+        final Node result = parse();
 
         // synchronize index
         context.setIndex(index);
@@ -64,11 +66,6 @@ public abstract class InlineProcessor {
 
     protected Delimiter lastDelimiter() {
         return context.lastDelimiter();
-    }
-
-    @NonNull
-    protected Map<String, Link> referenceMap() {
-        return context.referenceMap();
     }
 
     protected void addBracket(Bracket bracket) {
@@ -127,18 +124,14 @@ public abstract class InlineProcessor {
         this.index = context.index();
     }
 
-    protected void appendNode(@NonNull Node node) {
-        context.appendNode(node);
+    @NonNull
+    protected Text text(@NonNull String text) {
+        return context.text(text);
     }
 
     @NonNull
-    protected Text appendText(@NonNull CharSequence text, int beginIndex, int endIndex) {
-        return context.appendText(text, beginIndex, endIndex);
-    }
-
-    @NonNull
-    protected Text appendText(@NonNull CharSequence text) {
-        return context.appendText(text);
+    protected Text text(@NonNull String text, int start, int end) {
+        return context.text(text, start, end);
     }
 
     protected char peek() {
