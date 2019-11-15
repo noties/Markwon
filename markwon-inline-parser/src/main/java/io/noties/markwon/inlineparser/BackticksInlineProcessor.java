@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Parses inline code surrounded with {@code `} chars {@code `code`}
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class BackticksInlineProcessor extends InlineProcessor {
 

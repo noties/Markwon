@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public abstract class MarkwonEditorUtils {
 

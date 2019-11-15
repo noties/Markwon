@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Parses HTML entities {@code &amp;}
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class EntityInlineProcessor extends InlineProcessor {
 

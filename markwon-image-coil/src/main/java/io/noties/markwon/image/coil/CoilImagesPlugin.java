@@ -30,7 +30,7 @@ import io.noties.markwon.image.ImageSpanFactory;
 
 /**
  * @author Tyler Wong
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class CoilImagesPlugin extends AbstractMarkwonPlugin {
 

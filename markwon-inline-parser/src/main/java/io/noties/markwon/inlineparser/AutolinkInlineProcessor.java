@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Parses autolinks, for example {@code <me@mydoma.in>}
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class AutolinkInlineProcessor extends InlineProcessor {
 

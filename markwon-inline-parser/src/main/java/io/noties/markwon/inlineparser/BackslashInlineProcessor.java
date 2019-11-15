@@ -6,7 +6,7 @@ import org.commonmark.node.Node;
 import java.util.regex.Pattern;
 
 /**
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class BackslashInlineProcessor extends InlineProcessor {
 

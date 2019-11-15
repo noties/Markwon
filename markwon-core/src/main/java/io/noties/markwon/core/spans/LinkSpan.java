@@ -36,7 +36,7 @@ public class LinkSpan extends URLSpan {
     }
 
     /**
-     * @since 4.2.0-SNAPSHOT
+     * @since 4.2.0
      */
     @NonNull
     public String getLink() {

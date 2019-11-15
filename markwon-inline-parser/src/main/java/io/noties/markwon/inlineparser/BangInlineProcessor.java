@@ -7,7 +7,7 @@ import org.commonmark.node.Text;
 /**
  * Parses markdown images {@code ![alt](#href)}
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class BangInlineProcessor extends InlineProcessor {
     @Override

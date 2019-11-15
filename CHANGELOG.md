@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.2.0-SNAPSHOT
+# 4.2.0
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
 * `CoilImagesPlugin` image loader based on [Coil] library (new module: `markwon-image-coil`) ([#166], [#174])
 <br>Thanks to [@tylerbwong]

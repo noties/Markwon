@@ -79,7 +79,7 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
     }
 
     /**
-     * @since 4.2.0-SNAPSHOT
+     * @since 4.2.0
      */
     public int getLevel() {
         return level;

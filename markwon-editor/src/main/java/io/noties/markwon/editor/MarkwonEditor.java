@@ -14,7 +14,7 @@ import io.noties.markwon.Markwon;
  * @see #create(Markwon)
  * @see #process(Editable)
  * @see #preRender(Editable, PreRenderResultListener)
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public abstract class MarkwonEditor {
 

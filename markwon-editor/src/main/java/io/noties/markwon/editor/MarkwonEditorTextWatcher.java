@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
  * @see MarkwonEditor#preRender(Editable, MarkwonEditor.PreRenderResultListener)
  * @see #withProcess(MarkwonEditor)
  * @see #withPreRender(MarkwonEditor, ExecutorService, EditText)
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public abstract class MarkwonEditorTextWatcher implements TextWatcher {
 

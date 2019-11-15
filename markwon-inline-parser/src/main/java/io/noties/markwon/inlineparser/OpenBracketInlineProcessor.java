@@ -7,7 +7,7 @@ import org.commonmark.node.Text;
 /**
  * Parses markdown links {@code [link](#href)}
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class OpenBracketInlineProcessor extends InlineProcessor {
     @Override

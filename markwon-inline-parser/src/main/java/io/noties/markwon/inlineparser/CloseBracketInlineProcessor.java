@@ -15,7 +15,7 @@ import static io.noties.markwon.inlineparser.InlineParserUtils.mergeChildTextNod
  * Parses markdown link or image, relies on {@link OpenBracketInlineProcessor}
  * to handle start of these elements
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class CloseBracketInlineProcessor extends InlineProcessor {
 

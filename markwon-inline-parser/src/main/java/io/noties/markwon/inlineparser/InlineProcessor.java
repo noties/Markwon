@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * @see OpenBracketInlineProcessor
  * @see MarkwonInlineParser.FactoryBuilder#addInlineProcessor(InlineProcessor)
  * @see MarkwonInlineParser.FactoryBuilder#excludeInlineProcessor(Class)
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public abstract class InlineProcessor {
 

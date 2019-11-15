@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Parses inline HTML tags
  *
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class HtmlInlineProcessor extends InlineProcessor {
 

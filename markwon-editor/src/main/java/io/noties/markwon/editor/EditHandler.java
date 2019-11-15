@@ -11,7 +11,7 @@ import io.noties.markwon.editor.handler.StrongEmphasisEditHandler;
 /**
  * @see EmphasisEditHandler
  * @see StrongEmphasisEditHandler
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public interface EditHandler<T> {
 

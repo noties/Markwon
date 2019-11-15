@@ -11,7 +11,7 @@ import io.noties.markwon.editor.MarkwonEditorUtils;
 import io.noties.markwon.editor.PersistedSpans;
 
 /**
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class StrongEmphasisEditHandler extends AbstractEditHandler<StrongEmphasisSpan> {
 

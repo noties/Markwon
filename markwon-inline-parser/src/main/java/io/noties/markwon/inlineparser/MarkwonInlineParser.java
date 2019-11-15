@@ -34,7 +34,7 @@ import static io.noties.markwon.inlineparser.InlineParserUtils.mergeTextNodesBet
  * @see #factoryBuilder()
  * @see #factoryBuilderNoDefaults()
  * @see FactoryBuilder
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserContext {
 

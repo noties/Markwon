@@ -20,7 +20,7 @@ import static io.noties.markwon.editor.MarkwonEditorUtils.extractSpans;
  *
  * @see EditHandler#handleMarkdownSpan(PersistedSpans, Editable, String, Object, int, int)
  * @see EditHandler#configurePersistedSpans(Builder)
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public abstract class PersistedSpans {
 

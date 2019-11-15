@@ -17,7 +17,7 @@ import java.util.Collections;
 import io.noties.markwon.image.MediaDecoder;
 
 /**
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public class SvgPictureMediaDecoder extends MediaDecoder {
 

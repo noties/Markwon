@@ -4,7 +4,7 @@ import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 
 /**
- * @since 4.2.0-SNAPSHOT
+ * @since 4.2.0
  */
 public abstract class InlineParserUtils {
 

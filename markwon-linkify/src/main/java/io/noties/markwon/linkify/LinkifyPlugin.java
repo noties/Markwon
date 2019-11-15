@@ -69,14 +69,14 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         @Override
         public void onTextAdded(@NonNull MarkwonVisitor visitor, @NonNull String text, int start) {
 
-            // @since 4.2.0-SNAPSHOT obtain span factory for links
+            // @since 4.2.0 obtain span factory for links
             //  we will be using the link that is used by markdown (instead of directly applying URLSpan)
             final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Link.class);
             if (spanFactory == null) {
                 return;
             }
 
-            // @since 4.2.0-SNAPSHOT we no longer re-use builder (thread safety achieved for
+            // @since 4.2.0 we no longer re-use builder (thread safety achieved for
             //  render calls from different threads and ... better performance)
             final SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
