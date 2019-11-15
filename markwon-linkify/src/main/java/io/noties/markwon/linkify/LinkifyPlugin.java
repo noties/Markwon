@@ -1,18 +1,24 @@
 package io.noties.markwon.linkify;
 
 import android.text.SpannableStringBuilder;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+
+import org.commonmark.node.Link;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.RenderProps;
+import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
 import io.noties.markwon.core.CorePlugin;
+import io.noties.markwon.core.CoreProps;
 
 public class LinkifyPlugin extends AbstractMarkwonPlugin {
 
@@ -55,34 +61,42 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
     private static class LinkifyTextAddedListener implements CorePlugin.OnTextAddedListener {
 
         private final int mask;
-        private final SpannableStringBuilder builder;
 
         LinkifyTextAddedListener(int mask) {
             this.mask = mask;
-            this.builder = new SpannableStringBuilder();
         }
 
         @Override
         public void onTextAdded(@NonNull MarkwonVisitor visitor, @NonNull String text, int start) {
 
-            // clear previous state
-            builder.clear();
-            builder.clearSpans();
+            // @since 4.2.0 obtain span factory for links
+            //  we will be using the link that is used by markdown (instead of directly applying URLSpan)
+            final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Link.class);
+            if (spanFactory == null) {
+                return;
+            }
 
-            // append text to process
-            builder.append(text);
+            // @since 4.2.0 we no longer re-use builder (thread safety achieved for
+            //  render calls from different threads and ... better performance)
+            final SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
             if (Linkify.addLinks(builder, mask)) {
-                final Object[] spans = builder.getSpans(0, builder.length(), Object.class);
+                // target URL span specifically
+                final URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
                 if (spans != null
                         && spans.length > 0) {
+
+                    final RenderProps renderProps = visitor.renderProps();
                     final SpannableBuilder spannableBuilder = visitor.builder();
-                    for (Object span : spans) {
-                        spannableBuilder.setSpan(
-                                span,
+
+                    for (URLSpan span : spans) {
+                        CoreProps.LINK_DESTINATION.set(renderProps, span.getURL());
+                        SpannableBuilder.setSpans(
+                                spannableBuilder,
+                                spanFactory.getSpans(visitor.configuration(), renderProps),
                                 start + builder.getSpanStart(span),
-                                start + builder.getSpanEnd(span),
-                                builder.getSpanFlags(span));
+                                start + builder.getSpanEnd(span)
+                        );
                     }
                 }
             }

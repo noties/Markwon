@@ -50,6 +50,23 @@ public class OrderedListTest extends BaseSuiteTest {
   @Test
   public void two_spaces() {
     // just a regular flat-list (no sub-lists)
+    // UPD: cannot have more than 3 spaces (0.29), now it is:
+    // 1. First
+    // 2. Second 3. Third
+
+//    final Document document = document(
+//      span(ORDERED_LIST,
+//        args("start", 1),
+//        text("First")),
+//      text("\n"),
+//      span(ORDERED_LIST,
+//        args("start", 2),
+//        text("Second")),
+//      text("\n"),
+//      span(ORDERED_LIST,
+//        args("start", 3),
+//        text("Third"))
+//    );
 
     final Document document = document(
       span(ORDERED_LIST,
@@ -58,11 +75,7 @@ public class OrderedListTest extends BaseSuiteTest {
       text("\n"),
       span(ORDERED_LIST,
         args("start", 2),
-        text("Second")),
-      text("\n"),
-      span(ORDERED_LIST,
-        args("start", 3),
-        text("Third"))
+        text("Second 3. Third"))
     );
 
     matchInput("ol-2-spaces.md", document);

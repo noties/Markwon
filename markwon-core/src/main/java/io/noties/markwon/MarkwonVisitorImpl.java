@@ -18,6 +18,7 @@ import org.commonmark.node.HtmlInline;
 import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
+import org.commonmark.node.LinkReferenceDefinition;
 import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
 import org.commonmark.node.OrderedList;
@@ -153,6 +154,11 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
     @Override
     public void visit(Text text) {
         visit((Node) text);
+    }
+
+    @Override
+    public void visit(LinkReferenceDefinition linkReferenceDefinition) {
+        visit((Node) linkReferenceDefinition);
     }
 
     @Override

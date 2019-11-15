@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
     }
 }
@@ -44,7 +44,6 @@ if (hasProperty('local')) {
 
 ext {
 
-    // NB, updating build-tools or compile-sdk will require updating Travis config (.travis.yml)
     config = [
             'build-tools'    : '28.0.3',
             'compile-sdk'    : 28,
@@ -53,7 +52,7 @@ ext {
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
-    final def commonMarkVersion = '0.12.1'
+    final def commonMarkVersion = '0.13.0'
     final def daggerVersion = '2.10'
 
     deps = [
@@ -72,7 +71,8 @@ ext {
             'adapt'                   : 'io.noties:adapt:2.0.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
             'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
-            'glide'                   : 'com.github.bumptech.glide:glide:4.9.0'
+            'glide'                   : 'com.github.bumptech.glide:glide:4.9.0',
+            'coil'                    : 'io.coil-kt:coil:0.8.0'
     ]
 
     deps['annotationProcessor'] = [
@@ -81,11 +81,12 @@ ext {
     ]
 
     deps['test'] = [
-            'junit'      : 'junit:junit:4.12',
-            'robolectric': 'org.robolectric:robolectric:3.8',
-            'ix-java'    : 'com.github.akarnokd:ixjava:1.0.0',
-            'commons-io' : 'commons-io:commons-io:2.6',
-            'mockito'    : 'org.mockito:mockito-core:2.21.0'
+            'junit'               : 'junit:junit:4.12',
+            'robolectric'         : 'org.robolectric:robolectric:3.8',
+            'ix-java'             : 'com.github.akarnokd:ixjava:1.0.0',
+            'commons-io'          : 'commons-io:commons-io:2.6',
+            'mockito'             : 'org.mockito:mockito-core:2.21.0',
+            'commonmark-test-util': "com.atlassian.commonmark:commonmark-test-util:$commonMarkVersion",
     ]
 
     registerArtifact = this.&registerArtifact

@@ -17,13 +17,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFile 'proguard.pro'
-        }
-    }
 }
 
 dependencies {

@@ -31,7 +31,15 @@ public class LinkSpan extends URLSpan {
     }
 
     @Override
-    public void updateDrawState(TextPaint ds) {
+    public void updateDrawState(@NonNull TextPaint ds) {
         theme.applyLinkStyle(ds);
+    }
+
+    /**
+     * @since 4.2.0
+     */
+    @NonNull
+    public String getLink() {
+        return link;
     }
 }

@@ -19,6 +19,9 @@ features listed in [commonmark-spec] are supported
 (including support for **inlined/block HTML code**, **markdown tables**,
 **images** and **syntax highlight**).
 
+Since version **4.2.0** **Markwon** comes with an [editor](./markwon-editor/) to _highlight_ markdown input
+as user types (for example in **EditText**).
+
 [commonmark-spec]: https://spec.commonmark.org/0.28/
 [commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
 

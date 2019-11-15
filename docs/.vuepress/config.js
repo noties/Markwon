@@ -95,14 +95,17 @@ module.exports = {
                         '/docs/v4/core/text-setter.md'
                     ]
                 },
+                '/docs/v4/editor/',
                 '/docs/v4/ext-latex/',
                 '/docs/v4/ext-strikethrough/',
                 '/docs/v4/ext-tables/',
                 '/docs/v4/ext-tasklist/',
                 '/docs/v4/html/',
                 '/docs/v4/image/',
+                '/docs/v4/image-coil/',
                 '/docs/v4/image-glide/',
                 '/docs/v4/image-picasso/',
+                '/docs/v4/inline-parser/',
                 '/docs/v4/linkify/',
                 '/docs/v4/recycler/',
                 '/docs/v4/recycler-table/',

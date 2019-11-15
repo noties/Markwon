@@ -34,16 +34,19 @@ android {
 dependencies {
 
     implementation project(':markwon-core')
+    implementation project(':markwon-editor')
     implementation project(':markwon-ext-latex')
     implementation project(':markwon-ext-strikethrough')
     implementation project(':markwon-ext-tables')
     implementation project(':markwon-ext-tasklist')
     implementation project(':markwon-html')
     implementation project(':markwon-image')
-    implementation project(':markwon-syntax-highlight')
+    implementation project(':markwon-inline-parser')
+    implementation project(':markwon-linkify')
     implementation project(':markwon-recycler')
     implementation project(':markwon-recycler-table')
     implementation project(':markwon-simple-ext')
+    implementation project(':markwon-syntax-highlight')
 
     implementation project(':markwon-image-picasso')
 

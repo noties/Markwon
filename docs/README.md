@@ -21,6 +21,11 @@ but also gives all the means to tweak the appearance if desired. All markdown fe
 listed in <Link name="commonmark-spec" /> are supported (including support for **inlined/block HTML code**, 
 **markdown tables**, **images** and **syntax highlight**).
 
+Since version <Badge text="4.2.0" /> **Markwon** comes with an [editor] to _highlight_ markdown input
+as user types (for example in **EditText**).
+
+[editor]: /docs/v4/editor/
+
 ## Supported markdown features
 
 * Emphasis (`*`, `_`)
