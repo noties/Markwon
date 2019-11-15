@@ -55,18 +55,10 @@ public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserCon
         FactoryBuilder addDelimiterProcessor(@NonNull DelimiterProcessor processor);
 
         /**
-         * Indicate if markdown references are enabled. {@code referencesEnabled=true} if {@link #includeDefaults()}
-         * was called
+         * Indicate if markdown references are enabled. By default = `true`
          */
         @NonNull
         FactoryBuilder referencesEnabled(boolean referencesEnabled);
-
-        /**
-         * Includes all default delimiter and inline processors, and sets {@code referencesEnabled=true}.
-         * Useful with subsequent calls to {@link #excludeInlineProcessor(Class)} or {@link #excludeDelimiterProcessor(Class)}
-         */
-        @NonNull
-        FactoryBuilder includeDefaults();
 
         @NonNull
         FactoryBuilder excludeInlineProcessor(@NonNull Class<? extends InlineProcessor> processor);
@@ -76,6 +68,15 @@ public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserCon
 
         @NonNull
         InlineParserFactory build();
+    }
+
+    public interface FactoryBuilderNoDefaults extends FactoryBuilder {
+        /**
+         * Includes all default delimiter and inline processors, and sets {@code referencesEnabled=true}.
+         * Useful with subsequent calls to {@link #excludeInlineProcessor(Class)} or {@link #excludeDelimiterProcessor(Class)}
+         */
+        @NonNull
+        FactoryBuilder includeDefaults();
     }
 
     /**
@@ -89,12 +90,12 @@ public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserCon
     }
 
     /**
-     * NB, this return an <em>empty</em> builder, so if no {@link FactoryBuilder#includeDefaults()}
+     * NB, this return an <em>empty</em> builder, so if no {@link FactoryBuilderNoDefaults#includeDefaults()}
      * is called, it means effectively <strong>no inline parsing</strong> (unless further calls
      * to {@link FactoryBuilder#addInlineProcessor(InlineProcessor)} or {@link FactoryBuilder#addDelimiterProcessor(DelimiterProcessor)}).
      */
     @NonNull
-    public static FactoryBuilder factoryBuilderNoDefaults() {
+    public static FactoryBuilderNoDefaults factoryBuilderNoDefaults() {
         return new FactoryBuilderImpl();
     }
 
@@ -701,7 +702,7 @@ public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserCon
         }
     }
 
-    static class FactoryBuilderImpl implements FactoryBuilder {
+    static class FactoryBuilderImpl implements FactoryBuilder, FactoryBuilderNoDefaults {
 
         private final List<InlineProcessor> inlineProcessors = new ArrayList<>(3);
         private final List<DelimiterProcessor> delimiterProcessors = new ArrayList<>(3);

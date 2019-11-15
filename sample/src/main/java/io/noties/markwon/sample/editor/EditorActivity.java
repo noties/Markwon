@@ -177,7 +177,6 @@ public class EditorActivity extends Activity {
         editText.setMovementMethod(LinkMovementMethod.getInstance());
 
         final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
-                .includeDefaults()
                 // no inline images will be parsed
                 .excludeInlineProcessor(BangInlineProcessor.class)
                 // no html tags will be parsed
