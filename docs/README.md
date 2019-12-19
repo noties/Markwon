@@ -88,8 +88,11 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 * [Boxcryptor](https://www.boxcryptor.com) - A software that adds AES-256 and RSA encryption to Dropbox, Google Drive, OneDrive and many other clouds.
 
 <AwesomeGroup :apps="[
-    {name: 'Cinopsys: Movies and Shows', image: 'http://drive.google.com/uc?export=view&id=1rD0HLd8tDUCe8QcVEG_iGvsJbFyozRhC', link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'}
+    {name: 'Nextcloud', image: $withBase(`/assets/apps/nextcloud.png`), link: 'https://github.com/nextcloud/android', description: 'A safe home for all your data. Access & share your files, calendars, contacts, mail & more from any device, on your terms.'},
+    {name: 'Habitica', image: $withBase(`/assets/apps/habitica.webp`), link: 'https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica', description: 'Treat your life like a game to stay motivated and organized! Habitica makes it simple to have fun while accomplishing goals.'},
+    {name: 'Cinopsys: Movies and Shows', image: $withBase(`/assets/apps/cinopsys.png`), link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'}
 ]" />
+
 
 <u>Extension/plugins</u>:
 
