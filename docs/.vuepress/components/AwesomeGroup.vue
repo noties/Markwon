@@ -32,7 +32,7 @@ export default {
   margin: 0.25em;
   border-radius: 0.25em;
   box-shadow: 0 0 0.1em 0.1em #eee;
-  max-width: 30%;
+  max-width: 25%;
   min-width: 100px;
   display: flex;
   align-items: center;
