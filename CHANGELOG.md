@@ -1,5 +1,10 @@
 # Changelog
 
+# 4.2.1-SNAPSHOT
+* Fix SpannableBuilder `subSequence` method
+* Introduce Nougat check in `BulletListItemSpan` to position bullet (for bullets to be
+positioned correctly when nested inside other `LeadingMarginSpan`s)  
+
 # 4.2.0
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
 * `CoilImagesPlugin` image loader based on [Coil] library (new module: `markwon-image-coil`) ([#166], [#174])

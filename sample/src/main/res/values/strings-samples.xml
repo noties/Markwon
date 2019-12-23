@@ -29,4 +29,6 @@
 
     <string name="sample_inline_parser"># \# Inline Parser\n\nUsage of custom inline parser</string>
 
+    <string name="sample_html_details"># \# HTML &lt;details> tag\n\n&lt;details> tag parsed and rendered</string>
+
 </resources>

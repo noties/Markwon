@@ -34,6 +34,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".inlineparser.InlineParserActivity" />
+        <activity android:name=".htmldetails.HtmlDetailsActivity" />
 
     </application>
 
