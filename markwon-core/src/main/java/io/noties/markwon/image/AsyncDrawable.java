@@ -55,6 +55,7 @@ public class AsyncDrawable extends Drawable {
     /**
      * @since 4.0.0
      */
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public ImageSize getImageSize() {
         return imageSize;
@@ -63,20 +64,33 @@ public class AsyncDrawable extends Drawable {
     /**
      * @since 4.0.0
      */
+    @SuppressWarnings("unused")
     @NonNull
     public ImageSizeResolver getImageSizeResolver() {
         return imageSizeResolver;
     }
 
     /**
+     * @see #hasKnownDimensions()
      * @since 4.0.0
+     * @deprecated 4.2.1-SNAPSHOT
      */
+    @SuppressWarnings({"unused", "WeakerAccess"})
+    @Deprecated
     public boolean hasKnownDimentions() {
         return canvasWidth > 0;
     }
 
     /**
-     * @see #hasKnownDimentions()
+     * @since 4.2.1-SNAPSHOT
+     */
+    @SuppressWarnings({"unused", "WeakerAccess"})
+    public boolean hasKnownDimensions() {
+        return canvasWidth > 0;
+    }
+
+    /**
+     * @see #hasKnownDimensions()
      * @since 4.0.0
      */
     public int getLastKnownCanvasWidth() {
@@ -84,9 +98,10 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @see #hasKnownDimentions()
+     * @see #hasKnownDimensions()
      * @since 4.0.0
      */
+    @SuppressWarnings("WeakerAccess")
     public float getLastKnowTextSize() {
         return textSize;
     }
@@ -95,6 +110,7 @@ public class AsyncDrawable extends Drawable {
         return result;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean hasResult() {
         return result != null;
     }
@@ -104,10 +120,17 @@ public class AsyncDrawable extends Drawable {
     }
 
     // yeah
-    public void setCallback2(@Nullable Callback callback) {
+    @SuppressWarnings("WeakerAccess")
+    public void setCallback2(@Nullable Callback cb) {
 
-        this.callback = callback;
-        super.setCallback(callback);
+        // @since 4.2.1-SNAPSHOT
+        //  wrap callback so invalidation happens to this AsyncDrawable instance
+        //  and not for wrapped result/placeholder
+        this.callback = cb == null
+                ? null
+                : new WrappedCallback(cb);
+
+        super.setCallback(cb);
 
         // if not null -> means we are attached
         if (callback != null) {
@@ -138,6 +161,7 @@ public class AsyncDrawable extends Drawable {
     /**
      * @since 3.0.1
      */
+    @SuppressWarnings("WeakerAccess")
     protected void setPlaceholderResult(@NonNull Drawable placeholder) {
         // okay, if placeholder has bounds -> use it, otherwise use original imageSize
 
@@ -175,7 +199,6 @@ public class AsyncDrawable extends Drawable {
         }
 
         this.result = result;
-        this.result.setCallback(callback);
 
         initBounds();
     }
@@ -210,6 +233,12 @@ public class AsyncDrawable extends Drawable {
 
         final Rect bounds = resolveBounds();
         result.setBounds(bounds);
+        // @since 4.2.1-SNAPSHOT, we set callback after bounds are resolved
+        //  to reduce number of invalidations
+        result.setCallback(callback);
+
+        // so, this method will check if there is previous bounds and call invalidate _BEFORE_
+        //  applying new bounds. This is why it is important to have initial bounds empty.
         setBounds(bounds);
 
         invalidateSelf();
@@ -291,6 +320,7 @@ public class AsyncDrawable extends Drawable {
         return imageSizeResolver.resolveImageSize(this);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "AsyncDrawable{" +
@@ -301,5 +331,31 @@ public class AsyncDrawable extends Drawable {
                 ", textSize=" + textSize +
                 ", waitingForDimensions=" + waitingForDimensions +
                 '}';
+    }
+
+    // @since 4.2.1-SNAPSHOT
+    //  Wrapped callback to trigger invalidation for this AsyncDrawable instance (and not result/placeholder)
+    private class WrappedCallback implements Callback {
+
+        private final Callback callback;
+
+        WrappedCallback(@NonNull Callback callback) {
+            this.callback = callback;
+        }
+
+        @Override
+        public void invalidateDrawable(@NonNull Drawable who) {
+            callback.invalidateDrawable(AsyncDrawable.this);
+        }
+
+        @Override
+        public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
+            callback.scheduleDrawable(AsyncDrawable.this, what, when);
+        }
+
+        @Override
+        public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
+            callback.unscheduleDrawable(AsyncDrawable.this, what);
+        }
     }
 }

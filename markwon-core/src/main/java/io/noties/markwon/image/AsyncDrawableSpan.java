@@ -42,11 +42,9 @@ public class AsyncDrawableSpan extends ReplacementSpan {
         this.alignment = alignment;
         this.replacementTextIsLink = replacementTextIsLink;
 
-        // additionally set intrinsic bounds if empty
-        final Rect rect = drawable.getBounds();
-        if (rect.isEmpty()) {
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        }
+        // @since 4.2.1-SNAPSHOT we do not set intrinsic bounds
+        //  at this point they will always be 0,0-1,1, but this
+        //  will trigger another invalidation when we will have bounds
     }
 
     @Override

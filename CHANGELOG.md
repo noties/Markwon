@@ -4,6 +4,8 @@
 * Fix SpannableBuilder `subSequence` method
 * Introduce Nougat check in `BulletListItemSpan` to position bullet (for bullets to be
 positioned correctly when nested inside other `LeadingMarginSpan`s)  
+* Reduced number of invalidations in AsyncDrawable when result is ready
+* AsyncDrawable#hasKnownDimentions -> AsyncDrawable#hasKnownDimensions typo fix
 
 # 4.2.0
 * `MarkwonEditor` to highlight markdown input whilst editing (new module: `markwon-editor`)
