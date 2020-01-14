@@ -55,6 +55,11 @@ ext {
     final def commonMarkVersion = '0.13.0'
     final def daggerVersion = '2.10'
 
+    // please note that `pl.droidsonroids.gif:android-gif-drawable:1.2.15` is used due to the minimum
+    // api level mismatch that Markwon supports (16) and later versions of AndroidGifDrawable (17).
+    // It should not be a problem as this dependency is used as `compileOnly` and users
+    // must specify version explicitly (until library's API changes...)
+
     deps = [
             'x-annotations'           : 'androidx.annotation:annotation:1.1.0',
             'x-recycler-view'         : 'androidx.recyclerview:recyclerview:1.0.0',
@@ -63,7 +68,7 @@ ext {
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
             'android-svg'             : 'com.caverock:androidsvg:1.4',
-            'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.19',
+            'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.15',
             'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'io.noties:prism4j:2.0.0',
