@@ -96,7 +96,7 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 
 <div class="awesome-block">
 
-## \# Awesome Markwon
+## # Awesome Markwon
 
 </div>
 
