@@ -184,11 +184,12 @@ imagesPlugin.addSchemeHandler(new SchemeHandler() {
 :::warning
 If you wish to add support for **SVG** or **GIF** you must explicitly add these dependencies
 to your project:
-* for `SVG`: `com.caverock:androidsvg:1.4`
-* for `GIF`: `pl.droidsonroids.gif:android-gif-drawable:1.2.14`
+* to support `SVG`: [com.caverock:androidsvg](https://github.com/BigBadaboom/androidsvg)
+* to support `GIF`: [pl.droidsonroids.gif:android-gif-drawable](https://github.com/koral--/android-gif-drawable)
 
-You can try more recent versions of these libraries, but make sure that they doesn't 
-introduce any unexpected behavior.
+For [security reasons](https://github.com/noties/Markwon/issues/186) it's advisable to use latest 
+versions of these libraries. If you notice compilation and/or runtime issues when used with Markwon, 
+please [create an issue](https://github.com/noties/Markwon/issues/new) specifying library and library version used.
 :::
 
 
