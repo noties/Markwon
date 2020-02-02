@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.Parser;
 
 import java.util.HashMap;
@@ -30,6 +32,9 @@ import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImageSizeResolver;
+import io.noties.markwon.image.ImageSizeResolverDef;
+import io.noties.markwon.inlineparser.InlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
 /**
@@ -120,7 +125,17 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-        builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
+
+        // what we can do:
+        // [0-3] spaces before block start/end
+        // if it's $$\n -> block
+        // if it's $$\\dhdsfjh$$ -> inline
+
+//        builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
+        final InlineParserFactory factory = MarkwonInlineParser.factoryBuilderNoDefaults()
+                .addInlineProcessor(new LatexInlineProcessor())
+                .build();
+        builder.inlineParserFactory(factory);
     }
 
     @Override
@@ -145,14 +160,85 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         new AsyncDrawable(
                                 latex,
                                 jLatextAsyncDrawableLoader,
-                                jLatexImageSizeResolver,
+                                new ImageSizeResolverDef(),
                                 null),
-                        AsyncDrawableSpan.ALIGN_BOTTOM,
+                        AsyncDrawableSpan.ALIGN_CENTER,
                         false);
 
                 visitor.setSpans(length, span);
             }
         });
+    }
+
+    private static class LatexInlineProcessor extends InlineProcessor {
+
+        @Override
+        public char specialCharacter() {
+            return '$';
+        }
+
+        @Nullable
+        @Override
+        protected Node parse() {
+
+            final int start = index;
+
+            index += 1;
+            if (peek() != '$') {
+                index = start;
+                return null;
+            }
+
+            // must be not $
+            index += 1;
+            if (peek() == '$') {
+                return text("$");
+            }
+
+            // find next '$$', but not broken with 2(or more) new lines
+
+            boolean dollar = false;
+            boolean newLine = false;
+            boolean found = false;
+
+            index += 1;
+            final int length = input.length();
+
+            while (index < length) {
+                final char c = peek();
+                if (c == '\n') {
+                    if (newLine) {
+                        // second new line
+                        break;
+                    }
+                    newLine = true;
+                    dollar = false; // cannot be on another line
+                } else {
+                    newLine = false;
+                    if (c == '$') {
+                        if (dollar) {
+                            found = true;
+                            // advance
+                            index += 1;
+                            break;
+                        }
+                        dollar = true;
+                    } else {
+                        dollar = false;
+                    }
+                }
+                index += 1;
+            }
+
+            if (found) {
+                final JLatexMathBlock block = new JLatexMathBlock();
+                block.latex(input.substring(start + 2, index - 2));
+                index += 1;
+                return block;
+            }
+
+            return null;
+        }
     }
 
     @Override
@@ -182,7 +268,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @JLatexMathDrawable.Align
         private int align = JLatexMathDrawable.ALIGN_CENTER;
 
-        private boolean fitCanvas = true;
+        private boolean fitCanvas = false;
 
         // @since 4.0.0
         private int paddingHorizontal;

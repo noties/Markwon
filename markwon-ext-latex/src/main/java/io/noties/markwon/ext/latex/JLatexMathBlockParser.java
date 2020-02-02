@@ -60,6 +60,8 @@ public class JLatexMathBlockParser extends AbstractBlockParser {
         @Override
         public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
 
+            // ^\s{0,3}\$\$\s*$ as a regex to star the block
+
             final CharSequence line = state.getLine();
             final int length = line != null
                     ? line.length()

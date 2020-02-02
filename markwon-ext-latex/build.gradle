@@ -19,6 +19,8 @@ dependencies {
 
     api deps['jlatexmath-android']
 
+    debugImplementation project(':markwon-inline-parser')
+
     deps['test'].with {
         testImplementation it['junit']
         testImplementation it['robolectric']
