@@ -187,7 +187,7 @@ public class SpannableBuilder implements Appendable, CharSequence {
                 // if a span was fully including resulting subSequence it's start and
                 // end must be within 0..length bounds
                 s = Math.max(0, span.start - start);
-                e = Math.max(length, s + (span.end - span.start));
+                e = Math.min(length, s + (span.end - span.start));
 
                 builder.setSpan(
                         span.what,

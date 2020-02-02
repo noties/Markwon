@@ -4,7 +4,6 @@
     package="io.noties.markwon.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
 
     <application
         android:name=".App"

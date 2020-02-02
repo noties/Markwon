@@ -6,7 +6,7 @@ title: 'Introduction'
 
 <br><br>
 [![markwon](https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=markwon)](http://search.maven.org/#search|ga|1|g%3A%22io.noties.markwon%22%20)
-[![Build Status](https://travis-ci.org/noties/Markwon.svg?branch=master)](https://travis-ci.org/noties/Markwon)
+[![Build](https://github.com/noties/Markwon/workflows/Build/badge.svg)](https://github.com/noties/Markwon/actions)
 
 **Markwon** is a markdown library for Android. It parses markdown following 
 <Link name="commonmark-spec" /> with the help of amazing <Link name="commonmark-java" /> library
@@ -79,7 +79,26 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 :::
 
 
-## Awesome Markwon
+<style>
+.awesome-block {
+    background-color: #4CAF50;
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.awesome-block * {
+    border: 0
+}
+</style>
+
+
+<div class="awesome-block">
+
+## # Awesome Markwon
+
+</div>
 
 <u>Applications using Markwon</u>:
 
@@ -88,8 +107,11 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 * [Boxcryptor](https://www.boxcryptor.com) - A software that adds AES-256 and RSA encryption to Dropbox, Google Drive, OneDrive and many other clouds.
 
 <AwesomeGroup :apps="[
-    {name: 'Cinopsys: Movies and Shows', image: 'http://drive.google.com/uc?export=view&id=1rD0HLd8tDUCe8QcVEG_iGvsJbFyozRhC', link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'}
+    {name: 'Nextcloud', image: $withBase(`/assets/apps/nextcloud.png`), link: 'https://github.com/nextcloud/android', description: 'A safe home for all your data. Access & share your files, calendars, contacts, mail & more from any device, on your terms.'},
+    {name: 'Habitica', image: $withBase(`/assets/apps/habitica.png`), link: 'https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica', description: 'Treat your life like a game to stay motivated and organized! Habitica makes it simple to have fun while accomplishing goals.'},
+    {name: 'Cinopsys: Movies and Shows', image: $withBase(`/assets/apps/cinopsys.png`), link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'}
 ]" />
+
 
 <u>Extension/plugins</u>:
 

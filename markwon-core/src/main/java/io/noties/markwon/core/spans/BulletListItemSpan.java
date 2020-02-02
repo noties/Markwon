@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
 
@@ -14,6 +15,13 @@ import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.utils.LeadingMarginUtils;
 
 public class BulletListItemSpan implements LeadingMarginSpan {
+
+    private static final boolean IS_NOUGAT;
+
+    static {
+        final int sdk = Build.VERSION.SDK_INT;
+        IS_NOUGAT = Build.VERSION_CODES.N == sdk || Build.VERSION_CODES.N_MR1 == sdk;
+    }
 
     private MarkwonTheme theme;
 
@@ -62,28 +70,41 @@ public class BulletListItemSpan implements LeadingMarginSpan {
 
             final int marginLeft = (width - side) / 2;
 
-            // @since 2.0.2
-            // There is a bug in Android Nougat, when this span receives an `x` that
-            // doesn't correspond to what it should be (text is placed correctly though).
-            // Let's make this a general rule -> manually calculate difference between expected/actual
-            // and add this difference to resulting left/right values. If everything goes well
-            // we do not encounter a bug -> this `diff` value will be 0
-            final int diff;
-            if (dir < 0) {
-                // rtl
-                diff = x - (layout.getWidth() - (width * level));
-            } else {
-                diff = (width * level) - x;
-            }
-
             // in order to support RTL
             final int l;
             final int r;
             {
-                final int left = x + (dir * marginLeft);
-                final int right = left + (dir * side);
-                l = Math.min(left, right) + (dir * diff);
-                r = Math.max(left, right) + (dir * diff);
+                // @since 4.2.1 to correctly position bullet
+                // when nested inside other LeadingMarginSpans (sorry, Nougat)
+                if (IS_NOUGAT) {
+
+                    // @since 2.0.2
+                    // There is a bug in Android Nougat, when this span receives an `x` that
+                    // doesn't correspond to what it should be (text is placed correctly though).
+                    // Let's make this a general rule -> manually calculate difference between expected/actual
+                    // and add this difference to resulting left/right values. If everything goes well
+                    // we do not encounter a bug -> this `diff` value will be 0
+                    final int diff;
+                    if (dir < 0) {
+                        // rtl
+                        diff = x - (layout.getWidth() - (width * level));
+                    } else {
+                        diff = (width * level) - x;
+                    }
+
+                    final int left = x + (dir * marginLeft);
+                    final int right = left + (dir * side);
+                    l = Math.min(left, right) + (dir * diff);
+                    r = Math.max(left, right) + (dir * diff);
+
+                } else {
+                    if (dir > 0) {
+                        l = x + marginLeft;
+                    } else {
+                        l = x - width + marginLeft;
+                    }
+                    r = l + side;
+                }
             }
 
             final int t = baseline + (int) ((paint.descent() + paint.ascent()) / 2.F + .5F) - (side / 2);

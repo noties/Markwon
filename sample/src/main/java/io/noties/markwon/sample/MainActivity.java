@@ -24,6 +24,7 @@ import io.noties.markwon.sample.customextension.CustomExtensionActivity;
 import io.noties.markwon.sample.customextension2.CustomExtensionActivity2;
 import io.noties.markwon.sample.editor.EditorActivity;
 import io.noties.markwon.sample.html.HtmlActivity;
+import io.noties.markwon.sample.htmldetails.HtmlDetailsActivity;
 import io.noties.markwon.sample.inlineparser.InlineParserActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
 import io.noties.markwon.sample.precomputed.PrecomputedActivity;
@@ -125,6 +126,10 @@ public class MainActivity extends Activity {
 
             case INLINE_PARSER:
                 activity = InlineParserActivity.class;
+                break;
+
+            case HTML_DETAILS:
+                activity = HtmlDetailsActivity.class;
                 break;
 
             default:

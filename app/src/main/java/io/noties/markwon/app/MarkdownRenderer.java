@@ -25,6 +25,7 @@ import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.file.FileSchemeHandler;
+import io.noties.markwon.image.gif.GifMediaDecoder;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
 import io.noties.markwon.syntax.Prism4jTheme;
 import io.noties.markwon.syntax.Prism4jThemeDarkula;
@@ -105,7 +106,8 @@ public class MarkdownRenderer {
                                 // default-media-decoder is also added automatically
                                 plugin
                                         .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
-                                        .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()));
+                                        .addSchemeHandler(FileSchemeHandler.createWithAssets(context.getAssets()))
+                                        .addMediaDecoder(GifMediaDecoder.create(false));
                             }
                         }))
                         .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
