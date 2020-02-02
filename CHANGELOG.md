@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.2.1-SNAPSHOT
+# 4.2.1
 * Fix SpannableBuilder `subSequence` method
 * Introduce Nougat check in `BulletListItemSpan` to position bullet (for bullets to be
 positioned correctly when nested inside other `LeadingMarginSpan`s)  

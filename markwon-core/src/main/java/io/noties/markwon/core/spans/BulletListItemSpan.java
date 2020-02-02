@@ -74,7 +74,7 @@ public class BulletListItemSpan implements LeadingMarginSpan {
             final int l;
             final int r;
             {
-                // @since 4.2.1-SNAPSHOT to correctly position bullet
+                // @since 4.2.1 to correctly position bullet
                 // when nested inside other LeadingMarginSpans (sorry, Nougat)
                 if (IS_NOUGAT) {
 

@@ -73,7 +73,7 @@ public class AsyncDrawable extends Drawable {
     /**
      * @see #hasKnownDimensions()
      * @since 4.0.0
-     * @deprecated 4.2.1-SNAPSHOT
+     * @deprecated 4.2.1
      */
     @SuppressWarnings({"unused", "WeakerAccess"})
     @Deprecated
@@ -82,7 +82,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 4.2.1-SNAPSHOT
+     * @since 4.2.1
      */
     @SuppressWarnings({"unused", "WeakerAccess"})
     public boolean hasKnownDimensions() {
@@ -123,7 +123,7 @@ public class AsyncDrawable extends Drawable {
     @SuppressWarnings("WeakerAccess")
     public void setCallback2(@Nullable Callback cb) {
 
-        // @since 4.2.1-SNAPSHOT
+        // @since 4.2.1
         //  wrap callback so invalidation happens to this AsyncDrawable instance
         //  and not for wrapped result/placeholder
         this.callback = cb == null
@@ -233,7 +233,7 @@ public class AsyncDrawable extends Drawable {
 
         final Rect bounds = resolveBounds();
         result.setBounds(bounds);
-        // @since 4.2.1-SNAPSHOT, we set callback after bounds are resolved
+        // @since 4.2.1, we set callback after bounds are resolved
         //  to reduce number of invalidations
         result.setCallback(callback);
 
@@ -333,7 +333,7 @@ public class AsyncDrawable extends Drawable {
                 '}';
     }
 
-    // @since 4.2.1-SNAPSHOT
+    // @since 4.2.1
     //  Wrapped callback to trigger invalidation for this AsyncDrawable instance (and not result/placeholder)
     private class WrappedCallback implements Callback {
 

@@ -42,7 +42,7 @@ public class AsyncDrawableSpan extends ReplacementSpan {
         this.alignment = alignment;
         this.replacementTextIsLink = replacementTextIsLink;
 
-        // @since 4.2.1-SNAPSHOT we do not set intrinsic bounds
+        // @since 4.2.1 we do not set intrinsic bounds
         //  at this point they will always be 0,0-1,1, but this
         //  will trigger another invalidation when we will have bounds
     }
