@@ -1,5 +1,10 @@
 # Changelog
 
+# 4.2.2-SNAPSHOT
+* Fixed `AsyncDrawable` display when it has placeholder with empty bounds ([#189])
+
+[#189]: https://github.com/noties/Markwon/issues/189
+
 # 4.2.1
 * Fix SpannableBuilder `subSequence` method
 * Introduce Nougat check in `BulletListItemSpan` to position bullet (for bullets to be

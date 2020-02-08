@@ -164,20 +164,44 @@ public class AsyncDrawable extends Drawable {
     @SuppressWarnings("WeakerAccess")
     protected void setPlaceholderResult(@NonNull Drawable placeholder) {
         // okay, if placeholder has bounds -> use it, otherwise use original imageSize
+        // it's important to NOT pass to imageSizeResolver when placeholder has bounds
+        // this is done, so actual result and placeholder can have _different_
+        // bounds. Assume image is loaded with HTML and has ImageSize width=100%,
+        // so, even if placeholder has exact bounds, it will still be scaled up.
+
+        // this condition should not be true for placeholder (at least for now)
+        // (right now this method is always called from constructor)
+        if (result != null) {
+            // but it is, unregister current result
+            result.setCallback(null);
+        }
 
         final Rect rect = placeholder.getBounds();
 
         if (rect.isEmpty()) {
-            // if bounds are empty -> just use placeholder as a regular result
-            DrawableUtils.applyIntrinsicBounds(placeholder);
+            // check for intrinsic bounds
+            final Rect intrinsic = DrawableUtils.intrinsicBounds(placeholder);
+            if (intrinsic.isEmpty()) {
+                // @since 4.2.2.-SNAPSHOT
+                // if intrinsic bounds are empty, use _any_ non-empty bounds,
+                // they must be non-empty so when result is obtained - proper invalidation will occur
+                // (0, 0, 1, 0) is still considered empty
+                placeholder.setBounds(0, 0, 1, 1);
+            } else {
+                // use them
+                placeholder.setBounds(intrinsic);
+            }
+
+            // it is very important (if we have a placeholder) to set own bounds to it (and they must not be empty
+            // otherwise result won't be rendered)
+            // @since 4.2.2-SNAPSHOT
+            setBounds(placeholder.getBounds());
             setResult(placeholder);
+
         } else {
 
-            // this condition should not be true for placeholder (at least for now)
-            if (result != null) {
-                // but it is, unregister current result
-                result.setCallback(null);
-            }
+            // this method is not the same as above, as we do not want to trigger image-size-resolver
+            // in case when placeholder has exact bounds
 
             // placeholder has bounds specified -> use them until we have real result
             this.result = placeholder;

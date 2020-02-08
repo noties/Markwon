@@ -2,6 +2,8 @@ package io.noties.markwon.sample.recycler;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,7 +29,12 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.ImagesPlugin;
+import io.noties.markwon.image.file.FileSchemeHandler;
+import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
 import io.noties.markwon.image.picasso.PicassoImagesPlugin;
+import io.noties.markwon.image.svg.SvgMediaDecoder;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
 import io.noties.markwon.recycler.table.TableEntry;
@@ -74,13 +81,14 @@ public class RecyclerActivity extends Activity {
     private static Markwon markwon(@NonNull Context context) {
         return Markwon.builder(context)
                 .usePlugin(CorePlugin.create())
-//                .usePlugin(ImagesPlugin.create(plugin -> {
-//                    plugin
-//                            .addSchemeHandler(FileSchemeHandler.createWithAssets(context))
-//                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
-//                            .addMediaDecoder(SvgMediaDecoder.create());
-//                }))
-                .usePlugin(PicassoImagesPlugin.create(context))
+                .usePlugin(ImagesPlugin.create(plugin -> {
+                    plugin
+                            .addSchemeHandler(FileSchemeHandler.createWithAssets(context))
+                            .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
+                            .addMediaDecoder(SvgMediaDecoder.create())
+                            .placeholderProvider(drawable -> new ColorDrawable(0xFFff0000));
+                }))
+//                .usePlugin(PicassoImagesPlugin.create(context))
 //                .usePlugin(GlideImagesPlugin.create(context))
 //                .usePlugin(CoilImagesPlugin.create(context))
                 // important to use TableEntryPlugin instead of TablePlugin
