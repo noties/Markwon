@@ -3,9 +3,9 @@ package io.noties.markwon.ext.latex;
 import org.commonmark.node.CustomNode;
 
 /**
- * @since 4.2.1-SNAPSHOT
+ * @since 4.3.0-SNAPSHOT
  */
-public class JLatexMathInline extends CustomNode {
+public class JLatexMathNode extends CustomNode {
 
     private String latex;
 

@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 
-import org.commonmark.node.Node;
 import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.Parser;
 
@@ -33,7 +32,6 @@ import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImageSizeResolver;
 import io.noties.markwon.image.ImageSizeResolverDef;
-import io.noties.markwon.inlineparser.InlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
@@ -132,8 +130,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         // if it's $$\\dhdsfjh$$ -> inline
 
 //        builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
-        final InlineParserFactory factory = MarkwonInlineParser.factoryBuilderNoDefaults()
-                .addInlineProcessor(new LatexInlineProcessor())
+        final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
+                .addInlineProcessor(new JLatexMathInlineProcessor())
                 .build();
         builder.inlineParserFactory(factory);
     }
@@ -160,6 +158,33 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         new AsyncDrawable(
                                 latex,
                                 jLatextAsyncDrawableLoader,
+                                jLatexImageSizeResolver,
+                                null),
+                        AsyncDrawableSpan.ALIGN_CENTER,
+                        false);
+
+                visitor.setSpans(length, span);
+            }
+        });
+        builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathNode jLatexMathNode) {
+                final String latex = jLatexMathNode.latex();
+
+                final int length = visitor.length();
+
+                // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
+                // because Android will draw formula for each line of text, thus
+                // leading to formula duplicated (drawn on each line of text)
+                visitor.builder().append(prepareLatexTextPlaceholder(latex));
+
+                final MarkwonConfiguration configuration = visitor.configuration();
+
+                final AsyncDrawableSpan span = new AsyncDrawableSpan(
+                        configuration.theme(),
+                        new AsyncDrawable(
+                                latex,
+                                jLatextAsyncDrawableLoader,
                                 new ImageSizeResolverDef(),
                                 null),
                         AsyncDrawableSpan.ALIGN_CENTER,
@@ -170,76 +195,76 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         });
     }
 
-    private static class LatexInlineProcessor extends InlineProcessor {
-
-        @Override
-        public char specialCharacter() {
-            return '$';
-        }
-
-        @Nullable
-        @Override
-        protected Node parse() {
-
-            final int start = index;
-
-            index += 1;
-            if (peek() != '$') {
-                index = start;
-                return null;
-            }
-
-            // must be not $
-            index += 1;
-            if (peek() == '$') {
-                return text("$");
-            }
-
-            // find next '$$', but not broken with 2(or more) new lines
-
-            boolean dollar = false;
-            boolean newLine = false;
-            boolean found = false;
-
-            index += 1;
-            final int length = input.length();
-
-            while (index < length) {
-                final char c = peek();
-                if (c == '\n') {
-                    if (newLine) {
-                        // second new line
-                        break;
-                    }
-                    newLine = true;
-                    dollar = false; // cannot be on another line
-                } else {
-                    newLine = false;
-                    if (c == '$') {
-                        if (dollar) {
-                            found = true;
-                            // advance
-                            index += 1;
-                            break;
-                        }
-                        dollar = true;
-                    } else {
-                        dollar = false;
-                    }
-                }
-                index += 1;
-            }
-
-            if (found) {
-                final JLatexMathBlock block = new JLatexMathBlock();
-                block.latex(input.substring(start + 2, index - 2));
-                index += 1;
-                return block;
-            }
-
-            return null;
-        }
-    }
+//    private static class LatexInlineProcessor extends InlineProcessor {
+//
+//        @Override
+//        public char specialCharacter() {
+//            return '$';
+//        }
+//
+//        @Nullable
+//        @Override
+//        protected Node parse() {
+//
+//            final int start = index;
+//
+//            index += 1;
+//            if (peek() != '$') {
+//                index = start;
+//                return null;
+//            }
+//
+//            // must be not $
+//            index += 1;
+//            if (peek() == '$') {
+//                return text("$");
+//            }
+//
+//            // find next '$$', but not broken with 2(or more) new lines
+//
+//            boolean dollar = false;
+//            boolean newLine = false;
+//            boolean found = false;
+//
+//            index += 1;
+//            final int length = input.length();
+//
+//            while (index < length) {
+//                final char c = peek();
+//                if (c == '\n') {
+//                    if (newLine) {
+//                        // second new line
+//                        break;
+//                    }
+//                    newLine = true;
+//                    dollar = false; // cannot be on another line
+//                } else {
+//                    newLine = false;
+//                    if (c == '$') {
+//                        if (dollar) {
+//                            found = true;
+//                            // advance
+//                            index += 1;
+//                            break;
+//                        }
+//                        dollar = true;
+//                    } else {
+//                        dollar = false;
+//                    }
+//                }
+//                index += 1;
+//            }
+//
+//            if (found) {
+//                final JLatexMathBlock block = new JLatexMathBlock();
+//                block.latex(input.substring(start + 2, index - 2));
+//                index += 1;
+//                return block;
+//            }
+//
+//            return null;
+//        }
+//    }
 
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
@@ -383,7 +408,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                                         .textSize(config.textSize)
                                         .background(backgroundProvider != null ? backgroundProvider.provide() : null)
                                         .align(config.align)
-                                        .fitCanvas(config.fitCanvas)
+                                        .fitCanvas(false /*config.fitCanvas*/)
                                         .padding(
                                                 config.paddingHorizontal,
                                                 config.paddingVertical,

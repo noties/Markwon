@@ -1,5 +1,6 @@
 package io.noties.markwon.ext.latex;
 
+import org.commonmark.internal.util.Parsing;
 import org.commonmark.node.Block;
 import org.commonmark.parser.block.AbstractBlockParser;
 import org.commonmark.parser.block.AbstractBlockParserFactory;
@@ -60,18 +61,30 @@ public class JLatexMathBlockParser extends AbstractBlockParser {
         @Override
         public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
 
-            // ^\s{0,3}\$\$\s*$ as a regex to star the block
+            final int indent = state.getIndent();
 
-            final CharSequence line = state.getLine();
-            final int length = line != null
-                    ? line.length()
-                    : 0;
+            // check if it's an indented code block
+            if (indent < Parsing.CODE_BLOCK_INDENT) {
+                final int nextNonSpaceIndex = state.getNextNonSpaceIndex();
+                final CharSequence line = state.getLine();
+                final int length = line.length();
+                // we are looking for 2 `$$` subsequent signs
+                // and immediate new-line or arbitrary number of white spaces (we check for the first one)
+                // so, nextNonSpaceIndex + 2 >= length and both symbols are `$`s
+                final int diff = length - (nextNonSpaceIndex + 2);
+                if (diff >= 0) {
+                    // check for both `$`
+                    if (line.charAt(nextNonSpaceIndex) == '$'
+                            && line.charAt(nextNonSpaceIndex + 1) == '$') {
 
-            if (length > 1) {
-                if ('$' == line.charAt(0)
-                        && '$' == line.charAt(1)) {
-                    return BlockStart.of(new JLatexMathBlockParser())
-                            .atIndex(state.getIndex() + 2);
+                        if (diff > 0) {
+                            if (!Character.isWhitespace(line.charAt(nextNonSpaceIndex + 2))) {
+                                return BlockStart.none();
+                            }
+                            // consume all until new-line or first not-white-space char
+                        }
+
+                    }
                 }
             }
 
