@@ -3,10 +3,12 @@ package io.noties.markwon.sample.recycler;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.CharacterStyle;
+import android.text.style.UpdateAppearance;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.commonmark.node.FencedCodeBlock;
+import org.commonmark.node.Link;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,14 +29,13 @@ import io.noties.debug.Debug;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.file.FileSchemeHandler;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
-import io.noties.markwon.image.picasso.PicassoImagesPlugin;
 import io.noties.markwon.image.svg.SvgMediaDecoder;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
@@ -114,8 +116,22 @@ public class RecyclerActivity extends Activity {
                             visitor.builder().append(code);
                         });
                     }
+
+                    @Override
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        // `RemoveUnderlineSpan` will be added AFTER original, thus it will remove underline applied by original
+                        builder.appendFactory(Link.class, (configuration, props) -> new RemoveUnderlineSpan());
+                    }
                 })
                 .build();
+    }
+
+    private static class RemoveUnderlineSpan extends CharacterStyle implements UpdateAppearance {
+
+        @Override
+        public void updateDrawState(TextPaint tp) {
+            tp.setUnderlineText(false);
+        }
     }
 
     @NonNull

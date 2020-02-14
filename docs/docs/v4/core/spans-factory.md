@@ -62,7 +62,12 @@ builder.setFactory(Link.class, new SpanFactory() {
 
 ---
 
-Since <Badge text="3.0.1" /> you can _add_ multiple `SpanFactory` for a single node:
+:::warning
+Deprecated in <Badge text="4.2.2" type="error" vertical="middle" />. Use `appendFactory` or `prependFactory` for
+more explicit factories ordering. `addFactories` behaves like new `prependFactory` method.
+:::
+
+Since <Badge text="3.0.1" /><Badge text="4.2.2" type="error" /> you can _add_ multiple `SpanFactory` for a single node:
 
 ```java
 final Markwon markwon = Markwon.builder(context)
@@ -79,6 +84,22 @@ final Markwon markwon = Markwon.builder(context)
             }
         })
         .build();
+```
+
+## appendFactory/prependFactory <Badge text="4.2.2" />
+
+* use `appendFactory` if you wish to add a factory **after** original (can be used to post-process original factory)
+* use `prependFactory` if you wish to add a factory **before** original (original factory will be applied after this one)
+
+```java
+@Override
+public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+    // `RemoveUnderlineSpan` will be added AFTER original, thus it will remove underline applied by original
+    builder.appendFactory(Link.class, (configuration, props) -> new RemoveUnderlineSpan());
+
+    // will be added BEFORE origin (origin can override this)
+    builder.prependFactory(Link.class, (configuration, props) -> new AbsoluteSizeSpan(48, true));
+}
 ```
 
 ---

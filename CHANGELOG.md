@@ -3,9 +3,11 @@
 # 4.2.2-SNAPSHOT
 * Fixed `AsyncDrawable` display when it has placeholder with empty bounds ([#189])
 * Fixed `syntax-highlight` where code input is empty string ([#192])
+* Add `appendFactory`/`prependFactory` in `MarkwonSpansFactory.Builder` for more explicit `SpanFactory` ordering ([#193])
 
 [#189]: https://github.com/noties/Markwon/issues/189
 [#192]: https://github.com/noties/Markwon/issues/192
+[#193]: https://github.com/noties/Markwon/issues/193
 
 # 4.2.1
 * Fix SpannableBuilder `subSequence` method

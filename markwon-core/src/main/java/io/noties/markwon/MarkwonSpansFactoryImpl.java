@@ -56,7 +56,32 @@ class MarkwonSpansFactoryImpl implements MarkwonSpansFactory {
 
         @NonNull
         @Override
+        @Deprecated
         public <N extends Node> Builder addFactory(@NonNull Class<N> node, @NonNull SpanFactory factory) {
+            return prependFactory(node, factory);
+        }
+
+        @NonNull
+        @Override
+        public <N extends Node> Builder appendFactory(@NonNull Class<N> node, @NonNull SpanFactory factory) {
+            final SpanFactory existing = factories.get(node);
+            if (existing == null) {
+                factories.put(node, factory);
+            } else {
+                if (existing instanceof CompositeSpanFactory) {
+                    ((CompositeSpanFactory) existing).factories.add(0, factory);
+                } else {
+                    final CompositeSpanFactory compositeSpanFactory =
+                            new CompositeSpanFactory(factory, existing);
+                    factories.put(node, compositeSpanFactory);
+                }
+            }
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public <N extends Node> Builder prependFactory(@NonNull Class<N> node, @NonNull SpanFactory factory) {
             // if there is no factory registered for this node -> just add it
             final SpanFactory existing = factories.get(node);
             if (existing == null) {
