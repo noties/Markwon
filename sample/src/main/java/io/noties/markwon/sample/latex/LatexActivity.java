@@ -4,14 +4,19 @@ import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.commonmark.node.Node;
+
+import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.sample.R;
+import io.noties.markwon.utils.DumpNodes;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
 public class LatexActivity extends Activity {
@@ -44,27 +49,33 @@ public class LatexActivity extends Activity {
 //        latex += "\\end{array}";
 
         final String markdown = "# Example of LaTeX\n\nhello there: $$"
-                + latex + "$$\n\n something like **this**";
+                + latex + "$$ so nice, really?\n\n $$  \n" + latex + "\n$$\n\n   $$     \n" + latex + "\n$$";
 
         final Markwon markwon = Markwon.builder(this)
-//                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
-//                    @Override
-//                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
-//                        builder
-//                                .backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
-//                                    @NonNull
-//                                    @Override
-//                                    public Drawable provide() {
-//                                        return new ColorDrawable(0x40ff0000);
-//                                    }
-//                                })
-//                                .fitCanvas(true)
-//                                .align(JLatexMathDrawable.ALIGN_LEFT)
-//                                .padding(48)
-//                        ;
-//                    }
-//                }))
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
+                    @Override
+                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+                        builder
+                                .backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
+                                    @NonNull
+                                    @Override
+                                    public Drawable provide() {
+                                        return new ColorDrawable(0x40ff0000);
+                                    }
+                                })
+                                .fitCanvas(true)
+                                .align(JLatexMathDrawable.ALIGN_CENTER)
+                                .padding(48)
+                        ;
+                    }
+                }))
+//                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void beforeRender(@NonNull Node node) {
+                        Log.e("LTX", DumpNodes.dump(node));
+                    }
+                })
                 .build();
 //
 //        if (true) {

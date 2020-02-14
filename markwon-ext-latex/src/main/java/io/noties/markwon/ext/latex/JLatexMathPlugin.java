@@ -1,5 +1,6 @@
 package io.noties.markwon.ext.latex;
 
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.text.Spanned;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
@@ -26,10 +28,12 @@ import java.util.concurrent.Future;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
+import io.noties.markwon.image.ImageSize;
 import io.noties.markwon.image.ImageSizeResolver;
 import io.noties.markwon.image.ImageSizeResolverDef;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
@@ -129,7 +133,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         // if it's $$\n -> block
         // if it's $$\\dhdsfjh$$ -> inline
 
-//        builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
+        builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
+
         final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
                 .addInlineProcessor(new JLatexMathInlineProcessor())
                 .build();
@@ -141,6 +146,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         builder.on(JLatexMathBlock.class, new MarkwonVisitor.NodeVisitor<JLatexMathBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathBlock jLatexMathBlock) {
+
+                visitor.ensureNewLine();
 
                 final String latex = jLatexMathBlock.latex();
 
@@ -155,15 +162,21 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 final AsyncDrawableSpan span = new AsyncDrawableSpan(
                         configuration.theme(),
-                        new AsyncDrawable(
+                        new JLatextAsyncDrawable(
                                 latex,
                                 jLatextAsyncDrawableLoader,
                                 jLatexImageSizeResolver,
-                                null),
+                                null,
+                                true),
                         AsyncDrawableSpan.ALIGN_CENTER,
                         false);
 
                 visitor.setSpans(length, span);
+
+                if (visitor.hasNext(jLatexMathBlock)) {
+                    visitor.ensureNewLine();
+                    visitor.forceNewLine();
+                }
             }
         });
         builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
@@ -180,13 +193,14 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 final MarkwonConfiguration configuration = visitor.configuration();
 
-                final AsyncDrawableSpan span = new AsyncDrawableSpan(
+                final AsyncDrawableSpan span = new JLatexAsyncDrawableSpan(
                         configuration.theme(),
-                        new AsyncDrawable(
+                        new JLatextAsyncDrawable(
                                 latex,
                                 jLatextAsyncDrawableLoader,
                                 new ImageSizeResolverDef(),
-                                null),
+                                null,
+                                false),
                         AsyncDrawableSpan.ALIGN_CENTER,
                         false);
 
@@ -194,77 +208,6 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             }
         });
     }
-
-//    private static class LatexInlineProcessor extends InlineProcessor {
-//
-//        @Override
-//        public char specialCharacter() {
-//            return '$';
-//        }
-//
-//        @Nullable
-//        @Override
-//        protected Node parse() {
-//
-//            final int start = index;
-//
-//            index += 1;
-//            if (peek() != '$') {
-//                index = start;
-//                return null;
-//            }
-//
-//            // must be not $
-//            index += 1;
-//            if (peek() == '$') {
-//                return text("$");
-//            }
-//
-//            // find next '$$', but not broken with 2(or more) new lines
-//
-//            boolean dollar = false;
-//            boolean newLine = false;
-//            boolean found = false;
-//
-//            index += 1;
-//            final int length = input.length();
-//
-//            while (index < length) {
-//                final char c = peek();
-//                if (c == '\n') {
-//                    if (newLine) {
-//                        // second new line
-//                        break;
-//                    }
-//                    newLine = true;
-//                    dollar = false; // cannot be on another line
-//                } else {
-//                    newLine = false;
-//                    if (c == '$') {
-//                        if (dollar) {
-//                            found = true;
-//                            // advance
-//                            index += 1;
-//                            break;
-//                        }
-//                        dollar = true;
-//                    } else {
-//                        dollar = false;
-//                    }
-//                }
-//                index += 1;
-//            }
-//
-//            if (found) {
-//                final JLatexMathBlock block = new JLatexMathBlock();
-//                block.latex(input.substring(start + 2, index - 2));
-//                index += 1;
-//                return block;
-//            }
-//
-//            return null;
-//        }
-//    }
 
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
@@ -401,20 +344,53 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         // @since 4.0.1 (background provider can be null)
                         final BackgroundProvider backgroundProvider = config.backgroundProvider;
 
+                        final JLatexMathDrawable jLatexMathDrawable;
+
+                        final JLatextAsyncDrawable jLatextAsyncDrawable = (JLatextAsyncDrawable) drawable;
+                        if (jLatextAsyncDrawable.isBlock) {
+                            // create JLatexMathDrawable
+                            //noinspection ConstantConditions
+                            jLatexMathDrawable =
+                                    JLatexMathDrawable.builder(drawable.getDestination())
+                                            .textSize(config.textSize)
+                                            .background(backgroundProvider != null ? backgroundProvider.provide() : null)
+                                            .align(config.align)
+                                            .fitCanvas(config.fitCanvas)
+                                            .padding(
+                                                    config.paddingHorizontal,
+                                                    config.paddingVertical,
+                                                    config.paddingHorizontal,
+                                                    config.paddingVertical)
+                                            .build();
+                        } else {
+                            jLatexMathDrawable =
+                                    JLatexMathDrawable.builder(drawable.getDestination())
+                                            .textSize(config.textSize)
+//                                            .background(backgroundProvider != null ? backgroundProvider.provide() : null)
+//                                            .align(config.align)
+//                                            .fitCanvas(config.fitCanvas)
+//                                            .padding(
+//                                                    config.paddingHorizontal,
+//                                                    config.paddingVertical,
+//                                                    config.paddingHorizontal,
+//                                                    config.paddingVertical)
+                                            .build();
+                        }
+
                         // create JLatexMathDrawable
-                        //noinspection ConstantConditions
-                        final JLatexMathDrawable jLatexMathDrawable =
-                                JLatexMathDrawable.builder(drawable.getDestination())
-                                        .textSize(config.textSize)
-                                        .background(backgroundProvider != null ? backgroundProvider.provide() : null)
-                                        .align(config.align)
-                                        .fitCanvas(false /*config.fitCanvas*/)
-                                        .padding(
-                                                config.paddingHorizontal,
-                                                config.paddingVertical,
-                                                config.paddingHorizontal,
-                                                config.paddingVertical)
-                                        .build();
+//                        //noinspection ConstantConditions
+//                        final JLatexMathDrawable jLatexMathDrawable =
+//                                JLatexMathDrawable.builder(drawable.getDestination())
+//                                        .textSize(config.textSize)
+//                                        .background(backgroundProvider != null ? backgroundProvider.provide() : null)
+//                                        .align(config.align)
+//                                        .fitCanvas(config.fitCanvas)
+//                                        .padding(
+//                                                config.paddingHorizontal,
+//                                                config.paddingVertical,
+//                                                config.paddingHorizontal,
+//                                                config.paddingVertical)
+//                                        .build();
 
                         // we must post to handler, but also have a way to identify the drawable
                         // for which we are posting (in case of cancellation)
@@ -494,6 +470,68 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             }
 
             return imageBounds;
+        }
+    }
+
+    private static class JLatextAsyncDrawable extends AsyncDrawable {
+
+        private final boolean isBlock;
+
+        public JLatextAsyncDrawable(
+                @NonNull String destination,
+                @NonNull AsyncDrawableLoader loader,
+                @NonNull ImageSizeResolver imageSizeResolver,
+                @Nullable ImageSize imageSize,
+                boolean isBlock
+        ) {
+            super(destination, loader, imageSizeResolver, imageSize);
+            this.isBlock = isBlock;
+        }
+    }
+
+    private static class JLatexAsyncDrawableSpan extends AsyncDrawableSpan {
+
+        private final AsyncDrawable drawable;
+
+        public JLatexAsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable, int alignment, boolean replacementTextIsLink) {
+            super(theme, drawable, alignment, replacementTextIsLink);
+            this.drawable = drawable;
+        }
+
+        @Override
+        public int getSize(
+                @NonNull Paint paint,
+                CharSequence text,
+                @IntRange(from = 0) int start,
+                @IntRange(from = 0) int end,
+                @Nullable Paint.FontMetricsInt fm) {
+
+            // if we have no async drawable result - we will just render text
+
+            final int size;
+
+            if (drawable.hasResult()) {
+
+                final Rect rect = drawable.getBounds();
+
+                if (fm != null) {
+                    final int half = rect.bottom / 2;
+                    fm.ascent = -half;
+                    fm.descent = half;
+
+                    fm.top = fm.ascent;
+                    fm.bottom = 0;
+                }
+
+                size = rect.right;
+
+            } else {
+
+                // NB, no specific text handling (no new lines, etc)
+                size = (int) (paint.measureText(text, start, end) + .5F);
+            }
+
+            return size;
         }
     }
 }
