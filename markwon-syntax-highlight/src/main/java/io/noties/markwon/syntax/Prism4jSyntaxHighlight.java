@@ -41,6 +41,13 @@ public class Prism4jSyntaxHighlight implements SyntaxHighlight {
     @NonNull
     @Override
     public CharSequence highlight(@Nullable String info, @NonNull String code) {
+
+        // @since 4.2.2-SNAPSHOT
+        // although not null, but still is empty
+        if (code.isEmpty()) {
+            return code;
+        }
+
         // if info is null, do not highlight -> LICENCE footer very commonly wrapped inside code
         // block without syntax name specified (so, do not highlight)
         return info == null
