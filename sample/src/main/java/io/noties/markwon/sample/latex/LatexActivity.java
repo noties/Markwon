@@ -1,7 +1,7 @@
 package io.noties.markwon.sample.latex;
 
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,7 +14,6 @@ import io.noties.markwon.ext.latex.JLatexMathTheme;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
 import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
-import ru.noties.jlatexmath.JLatexMathDrawable;
 
 public class LatexActivity extends ActivityWithMenuOptions {
 
@@ -87,7 +86,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
     private static String wrapLatexInSampleMarkdown(@NonNull String latex) {
         return "" +
                 "# Example of LaTeX\n\n" +
-                "(inline): $$" + latex + "$$ so nice, really? Now, (block):\n\n" +
+                "(inline): $$" + latex + "$$ so nice, really-really really-really really-really? Now, (block):\n\n" +
                 "$$\n" +
                 "" + latex + "\n" +
                 "$$\n\n" +
@@ -95,23 +94,22 @@ public class LatexActivity extends ActivityWithMenuOptions {
     }
 
     private void render(@NonNull String markdown) {
+
+        final float textSize = textView.getTextSize();
+        final Resources r = getResources();
+
         final Markwon markwon = Markwon.builder(this)
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
-                    @Override
-                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
-                        builder
-                                .backgroundProvider(new JLatexMathTheme.BackgroundProvider() {
-                                    @NonNull
-                                    @Override
-                                    public Drawable provide() {
-                                        return new ColorDrawable(0x40ff0000);
-                                    }
-                                })
-                                .fitCanvas(true)
-                                .align(JLatexMathDrawable.ALIGN_CENTER)
-                                .padding(48)
-                        ;
-                    }
+                .usePlugin(JLatexMathPlugin.create(textSize, textSize * 1.25F, builder -> {
+                    builder.theme()
+                            .inlineBackgroundProvider(() -> new ColorDrawable(0x1000ff00))
+                            .blockBackgroundProvider(() -> new ColorDrawable(0x10ff0000))
+                            .blockPadding(JLatexMathTheme.Padding.symmetric(
+                                    r.getDimensionPixelSize(R.dimen.latex_block_padding_vertical),
+                                    r.getDimensionPixelSize(R.dimen.latex_block_padding_horizontal)
+                            ));
+
+                    // explicitly request LEGACY rendering mode
+//                    builder.renderMode(JLatexMathPlugin.RenderMode.LEGACY);
                 }))
                 .build();
 

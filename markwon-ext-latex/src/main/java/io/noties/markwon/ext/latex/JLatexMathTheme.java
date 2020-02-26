@@ -128,9 +128,9 @@ public abstract class JLatexMathTheme {
         private BackgroundProvider inlineBackgroundProvider;
         private BackgroundProvider blockBackgroundProvider;
 
-        private boolean blockFitCanvas;
+        private boolean blockFitCanvas = true;
         // horizontal alignment (when there is additional horizontal space)
-        private int blockHorizontalAlignment;
+        private int blockHorizontalAlignment = JLatexMathDrawable.ALIGN_CENTER;
 
         private Padding padding;
         private Padding inlinePadding;
@@ -196,7 +196,7 @@ public abstract class JLatexMathTheme {
 
         @NonNull
         public JLatexMathTheme build() {
-            return null;
+            return new Impl(this);
         }
     }
 

@@ -1,6 +1,5 @@
 package io.noties.markwon.ext.latex;
 
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -10,7 +9,6 @@ import android.text.Spanned;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
@@ -28,14 +26,11 @@ import java.util.concurrent.Future;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
-import io.noties.markwon.image.ImageSize;
 import io.noties.markwon.image.ImageSizeResolver;
-import io.noties.markwon.image.ImageSizeResolverDef;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
@@ -68,7 +63,6 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         BLOCKS_AND_INLINES
     }
 
-    // TODO: inlines are not moved to a new line when exceed available width.. (api 23, emulator)
     public interface BuilderConfigure {
         void configureBuilder(@NonNull Builder builder);
     }
@@ -78,52 +72,65 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         return new JLatexMathPlugin(builder(textSize).build());
     }
 
+    /**
+     * @since 4.3.0-SNAPSHOT
+     */
+    @NonNull
+    public static JLatexMathPlugin create(@Px float inlineTextSize, @Px float blockTextSize) {
+        return new JLatexMathPlugin(builder(inlineTextSize, blockTextSize).build());
+    }
+
     @NonNull
     public static JLatexMathPlugin create(@NonNull Config config) {
         return new JLatexMathPlugin(config);
     }
 
     @NonNull
-    public static JLatexMathPlugin create(float textSize, @NonNull BuilderConfigure builderConfigure) {
-        final Builder builder = new Builder(textSize);
+    public static JLatexMathPlugin create(@Px float textSize, @NonNull BuilderConfigure builderConfigure) {
+        final Builder builder = builder(textSize);
+        builderConfigure.configureBuilder(builder);
+        return new JLatexMathPlugin(builder.build());
+    }
+
+    /**
+     * @since 4.3.0-SNAPSHOT
+     */
+    @NonNull
+    public static JLatexMathPlugin create(
+            @Px float inlineTextSize,
+            @Px float blockTextSize,
+            @NonNull BuilderConfigure builderConfigure) {
+        final Builder builder = builder(inlineTextSize, blockTextSize);
         builderConfigure.configureBuilder(builder);
         return new JLatexMathPlugin(builder.build());
     }
 
     @NonNull
-    public static JLatexMathPlugin.Builder builder(float textSize) {
-        return new Builder(textSize);
+    public static JLatexMathPlugin.Builder builder(@Px float textSize) {
+        return new Builder(JLatexMathTheme.builder(textSize));
+    }
+
+    /**
+     * @since 4.3.0-SNAPSHOT
+     */
+    @NonNull
+    public static JLatexMathPlugin.Builder builder(@Px float inlineTextSize, @Px float blockTextSize) {
+        return new Builder(JLatexMathTheme.builder(inlineTextSize, blockTextSize));
     }
 
     public static class Config {
 
-        private final float textSize;
+        // @since 4.3.0-SNAPSHOT
+        private final JLatexMathTheme theme;
 
-        // @since 4.0.0
-        private final JLatexMathTheme.BackgroundProvider backgroundProvider;
+        // @since 4.3.0-SNAPSHOT
+        private final RenderMode renderMode;
 
-        @JLatexMathDrawable.Align
-        private final int align;
-
-        private final boolean fitCanvas;
-
-        // @since 4.0.0
-        private final int paddingHorizontal;
-
-        // @since 4.0.0
-        private final int paddingVertical;
-
-        // @since 4.0.0
         private final ExecutorService executorService;
 
         Config(@NonNull Builder builder) {
-            this.textSize = builder.textSize;
-            this.backgroundProvider = builder.backgroundProvider;
-            this.align = builder.align;
-            this.fitCanvas = builder.fitCanvas;
-            this.paddingHorizontal = builder.paddingHorizontal;
-            this.paddingVertical = builder.paddingVertical;
-
+            this.theme = builder.theme.build();
+            this.renderMode = builder.renderMode;
             // @since 4.0.0
             ExecutorService executorService = builder.executorService;
             if (executorService == null) {
@@ -133,29 +140,46 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
     }
 
+    private final Config config;
     private final JLatextAsyncDrawableLoader jLatextAsyncDrawableLoader;
-    private final JLatexImageSizeResolver jLatexImageSizeResolver;
+    private final JLatexBlockImageSizeResolver jLatexBlockImageSizeResolver;
+    private final ImageSizeResolver inlineImageSizeResolver;
 
     @SuppressWarnings("WeakerAccess")
     JLatexMathPlugin(@NonNull Config config) {
+        this.config = config;
         this.jLatextAsyncDrawableLoader = new JLatextAsyncDrawableLoader(config);
-        this.jLatexImageSizeResolver = new JLatexImageSizeResolver(config.fitCanvas);
+        this.jLatexBlockImageSizeResolver = new JLatexBlockImageSizeResolver(config.theme.blockFitCanvas());
+        this.inlineImageSizeResolver = new InlineImageSizeResolver();
     }
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
 
-        // what we can do:
-        // [0-3] spaces before block start/end
-        // if it's $$\n -> block
-        // if it's $$\\dhdsfjh$$ -> inline
+        // TODO: depending on renderMode we should register our parsing here
+        // * for LEGACY -> just add custom block parser
+        // * for INLINE.. -> require InlinePlugin, add inline processor + add block parser
 
-        builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
+        switch (config.renderMode) {
 
-        final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
-                .addInlineProcessor(new JLatexMathInlineProcessor())
-                .build();
-        builder.inlineParserFactory(factory);
+            case LEGACY: {
+                builder.customBlockParserFactory(new JLatexMathBlockParserLegacy.Factory());
+            }
+            break;
+
+            case BLOCKS_AND_INLINES: {
+                builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
+
+                final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
+                        .addInlineProcessor(new JLatexMathInlineProcessor())
+                        .build();
+                builder.inlineParserFactory(factory);
+            }
+            break;
+
+            default:
+                throw new RuntimeException("Unexpected `renderMode`: " + config.renderMode);
+        }
     }
 
     @Override
@@ -182,7 +206,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         new JLatextAsyncDrawable(
                                 latex,
                                 jLatextAsyncDrawableLoader,
-                                jLatexImageSizeResolver,
+                                jLatexBlockImageSizeResolver,
                                 null,
                                 true),
                         AsyncDrawableSpan.ALIGN_CENTER,
@@ -196,34 +220,39 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                 }
             }
         });
-        builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
-            @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathNode jLatexMathNode) {
-                final String latex = jLatexMathNode.latex();
 
-                final int length = visitor.length();
 
-                // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
-                // because Android will draw formula for each line of text, thus
-                // leading to formula duplicated (drawn on each line of text)
-                visitor.builder().append(prepareLatexTextPlaceholder(latex));
+        if (RenderMode.BLOCKS_AND_INLINES == config.renderMode) {
 
-                final MarkwonConfiguration configuration = visitor.configuration();
+            builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
+                @Override
+                public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathNode jLatexMathNode) {
+                    final String latex = jLatexMathNode.latex();
 
-                final AsyncDrawableSpan span = new JLatexAsyncDrawableSpan(
-                        configuration.theme(),
-                        new JLatextAsyncDrawable(
-                                latex,
-                                jLatextAsyncDrawableLoader,
-                                new ImageSizeResolverDef(),
-                                null,
-                                false),
-                        AsyncDrawableSpan.ALIGN_CENTER,
-                        false);
+                    final int length = visitor.length();
 
-                visitor.setSpans(length, span);
-            }
-        });
+                    // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
+                    // because Android will draw formula for each line of text, thus
+                    // leading to formula duplicated (drawn on each line of text)
+                    visitor.builder().append(prepareLatexTextPlaceholder(latex));
+
+                    final MarkwonConfiguration configuration = visitor.configuration();
+
+                    final AsyncDrawableSpan span = new JLatexInlineAsyncDrawableSpan(
+                            configuration.theme(),
+                            new JLatextAsyncDrawable(
+                                    latex,
+                                    jLatextAsyncDrawableLoader,
+                                    inlineImageSizeResolver,
+                                    null,
+                                    false),
+                            AsyncDrawableSpan.ALIGN_CENTER,
+                            false);
+
+                    visitor.setSpans(length, span);
+                }
+            });
+        }
     }
 
     @Override
@@ -245,61 +274,30 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     public static class Builder {
 
-        private final float textSize;
+        // @since 4.3.0-SNAPSHOT
+        private final JLatexMathTheme.Builder theme;
 
-        // @since 4.0.0
-        private JLatexMathTheme.BackgroundProvider backgroundProvider;
-
-        @JLatexMathDrawable.Align
-        private int align = JLatexMathDrawable.ALIGN_CENTER;
-
-        private boolean fitCanvas = false;
-
-        // @since 4.0.0
-        private int paddingHorizontal;
-
-        // @since 4.0.0
-        private int paddingVertical;
+        // @since 4.3.0-SNAPSHOT
+        private RenderMode renderMode = RenderMode.BLOCKS_AND_INLINES;
 
         // @since 4.0.0
         private ExecutorService executorService;
 
-        Builder(float textSize) {
-            this.textSize = textSize;
+        Builder(@NonNull JLatexMathTheme.Builder builder) {
+            this.theme = builder;
         }
 
         @NonNull
-        public Builder backgroundProvider(@NonNull JLatexMathTheme.BackgroundProvider backgroundProvider) {
-            this.backgroundProvider = backgroundProvider;
-            return this;
-        }
-
-        @NonNull
-        public Builder align(@JLatexMathDrawable.Align int align) {
-            this.align = align;
-            return this;
-        }
-
-        @NonNull
-        public Builder fitCanvas(boolean fitCanvas) {
-            this.fitCanvas = fitCanvas;
-            return this;
-        }
-
-        @NonNull
-        public Builder padding(@Px int padding) {
-            this.paddingHorizontal = padding;
-            this.paddingVertical = padding;
-            return this;
+        public JLatexMathTheme.Builder theme() {
+            return theme;
         }
 
         /**
-         * @since 4.0.0
+         * @since 4.3.0-SNAPSHOT
          */
         @NonNull
-        public Builder builder(@Px int paddingHorizontal, @Px int paddingVertical) {
-            this.paddingHorizontal = paddingHorizontal;
-            this.paddingVertical = paddingVertical;
+        public Builder renderMode(@NonNull RenderMode renderMode) {
+            this.renderMode = renderMode;
             return this;
         }
 
@@ -319,7 +317,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     // @since 4.0.0
-    private static class JLatextAsyncDrawableLoader extends AsyncDrawableLoader {
+    static class JLatextAsyncDrawableLoader extends AsyncDrawableLoader {
 
         private final Config config;
         private final Handler handler = new Handler(Looper.getMainLooper());
@@ -358,57 +356,15 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                     private void execute() {
 
-                        // @since 4.0.1 (background provider can be null)
-                        final JLatexMathTheme.BackgroundProvider backgroundProvider = config.backgroundProvider;
-
                         final JLatexMathDrawable jLatexMathDrawable;
 
-                        // TODO: obtain real values from theme (for blocks and inlines)
                         final JLatextAsyncDrawable jLatextAsyncDrawable = (JLatextAsyncDrawable) drawable;
-                        if (jLatextAsyncDrawable.isBlock) {
-                            // create JLatexMathDrawable
-                            //noinspection ConstantConditions
-                            jLatexMathDrawable =
-                                    JLatexMathDrawable.builder(drawable.getDestination())
-                                            .textSize(config.textSize)
-                                            .background(backgroundProvider != null ? backgroundProvider.provide() : null)
-                                            .align(config.align)
-                                            .fitCanvas(config.fitCanvas)
-                                            .padding(
-                                                    config.paddingHorizontal,
-                                                    config.paddingVertical,
-                                                    config.paddingHorizontal,
-                                                    config.paddingVertical)
-                                            .build();
-                        } else {
-                            jLatexMathDrawable =
-                                    JLatexMathDrawable.builder(drawable.getDestination())
-                                            .textSize(config.textSize)
-//                                            .background(backgroundProvider != null ? backgroundProvider.provide() : null)
-//                                            .align(config.align)
-//                                            .fitCanvas(config.fitCanvas)
-//                                            .padding(
-//                                                    config.paddingHorizontal,
-//                                                    config.paddingVertical,
-//                                                    config.paddingHorizontal,
-//                                                    config.paddingVertical)
-                                            .build();
-                        }
 
-                        // create JLatexMathDrawable
-//                        //noinspection ConstantConditions
-//                        final JLatexMathDrawable jLatexMathDrawable =
-//                                JLatexMathDrawable.builder(drawable.getDestination())
-//                                        .textSize(config.textSize)
-//                                        .background(backgroundProvider != null ? backgroundProvider.provide() : null)
-//                                        .align(config.align)
-//                                        .fitCanvas(config.fitCanvas)
-//                                        .padding(
-//                                                config.paddingHorizontal,
-//                                                config.paddingVertical,
-//                                                config.paddingHorizontal,
-//                                                config.paddingVertical)
-//                                        .build();
+                        if (jLatextAsyncDrawable.isBlock()) {
+                            jLatexMathDrawable = createBlockDrawable(jLatextAsyncDrawable.getDestination());
+                        } else {
+                            jLatexMathDrawable = createInlineDrawable(jLatextAsyncDrawable.getDestination());
+                        }
 
                         // we must post to handler, but also have a way to identify the drawable
                         // for which we are posting (in case of cancellation)
@@ -447,109 +403,63 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         public Drawable placeholder(@NonNull AsyncDrawable drawable) {
             return null;
         }
+
+        // @since 4.3.0-SNAPSHOT
+        @NonNull
+        private JLatexMathDrawable createBlockDrawable(@NonNull String latex) {
+
+            final JLatexMathTheme theme = config.theme;
+
+            final JLatexMathTheme.BackgroundProvider backgroundProvider = theme.blockBackgroundProvider();
+            final JLatexMathTheme.Padding padding = theme.blockPadding();
+
+            final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
+                    .textSize(theme.blockTextSize())
+                    .align(theme.blockHorizontalAlignment())
+                    .fitCanvas(theme.blockFitCanvas());
+
+            if (backgroundProvider != null) {
+                builder.background(backgroundProvider.provide());
+            }
+
+            if (padding != null) {
+                builder.padding(padding.left, padding.top, padding.right, padding.bottom);
+            }
+
+            return builder.build();
+        }
+
+        // @since 4.3.0-SNAPSHOT
+        @NonNull
+        private JLatexMathDrawable createInlineDrawable(@NonNull String latex) {
+
+            final JLatexMathTheme theme = config.theme;
+
+            final JLatexMathTheme.BackgroundProvider backgroundProvider = theme.inlineBackgroundProvider();
+            final JLatexMathTheme.Padding padding = theme.inlinePadding();
+
+            final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
+                    .textSize(theme.inlineTextSize())
+                    .fitCanvas(false);
+
+            if (backgroundProvider != null) {
+                builder.background(backgroundProvider.provide());
+            }
+
+            if (padding != null) {
+                builder.padding(padding.left, padding.top, padding.right, padding.bottom);
+            }
+
+            return builder.build();
+        }
     }
 
-    // we must make drawable fit canvas (if specified), but do not keep the ratio whilst scaling up
-    // @since 4.0.0
-    private static class JLatexImageSizeResolver extends ImageSizeResolver {
-
-        private final boolean fitCanvas;
-
-        JLatexImageSizeResolver(boolean fitCanvas) {
-            this.fitCanvas = fitCanvas;
-        }
+    private static class InlineImageSizeResolver extends ImageSizeResolver {
 
         @NonNull
         @Override
         public Rect resolveImageSize(@NonNull AsyncDrawable drawable) {
-
-            final Rect imageBounds = drawable.getResult().getBounds();
-            final int canvasWidth = drawable.getLastKnownCanvasWidth();
-
-            if (fitCanvas) {
-
-                // we modify bounds only if `fitCanvas` is true
-                final int w = imageBounds.width();
-
-                if (w < canvasWidth) {
-                    // increase width and center formula (keep height as-is)
-                    return new Rect(0, 0, canvasWidth, imageBounds.height());
-                }
-
-                // @since 4.0.2 we additionally scale down the resulting formula (keeping the ratio)
-                // the thing is - JLatexMathDrawable will do it anyway, but it will modify its own
-                // bounds (which AsyncDrawable won't catch), thus leading to an empty space after the formula
-                if (w > canvasWidth) {
-                    // here we must scale it down (keeping the ratio)
-                    final float ratio = (float) w / imageBounds.height();
-                    final int h = (int) (canvasWidth / ratio + .5F);
-                    return new Rect(0, 0, canvasWidth, h);
-                }
-            }
-
-            return imageBounds;
-        }
-    }
-
-    private static class JLatextAsyncDrawable extends AsyncDrawable {
-
-        private final boolean isBlock;
-
-        public JLatextAsyncDrawable(
-                @NonNull String destination,
-                @NonNull AsyncDrawableLoader loader,
-                @NonNull ImageSizeResolver imageSizeResolver,
-                @Nullable ImageSize imageSize,
-                boolean isBlock
-        ) {
-            super(destination, loader, imageSizeResolver, imageSize);
-            this.isBlock = isBlock;
-        }
-    }
-
-    private static class JLatexAsyncDrawableSpan extends AsyncDrawableSpan {
-
-        private final AsyncDrawable drawable;
-
-        public JLatexAsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable, int alignment, boolean replacementTextIsLink) {
-            super(theme, drawable, alignment, replacementTextIsLink);
-            this.drawable = drawable;
-        }
-
-        @Override
-        public int getSize(
-                @NonNull Paint paint,
-                CharSequence text,
-                @IntRange(from = 0) int start,
-                @IntRange(from = 0) int end,
-                @Nullable Paint.FontMetricsInt fm) {
-
-            // if we have no async drawable result - we will just render text
-
-            final int size;
-
-            if (drawable.hasResult()) {
-
-                final Rect rect = drawable.getBounds();
-
-                if (fm != null) {
-                    final int half = rect.bottom / 2;
-                    fm.ascent = -half;
-                    fm.descent = half;
-
-                    fm.top = fm.ascent;
-                    fm.bottom = 0;
-                }
-
-                size = rect.right;
-
-            } else {
-
-                // NB, no specific text handling (no new lines, etc)
-                size = (int) (paint.measureText(text, start, end) + .5F);
-            }
-
-            return size;
+            return drawable.getResult().getBounds();
         }
     }
 }
