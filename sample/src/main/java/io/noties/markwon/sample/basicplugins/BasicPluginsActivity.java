@@ -21,6 +21,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
@@ -35,15 +36,17 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
 
-
     @NonNull
     @Override
     public MenuOptions menuOptions() {
         return MenuOptions.create()
                 .add("paragraphSpan", this::paragraphSpan)
                 .add("disableNode", this::disableNode)
+                .add("customizeTheme", this::customizeTheme)
                 .add("linkWithMovementMethod", this::linkWithMovementMethod)
-                .add("imagesPlugin", this::imagesPlugin);
+                .add("imagesPlugin", this::imagesPlugin)
+                .add("softBreakAddsSpace", this::softBreakAddsSpace)
+                .add("softBreakAddsNewLine", this::softBreakAddsNewLine);
     }
 
     @Override
@@ -215,6 +218,28 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .build();
 
         markwon.setMarkdown(textView, markdown);
+    }
+
+    private void softBreakAddsSpace() {
+        // default behavior
+
+        final String md = "" +
+                "Hello there ->(line)\n(break)<- going on and on";
+
+        Markwon.create(this).setMarkdown(textView, md);
+    }
+
+    private void softBreakAddsNewLine() {
+        // insert a new line when markdown has a soft break
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(SoftBreakAddsNewLinePlugin.create())
+                .build();
+
+        final String md = "" +
+                "Hello there ->(line)\n(break)<- going on and on";
+
+        markwon.setMarkdown(textView, md);
     }
 
 //    public void step_6() {

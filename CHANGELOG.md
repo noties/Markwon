@@ -13,6 +13,8 @@
   ```
 * `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
 * `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering
+* add `SoftBreakAddsNewLinePlugin` plugin (`core` module)
+
 
 # 4.2.2
 * Fixed `AsyncDrawable` display when it has placeholder with empty bounds ([#189])
