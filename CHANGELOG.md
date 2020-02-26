@@ -1,7 +1,18 @@
 # Changelog
 
 # 4.3.0-SNAPSHOT
+* add `MarkwonInlineParserPlugin` in `inline-parser` module
+* `JLatexMathPlugin` now supports both inline and block structures
 
+  this comes with a breaking change: `JLatexMathPlugin` now depends on `inline-parser` module and `MarkwonInlineParserPlugin` must be explicitly added to a `Markwon` instance:
+  ```java
+  final Markwon markwon = Markwon.builder(this)
+        .usePlugin(MarkwonInlineParserPlugin.create())
+        .usePlugin(JLatexMathPlugin.create(textSize))
+        .build();
+  ```
+* `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
+* `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering
 
 # 4.2.2
 * Fixed `AsyncDrawable` display when it has placeholder with empty bounds ([#189])

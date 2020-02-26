@@ -15,7 +15,7 @@ import org.commonmark.parser.block.ParserState;
  * @since 4.3.0-SNAPSHOT (although there was a class with the same name,
  * which is renamed now to {@link JLatexMathBlockParserLegacy})
  */
-public class JLatexMathBlockParser extends AbstractBlockParser {
+class JLatexMathBlockParser extends AbstractBlockParser {
 
     private static final char DOLLAR = '$';
     private static final char SPACE = ' ';

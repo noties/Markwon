@@ -11,7 +11,7 @@ import org.commonmark.parser.block.ParserState;
 /**
  * @since 4.3.0-SNAPSHOT (although it is just renamed parser from previous versions)
  */
-public class JLatexMathBlockParserLegacy extends AbstractBlockParser {
+class JLatexMathBlockParserLegacy extends AbstractBlockParser {
 
     private final JLatexMathBlock block = new JLatexMathBlock();
 

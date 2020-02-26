@@ -11,7 +11,7 @@ import io.noties.markwon.inlineparser.InlineProcessor;
 /**
  * @since 4.3.0-SNAPSHOT
  */
-public class JLatexMathInlineProcessor extends InlineProcessor {
+class JLatexMathInlineProcessor extends InlineProcessor {
 
     private static final Pattern RE = Pattern.compile("(\\${2})([\\s\\S]+?)\\1");
 
