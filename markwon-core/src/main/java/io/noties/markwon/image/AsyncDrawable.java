@@ -182,7 +182,7 @@ public class AsyncDrawable extends Drawable {
             // check for intrinsic bounds
             final Rect intrinsic = DrawableUtils.intrinsicBounds(placeholder);
             if (intrinsic.isEmpty()) {
-                // @since 4.2.2.-SNAPSHOT
+                // @since 4.2.2
                 // if intrinsic bounds are empty, use _any_ non-empty bounds,
                 // they must be non-empty so when result is obtained - proper invalidation will occur
                 // (0, 0, 1, 0) is still considered empty
