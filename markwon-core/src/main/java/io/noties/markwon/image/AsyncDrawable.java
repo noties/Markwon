@@ -194,7 +194,7 @@ public class AsyncDrawable extends Drawable {
 
             // it is very important (if we have a placeholder) to set own bounds to it (and they must not be empty
             // otherwise result won't be rendered)
-            // @since 4.2.2-SNAPSHOT
+            // @since 4.2.2
             setBounds(placeholder.getBounds());
             setResult(placeholder);
 

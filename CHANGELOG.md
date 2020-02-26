@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.2.2-SNAPSHOT
+# 4.2.2
 * Fixed `AsyncDrawable` display when it has placeholder with empty bounds ([#189])
 * Fixed `syntax-highlight` where code input is empty string ([#192])
 * Add `appendFactory`/`prependFactory` in `MarkwonSpansFactory.Builder` for more explicit `SpanFactory` ordering ([#193])

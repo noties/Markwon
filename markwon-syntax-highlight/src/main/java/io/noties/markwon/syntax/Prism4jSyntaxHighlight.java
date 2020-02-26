@@ -42,7 +42,7 @@ public class Prism4jSyntaxHighlight implements SyntaxHighlight {
     @Override
     public CharSequence highlight(@Nullable String info, @NonNull String code) {
 
-        // @since 4.2.2-SNAPSHOT
+        // @since 4.2.2
         // although not null, but still is empty
         if (code.isEmpty()) {
             return code;
