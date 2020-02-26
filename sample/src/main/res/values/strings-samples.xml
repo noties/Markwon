@@ -29,6 +29,8 @@
 
     <string name="sample_inline_parser"># \# Inline Parser\n\nUsage of custom inline parser</string>
 
-    <string name="sample_html_details"># \# HTML &lt;details> tag\n\n&lt;details> tag parsed and rendered</string>
+    <string name="sample_html_details"># \# HTML\n\n`details` tag parsed and rendered</string>
+
+    <string name="sample_task_list"># \# TaskList\n\nUsage of TaskListPlugin</string>
 
 </resources>
