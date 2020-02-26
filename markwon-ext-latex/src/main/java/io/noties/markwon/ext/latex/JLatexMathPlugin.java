@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 
-import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.Parser;
 
 import java.util.HashMap;
@@ -31,7 +30,7 @@ import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImageSizeResolver;
-import io.noties.markwon.inlineparser.MarkwonInlineParser;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
 /**
@@ -154,9 +153,18 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
+    public void configure(@NonNull Registry registry) {
+        if (RenderMode.BLOCKS_AND_INLINES == config.renderMode) {
+            registry.require(MarkwonInlineParserPlugin.class)
+                    .factoryBuilder()
+                    .addInlineProcessor(new JLatexMathInlineProcessor());
+        }
+    }
+
+    @Override
     public void configureParser(@NonNull Parser.Builder builder) {
 
-        // TODO: depending on renderMode we should register our parsing here
+        // depending on renderMode we should register our parsing here
         // * for LEGACY -> just add custom block parser
         // * for INLINE.. -> require InlinePlugin, add inline processor + add block parser
 
@@ -169,11 +177,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             case BLOCKS_AND_INLINES: {
                 builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
-
-                final InlineParserFactory factory = MarkwonInlineParser.factoryBuilder()
-                        .addInlineProcessor(new JLatexMathInlineProcessor())
-                        .build();
-                builder.inlineParserFactory(factory);
+                // inline processor is added through `registry`
             }
             break;
 
