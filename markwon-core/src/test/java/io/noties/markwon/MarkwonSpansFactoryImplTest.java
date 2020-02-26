@@ -113,6 +113,7 @@ public class MarkwonSpansFactoryImplTest {
     }
 
     @Test
+    @Deprecated
     public void builder_add_factory() {
         // here is what we should validate:
         // * if we call addFactory and there is none already -> supplied factory
@@ -145,5 +146,75 @@ public class MarkwonSpansFactoryImplTest {
         builder.addFactory(node, third);
         assertEquals(compositeSpanFactory, builder.getFactory(node));
         assertEquals(Arrays.asList(first, second, third), compositeSpanFactory.factories);
+    }
+
+    @Test
+    public void builder_prepend_factory() {
+        // here is what we should validate:
+        // * if we call prependFactory and there is none already -> supplied factory
+        // * if there is
+        // * * if not composite -> make composite
+        // * * if composite -> add to it
+
+        final MarkwonSpansFactoryImpl.BuilderImpl builder = new MarkwonSpansFactoryImpl.BuilderImpl();
+
+        final SpanFactory first = mock(SpanFactory.class);
+        final SpanFactory second = mock(SpanFactory.class);
+        final SpanFactory third = mock(SpanFactory.class);
+
+        final Class<Node> node = Node.class;
+
+        // assert none yet
+        assertNull(builder.getFactory(node));
+
+        // add first, none yet -> it should be added without modifications
+        builder.prependFactory(node, first);
+        assertEquals(first, builder.getFactory(node));
+
+        // add second -> composite factory will be created
+        builder.prependFactory(node, second);
+        final MarkwonSpansFactoryImpl.CompositeSpanFactory compositeSpanFactory =
+                (MarkwonSpansFactoryImpl.CompositeSpanFactory) builder.getFactory(node);
+        assertNotNull(compositeSpanFactory);
+        assertEquals(Arrays.asList(first, second), compositeSpanFactory.factories);
+
+        builder.prependFactory(node, third);
+        assertEquals(compositeSpanFactory, builder.getFactory(node));
+        assertEquals(Arrays.asList(first, second, third), compositeSpanFactory.factories);
+    }
+
+    @Test
+    public void builder_append_factory() {
+        // here is what we should validate:
+        // * if we call appendFactory and there is none already -> supplied factory
+        // * if there is
+        // * * if not composite -> make composite
+        // * * if composite -> add to it
+
+        final MarkwonSpansFactoryImpl.BuilderImpl builder = new MarkwonSpansFactoryImpl.BuilderImpl();
+
+        final SpanFactory first = mock(SpanFactory.class);
+        final SpanFactory second = mock(SpanFactory.class);
+        final SpanFactory third = mock(SpanFactory.class);
+
+        final Class<Node> node = Node.class;
+
+        // assert none yet
+        assertNull(builder.getFactory(node));
+
+        // add first, none yet -> it should be added without modifications
+        builder.appendFactory(node, first);
+        assertEquals(first, builder.getFactory(node));
+
+        // add second -> composite factory will be created
+        builder.appendFactory(node, second);
+        final MarkwonSpansFactoryImpl.CompositeSpanFactory compositeSpanFactory =
+                (MarkwonSpansFactoryImpl.CompositeSpanFactory) builder.getFactory(node);
+        assertNotNull(compositeSpanFactory);
+        assertEquals(Arrays.asList(second, first), compositeSpanFactory.factories);
+
+        builder.appendFactory(node, third);
+        assertEquals(compositeSpanFactory, builder.getFactory(node));
+        assertEquals(Arrays.asList(third, second, first), compositeSpanFactory.factories);
     }
 }
