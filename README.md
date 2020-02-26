@@ -4,8 +4,6 @@
 
 [![Build](https://github.com/noties/Markwon/workflows/Build/badge.svg)](https://github.com/noties/Markwon/actions)
 
-![hey](http://img.xiaoyv.top/bbs/201603246-20aa1b8ad8bf27df3c906473619c2d84.jpg)
-
 **Markwon** is a markdown library for Android. It parses markdown
 following [commonmark-spec] with the help of amazing [commonmark-java]
 library and renders result as _Android-native_ Spannables. **No HTML**
