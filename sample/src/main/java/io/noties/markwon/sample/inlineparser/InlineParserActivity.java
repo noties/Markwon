@@ -1,6 +1,5 @@
 package io.noties.markwon.sample.inlineparser;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -26,18 +25,28 @@ import io.noties.markwon.inlineparser.BackticksInlineProcessor;
 import io.noties.markwon.inlineparser.CloseBracketInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.inlineparser.OpenBracketInlineProcessor;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
 
-public class InlineParserActivity extends Activity {
+public class InlineParserActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("links_only", this::links_only)
+                .add("disable_code", this::disable_code);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_view);
 
-        this.textView = findViewById(R.id.text_view);
+        textView = findViewById(R.id.text_view);
 
 //        links_only();
 

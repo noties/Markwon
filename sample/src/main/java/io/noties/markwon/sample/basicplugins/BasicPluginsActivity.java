@@ -1,12 +1,9 @@
 package io.noties.markwon.sample.basicplugins;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.TextUtils;
-import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
@@ -22,56 +19,56 @@ import java.util.Collections;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
-import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.RenderProps;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.html.tag.SimpleTagHandler;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.SchemeHandler;
 import io.noties.markwon.image.network.NetworkSchemeHandler;
 import io.noties.markwon.movement.MovementMethodPlugin;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
+import io.noties.markwon.sample.R;
 
-public class BasicPluginsActivity extends Activity {
+public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
+
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("paragraphSpan", this::paragraphSpan)
+                .add("disableNode", this::disableNode)
+                .add("linkWithMovementMethod", this::linkWithMovementMethod)
+                .add("imagesPlugin", this::imagesPlugin);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_text_view);
 
-        textView = new TextView(this);
-        setContentView(textView);
+        textView = findViewById(R.id.text_view);
 
-        step_1();
-
-        step_2();
-
-        step_3();
-
-        step_4();
-
-        step_5();
-
-        step_6();
+        paragraphSpan();
+//
+//        disableNode();
+//
+//        customizeTheme();
+//
+//        linkWithMovementMethod();
+//
+//        imagesPlugin();
     }
 
     /**
      * In order to apply paragraph spans a custom plugin should be created (CorePlugin will take care
      * of everything else).
-     * <p>
-     * Please note that when a plugin is registered and it <em>depends</em> on CorePlugin, there is no
-     * need to explicitly specify it. By default all plugins that extend AbstractMarkwonPlugin do declare
-     * it\'s dependency on CorePlugin ({@link MarkwonPlugin#priority()}).
-     * <p>
-     * Order in which plugins are specified to the builder is of little importance as long as each
-     * plugin clearly states what dependencies it has
      */
-    private void step_1() {
+    private void paragraphSpan() {
 
         final String markdown = "# Hello!\n\nA paragraph?\n\nIt should be!";
 
@@ -91,7 +88,7 @@ public class BasicPluginsActivity extends Activity {
     /**
      * To disable some nodes from rendering another custom plugin can be used
      */
-    private void step_2() {
+    private void disableNode() {
 
         final String markdown = "# Heading 1\n\n## Heading 2\n\n**other** content [here](#)";
 
@@ -116,7 +113,7 @@ public class BasicPluginsActivity extends Activity {
     /**
      * To customize core theme plugin can be used again
      */
-    private void step_3() {
+    private void customizeTheme() {
 
         final String markdown = "`A code` that is rendered differently\n\n```\nHello!\n```";
 
@@ -145,7 +142,7 @@ public class BasicPluginsActivity extends Activity {
      * <p>
      * In order to customize them a custom plugin should be used
      */
-    private void step_4() {
+    private void linkWithMovementMethod() {
 
         final String markdown = "[a link without scheme](github.com)";
 
@@ -178,7 +175,7 @@ public class BasicPluginsActivity extends Activity {
      * images handling (parsing markdown containing images, obtain an image from network
      * file system or assets). Please note that
      */
-    private void step_5() {
+    private void imagesPlugin() {
 
         final String markdown = "![image](myownscheme://en.wikipedia.org/static/images/project-logos/enwiki-2x.png)";
 
@@ -220,29 +217,29 @@ public class BasicPluginsActivity extends Activity {
         markwon.setMarkdown(textView, markdown);
     }
 
-    public void step_6() {
-
-        final Markwon markwon = Markwon.builder(this)
-                .usePlugin(HtmlPlugin.create())
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configure(@NonNull Registry registry) {
-                        registry.require(HtmlPlugin.class, plugin -> plugin.addHandler(new SimpleTagHandler() {
-                            @Override
-                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
-                                return new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
-                            }
-
-                            @NonNull
-                            @Override
-                            public Collection<String> supportedTags() {
-                                return Collections.singleton("center");
-                            }
-                        }));
-                    }
-                })
-                .build();
-    }
+//    public void step_6() {
+//
+//        final Markwon markwon = Markwon.builder(this)
+//                .usePlugin(HtmlPlugin.create())
+//                .usePlugin(new AbstractMarkwonPlugin() {
+//                    @Override
+//                    public void configure(@NonNull Registry registry) {
+//                        registry.require(HtmlPlugin.class, plugin -> plugin.addHandler(new SimpleTagHandler() {
+//                            @Override
+//                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
+//                                return new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+//                            }
+//
+//                            @NonNull
+//                            @Override
+//                            public Collection<String> supportedTags() {
+//                                return Collections.singleton("center");
+//                            }
+//                        }));
+//                    }
+//                })
+//                .build();
+//    }
 
     // text lifecycle (after/before)
     // rendering lifecycle (before/after)

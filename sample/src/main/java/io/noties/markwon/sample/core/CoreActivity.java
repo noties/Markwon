@@ -1,36 +1,48 @@
 package io.noties.markwon.sample.core;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.commonmark.node.Node;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.core.CorePlugin;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
+import io.noties.markwon.sample.R;
 
-public class CoreActivity extends Activity {
+public class CoreActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("simple", this::simple)
+                .add("toast", this::toast)
+                .add("alreadyParsed", this::alreadyParsed);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_text_view);
 
-        textView = new TextView(this);
-        setContentView(textView);
+        textView = findViewById(R.id.text_view);
 
-        step_1();
+//        step_1();
 
-        step_2();
+        simple();
 
-        step_3();
-
-        step_4();
+//        toast();
+//
+//        alreadyParsed();
     }
 
     /**
@@ -70,7 +82,7 @@ public class CoreActivity extends Activity {
     /**
      * To simply apply raw (non-parsed) markdown call {@link Markwon#setMarkdown(TextView, String)}
      */
-    private void step_2() {
+    private void simple() {
 
         // this is raw markdown
         final String markdown = "Hello **markdown**!";
@@ -91,7 +103,7 @@ public class CoreActivity extends Activity {
      * of invalidation. But if a Toast for example is created with a custom view
      * ({@code new Toast(this).setView(...) }) and has access to a TextView everything <em>should</em> work.
      */
-    private void step_3() {
+    private void toast() {
 
         final String markdown = "*Toast* __here__!\n\n> And a quote!";
 
@@ -105,7 +117,7 @@ public class CoreActivity extends Activity {
     /**
      * To apply already parsed markdown use {@link Markwon#setParsedMarkdown(TextView, Spanned)}
      */
-    private void step_4() {
+    private void alreadyParsed() {
 
         final String markdown = "This **is** pre-parsed [markdown](#)";
 
