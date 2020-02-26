@@ -1,6 +1,5 @@
 package io.noties.markwon.sample.editor;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -42,11 +41,25 @@ import io.noties.markwon.inlineparser.EntityInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
 
-public class EditorActivity extends Activity {
+public class EditorActivity extends ActivityWithMenuOptions {
 
     private EditText editText;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("simpleProcess", this::simple_process)
+                .add("simplePreRender", this::simple_pre_render)
+                .add("customPunctuationSpan", this::custom_punctuation_span)
+                .add("additionalEditSpan", this::additional_edit_span)
+                .add("additionalPlugins", this::additional_plugins)
+                .add("multipleEditSpans", this::multiple_edit_spans);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,16 +68,6 @@ public class EditorActivity extends Activity {
 
         this.editText = findViewById(R.id.edit_text);
         initBottomBar();
-
-//        simple_process();
-
-//        simple_pre_render();
-
-//        custom_punctuation_span();
-
-//        additional_edit_span();
-
-//        additional_plugins();
 
         multiple_edit_spans();
     }

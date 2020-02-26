@@ -120,6 +120,7 @@ public class JLatexMathBlockParser extends AbstractBlockParser {
             }
 
             // consume spaces until the end of the line, if any other content is found -> NONE
+            // TODO: here we can check mode in which we operate (legacy or not)
             if (Parsing.skip(SPACE, line, nextNonSpaceIndex + signs, length) != length) {
                 return BlockStart.none();
             }

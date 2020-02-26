@@ -42,8 +42,33 @@ import ru.noties.jlatexmath.JLatexMathDrawable;
 /**
  * @since 3.0.0
  */
-public class  JLatexMathPlugin extends AbstractMarkwonPlugin {
+public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
+    /**
+     * @since 4.3.0-SNAPSHOT
+     */
+    public enum RenderMode {
+        /**
+         * <em>LEGACY</em> mode mimics pre {@code 4.3.0-SNAPSHOT} behavior by rendering LaTeX blocks only.
+         * In this mode LaTeX is started by `$$` (that must be exactly at the start of a line) and
+         * ended at whatever line that is ended with `$$` characters exactly.
+         */
+        LEGACY,
+
+        /**
+         * Starting with {@code 4.3.0-SNAPSHOT} it is possible to have LaTeX inlines (which flows inside
+         * a text paragraph without breaking it). Inline LaTeX starts and ends with `$$` symbols. For example:
+         * {@code
+         * **bold $$\\begin{array}\\end{array}$$ bold-end**, and whatever more
+         * }
+         * LaTeX block starts on a new line started by 0-3 spaces and 2 (or more) {@code $} signs
+         * followed by a new-line (with any amount of space characters in-between). And ends on a new-line
+         * starting with 0-3 spaces followed by number of {@code $} signs that was used to <em>start the block</em>.
+         */
+        BLOCKS_AND_INLINES
+    }
+
+    // TODO: inlines are not moved to a new line when exceed available width.. (api 23, emulator)
     public interface BuilderConfigure {
         void configureBuilder(@NonNull Builder builder);
     }
@@ -338,6 +363,7 @@ public class  JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                         final JLatexMathDrawable jLatexMathDrawable;
 
+                        // TODO: obtain real values from theme (for blocks and inlines)
                         final JLatextAsyncDrawable jLatextAsyncDrawable = (JLatextAsyncDrawable) drawable;
                         if (jLatextAsyncDrawable.isBlock) {
                             // create JLatexMathDrawable
