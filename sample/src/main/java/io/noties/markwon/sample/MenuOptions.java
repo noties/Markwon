@@ -4,6 +4,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,6 +14,16 @@ public class MenuOptions {
     @NonNull
     public static MenuOptions create() {
         return new MenuOptions();
+    }
+
+    static class Option {
+        final String title;
+        final Runnable action;
+
+        Option(@NonNull String title, @NonNull Runnable action) {
+            this.title = title;
+            this.action = action;
+        }
     }
 
     // to preserve order use LinkedHashMap
@@ -34,13 +45,13 @@ public class MenuOptions {
         return false;
     }
 
-    boolean onOptionsItemSelected(MenuItem item) {
+    @Nullable
+    Option onOptionsItemSelected(MenuItem item) {
         final String title = String.valueOf(item.getTitle());
         final Runnable action = actions.get(title);
         if (action != null) {
-            action.run();
-            return true;
+            return new Option(title, action);
         }
-        return false;
+        return null;
     }
 }

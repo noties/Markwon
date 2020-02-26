@@ -13,6 +13,14 @@ public abstract class ActivityWithMenuOptions extends Activity {
     @NonNull
     public abstract MenuOptions menuOptions();
 
+    protected void beforeOptionSelected(@NonNull String option) {
+        // no op, override to customize
+    }
+
+    protected void afterOptionSelected(@NonNull String option) {
+        // no op, override to customize
+    }
+
     private MenuOptions menuOptions;
 
     @Override
@@ -29,6 +37,13 @@ public abstract class ActivityWithMenuOptions extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return menuOptions.onOptionsItemSelected(item);
+        final MenuOptions.Option option = menuOptions.onOptionsItemSelected(item);
+        if (option != null) {
+            beforeOptionSelected(option.title);
+            option.action.run();
+            afterOptionSelected(option.title);
+            return true;
+        }
+        return false;
     }
 }
