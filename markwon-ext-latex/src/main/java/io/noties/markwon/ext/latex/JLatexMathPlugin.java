@@ -42,15 +42,7 @@ import ru.noties.jlatexmath.JLatexMathDrawable;
 /**
  * @since 3.0.0
  */
-public class JLatexMathPlugin extends AbstractMarkwonPlugin {
-
-    /**
-     * @since 4.0.0
-     */
-    public interface BackgroundProvider {
-        @NonNull
-        Drawable provide();
-    }
+public class  JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     public interface BuilderConfigure {
         void configureBuilder(@NonNull Builder builder);
@@ -83,7 +75,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         private final float textSize;
 
         // @since 4.0.0
-        private final BackgroundProvider backgroundProvider;
+        private final JLatexMathTheme.BackgroundProvider backgroundProvider;
 
         @JLatexMathDrawable.Align
         private final int align;
@@ -231,7 +223,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         private final float textSize;
 
         // @since 4.0.0
-        private BackgroundProvider backgroundProvider;
+        private JLatexMathTheme.BackgroundProvider backgroundProvider;
 
         @JLatexMathDrawable.Align
         private int align = JLatexMathDrawable.ALIGN_CENTER;
@@ -252,7 +244,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
 
         @NonNull
-        public Builder backgroundProvider(@NonNull BackgroundProvider backgroundProvider) {
+        public Builder backgroundProvider(@NonNull JLatexMathTheme.BackgroundProvider backgroundProvider) {
             this.backgroundProvider = backgroundProvider;
             return this;
         }
@@ -342,7 +334,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                     private void execute() {
 
                         // @since 4.0.1 (background provider can be null)
-                        final BackgroundProvider backgroundProvider = config.backgroundProvider;
+                        final JLatexMathTheme.BackgroundProvider backgroundProvider = config.backgroundProvider;
 
                         final JLatexMathDrawable jLatexMathDrawable;
 

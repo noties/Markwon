@@ -27,7 +27,9 @@ public enum Sample {
 
     INLINE_PARSER(R.string.sample_inline_parser),
 
-    HTML_DETAILS(R.string.sample_html_details);
+    HTML_DETAILS(R.string.sample_html_details),
+
+    TASK_LIST(R.string.sample_task_list);
 
     private final int textResId;
 

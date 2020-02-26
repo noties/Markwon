@@ -15,6 +15,7 @@ import org.commonmark.node.Node;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
+import io.noties.markwon.ext.latex.JLatexMathTheme;
 import io.noties.markwon.sample.R;
 import io.noties.markwon.utils.DumpNodes;
 import ru.noties.jlatexmath.JLatexMathDrawable;
@@ -56,7 +57,7 @@ public class LatexActivity extends Activity {
                     @Override
                     public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
                         builder
-                                .backgroundProvider(new JLatexMathPlugin.BackgroundProvider() {
+                                .backgroundProvider(new JLatexMathTheme.BackgroundProvider() {
                                     @NonNull
                                     @Override
                                     public Drawable provide() {
