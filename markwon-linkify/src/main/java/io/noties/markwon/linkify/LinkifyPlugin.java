@@ -1,11 +1,13 @@
 package io.noties.markwon.linkify;
 
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+import androidx.core.text.util.LinkifyCompat;
 
 import org.commonmark.node.Link;
 
@@ -33,19 +35,31 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static LinkifyPlugin create() {
-        return create(Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS | Linkify.WEB_URLS);
+        return create(false);
+    }
+
+    @NonNull
+    public static LinkifyPlugin create(boolean useCompat) {
+        return create(Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS | Linkify.WEB_URLS, useCompat);
     }
 
     @NonNull
     public static LinkifyPlugin create(@LinkifyMask int mask) {
-        return new LinkifyPlugin(mask);
+        return new LinkifyPlugin(mask, false);
+    }
+
+    @NonNull
+    public static LinkifyPlugin create(@LinkifyMask int mask, boolean useCompat) {
+        return new LinkifyPlugin(mask, useCompat);
     }
 
     private final int mask;
+    private final boolean useCompat;
 
     @SuppressWarnings("WeakerAccess")
-    LinkifyPlugin(@LinkifyMask int mask) {
+    LinkifyPlugin(@LinkifyMask int mask, boolean useCompat) {
         this.mask = mask;
+        this.useCompat = useCompat;
     }
 
     @Override
@@ -53,7 +67,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         registry.require(CorePlugin.class, new Action<CorePlugin>() {
             @Override
             public void apply(@NonNull CorePlugin corePlugin) {
-                corePlugin.addOnTextAddedListener(new LinkifyTextAddedListener(mask));
+                corePlugin.addOnTextAddedListener(new LinkifyTextAddedListener(mask, useCompat));
             }
         });
     }
@@ -61,9 +75,11 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
     private static class LinkifyTextAddedListener implements CorePlugin.OnTextAddedListener {
 
         private final int mask;
+        private final boolean useCompat;
 
-        LinkifyTextAddedListener(int mask) {
+        LinkifyTextAddedListener(int mask, boolean useCompat) {
             this.mask = mask;
+            this.useCompat = useCompat;
         }
 
         @Override
@@ -80,7 +96,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
             //  render calls from different threads and ... better performance)
             final SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
-            if (Linkify.addLinks(builder, mask)) {
+            if (addLinks(builder, mask)) {
                 // target URL span specifically
                 final URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
                 if (spans != null
@@ -99,6 +115,14 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
                         );
                     }
                 }
+            }
+        }
+
+        private boolean addLinks(@NonNull Spannable text, @LinkifyMask int mask) {
+            if (useCompat) {
+                return LinkifyCompat.addLinks(text, mask);
+            } else {
+                return Linkify.addLinks(text, mask);
             }
         }
     }
