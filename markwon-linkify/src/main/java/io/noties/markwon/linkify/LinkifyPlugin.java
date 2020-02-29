@@ -38,6 +38,11 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         return create(false);
     }
 
+    /**
+     * @param useCompat If true, use {@link LinkifyCompat} to handle links.
+     *                  Note that the {@link LinkifyCompat} depends on androidx.core:core,
+     *                  the dependency must be added on a client side explicitly.
+     */
     @NonNull
     public static LinkifyPlugin create(boolean useCompat) {
         return create(Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS | Linkify.WEB_URLS, useCompat);
@@ -48,6 +53,11 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         return new LinkifyPlugin(mask, false);
     }
 
+    /**
+     * @param useCompat If true, use {@link LinkifyCompat} to handle links.
+     *                  Note that the {@link LinkifyCompat} depends on androidx.core:core,
+     *                  the dependency must be added on a client side explicitly.
+     */
     @NonNull
     public static LinkifyPlugin create(@LinkifyMask int mask, boolean useCompat) {
         return new LinkifyPlugin(mask, useCompat);
