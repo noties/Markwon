@@ -109,7 +109,8 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 <AwesomeGroup :apps="[
     {name: 'Nextcloud', image: $withBase(`/assets/apps/nextcloud.png`), link: 'https://github.com/nextcloud/android', description: 'A safe home for all your data. Access & share your files, calendars, contacts, mail & more from any device, on your terms.'},
     {name: 'Habitica', image: $withBase(`/assets/apps/habitica.png`), link: 'https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica', description: 'Treat your life like a game to stay motivated and organized! Habitica makes it simple to have fun while accomplishing goals.'},
-    {name: 'Cinopsys: Movies and Shows', image: $withBase(`/assets/apps/cinopsys.png`), link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'}
+    {name: 'Cinopsys: Movies and Shows', image: $withBase(`/assets/apps/cinopsys.png`), link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'},
+    {name: 'Pure Writer', image: $withBase(`/assets/apps/purewriter.png`), link: 'https://play.google.com/store/apps/details?id=com.drakeet.purewriter', description: 'Never lose content editor & Markdown'}
 ]" />
 
 
