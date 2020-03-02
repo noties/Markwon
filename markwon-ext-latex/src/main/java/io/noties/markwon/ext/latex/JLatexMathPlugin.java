@@ -69,14 +69,13 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     public interface ErrorHandler {
 
         /**
-         * @param latex that caused the error or null if operated `AsyncDrawable`
-         *              is not an instance of `JLatexAsyncDrawable`
+         * @param latex that caused the error
          * @param error occurred
          * @return (optional) error drawable that will be used instead (if drawable will have bounds
          * it will be used, if not intrinsic bounds will be set)
          */
         @Nullable
-        Drawable handleError(@Nullable String latex, @NonNull Throwable error);
+        Drawable handleError(@NonNull String latex, @NonNull Throwable error);
     }
 
     public interface BuilderConfigure {
@@ -323,12 +322,14 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         /**
          * @since 4.3.0-SNAPSHOT
          */
+        @SuppressWarnings("UnusedReturnValue")
         @NonNull
         public Builder renderMode(@NonNull RenderMode renderMode) {
             this.renderMode = renderMode;
             return this;
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         @NonNull
         public Builder errorHandler(@Nullable ErrorHandler errorHandler) {
             this.errorHandler = errorHandler;
@@ -338,6 +339,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         /**
          * @since 4.0.0
          */
+        @SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
         @NonNull
         public Builder executorService(@NonNull ExecutorService executorService) {
             this.executorService = executorService;
@@ -390,6 +392,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                                         "Error displaying latex: `" + drawable.getDestination() + "`",
                                         t);
                             } else {
+                                // just call `getDestination` without casts and checks
                                 final Drawable errorDrawable = errorHandler.handleError(
                                         drawable.getDestination(),
                                         t
