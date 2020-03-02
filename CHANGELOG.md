@@ -14,6 +14,7 @@
 * `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
 * `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering
 * add `SoftBreakAddsNewLinePlugin` plugin (`core` module)
+* `LinkResolverDef` defaults to `https` when a link does not have scheme information
 
 
 # 4.2.2
