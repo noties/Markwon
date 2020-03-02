@@ -100,7 +100,7 @@ use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
 * Added `MarkwonPlugin.Registry` and `MarkwonPlugin#configure(Registry)` method
 * `CorePlugin#addOnTextAddedListener` (process raw text added)
 * `ImageSizeResolver` signature change (accept `AsyncDrawable`)
-* `LinkResolver` is now an independent entity (previously part of `LinkSpan`)
+* `LinkResolver` is now an independent entity (previously part of the `LinkSpan`), `LinkSpan.Resolver` -&gt; `LinkResolver`
 * `AsyncDrawableScheduler` can now be called multiple times without performance penalty
 * `AsyncDrawable` now exposes its destination, image-size, last known dimensions (canvas, text-size)
 * `AsyncDrawableLoader` signature change (accept `AsyncDrawable`)
