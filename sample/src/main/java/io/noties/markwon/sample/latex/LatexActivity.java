@@ -2,12 +2,15 @@ package io.noties.markwon.sample.latex;
 
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
+import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.ext.latex.JLatexMathTheme;
@@ -57,6 +60,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 .add("bangle", this::bangle)
                 .add("boxes", this::boxes)
                 .add("insideBlockQuote", this::insideBlockQuote)
+                .add("error", this::error)
                 .add("legacy", this::legacy);
     }
 
@@ -95,6 +99,27 @@ public class LatexActivity extends ActivityWithMenuOptions {
         render(md);
     }
 
+    private void error() {
+        final String md = wrapLatexInSampleMarkdown("\\sum_{i=0}^\\infty x \\cdot 0 \\rightarrow \\iMightNotExist{0}");
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
+                    //noinspection Convert2Lambda
+                    builder.errorHandler(new JLatexMathPlugin.ErrorHandler() {
+                        @Nullable
+                        @Override
+                        public Drawable handleError(@Nullable String latex, @NonNull Throwable error) {
+                            Debug.e(error, latex);
+                            return ContextCompat.getDrawable(LatexActivity.this, R.drawable.ic_android_black_24dp);
+                        }
+                    });
+                }))
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
     private void legacy() {
         final String md = wrapLatexInSampleMarkdown(LATEX_BANGLE);
 
@@ -127,22 +152,22 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final float textSize = textView.getTextSize();
         final Resources r = getResources();
 
-final Markwon markwon = Markwon.builder(this)
-        // NB! `MarkwonInlineParserPlugin` is required in order to parse inlines
-        .usePlugin(MarkwonInlineParserPlugin.create())
-        .usePlugin(JLatexMathPlugin.create(textSize, textSize * 1.25F, builder -> {
-            builder.theme()
-                    .inlineBackgroundProvider(() -> new ColorDrawable(0x1000ff00))
-                    .blockBackgroundProvider(() -> new ColorDrawable(0x10ff0000))
-                    .blockPadding(JLatexMathTheme.Padding.symmetric(
-                            r.getDimensionPixelSize(R.dimen.latex_block_padding_vertical),
-                            r.getDimensionPixelSize(R.dimen.latex_block_padding_horizontal)
-                    ));
+        final Markwon markwon = Markwon.builder(this)
+                // NB! `MarkwonInlineParserPlugin` is required in order to parse inlines
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(JLatexMathPlugin.create(textSize, textSize * 1.25F, builder -> {
+                    builder.theme()
+                            .inlineBackgroundProvider(() -> new ColorDrawable(0x1000ff00))
+                            .blockBackgroundProvider(() -> new ColorDrawable(0x10ff0000))
+                            .blockPadding(JLatexMathTheme.Padding.symmetric(
+                                    r.getDimensionPixelSize(R.dimen.latex_block_padding_vertical),
+                                    r.getDimensionPixelSize(R.dimen.latex_block_padding_horizontal)
+                            ));
 
-            // explicitly request LEGACY rendering mode
+                    // explicitly request LEGACY rendering mode
 //                    builder.renderMode(JLatexMathPlugin.RenderMode.LEGACY);
-        }))
-        .build();
+                }))
+                .build();
 
         markwon.setMarkdown(textView, markdown);
     }

@@ -29,6 +29,7 @@ import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
+import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageSizeResolver;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import ru.noties.jlatexmath.JLatexMathDrawable;
@@ -60,6 +61,22 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
          * starting with 0-3 spaces followed by number of {@code $} signs that was used to <em>start the block</em>.
          */
         BLOCKS_AND_INLINES
+    }
+
+    /**
+     * @since 4.3.0-SNAPSHOT
+     */
+    public interface ErrorHandler {
+
+        /**
+         * @param latex that caused the error or null if operated `AsyncDrawable`
+         *              is not an instance of `JLatexAsyncDrawable`
+         * @param error occurred
+         * @return (optional) error drawable that will be used instead (if drawable will have bounds
+         * it will be used, if not intrinsic bounds will be set)
+         */
+        @Nullable
+        Drawable handleError(@Nullable String latex, @NonNull Throwable error);
     }
 
     public interface BuilderConfigure {
@@ -125,11 +142,15 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         // @since 4.3.0-SNAPSHOT
         private final RenderMode renderMode;
 
+        // @since 4.3.0-SNAPSHOT
+        private final ErrorHandler errorHandler;
+
         private final ExecutorService executorService;
 
         Config(@NonNull Builder builder) {
             this.theme = builder.theme.build();
             this.renderMode = builder.renderMode;
+            this.errorHandler = builder.errorHandler;
             // @since 4.0.0
             ExecutorService executorService = builder.executorService;
             if (executorService == null) {
@@ -284,6 +305,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         // @since 4.3.0-SNAPSHOT
         private RenderMode renderMode = RenderMode.BLOCKS_AND_INLINES;
 
+        // @since 4.3.0-SNAPSHOT
+        private ErrorHandler errorHandler;
+
         // @since 4.0.0
         private ExecutorService executorService;
 
@@ -302,6 +326,12 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @NonNull
         public Builder renderMode(@NonNull RenderMode renderMode) {
             this.renderMode = renderMode;
+            return this;
+        }
+
+        @NonNull
+        public Builder errorHandler(@Nullable ErrorHandler errorHandler) {
+            this.errorHandler = errorHandler;
             return this;
         }
 
@@ -351,10 +381,24 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         try {
                             execute();
                         } catch (Throwable t) {
-                            Log.e(
-                                    "JLatexMathPlugin",
-                                    "Error displaying latex: `" + drawable.getDestination() + "`",
-                                    t);
+                            // @since 4.3.0-SNAPSHOT add error handling
+                            final ErrorHandler errorHandler = config.errorHandler;
+                            if (errorHandler == null) {
+                                // as before
+                                Log.e(
+                                        "JLatexMathPlugin",
+                                        "Error displaying latex: `" + drawable.getDestination() + "`",
+                                        t);
+                            } else {
+                                final Drawable errorDrawable = errorHandler.handleError(
+                                        drawable.getDestination(),
+                                        t
+                                );
+                                if (errorDrawable != null) {
+                                    DrawableUtils.applyIntrinsicBoundsIfEmpty(errorDrawable);
+                                    setResult(drawable, errorDrawable);
+                                }
+                            }
                         }
                     }
 
@@ -370,19 +414,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                             jLatexMathDrawable = createInlineDrawable(jLatextAsyncDrawable.getDestination());
                         }
 
-                        // we must post to handler, but also have a way to identify the drawable
-                        // for which we are posting (in case of cancellation)
-                        handler.postAtTime(new Runnable() {
-                            @Override
-                            public void run() {
-                                // remove entry from cache (it will be present if task is not cancelled)
-                                if (cache.remove(drawable) != null
-                                        && drawable.isAttached()) {
-                                    drawable.setResult(jLatexMathDrawable);
-                                }
-
-                            }
-                        }, drawable, SystemClock.uptimeMillis());
+                        setResult(drawable, jLatexMathDrawable);
                     }
                 }));
             }
@@ -455,6 +487,23 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             }
 
             return builder.build();
+        }
+
+        // @since 4.3.0-SNAPSHOT
+        private void setResult(@NonNull final AsyncDrawable drawable, @NonNull final Drawable result) {
+            // we must post to handler, but also have a way to identify the drawable
+            // for which we are posting (in case of cancellation)
+            handler.postAtTime(new Runnable() {
+                @Override
+                public void run() {
+                    // remove entry from cache (it will be present if task is not cancelled)
+                    if (cache.remove(drawable) != null
+                            && drawable.isAttached()) {
+                        drawable.setResult(result);
+                    }
+
+                }
+            }, drawable, SystemClock.uptimeMillis());
         }
     }
 

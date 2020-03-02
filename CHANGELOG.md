@@ -13,8 +13,12 @@
   ```
 * `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
 * `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering
+* add `JLatexMathPlugin.ErrorHandler` to catch latex rendering errors and (optionally) display error drawable ([#204])
 * add `SoftBreakAddsNewLinePlugin` plugin (`core` module)
-* `LinkResolverDef` defaults to `https` when a link does not have scheme information
+* `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
+
+[#75]: https://github.com/noties/Markwon/issues/75
+[#204]: https://github.com/noties/Markwon/issues/204 
 
 
 # 4.2.2
