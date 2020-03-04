@@ -77,7 +77,13 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         registry.require(CorePlugin.class, new Action<CorePlugin>() {
             @Override
             public void apply(@NonNull CorePlugin corePlugin) {
-                corePlugin.addOnTextAddedListener(new LinkifyTextAddedListener(mask, useCompat));
+                final LinkifyTextAddedListener listener;
+                if (useCompat) {
+                    listener = new LinkifyCompatTextAddedListener(mask);
+                } else {
+                    listener = new LinkifyTextAddedListener(mask);
+                }
+                corePlugin.addOnTextAddedListener(listener);
             }
         });
     }
@@ -85,11 +91,9 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
     private static class LinkifyTextAddedListener implements CorePlugin.OnTextAddedListener {
 
         private final int mask;
-        private final boolean useCompat;
 
-        LinkifyTextAddedListener(int mask, boolean useCompat) {
+        LinkifyTextAddedListener(int mask) {
             this.mask = mask;
-            this.useCompat = useCompat;
         }
 
         @Override
@@ -128,12 +132,20 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
             }
         }
 
-        private boolean addLinks(@NonNull Spannable text, @LinkifyMask int mask) {
-            if (useCompat) {
-                return LinkifyCompat.addLinks(text, mask);
-            } else {
-                return Linkify.addLinks(text, mask);
-            }
+        protected boolean addLinks(@NonNull Spannable text, @LinkifyMask int mask) {
+            return Linkify.addLinks(text, mask);
+        }
+    }
+
+    private static class LinkifyCompatTextAddedListener extends LinkifyTextAddedListener {
+
+        LinkifyCompatTextAddedListener(int mask) {
+            super(mask);
+        }
+
+        @Override
+        protected boolean addLinks(@NonNull Spannable text, int mask) {
+            return LinkifyCompat.addLinks(text, mask);
         }
     }
 }
