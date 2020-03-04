@@ -144,7 +144,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         }
 
         @Override
-        protected boolean addLinks(@NonNull Spannable text, int mask) {
+        protected boolean addLinks(@NonNull Spannable text, @LinkifyMask int mask) {
             return LinkifyCompat.addLinks(text, mask);
         }
     }
