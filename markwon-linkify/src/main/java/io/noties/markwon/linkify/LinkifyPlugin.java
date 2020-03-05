@@ -1,11 +1,13 @@
 package io.noties.markwon.linkify;
 
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+import androidx.core.text.util.LinkifyCompat;
 
 import org.commonmark.node.Link;
 
@@ -33,19 +35,41 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static LinkifyPlugin create() {
-        return create(Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS | Linkify.WEB_URLS);
+        return create(false);
+    }
+
+    /**
+     * @param useCompat If true, use {@link LinkifyCompat} to handle links.
+     *                  Note that the {@link LinkifyCompat} depends on androidx.core:core,
+     *                  the dependency must be added on a client side explicitly.
+     */
+    @NonNull
+    public static LinkifyPlugin create(boolean useCompat) {
+        return create(Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS | Linkify.WEB_URLS, useCompat);
     }
 
     @NonNull
     public static LinkifyPlugin create(@LinkifyMask int mask) {
-        return new LinkifyPlugin(mask);
+        return new LinkifyPlugin(mask, false);
+    }
+
+    /**
+     * @param useCompat If true, use {@link LinkifyCompat} to handle links.
+     *                  Note that the {@link LinkifyCompat} depends on androidx.core:core,
+     *                  the dependency must be added on a client side explicitly.
+     */
+    @NonNull
+    public static LinkifyPlugin create(@LinkifyMask int mask, boolean useCompat) {
+        return new LinkifyPlugin(mask, useCompat);
     }
 
     private final int mask;
+    private final boolean useCompat;
 
     @SuppressWarnings("WeakerAccess")
-    LinkifyPlugin(@LinkifyMask int mask) {
+    LinkifyPlugin(@LinkifyMask int mask, boolean useCompat) {
         this.mask = mask;
+        this.useCompat = useCompat;
     }
 
     @Override
@@ -53,7 +77,13 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         registry.require(CorePlugin.class, new Action<CorePlugin>() {
             @Override
             public void apply(@NonNull CorePlugin corePlugin) {
-                corePlugin.addOnTextAddedListener(new LinkifyTextAddedListener(mask));
+                final LinkifyTextAddedListener listener;
+                if (useCompat) {
+                    listener = new LinkifyCompatTextAddedListener(mask);
+                } else {
+                    listener = new LinkifyTextAddedListener(mask);
+                }
+                corePlugin.addOnTextAddedListener(listener);
             }
         });
     }
@@ -80,7 +110,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
             //  render calls from different threads and ... better performance)
             final SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
-            if (Linkify.addLinks(builder, mask)) {
+            if (addLinks(builder, mask)) {
                 // target URL span specifically
                 final URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
                 if (spans != null
@@ -100,6 +130,22 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
                     }
                 }
             }
+        }
+
+        protected boolean addLinks(@NonNull Spannable text, @LinkifyMask int mask) {
+            return Linkify.addLinks(text, mask);
+        }
+    }
+
+    private static class LinkifyCompatTextAddedListener extends LinkifyTextAddedListener {
+
+        LinkifyCompatTextAddedListener(int mask) {
+            super(mask);
+        }
+
+        @Override
+        protected boolean addLinks(@NonNull Spannable text, @LinkifyMask int mask) {
+            return LinkifyCompat.addLinks(text, mask);
         }
     }
 }
