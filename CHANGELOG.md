@@ -16,6 +16,7 @@
 * add `JLatexMathPlugin.ErrorHandler` to catch latex rendering errors and (optionally) display error drawable ([#204])
 * add `SoftBreakAddsNewLinePlugin` plugin (`core` module)
 * `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
+* add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
 
 [#75]: https://github.com/noties/Markwon/issues/75
 [#204]: https://github.com/noties/Markwon/issues/204 

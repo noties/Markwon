@@ -133,18 +133,19 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         return new Builder(JLatexMathTheme.builder(inlineTextSize, blockTextSize));
     }
 
-    public static class Config {
+    @VisibleForTesting
+    static class Config {
 
         // @since 4.3.0-SNAPSHOT
-        private final JLatexMathTheme theme;
+        final JLatexMathTheme theme;
 
         // @since 4.3.0-SNAPSHOT
-        private final RenderMode renderMode;
+        final RenderMode renderMode;
 
         // @since 4.3.0-SNAPSHOT
-        private final ErrorHandler errorHandler;
+        final ErrorHandler errorHandler;
 
-        private final ExecutorService executorService;
+        final ExecutorService executorService;
 
         Config(@NonNull Builder builder) {
             this.theme = builder.theme.build();
@@ -159,7 +160,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
     }
 
-    private final Config config;
+    @VisibleForTesting
+    final Config config;
+
     private final JLatextAsyncDrawableLoader jLatextAsyncDrawableLoader;
     private final JLatexBlockImageSizeResolver jLatexBlockImageSizeResolver;
     private final ImageSizeResolver inlineImageSizeResolver;

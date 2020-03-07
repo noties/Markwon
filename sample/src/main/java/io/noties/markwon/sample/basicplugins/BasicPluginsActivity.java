@@ -21,8 +21,12 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.RenderProps;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
+import io.noties.markwon.SpanFactory;
+import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.core.spans.LastLineSpacingSpan;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.SchemeHandler;
@@ -46,7 +50,9 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .add("linkWithMovementMethod", this::linkWithMovementMethod)
                 .add("imagesPlugin", this::imagesPlugin)
                 .add("softBreakAddsSpace", this::softBreakAddsSpace)
-                .add("softBreakAddsNewLine", this::softBreakAddsNewLine);
+                .add("softBreakAddsNewLine", this::softBreakAddsNewLine)
+                .add("additionalSpacing", this::additionalSpacing)
+                .add("headingNoSpace", this::headingNoSpace);
     }
 
     @Override
@@ -242,6 +248,69 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
         markwon.setMarkdown(textView, md);
     }
 
+    private void additionalSpacing() {
+
+        // please note that bottom line (after 1 & 2 levels) will be drawn _AFTER_ padding
+        final int spacing = (int) (128 * getResources().getDisplayMetrics().density + .5F);
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.headingBreakHeight(0);
+                    }
+
+                    @Override
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        builder.appendFactory(
+                                Heading.class,
+                                (configuration, props) -> new LastLineSpacingSpan(spacing));
+                    }
+                })
+                .build();
+
+        final String md = "" +
+                "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void headingNoSpace() {
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.headingBreakHeight(0);
+                    }
+
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.on(Heading.class, (visitor, heading) -> {
+
+                            visitor.ensureNewLine();
+
+                            final int length = visitor.length();
+                            visitor.visitChildren(heading);
+
+                            CoreProps.HEADING_LEVEL.set(visitor.renderProps(), heading.getLevel());
+
+                            visitor.setSpansForNodeOptional(heading, length);
+
+                            if (visitor.hasNext(heading)) {
+                                visitor.ensureNewLine();
+//                                visitor.forceNewLine();
+                            }
+                        });
+                    }
+                })
+                .build();
+
+        final String md = "" +
+                "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
+    }
+
 //    public void step_6() {
 //
 //        final Markwon markwon = Markwon.builder(this)
@@ -270,5 +339,4 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
     // rendering lifecycle (before/after)
     // renderProps
     // process
-    // priority
 }
