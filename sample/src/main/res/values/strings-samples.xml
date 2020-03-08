@@ -33,4 +33,6 @@
 
     <string name="sample_task_list"># \# TaskList\n\nUsage of TaskListPlugin</string>
 
+    <string name="sample_images"># \# Images\n\nUsage of different images plugins</string>
+
 </resources>

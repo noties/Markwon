@@ -25,6 +25,7 @@ import io.noties.markwon.sample.customextension2.CustomExtensionActivity2;
 import io.noties.markwon.sample.editor.EditorActivity;
 import io.noties.markwon.sample.html.HtmlActivity;
 import io.noties.markwon.sample.htmldetails.HtmlDetailsActivity;
+import io.noties.markwon.sample.images.ImagesActivity;
 import io.noties.markwon.sample.inlineparser.InlineParserActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
 import io.noties.markwon.sample.precomputed.PrecomputedActivity;
@@ -135,6 +136,10 @@ public class MainActivity extends Activity {
 
             case TASK_LIST:
                 activity = TaskListActivity.class;
+                break;
+
+            case IMAGES:
+                activity = ImagesActivity.class;
                 break;
 
             default:

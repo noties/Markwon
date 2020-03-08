@@ -29,7 +29,9 @@ public enum Sample {
 
     HTML_DETAILS(R.string.sample_html_details),
 
-    TASK_LIST(R.string.sample_task_list);
+    TASK_LIST(R.string.sample_task_list),
+
+    IMAGES(R.string.sample_images);
 
     private final int textResId;
 

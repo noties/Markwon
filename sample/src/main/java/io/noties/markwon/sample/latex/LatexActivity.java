@@ -61,7 +61,8 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 .add("boxes", this::boxes)
                 .add("insideBlockQuote", this::insideBlockQuote)
                 .add("error", this::error)
-                .add("legacy", this::legacy);
+                .add("legacy", this::legacy)
+                .add("textColor", this::textColor);
     }
 
     @Override
@@ -133,6 +134,20 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 }))
                 .build();
 
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void textColor() {
+        final String md = wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION);
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
+                    @Override
+                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+
+                    }
+                }))
+                .build();
         markwon.setMarkdown(textView, md);
     }
 
