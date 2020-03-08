@@ -3,6 +3,7 @@ package io.noties.markwon.sample.images;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.bumptech.glide.request.target.Target;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
 import io.noties.markwon.sample.MenuOptions;
@@ -29,7 +31,8 @@ public class ImagesActivity extends ActivityWithMenuOptions {
         // todo: same for other plugins
         return MenuOptions.create()
                 .add("glide-singleImage", this::glideSingleImage)
-                .add("glide-singleImageWithPlaceholder", this::glideSingleImageWithPlaceholder);
+                .add("glide-singleImageWithPlaceholder", this::glideSingleImageWithPlaceholder)
+                .add("click", this::click);
     }
 
     @Override
@@ -80,6 +83,17 @@ public class ImagesActivity extends ActivityWithMenuOptions {
                 }))
                 .build();
 
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void click() {
+
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        final String md = "[![markdown](https://www.mdeditor.com/images/logos/markdown.png \"markdown\")](https://www.mdeditor.com/images/logos/markdown.png)";
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(ImagesPlugin.create())
+                .build();
         markwon.setMarkdown(textView, md);
     }
 }

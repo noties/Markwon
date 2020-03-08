@@ -19,11 +19,15 @@
 * add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
 * `JLatexMathPlugin` add text color customization ([#207])
+* `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
+<br>Thanks to [@drakeet]
 
 [#189]: https://github.com/noties/Markwon/issues/189
 [#75]: https://github.com/noties/Markwon/issues/75
 [#204]: https://github.com/noties/Markwon/issues/204 
 [#207]: https://github.com/noties/Markwon/issues/207
+[#201]: https://github.com/noties/Markwon/issues/201
+[@drakeet]: https://github.com/drakeet
 
 
 # 4.2.2
