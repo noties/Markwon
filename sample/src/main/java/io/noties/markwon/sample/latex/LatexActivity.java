@@ -1,6 +1,7 @@
 package io.noties.markwon.sample.latex;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -141,12 +142,11 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final String md = wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION);
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create())
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
-                    @Override
-                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
-
-                    }
-                }))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> builder.theme()
+                        .inlineTextColor(Color.RED)
+                        .blockTextColor(Color.GREEN)
+                        .inlineBackgroundProvider(() -> new ColorDrawable(Color.YELLOW))
+                        .blockBackgroundProvider(() -> new ColorDrawable(Color.GRAY))))
                 .build();
         markwon.setMarkdown(textView, md);
     }

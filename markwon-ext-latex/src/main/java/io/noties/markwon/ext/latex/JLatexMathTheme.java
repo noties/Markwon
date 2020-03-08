@@ -2,6 +2,7 @@ package io.noties.markwon.ext.latex;
 
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
@@ -118,6 +119,11 @@ public abstract class JLatexMathTheme {
     @Nullable
     public abstract Padding blockPadding();
 
+    @ColorInt
+    public abstract int inlineTextColor();
+
+    @ColorInt
+    public abstract int blockTextColor();
 
     public static class Builder {
         private final float textSize;
@@ -135,6 +141,10 @@ public abstract class JLatexMathTheme {
         private Padding padding;
         private Padding inlinePadding;
         private Padding blockPadding;
+
+        private int textColor = 0xFF000000;
+        private int inlineTextColor;
+        private int blockTextColor;
 
         Builder(float textSize, float inlineTextSize, float blockTextSize) {
             this.textSize = textSize;
@@ -195,6 +205,24 @@ public abstract class JLatexMathTheme {
         }
 
         @NonNull
+        public Builder textColor(@ColorInt int textColor) {
+            this.textColor = textColor;
+            return this;
+        }
+
+        @NonNull
+        public Builder inlineTextColor(@ColorInt int inlineTextColor) {
+            this.inlineTextColor = inlineTextColor;
+            return this;
+        }
+
+        @NonNull
+        public Builder blockTextColor(@ColorInt int blockTextColor) {
+            this.blockTextColor = blockTextColor;
+            return this;
+        }
+
+        @NonNull
         public JLatexMathTheme build() {
             return new Impl(this);
         }
@@ -218,6 +246,10 @@ public abstract class JLatexMathTheme {
         private final Padding inlinePadding;
         private final Padding blockPadding;
 
+        private final int textColor;
+        private final int inlineTextColor;
+        private final int blockTextColor;
+
         Impl(@NonNull Builder builder) {
             this.textSize = builder.textSize;
             this.inlineTextSize = builder.inlineTextSize;
@@ -230,6 +262,9 @@ public abstract class JLatexMathTheme {
             this.padding = builder.padding;
             this.inlinePadding = builder.inlinePadding;
             this.blockPadding = builder.blockPadding;
+            this.textColor = builder.textColor;
+            this.inlineTextColor = builder.inlineTextColor;
+            this.blockTextColor = builder.blockTextColor;
         }
 
         @Override
@@ -292,6 +327,22 @@ public abstract class JLatexMathTheme {
                 return blockPadding;
             }
             return padding;
+        }
+
+        @Override
+        public int inlineTextColor() {
+            if (inlineTextColor != 0) {
+                return inlineTextColor;
+            }
+            return textColor;
+        }
+
+        @Override
+        public int blockTextColor() {
+            if (blockTextColor != 0) {
+                return blockTextColor;
+            }
+            return textColor;
         }
     }
 }

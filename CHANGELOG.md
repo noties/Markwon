@@ -18,10 +18,12 @@
 * `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
 * add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
+* `JLatexMathPlugin` add text color customization ([#207])
 
 [#189]: https://github.com/noties/Markwon/issues/189
 [#75]: https://github.com/noties/Markwon/issues/75
 [#204]: https://github.com/noties/Markwon/issues/204 
+[#207]: https://github.com/noties/Markwon/issues/207
 
 
 # 4.2.2

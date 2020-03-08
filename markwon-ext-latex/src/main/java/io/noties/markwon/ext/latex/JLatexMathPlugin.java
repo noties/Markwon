@@ -454,6 +454,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             final JLatexMathTheme.BackgroundProvider backgroundProvider = theme.blockBackgroundProvider();
             final JLatexMathTheme.Padding padding = theme.blockPadding();
+            final int color = theme.blockTextColor();
 
             final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
                     .textSize(theme.blockTextSize())
@@ -468,6 +469,10 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                 builder.padding(padding.left, padding.top, padding.right, padding.bottom);
             }
 
+            if (color != 0) {
+                builder.color(color);
+            }
+
             return builder.build();
         }
 
@@ -479,6 +484,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             final JLatexMathTheme.BackgroundProvider backgroundProvider = theme.inlineBackgroundProvider();
             final JLatexMathTheme.Padding padding = theme.inlinePadding();
+            final int color = theme.inlineTextColor();
 
             final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
                     .textSize(theme.inlineTextSize())
@@ -490,6 +496,10 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             if (padding != null) {
                 builder.padding(padding.left, padding.top, padding.right, padding.bottom);
+            }
+
+            if (color != 0) {
+                builder.color(color);
             }
 
             return builder.build();
