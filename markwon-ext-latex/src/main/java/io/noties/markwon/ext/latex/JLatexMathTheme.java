@@ -47,6 +47,7 @@ public abstract class JLatexMathTheme {
     /**
      * Special immutable class to hold padding information
      */
+    @SuppressWarnings("WeakerAccess")
     public static class Padding {
         public final int left;
         public final int top;
@@ -60,6 +61,7 @@ public abstract class JLatexMathTheme {
             this.bottom = bottom;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Padding{" +
@@ -125,6 +127,7 @@ public abstract class JLatexMathTheme {
     @ColorInt
     public abstract int blockTextColor();
 
+    @SuppressWarnings({"unused", "UnusedReturnValue"})
     public static class Builder {
         private final float textSize;
         private final float inlineTextSize;
@@ -142,7 +145,7 @@ public abstract class JLatexMathTheme {
         private Padding inlinePadding;
         private Padding blockPadding;
 
-        private int textColor = 0xFF000000;
+        private int textColor;
         private int inlineTextColor;
         private int blockTextColor;
 

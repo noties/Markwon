@@ -3,23 +3,23 @@ package io.noties.markwon.ext.latex;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.AsyncDrawable;
-import io.noties.markwon.image.AsyncDrawableSpan;
 
 /**
  * @since 4.3.0-SNAPSHOT
  */
-class JLatexInlineAsyncDrawableSpan extends AsyncDrawableSpan {
+class JLatexInlineAsyncDrawableSpan extends JLatexAsyncDrawableSpan {
 
     private final AsyncDrawable drawable;
 
-    JLatexInlineAsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull AsyncDrawable drawable, int alignment, boolean replacementTextIsLink) {
-        super(theme, drawable, alignment, replacementTextIsLink);
+    JLatexInlineAsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull JLatextAsyncDrawable drawable, @ColorInt int color) {
+        super(theme, drawable, color);
         this.drawable = drawable;
     }
 

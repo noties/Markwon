@@ -63,7 +63,16 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 .add("insideBlockQuote", this::insideBlockQuote)
                 .add("error", this::error)
                 .add("legacy", this::legacy)
-                .add("textColor", this::textColor);
+                .add("textColor", this::textColor)
+                .add("defaultTextColor", this::defaultTextColor);
+    }
+
+    @Override
+    protected void beforeOptionSelected(@NonNull String option) {
+        super.beforeOptionSelected(option);
+
+        // reset text color
+        textView.setTextColor(0xFF000000);
     }
 
     @Override
@@ -147,6 +156,18 @@ public class LatexActivity extends ActivityWithMenuOptions {
                         .blockTextColor(Color.GREEN)
                         .inlineBackgroundProvider(() -> new ColorDrawable(Color.YELLOW))
                         .blockBackgroundProvider(() -> new ColorDrawable(Color.GRAY))))
+                .build();
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void defaultTextColor() {
+        // @since 4.3.0-SNAPSHOT text color is automatically taken from textView
+        textView.setTextColor(0xFFff0000);
+
+        final String md = wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION);
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
                 .build();
         markwon.setMarkdown(textView, md);
     }

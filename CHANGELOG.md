@@ -12,13 +12,14 @@
         .build();
   ```
 * `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
-* `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering
+* `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering (`LEGACY` &amp; `BLOCKS_AND_INLINES`)
 * add `JLatexMathPlugin.ErrorHandler` to catch latex rendering errors and (optionally) display error drawable ([#204])
+* `JLatexMathPlugin` add text color customization ([#207])
+* `JLatexMathPlugin` will use text color of widget in which it is displayed **if color is not set explicitly**
 * add `SoftBreakAddsNewLinePlugin` plugin (`core` module)
 * `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
 * add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
-* `JLatexMathPlugin` add text color customization ([#207])
 * `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
 <br>Thanks to [@drakeet]
 

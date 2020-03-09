@@ -228,7 +228,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 final MarkwonConfiguration configuration = visitor.configuration();
 
-                final AsyncDrawableSpan span = new AsyncDrawableSpan(
+                final AsyncDrawableSpan span = new JLatexAsyncDrawableSpan(
                         configuration.theme(),
                         new JLatextAsyncDrawable(
                                 latex,
@@ -236,8 +236,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                                 jLatexBlockImageSizeResolver,
                                 null,
                                 true),
-                        AsyncDrawableSpan.ALIGN_CENTER,
-                        false);
+                        config.theme.blockTextColor()
+                );
 
                 visitor.setSpans(length, span);
 
@@ -273,8 +273,8 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                                     inlineImageSizeResolver,
                                     null,
                                     false),
-                            AsyncDrawableSpan.ALIGN_CENTER,
-                            false);
+                            config.theme.inlineTextColor()
+                    );
 
                     visitor.setSpans(length, span);
                 }
@@ -415,9 +415,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         final JLatextAsyncDrawable jLatextAsyncDrawable = (JLatextAsyncDrawable) drawable;
 
                         if (jLatextAsyncDrawable.isBlock()) {
-                            jLatexMathDrawable = createBlockDrawable(jLatextAsyncDrawable.getDestination());
+                            jLatexMathDrawable = createBlockDrawable(jLatextAsyncDrawable);
                         } else {
-                            jLatexMathDrawable = createInlineDrawable(jLatextAsyncDrawable.getDestination());
+                            jLatexMathDrawable = createInlineDrawable(jLatextAsyncDrawable);
                         }
 
                         setResult(drawable, jLatexMathDrawable);
@@ -448,7 +448,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         // @since 4.3.0-SNAPSHOT
         @NonNull
-        private JLatexMathDrawable createBlockDrawable(@NonNull String latex) {
+        private JLatexMathDrawable createBlockDrawable(@NonNull JLatextAsyncDrawable drawable) {
+
+            final String latex = drawable.getDestination();
 
             final JLatexMathTheme theme = config.theme;
 
@@ -478,7 +480,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         // @since 4.3.0-SNAPSHOT
         @NonNull
-        private JLatexMathDrawable createInlineDrawable(@NonNull String latex) {
+        private JLatexMathDrawable createInlineDrawable(@NonNull JLatextAsyncDrawable drawable) {
+
+            final String latex = drawable.getDestination();
 
             final JLatexMathTheme theme = config.theme;
 

@@ -48,5 +48,14 @@ final Markwon markwon = Markwon.builder(context)
 
 
 :::tip
-Since <Badge text="4.0.0" /> `JLatexMathPlugin` operates independently of `ImagesPlugin`
+Sometimes it is enough to use rendered to an image LaTeX formula and 
+inline it directly in your markdown document. For this markdown references can be useful. For example:
+```markdown
+<!-- your mardown -->
+![markdown-reference] of a solution...
+
+<!-- then reference prerendered and converted to base64 SVG/PNG/GIF/etc -->
+[markdown-reference]: data:image/svg+xml;base64,base64encodeddata==
+```
+For this to work an image loader that supports data uri and base64 must be used. Default `Markwon` [image-loader](../image/) supports it out of box (including SVG support)
 :::
