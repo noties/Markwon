@@ -2,17 +2,9 @@
 
 # 4.3.0-SNAPSHOT
 * add `MarkwonInlineParserPlugin` in `inline-parser` module
-* `JLatexMathPlugin` now supports both inline and block structures
-
-  this comes with a breaking change: `JLatexMathPlugin` now depends on `inline-parser` module and `MarkwonInlineParserPlugin` must be explicitly added to a `Markwon` instance:
-  ```java
-  final Markwon markwon = Markwon.builder(this)
-        .usePlugin(MarkwonInlineParserPlugin.create())
-        .usePlugin(JLatexMathPlugin.create(textSize))
-        .build();
-  ```
+* `JLatexMathPlugin` now supports inline LaTeX structures via `MarkwonInlineParserPlugin` 
+dependency (must be explicitly added to `Markwon` whilst configuring)
 * `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
-* `JLatexMathPlugin`: add `renderMode` to use previous (pre `4.3.0`) LaTeX rendering (`LEGACY` &amp; `BLOCKS_AND_INLINES`)
 * add `JLatexMathPlugin.ErrorHandler` to catch latex rendering errors and (optionally) display error drawable ([#204])
 * `JLatexMathPlugin` add text color customization ([#207])
 * `JLatexMathPlugin` will use text color of widget in which it is displayed **if color is not set explicitly**
@@ -22,6 +14,34 @@
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
 * `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
 <br>Thanks to [@drakeet]
+
+
+```java
+// default usage: new blocks parser, no inlines
+final Markwon markwon = Markwon.builder(this)
+    .usePlugin(JLatexMathPlugin.create(textSize))
+    .build();
+```
+
+```java
+// legacy blocks (pre `4.3.0`) parsing, no inlines
+final Markwon markwon =  Markwon.builder(this)
+        .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> builder.blocksLegacy(true)))
+        .build();
+```
+
+```java
+// new blocks parsing and inline parsing
+final Markwon markwon =  Markwon.builder(this)
+        .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
+            // blocksEnabled and blocksLegacy can be omitted
+            builder
+                    .blocksEnabled(true)
+                    .blocksLegacy(false)
+                    .inlinesEnabled(true);
+        }))
+        .build();
+```
 
 [#189]: https://github.com/noties/Markwon/issues/189
 [#75]: https://github.com/noties/Markwon/issues/75

@@ -64,7 +64,8 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 .add("error", this::error)
                 .add("legacy", this::legacy)
                 .add("textColor", this::textColor)
-                .add("defaultTextColor", this::defaultTextColor);
+                .add("defaultTextColor", this::defaultTextColor)
+                .add("inlineAndBlock", this::inlineAndBlock);
     }
 
     @Override
@@ -87,19 +88,19 @@ public class LatexActivity extends ActivityWithMenuOptions {
     }
 
     private void array() {
-        render(wrapLatexInSampleMarkdown(LATEX_ARRAY));
+        renderWithBlocksAndInlines(wrapLatexInSampleMarkdown(LATEX_ARRAY));
     }
 
     private void longDivision() {
-        render(wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION));
+        renderWithBlocksAndInlines(wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION));
     }
 
     private void bangle() {
-        render(wrapLatexInSampleMarkdown(LATEX_BANGLE));
+        renderWithBlocksAndInlines(wrapLatexInSampleMarkdown(LATEX_BANGLE));
     }
 
     private void boxes() {
-        render(wrapLatexInSampleMarkdown(LATEX_BOXES));
+        renderWithBlocksAndInlines(wrapLatexInSampleMarkdown(LATEX_BOXES));
     }
 
     private void insideBlockQuote() {
@@ -107,7 +108,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final String md = "" +
                 "# LaTeX inside a blockquote\n" +
                 "> $$" + latex + "$$\n";
-        render(md);
+        renderWithBlocksAndInlines(md);
     }
 
     private void error() {
@@ -116,6 +117,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create())
                 .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
+                    builder.inlinesEnabled(true);
                     //noinspection Convert2Lambda
                     builder.errorHandler(new JLatexMathPlugin.ErrorHandler() {
                         @Nullable
@@ -137,7 +139,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final Markwon markwon = Markwon.builder(this)
                 // LEGACY does not require inline parser
                 .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
-                    builder.renderMode(JLatexMathPlugin.RenderMode.LEGACY);
+                    builder.blocksLegacy(true);
                     builder.theme()
                             .backgroundProvider(() -> new ColorDrawable(0x100000ff))
                             .padding(JLatexMathTheme.Padding.all(48));
@@ -151,25 +153,54 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final String md = wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION);
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create())
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> builder.theme()
-                        .inlineTextColor(Color.RED)
-                        .blockTextColor(Color.GREEN)
-                        .inlineBackgroundProvider(() -> new ColorDrawable(Color.YELLOW))
-                        .blockBackgroundProvider(() -> new ColorDrawable(Color.GRAY))))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
+                    builder.inlinesEnabled(true);
+                    builder.theme()
+                            .inlineTextColor(Color.RED)
+                            .blockTextColor(Color.GREEN)
+                            .inlineBackgroundProvider(() -> new ColorDrawable(Color.YELLOW))
+                            .blockBackgroundProvider(() -> new ColorDrawable(Color.GRAY));
+                }))
                 .build();
         markwon.setMarkdown(textView, md);
     }
 
     private void defaultTextColor() {
         // @since 4.3.0-SNAPSHOT text color is automatically taken from textView
+        //  (if it's not specified explicitly via configuration)
         textView.setTextColor(0xFFff0000);
 
         final String md = wrapLatexInSampleMarkdown(LATEX_LONG_DIVISION);
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create())
-                .usePlugin(JLatexMathPlugin.create(textView.getTextSize()))
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), new JLatexMathPlugin.BuilderConfigure() {
+                    @Override
+                    public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+                        builder.inlinesEnabled(true);
+                        // override default text color
+                        builder.theme()
+                                .inlineTextColor(0xFF00ffff);
+                    }
+                }))
                 .build();
+
         markwon.setMarkdown(textView, md);
+    }
+
+    private void inlineAndBlock() {
+        final String md = "" +
+                "# Inline and block\n\n" +
+                "$$\\int_{a}^{b} f(x)dx = F(b) - F(a)$$\n\n" +
+                "this was **inline** _LaTeX_ $$\\int_{a}^{b} f(x)dx = F(b) - F(a)$$ and once again it was\n\n" +
+                "Now a block:\n\n" +
+                "$$\n" +
+                "\\int_{a}^{b} f(x)dx = F(b) - F(a)\n" +
+                "$$\n\n" +
+                "Not a block (content on delimited line), but inline instead:\n\n" +
+                "$$\\int_{a}^{b} f(x)dx = F(b) - F(a)$$" +
+                "\n\n" +
+                "that's it";
+        renderWithBlocksAndInlines(md);
     }
 
     @NonNull
@@ -183,7 +214,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 "the end";
     }
 
-    private void render(@NonNull String markdown) {
+    private void renderWithBlocksAndInlines(@NonNull String markdown) {
 
         final float textSize = textView.getTextSize();
         final Resources r = getResources();
@@ -192,6 +223,8 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 // NB! `MarkwonInlineParserPlugin` is required in order to parse inlines
                 .usePlugin(MarkwonInlineParserPlugin.create())
                 .usePlugin(JLatexMathPlugin.create(textSize, textSize * 1.25F, builder -> {
+                    // Important thing to do is to enable inlines (by default disabled)
+                    builder.inlinesEnabled(true);
                     builder.theme()
                             .inlineBackgroundProvider(() -> new ColorDrawable(0x1000ff00))
                             .blockBackgroundProvider(() -> new ColorDrawable(0x10ff0000))
@@ -199,9 +232,6 @@ public class LatexActivity extends ActivityWithMenuOptions {
                                     r.getDimensionPixelSize(R.dimen.latex_block_padding_vertical),
                                     r.getDimensionPixelSize(R.dimen.latex_block_padding_horizontal)
                             ));
-
-                    // explicitly request LEGACY rendering mode
-//                    builder.renderMode(JLatexMathPlugin.RenderMode.LEGACY);
                 }))
                 .build();
 

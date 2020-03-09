@@ -42,30 +42,6 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     /**
      * @since 4.3.0-SNAPSHOT
      */
-    public enum RenderMode {
-        /**
-         * <em>LEGACY</em> mode mimics pre {@code 4.3.0-SNAPSHOT} behavior by rendering LaTeX blocks only.
-         * In this mode LaTeX is started by `$$` (that must be exactly at the start of a line) and
-         * ended at whatever line that is ended with `$$` characters exactly.
-         */
-        LEGACY,
-
-        /**
-         * Starting with {@code 4.3.0-SNAPSHOT} it is possible to have LaTeX inlines (which flows inside
-         * a text paragraph without breaking it). Inline LaTeX starts and ends with `$$` symbols. For example:
-         * {@code
-         * **bold $$\\begin{array}\\end{array}$$ bold-end**, and whatever more
-         * }
-         * LaTeX block starts on a new line started by 0-3 spaces and 2 (or more) {@code $} signs
-         * followed by a new-line (with any amount of space characters in-between). And ends on a new-line
-         * starting with 0-3 spaces followed by number of {@code $} signs that was used to <em>start the block</em>.
-         */
-        BLOCKS_AND_INLINES
-    }
-
-    /**
-     * @since 4.3.0-SNAPSHOT
-     */
     public interface ErrorHandler {
 
         /**
@@ -140,7 +116,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         final JLatexMathTheme theme;
 
         // @since 4.3.0-SNAPSHOT
-        final RenderMode renderMode;
+        final boolean blocksEnabled;
+        final boolean blocksLegacy;
+        final boolean inlinesEnabled;
 
         // @since 4.3.0-SNAPSHOT
         final ErrorHandler errorHandler;
@@ -149,7 +127,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         Config(@NonNull Builder builder) {
             this.theme = builder.theme.build();
-            this.renderMode = builder.renderMode;
+            this.blocksEnabled = builder.blocksEnabled;
+            this.blocksLegacy = builder.blocksLegacy;
+            this.inlinesEnabled = builder.inlinesEnabled;
             this.errorHandler = builder.errorHandler;
             // @since 4.0.0
             ExecutorService executorService = builder.executorService;
@@ -177,7 +157,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configure(@NonNull Registry registry) {
-        if (RenderMode.BLOCKS_AND_INLINES == config.renderMode) {
+        if (config.inlinesEnabled) {
             registry.require(MarkwonInlineParserPlugin.class)
                     .factoryBuilder()
                     .addInlineProcessor(new JLatexMathInlineProcessor());
@@ -186,31 +166,27 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-
-        // depending on renderMode we should register our parsing here
-        // * for LEGACY -> just add custom block parser
-        // * for INLINE.. -> require InlinePlugin, add inline processor + add block parser
-
-        switch (config.renderMode) {
-
-            case LEGACY: {
+        // @since $nap;
+        if (config.blocksEnabled) {
+            if (config.blocksLegacy) {
                 builder.customBlockParserFactory(new JLatexMathBlockParserLegacy.Factory());
-            }
-            break;
-
-            case BLOCKS_AND_INLINES: {
+            } else {
                 builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
-                // inline processor is added through `registry`
             }
-            break;
-
-            default:
-                throw new RuntimeException("Unexpected `renderMode`: " + config.renderMode);
         }
     }
 
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+        addBlockVisitor(builder);
+        addInlineVisitor(builder);
+    }
+
+    private void addBlockVisitor(@NonNull MarkwonVisitor.Builder builder) {
+        if (!config.blocksEnabled) {
+            return;
+        }
+
         builder.on(JLatexMathBlock.class, new MarkwonVisitor.NodeVisitor<JLatexMathBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathBlock jLatexMathBlock) {
@@ -247,39 +223,42 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                 }
             }
         });
+    }
 
+    private void addInlineVisitor(@NonNull MarkwonVisitor.Builder builder) {
 
-        if (RenderMode.BLOCKS_AND_INLINES == config.renderMode) {
-
-            builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
-                @Override
-                public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathNode jLatexMathNode) {
-                    final String latex = jLatexMathNode.latex();
-
-                    final int length = visitor.length();
-
-                    // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
-                    // because Android will draw formula for each line of text, thus
-                    // leading to formula duplicated (drawn on each line of text)
-                    visitor.builder().append(prepareLatexTextPlaceholder(latex));
-
-                    final MarkwonConfiguration configuration = visitor.configuration();
-
-                    final AsyncDrawableSpan span = new JLatexInlineAsyncDrawableSpan(
-                            configuration.theme(),
-                            new JLatextAsyncDrawable(
-                                    latex,
-                                    jLatextAsyncDrawableLoader,
-                                    inlineImageSizeResolver,
-                                    null,
-                                    false),
-                            config.theme.inlineTextColor()
-                    );
-
-                    visitor.setSpans(length, span);
-                }
-            });
+        if (!config.inlinesEnabled) {
+            return;
         }
+
+        builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathNode jLatexMathNode) {
+                final String latex = jLatexMathNode.latex();
+
+                final int length = visitor.length();
+
+                // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
+                // because Android will draw formula for each line of text, thus
+                // leading to formula duplicated (drawn on each line of text)
+                visitor.builder().append(prepareLatexTextPlaceholder(latex));
+
+                final MarkwonConfiguration configuration = visitor.configuration();
+
+                final AsyncDrawableSpan span = new JLatexInlineAsyncDrawableSpan(
+                        configuration.theme(),
+                        new JLatextAsyncDrawable(
+                                latex,
+                                jLatextAsyncDrawableLoader,
+                                inlineImageSizeResolver,
+                                null,
+                                false),
+                        config.theme.inlineTextColor()
+                );
+
+                visitor.setSpans(length, span);
+            }
+        });
     }
 
     @Override
@@ -299,13 +278,16 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         return latex.replace('\n', ' ').trim();
     }
 
+    @SuppressWarnings({"unused", "UnusedReturnValue"})
     public static class Builder {
 
         // @since 4.3.0-SNAPSHOT
         private final JLatexMathTheme.Builder theme;
 
         // @since 4.3.0-SNAPSHOT
-        private RenderMode renderMode = RenderMode.BLOCKS_AND_INLINES;
+        private boolean blocksEnabled = true;
+        private boolean blocksLegacy;
+        private boolean inlinesEnabled;
 
         // @since 4.3.0-SNAPSHOT
         private ErrorHandler errorHandler;
@@ -323,16 +305,35 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
 
         /**
-         * @since 4.3.0-SNAPSHOT
+         * @since $nap;
          */
-        @SuppressWarnings("UnusedReturnValue")
         @NonNull
-        public Builder renderMode(@NonNull RenderMode renderMode) {
-            this.renderMode = renderMode;
+        public Builder blocksEnabled(boolean blocksEnabled) {
+            this.blocksEnabled = blocksEnabled;
             return this;
         }
 
-        @SuppressWarnings("UnusedReturnValue")
+        /**
+         * @param blocksLegacy indicates if blocks should be handled in legacy mode ({@code pre 4.3.0})
+         * @since 4.3.0-SNAPSHOT
+         */
+        @NonNull
+        public Builder blocksLegacy(boolean blocksLegacy) {
+            this.blocksLegacy = blocksLegacy;
+            return this;
+        }
+
+        /**
+         * @param inlinesEnabled indicates if inline parsing should be enabled.
+         *                       NB, this requires `MarkwonInlineParserPlugin` to be used when creating `MarkwonInstance`
+         * @since 4.3.0-SNAPSHOT
+         */
+        @NonNull
+        public Builder inlinesEnabled(boolean inlinesEnabled) {
+            this.inlinesEnabled = inlinesEnabled;
+            return this;
+        }
+
         @NonNull
         public Builder errorHandler(@Nullable ErrorHandler errorHandler) {
             this.errorHandler = errorHandler;
@@ -342,7 +343,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         /**
          * @since 4.0.0
          */
-        @SuppressWarnings({"UnusedReturnValue", "WeakerAccess"})
+        @SuppressWarnings("WeakerAccess")
         @NonNull
         public Builder executorService(@NonNull ExecutorService executorService) {
             this.executorService = executorService;

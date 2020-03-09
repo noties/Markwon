@@ -26,7 +26,6 @@ class JLatexMathBlockParser extends AbstractBlockParser {
 
     private final int signs;
 
-    @SuppressWarnings("WeakerAccess")
     JLatexMathBlockParser(int signs) {
         this.signs = signs;
     }

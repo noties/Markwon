@@ -128,7 +128,8 @@ public class JLatexMathPluginTest {
         final JLatexMathPlugin plugin = JLatexMathPlugin.create(1, new JLatexMathPlugin.BuilderConfigure() {
             @Override
             public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
-                builder.renderMode(JLatexMathPlugin.RenderMode.LEGACY);
+                builder.blocksLegacy(true);
+                builder.inlinesEnabled(false);
             }
         });
 
@@ -167,12 +168,19 @@ public class JLatexMathPluginTest {
     public void blocks_inlines_implicit() {
         final JLatexMathPlugin plugin = JLatexMathPlugin.create(1);
         final JLatexMathPlugin.Config config = plugin.config;
-        assertEquals(JLatexMathPlugin.RenderMode.BLOCKS_AND_INLINES, config.renderMode);
+        assertTrue("blocksEnabled", config.blocksEnabled);
+        assertFalse("blocksLegacy", config.blocksLegacy);
+        assertFalse("inlinesEnabled", config.inlinesEnabled);
     }
 
     @Test
     public void blocks_inlines() {
-        final JLatexMathPlugin plugin = JLatexMathPlugin.create(12);
+        final JLatexMathPlugin plugin = JLatexMathPlugin.create(12, new JLatexMathPlugin.BuilderConfigure() {
+            @Override
+            public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+                builder.inlinesEnabled(true);
+            }
+        });
 
         // registry
         {
