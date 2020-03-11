@@ -19,7 +19,7 @@ public class SoftBreakAddsNewLinePlugin extends AbstractMarkwonPlugin {
         builder.on(SoftLineBreak.class, new MarkwonVisitor.NodeVisitor<SoftLineBreak>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull SoftLineBreak softLineBreak) {
-                visitor.forceNewLine();
+                visitor.ensureNewLine();
             }
         });
     }

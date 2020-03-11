@@ -14,6 +14,7 @@ dependency (must be explicitly added to `Markwon` whilst configuring)
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
 * `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
 <br>Thanks to [@drakeet]
+* `MarkwonVisitor.BlockHandler` and `BlockHandlerDef` implementation to control how blocks insert new lines after them
 
 
 ```java

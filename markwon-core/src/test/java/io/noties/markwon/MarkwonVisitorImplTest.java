@@ -43,7 +43,8 @@ public class MarkwonVisitorImplTest {
                 mock(MarkwonConfiguration.class),
                 renderProps,
                 spannableBuilder,
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         impl.clear();
 
@@ -61,7 +62,8 @@ public class MarkwonVisitorImplTest {
                 mock(MarkwonConfiguration.class),
                 mock(RenderProps.class),
                 builder,
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         // at the start - won't add anything
         impl.ensureNewLine();
@@ -92,7 +94,8 @@ public class MarkwonVisitorImplTest {
                 mock(MarkwonConfiguration.class),
                 mock(RenderProps.class),
                 builder,
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         assertEquals(0, builder.length());
 
@@ -144,7 +147,8 @@ public class MarkwonVisitorImplTest {
                 mock(MarkwonConfiguration.class),
                 mock(RenderProps.class),
                 mock(SpannableBuilder.class),
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         final BlockQuote node = mock(BlockQuote.class);
         final Node child = mock(Node.class);
@@ -163,7 +167,8 @@ public class MarkwonVisitorImplTest {
                 mock(MarkwonConfiguration.class),
                 mock(RenderProps.class),
                 mock(SpannableBuilder.class),
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         final Node noNext = mock(Node.class);
         assertFalse(impl.hasNext(noNext));
@@ -195,7 +200,8 @@ public class MarkwonVisitorImplTest {
                 mock(MarkwonConfiguration.class),
                 mock(RenderProps.class),
                 builder,
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         for (int i = 0; i < 13; i++) {
             builder.setLength(i);
@@ -221,7 +227,8 @@ public class MarkwonVisitorImplTest {
                 configuration,
                 mock(RenderProps.class),
                 mock(SpannableBuilder.class),
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         impl.setSpansForNode(Node.class, 0);
 
@@ -252,7 +259,8 @@ public class MarkwonVisitorImplTest {
                 configuration,
                 mock(RenderProps.class),
                 builder,
-                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap());
+                Collections.<Class<? extends Node>, MarkwonVisitor.NodeVisitor<? extends Node>>emptyMap(),
+                mock(MarkwonVisitor.BlockHandler.class));
 
         // append something
         builder.append("no-spans-test");

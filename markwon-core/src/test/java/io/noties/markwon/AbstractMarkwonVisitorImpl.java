@@ -12,7 +12,8 @@ public class AbstractMarkwonVisitorImpl extends MarkwonVisitorImpl {
             @NonNull MarkwonConfiguration configuration,
             @NonNull RenderProps renderProps,
             @NonNull SpannableBuilder spannableBuilder,
-            @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
-        super(configuration, renderProps, spannableBuilder, nodes);
+            @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes,
+            @NonNull BlockHandler blockHandler) {
+        super(configuration, renderProps, spannableBuilder, nodes, blockHandler);
     }
 }

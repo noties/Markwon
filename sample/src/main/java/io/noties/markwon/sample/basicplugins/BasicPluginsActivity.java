@@ -11,19 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.commonmark.node.Heading;
+import org.commonmark.node.Node;
 import org.commonmark.node.Paragraph;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.BlockHandlerDef;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.RenderProps;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
-import io.noties.markwon.SpanFactory;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.core.spans.LastLineSpacingSpan;
@@ -52,7 +52,9 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .add("softBreakAddsSpace", this::softBreakAddsSpace)
                 .add("softBreakAddsNewLine", this::softBreakAddsNewLine)
                 .add("additionalSpacing", this::additionalSpacing)
-                .add("headingNoSpace", this::headingNoSpace);
+                .add("headingNoSpace", this::headingNoSpace)
+                .add("headingNoSpaceBlockHandler", this::headingNoSpaceBlockHandler)
+                .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine);
     }
 
     @Override
@@ -307,6 +309,68 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
         final String md = "" +
                 "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void headingNoSpaceBlockHandler() {
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.blockHandler(new BlockHandlerDef() {
+                            @Override
+                            public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                                if (node instanceof Heading) {
+                                    if (visitor.hasNext(node)) {
+                                        visitor.ensureNewLine();
+                                        // ensure new line but do not force insert one
+                                    }
+                                } else {
+                                    super.blockEnd(visitor, node);
+                                }
+                            }
+                        });
+                    }
+                })
+                .build();
+
+        final String md = "" +
+                "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void allBlocksNoForcedLine() {
+        final MarkwonVisitor.BlockHandler blockHandler = new BlockHandlerDef() {
+            @Override
+            public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                if (visitor.hasNext(node)) {
+                    visitor.ensureNewLine();
+                }
+            }
+        };
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.blockHandler(blockHandler);
+                    }
+                })
+                .build();
+
+        final String md = "" +
+                "# Hello there!\n\n" +
+                "* a first\n" +
+                "* second\n" +
+                "- third\n" +
+                "* * nested one\n\n" +
+                "> block quote\n\n" +
+                "> > and nested one\n\n" +
+                "```java\n" +
+                "final int i = 0;\n" +
+                "```\n\n";
 
         markwon.setMarkdown(textView, md);
     }

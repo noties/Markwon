@@ -45,15 +45,20 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes;
 
+    // @since $nap;
+    private final BlockHandler blockHandler;
+
     MarkwonVisitorImpl(
             @NonNull MarkwonConfiguration configuration,
             @NonNull RenderProps renderProps,
             @NonNull SpannableBuilder builder,
-            @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes) {
+            @NonNull Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes,
+            @NonNull BlockHandler blockHandler) {
         this.configuration = configuration;
         this.renderProps = renderProps;
         this.builder = builder;
         this.nodes = nodes;
+        this.blockHandler = blockHandler;
     }
 
     @Override
@@ -268,9 +273,20 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
         }
     }
 
+    @Override
+    public void blockStart(@NonNull Node node) {
+        blockHandler.blockStart(this, node);
+    }
+
+    @Override
+    public void blockEnd(@NonNull Node node) {
+        blockHandler.blockEnd(this, node);
+    }
+
     static class BuilderImpl implements Builder {
 
         private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes = new HashMap<>();
+        private BlockHandler blockHandler;
 
         @NonNull
         @Override
@@ -292,12 +308,26 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
         @NonNull
         @Override
+        public Builder blockHandler(@NonNull BlockHandler blockHandler) {
+            this.blockHandler = blockHandler;
+            return this;
+        }
+
+        @NonNull
+        @Override
         public MarkwonVisitor build(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps) {
+            // @since $nap;
+            BlockHandler blockHandler = this.blockHandler;
+            if (blockHandler == null) {
+                blockHandler = new BlockHandlerDef();
+            }
+
             return new MarkwonVisitorImpl(
                     configuration,
                     renderProps,
                     new SpannableBuilder(),
-                    Collections.unmodifiableMap(nodes));
+                    Collections.unmodifiableMap(nodes),
+                    blockHandler);
         }
     }
 }

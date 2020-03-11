@@ -191,7 +191,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathBlock jLatexMathBlock) {
 
-                visitor.ensureNewLine();
+                visitor.blockStart(jLatexMathBlock);
 
                 final String latex = jLatexMathBlock.latex();
 
@@ -217,10 +217,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 visitor.setSpans(length, span);
 
-                if (visitor.hasNext(jLatexMathBlock)) {
-                    visitor.ensureNewLine();
-                    visitor.forceNewLine();
-                }
+                visitor.blockEnd(jLatexMathBlock);
             }
         });
     }
