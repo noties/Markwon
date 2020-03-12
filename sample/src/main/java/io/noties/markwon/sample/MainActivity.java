@@ -28,6 +28,7 @@ import io.noties.markwon.sample.htmldetails.HtmlDetailsActivity;
 import io.noties.markwon.sample.images.ImagesActivity;
 import io.noties.markwon.sample.inlineparser.InlineParserActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
+import io.noties.markwon.sample.notification.NotificationActivity;
 import io.noties.markwon.sample.precomputed.PrecomputedActivity;
 import io.noties.markwon.sample.recycler.RecyclerActivity;
 import io.noties.markwon.sample.simpleext.SimpleExtActivity;
@@ -140,6 +141,10 @@ public class MainActivity extends Activity {
 
             case IMAGES:
                 activity = ImagesActivity.class;
+                break;
+
+            case REMOTE_VIEWS:
+                activity = NotificationActivity.class;
                 break;
 
             default:

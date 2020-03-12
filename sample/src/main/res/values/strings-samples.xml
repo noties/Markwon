@@ -35,4 +35,6 @@
 
     <string name="sample_images"># \# Images\n\nUsage of different images plugins</string>
 
+    <string name="sample_remote_views"># \# Notification\n\nExample usage in notifications and other remote views</string>
+
 </resources>
