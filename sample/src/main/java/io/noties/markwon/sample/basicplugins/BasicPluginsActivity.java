@@ -3,8 +3,12 @@ package io.noties.markwon.sample.basicplugins;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,7 @@ import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.BlockHandlerDef;
+import io.noties.markwon.LinkResolverDef;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
@@ -26,6 +31,7 @@ import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.core.spans.HeadingSpan;
 import io.noties.markwon.core.spans.LastLineSpacingSpan;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
@@ -39,6 +45,7 @@ import io.noties.markwon.sample.R;
 public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
+    private ScrollView scrollView;
 
     @NonNull
     @Override
@@ -54,7 +61,8 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .add("additionalSpacing", this::additionalSpacing)
                 .add("headingNoSpace", this::headingNoSpace)
                 .add("headingNoSpaceBlockHandler", this::headingNoSpaceBlockHandler)
-                .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine);
+                .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine)
+                .add("anchor", this::anchor);
     }
 
     @Override
@@ -63,6 +71,7 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
         setContentView(R.layout.activity_text_view);
 
         textView = findViewById(R.id.text_view);
+        scrollView = findViewById(R.id.scroll_view);
 
         paragraphSpan();
 //
@@ -403,4 +412,96 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
     // rendering lifecycle (before/after)
     // renderProps
     // process
+
+    private static class AnchorSpan {
+        final String anchor;
+
+        AnchorSpan(@NonNull String anchor) {
+            this.anchor = anchor;
+        }
+    }
+
+    @NonNull
+    private String createAnchor(@NonNull CharSequence content) {
+        return String.valueOf(content)
+                .replaceAll("[^\\w]", "")
+                .toLowerCase();
+    }
+
+    private static class AnchorLinkResolver extends LinkResolverDef {
+
+        interface ScrollTo {
+            void scrollTo(@NonNull View view, int top);
+        }
+
+        private final ScrollTo scrollTo;
+
+        AnchorLinkResolver(@NonNull ScrollTo scrollTo) {
+            this.scrollTo = scrollTo;
+        }
+
+        @Override
+        public void resolve(@NonNull View view, @NonNull String link) {
+            if (link.startsWith("#")) {
+                final TextView textView = (TextView) view;
+                final Spanned spanned = (Spannable) textView.getText();
+                final AnchorSpan[] spans = spanned.getSpans(0, spanned.length(), AnchorSpan.class);
+                if (spans != null) {
+                    final String anchor = link.substring(1);
+                    for (AnchorSpan span: spans) {
+                        if (anchor.equals(span.anchor)) {
+                            final int start = spanned.getSpanStart(span);
+                            final int line = textView.getLayout().getLineForOffset(start);
+                            final int top = textView.getLayout().getLineTop(line);
+                            scrollTo.scrollTo(textView, top);
+                            return;
+                        }
+                    }
+                }
+            }
+            super.resolve(view, link);
+        }
+    }
+
+    private void anchor() {
+        final String lorem = getString(R.string.lorem);
+        final String md = "" +
+                "Hello [there](#there)!\n\n\n" +
+                lorem + "\n\n" +
+                "# There!\n\n" +
+                lorem;
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver(new AnchorLinkResolver((view, top) -> {
+                            scrollView.smoothScrollTo(0, top);
+                        }));
+                    }
+
+                    @Override
+                    public void afterSetText(@NonNull TextView textView) {
+                        final Spannable spannable = (Spannable) textView.getText();
+                        // obtain heading spans
+                        final HeadingSpan[] spans = spannable.getSpans(0, spannable.length(), HeadingSpan.class);
+                        if (spans != null) {
+                            for (HeadingSpan span : spans) {
+                                final int start = spannable.getSpanStart(span);
+                                final int end = spannable.getSpanEnd(span);
+                                final int flags = spannable.getSpanFlags(span);
+                                spannable.setSpan(
+                                        new AnchorSpan(createAnchor(spannable.subSequence(start, end))),
+                                        start,
+                                        end,
+                                        flags
+                                );
+                            }
+                        }
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
 }

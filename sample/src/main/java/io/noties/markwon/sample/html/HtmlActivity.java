@@ -1,6 +1,5 @@
 package io.noties.markwon.sample.html;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -27,9 +26,22 @@ import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.MarkwonHtmlRenderer;
 import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.html.tag.SimpleTagHandler;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
 
-public class HtmlActivity extends Activity {
+public class HtmlActivity extends ActivityWithMenuOptions {
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("align", this::align)
+                .add("randomCharSize", this::randomCharSize)
+                .add("enhance", this::enhance);
+    }
+
+    private TextView textView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,35 +51,9 @@ public class HtmlActivity extends Activity {
 
         // let's define some custom tag-handlers
 
-        final TextView textView = findViewById(R.id.text_view);
+        textView = findViewById(R.id.text_view);
 
-        final Markwon markwon = Markwon.builder(this)
-                .usePlugin(HtmlPlugin.create())
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configure(@NonNull Registry registry) {
-                        registry.require(HtmlPlugin.class, htmlPlugin -> htmlPlugin
-                                .addHandler(new AlignTagHandler())
-                                .addHandler(new RandomCharSize(new Random(42L), textView.getTextSize()))
-                                .addHandler(new EnhanceTagHandler((int) (textView.getTextSize() * 2 + .05F))));
-                    }
-                })
-                .build();
-
-        final String markdown = "# Hello, HTML\n" +
-                "\n" +
-                "<align center>We are centered</align>\n" +
-                "\n" +
-                "<align end>We are at the end</align>\n" +
-                "\n" +
-                "<align>We should be at the start</align>\n" +
-                "\n" +
-                "<random-char-size>\n" +
-                "This message should have a jumpy feeling because of different sizes of characters\n" +
-                "</random-char-size>\n\n" +
-                "<enhance start=\"5\" end=\"12\">This is text that must be enhanced, at least a part of it</enhance>";
-
-        markwon.setMarkdown(textView, markdown);
+        align();
     }
 
     // we can use `SimpleTagHandler` for _simple_ cases (when the whole tag content
@@ -105,6 +91,31 @@ public class HtmlActivity extends Activity {
         }
     }
 
+    private void align() {
+
+        final String md = "" +
+                "<align center>We are centered</align>\n" +
+                "\n" +
+                "<align end>We are at the end</align>\n" +
+                "\n" +
+                "<align>We should be at the start</align>\n" +
+                "\n";
+
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(HtmlPlugin.class, htmlPlugin -> htmlPlugin
+                                .addHandler(new AlignTagHandler()));
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
     // each character will have random size
     private static class RandomCharSize extends TagHandler {
 
@@ -137,6 +148,27 @@ public class HtmlActivity extends Activity {
         public Collection<String> supportedTags() {
             return Collections.singleton("random-char-size");
         }
+    }
+
+    private void randomCharSize() {
+
+        final String md = "" +
+                "<random-char-size>\n" +
+                "This message should have a jumpy feeling because of different sizes of characters\n" +
+                "</random-char-size>\n\n";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(HtmlPlugin.class, htmlPlugin -> htmlPlugin
+                                .addHandler(new RandomCharSize(new Random(42L), textView.getTextSize())));
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
     }
 
     private static class EnhanceTagHandler extends TagHandler {
@@ -186,5 +218,25 @@ public class HtmlActivity extends Activity {
             }
             return position;
         }
+    }
+
+    private void enhance() {
+
+        final String md = "" +
+                "<enhance start=\"5\" end=\"12\">This is text that must be enhanced, at least a part of it</enhance>";
+
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(HtmlPlugin.class, htmlPlugin -> htmlPlugin
+                                .addHandler(new EnhanceTagHandler((int) (textView.getTextSize() * 2 + .05F))));
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
     }
 }
