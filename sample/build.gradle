@@ -49,6 +49,7 @@ dependencies {
     implementation project(':markwon-syntax-highlight')
 
     implementation project(':markwon-image-picasso')
+    implementation project(':markwon-image-glide')
 
     deps.with {
         implementation it['x-recycler-view']

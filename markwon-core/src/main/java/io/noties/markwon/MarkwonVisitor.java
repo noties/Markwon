@@ -23,6 +23,19 @@ public interface MarkwonVisitor extends Visitor {
         void visit(@NonNull MarkwonVisitor visitor, @NonNull N n);
     }
 
+    /**
+     * Primary purpose is to control the spacing applied before/after certain blocks, which
+     * visitors are created elsewhere
+     *
+     * @since 4.3.0
+     */
+    interface BlockHandler {
+
+        void blockStart(@NonNull MarkwonVisitor visitor, @NonNull Node node);
+
+        void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node);
+    }
+
     interface Builder {
 
         /**
@@ -32,6 +45,16 @@ public interface MarkwonVisitor extends Visitor {
          */
         @NonNull
         <N extends Node> Builder on(@NonNull Class<N> node, @Nullable NodeVisitor<? super N> nodeVisitor);
+
+        /**
+         * @param blockHandler to handle block start/end
+         * @see BlockHandler
+         * @see BlockHandlerDef
+         * @since 4.3.0
+         */
+        @SuppressWarnings("UnusedReturnValue")
+        @NonNull
+        Builder blockHandler(@NonNull BlockHandler blockHandler);
 
         @NonNull
         MarkwonVisitor build(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps);
@@ -133,4 +156,14 @@ public interface MarkwonVisitor extends Visitor {
      */
     @SuppressWarnings("unused")
     <N extends Node> void setSpansForNodeOptional(@NonNull Class<N> node, int start);
+
+    /**
+     * @since 4.3.0
+     */
+    void blockStart(@NonNull Node node);
+
+    /**
+     * @since 4.3.0
+     */
+    void blockEnd(@NonNull Node node);
 }

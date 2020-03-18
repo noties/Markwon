@@ -4,7 +4,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        // on `3.5.3` tests are not run from CLI
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
     }
 }
@@ -16,6 +17,7 @@ allprojects {
         }
         google()
         jcenter()
+//        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
     version = VERSION_NAME
     group = GROUP
@@ -69,7 +71,7 @@ ext {
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
             'android-svg'             : 'com.caverock:androidsvg:1.4',
             'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.15',
-            'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.0',
+            'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.1',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'io.noties:prism4j:2.0.0',
             'debug'                   : 'io.noties:debug:5.0.0@jar',

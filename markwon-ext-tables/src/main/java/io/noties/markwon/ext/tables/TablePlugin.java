@@ -121,12 +121,15 @@ public class TablePlugin extends AbstractMarkwonPlugin {
                         @Override
                         public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableBlock tableBlock) {
 
+                            visitor.blockStart(tableBlock);
+
                             visitor.visitChildren(tableBlock);
 
-                            if (visitor.hasNext(tableBlock)) {
-                                visitor.ensureNewLine();
-                                visitor.forceNewLine();
-                            }
+//                            if (visitor.hasNext(tableBlock)) {
+//                                visitor.ensureNewLine();
+//                                visitor.forceNewLine();
+//                            }
+                            visitor.blockEnd(tableBlock);
                         }
                     })
                     .on(TableBody.class, new MarkwonVisitor.NodeVisitor<TableBody>() {

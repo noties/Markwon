@@ -35,6 +35,9 @@
 
         <activity android:name=".inlineparser.InlineParserActivity" />
         <activity android:name=".htmldetails.HtmlDetailsActivity" />
+        <activity android:name=".tasklist.TaskListActivity" />
+        <activity android:name=".images.ImagesActivity" />
+        <activity android:name=".notification.NotificationActivity" />
 
     </application>
 

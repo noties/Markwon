@@ -223,6 +223,7 @@ public class AsyncDrawable extends Drawable {
         }
 
         this.result = result;
+//        this.result.setCallback(callback);
 
         initBounds();
     }
@@ -250,6 +251,10 @@ public class AsyncDrawable extends Drawable {
         if (canvasWidth == 0) {
             // we still have no bounds - wait for them
             waitingForDimensions = true;
+
+            // we cannot have empty bounds - otherwise in case if text contains
+            //  a single AsyncDrawableSpan, it won't be displayed
+            setBounds(noDimensionsBounds(result));
             return;
         }
 
@@ -266,6 +271,24 @@ public class AsyncDrawable extends Drawable {
         setBounds(bounds);
 
         invalidateSelf();
+    }
+
+    /**
+     * @since 4.3.0
+     */
+    @NonNull
+    private static Rect noDimensionsBounds(@Nullable Drawable result) {
+        if (result != null) {
+            final Rect bounds = result.getBounds();
+            if (!bounds.isEmpty()) {
+                return bounds;
+            }
+            final Rect intrinsicBounds = DrawableUtils.intrinsicBounds(result);
+            if (!intrinsicBounds.isEmpty()) {
+                return intrinsicBounds;
+            }
+        }
+        return new Rect(0, 0, 1, 1);
     }
 
     /**

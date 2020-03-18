@@ -10,17 +10,24 @@ import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.inlineparser.InlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParser;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -109,5 +116,115 @@ public class JLatexMathPluginTest {
         assertTrue(placeholder, placeholder.indexOf('\n') < 0);
 
         verify(visitor, times(1)).setSpans(eq(0), any());
+    }
+
+    @Test
+    public void legacy() {
+        // if render mode is legacy:
+        //  - no inline plugin is required,
+        //  - parser has legacy block parser factory
+        //  - no inline node is registered (node)
+
+        final JLatexMathPlugin plugin = JLatexMathPlugin.create(1, new JLatexMathPlugin.BuilderConfigure() {
+            @Override
+            public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+                builder.blocksLegacy(true);
+                builder.inlinesEnabled(false);
+            }
+        });
+
+        // registry
+        {
+            final MarkwonPlugin.Registry registry = mock(MarkwonPlugin.Registry.class);
+            plugin.configure(registry);
+            verify(registry, never()).require(any(Class.class));
+        }
+
+        // parser
+        {
+            final Parser.Builder builder = mock(Parser.Builder.class);
+            plugin.configureParser(builder);
+
+            final ArgumentCaptor<BlockParserFactory> captor =
+                    ArgumentCaptor.forClass(BlockParserFactory.class);
+            verify(builder, times(1)).customBlockParserFactory(captor.capture());
+            final BlockParserFactory factory = captor.getValue();
+            assertTrue(factory.getClass().getName(), factory instanceof JLatexMathBlockParserLegacy.Factory);
+        }
+
+        // visitor
+        {
+            final MarkwonVisitor.Builder builder = mock(MarkwonVisitor.Builder.class);
+            plugin.configureVisitor(builder);
+
+            final ArgumentCaptor<Class> captor = ArgumentCaptor.forClass(Class.class);
+            verify(builder, times(1)).on(captor.capture(), any(MarkwonVisitor.NodeVisitor.class));
+
+            assertEquals(JLatexMathBlock.class, captor.getValue());
+        }
+    }
+
+    @Test
+    public void blocks_inlines_implicit() {
+        final JLatexMathPlugin plugin = JLatexMathPlugin.create(1);
+        final JLatexMathPlugin.Config config = plugin.config;
+        assertTrue("blocksEnabled", config.blocksEnabled);
+        assertFalse("blocksLegacy", config.blocksLegacy);
+        assertFalse("inlinesEnabled", config.inlinesEnabled);
+    }
+
+    @Test
+    public void blocks_inlines() {
+        final JLatexMathPlugin plugin = JLatexMathPlugin.create(12, new JLatexMathPlugin.BuilderConfigure() {
+            @Override
+            public void configureBuilder(@NonNull JLatexMathPlugin.Builder builder) {
+                builder.inlinesEnabled(true);
+            }
+        });
+
+        // registry
+        {
+            final MarkwonInlineParser.FactoryBuilder factoryBuilder = mock(MarkwonInlineParser.FactoryBuilder.class);
+            final MarkwonInlineParserPlugin inlineParserPlugin = mock(MarkwonInlineParserPlugin.class);
+            final MarkwonPlugin.Registry registry = mock(MarkwonPlugin.Registry.class);
+            when(inlineParserPlugin.factoryBuilder()).thenReturn(factoryBuilder);
+            when(registry.require(eq(MarkwonInlineParserPlugin.class))).thenReturn(inlineParserPlugin);
+            plugin.configure(registry);
+
+            verify(registry, times(1)).require(eq(MarkwonInlineParserPlugin.class));
+            verify(inlineParserPlugin, times(1)).factoryBuilder();
+
+            final ArgumentCaptor<InlineProcessor> captor = ArgumentCaptor.forClass(InlineProcessor.class);
+            verify(factoryBuilder, times(1)).addInlineProcessor(captor.capture());
+
+            final InlineProcessor inlineProcessor = captor.getValue();
+            assertTrue(inlineParserPlugin.getClass().getName(), inlineProcessor instanceof JLatexMathInlineProcessor);
+        }
+
+        // parser
+        {
+            final Parser.Builder builder = mock(Parser.Builder.class);
+            plugin.configureParser(builder);
+
+            final ArgumentCaptor<BlockParserFactory> captor =
+                    ArgumentCaptor.forClass(BlockParserFactory.class);
+            verify(builder, times(1)).customBlockParserFactory(captor.capture());
+            final BlockParserFactory factory = captor.getValue();
+            assertTrue(factory.getClass().getName(), factory instanceof JLatexMathBlockParser.Factory);
+        }
+
+        // visitor
+        {
+            final MarkwonVisitor.Builder builder = mock(MarkwonVisitor.Builder.class);
+            plugin.configureVisitor(builder);
+
+            final ArgumentCaptor<Class> captor = ArgumentCaptor.forClass(Class.class);
+            verify(builder, times(2)).on(captor.capture(), any(MarkwonVisitor.NodeVisitor.class));
+
+            final List<Class> nodes = captor.getAllValues();
+            assertEquals(2, nodes.size());
+            assertTrue(nodes.toString(), nodes.contains(JLatexMathNode.class));
+            assertTrue(nodes.toString(), nodes.contains(JLatexMathBlock.class));
+        }
     }
 }

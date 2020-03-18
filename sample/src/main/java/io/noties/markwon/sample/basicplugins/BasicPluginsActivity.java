@@ -1,77 +1,94 @@
 package io.noties.markwon.sample.basicplugins;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.commonmark.node.Heading;
+import org.commonmark.node.Node;
 import org.commonmark.node.Paragraph;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.BlockHandlerDef;
+import io.noties.markwon.LinkResolverDef;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
-import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.RenderProps;
+import io.noties.markwon.SoftBreakAddsNewLinePlugin;
+import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.HtmlTag;
-import io.noties.markwon.html.tag.SimpleTagHandler;
+import io.noties.markwon.core.spans.HeadingSpan;
+import io.noties.markwon.core.spans.LastLineSpacingSpan;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.SchemeHandler;
 import io.noties.markwon.image.network.NetworkSchemeHandler;
 import io.noties.markwon.movement.MovementMethodPlugin;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
+import io.noties.markwon.sample.R;
 
-public class BasicPluginsActivity extends Activity {
+public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
+    private ScrollView scrollView;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("paragraphSpan", this::paragraphSpan)
+                .add("disableNode", this::disableNode)
+                .add("customizeTheme", this::customizeTheme)
+                .add("linkWithMovementMethod", this::linkWithMovementMethod)
+                .add("imagesPlugin", this::imagesPlugin)
+                .add("softBreakAddsSpace", this::softBreakAddsSpace)
+                .add("softBreakAddsNewLine", this::softBreakAddsNewLine)
+                .add("additionalSpacing", this::additionalSpacing)
+                .add("headingNoSpace", this::headingNoSpace)
+                .add("headingNoSpaceBlockHandler", this::headingNoSpaceBlockHandler)
+                .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine)
+                .add("anchor", this::anchor);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_text_view);
 
-        textView = new TextView(this);
-        setContentView(textView);
+        textView = findViewById(R.id.text_view);
+        scrollView = findViewById(R.id.scroll_view);
 
-        step_1();
-
-        step_2();
-
-        step_3();
-
-        step_4();
-
-        step_5();
-
-        step_6();
+        paragraphSpan();
+//
+//        disableNode();
+//
+//        customizeTheme();
+//
+//        linkWithMovementMethod();
+//
+//        imagesPlugin();
     }
 
     /**
      * In order to apply paragraph spans a custom plugin should be created (CorePlugin will take care
      * of everything else).
-     * <p>
-     * Please note that when a plugin is registered and it <em>depends</em> on CorePlugin, there is no
-     * need to explicitly specify it. By default all plugins that extend AbstractMarkwonPlugin do declare
-     * it\'s dependency on CorePlugin ({@link MarkwonPlugin#priority()}).
-     * <p>
-     * Order in which plugins are specified to the builder is of little importance as long as each
-     * plugin clearly states what dependencies it has
      */
-    private void step_1() {
+    private void paragraphSpan() {
 
         final String markdown = "# Hello!\n\nA paragraph?\n\nIt should be!";
 
@@ -91,7 +108,7 @@ public class BasicPluginsActivity extends Activity {
     /**
      * To disable some nodes from rendering another custom plugin can be used
      */
-    private void step_2() {
+    private void disableNode() {
 
         final String markdown = "# Heading 1\n\n## Heading 2\n\n**other** content [here](#)";
 
@@ -116,7 +133,7 @@ public class BasicPluginsActivity extends Activity {
     /**
      * To customize core theme plugin can be used again
      */
-    private void step_3() {
+    private void customizeTheme() {
 
         final String markdown = "`A code` that is rendered differently\n\n```\nHello!\n```";
 
@@ -145,7 +162,7 @@ public class BasicPluginsActivity extends Activity {
      * <p>
      * In order to customize them a custom plugin should be used
      */
-    private void step_4() {
+    private void linkWithMovementMethod() {
 
         final String markdown = "[a link without scheme](github.com)";
 
@@ -178,7 +195,7 @@ public class BasicPluginsActivity extends Activity {
      * images handling (parsing markdown containing images, obtain an image from network
      * file system or assets). Please note that
      */
-    private void step_5() {
+    private void imagesPlugin() {
 
         final String markdown = "![image](myownscheme://en.wikipedia.org/static/images/project-logos/enwiki-2x.png)";
 
@@ -220,33 +237,269 @@ public class BasicPluginsActivity extends Activity {
         markwon.setMarkdown(textView, markdown);
     }
 
-    public void step_6() {
+    private void softBreakAddsSpace() {
+        // default behavior
+
+        final String md = "" +
+                "Hello there ->(line)\n(break)<- going on and on";
+
+        Markwon.create(this).setMarkdown(textView, md);
+    }
+
+    private void softBreakAddsNewLine() {
+        // insert a new line when markdown has a soft break
 
         final Markwon markwon = Markwon.builder(this)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(SoftBreakAddsNewLinePlugin.create())
+                .build();
+
+        final String md = "" +
+                "Hello there ->(line)\n(break)<- going on and on";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void additionalSpacing() {
+
+        // please note that bottom line (after 1 & 2 levels) will be drawn _AFTER_ padding
+        final int spacing = (int) (128 * getResources().getDisplayMetrics().density + .5F);
+
+        final Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
-                    public void configure(@NonNull Registry registry) {
-                        registry.require(HtmlPlugin.class, plugin -> plugin.addHandler(new SimpleTagHandler() {
-                            @Override
-                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
-                                return new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
-                            }
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.headingBreakHeight(0);
+                    }
 
-                            @NonNull
-                            @Override
-                            public Collection<String> supportedTags() {
-                                return Collections.singleton("center");
-                            }
-                        }));
+                    @Override
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        builder.appendFactory(
+                                Heading.class,
+                                (configuration, props) -> new LastLineSpacingSpan(spacing));
                     }
                 })
                 .build();
+
+        final String md = "" +
+                "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
     }
+
+    private void headingNoSpace() {
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.headingBreakHeight(0);
+                    }
+
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.on(Heading.class, (visitor, heading) -> {
+
+                            visitor.ensureNewLine();
+
+                            final int length = visitor.length();
+                            visitor.visitChildren(heading);
+
+                            CoreProps.HEADING_LEVEL.set(visitor.renderProps(), heading.getLevel());
+
+                            visitor.setSpansForNodeOptional(heading, length);
+
+                            if (visitor.hasNext(heading)) {
+                                visitor.ensureNewLine();
+//                                visitor.forceNewLine();
+                            }
+                        });
+                    }
+                })
+                .build();
+
+        final String md = "" +
+                "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void headingNoSpaceBlockHandler() {
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                builder.blockHandler(new BlockHandlerDef() {
+                    @Override
+                    public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                        if (node instanceof Heading) {
+                            if (visitor.hasNext(node)) {
+                                visitor.ensureNewLine();
+                                // ensure new line but do not force insert one
+                            }
+                        } else {
+                            super.blockEnd(visitor, node);
+                        }
+                    }
+                });
+            }
+        })
+        .build();
+
+        final String md = "" +
+                "# Title title title title title title title title title title \n\ntext text text text";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void allBlocksNoForcedLine() {
+        final MarkwonVisitor.BlockHandler blockHandler = new BlockHandlerDef() {
+            @Override
+            public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                if (visitor.hasNext(node)) {
+                    visitor.ensureNewLine();
+                }
+            }
+        };
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.blockHandler(blockHandler);
+                    }
+                })
+                .build();
+
+        final String md = "" +
+                "# Hello there!\n\n" +
+                "* a first\n" +
+                "* second\n" +
+                "- third\n" +
+                "* * nested one\n\n" +
+                "> block quote\n\n" +
+                "> > and nested one\n\n" +
+                "```java\n" +
+                "final int i = 0;\n" +
+                "```\n\n";
+
+        markwon.setMarkdown(textView, md);
+    }
+
+//    public void step_6() {
+//
+//        final Markwon markwon = Markwon.builder(this)
+//                .usePlugin(HtmlPlugin.create())
+//                .usePlugin(new AbstractMarkwonPlugin() {
+//                    @Override
+//                    public void configure(@NonNull Registry registry) {
+//                        registry.require(HtmlPlugin.class, plugin -> plugin.addHandler(new SimpleTagHandler() {
+//                            @Override
+//                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
+//                                return new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+//                            }
+//
+//                            @NonNull
+//                            @Override
+//                            public Collection<String> supportedTags() {
+//                                return Collections.singleton("center");
+//                            }
+//                        }));
+//                    }
+//                })
+//                .build();
+//    }
 
     // text lifecycle (after/before)
     // rendering lifecycle (before/after)
     // renderProps
     // process
-    // priority
+
+    private static class AnchorSpan {
+        final String anchor;
+
+        AnchorSpan(@NonNull String anchor) {
+            this.anchor = anchor;
+        }
+    }
+
+    @NonNull
+    private String createAnchor(@NonNull CharSequence content) {
+        return String.valueOf(content)
+                .replaceAll("[^\\w]", "")
+                .toLowerCase();
+    }
+
+    private static class AnchorLinkResolver extends LinkResolverDef {
+
+        interface ScrollTo {
+            void scrollTo(@NonNull View view, int top);
+        }
+
+        private final ScrollTo scrollTo;
+
+        AnchorLinkResolver(@NonNull ScrollTo scrollTo) {
+            this.scrollTo = scrollTo;
+        }
+
+        @Override
+        public void resolve(@NonNull View view, @NonNull String link) {
+            if (link.startsWith("#")) {
+                final TextView textView = (TextView) view;
+                final Spanned spanned = (Spannable) textView.getText();
+                final AnchorSpan[] spans = spanned.getSpans(0, spanned.length(), AnchorSpan.class);
+                if (spans != null) {
+                    final String anchor = link.substring(1);
+                    for (AnchorSpan span: spans) {
+                        if (anchor.equals(span.anchor)) {
+                            final int start = spanned.getSpanStart(span);
+                            final int line = textView.getLayout().getLineForOffset(start);
+                            final int top = textView.getLayout().getLineTop(line);
+                            scrollTo.scrollTo(textView, top);
+                            return;
+                        }
+                    }
+                }
+            }
+            super.resolve(view, link);
+        }
+    }
+
+    private void anchor() {
+        final String lorem = getString(R.string.lorem);
+        final String md = "" +
+                "Hello [there](#there)!\n\n\n" +
+                lorem + "\n\n" +
+                "# There!\n\n" +
+                lorem;
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver(new AnchorLinkResolver((view, top) -> scrollView.smoothScrollTo(0, top)));
+                    }
+
+                    @Override
+                    public void afterSetText(@NonNull TextView textView) {
+                        final Spannable spannable = (Spannable) textView.getText();
+                        // obtain heading spans
+                        final HeadingSpan[] spans = spannable.getSpans(0, spannable.length(), HeadingSpan.class);
+                        if (spans != null) {
+                            for (HeadingSpan span : spans) {
+                                final int start = spannable.getSpanStart(span);
+                                final int end = spannable.getSpanEnd(span);
+                                final int flags = spannable.getSpanFlags(span);
+                                spannable.setSpan(
+                                        new AnchorSpan(createAnchor(spannable.subSequence(start, end))),
+                                        start,
+                                        end,
+                                        flags
+                                );
+                            }
+                        }
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
 }

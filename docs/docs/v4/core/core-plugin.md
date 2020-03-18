@@ -81,10 +81,15 @@ More information about props can be found [here](/docs/v4/core/render-props.md)
 ---
 
 :::tip Soft line break
-Since <Badge text="3.0.0" /> Markwon core does not give an option to
-insert a new line when there is a soft line break in markdown. Instead a
-custom plugin can be used:
+Since <Badge text="4.3.0" /> there is a dedicated plugin to insert a new line for 
+markdown soft breaks - `SoftBreakAddsNewLinePlugin`:
+```java
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(SoftBreakAddsNewLinePlugin.create())
+        .build();
+```
 
+It is still possible to do it manually with a custom visitor:
 ```java
 final Markwon markwon = Markwon.builder(this)
         .usePlugin(new AbstractMarkwonPlugin() {

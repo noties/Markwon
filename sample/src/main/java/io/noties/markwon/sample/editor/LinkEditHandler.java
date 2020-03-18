@@ -40,24 +40,28 @@ class LinkEditHandler extends AbstractEditHandler<LinkSpan> {
         final EditLinkSpan editLinkSpan = persistedSpans.get(EditLinkSpan.class);
         editLinkSpan.link = span.getLink();
 
-        final int s;
-        final int e;
+        // First first __letter__ to find link content (scheme start in URL, receiver in email address)
+        // NB! do not use phone number auto-link (via LinkifyPlugin) as we cannot guarantee proper link
+        //  display. For example, we _could_ also look for a digit, but:
+        //  * if phone number start with special symbol, we won't have it (`+`, `(`)
+        //  * it might interfere with an ordered-list
+        int start = -1;
 
-        // markdown link vs. autolink
-        if ('[' == input.charAt(spanStart)) {
-            s = spanStart + 1;
-            e = spanStart + 1 + spanTextLength;
-        } else {
-            s = spanStart;
-            e = spanStart + spanTextLength;
+        for (int i = spanStart, length = input.length(); i < length; i++) {
+            if (Character.isLetter(input.charAt(i))) {
+                start = i;
+                break;
+            }
         }
 
-        editable.setSpan(
-                editLinkSpan,
-                s,
-                e,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        );
+        if (start > -1) {
+            editable.setSpan(
+                    editLinkSpan,
+                    start,
+                    start + spanTextLength,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+        }
     }
 
     @NonNull

@@ -1,5 +1,57 @@
 # Changelog
 
+# 4.3.0-SNAPSHOT
+* add `MarkwonInlineParserPlugin` in `inline-parser` module
+* `JLatexMathPlugin` now supports inline LaTeX structures via `MarkwonInlineParserPlugin` 
+dependency (must be explicitly added to `Markwon` whilst configuring)
+* `JLatexMathPlugin`: add `theme` (to customize both inlines and blocks)
+* add `JLatexMathPlugin.ErrorHandler` to catch latex rendering errors and (optionally) display error drawable ([#204])
+* `JLatexMathPlugin` add text color customization ([#207])
+* `JLatexMathPlugin` will use text color of widget in which it is displayed **if color is not set explicitly**
+* add `SoftBreakAddsNewLinePlugin` plugin (`core` module)
+* `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
+* add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
+* non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
+* `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
+<br>Thanks to [@drakeet]
+* `MarkwonVisitor.BlockHandler` and `BlockHandlerDef` implementation to control how blocks insert new lines after them
+
+
+```java
+// default usage: new blocks parser, no inlines
+final Markwon markwon = Markwon.builder(this)
+    .usePlugin(JLatexMathPlugin.create(textSize))
+    .build();
+```
+
+```java
+// legacy blocks (pre `4.3.0`) parsing, no inlines
+final Markwon markwon =  Markwon.builder(this)
+        .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> builder.blocksLegacy(true)))
+        .build();
+```
+
+```java
+// new blocks parsing and inline parsing
+final Markwon markwon =  Markwon.builder(this)
+        .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
+            // blocksEnabled and blocksLegacy can be omitted
+            builder
+                    .blocksEnabled(true)
+                    .blocksLegacy(false)
+                    .inlinesEnabled(true);
+        }))
+        .build();
+```
+
+[#189]: https://github.com/noties/Markwon/issues/189
+[#75]: https://github.com/noties/Markwon/issues/75
+[#204]: https://github.com/noties/Markwon/issues/204 
+[#207]: https://github.com/noties/Markwon/issues/207
+[#201]: https://github.com/noties/Markwon/issues/201
+[@drakeet]: https://github.com/drakeet
+
+
 # 4.2.2
 * Fixed `AsyncDrawable` display when it has placeholder with empty bounds ([#189])
 * Fixed `syntax-highlight` where code input is empty string ([#192])
@@ -84,7 +136,7 @@ use `Markwon#builderNoCore()` to obtain a builder without `CorePlugin`
 * Added `MarkwonPlugin.Registry` and `MarkwonPlugin#configure(Registry)` method
 * `CorePlugin#addOnTextAddedListener` (process raw text added)
 * `ImageSizeResolver` signature change (accept `AsyncDrawable`)
-* `LinkResolver` is now an independent entity (previously part of `LinkSpan`)
+* `LinkResolver` is now an independent entity (previously part of the `LinkSpan`), `LinkSpan.Resolver` -&gt; `LinkResolver`
 * `AsyncDrawableScheduler` can now be called multiple times without performance penalty
 * `AsyncDrawable` now exposes its destination, image-size, last known dimensions (canvas, text-size)
 * `AsyncDrawableLoader` signature change (accept `AsyncDrawable`)

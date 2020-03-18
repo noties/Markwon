@@ -1,11 +1,11 @@
 package io.noties.markwon.sample.editor;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.MetricAffectingSpan;
@@ -41,30 +41,61 @@ import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.EntityInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
 
-public class EditorActivity extends Activity {
+public class EditorActivity extends ActivityWithMenuOptions {
 
     private EditText editText;
+    private String pendingInput;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("simpleProcess", this::simple_process)
+                .add("simplePreRender", this::simple_pre_render)
+                .add("customPunctuationSpan", this::custom_punctuation_span)
+                .add("additionalEditSpan", this::additional_edit_span)
+                .add("additionalPlugins", this::additional_plugins)
+                .add("multipleEditSpans", this::multiple_edit_spans)
+                .add("multipleEditSpansPlugin", this::multiple_edit_spans_plugin)
+                .add("pluginRequire", this::plugin_require)
+                .add("pluginNoDefaults", this::plugin_no_defaults);
+    }
+
+    @Override
+    protected void beforeOptionSelected(@NonNull String option) {
+        // we cannot _clear_ editText of text-watchers without keeping a reference to them...
+        pendingInput = editText != null
+                ? editText.getText().toString()
+                : null;
+
+        createView();
+    }
+
+    @Override
+    protected void afterOptionSelected(@NonNull String option) {
+        if (!TextUtils.isEmpty(pendingInput)) {
+            editText.setText(pendingInput);
+        }
+    }
+
+    private void createView() {
+        setContentView(R.layout.activity_editor);
+
+        this.editText = findViewById(R.id.edit_text);
+
+        initBottomBar();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
-
-        this.editText = findViewById(R.id.edit_text);
-        initBottomBar();
-
-//        simple_process();
-
-//        simple_pre_render();
-
-//        custom_punctuation_span();
-
-//        additional_edit_span();
-
-//        additional_plugins();
+        createView();
 
         multiple_edit_spans();
     }
@@ -212,6 +243,76 @@ public class EditorActivity extends Activity {
                 .build();
 
 //        editText.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
+        editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                editor, Executors.newSingleThreadExecutor(), editText));
+    }
+
+    private void multiple_edit_spans_plugin() {
+        // inline parsing is configured via MarkwonInlineParserPlugin
+
+        // for links to be clickable
+        editText.setMovementMethod(LinkMovementMethod.getInstance());
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(builder -> {
+                    builder
+                            .excludeInlineProcessor(BangInlineProcessor.class)
+                            .excludeInlineProcessor(HtmlInlineProcessor.class)
+                            .excludeInlineProcessor(EntityInlineProcessor.class);
+                }))
+                .build();
+
+        final LinkEditHandler.OnClick onClick = (widget, link) -> markwon.configuration().linkResolver().resolve(widget, link);
+
+        final MarkwonEditor editor = MarkwonEditor.builder(markwon)
+                .useEditHandler(new EmphasisEditHandler())
+                .useEditHandler(new StrongEmphasisEditHandler())
+                .useEditHandler(new StrikethroughEditHandler())
+                .useEditHandler(new CodeEditHandler())
+                .useEditHandler(new BlockQuoteEditHandler())
+                .useEditHandler(new LinkEditHandler(onClick))
+                .build();
+
+        editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                editor, Executors.newSingleThreadExecutor(), editText));
+    }
+
+    private void plugin_require() {
+        // usage of plugin from other plugins
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(MarkwonInlineParserPlugin.class)
+                                .factoryBuilder()
+                                .excludeInlineProcessor(HtmlInlineProcessor.class);
+                    }
+                })
+                .build();
+
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
+        editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                editor, Executors.newSingleThreadExecutor(), editText));
+    }
+
+    private void plugin_no_defaults() {
+        // a plugin with no defaults registered
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create(MarkwonInlineParser.factoryBuilderNoDefaults()))
+//                .usePlugin(MarkwonInlineParserPlugin.create(MarkwonInlineParser.factoryBuilderNoDefaults(), factoryBuilder -> {
+//                    // if anything, they can be included here
+////                    factoryBuilder.includeDefaults()
+//                }))
+                .build();
+
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
                 editor, Executors.newSingleThreadExecutor(), editText));
     }

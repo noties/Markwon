@@ -1,6 +1,5 @@
 package io.noties.markwon.sample.inlineparser;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -25,19 +24,32 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.inlineparser.BackticksInlineProcessor;
 import io.noties.markwon.inlineparser.CloseBracketInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.inlineparser.OpenBracketInlineProcessor;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
 
-public class InlineParserActivity extends Activity {
+public class InlineParserActivity extends ActivityWithMenuOptions {
 
     private TextView textView;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("links_only", this::links_only)
+                .add("disable_code", this::disable_code)
+                .add("pluginWithDefaults", this::pluginWithDefaults)
+                .add("pluginNoDefaults", this::pluginNoDefaults);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_view);
 
-        this.textView = findViewById(R.id.text_view);
+        textView = findViewById(R.id.text_view);
 
 //        links_only();
 
@@ -115,4 +127,50 @@ public class InlineParserActivity extends Activity {
                 "**Good day!**";
         markwon.setMarkdown(textView, md);
     }
+
+    private void pluginWithDefaults() {
+        // a plugin with defaults registered
+
+        final String md = "no [links](#) for **you** `code`!";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                // the same as:
+//                .usePlugin(MarkwonInlineParserPlugin.create(MarkwonInlineParser.factoryBuilder()))
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(MarkwonInlineParserPlugin.class, plugin -> {
+                            plugin.factoryBuilder()
+                                    .excludeInlineProcessor(OpenBracketInlineProcessor.class);
+                        });
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void pluginNoDefaults() {
+        // a plugin with NO defaults registered
+
+        final String md = "no [links](#) for **you** `code`!";
+
+        final Markwon markwon = Markwon.builder(this)
+                // pass `MarkwonInlineParser.factoryBuilderNoDefaults()` no disable all
+                .usePlugin(MarkwonInlineParserPlugin.create(MarkwonInlineParser.factoryBuilderNoDefaults()))
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        registry.require(MarkwonInlineParserPlugin.class, plugin -> {
+                            plugin.factoryBuilder()
+                                    .addInlineProcessor(new BackticksInlineProcessor());
+                        });
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
 }

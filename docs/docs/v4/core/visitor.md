@@ -71,3 +71,32 @@ public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
     });
 }
 ```
+
+### BlockHandler <Badge text="4.3.0" />
+
+Since <Badge text="4.3.0" /> there is class to control insertions of new lines after markdown blocks
+`BlockHandler` (`MarkwonVisitor.BlockHandler`) and its default implementation `BlockHandlerDef`. For example,
+to disable an empty new line after `Heading`:
+
+```java
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                builder.blockHandler(new BlockHandlerDef() {
+                    @Override
+                    public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                        if (node instanceof Heading) {
+                            if (visitor.hasNext(node)) {
+                                visitor.ensureNewLine();
+                                // ensure new line but do not force insert one
+                            }
+                        } else {
+                            super.blockEnd(visitor, node);
+                        }
+                    }
+                });
+            }
+        })
+        .build();
+```

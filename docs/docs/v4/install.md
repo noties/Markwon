@@ -5,8 +5,18 @@ next: /docs/v4/core/getting-started.md
 
 # Installation
 
-![stable](https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=stable)
-![snapshot](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.noties.markwon/core.svg?label=snapshot)
+<table>
+    <tbody>
+        <tr>
+            <td><img alt="stable" src="https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=stable"></td>
+            <td><a href="https://github.com/noties/Markwon/blob/master/CHANGELOG.md">changelog<OutboundLink/></a></td>
+        </tr>
+        <tr>
+            <td><img alt="snapshot" src="https://img.shields.io/nexus/s/https/oss.sonatype.org/io.noties.markwon/core.svg?label=snapshot"></td>
+            <td><a href="https://github.com/noties/Markwon/blob/develop/CHANGELOG.md">changelog<OutboundLink/></a></td>
+        </tr>
+    </tbody>
+</table>
 
 <ArtifactPicker4 />
 

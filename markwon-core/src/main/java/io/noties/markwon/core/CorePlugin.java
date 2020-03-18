@@ -210,17 +210,14 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull BlockQuote blockQuote) {
 
-                visitor.ensureNewLine();
+                visitor.blockStart(blockQuote);
 
                 final int length = visitor.length();
 
                 visitor.visitChildren(blockQuote);
                 visitor.setSpansForNodeOptional(blockQuote, length);
 
-                if (visitor.hasNext(blockQuote)) {
-                    visitor.ensureNewLine();
-                    visitor.forceNewLine();
-                }
+                visitor.blockEnd(blockQuote);
             }
         });
     }
@@ -316,7 +313,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @NonNull String code,
             @NonNull Node node) {
 
-        visitor.ensureNewLine();
+        visitor.blockStart(node);
 
         final int length = visitor.length();
 
@@ -333,10 +330,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
         visitor.setSpansForNodeOptional(node, length);
 
-        if (visitor.hasNext(node)) {
-            visitor.ensureNewLine();
-            visitor.forceNewLine();
-        }
+        visitor.blockEnd(node);
     }
 
     private static void bulletList(@NonNull MarkwonVisitor.Builder builder) {
@@ -402,7 +396,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull ThematicBreak thematicBreak) {
 
-                visitor.ensureNewLine();
+                visitor.blockStart(thematicBreak);
 
                 final int length = visitor.length();
 
@@ -411,10 +405,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 visitor.setSpansForNodeOptional(thematicBreak, length);
 
-                if (visitor.hasNext(thematicBreak)) {
-                    visitor.ensureNewLine();
-                    visitor.forceNewLine();
-                }
+                visitor.blockEnd(thematicBreak);
             }
         });
     }
@@ -424,7 +415,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Heading heading) {
 
-                visitor.ensureNewLine();
+                visitor.blockStart(heading);
 
                 final int length = visitor.length();
                 visitor.visitChildren(heading);
@@ -433,10 +424,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 visitor.setSpansForNodeOptional(heading, length);
 
-                if (visitor.hasNext(heading)) {
-                    visitor.ensureNewLine();
-                    visitor.forceNewLine();
-                }
+                visitor.blockEnd(heading);
             }
         });
     }
@@ -467,7 +455,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final boolean inTightList = isInTightList(paragraph);
 
                 if (!inTightList) {
-                    visitor.ensureNewLine();
+                    visitor.blockStart(paragraph);
                 }
 
                 final int length = visitor.length();
@@ -478,9 +466,8 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 // @since 1.1.1 apply paragraph span
                 visitor.setSpansForNodeOptional(paragraph, length);
 
-                if (!inTightList && visitor.hasNext(paragraph)) {
-                    visitor.ensureNewLine();
-                    visitor.forceNewLine();
+                if (!inTightList) {
+                    visitor.blockEnd(paragraph);
                 }
             }
         });

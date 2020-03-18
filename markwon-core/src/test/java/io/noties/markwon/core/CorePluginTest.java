@@ -109,6 +109,12 @@ public class CorePluginTest {
 
             @NonNull
             @Override
+            public MarkwonVisitor.Builder blockHandler(@NonNull MarkwonVisitor.BlockHandler blockHandler) {
+                throw new RuntimeException();
+            }
+
+            @NonNull
+            @Override
             public MarkwonVisitor build(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps) {
                 throw new RuntimeException();
             }

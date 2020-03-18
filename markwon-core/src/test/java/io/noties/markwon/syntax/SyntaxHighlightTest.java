@@ -91,7 +91,8 @@ public class SyntaxHighlightTest {
                 configuration,
                 mock(RenderProps.class),
                 new SpannableBuilder(),
-                visitorMap);
+                visitorMap,
+                mock(MarkwonVisitor.BlockHandler.class));
 
         final SpannableBuilder builder = visitor.builder();
 

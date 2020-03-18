@@ -1,6 +1,5 @@
 package io.noties.markwon.sample.customextension2;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -25,34 +24,45 @@ import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.inlineparser.InlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
+import io.noties.markwon.sample.ActivityWithMenuOptions;
+import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
 
-public class CustomExtensionActivity2 extends Activity {
+public class CustomExtensionActivity2 extends ActivityWithMenuOptions {
+
+    private static final String MD = "" +
+            "# Custom Extension 2\n" +
+            "\n" +
+            "This is an issue #1\n" +
+            "Done by @noties";
+
+    private TextView textView;
+
+    @NonNull
+    @Override
+    public MenuOptions menuOptions() {
+        return MenuOptions.create()
+                .add("text_added", this::text_added)
+                .add("inline_parsing", this::inline_parsing);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_view);
 
-        final TextView textView = findViewById(R.id.text_view);
+        textView = findViewById(R.id.text_view);
 
         // let's look for github special links:
         // * `#1` - an issue or a pull request
         // * `@user` link to a user
 
-
-        final String md = "# Custom Extension 2\n" +
-                "\n" +
-                "This is an issue #1\n" +
-                "Done by @noties";
-
-
 //        inline_parsing(textView, md);
 
-        text_added(textView, md);
+        text_added();
     }
 
-    private void text_added(@NonNull TextView textView, @NonNull String md) {
+    private void text_added() {
 
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
@@ -64,10 +74,10 @@ public class CustomExtensionActivity2 extends Activity {
                 })
                 .build();
 
-        markwon.setMarkdown(textView, md);
+        markwon.setMarkdown(textView, MD);
     }
 
-    private void inline_parsing(@NonNull TextView textView, @NonNull String md) {
+    private void inline_parsing() {
 
         final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
                 // include all current defaults (otherwise will be empty - contain only our inline-processors)
@@ -86,7 +96,7 @@ public class CustomExtensionActivity2 extends Activity {
                 })
                 .build();
 
-        markwon.setMarkdown(textView, md);
+        markwon.setMarkdown(textView, MD);
     }
 
     private static class IssueInlineProcessor extends InlineProcessor {
