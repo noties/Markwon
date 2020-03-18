@@ -323,26 +323,26 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
     }
 
     private void headingNoSpaceBlockHandler() {
-        final Markwon markwon = Markwon.builder(this)
-                .usePlugin(new AbstractMarkwonPlugin() {
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                builder.blockHandler(new BlockHandlerDef() {
                     @Override
-                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-                        builder.blockHandler(new BlockHandlerDef() {
-                            @Override
-                            public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
-                                if (node instanceof Heading) {
-                                    if (visitor.hasNext(node)) {
-                                        visitor.ensureNewLine();
-                                        // ensure new line but do not force insert one
-                                    }
-                                } else {
-                                    super.blockEnd(visitor, node);
-                                }
+                    public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                        if (node instanceof Heading) {
+                            if (visitor.hasNext(node)) {
+                                visitor.ensureNewLine();
+                                // ensure new line but do not force insert one
                             }
-                        });
+                        } else {
+                            super.blockEnd(visitor, node);
+                        }
                     }
-                })
-                .build();
+                });
+            }
+        })
+        .build();
 
         final String md = "" +
                 "# Title title title title title title title title title title \n\ntext text text text";

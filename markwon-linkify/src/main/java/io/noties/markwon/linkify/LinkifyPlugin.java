@@ -42,7 +42,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
      * @param useCompat If true, use {@link LinkifyCompat} to handle links.
      *                  Note that the {@link LinkifyCompat} depends on androidx.core:core,
      *                  the dependency must be added on a client side explicitly.
-     * @since 4.3.0-SNAPSHOT `useCompat` argument
+     * @since 4.3.0 `useCompat` argument
      */
     @NonNull
     public static LinkifyPlugin create(boolean useCompat) {
@@ -58,7 +58,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
      * @param useCompat If true, use {@link LinkifyCompat} to handle links.
      *                  Note that the {@link LinkifyCompat} depends on androidx.core:core,
      *                  the dependency must be added on a client side explicitly.
-     * @since 4.3.0-SNAPSHOT `useCompat` argument
+     * @since 4.3.0 `useCompat` argument
      */
     @NonNull
     public static LinkifyPlugin create(@LinkifyMask int mask, boolean useCompat) {
@@ -80,7 +80,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
             @Override
             public void apply(@NonNull CorePlugin corePlugin) {
                 final LinkifyTextAddedListener listener;
-                // @since 4.3.0-SNAPSHOT
+                // @since 4.3.0
                 if (useCompat) {
                     listener = new LinkifyCompatTextAddedListener(mask);
                 } else {
@@ -140,7 +140,7 @@ public class LinkifyPlugin extends AbstractMarkwonPlugin {
         }
     }
 
-    // @since 4.3.0-SNAPSHOT
+    // @since 4.3.0
     private static class LinkifyCompatTextAddedListener extends LinkifyTextAddedListener {
 
         LinkifyCompatTextAddedListener(int mask) {

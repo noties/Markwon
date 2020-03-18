@@ -274,7 +274,7 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @since 4.3.0-SNAPSHOT
+     * @since 4.3.0
      */
     @NonNull
     private static Rect noDimensionsBounds(@Nullable Drawable result) {

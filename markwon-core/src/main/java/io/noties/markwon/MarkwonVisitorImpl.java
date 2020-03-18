@@ -45,7 +45,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
 
     private final Map<Class<? extends Node>, NodeVisitor<? extends Node>> nodes;
 
-    // @since $nap;
+    // @since 4.3.0
     private final BlockHandler blockHandler;
 
     MarkwonVisitorImpl(
@@ -316,7 +316,7 @@ class MarkwonVisitorImpl implements MarkwonVisitor {
         @NonNull
         @Override
         public MarkwonVisitor build(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps) {
-            // @since $nap;
+            // @since 4.3.0
             BlockHandler blockHandler = this.blockHandler;
             if (blockHandler == null) {
                 blockHandler = new BlockHandlerDef();

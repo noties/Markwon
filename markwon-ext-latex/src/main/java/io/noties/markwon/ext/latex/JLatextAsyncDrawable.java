@@ -9,7 +9,7 @@ import io.noties.markwon.image.ImageSize;
 import io.noties.markwon.image.ImageSizeResolver;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 class JLatextAsyncDrawable extends AsyncDrawable {
 

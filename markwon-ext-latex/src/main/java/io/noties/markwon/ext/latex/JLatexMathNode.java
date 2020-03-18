@@ -3,7 +3,7 @@ package io.noties.markwon.ext.latex;
 import org.commonmark.node.CustomNode;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 public class JLatexMathNode extends CustomNode {
 

@@ -7,7 +7,7 @@ import org.commonmark.parser.Parser;
 import io.noties.markwon.AbstractMarkwonPlugin;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 public class MarkwonInlineParserPlugin extends AbstractMarkwonPlugin {
 

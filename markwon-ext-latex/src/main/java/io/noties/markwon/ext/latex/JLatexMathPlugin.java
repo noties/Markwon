@@ -40,7 +40,7 @@ import ru.noties.jlatexmath.JLatexMathDrawable;
 public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     /**
-     * @since 4.3.0-SNAPSHOT
+     * @since 4.3.0
      */
     public interface ErrorHandler {
 
@@ -64,7 +64,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.3.0-SNAPSHOT
+     * @since 4.3.0
      */
     @NonNull
     public static JLatexMathPlugin create(@Px float inlineTextSize, @Px float blockTextSize) {
@@ -84,7 +84,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.3.0-SNAPSHOT
+     * @since 4.3.0
      */
     @NonNull
     public static JLatexMathPlugin create(
@@ -102,7 +102,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since 4.3.0-SNAPSHOT
+     * @since 4.3.0
      */
     @NonNull
     public static JLatexMathPlugin.Builder builder(@Px float inlineTextSize, @Px float blockTextSize) {
@@ -112,15 +112,15 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     @VisibleForTesting
     static class Config {
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         final JLatexMathTheme theme;
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         final boolean blocksEnabled;
         final boolean blocksLegacy;
         final boolean inlinesEnabled;
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         final ErrorHandler errorHandler;
 
         final ExecutorService executorService;
@@ -166,7 +166,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-        // @since $nap;
+        // @since 4.3.0
         if (config.blocksEnabled) {
             if (config.blocksLegacy) {
                 builder.customBlockParserFactory(new JLatexMathBlockParserLegacy.Factory());
@@ -278,15 +278,15 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     @SuppressWarnings({"unused", "UnusedReturnValue"})
     public static class Builder {
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         private final JLatexMathTheme.Builder theme;
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         private boolean blocksEnabled = true;
         private boolean blocksLegacy;
         private boolean inlinesEnabled;
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         private ErrorHandler errorHandler;
 
         // @since 4.0.0
@@ -302,7 +302,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         }
 
         /**
-         * @since $nap;
+         * @since 4.3.0
          */
         @NonNull
         public Builder blocksEnabled(boolean blocksEnabled) {
@@ -312,7 +312,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         /**
          * @param blocksLegacy indicates if blocks should be handled in legacy mode ({@code pre 4.3.0})
-         * @since 4.3.0-SNAPSHOT
+         * @since 4.3.0
          */
         @NonNull
         public Builder blocksLegacy(boolean blocksLegacy) {
@@ -323,7 +323,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         /**
          * @param inlinesEnabled indicates if inline parsing should be enabled.
          *                       NB, this requires `MarkwonInlineParserPlugin` to be used when creating `MarkwonInstance`
-         * @since 4.3.0-SNAPSHOT
+         * @since 4.3.0
          */
         @NonNull
         public Builder inlinesEnabled(boolean inlinesEnabled) {
@@ -384,7 +384,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
                         try {
                             execute();
                         } catch (Throwable t) {
-                            // @since 4.3.0-SNAPSHOT add error handling
+                            // @since 4.3.0 add error handling
                             final ErrorHandler errorHandler = config.errorHandler;
                             if (errorHandler == null) {
                                 // as before
@@ -444,7 +444,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             return null;
         }
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         @NonNull
         private JLatexMathDrawable createBlockDrawable(@NonNull JLatextAsyncDrawable drawable) {
 
@@ -476,7 +476,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             return builder.build();
         }
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         @NonNull
         private JLatexMathDrawable createInlineDrawable(@NonNull JLatextAsyncDrawable drawable) {
 
@@ -507,7 +507,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             return builder.build();
         }
 
-        // @since 4.3.0-SNAPSHOT
+        // @since 4.3.0
         private void setResult(@NonNull final AsyncDrawable drawable, @NonNull final Drawable result) {
             // we must post to handler, but also have a way to identify the drawable
             // for which we are posting (in case of cancellation)

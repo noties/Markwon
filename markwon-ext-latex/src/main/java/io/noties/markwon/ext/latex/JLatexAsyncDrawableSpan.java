@@ -15,7 +15,7 @@ import ru.noties.jlatexmath.JLatexMathDrawable;
 import ru.noties.jlatexmath.awt.Color;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 public class JLatexAsyncDrawableSpan extends AsyncDrawableSpan {
 

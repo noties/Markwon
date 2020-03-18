@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import org.commonmark.node.Node;
 
 /**
- * @since $nap;
+ * @since 4.3.0
  */
 public class BlockHandlerDef implements MarkwonVisitor.BlockHandler {
     @Override

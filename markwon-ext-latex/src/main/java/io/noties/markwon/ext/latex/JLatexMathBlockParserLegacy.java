@@ -9,7 +9,7 @@ import org.commonmark.parser.block.MatchedBlockParser;
 import org.commonmark.parser.block.ParserState;
 
 /**
- * @since 4.3.0-SNAPSHOT (although it is just renamed parser from previous versions)
+ * @since 4.3.0 (although it is just renamed parser from previous versions)
  */
 class JLatexMathBlockParserLegacy extends AbstractBlockParser {
 

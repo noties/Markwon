@@ -3,6 +3,16 @@
 **Experimental** commonmark-java inline parser that allows customizing 
 core features and/or extend with own. 
 
+:::tip
+Since <Badge text="4.3.0" /> there is also `MarkwonInlineParserPlugin` which can be used 
+to allow other plugins to customize inline parser
+```java
+final Markwon markwon = Markwon.builder(this)
+        .usePlugin(MarkwonInlineParserPlugin.create())
+        .build();
+```
+:::
+
 Usage of _internal_ classes:
 ```java
 import org.commonmark.internal.Bracket;

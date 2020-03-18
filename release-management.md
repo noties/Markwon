@@ -42,3 +42,7 @@ whenever a new API method/field/functionality-change is introduced (`snc`):
 ```
 
 This live template would be possible to use in both inline comment and javadoc comment.
+
+## documentation
+
+If there are updates to documentation web site, do not forget to publish it

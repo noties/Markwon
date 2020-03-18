@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import org.commonmark.node.SoftLineBreak;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 public class SoftBreakAddsNewLinePlugin extends AbstractMarkwonPlugin {
 

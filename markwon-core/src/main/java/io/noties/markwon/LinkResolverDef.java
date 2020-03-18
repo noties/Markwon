@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 
 public class LinkResolverDef implements LinkResolver {
 
-    // @since 4.3.0-SNAPSHOT
+    // @since 4.3.0
     private static final String DEFAULT_SCHEME = "https";
 
     @Override
@@ -30,7 +30,7 @@ public class LinkResolverDef implements LinkResolver {
     }
 
     /**
-     * @since 4.3.0-SNAPSHOT
+     * @since 4.3.0
      */
     @NonNull
     private static Uri parseLink(@NonNull String link) {

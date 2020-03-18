@@ -10,7 +10,7 @@ import androidx.annotation.Px;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 public abstract class JLatexMathTheme {
 
@@ -35,7 +35,7 @@ public abstract class JLatexMathTheme {
     }
 
     /**
-     * Moved from {@link JLatexMathPlugin} in {@code 4.3.0-SNAPSHOT} version
+     * Moved from {@link JLatexMathPlugin} in {@code 4.3.0} version
      *
      * @since 4.0.0
      */

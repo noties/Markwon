@@ -173,7 +173,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
     }
 
     private void defaultTextColor() {
-        // @since 4.3.0-SNAPSHOT text color is automatically taken from textView
+        // @since 4.3.0 text color is automatically taken from textView
         //  (if it's not specified explicitly via configuration)
         textView.setTextColor(0xFFff0000);
 

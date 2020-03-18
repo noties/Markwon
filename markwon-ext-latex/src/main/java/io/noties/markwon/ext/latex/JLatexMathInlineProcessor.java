@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import io.noties.markwon.inlineparser.InlineProcessor;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 class JLatexMathInlineProcessor extends InlineProcessor {
 

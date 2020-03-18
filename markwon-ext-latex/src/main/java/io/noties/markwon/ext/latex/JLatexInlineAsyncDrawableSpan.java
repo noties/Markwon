@@ -12,7 +12,7 @@ import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.AsyncDrawable;
 
 /**
- * @since 4.3.0-SNAPSHOT
+ * @since 4.3.0
  */
 class JLatexInlineAsyncDrawableSpan extends JLatexAsyncDrawableSpan {
 
