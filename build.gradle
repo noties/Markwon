@@ -4,7 +4,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        // on `3.5.3` tests are not run from CLI
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
     }
 }

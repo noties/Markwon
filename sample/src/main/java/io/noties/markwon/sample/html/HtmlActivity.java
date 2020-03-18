@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 
+import org.commonmark.node.Paragraph;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -26,6 +28,7 @@ import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.MarkwonHtmlRenderer;
 import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.html.tag.SimpleTagHandler;
+import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
 import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
@@ -38,7 +41,8 @@ public class HtmlActivity extends ActivityWithMenuOptions {
         return MenuOptions.create()
                 .add("align", this::align)
                 .add("randomCharSize", this::randomCharSize)
-                .add("enhance", this::enhance);
+                .add("enhance", this::enhance)
+                .add("image", this::image);
     }
 
     private TextView textView;
@@ -235,6 +239,31 @@ public class HtmlActivity extends ActivityWithMenuOptions {
                                 .addHandler(new EnhanceTagHandler((int) (textView.getTextSize() * 2 + .05F))));
                     }
                 })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void image() {
+        // treat unclosed/void `img` tag as HTML inline
+        final String md = "" +
+                "## Try CommonMark\n" +
+                "\n" +
+                "Markwon IMG:\n" +
+                "\n" +
+                "![](https://upload.wikimedia.org/wikipedia/it/thumb/c/c5/GTA_2.JPG/220px-GTA_2.JPG)\n" +
+                "\n" +
+                "New lines...\n" +
+                "\n" +
+                "HTML IMG:\n" +
+                "\n" +
+                "<img src=\"https://upload.wikimedia.org/wikipedia/it/thumb/c/c5/GTA_2.JPG/220px-GTA_2.JPG\"></img>\n" +
+                "\n" +
+                "New lines\n\n";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(HtmlPlugin.create())
                 .build();
 
         markwon.setMarkdown(textView, md);

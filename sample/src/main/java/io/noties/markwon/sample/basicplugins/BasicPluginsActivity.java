@@ -475,9 +475,7 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver(new AnchorLinkResolver((view, top) -> {
-                            scrollView.smoothScrollTo(0, top);
-                        }));
+                        builder.linkResolver(new AnchorLinkResolver((view, top) -> scrollView.smoothScrollTo(0, top)));
                     }
 
                     @Override

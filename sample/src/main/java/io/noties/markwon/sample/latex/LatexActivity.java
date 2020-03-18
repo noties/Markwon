@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
     }
 
     private TextView textView;
+    private View parent;
 
     @NonNull
     @Override
@@ -65,7 +67,8 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 .add("legacy", this::legacy)
                 .add("textColor", this::textColor)
                 .add("defaultTextColor", this::defaultTextColor)
-                .add("inlineAndBlock", this::inlineAndBlock);
+                .add("inlineAndBlock", this::inlineAndBlock)
+                .add("dark", this::dark);
     }
 
     @Override
@@ -74,6 +77,9 @@ public class LatexActivity extends ActivityWithMenuOptions {
 
         // reset text color
         textView.setTextColor(0xFF000000);
+
+        // reset background
+        parent.setBackgroundColor(0xFFffffff);
     }
 
     @Override
@@ -82,6 +88,7 @@ public class LatexActivity extends ActivityWithMenuOptions {
         setContentView(R.layout.activity_text_view);
 
         textView = findViewById(R.id.text_view);
+        parent = findViewById(R.id.scroll_view);
 
 //        array();
         longDivision();
@@ -200,6 +207,17 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 "$$\\int_{a}^{b} f(x)dx = F(b) - F(a)$$" +
                 "\n\n" +
                 "that's it";
+        renderWithBlocksAndInlines(md);
+    }
+
+    private void dark() {
+        parent.setBackgroundColor(0xFF000000);
+        textView.setTextColor(0xFFffffff);
+
+        String latex = "W=W_1+W_2=F_1X_1-F_2X_2";
+        final String md = "" +
+                "# LaTeX inside a blockquote\n" +
+                "> $$" + latex + "$$\n";
         renderWithBlocksAndInlines(md);
     }
 
