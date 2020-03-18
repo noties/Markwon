@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.3.0-SNAPSHOT
+# 4.3.0
 * add `MarkwonInlineParserPlugin` in `inline-parser` module
 * `JLatexMathPlugin` now supports inline LaTeX structures via `MarkwonInlineParserPlugin` 
 dependency (must be explicitly added to `Markwon` whilst configuring)
