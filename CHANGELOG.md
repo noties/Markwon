@@ -12,8 +12,7 @@ dependency (must be explicitly added to `Markwon` whilst configuring)
 * `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
 * add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
-* `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
-<br>Thanks to [@drakeet]
+* `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])<br>Thanks to [@drakeet]
 * `MarkwonVisitor.BlockHandler` and `BlockHandlerDef` implementation to control how blocks insert new lines after them
 
 
