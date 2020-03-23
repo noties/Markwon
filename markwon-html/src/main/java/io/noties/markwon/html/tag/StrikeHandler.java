@@ -25,7 +25,7 @@ public class StrikeHandler extends TagHandler {
     static {
         boolean hasMarkdownImplementation;
         try {
-            org.commonmark.ext.gfm.strikethrough.Strikethrough.class.getName();
+            Class.forName("org.commonmark.ext.gfm.strikethrough.Strikethrough");
             hasMarkdownImplementation = true;
         } catch (Throwable t) {
             hasMarkdownImplementation = false;
