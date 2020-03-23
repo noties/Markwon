@@ -30,6 +30,7 @@ import io.noties.markwon.sample.inlineparser.InlineParserActivity;
 import io.noties.markwon.sample.latex.LatexActivity;
 import io.noties.markwon.sample.notification.NotificationActivity;
 import io.noties.markwon.sample.precomputed.PrecomputedActivity;
+import io.noties.markwon.sample.precomputed.PrecomputedFutureActivity;
 import io.noties.markwon.sample.recycler.RecyclerActivity;
 import io.noties.markwon.sample.simpleext.SimpleExtActivity;
 import io.noties.markwon.sample.tasklist.TaskListActivity;
@@ -121,6 +122,10 @@ public class MainActivity extends Activity {
 
             case PRECOMPUTED_TEXT:
                 activity = PrecomputedActivity.class;
+                break;
+
+            case PRECOMPUTED_FUTURE_TEXT:
+                activity = PrecomputedFutureActivity.class;
                 break;
 
             case EDITOR:
