@@ -1,5 +1,11 @@
 # Changelog
 
+# 4.3.1-SNAPSHOT
+* Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]
+
+[#216]: https://github.com/noties/Markwon/pull/216
+[@francescocervone]: https://github.com/francescocervone
+
 # 4.3.0
 * add `MarkwonInlineParserPlugin` in `inline-parser` module
 * `JLatexMathPlugin` now supports inline LaTeX structures via `MarkwonInlineParserPlugin` 
