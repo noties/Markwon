@@ -2,6 +2,7 @@
 
 # 4.3.1-SNAPSHOT
 * Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]
+* module `images`: `GifSupport` and `SvgSupport` use `Class.forName` instead access to full qualified class name
 
 [#216]: https://github.com/noties/Markwon/pull/216
 [@francescocervone]: https://github.com/francescocervone

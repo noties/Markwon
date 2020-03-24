@@ -14,7 +14,8 @@ public abstract class GifSupport {
     static {
         boolean result;
         try {
-            pl.droidsonroids.gif.GifDrawable.class.getName();
+            // @since $nap;
+            Class.forName("pl.droidsonroids.gif.GifDrawable");
             result = true;
         } catch (Throwable t) {
             // @since 4.1.1 instead of printing full stacktrace of the exception,
