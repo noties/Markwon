@@ -3,22 +3,16 @@ package io.noties.markwon.sample.basicplugins;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.BulletList;
 import org.commonmark.node.Heading;
-import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
-import org.commonmark.node.OrderedList;
 import org.commonmark.node.Paragraph;
 
 import java.util.Collection;
@@ -26,21 +20,14 @@ import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.BlockHandlerDef;
-import io.noties.markwon.LinkResolverDef;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.Prop;
-import io.noties.markwon.RenderProps;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
-import io.noties.markwon.SpanFactory;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.core.spans.BulletListItemSpan;
-import io.noties.markwon.core.spans.HeadingSpan;
 import io.noties.markwon.core.spans.LastLineSpacingSpan;
-import io.noties.markwon.core.spans.OrderedListItemSpan;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.SchemeHandler;
@@ -332,26 +319,26 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
     }
 
     private void headingNoSpaceBlockHandler() {
-final Markwon markwon = Markwon.builder(this)
-        .usePlugin(new AbstractMarkwonPlugin() {
-            @Override
-            public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-                builder.blockHandler(new BlockHandlerDef() {
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
-                    public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
-                        if (node instanceof Heading) {
-                            if (visitor.hasNext(node)) {
-                                visitor.ensureNewLine();
-                                // ensure new line but do not force insert one
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.blockHandler(new BlockHandlerDef() {
+                            @Override
+                            public void blockEnd(@NonNull MarkwonVisitor visitor, @NonNull Node node) {
+                                if (node instanceof Heading) {
+                                    if (visitor.hasNext(node)) {
+                                        visitor.ensureNewLine();
+                                        // ensure new line but do not force insert one
+                                    }
+                                } else {
+                                    super.blockEnd(visitor, node);
+                                }
                             }
-                        } else {
-                            super.blockEnd(visitor, node);
-                        }
+                        });
                     }
-                });
-            }
-        })
-        .build();
+                })
+                .build();
 
         final String md = "" +
                 "# Title title title title title title title title title title \n\ntext text text text";
@@ -393,85 +380,6 @@ final Markwon markwon = Markwon.builder(this)
         markwon.setMarkdown(textView, md);
     }
 
-//    public void step_6() {
-//
-//        final Markwon markwon = Markwon.builder(this)
-//                .usePlugin(HtmlPlugin.create())
-//                .usePlugin(new AbstractMarkwonPlugin() {
-//                    @Override
-//                    public void configure(@NonNull Registry registry) {
-//                        registry.require(HtmlPlugin.class, plugin -> plugin.addHandler(new SimpleTagHandler() {
-//                            @Override
-//                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
-//                                return new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
-//                            }
-//
-//                            @NonNull
-//                            @Override
-//                            public Collection<String> supportedTags() {
-//                                return Collections.singleton("center");
-//                            }
-//                        }));
-//                    }
-//                })
-//                .build();
-//    }
-
-    // text lifecycle (after/before)
-    // rendering lifecycle (before/after)
-    // renderProps
-    // process
-
-    private static class AnchorSpan {
-        final String anchor;
-
-        AnchorSpan(@NonNull String anchor) {
-            this.anchor = anchor;
-        }
-    }
-
-    @NonNull
-    private String createAnchor(@NonNull CharSequence content) {
-        return String.valueOf(content)
-                .replaceAll("[^\\w]", "")
-                .toLowerCase();
-    }
-
-    private static class AnchorLinkResolver extends LinkResolverDef {
-
-        interface ScrollTo {
-            void scrollTo(@NonNull View view, int top);
-        }
-
-        private final ScrollTo scrollTo;
-
-        AnchorLinkResolver(@NonNull ScrollTo scrollTo) {
-            this.scrollTo = scrollTo;
-        }
-
-        @Override
-        public void resolve(@NonNull View view, @NonNull String link) {
-            if (link.startsWith("#")) {
-                final TextView textView = (TextView) view;
-                final Spanned spanned = (Spannable) textView.getText();
-                final AnchorSpan[] spans = spanned.getSpans(0, spanned.length(), AnchorSpan.class);
-                if (spans != null) {
-                    final String anchor = link.substring(1);
-                    for (AnchorSpan span: spans) {
-                        if (anchor.equals(span.anchor)) {
-                            final int start = spanned.getSpanStart(span);
-                            final int line = textView.getLayout().getLineForOffset(start);
-                            final int top = textView.getLayout().getLineTop(line);
-                            scrollTo.scrollTo(textView, top);
-                            return;
-                        }
-                    }
-                }
-            }
-            super.resolve(view, link);
-        }
-    }
-
     private void anchor() {
         final String lorem = getString(R.string.lorem);
         final String md = "" +
@@ -481,156 +389,26 @@ final Markwon markwon = Markwon.builder(this)
                 lorem;
 
         final Markwon markwon = Markwon.builder(this)
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver(new AnchorLinkResolver((view, top) -> scrollView.smoothScrollTo(0, top)));
-                    }
-
-                    @Override
-                    public void afterSetText(@NonNull TextView textView) {
-                        final Spannable spannable = (Spannable) textView.getText();
-                        // obtain heading spans
-                        final HeadingSpan[] spans = spannable.getSpans(0, spannable.length(), HeadingSpan.class);
-                        if (spans != null) {
-                            for (HeadingSpan span : spans) {
-                                final int start = spannable.getSpanStart(span);
-                                final int end = spannable.getSpanEnd(span);
-                                final int flags = spannable.getSpanFlags(span);
-                                spannable.setSpan(
-                                        new AnchorSpan(createAnchor(spannable.subSequence(start, end))),
-                                        start,
-                                        end,
-                                        flags
-                                );
-                            }
-                        }
-                    }
-                })
+                .usePlugin(new AnchorHeadingPlugin((view, top) -> scrollView.smoothScrollTo(0, top)))
                 .build();
 
         markwon.setMarkdown(textView, md);
     }
 
-    private static final Prop<Boolean> ORDERED_IS_NESTED = Prop.of("my-ordered-is-nested");
-
     private void letterOrderedList() {
-        // first level of ordered-list is still number,
-        // other ordered-list levels start with `A`
+        // bullet list nested in ordered list renders letters instead of bullets
         final String md = "" +
                 "1. Hello there!\n" +
                 "1. And here is how:\n" +
-                "   1. First\n" +
-                "   2. Second\n" +
-                "   3. Third\n" +
+                "   - First\n" +
+                "   - Second\n" +
+                "   - Third\n" +
                 "      1. And first here\n\n";
 
         final Markwon markwon = Markwon.builder(this)
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-                        builder.on(ListItem.class, new MarkwonVisitor.NodeVisitor<ListItem>() {
-                            @Override
-                            public void visit(@NonNull MarkwonVisitor visitor, @NonNull ListItem listItem) {
-                                final int length = visitor.length();
-
-                                // it's important to visit children before applying render props (
-                                // we can have nested children, who are list items also, thus they will
-                                // override out props (if we set them before visiting children)
-                                visitor.visitChildren(listItem);
-
-                                final Node parent = listItem.getParent();
-                                if (parent instanceof OrderedList) {
-
-                                    final int start = ((OrderedList) parent).getStartNumber();
-
-                                    CoreProps.LIST_ITEM_TYPE.set(visitor.renderProps(), CoreProps.ListItemType.ORDERED);
-                                    CoreProps.ORDERED_LIST_ITEM_NUMBER.set(visitor.renderProps(), start);
-                                    ORDERED_IS_NESTED.set(visitor.renderProps(), isOrderedListNested(parent));
-
-                                    // after we have visited the children increment start number
-                                    final OrderedList orderedList = (OrderedList) parent;
-                                    orderedList.setStartNumber(orderedList.getStartNumber() + 1);
-
-                                } else {
-                                    CoreProps.LIST_ITEM_TYPE.set(visitor.renderProps(), CoreProps.ListItemType.BULLET);
-                                    CoreProps.BULLET_LIST_ITEM_LEVEL.set(visitor.renderProps(), listLevel(listItem));
-                                }
-
-                                visitor.setSpansForNodeOptional(listItem, length);
-
-                                if (visitor.hasNext(listItem)) {
-                                    visitor.ensureNewLine();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
-                        builder.setFactory(ListItem.class, new SpanFactory() {
-                            @Override
-                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
-
-                                // type of list item
-                                // bullet : level
-                                // ordered: number
-                                final Object spans;
-
-                                if (CoreProps.ListItemType.BULLET == CoreProps.LIST_ITEM_TYPE.require(props)) {
-                                    spans = new BulletListItemSpan(
-                                            configuration.theme(),
-                                            CoreProps.BULLET_LIST_ITEM_LEVEL.require(props)
-                                    );
-                                } else {
-                                    final int number = CoreProps.ORDERED_LIST_ITEM_NUMBER.require(props);
-                                    final String text;
-                                    if (ORDERED_IS_NESTED.get(props, false)) {
-                                        // or `a`, or any other logic
-                                        text = ((char)('A' + number - 1)) + ".\u00a0";
-                                    } else {
-                                        text = number + ".\u00a0";
-                                    }
-
-                                    spans = new OrderedListItemSpan(
-                                            configuration.theme(),
-                                            text
-                                    );
-                                }
-
-                                return spans;
-                            }
-                        });
-                    }
-                })
+                .usePlugin(new BulletListIsOrderedWithLettersWhenNestedPlugin())
                 .build();
 
         markwon.setMarkdown(textView, md);
-    }
-
-    private static int listLevel(@NonNull Node node) {
-        int level = 0;
-        Node parent = node.getParent();
-        while (parent != null) {
-            if (parent instanceof ListItem) {
-                level += 1;
-            }
-            parent = parent.getParent();
-        }
-        return level;
-    }
-
-    private static boolean isOrderedListNested(@NonNull Node node) {
-        node = node.getParent();
-        while (node != null) {
-            if (node instanceof OrderedList) {
-                return true;
-            }
-            if (node instanceof BulletList) {
-                return false;
-            }
-            node = node.getParent();
-        }
-        return false;
     }
 }
