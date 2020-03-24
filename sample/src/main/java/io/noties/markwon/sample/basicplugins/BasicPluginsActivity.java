@@ -14,8 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.commonmark.node.BulletList;
 import org.commonmark.node.Heading;
+import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
+import org.commonmark.node.OrderedList;
 import org.commonmark.node.Paragraph;
 
 import java.util.Collection;
@@ -28,11 +31,16 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.Prop;
+import io.noties.markwon.RenderProps;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
+import io.noties.markwon.SpanFactory;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.core.spans.BulletListItemSpan;
 import io.noties.markwon.core.spans.HeadingSpan;
 import io.noties.markwon.core.spans.LastLineSpacingSpan;
+import io.noties.markwon.core.spans.OrderedListItemSpan;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.SchemeHandler;
@@ -62,7 +70,8 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .add("headingNoSpace", this::headingNoSpace)
                 .add("headingNoSpaceBlockHandler", this::headingNoSpaceBlockHandler)
                 .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine)
-                .add("anchor", this::anchor);
+                .add("anchor", this::anchor)
+                .add("letterOrderedList", this::letterOrderedList);
     }
 
     @Override
@@ -501,5 +510,127 @@ final Markwon markwon = Markwon.builder(this)
                 .build();
 
         markwon.setMarkdown(textView, md);
+    }
+
+    private static final Prop<Boolean> ORDERED_IS_NESTED = Prop.of("my-ordered-is-nested");
+
+    private void letterOrderedList() {
+        // first level of ordered-list is still number,
+        // other ordered-list levels start with `A`
+        final String md = "" +
+                "1. Hello there!\n" +
+                "1. And here is how:\n" +
+                "   1. First\n" +
+                "   2. Second\n" +
+                "   3. Third\n" +
+                "      1. And first here\n\n";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.on(ListItem.class, new MarkwonVisitor.NodeVisitor<ListItem>() {
+                            @Override
+                            public void visit(@NonNull MarkwonVisitor visitor, @NonNull ListItem listItem) {
+                                final int length = visitor.length();
+
+                                // it's important to visit children before applying render props (
+                                // we can have nested children, who are list items also, thus they will
+                                // override out props (if we set them before visiting children)
+                                visitor.visitChildren(listItem);
+
+                                final Node parent = listItem.getParent();
+                                if (parent instanceof OrderedList) {
+
+                                    final int start = ((OrderedList) parent).getStartNumber();
+
+                                    CoreProps.LIST_ITEM_TYPE.set(visitor.renderProps(), CoreProps.ListItemType.ORDERED);
+                                    CoreProps.ORDERED_LIST_ITEM_NUMBER.set(visitor.renderProps(), start);
+                                    ORDERED_IS_NESTED.set(visitor.renderProps(), isOrderedListNested(parent));
+
+                                    // after we have visited the children increment start number
+                                    final OrderedList orderedList = (OrderedList) parent;
+                                    orderedList.setStartNumber(orderedList.getStartNumber() + 1);
+
+                                } else {
+                                    CoreProps.LIST_ITEM_TYPE.set(visitor.renderProps(), CoreProps.ListItemType.BULLET);
+                                    CoreProps.BULLET_LIST_ITEM_LEVEL.set(visitor.renderProps(), listLevel(listItem));
+                                }
+
+                                visitor.setSpansForNodeOptional(listItem, length);
+
+                                if (visitor.hasNext(listItem)) {
+                                    visitor.ensureNewLine();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        builder.setFactory(ListItem.class, new SpanFactory() {
+                            @Override
+                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
+
+                                // type of list item
+                                // bullet : level
+                                // ordered: number
+                                final Object spans;
+
+                                if (CoreProps.ListItemType.BULLET == CoreProps.LIST_ITEM_TYPE.require(props)) {
+                                    spans = new BulletListItemSpan(
+                                            configuration.theme(),
+                                            CoreProps.BULLET_LIST_ITEM_LEVEL.require(props)
+                                    );
+                                } else {
+                                    final int number = CoreProps.ORDERED_LIST_ITEM_NUMBER.require(props);
+                                    final String text;
+                                    if (ORDERED_IS_NESTED.get(props, false)) {
+                                        // or `a`, or any other logic
+                                        text = ((char)('A' + number - 1)) + ".\u00a0";
+                                    } else {
+                                        text = number + ".\u00a0";
+                                    }
+
+                                    spans = new OrderedListItemSpan(
+                                            configuration.theme(),
+                                            text
+                                    );
+                                }
+
+                                return spans;
+                            }
+                        });
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private static int listLevel(@NonNull Node node) {
+        int level = 0;
+        Node parent = node.getParent();
+        while (parent != null) {
+            if (parent instanceof ListItem) {
+                level += 1;
+            }
+            parent = parent.getParent();
+        }
+        return level;
+    }
+
+    private static boolean isOrderedListNested(@NonNull Node node) {
+        node = node.getParent();
+        while (node != null) {
+            if (node instanceof OrderedList) {
+                return true;
+            }
+            if (node instanceof BulletList) {
+                return false;
+            }
+            node = node.getParent();
+        }
+        return false;
     }
 }
