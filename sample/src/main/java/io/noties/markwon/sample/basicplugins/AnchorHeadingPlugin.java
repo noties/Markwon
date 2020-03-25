@@ -89,7 +89,7 @@ public class AnchorHeadingPlugin extends AbstractMarkwonPlugin {
     }
 
     @NonNull
-    private static String createAnchor(@NonNull CharSequence content) {
+    public static String createAnchor(@NonNull CharSequence content) {
         return String.valueOf(content)
                 .replaceAll("[^\\w]", "")
                 .toLowerCase();

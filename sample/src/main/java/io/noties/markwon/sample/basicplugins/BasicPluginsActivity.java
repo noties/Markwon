@@ -58,7 +58,8 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .add("headingNoSpaceBlockHandler", this::headingNoSpaceBlockHandler)
                 .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine)
                 .add("anchor", this::anchor)
-                .add("letterOrderedList", this::letterOrderedList);
+                .add("letterOrderedList", this::letterOrderedList)
+                .add("tableOfContents", this::tableOfContents);
     }
 
     @Override
@@ -407,6 +408,28 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(new BulletListIsOrderedWithLettersWhenNestedPlugin())
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void tableOfContents() {
+        final String lorem = getString(R.string.lorem);
+        final String md = "" +
+                "# First\n" +
+                "" + lorem + "\n\n" +
+                "# Second\n" +
+                "" + lorem + "\n\n" +
+                "## Second level\n\n" +
+                "" + lorem + "\n\n" +
+                "### Level 3\n\n" +
+                "" + lorem + "\n\n" +
+                "# First again\n" +
+                "" + lorem + "\n\n";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new TableOfContentsPlugin())
+                .usePlugin(new AnchorHeadingPlugin((view, top) -> scrollView.smoothScrollTo(0, top)))
                 .build();
 
         markwon.setMarkdown(textView, md);
