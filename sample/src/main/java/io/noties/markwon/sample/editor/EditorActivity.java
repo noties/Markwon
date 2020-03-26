@@ -64,7 +64,8 @@ public class EditorActivity extends ActivityWithMenuOptions {
                 .add("multipleEditSpans", this::multiple_edit_spans)
                 .add("multipleEditSpansPlugin", this::multiple_edit_spans_plugin)
                 .add("pluginRequire", this::plugin_require)
-                .add("pluginNoDefaults", this::plugin_no_defaults);
+                .add("pluginNoDefaults", this::plugin_no_defaults)
+                .add("heading", this::heading);
     }
 
     @Override
@@ -312,6 +313,16 @@ public class EditorActivity extends ActivityWithMenuOptions {
                 .build();
 
         final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
+        editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                editor, Executors.newSingleThreadExecutor(), editText));
+    }
+
+    private void heading() {
+        final Markwon markwon = Markwon.create(this);
+        final MarkwonEditor editor = MarkwonEditor.builder(markwon)
+                .useEditHandler(new HeadingEditHandler())
+                .build();
 
         editText.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
                 editor, Executors.newSingleThreadExecutor(), editText));
