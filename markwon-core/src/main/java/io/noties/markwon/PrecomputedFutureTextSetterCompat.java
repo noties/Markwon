@@ -55,7 +55,8 @@ public class PrecomputedFutureTextSetterCompat implements Markwon.TextSetter {
 
             onComplete.run();
         } else {
-            Log.w("Markwon, no-op", "PrecomputedFutureTextSetterCompat: textView provided is not an AppCompatTextView!");
+
+            throw new IllegalStateException("TextView provided is not a child of AppCompatTextView, cannot call setTextFuture().");
         }
     }
 }
