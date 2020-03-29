@@ -1,11 +1,15 @@
 # Changelog
 
-# 4.3.1-SNAPSHOT
+# $nap;
 * Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]
 * module `images`: `GifSupport` and `SvgSupport` use `Class.forName` instead access to full qualified class name
+* `ext-table`: fix links in tables ([#224])
+* `ext-table`: proper borders (equal for all sides)
 
 [#216]: https://github.com/noties/Markwon/pull/216
+[#224]: https://github.com/noties/Markwon/issues/224
 [@francescocervone]: https://github.com/francescocervone
+
 
 # 4.3.0
 * add `MarkwonInlineParserPlugin` in `inline-parser` module

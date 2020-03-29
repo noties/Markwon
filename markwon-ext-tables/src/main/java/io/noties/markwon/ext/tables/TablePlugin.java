@@ -123,7 +123,12 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
                             visitor.blockStart(tableBlock);
 
+                            final int length = visitor.length();
+
                             visitor.visitChildren(tableBlock);
+
+                            // @since $nap; apply table span for the full table
+                            visitor.setSpans(length, new TableSpan());
 
                             visitor.blockEnd(tableBlock);
                         }

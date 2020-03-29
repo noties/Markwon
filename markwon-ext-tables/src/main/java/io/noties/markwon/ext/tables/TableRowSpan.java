@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.Layout;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.style.ReplacementSpan;
@@ -18,6 +19,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.noties.markwon.utils.LeadingMarginUtils;
 
 public class TableRowSpan extends ReplacementSpan {
 
@@ -139,16 +142,16 @@ public class TableRowSpan extends ReplacementSpan {
             int top,
             int y,
             int bottom,
-            @NonNull Paint paint) {
+            @NonNull Paint p) {
 
         if (recreateLayouts(canvas.getWidth())) {
             width = canvas.getWidth();
             // @since $nap; it's important to cast to TextPaint in order to display links, etc
-            if (paint instanceof TextPaint) {
+            if (p instanceof TextPaint) {
                 // there must be a reason why this method receives Paint instead of TextPaint...
-                textPaint.set((TextPaint) paint);
+                textPaint.set((TextPaint) p);
             } else {
-                textPaint.set(paint);
+                textPaint.set(p);
             }
             makeNewLayouts();
         }
@@ -161,28 +164,25 @@ public class TableRowSpan extends ReplacementSpan {
 
         final int w = width / size;
 
-        // feels like magic...
-        final int heightDiff = (bottom - top - height) / 4;
-
         // @since 1.1.1
         // draw backgrounds
         {
             if (header) {
-                theme.applyTableHeaderRowStyle(this.paint);
+                theme.applyTableHeaderRowStyle(paint);
             } else if (odd) {
-                theme.applyTableOddRowStyle(this.paint);
+                theme.applyTableOddRowStyle(paint);
             } else {
                 // even
-                theme.applyTableEvenRowStyle(this.paint);
+                theme.applyTableEvenRowStyle(paint);
             }
 
             // if present (0 is transparent)
-            if (this.paint.getColor() != 0) {
+            if (paint.getColor() != 0) {
                 final int save = canvas.save();
                 try {
                     rect.set(0, 0, width, bottom - top);
-                    canvas.translate(x, top - heightDiff);
-                    canvas.drawRect(rect, this.paint);
+                    canvas.translate(x, top);
+                    canvas.drawRect(rect, paint);
                 } finally {
                     canvas.restoreToCount(save);
                 }
@@ -192,14 +192,49 @@ public class TableRowSpan extends ReplacementSpan {
         // @since 1.1.1 reset after applying background color
         // as background changes color attribute and if not specific tableBorderColor
         // is specified then after this row all borders will have color of this row (plus alpha)
-        this.paint.set(paint);
-        theme.applyTableBorderStyle(this.paint);
+        paint.set(p);
+        theme.applyTableBorderStyle(paint);
 
         final int borderWidth = theme.tableBorderWidth(paint);
         final boolean drawBorder = borderWidth > 0;
+
+        // why divided by 4 gives a more or less good result is still not clear (shouldn't it be 2?)
+        final int heightDiff = (bottom - top - height) / 4;
+
+        // required for borderTop calculation
+        final boolean isFirstTableRow;
+
+        // @since $nap;
         if (drawBorder) {
-            rect.set(0, 0, w, bottom - top);
+            boolean first = false;
+            // only if first draw the line
+            {
+                final Spanned spanned = (Spanned) text;
+                final TableSpan[] spans = spanned.getSpans(start, end, TableSpan.class);
+                if (spans != null && spans.length > 0) {
+                    final TableSpan span = spans[0];
+                    if (LeadingMarginUtils.selfStart(start, text, span)) {
+                        first = true;
+                        rect.set((int) x, top, width, top + borderWidth);
+                        canvas.drawRect(rect, paint);
+                    }
+                }
+            }
+
+            // draw the line at the bottom
+            rect.set((int) x, bottom - borderWidth, width, bottom);
+            canvas.drawRect(rect, paint);
+
+            isFirstTableRow = first;
+        } else {
+            isFirstTableRow = false;
         }
+
+        final int borderWidthHalf = borderWidth / 2;
+
+        // to NOT overlap borders inset top and bottom
+        final int borderTop = isFirstTableRow ? borderWidth : 0;
+        final int borderBottom = bottom - top - borderWidth;
 
         StaticLayout layout;
         for (int i = 0; i < size; i++) {
@@ -207,10 +242,23 @@ public class TableRowSpan extends ReplacementSpan {
             final int save = canvas.save();
             try {
 
-                canvas.translate(x + (i * w), top - heightDiff);
+                canvas.translate(x + (i * w), top);
 
+                // @since $nap;
                 if (drawBorder) {
-                    canvas.drawRect(rect, this.paint);
+                    // first vertical border will have full width (it cannot exceed canvas)
+                    if (i == 0) {
+                        rect.set(0, borderTop, borderWidth, borderBottom);
+                    } else {
+                        rect.set(-borderWidthHalf, borderTop, borderWidthHalf, borderBottom);
+                    }
+
+                    canvas.drawRect(rect, paint);
+
+                    if (i == (size - 1)) {
+                        rect.set(w - borderWidth, borderTop, w, borderBottom);
+                        canvas.drawRect(rect, paint);
+                    }
                 }
 
                 canvas.translate(padding, padding + heightDiff);
