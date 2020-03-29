@@ -33,7 +33,9 @@ public enum Sample {
 
     IMAGES(R.string.sample_images),
 
-    REMOTE_VIEWS(R.string.sample_remote_views);
+    REMOTE_VIEWS(R.string.sample_remote_views),
+
+    TABLE(R.string.sample_table);
 
     private final int textResId;
 

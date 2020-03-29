@@ -125,10 +125,6 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
                             visitor.visitChildren(tableBlock);
 
-//                            if (visitor.hasNext(tableBlock)) {
-//                                visitor.ensureNewLine();
-//                                visitor.forceNewLine();
-//                            }
                             visitor.blockEnd(tableBlock);
                         }
                     })

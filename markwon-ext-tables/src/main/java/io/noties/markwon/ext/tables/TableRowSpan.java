@@ -143,7 +143,13 @@ public class TableRowSpan extends ReplacementSpan {
 
         if (recreateLayouts(canvas.getWidth())) {
             width = canvas.getWidth();
-            textPaint.set(paint);
+            // @since $nap; it's important to cast to TextPaint in order to display links, etc
+            if (paint instanceof TextPaint) {
+                // there must be a reason why this method receives Paint instead of TextPaint...
+                textPaint.set((TextPaint) paint);
+            } else {
+                textPaint.set(paint);
+            }
             makeNewLayouts();
         }
 

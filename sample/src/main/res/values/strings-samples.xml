@@ -37,4 +37,5 @@
 
     <string name="sample_remote_views"># \# Notification\n\nExample usage in notifications and other remote views</string>
 
+    <string name="sample_table"># \# Table\n\nUsage of tables in a `TextView`</string>
 </resources>

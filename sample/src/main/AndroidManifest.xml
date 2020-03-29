@@ -38,6 +38,7 @@
         <activity android:name=".tasklist.TaskListActivity" />
         <activity android:name=".images.ImagesActivity" />
         <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".table.TableActivity" />
 
     </application>
 
