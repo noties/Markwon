@@ -1,7 +1,6 @@
 package io.noties.markwon;
 
 import android.text.Spanned;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,12 +9,14 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.text.PrecomputedTextCompat;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 
 /**
  * Please note this class requires `androidx.core:core` artifact being explicitly added to your dependencies.
  * This is intended to be used in a RecyclerView.
  *
  * @see io.noties.markwon.Markwon.TextSetter
+ * @since $nap;
  */
 public class PrecomputedFutureTextSetterCompat implements Markwon.TextSetter {
 
@@ -47,16 +48,18 @@ public class PrecomputedFutureTextSetterCompat implements Markwon.TextSetter {
             @NonNull Spanned markdown,
             @NonNull TextView.BufferType bufferType,
             @NonNull Runnable onComplete) {
-
         if (textView instanceof AppCompatTextView) {
-            ((AppCompatTextView) textView).setTextFuture(PrecomputedTextCompat.getTextFuture(
-                    markdown, ((AppCompatTextView) textView).getTextMetricsParamsCompat(), executor
-            ));
-
+            final AppCompatTextView appCompatTextView = (AppCompatTextView) textView;
+            final Future<PrecomputedTextCompat> future = PrecomputedTextCompat.getTextFuture(
+                    markdown,
+                    appCompatTextView.getTextMetricsParamsCompat(),
+                    executor);
+            appCompatTextView.setTextFuture(future);
+            // `setTextFuture` is actually a synchronous call, so we should call onComplete now
             onComplete.run();
         } else {
-
-            throw new IllegalStateException("TextView provided is not a child of AppCompatTextView, cannot call setTextFuture().");
+            throw new IllegalStateException("TextView provided is not an instance of AppCompatTextView, " +
+                    "cannot call setTextFuture(), textView: " + textView);
         }
     }
 }

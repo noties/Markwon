@@ -5,10 +5,12 @@
 * module `images`: `GifSupport` and `SvgSupport` use `Class.forName` instead access to full qualified class name
 * `ext-table`: fix links in tables ([#224])
 * `ext-table`: proper borders (equal for all sides)
+* module `core`: Add `PrecomputedFutureTextSetterCompat`<br>Thanks [@KirkBushman]
 
 [#216]: https://github.com/noties/Markwon/pull/216
 [#224]: https://github.com/noties/Markwon/issues/224
 [@francescocervone]: https://github.com/francescocervone
+[@KirkBushman]: https://github.com/KirkBushman
 
 
 # 4.3.0
