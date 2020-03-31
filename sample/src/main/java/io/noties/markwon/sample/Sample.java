@@ -23,6 +23,8 @@ public enum Sample {
 
     PRECOMPUTED_TEXT(R.string.sample_precomputed_text),
 
+    PRECOMPUTED_FUTURE_TEXT(R.string.sample_precomputed_future_text),
+
     EDITOR(R.string.sample_editor),
 
     INLINE_PARSER(R.string.sample_inline_parser),
