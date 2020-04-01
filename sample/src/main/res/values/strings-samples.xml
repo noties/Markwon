@@ -25,6 +25,8 @@
 
     <string name="sample_precomputed_text"># \# PrecomputedText\n\nUsage of TextSetter and PrecomputedTextCompat</string>
 
+    <string name="sample_precomputed_future_text"># \# PrecomputedFutureText\n\nUsage of TextSetter and PrecomputedFutureTextSetterCompat</string>
+
     <string name="sample_editor"># \# Editor\n\n`MarkwonEditor` sample usage to highlight user input in EditText</string>
 
     <string name="sample_inline_parser"># \# Inline Parser\n\nUsage of custom inline parser</string>
@@ -37,4 +39,5 @@
 
     <string name="sample_remote_views"># \# Notification\n\nExample usage in notifications and other remote views</string>
 
+    <string name="sample_table"># \# Table\n\nUsage of tables in a `TextView`</string>
 </resources>

@@ -8,4 +8,9 @@
         <attr name="fcdv_checked" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="ColorBlendView">
+        <attr name="cbv_foreground" format="color" />
+        <attr name="cbv_background" format="color" />
+    </declare-styleable>
+
 </resources>

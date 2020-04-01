@@ -54,6 +54,7 @@ dependencies {
     deps.with {
         implementation it['x-recycler-view']
         implementation it['x-core'] // for precomputedTextCompat
+        implementation it['x-appcompat'] // for setTextFuture
         implementation it['okhttp']
         implementation it['prism4j']
         implementation it['debug']

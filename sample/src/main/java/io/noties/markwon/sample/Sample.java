@@ -23,6 +23,8 @@ public enum Sample {
 
     PRECOMPUTED_TEXT(R.string.sample_precomputed_text),
 
+    PRECOMPUTED_FUTURE_TEXT(R.string.sample_precomputed_future_text),
+
     EDITOR(R.string.sample_editor),
 
     INLINE_PARSER(R.string.sample_inline_parser),
@@ -33,7 +35,9 @@ public enum Sample {
 
     IMAGES(R.string.sample_images),
 
-    REMOTE_VIEWS(R.string.sample_remote_views);
+    REMOTE_VIEWS(R.string.sample_remote_views),
+
+    TABLE(R.string.sample_table);
 
     private final int textResId;
 

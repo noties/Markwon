@@ -25,7 +25,9 @@ public class StrikeHandler extends TagHandler {
     static {
         boolean hasMarkdownImplementation;
         try {
-            org.commonmark.ext.gfm.strikethrough.Strikethrough.class.getName();
+            // @since 4.3.1 we class Class.forName instead of trying
+            //  to access the class by full qualified name (which caused issues with DexGuard)
+            Class.forName("org.commonmark.ext.gfm.strikethrough.Strikethrough");
             hasMarkdownImplementation = true;
         } catch (Throwable t) {
             hasMarkdownImplementation = false;

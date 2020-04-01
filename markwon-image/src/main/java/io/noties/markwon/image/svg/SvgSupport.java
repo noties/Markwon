@@ -14,7 +14,7 @@ public abstract class SvgSupport {
     static {
         boolean result;
         try {
-            com.caverock.androidsvg.SVG.class.getName();
+            Class.forName("com.caverock.androidsvg.SVG");
             result = true;
         } catch (Throwable t) {
             // @since 4.1.1 instead of printing full stacktrace of the exception,

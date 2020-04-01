@@ -1,5 +1,18 @@
 # Changelog
 
+# 4.3.1
+* Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]
+* module `images`: `GifSupport` and `SvgSupport` use `Class.forName` instead access to full qualified class name
+* `ext-table`: fix links in tables ([#224])
+* `ext-table`: proper borders (equal for all sides)
+* module `core`: Add `PrecomputedFutureTextSetterCompat`<br>Thanks [@KirkBushman]
+
+[#216]: https://github.com/noties/Markwon/pull/216
+[#224]: https://github.com/noties/Markwon/issues/224
+[@francescocervone]: https://github.com/francescocervone
+[@KirkBushman]: https://github.com/KirkBushman
+
+
 # 4.3.0
 * add `MarkwonInlineParserPlugin` in `inline-parser` module
 * `JLatexMathPlugin` now supports inline LaTeX structures via `MarkwonInlineParserPlugin` 
@@ -12,8 +25,7 @@ dependency (must be explicitly added to `Markwon` whilst configuring)
 * `LinkResolverDef` defaults to `https` when a link does not have scheme information ([#75])
 * add `option` abstraction for `sample` module allowing switching of multiple cases in runtime via menu
 * non-empty bounds for `AsyncDrawable` when no dimensions are not yet available ([#189])
-* `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])
-<br>Thanks to [@drakeet]
+* `linkify` - option to use `LinkifyCompat` in `LinkifyPlugin` ([#201])<br>Thanks to [@drakeet]
 * `MarkwonVisitor.BlockHandler` and `BlockHandlerDef` implementation to control how blocks insert new lines after them
 
 

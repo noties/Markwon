@@ -10,6 +10,7 @@ import androidx.annotation.Px;
 import io.noties.markwon.utils.ColorUtils;
 import io.noties.markwon.utils.Dip;
 
+@SuppressWarnings("WeakerAccess")
 public class TableTheme {
 
     @NonNull
@@ -101,7 +102,8 @@ public class TableTheme {
         }
 
         paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
+        // @since 4.3.1 before it was STROKE... change to FILL as we draw border differently
+        paint.setStyle(Paint.Style.FILL);
     }
 
     public void applyTableOddRowStyle(@NonNull Paint paint) {

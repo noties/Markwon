@@ -28,6 +28,7 @@
         <activity android:name=".simpleext.SimpleExtActivity" />
         <activity android:name=".customextension2.CustomExtensionActivity2" />
         <activity android:name=".precomputed.PrecomputedActivity" />
+        <activity android:name=".precomputed.PrecomputedFutureActivity" />
 
         <activity
             android:name=".editor.EditorActivity"
@@ -38,6 +39,7 @@
         <activity android:name=".tasklist.TaskListActivity" />
         <activity android:name=".images.ImagesActivity" />
         <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".table.TableActivity" />
 
     </application>
 
