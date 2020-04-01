@@ -146,7 +146,7 @@ public class TableRowSpan extends ReplacementSpan {
 
         if (recreateLayouts(canvas.getWidth())) {
             width = canvas.getWidth();
-            // @since $nap; it's important to cast to TextPaint in order to display links, etc
+            // @since 4.3.1 it's important to cast to TextPaint in order to display links, etc
             if (p instanceof TextPaint) {
                 // there must be a reason why this method receives Paint instead of TextPaint...
                 textPaint.set((TextPaint) p);
@@ -204,7 +204,7 @@ public class TableRowSpan extends ReplacementSpan {
         // required for borderTop calculation
         final boolean isFirstTableRow;
 
-        // @since $nap;
+        // @since 4.3.1
         if (drawBorder) {
             boolean first = false;
             // only if first draw the line
@@ -244,7 +244,7 @@ public class TableRowSpan extends ReplacementSpan {
 
                 canvas.translate(x + (i * w), top);
 
-                // @since $nap;
+                // @since 4.3.1
                 if (drawBorder) {
                     // first vertical border will have full width (it cannot exceed canvas)
                     if (i == 0) {

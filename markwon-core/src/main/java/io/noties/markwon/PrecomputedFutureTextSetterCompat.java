@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
  * This is intended to be used in a RecyclerView.
  *
  * @see io.noties.markwon.Markwon.TextSetter
- * @since $nap;
+ * @since 4.3.1
  */
 public class PrecomputedFutureTextSetterCompat implements Markwon.TextSetter {
 

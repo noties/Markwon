@@ -102,7 +102,7 @@ public class TableTheme {
         }
 
         paint.setColor(color);
-        // @since $nap; before it was STROKE... change to FILL as we draw border differently
+        // @since 4.3.1 before it was STROKE... change to FILL as we draw border differently
         paint.setStyle(Paint.Style.FILL);
     }
 

@@ -1,6 +1,6 @@
 # Changelog
 
-# $nap;
+# 4.3.1
 * Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]
 * module `images`: `GifSupport` and `SvgSupport` use `Class.forName` instead access to full qualified class name
 * `ext-table`: fix links in tables ([#224])

@@ -1,7 +1,7 @@
 package io.noties.markwon.ext.tables;
 
 /**
- * @since $nap;
+ * @since 4.3.1
  */
 public class TableSpan {
 }

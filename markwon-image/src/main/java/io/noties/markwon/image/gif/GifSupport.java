@@ -14,7 +14,7 @@ public abstract class GifSupport {
     static {
         boolean result;
         try {
-            // @since $nap;
+            // @since 4.3.1
             Class.forName("pl.droidsonroids.gif.GifDrawable");
             result = true;
         } catch (Throwable t) {

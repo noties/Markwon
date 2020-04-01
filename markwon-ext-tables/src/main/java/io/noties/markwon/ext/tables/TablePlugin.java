@@ -127,7 +127,7 @@ public class TablePlugin extends AbstractMarkwonPlugin {
 
                             visitor.visitChildren(tableBlock);
 
-                            // @since $nap; apply table span for the full table
+                            // @since 4.3.1 apply table span for the full table
                             visitor.setSpans(length, new TableSpan());
 
                             visitor.blockEnd(tableBlock);
