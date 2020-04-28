@@ -6,6 +6,7 @@
 * `HtmlEmptyTagReplacement` now is configurable by `HtmlPlugin`, `iframe` handling ([#235])
 * `AsyncDrawableLoader` now uses `TextView` width without padding instead of width of canvas
 * Support for images inside table cells (`ext-tables` module)
+* expose `enabledBlockTypes` in `CorePlugin`
 
 [#235]: https://github.com/noties/Markwon/issues/235
 

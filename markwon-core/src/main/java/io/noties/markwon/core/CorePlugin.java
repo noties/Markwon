@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import org.commonmark.node.Block;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
@@ -16,6 +17,7 @@ import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
+import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
@@ -30,7 +32,10 @@ import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
@@ -88,6 +93,23 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     @NonNull
     public static CorePlugin create() {
         return new CorePlugin();
+    }
+
+    /**
+     * @return a set with enabled by default block types
+     * @since $nap;
+     */
+    @NonNull
+    public static Set<Class<? extends Block>> enabledBlockTypes() {
+        return new HashSet<>(Arrays.asList(
+                BlockQuote.class,
+                Heading.class,
+                FencedCodeBlock.class,
+                HtmlBlock.class,
+                ThematicBreak.class,
+                ListBlock.class,
+                IndentedCodeBlock.class
+        ));
     }
 
     // @since 4.0.0
