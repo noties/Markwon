@@ -6,10 +6,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.commonmark.internal.inline.AsteriskDelimiterProcessor;
+import org.commonmark.internal.inline.UnderscoreDelimiterProcessor;
 import org.commonmark.node.Block;
 import org.commonmark.node.BlockQuote;
+import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.Heading;
 import org.commonmark.node.HtmlBlock;
+import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.ListBlock;
 import org.commonmark.node.ThematicBreak;
 import org.commonmark.parser.InlineParserFactory;
@@ -22,7 +26,9 @@ import java.util.Set;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.inlineparser.BackticksInlineProcessor;
+import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.CloseBracketInlineProcessor;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.inlineparser.OpenBracketInlineProcessor;
@@ -41,7 +47,9 @@ public class InlineParserActivity extends ActivityWithMenuOptions {
                 .add("links_only", this::links_only)
                 .add("disable_code", this::disable_code)
                 .add("pluginWithDefaults", this::pluginWithDefaults)
-                .add("pluginNoDefaults", this::pluginNoDefaults);
+                .add("pluginNoDefaults", this::pluginNoDefaults)
+                .add("disableHtmlInlineParser", this::disableHtmlInlineParser)
+                .add("disableHtmlSanitize", this::disableHtmlSanitize);
     }
 
     @Override
@@ -173,4 +181,67 @@ public class InlineParserActivity extends ActivityWithMenuOptions {
         markwon.setMarkdown(textView, md);
     }
 
+    private void disableHtmlInlineParser() {
+        final String md = "# Html <b>disabled</b>\n\n" +
+                "<em>emphasis <strong>strong</strong>\n\n" +
+                "<p>paragraph <img src='hey.jpg' /></p>\n\n" +
+                "<test></test>\n\n" +
+                "<test>";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        // NB! `AsteriskDelimiterProcessor` and `UnderscoreDelimiterProcessor`
+                        //  handles both emphasis and strong-emphasis nodes
+                        registry.require(MarkwonInlineParserPlugin.class, plugin -> {
+                            plugin.factoryBuilder()
+                                    .excludeInlineProcessor(HtmlInlineProcessor.class)
+                                    .excludeInlineProcessor(BangInlineProcessor.class)
+                                    .excludeInlineProcessor(OpenBracketInlineProcessor.class)
+                                    .excludeDelimiterProcessor(AsteriskDelimiterProcessor.class)
+                                    .excludeDelimiterProcessor(UnderscoreDelimiterProcessor.class);
+                        });
+                    }
+
+                    @Override
+                    public void configureParser(@NonNull Parser.Builder builder) {
+                        builder.enabledBlockTypes(new HashSet<>(Arrays.asList(
+                                Heading.class,
+//                        HtmlBlock.class,
+                                ThematicBreak.class,
+                                FencedCodeBlock.class,
+                                IndentedCodeBlock.class,
+                                BlockQuote.class,
+                                ListBlock.class
+                        )));
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void disableHtmlSanitize() {
+        final String md = "# Html <b>disabled</b>\n\n" +
+                "<em>emphasis <strong>strong</strong>\n\n" +
+                "<p>paragraph <img src='hey.jpg' /></p>\n\n" +
+                "<test></test>\n\n" +
+                "<test>";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        return markdown
+                                .replaceAll("<", "&lt;")
+                                .replaceAll(">", "&gt;");
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
 }

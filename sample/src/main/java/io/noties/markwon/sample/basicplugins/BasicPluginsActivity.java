@@ -434,4 +434,25 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
 
         markwon.setMarkdown(textView, md);
     }
+
+//    private void code() {
+//        final String md = "" +
+//                "hello `there`!\n\n" +
+//                "so this, `is super duper long very very very long line that should be going further and further and further down` yep.\n\n" +
+//                "`okay`";
+//        final Markwon markwon = Markwon.builder(this)
+//                .usePlugin(new AbstractMarkwonPlugin() {
+//                    @Override
+//                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+//                        builder.setFactory(Code.class, new SpanFactory() {
+//                            @Override
+//                            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
+//                                return new CodeTextView.CodeSpan();
+//                            }
+//                        });
+//                    }
+//                })
+//                .build();
+//        markwon.setMarkdown(textView, md);
+//    }
 }

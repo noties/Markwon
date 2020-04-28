@@ -1,5 +1,6 @@
 package io.noties.markwon.core;
 
+import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ import io.noties.markwon.core.factory.ListItemSpanFactory;
 import io.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import io.noties.markwon.core.factory.ThematicBreakSpanFactory;
 import io.noties.markwon.core.spans.OrderedListItemSpan;
+import io.noties.markwon.core.spans.TextViewSpan;
 import io.noties.markwon.image.ImageProps;
 
 /**
@@ -150,6 +152,13 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         OrderedListItemSpan.measure(textView, markdown);
+
+        // @since $nap;
+        // we do not break API compatibility, instead we introduce the `instance of` check
+        if (markdown instanceof Spannable) {
+            final Spannable spannable = (Spannable) markdown;
+            TextViewSpan.applyTo(spannable, textView);
+        }
     }
 
     @Override

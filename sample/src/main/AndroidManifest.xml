@@ -24,7 +24,11 @@
         <activity android:name="io.noties.markwon.sample.basicplugins.BasicPluginsActivity" />
         <activity android:name="io.noties.markwon.sample.recycler.RecyclerActivity" />
         <activity android:name="io.noties.markwon.sample.theme.ThemeActivity" />
-        <activity android:name=".html.HtmlActivity" />
+
+        <activity
+            android:name=".html.HtmlActivity"
+            android:exported="true" />
+
         <activity android:name=".simpleext.SimpleExtActivity" />
         <activity android:name=".customextension2.CustomExtensionActivity2" />
         <activity android:name=".precomputed.PrecomputedActivity" />
@@ -32,6 +36,7 @@
 
         <activity
             android:name=".editor.EditorActivity"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".inlineparser.InlineParserActivity" />

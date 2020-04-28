@@ -1,6 +1,12 @@
 # Changelog
 
 # $nap;
+* `TextViewSpan` to obtain `TextView` in which markdown is displayed (applied by `CorePlugin`)
+* `TextLayoutSpan` to obtain `Layout` in which markdown is displayed (applied by `TablePlugin`, more specifically `TableRowSpan` to propagate layout in which cell content is displayed)
+* `HtmlEmptyTagReplacement` now is configurable by `HtmlPlugin`, `iframe` handling ([#235])
+* `AsyncDrawableLoader` now uses `TextView` width without padding instead of width of canvas
+
+[#235]: https://github.com/noties/Markwon/issues/235
 
 # 4.3.1
 * Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]

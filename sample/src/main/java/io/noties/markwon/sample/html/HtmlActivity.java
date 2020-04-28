@@ -1,17 +1,17 @@
 package io.noties.markwon.sample.html;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
-
-import org.commonmark.node.Paragraph;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +23,7 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.html.HtmlEmptyTagReplacement;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.MarkwonHtmlRenderer;
@@ -42,7 +43,10 @@ public class HtmlActivity extends ActivityWithMenuOptions {
                 .add("align", this::align)
                 .add("randomCharSize", this::randomCharSize)
                 .add("enhance", this::enhance)
-                .add("image", this::image);
+                .add("image", this::image)
+                .add("elegantUnderline", this::elegantUnderline)
+                .add("iframe", this::iframe)
+                .add("emptyTagReplacement", this::emptyTagReplacement);
     }
 
     private TextView textView;
@@ -57,7 +61,7 @@ public class HtmlActivity extends ActivityWithMenuOptions {
 
         textView = findViewById(R.id.text_view);
 
-        align();
+        elegantUnderline();
     }
 
     // we can use `SimpleTagHandler` for _simple_ cases (when the whole tag content
@@ -264,6 +268,88 @@ public class HtmlActivity extends ActivityWithMenuOptions {
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(ImagesPlugin.create())
                 .usePlugin(HtmlPlugin.create())
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void elegantUnderline() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            Toast.makeText(
+                    this,
+                    "Elegant underline is supported on KitKat and up",
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+
+        final String underline = "Well well wel, and now <u>Gogogo, quite **perfect** yeah</u> and nice and elegant";
+
+        final String md = "" +
+                underline + "\n\n" +
+                "<b>" + underline + "</b>\n\n" +
+                "<font name=serif>" + underline + "</font>\n\n" +
+                "<font name=sans-serif>" + underline + underline + underline + "</font>\n\n" +
+                "<font name=monospace>" + underline + "</font>\n\n" +
+                "";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create(plugin -> plugin
+                        .addHandler(new HtmlFontTagHandler())
+                        .addHandler(new HtmlElegantUnderlineTagHandler())))
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void iframe() {
+        final String md = "" +
+                "# Hello iframe\n\n" +
+                "<p class=\"p1\"><img title=\"JUMP FORCE\" src=\"https://img1.ak.crunchyroll.com/i/spire1/f0c009039dd9f8dff5907fff148adfca1587067000_full.jpg\" alt=\"JUMP FORCE\" width=\"640\" height=\"362\" /></p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\">Switch owners will soon get to take part in the ultimate <em>Shonen Jump </em>rumble. Bandai Namco announced plans to bring <strong><em>Jump Force </em></strong>to <strong>Switch</strong> as <strong><em>Jump Force Deluxe Edition</em></strong>, with a release set for sometime this year. This version will include all of the original playable characters and those from Character Pass 1, and <strong>Character Pass 2 is also in the works </strong>for all versions, starting with <strong>Shoto Todoroki from </strong><span style=\"color: #ff9900;\"><a href=\"/my-hero-academia?utm_source=editorial_cr&amp;utm_medium=news&amp;utm_campaign=article_driven&amp;referrer=editorial_cr_news_article_driven\"><span style=\"color: #ff9900;\"><strong><em>My Hero Academia</em></strong></span></a></span>.</p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\">Other than Todoroki, Bandai Namco hinted that the four other Character Pass 2 characters will hail from <span style=\"color: #ff9900;\"><a href=\"/hunter-x-hunter?utm_source=editorial_cr&amp;utm_medium=news&amp;utm_campaign=article_driven&amp;referrer=editorial_cr_news_article_driven\"><span style=\"color: #ff9900;\"><em>Hunter x Hunter</em></span></a></span>, <em>Yu Yu Hakusho</em>, <span style=\"color: #ff9900;\"><a href=\"/bleach?utm_source=editorial_cr&amp;utm_medium=news&amp;utm_campaign=article_driven&amp;referrer=editorial_cr_news_article_driven\"><span style=\"color: #ff9900;\"><em>Bleach</em></span></a></span>, and <span style=\"color: #ff9900;\"><a href=\"/jojos-bizarre-adventure?utm_source=editorial_cr&amp;utm_medium=news&amp;utm_campaign=article_driven&amp;referrer=editorial_cr_news_article_driven\"><span style=\"color: #ff9900;\"><em>JoJo's Bizarre Adventure</em></span></a></span>. Character Pass 2 will be priced at $17.99, and Todoroki launches this spring.<span class=\"Apple-converted-space\">&nbsp;</span></p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\"><iframe style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"https://www.youtube.com/embed/At1qTj-LWCc\" frameborder=\"0\" width=\"640\" height=\"360\"></iframe></p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\">Character Pass 2 promo:</p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\"><iframe style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"https://www.youtube.com/embed/CukwN6kV4R4\" frameborder=\"0\" width=\"640\" height=\"360\"></iframe></p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\"><a href=\"https://got.cr/PremiumTrial-NewsBanner4\"><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"https://img1.ak.crunchyroll.com/i/spire4/78f5441d927cf160a93e037b567c2b1f1587067041_full.png\" alt=\"\" width=\"640\" height=\"43\" /></a></p>\n" +
+                "<p class=\"p2\">&nbsp;</p>\n" +
+                "<p class=\"p1\">-------</p>\n" +
+                "<p class=\"p1\"><em>Joseph Luster is the Games and Web editor at </em><a href=\"http://www.otakuusamagazine.com/ME2/Default.asp\"><em>Otaku USA Magazine</em></a><em>. You can read his webcomic, </em><a href=\"http://subhumanzoids.com/comics/big-dumb-fighting-idiots/\">BIG DUMB FIGHTING IDIOTS</a><em> at </em><a href=\"http://subhumanzoids.com/\"><em>subhumanzoids</em></a><em>. Follow him on Twitter </em><a href=\"https://twitter.com/Moldilox\"><em>@Moldilox</em></a><em>.</em><span class=\"Apple-converted-space\">&nbsp;</span></p>";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(HtmlPlugin.create())
+                .usePlugin(new IFrameHtmlPlugin())
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void emptyTagReplacement() {
+
+        final String md = "" +
+                "<empty></empty> the `<empty></empty>` is replaced?";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create(plugin -> {
+                    plugin.emptyTagReplacement(new HtmlEmptyTagReplacement() {
+                        @Nullable
+                        @Override
+                        public String replace(@NonNull HtmlTag tag) {
+                            if ("empty".equals(tag.name())) {
+                                return "REPLACED_EMPTY_WITH_IT";
+                            }
+                            return super.replace(tag);
+                        }
+                    });
+                }))
                 .build();
 
         markwon.setMarkdown(textView, md);

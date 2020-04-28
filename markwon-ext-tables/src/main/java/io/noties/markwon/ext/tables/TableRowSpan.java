@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -20,7 +22,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.noties.markwon.core.spans.TextLayoutSpan;
 import io.noties.markwon.utils.LeadingMarginUtils;
+import io.noties.markwon.utils.SpanUtils;
 
 public class TableRowSpan extends ReplacementSpan {
 
@@ -144,7 +148,7 @@ public class TableRowSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint p) {
 
-        if (recreateLayouts(canvas.getWidth())) {
+        if (recreateLayouts(SpanUtils.width(canvas, text))) {
             width = canvas.getWidth();
             // @since 4.3.1 it's important to cast to TextPaint in order to display links, etc
             if (p instanceof TextPaint) {
@@ -295,17 +299,31 @@ public class TableRowSpan extends ReplacementSpan {
         this.layouts.clear();
         Cell cell;
         StaticLayout layout;
+        Spannable spannable;
+
         for (int i = 0, size = cells.size(); i < size; i++) {
+
             cell = cells.get(i);
+
+            if (cell.text instanceof Spannable) {
+                spannable = (Spannable) cell.text;
+            } else {
+                spannable = new SpannableString(cell.text);
+            }
+
             layout = new StaticLayout(
-                    cell.text,
+                    spannable,
                     textPaint,
                     w,
                     alignment(cell.alignment),
-                    1.F,
-                    .0F,
+                    1.0F,
+                    0.0F,
                     false
             );
+
+            // @since $nap;
+            TextLayoutSpan.applyTo(spannable, layout);
+
             layouts.add(layout);
         }
     }

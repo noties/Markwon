@@ -16,5 +16,6 @@ include ':app', ':sample',
         ':markwon-recycler',
         ':markwon-recycler-table',
         ':markwon-simple-ext',
+        ':markwon-spans-better',
         ':markwon-syntax-highlight',
         ':markwon-test-span'

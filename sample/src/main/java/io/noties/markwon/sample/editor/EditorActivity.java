@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.MetricAffectingSpan;
@@ -25,8 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import io.noties.debug.AndroidLogDebugOutput;
+import io.noties.debug.Debug;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.core.spans.EmphasisSpan;
 import io.noties.markwon.core.spans.StrongEmphasisSpan;
 import io.noties.markwon.editor.AbstractEditHandler;
@@ -65,7 +69,8 @@ public class EditorActivity extends ActivityWithMenuOptions {
                 .add("multipleEditSpansPlugin", this::multiple_edit_spans_plugin)
                 .add("pluginRequire", this::plugin_require)
                 .add("pluginNoDefaults", this::plugin_no_defaults)
-                .add("heading", this::heading);
+                .add("heading", this::heading)
+                .add("newLine", this::newLine);
     }
 
     @Override
@@ -98,7 +103,10 @@ public class EditorActivity extends ActivityWithMenuOptions {
         super.onCreate(savedInstanceState);
         createView();
 
+        Debug.init(new AndroidLogDebugOutput(true));
+
         multiple_edit_spans();
+//        newLine();
     }
 
     private void simple_process() {
@@ -230,6 +238,7 @@ public class EditorActivity extends ActivityWithMenuOptions {
                         builder.inlineParserFactory(inlineParserFactory);
                     }
                 })
+                .usePlugin(SoftBreakAddsNewLinePlugin.create())
                 .build();
 
         final LinkEditHandler.OnClick onClick = (widget, link) -> markwon.configuration().linkResolver().resolve(widget, link);
@@ -280,6 +289,13 @@ public class EditorActivity extends ActivityWithMenuOptions {
                 editor, Executors.newSingleThreadExecutor(), editText));
     }
 
+    private void newLine() {
+        final Markwon markwon = Markwon.create(this);
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+        final TextWatcher textWatcher = MarkdownNewLine.wrap(MarkwonEditorTextWatcher.withProcess(editor));
+        editText.addTextChangedListener(textWatcher);
+    }
+
     private void plugin_require() {
         // usage of plugin from other plugins
 
@@ -294,6 +310,8 @@ public class EditorActivity extends ActivityWithMenuOptions {
                     }
                 })
                 .build();
+
+        editText.setMovementMethod(LinkMovementMethod.getInstance());
 
         final MarkwonEditor editor = MarkwonEditor.create(markwon);
 

@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 // utility class to print parsed Nodes hierarchy
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class DumpNodes {
 
     public interface NodeProcessor {
