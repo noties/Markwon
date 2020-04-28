@@ -5,6 +5,7 @@
 * `TextLayoutSpan` to obtain `Layout` in which markdown is displayed (applied by `TablePlugin`, more specifically `TableRowSpan` to propagate layout in which cell content is displayed)
 * `HtmlEmptyTagReplacement` now is configurable by `HtmlPlugin`, `iframe` handling ([#235])
 * `AsyncDrawableLoader` now uses `TextView` width without padding instead of width of canvas
+* Support for images inside table cells (`ext-tables` module)
 
 [#235]: https://github.com/noties/Markwon/issues/235
 

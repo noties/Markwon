@@ -68,7 +68,8 @@ public class LatexActivity extends ActivityWithMenuOptions {
                 .add("textColor", this::textColor)
                 .add("defaultTextColor", this::defaultTextColor)
                 .add("inlineAndBlock", this::inlineAndBlock)
-                .add("dark", this::dark);
+                .add("dark", this::dark)
+                .add("omega", this::omega);
     }
 
     @Override
@@ -218,6 +219,18 @@ public class LatexActivity extends ActivityWithMenuOptions {
         final String md = "" +
                 "# LaTeX inside a blockquote\n" +
                 "> $$" + latex + "$$\n";
+        renderWithBlocksAndInlines(md);
+    }
+
+    private void omega() {
+        final String md = "" +
+                "# Block\n\n" +
+                "$$\n" +
+                "\\Omega\n" +
+                "$$\n\n" +
+                "# Inline\n\n" +
+                "$$\\Omega$$";
+
         renderWithBlocksAndInlines(md);
     }
 

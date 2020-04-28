@@ -7,10 +7,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
-import io.noties.markwon.ext.tables.TableTheme;
+import io.noties.markwon.image.ImagesPlugin;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
 import io.noties.markwon.sample.MenuOptions;
@@ -25,7 +26,9 @@ public class TableActivity extends ActivityWithMenuOptions {
     public MenuOptions menuOptions() {
         return MenuOptions.create()
                 .add("customize", this::customize)
-                .add("tableAndLinkify", this::tableAndLinkify);
+                .add("tableAndLinkify", this::tableAndLinkify)
+                .add("withImages", this::withImages)
+                .add("withLatex", this::withLatex);
     }
 
     private TextView textView;
@@ -81,6 +84,49 @@ public class TableActivity extends ActivityWithMenuOptions {
 
         final Markwon markwon = Markwon.builder(this)
                 .usePlugin(LinkifyPlugin.create())
+                .usePlugin(TablePlugin.create(this))
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void withImages() {
+
+        final String md = "" +
+                "| HEADER | HEADER |\n" +
+                "|:----:|:----:|\n" +
+                "| ![Build](https://github.com/noties/Markwon/workflows/Build/badge.svg) | Build |\n" +
+                "| Stable | ![stable](https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=stable) |\n" +
+                "| BIG | ![image](https://images.pexels.com/photos/41171/brussels-sprouts-sprouts-cabbage-grocery-41171.jpeg) |\n" +
+                "\n";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(TablePlugin.create(this))
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void withLatex() {
+
+        String latex = "\\begin{array}{cc}";
+        latex += "\\fbox{\\text{A framed box with \\textdbend}}&\\shadowbox{\\text{A shadowed box}}\\cr";
+        latex += "\\doublebox{\\text{A double framed box}}&\\ovalbox{\\text{An oval framed box}}\\cr";
+        latex += "\\end{array}";
+
+        final String md = "" +
+                "| HEADER | HEADER |\n" +
+                "|:----:|:----:|\n" +
+                "| ![Build](https://github.com/noties/Markwon/workflows/Build/badge.svg) | Build |\n" +
+                "| Stable | ![stable](https://img.shields.io/maven-central/v/io.noties.markwon/core.svg?label=stable) |\n" +
+                "| BIG | $$" + latex + "$$ |\n" +
+                "\n";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> builder.inlinesEnabled(true)))
                 .usePlugin(TablePlugin.create(this))
                 .build();
 

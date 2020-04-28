@@ -530,7 +530,20 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @NonNull
         @Override
         public Rect resolveImageSize(@NonNull AsyncDrawable drawable) {
-            return drawable.getResult().getBounds();
+
+            // @since $nap; resolve inline size (scale down if exceed available width)
+            final Rect imageBounds = drawable.getResult().getBounds();
+            final int canvasWidth = drawable.getLastKnownCanvasWidth();
+            final int w = imageBounds.width();
+
+            if (w > canvasWidth) {
+                // here we must scale it down (keeping the ratio)
+                final float ratio = (float) w / imageBounds.height();
+                final int h = (int) (canvasWidth / ratio + .5F);
+                return new Rect(0, 0, canvasWidth, h);
+            }
+
+            return imageBounds;
         }
     }
 }
