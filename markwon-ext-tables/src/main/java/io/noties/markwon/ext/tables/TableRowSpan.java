@@ -151,8 +151,9 @@ public class TableRowSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint p) {
 
-        if (recreateLayouts(SpanUtils.width(canvas, text))) {
-            width = canvas.getWidth();
+        final int spanWidth = SpanUtils.width(canvas, text);
+        if (recreateLayouts(spanWidth)) {
+            width = spanWidth;
             // @since 4.3.1 it's important to cast to TextPaint in order to display links, etc
             if (p instanceof TextPaint) {
                 // there must be a reason why this method receives Paint instead of TextPaint...
