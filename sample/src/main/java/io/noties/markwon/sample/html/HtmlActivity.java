@@ -44,7 +44,7 @@ public class HtmlActivity extends ActivityWithMenuOptions {
                 .add("randomCharSize", this::randomCharSize)
                 .add("enhance", this::enhance)
                 .add("image", this::image)
-                .add("elegantUnderline", this::elegantUnderline)
+//                .add("elegantUnderline", this::elegantUnderline)
                 .add("iframe", this::iframe)
                 .add("emptyTagReplacement", this::emptyTagReplacement);
     }
@@ -60,8 +60,8 @@ public class HtmlActivity extends ActivityWithMenuOptions {
         // let's define some custom tag-handlers
 
         textView = findViewById(R.id.text_view);
-
-        elegantUnderline();
+        
+        emptyTagReplacement();
     }
 
     // we can use `SimpleTagHandler` for _simple_ cases (when the whole tag content
