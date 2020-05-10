@@ -128,7 +128,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
             LoadRequest request = coilStore.load(drawable).newBuilder()
                     .target(target)
                     .build();
-            RequestDisposable disposable = imageLoader.load(request);
+            RequestDisposable disposable = imageLoader.execute(request);
             cache.put(drawable, disposable);
         }
 
