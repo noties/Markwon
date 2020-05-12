@@ -3,10 +3,11 @@ package io.noties.markwon.image.file;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -18,7 +19,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import io.noties.markwon.urlprocessor.UrlProcessorAndroidAssets;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.SchemeHandler;
 
@@ -30,7 +30,7 @@ public class FileSchemeHandler extends SchemeHandler {
     public static final String SCHEME = "file";
 
     /**
-     * @see UrlProcessorAndroidAssets
+     * @see io.noties.markwon.image.destination.ImageDestinationProcessorAssets
      */
     @NonNull
     public static FileSchemeHandler createWithAssets(@NonNull AssetManager assetManager) {
@@ -39,7 +39,7 @@ public class FileSchemeHandler extends SchemeHandler {
 
     /**
      * @see #createWithAssets(AssetManager)
-     * @see UrlProcessorAndroidAssets
+     * @see io.noties.markwon.image.destination.ImageDestinationProcessorAssets
      * @since 4.0.0
      */
     @NonNull

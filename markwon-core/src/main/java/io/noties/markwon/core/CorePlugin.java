@@ -320,7 +320,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final boolean link = parent instanceof Link;
 
                 final String destination = configuration
-                        .urlProcessor()
+                        .imageDestinationProcessor()
                         .process(image.getDestination());
 
                 final RenderProps props = visitor.renderProps();
@@ -524,8 +524,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
                 visitor.visitChildren(link);
 
-                final MarkwonConfiguration configuration = visitor.configuration();
-                final String destination = configuration.urlProcessor().process(link.getDestination());
+                final String destination = link.getDestination();
 
                 CoreProps.LINK_DESTINATION.set(visitor.renderProps(), destination);
 

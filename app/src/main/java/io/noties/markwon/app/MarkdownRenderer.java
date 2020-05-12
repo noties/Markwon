@@ -24,6 +24,8 @@ import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.image.ImagesPlugin;
+import io.noties.markwon.image.destination.ImageDestinationProcessor;
+import io.noties.markwon.image.destination.ImageDestinationProcessorRelativeToAbsolute;
 import io.noties.markwon.image.file.FileSchemeHandler;
 import io.noties.markwon.image.gif.GifMediaDecoder;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
@@ -31,8 +33,6 @@ import io.noties.markwon.syntax.Prism4jTheme;
 import io.noties.markwon.syntax.Prism4jThemeDarkula;
 import io.noties.markwon.syntax.Prism4jThemeDefault;
 import io.noties.markwon.syntax.SyntaxHighlightPlugin;
-import io.noties.markwon.urlprocessor.UrlProcessor;
-import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import io.noties.prism4j.Prism4j;
 
 @ActivityScope
@@ -86,11 +86,11 @@ public class MarkdownRenderer {
             }
 
             private void execute() {
-                final UrlProcessor urlProcessor;
+                final ImageDestinationProcessor imageDestinationProcessor;
                 if (uri == null) {
-                    urlProcessor = new UrlProcessorInitialReadme();
+                    imageDestinationProcessor = new ImageDestinationProcessorInitialReadme();
                 } else {
-                    urlProcessor = new UrlProcessorRelativeToAbsolute(uri.toString());
+                    imageDestinationProcessor = new ImageDestinationProcessorRelativeToAbsolute(uri.toString());
                 }
 
                 final Prism4jTheme prism4jTheme = isLightTheme
@@ -119,7 +119,7 @@ public class MarkdownRenderer {
                         .usePlugin(new AbstractMarkwonPlugin() {
                             @Override
                             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                                builder.urlProcessor(urlProcessor);
+                                builder.imageDestinationProcessor(imageDestinationProcessor);
                             }
                         })
                         .build();

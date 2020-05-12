@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.BlockHandlerDef;
+import io.noties.markwon.LinkResolverDef;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
@@ -153,7 +155,7 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
      * <ul>
      * <li>SyntaxHighlight</li>
      * <li>LinkSpan.Resolver</li>
-     * <li>UrlProcessor</li>
+     * <li>ImageDestinationProcessor</li>
      * <li>ImageSizeResolver</li>
      * </ul>
      * <p>
@@ -173,12 +175,18 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         // for example if specified destination has no scheme info, we will
                         // _assume_ that it's network request and append HTTPS scheme
-                        builder.urlProcessor(destination -> {
-                            final Uri uri = Uri.parse(destination);
-                            if (TextUtils.isEmpty(uri.getScheme())) {
-                                return "https://" + destination;
+                        builder.linkResolver(new LinkResolverDef() {
+                            @Override
+                            public void resolve(@NonNull View view, @NonNull String link) {
+                                final String destination;
+                                final Uri uri = Uri.parse(link);
+                                if (TextUtils.isEmpty(uri.getScheme())) {
+                                    destination = "https://" + link;
+                                } else {
+                                    destination = link;
+                                }
+                                super.resolve(view, destination);
                             }
-                            return destination;
                         });
                     }
                 })

@@ -6,15 +6,13 @@ import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.ImageSizeResolver;
 import io.noties.markwon.image.ImageSizeResolverDef;
+import io.noties.markwon.image.destination.ImageDestinationProcessor;
 import io.noties.markwon.syntax.SyntaxHighlight;
 import io.noties.markwon.syntax.SyntaxHighlightNoOp;
-import io.noties.markwon.urlprocessor.UrlProcessor;
-import io.noties.markwon.urlprocessor.UrlProcessorNoOp;
 
 /**
  * since 3.0.0 renamed `SpannableConfiguration` -&gt; `MarkwonConfiguration`
  */
-@SuppressWarnings("WeakerAccess")
 public class MarkwonConfiguration {
 
     @NonNull
@@ -26,7 +24,8 @@ public class MarkwonConfiguration {
     private final AsyncDrawableLoader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkResolver linkResolver;
-    private final UrlProcessor urlProcessor;
+    // @since $nap;
+    private final ImageDestinationProcessor imageDestinationProcessor;
     private final ImageSizeResolver imageSizeResolver;
 
     // @since 3.0.0
@@ -37,7 +36,7 @@ public class MarkwonConfiguration {
         this.asyncDrawableLoader = builder.asyncDrawableLoader;
         this.syntaxHighlight = builder.syntaxHighlight;
         this.linkResolver = builder.linkResolver;
-        this.urlProcessor = builder.urlProcessor;
+        this.imageDestinationProcessor = builder.imageDestinationProcessor;
         this.imageSizeResolver = builder.imageSizeResolver;
         this.spansFactory = builder.spansFactory;
     }
@@ -62,9 +61,12 @@ public class MarkwonConfiguration {
         return linkResolver;
     }
 
+    /**
+     * @since $nap;
+     */
     @NonNull
-    public UrlProcessor urlProcessor() {
-        return urlProcessor;
+    public ImageDestinationProcessor imageDestinationProcessor() {
+        return imageDestinationProcessor;
     }
 
     @NonNull
@@ -87,7 +89,8 @@ public class MarkwonConfiguration {
         private AsyncDrawableLoader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
         private LinkResolver linkResolver;
-        private UrlProcessor urlProcessor;
+        // @since $nap;
+        private ImageDestinationProcessor imageDestinationProcessor;
         private ImageSizeResolver imageSizeResolver;
         private MarkwonSpansFactory spansFactory;
 
@@ -115,9 +118,12 @@ public class MarkwonConfiguration {
             return this;
         }
 
+        /**
+         * @since $nap;
+         */
         @NonNull
-        public Builder urlProcessor(@NonNull UrlProcessor urlProcessor) {
-            this.urlProcessor = urlProcessor;
+        public Builder imageDestinationProcessor(@NonNull ImageDestinationProcessor imageDestinationProcessor) {
+            this.imageDestinationProcessor = imageDestinationProcessor;
             return this;
         }
 
@@ -151,8 +157,9 @@ public class MarkwonConfiguration {
                 linkResolver = new LinkResolverDef();
             }
 
-            if (urlProcessor == null) {
-                urlProcessor = new UrlProcessorNoOp();
+            // @since $nap;
+            if (imageDestinationProcessor == null) {
+                imageDestinationProcessor = ImageDestinationProcessor.noOp();
             }
 
             if (imageSizeResolver == null) {

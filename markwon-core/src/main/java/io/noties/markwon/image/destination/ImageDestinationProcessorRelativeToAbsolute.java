@@ -1,4 +1,4 @@
-package io.noties.markwon.urlprocessor;
+package io.noties.markwon.image.destination;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,13 +6,28 @@ import androidx.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-@SuppressWarnings("WeakerAccess")
-public class UrlProcessorRelativeToAbsolute implements UrlProcessor {
+/**
+ * @since $nap;
+ */
+public class ImageDestinationProcessorRelativeToAbsolute extends ImageDestinationProcessor {
+
+    @NonNull
+    public static ImageDestinationProcessorRelativeToAbsolute create(@NonNull String base) {
+        return new ImageDestinationProcessorRelativeToAbsolute(base);
+    }
+
+    public static ImageDestinationProcessorRelativeToAbsolute create(@NonNull URL base) {
+        return new ImageDestinationProcessorRelativeToAbsolute(base);
+    }
 
     private final URL base;
 
-    public UrlProcessorRelativeToAbsolute(@NonNull String base) {
+    public ImageDestinationProcessorRelativeToAbsolute(@NonNull String base) {
         this.base = obtain(base);
+    }
+
+    public ImageDestinationProcessorRelativeToAbsolute(@NonNull URL base) {
+        this.base = base;
     }
 
     @NonNull
