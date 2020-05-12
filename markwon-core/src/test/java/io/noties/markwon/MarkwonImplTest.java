@@ -1,6 +1,7 @@
 package io.noties.markwon;
 
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import org.commonmark.node.Node;
@@ -50,7 +51,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
                 mock(MarkwonConfiguration.class),
-                Collections.singletonList(plugin));
+                Collections.singletonList(plugin),
+                true
+        );
 
         impl.parse("whatever");
 
@@ -74,7 +77,9 @@ public class MarkwonImplTest {
                 parser,
                 mock(MarkwonVisitorFactory.class),
                 mock(MarkwonConfiguration.class),
-                Arrays.asList(first, second));
+                Arrays.asList(first, second),
+                true
+        );
 
         impl.parse("zero");
 
@@ -102,7 +107,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 visitorFactory,
                 mock(MarkwonConfiguration.class),
-                Collections.singletonList(plugin));
+                Collections.singletonList(plugin),
+                true
+        );
 
         when(visitorFactory.create()).thenReturn(visitor);
         when(visitor.builder()).thenReturn(builder);
@@ -149,7 +156,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 visitorFactory,
                 mock(MarkwonConfiguration.class),
-                Collections.<MarkwonPlugin>emptyList());
+                Collections.<MarkwonPlugin>emptyList(),
+                true
+        );
 
         impl.render(mock(Node.class));
 
@@ -185,7 +194,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 visitorFactory,
                 mock(MarkwonConfiguration.class),
-                Collections.singletonList(plugin));
+                Collections.singletonList(plugin),
+                true
+        );
 
         final AtomicBoolean flag = new AtomicBoolean(false);
         final Node node = mock(Node.class);
@@ -224,7 +235,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class, RETURNS_MOCKS),
                 mock(MarkwonConfiguration.class),
-                Collections.singletonList(plugin));
+                Collections.singletonList(plugin),
+                true
+        );
 
         final TextView textView = mock(TextView.class);
         final AtomicBoolean flag = new AtomicBoolean(false);
@@ -272,7 +285,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
                 mock(MarkwonConfiguration.class),
-                plugins);
+                plugins,
+                true
+        );
 
         assertTrue("First", impl.hasPlugin(First.class));
         assertFalse("Second", impl.hasPlugin(Second.class));
@@ -295,7 +310,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
                 mock(MarkwonConfiguration.class),
-                Collections.singletonList(plugin));
+                Collections.singletonList(plugin),
+                true
+        );
 
         final TextView textView = mock(TextView.class);
         final Spanned spanned = mock(Spanned.class);
@@ -339,7 +356,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
                 mock(MarkwonConfiguration.class),
-                plugins);
+                plugins,
+                true
+        );
 
         // should be returned
         assertNotNull(impl.requirePlugin(MarkwonPlugin.class));
@@ -370,7 +389,9 @@ public class MarkwonImplTest {
                 mock(Parser.class),
                 mock(MarkwonVisitorFactory.class),
                 mock(MarkwonConfiguration.class),
-                plugins);
+                plugins,
+                true
+        );
 
         final List<? extends MarkwonPlugin> list = impl.getPlugins();
 
@@ -384,5 +405,43 @@ public class MarkwonImplTest {
         } catch (UnsupportedOperationException e) {
             assertTrue(e.getMessage(), true);
         }
+    }
+
+    @Test
+    public void fallback_to_raw() {
+        final String md = "*";
+
+        final MarkwonImpl impl = new MarkwonImpl(
+                TextView.BufferType.SPANNABLE,
+                null,
+                mock(Parser.class, RETURNS_MOCKS),
+                // it must be sufficient to just return mocks and thus empty rendering result
+                mock(MarkwonVisitorFactory.class, RETURNS_MOCKS),
+                mock(MarkwonConfiguration.class),
+                Collections.<MarkwonPlugin>emptyList(),
+                true
+        );
+
+        final Spanned spanned = impl.toMarkdown(md);
+        assertEquals(md, spanned.toString());
+    }
+
+    @Test
+    public void fallback_to_raw_false() {
+        final String md = "*";
+
+        final MarkwonImpl impl = new MarkwonImpl(
+                TextView.BufferType.SPANNABLE,
+                null,
+                mock(Parser.class, RETURNS_MOCKS),
+                // it must be sufficient to just return mocks and thus empty rendering result
+                mock(MarkwonVisitorFactory.class, RETURNS_MOCKS),
+                mock(MarkwonConfiguration.class),
+                Collections.<MarkwonPlugin>emptyList(),
+                false
+        );
+
+        final Spanned spanned = impl.toMarkdown(md);
+        assertTrue(spanned.toString(), TextUtils.isEmpty(spanned));
     }
 }

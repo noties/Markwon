@@ -27,6 +27,9 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
     private Markwon.TextSetter textSetter;
 
+    // @since $nap;
+    private boolean fallbackToRawInputWhenEmpty = true;
+
     MarkwonBuilderImpl(@NonNull Context context) {
         this.context = context;
     }
@@ -73,6 +76,13 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
     @NonNull
     @Override
+    public Markwon.Builder fallbackToRawInputWhenEmpty(boolean fallbackToRawInputWhenEmpty) {
+        this.fallbackToRawInputWhenEmpty = fallbackToRawInputWhenEmpty;
+        return this;
+    }
+
+    @NonNull
+    @Override
     public Markwon build() {
 
         if (plugins.isEmpty()) {
@@ -114,7 +124,8 @@ class MarkwonBuilderImpl implements Markwon.Builder {
                 parserBuilder.build(),
                 visitorFactory,
                 configuration,
-                Collections.unmodifiableList(plugins)
+                Collections.unmodifiableList(plugins),
+                fallbackToRawInputWhenEmpty
         );
     }
 

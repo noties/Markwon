@@ -1,6 +1,8 @@
 package io.noties.markwon;
 
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,19 +30,25 @@ class MarkwonImpl extends Markwon {
     @Nullable
     private final TextSetter textSetter;
 
+    // @since $nap;
+    private final boolean fallbackToRawInputWhenEmpty;
+
     MarkwonImpl(
             @NonNull TextView.BufferType bufferType,
             @Nullable TextSetter textSetter,
             @NonNull Parser parser,
             @NonNull MarkwonVisitorFactory visitorFactory,
             @NonNull MarkwonConfiguration configuration,
-            @NonNull List<MarkwonPlugin> plugins) {
+            @NonNull List<MarkwonPlugin> plugins,
+            boolean fallbackToRawInputWhenEmpty
+    ) {
         this.bufferType = bufferType;
         this.textSetter = textSetter;
         this.parser = parser;
         this.visitorFactory = visitorFactory;
         this.configuration = configuration;
         this.plugins = plugins;
+        this.fallbackToRawInputWhenEmpty = fallbackToRawInputWhenEmpty;
     }
 
     @NonNull
@@ -86,7 +94,18 @@ class MarkwonImpl extends Markwon {
     @NonNull
     @Override
     public Spanned toMarkdown(@NonNull String input) {
-        return render(parse(input));
+        final Spanned spanned = render(parse(input));
+
+        // @since $nap;
+        // if spanned is empty, we are configured to use raw input and input is not empty
+        if (TextUtils.isEmpty(spanned)
+                && fallbackToRawInputWhenEmpty
+                && !TextUtils.isEmpty(input)) {
+            // let's use SpannableStringBuilder in order to keep backward-compatibility
+            return new SpannableStringBuilder(input);
+        }
+
+        return spanned;
     }
 
     @Override

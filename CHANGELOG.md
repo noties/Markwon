@@ -9,11 +9,13 @@
 * Expose `enabledBlockTypes` in `CorePlugin`
 * Update `jlatexmath-android` dependency ([#225])
 * Update `image-coil` module (Coil version `0.10.1`) ([#244])<br>Thanks to [@tylerbwong]
-* Rename `UrlProcessor` to `ImageDestinationProcessor` (`io.noties.markwon.urlprocessor` -&gt; `io.noties.markwon.image.destination`) and limit its usage to process **only** destination URL of images (was used to also process links before) 
+* Rename `UrlProcessor` to `ImageDestinationProcessor` (`io.noties.markwon.urlprocessor` -&gt; `io.noties.markwon.image.destination`) and limit its usage to process **only** destination URL of images (was used to also process links before)
+* `fallbackToRawInputWhenEmpty` `Markwon.Builder` configuration to fallback to raw input if rendered markdown is empty ([#242]) 
 
 [#235]: https://github.com/noties/Markwon/issues/235
 [#225]: https://github.com/noties/Markwon/issues/225
 [#244]: https://github.com/noties/Markwon/pull/244
+[#242]: https://github.com/noties/Markwon/issues/242
 [@tylerbwong]: https://github.com/tylerbwong
 
 
