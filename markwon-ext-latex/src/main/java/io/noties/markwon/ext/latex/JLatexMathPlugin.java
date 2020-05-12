@@ -458,8 +458,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
                     .textSize(theme.blockTextSize())
-                    .align(theme.blockHorizontalAlignment())
-                    .fitCanvas(theme.blockFitCanvas());
+                    .align(theme.blockHorizontalAlignment());
 
             if (backgroundProvider != null) {
                 builder.background(backgroundProvider.provide());
@@ -489,8 +488,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             final int color = theme.inlineTextColor();
 
             final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
-                    .textSize(theme.inlineTextSize())
-                    .fitCanvas(false);
+                    .textSize(theme.inlineTextSize());
 
             if (backgroundProvider != null) {
                 builder.background(backgroundProvider.provide());
