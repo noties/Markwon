@@ -8,9 +8,12 @@
 * Support for images inside table cells (`ext-tables` module)
 * Expose `enabledBlockTypes` in `CorePlugin`
 * Update `jlatexmath-android` dependency ([#225])
+* Update `image-coil` module (Coil version `0.10.1`) ([#244])<br>Thanks to [@tylerbwong]
 
 [#235]: https://github.com/noties/Markwon/issues/235
 [#225]: https://github.com/noties/Markwon/issues/225
+[#244]: https://github.com/noties/Markwon/pull/244
+[@tylerbwong]: https://github.com/tylerbwong
 
 
 # 4.3.1
