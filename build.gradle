@@ -80,7 +80,7 @@ ext {
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
             'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
             'glide'                   : 'com.github.bumptech.glide:glide:4.9.0',
-            'coil'                    : 'io.coil-kt:coil:0.8.0'
+            'coil'                    : 'io.coil-kt:coil:0.10.1'
     ]
 
     deps['annotationProcessor'] = [
