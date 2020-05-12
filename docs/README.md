@@ -99,12 +99,7 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
 ## # Awesome Markwon
 
 </div>
-
-<u>Applications using Markwon</u>:
-
-* [Partico](https://partiko.app/) - Partiko is a censorship free social network.
-* [FairNote](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote) - simple and intuitive notepad app. It gives you speed and efficiency when you write notes, to-do lists, e-mails, or jot down quick ideas.
-* [Boxcryptor](https://www.boxcryptor.com) - A software that adds AES-256 and RSA encryption to Dropbox, Google Drive, OneDrive and many other clouds.
+<br>
 
 <AwesomeGroup :apps="[
     {name: 'Nextcloud', image: $withBase(`/assets/apps/nextcloud.png`), link: 'https://github.com/nextcloud/android', description: 'A safe home for all your data. Access & share your files, calendars, contacts, mail & more from any device, on your terms.'},
@@ -112,6 +107,11 @@ and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](ht
     {name: 'Cinopsys: Movies and Shows', image: $withBase(`/assets/apps/cinopsys.png`), link: 'https://play.google.com/store/apps/details?id=com.cinopsys.movieshows'},
     {name: 'Pure Writer', image: $withBase(`/assets/apps/purewriter.png`), link: 'https://play.google.com/store/apps/details?id=com.drakeet.purewriter', description: 'Never lose content editor & Markdown'}
 ]" />
+
+* [Partico](https://partiko.app/) - Partiko is a censorship free social network.
+* [FairNote](https://play.google.com/store/apps/details?id=com.rgiskard.fairnote) - simple and intuitive notepad app. It gives you speed and efficiency when you write notes, to-do lists, e-mails, or jot down quick ideas.
+* [Boxcryptor](https://www.boxcryptor.com) - A software that adds AES-256 and RSA encryption to Dropbox, Google Drive, OneDrive and many other clouds.
+* [Senstone Portable Voice Assistant](https://play.google.com/store/apps/details?id=com.senstone) - Senstone is a tiny wearable personal assistant powered by this App. It lets you capture your ideas, notes and reminders handsfree without pulling out your phone. 
 
 
 <u>Extension/plugins</u>:
