@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
 /**
  * A special span that allows to obtain {@code TextView} in which spans are displayed
  *
- * @since $nap;
+ * @since 4.4.0
  */
 public class TextViewSpan {
 

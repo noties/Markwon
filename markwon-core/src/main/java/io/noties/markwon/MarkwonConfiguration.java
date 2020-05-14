@@ -24,7 +24,7 @@ public class MarkwonConfiguration {
     private final AsyncDrawableLoader asyncDrawableLoader;
     private final SyntaxHighlight syntaxHighlight;
     private final LinkResolver linkResolver;
-    // @since $nap;
+    // @since 4.4.0
     private final ImageDestinationProcessor imageDestinationProcessor;
     private final ImageSizeResolver imageSizeResolver;
 
@@ -62,7 +62,7 @@ public class MarkwonConfiguration {
     }
 
     /**
-     * @since $nap;
+     * @since 4.4.0
      */
     @NonNull
     public ImageDestinationProcessor imageDestinationProcessor() {
@@ -89,7 +89,7 @@ public class MarkwonConfiguration {
         private AsyncDrawableLoader asyncDrawableLoader;
         private SyntaxHighlight syntaxHighlight;
         private LinkResolver linkResolver;
-        // @since $nap;
+        // @since 4.4.0
         private ImageDestinationProcessor imageDestinationProcessor;
         private ImageSizeResolver imageSizeResolver;
         private MarkwonSpansFactory spansFactory;
@@ -119,7 +119,7 @@ public class MarkwonConfiguration {
         }
 
         /**
-         * @since $nap;
+         * @since 4.4.0
          */
         @NonNull
         public Builder imageDestinationProcessor(@NonNull ImageDestinationProcessor imageDestinationProcessor) {
@@ -157,7 +157,7 @@ public class MarkwonConfiguration {
                 linkResolver = new LinkResolverDef();
             }
 
-            // @since $nap;
+            // @since 4.4.0
             if (imageDestinationProcessor == null) {
                 imageDestinationProcessor = ImageDestinationProcessor.noOp();
             }

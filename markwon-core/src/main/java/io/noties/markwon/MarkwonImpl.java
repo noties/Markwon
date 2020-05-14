@@ -30,7 +30,7 @@ class MarkwonImpl extends Markwon {
     @Nullable
     private final TextSetter textSetter;
 
-    // @since $nap;
+    // @since 4.4.0
     private final boolean fallbackToRawInputWhenEmpty;
 
     MarkwonImpl(
@@ -96,7 +96,7 @@ class MarkwonImpl extends Markwon {
     public Spanned toMarkdown(@NonNull String input) {
         final Spanned spanned = render(parse(input));
 
-        // @since $nap;
+        // @since 4.4.0
         // if spanned is empty, we are configured to use raw input and input is not empty
         if (TextUtils.isEmpty(spanned)
                 && fallbackToRawInputWhenEmpty

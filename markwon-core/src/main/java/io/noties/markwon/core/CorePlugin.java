@@ -97,7 +97,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
     /**
      * @return a set with enabled by default block types
-     * @since $nap;
+     * @since 4.4.0
      */
     @NonNull
     public static Set<Class<? extends Block>> enabledBlockTypes() {
@@ -175,7 +175,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         OrderedListItemSpan.measure(textView, markdown);
 
-        // @since $nap;
+        // @since 4.4.0
         // we do not break API compatibility, instead we introduce the `instance of` check
         if (markdown instanceof Spannable) {
             final Spannable spannable = (Spannable) markdown;

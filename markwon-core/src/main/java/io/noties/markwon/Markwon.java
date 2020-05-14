@@ -196,9 +196,9 @@ public abstract class Markwon {
          * Control if small chunks of non-finished markdown sentences (for example, a single `*` character)
          * should be displayed/rendered as raw input instead of an empty string.
          * <p>
-         * Since $nap; {@code true} by default, versions prior - {@code false}
+         * Since 4.4.0 {@code true} by default, versions prior - {@code false}
          *
-         * @since $nap;
+         * @since 4.4.0
          */
         @NonNull
         Builder fallbackToRawInputWhenEmpty(boolean fallbackToRawInputWhenEmpty);

@@ -6,7 +6,7 @@ import android.text.Layout;
 import androidx.annotation.NonNull;
 
 /**
- * @since $nap;
+ * @since 4.4.0
  */
 public abstract class LayoutUtils {
 

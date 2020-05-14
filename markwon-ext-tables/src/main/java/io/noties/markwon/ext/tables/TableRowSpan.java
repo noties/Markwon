@@ -339,10 +339,10 @@ public class TableRowSpan extends ReplacementSpan {
                 false
         );
 
-        // @since $nap;
+        // @since 4.4.0
         TextLayoutSpan.applyTo(spannable, layout);
 
-        // @since $nap;
+        // @since 4.4.0
         scheduleAsyncDrawables(spannable, recreate);
 
         layouts.add(index, layout);

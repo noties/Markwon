@@ -27,7 +27,7 @@ class MarkwonBuilderImpl implements Markwon.Builder {
 
     private Markwon.TextSetter textSetter;
 
-    // @since $nap;
+    // @since 4.4.0
     private boolean fallbackToRawInputWhenEmpty = true;
 
     MarkwonBuilderImpl(@NonNull Context context) {

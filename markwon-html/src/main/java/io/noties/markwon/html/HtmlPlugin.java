@@ -57,7 +57,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     private MarkwonHtmlParser htmlParser;
     private MarkwonHtmlRenderer htmlRenderer;
 
-    // @since $nap;
+    // @since 4.4.0
     private HtmlEmptyTagReplacement emptyTagReplacement = new HtmlEmptyTagReplacement();
 
     @SuppressWarnings("WeakerAccess")
@@ -109,7 +109,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
 
     /**
      * @param emptyTagReplacement {@link HtmlEmptyTagReplacement}
-     * @since $nap;
+     * @since 4.4.0
      */
     @NonNull
     public HtmlPlugin emptyTagReplacement(@NonNull HtmlEmptyTagReplacement emptyTagReplacement) {

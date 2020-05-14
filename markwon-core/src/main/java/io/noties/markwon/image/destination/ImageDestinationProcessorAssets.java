@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
  * {@code FileSchemeHandler} from the {@code image} module supports asset images when created with
  * {@code createWithAssets} factory method
  *
- * @since $nap;
+ * @since 4.4.0
  */
 public class ImageDestinationProcessorAssets extends ImageDestinationProcessor {
 

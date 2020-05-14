@@ -11,7 +11,7 @@ import io.noties.markwon.core.spans.TextLayoutSpan;
 import io.noties.markwon.core.spans.TextViewSpan;
 
 /**
- * @since $nap;
+ * @since 4.4.0
  */
 public abstract class SpanUtils {
 

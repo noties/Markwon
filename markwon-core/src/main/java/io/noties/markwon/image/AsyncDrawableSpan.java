@@ -100,7 +100,7 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
-        // @since $nap; use SpanUtils instead of `canvas.getWidth`
+        // @since 4.4.0 use SpanUtils instead of `canvas.getWidth`
         drawable.initWithKnownDimensions(
                 SpanUtils.width(canvas, text),
                 paint.getTextSize()

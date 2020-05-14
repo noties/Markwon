@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * @since $nap;
+ * @since 4.4.0
  */
 public class ImageDestinationProcessorRelativeToAbsolute extends ImageDestinationProcessor {
 

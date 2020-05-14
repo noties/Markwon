@@ -46,7 +46,7 @@ public class HtmlEmptyTagReplacement {
                 replacement = alt;
             }
         } else if ("iframe".equals(name)) {
-            // @since $nap; make iframe non-empty
+            // @since 4.4.0 make iframe non-empty
             replacement = IFRAME_REPLACEMENT;
         } else {
             replacement = null;

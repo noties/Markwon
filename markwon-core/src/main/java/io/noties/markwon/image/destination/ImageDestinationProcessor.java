@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 /**
  * Process destination of image nodes
  *
- * @since $nap;
+ * @since 4.4.0
  */
 public abstract class ImageDestinationProcessor {
     @NonNull

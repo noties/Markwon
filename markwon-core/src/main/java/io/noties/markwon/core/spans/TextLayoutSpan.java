@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import java.lang.ref.WeakReference;
 
 /**
- * @since $nap;
+ * @since 4.4.0
  */
 public class TextLayoutSpan {
 
