@@ -458,8 +458,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
             final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
                     .textSize(theme.blockTextSize())
-                    .align(theme.blockHorizontalAlignment())
-                    .fitCanvas(theme.blockFitCanvas());
+                    .align(theme.blockHorizontalAlignment());
 
             if (backgroundProvider != null) {
                 builder.background(backgroundProvider.provide());
@@ -489,8 +488,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             final int color = theme.inlineTextColor();
 
             final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
-                    .textSize(theme.inlineTextSize())
-                    .fitCanvas(false);
+                    .textSize(theme.inlineTextSize());
 
             if (backgroundProvider != null) {
                 builder.background(backgroundProvider.provide());
@@ -530,7 +528,20 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @NonNull
         @Override
         public Rect resolveImageSize(@NonNull AsyncDrawable drawable) {
-            return drawable.getResult().getBounds();
+
+            // @since 4.4.0 resolve inline size (scale down if exceed available width)
+            final Rect imageBounds = drawable.getResult().getBounds();
+            final int canvasWidth = drawable.getLastKnownCanvasWidth();
+            final int w = imageBounds.width();
+
+            if (w > canvasWidth) {
+                // here we must scale it down (keeping the ratio)
+                final float ratio = (float) w / imageBounds.height();
+                final int h = (int) (canvasWidth / ratio + .5F);
+                return new Rect(0, 0, canvasWidth, h);
+            }
+
+            return imageBounds;
         }
     }
 }

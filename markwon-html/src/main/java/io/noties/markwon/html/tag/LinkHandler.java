@@ -27,7 +27,8 @@ public class LinkHandler extends SimpleTagHandler {
 
                 CoreProps.LINK_DESTINATION.set(
                         renderProps,
-                        configuration.urlProcessor().process(destination));
+                        destination
+                );
 
                 return spanFactory.getSpans(configuration, renderProps);
             }

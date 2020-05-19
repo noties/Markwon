@@ -53,13 +53,16 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
     public static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
 
     private final MarkwonHtmlRendererImpl.Builder builder;
-    private final MarkwonHtmlParser htmlParser;
+
+    private MarkwonHtmlParser htmlParser;
     private MarkwonHtmlRenderer htmlRenderer;
+
+    // @since 4.4.0
+    private HtmlEmptyTagReplacement emptyTagReplacement = new HtmlEmptyTagReplacement();
 
     @SuppressWarnings("WeakerAccess")
     HtmlPlugin() {
         this.builder = new MarkwonHtmlRendererImpl.Builder();
-        this.htmlParser = MarkwonHtmlParserImpl.create();
     }
 
     /**
@@ -104,6 +107,16 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
         return this;
     }
 
+    /**
+     * @param emptyTagReplacement {@link HtmlEmptyTagReplacement}
+     * @since 4.4.0
+     */
+    @NonNull
+    public HtmlPlugin emptyTagReplacement(@NonNull HtmlEmptyTagReplacement emptyTagReplacement) {
+        this.emptyTagReplacement = emptyTagReplacement;
+        return this;
+    }
+
     @Override
     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder configurationBuilder) {
 
@@ -128,6 +141,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
             builder.addDefaultTagHandler(new HeadingHandler());
         }
 
+        htmlParser = MarkwonHtmlParserImpl.create(emptyTagReplacement);
         htmlRenderer = builder.build();
     }
 

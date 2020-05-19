@@ -1,4 +1,4 @@
-package io.noties.markwon.urlprocessor;
+package io.noties.markwon.image.destination;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,18 +6,18 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import static io.noties.markwon.image.destination.ImageDestinationProcessorAssets.BASE;
 import static org.junit.Assert.assertEquals;
-import static io.noties.markwon.urlprocessor.UrlProcessorAndroidAssets.BASE;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class UrlProcessorAndroidAssetsTest {
+public class ImageDestinationProcessorAssetsTest {
 
-    private UrlProcessorAndroidAssets processor;
+    private ImageDestinationProcessorAssets processor;
 
     @Before
     public void before() {
-        processor = new UrlProcessorAndroidAssets();
+        processor = new ImageDestinationProcessorAssets();
     }
 
     @Test

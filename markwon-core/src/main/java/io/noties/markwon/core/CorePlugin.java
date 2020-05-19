@@ -1,5 +1,6 @@
 package io.noties.markwon.core;
 
+import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import org.commonmark.node.Block;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
@@ -15,6 +17,7 @@ import org.commonmark.node.Emphasis;
 import org.commonmark.node.FencedCodeBlock;
 import org.commonmark.node.HardLineBreak;
 import org.commonmark.node.Heading;
+import org.commonmark.node.HtmlBlock;
 import org.commonmark.node.Image;
 import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Link;
@@ -29,7 +32,10 @@ import org.commonmark.node.Text;
 import org.commonmark.node.ThematicBreak;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
@@ -48,6 +54,7 @@ import io.noties.markwon.core.factory.ListItemSpanFactory;
 import io.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import io.noties.markwon.core.factory.ThematicBreakSpanFactory;
 import io.noties.markwon.core.spans.OrderedListItemSpan;
+import io.noties.markwon.core.spans.TextViewSpan;
 import io.noties.markwon.image.ImageProps;
 
 /**
@@ -86,6 +93,23 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     @NonNull
     public static CorePlugin create() {
         return new CorePlugin();
+    }
+
+    /**
+     * @return a set with enabled by default block types
+     * @since 4.4.0
+     */
+    @NonNull
+    public static Set<Class<? extends Block>> enabledBlockTypes() {
+        return new HashSet<>(Arrays.asList(
+                BlockQuote.class,
+                Heading.class,
+                FencedCodeBlock.class,
+                HtmlBlock.class,
+                ThematicBreak.class,
+                ListBlock.class,
+                IndentedCodeBlock.class
+        ));
     }
 
     // @since 4.0.0
@@ -150,6 +174,13 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
         OrderedListItemSpan.measure(textView, markdown);
+
+        // @since 4.4.0
+        // we do not break API compatibility, instead we introduce the `instance of` check
+        if (markdown instanceof Spannable) {
+            final Spannable spannable = (Spannable) markdown;
+            TextViewSpan.applyTo(spannable, textView);
+        }
     }
 
     @Override
@@ -289,7 +320,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final boolean link = parent instanceof Link;
 
                 final String destination = configuration
-                        .urlProcessor()
+                        .imageDestinationProcessor()
                         .process(image.getDestination());
 
                 final RenderProps props = visitor.renderProps();
@@ -493,8 +524,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
                 visitor.visitChildren(link);
 
-                final MarkwonConfiguration configuration = visitor.configuration();
-                final String destination = configuration.urlProcessor().process(link.getDestination());
+                final String destination = link.getDestination();
 
                 CoreProps.LINK_DESTINATION.set(visitor.renderProps(), destination);
 

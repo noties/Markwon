@@ -18,6 +18,7 @@ public class Dip {
 
     private final float density;
 
+    @SuppressWarnings("WeakerAccess")
     public Dip(float density) {
         this.density = density;
     }

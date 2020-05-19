@@ -21,6 +21,7 @@ public class HtmlEmptyTagReplacement {
     }
 
     private static final String IMG_REPLACEMENT = "\uFFFC";
+    private static final String IFRAME_REPLACEMENT = "\u00a0"; // non-breakable space
 
     /**
      * @return replacement for supplied startTag or null if no replacement should occur (which will
@@ -44,6 +45,9 @@ public class HtmlEmptyTagReplacement {
             } else {
                 replacement = alt;
             }
+        } else if ("iframe".equals(name)) {
+            // @since 4.4.0 make iframe non-empty
+            replacement = IFRAME_REPLACEMENT;
         } else {
             replacement = null;
         }

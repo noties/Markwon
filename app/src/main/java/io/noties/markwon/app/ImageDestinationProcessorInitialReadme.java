@@ -5,15 +5,15 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import io.noties.markwon.urlprocessor.UrlProcessor;
-import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
+import io.noties.markwon.image.destination.ImageDestinationProcessor;
+import io.noties.markwon.image.destination.ImageDestinationProcessorRelativeToAbsolute;
 
-class UrlProcessorInitialReadme implements UrlProcessor {
+class ImageDestinationProcessorInitialReadme extends ImageDestinationProcessor {
 
     private static final String GITHUB_BASE = "https://github.com/noties/Markwon/raw/master/";
 
-    private final UrlProcessorRelativeToAbsolute processor
-            = new UrlProcessorRelativeToAbsolute(GITHUB_BASE);
+    private final ImageDestinationProcessorRelativeToAbsolute processor
+            = new ImageDestinationProcessorRelativeToAbsolute(GITHUB_BASE);
 
     @NonNull
     @Override

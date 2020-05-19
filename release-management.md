@@ -38,7 +38,8 @@ For example, `@since $nap` seems like a good candidate. For this a live template
 whenever a new API method/field/functionality-change is introduced (`snc`):
 
 ```
-@since $nap;
+// semicolon with a space so this one is not accedentally replaced with release version
+@since $nap ;
 ```
 
 This live template would be possible to use in both inline comment and javadoc comment.

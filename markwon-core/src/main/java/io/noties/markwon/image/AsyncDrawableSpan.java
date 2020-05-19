@@ -14,6 +14,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.utils.SpanUtils;
 
 @SuppressWarnings("WeakerAccess")
 public class AsyncDrawableSpan extends ReplacementSpan {
@@ -99,7 +100,11 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint paint) {
 
-        drawable.initWithKnownDimensions(canvas.getWidth(), paint.getTextSize());
+        // @since 4.4.0 use SpanUtils instead of `canvas.getWidth`
+        drawable.initWithKnownDimensions(
+                SpanUtils.width(canvas, text),
+                paint.getTextSize()
+        );
 
         final AsyncDrawable drawable = this.drawable;
 

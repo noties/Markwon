@@ -8,8 +8,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.commonmark.node.Block;
+import org.commonmark.node.BlockQuote;
 import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
 
+import java.util.Set;
+
+import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
@@ -26,7 +32,8 @@ public class CoreActivity extends ActivityWithMenuOptions {
         return MenuOptions.create()
                 .add("simple", this::simple)
                 .add("toast", this::toast)
-                .add("alreadyParsed", this::alreadyParsed);
+                .add("alreadyParsed", this::alreadyParsed)
+                .add("enabledBlockTypes", this::enabledBlockTypes);
     }
 
     @Override
@@ -131,5 +138,29 @@ public class CoreActivity extends ActivityWithMenuOptions {
 
         // apply parsed markdown
         markwon.setParsedMarkdown(textView, spanned);
+    }
+
+    private void enabledBlockTypes() {
+
+        final String md = "" +
+                "# Head\n\n" +
+                "> and disabled quote\n\n" +
+                "```\n" +
+                "yep\n" +
+                "```";
+
+        final Set<Class<? extends Block>> blocks = CorePlugin.enabledBlockTypes();
+        blocks.remove(BlockQuote.class);
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureParser(@NonNull Parser.Builder builder) {
+                        builder.enabledBlockTypes(blocks);
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
     }
 }

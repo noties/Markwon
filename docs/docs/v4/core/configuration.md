@@ -5,7 +5,7 @@ These are _configurable_ properties:
 * `AsyncDrawableLoader` (back here since <Badge text="4.0.0" />)
 * `SyntaxHighlight`
 * `LinkResolver` (since <Badge text="4.0.0" />, before &mdash; `LinkSpan.Resolver`)
-* `UrlProcessor`
+* `ImageDestinationProcessor` (since <Badge text="4.4.0" />, before &mdash; `UrlProcessor`)
 * `ImageSizeResolver`
 
 :::tip
@@ -36,10 +36,11 @@ final Markwon markwon = Markwon.builder(context)
         .build();
 ```
 
-Currently `Markwon` provides 3 implementations for loading images:
+Currently `Markwon` provides 4 implementations for loading images:
 * [markwon implementation](/docs/v4/image/) with SVG, GIF, data uri and android_assets support
 * [based on Picasso](/docs/v4/image-picasso/)
 * [based on Glide](/docs/v4/image-glide/)
+* [base on Coil](/docs/v4/image-coil/)
 
 ## SyntaxHighlight
 
@@ -87,32 +88,32 @@ if there is none registered. if you wish to register own instance of a `Movement
 apply it directly to a TextView or use [MovementMethodPlugin](/docs/v4/core/movement-method-plugin.md)
 :::
 
-## UrlProcessor
+## ImageDestinationProcessor
 
-Process URLs in your markdown (for links and images). If not provided explicitly, 
+Process destinations (URLs) of images in your markdown. If not provided explicitly, 
 default **no-op** implementation will be used, which does not modify URLs (keeping them as-is).
 
 `Markwon` provides 2 implementations of `UrlProcessor`:
-* `UrlProcessorRelativeToAbsolute`
-* `UrlProcessorAndroidAssets`
+* `ImageDestinationProcessorRelativeToAbsolute`
+* `ImageDestinationProcessorAssets`
 
-### UrlProcessorRelativeToAbsolute
+### ImageDestinationProcessorRelativeToAbsolute
 
-`UrlProcessorRelativeToAbsolute` can be used to make relative URL absolute. For example if an image is
-defined like this: `![img](./art/image.JPG)` and `UrlProcessorRelativeToAbsolute`
+`ImageDestinationProcessorRelativeToAbsolute` can be used to make relative URL absolute. For example if an image is
+defined like this: `![img](./art/image.JPG)` and `ImageDestinationProcessorRelativeToAbsolute`
 is created with `https://github.com/noties/Markwon/raw/master/` as the base: 
-`new UrlProcessorRelativeToAbsolute("https://github.com/noties/Markwon/raw/master/")`,
+`new ImageDestinationProcessorRelativeToAbsolute("https://github.com/noties/Markwon/raw/master/")`,
 then final image will have `https://github.com/noties/Markwon/raw/master/art/image.JPG`
 as the destination.
 
-### UrlProcessorAndroidAssets
+### ImageDestinationProcessorAssets
 
-`UrlProcessorAndroidAssets` can be used to make processed links to point to Android assets folder.
+`ImageDestinationProcessorAssets` can be used to make processed destinations to point to Android assets folder.
 So an image: `![img](./art/image.JPG)` will have `file:///android_asset/art/image.JPG` as the
 destination.
 
 :::tip
-Please note that `UrlProcessorAndroidAssets` will process only URLs that have no `scheme` information,
+Please note that `ImageDestinationProcessorAssets` will process only URLs that have no `scheme` information,
 so a `./art/image.png` will become `file:///android_asset/art/image.JPG` whilst `https://so.me/where.png`
 will be kept as-is.
 :::

@@ -1,5 +1,24 @@
 # Changelog
 
+# 4.4.0
+* `TextViewSpan` to obtain `TextView` in which markdown is displayed (applied by `CorePlugin`)
+* `TextLayoutSpan` to obtain `Layout` in which markdown is displayed (applied by `TablePlugin`, more specifically `TableRowSpan` to propagate layout in which cell content is displayed)
+* `HtmlEmptyTagReplacement` now is configurable by `HtmlPlugin`, `iframe` handling ([#235])
+* `AsyncDrawable` now uses `TextView` width without padding instead of width of canvas
+* Support for images inside table cells (`ext-tables` module)
+* Expose `enabledBlockTypes` in `CorePlugin`
+* Update `jlatexmath-android` dependency ([#225])
+* Update `image-coil` module (Coil version `0.10.1`) ([#244])<br>Thanks to [@tylerbwong]
+* Rename `UrlProcessor` to `ImageDestinationProcessor` (`io.noties.markwon.urlprocessor` -&gt; `io.noties.markwon.image.destination`) and limit its usage to process **only** destination URL of images (was used to also process links before)
+* `fallbackToRawInputWhenEmpty` `Markwon.Builder` configuration to fallback to raw input if rendered markdown is empty ([#242]) 
+
+[#235]: https://github.com/noties/Markwon/issues/235
+[#225]: https://github.com/noties/Markwon/issues/225
+[#244]: https://github.com/noties/Markwon/pull/244
+[#242]: https://github.com/noties/Markwon/issues/242
+[@tylerbwong]: https://github.com/tylerbwong
+
+
 # 4.3.1
 * Fix DexGuard optimization issue ([#216])<br>Thanks [@francescocervone]
 * module `images`: `GifSupport` and `SvgSupport` use `Class.forName` instead access to full qualified class name

@@ -62,7 +62,7 @@ public class ImageHandler extends SimpleTagHandler {
             return null;
         }
 
-        final String destination = configuration.urlProcessor().process(src);
+        final String destination = configuration.imageDestinationProcessor().process(src);
         final ImageSize imageSize = imageSizeParser.parse(tag.attributes());
 
         // todo: replacement text is link... as we are not at block level

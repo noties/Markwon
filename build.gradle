@@ -72,7 +72,7 @@ ext {
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
             'android-svg'             : 'com.caverock:androidsvg:1.4',
             'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.15',
-            'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.1.1',
+            'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.2.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'io.noties:prism4j:2.0.0',
             'debug'                   : 'io.noties:debug:5.0.0@jar',
@@ -80,7 +80,7 @@ ext {
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
             'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
             'glide'                   : 'com.github.bumptech.glide:glide:4.9.0',
-            'coil'                    : 'io.coil-kt:coil:0.8.0'
+            'coil'                    : 'io.coil-kt:coil:0.10.1'
     ]
 
     deps['annotationProcessor'] = [

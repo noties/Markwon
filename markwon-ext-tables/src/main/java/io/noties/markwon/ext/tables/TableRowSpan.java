@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -20,7 +23,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.noties.markwon.core.spans.TextLayoutSpan;
+import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.utils.LeadingMarginUtils;
+import io.noties.markwon.utils.SpanUtils;
 
 public class TableRowSpan extends ReplacementSpan {
 
@@ -67,7 +74,7 @@ public class TableRowSpan extends ReplacementSpan {
 
     private final TableTheme theme;
     private final List<Cell> cells;
-    private final List<StaticLayout> layouts;
+    private final List<Layout> layouts;
     private final TextPaint textPaint;
     private final boolean header;
     private final boolean odd;
@@ -108,7 +115,7 @@ public class TableRowSpan extends ReplacementSpan {
             if (fm != null) {
 
                 int max = 0;
-                for (StaticLayout layout : layouts) {
+                for (Layout layout : layouts) {
                     final int height = layout.getHeight();
                     if (height > max) {
                         max = height;
@@ -144,8 +151,9 @@ public class TableRowSpan extends ReplacementSpan {
             int bottom,
             @NonNull Paint p) {
 
-        if (recreateLayouts(canvas.getWidth())) {
-            width = canvas.getWidth();
+        final int spanWidth = SpanUtils.width(canvas, text);
+        if (recreateLayouts(spanWidth)) {
+            width = spanWidth;
             // @since 4.3.1 it's important to cast to TextPaint in order to display links, etc
             if (p instanceof TextPaint) {
                 // there must be a reason why this method receives Paint instead of TextPaint...
@@ -236,7 +244,7 @@ public class TableRowSpan extends ReplacementSpan {
         final int borderTop = isFirstTableRow ? borderWidth : 0;
         final int borderBottom = bottom - top - borderWidth;
 
-        StaticLayout layout;
+        Layout layout;
         for (int i = 0; i < size; i++) {
             layout = layouts.get(i);
             final int save = canvas.save();
@@ -293,20 +301,76 @@ public class TableRowSpan extends ReplacementSpan {
         final int w = (width / columns) - padding;
 
         this.layouts.clear();
-        Cell cell;
-        StaticLayout layout;
+
         for (int i = 0, size = cells.size(); i < size; i++) {
-            cell = cells.get(i);
-            layout = new StaticLayout(
-                    cell.text,
-                    textPaint,
-                    w,
-                    alignment(cell.alignment),
-                    1.F,
-                    .0F,
-                    false
-            );
-            layouts.add(layout);
+            makeLayout(i, w, cells.get(i));
+        }
+    }
+
+    private void makeLayout(final int index, final int width, @NonNull final Cell cell) {
+
+        final Runnable recreate = new Runnable() {
+            @Override
+            public void run() {
+                final Invalidator invalidator = TableRowSpan.this.invalidator;
+                if (invalidator != null) {
+                    layouts.remove(index);
+                    makeLayout(index, width, cell);
+                    invalidator.invalidate();
+                }
+            }
+        };
+
+        final Spannable spannable;
+
+        if (cell.text instanceof Spannable) {
+            spannable = (Spannable) cell.text;
+        } else {
+            spannable = new SpannableString(cell.text);
+        }
+
+        final Layout layout = new StaticLayout(
+                spannable,
+                textPaint,
+                width,
+                alignment(cell.alignment),
+                1.0F,
+                0.0F,
+                false
+        );
+
+        // @since 4.4.0
+        TextLayoutSpan.applyTo(spannable, layout);
+
+        // @since 4.4.0
+        scheduleAsyncDrawables(spannable, recreate);
+
+        layouts.add(index, layout);
+    }
+
+    private void scheduleAsyncDrawables(@NonNull Spannable spannable, @NonNull final Runnable recreate) {
+
+        final AsyncDrawableSpan[] spans = spannable.getSpans(0, spannable.length(), AsyncDrawableSpan.class);
+        if (spans != null
+                && spans.length > 0) {
+
+            for (AsyncDrawableSpan span : spans) {
+
+                final AsyncDrawable drawable = span.getDrawable();
+
+                // it is absolutely crucial to check if drawable is already attached,
+                //  otherwise we would end up with a loop
+                if (drawable.isAttached()) {
+                    continue;
+                }
+
+                drawable.setCallback2(new CallbackAdapter() {
+                    @Override
+                    public void invalidateDrawable(@NonNull Drawable who) {
+                        recreate.run();
+                    }
+                });
+            }
         }
     }
 
@@ -329,5 +393,22 @@ public class TableRowSpan extends ReplacementSpan {
 
     public void invalidator(@Nullable Invalidator invalidator) {
         this.invalidator = invalidator;
+    }
+
+    private static abstract class CallbackAdapter implements Drawable.Callback {
+        @Override
+        public void invalidateDrawable(@NonNull Drawable who) {
+
+        }
+
+        @Override
+        public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
+
+        }
+
+        @Override
+        public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
+
+        }
     }
 }
