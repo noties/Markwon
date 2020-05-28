@@ -34,7 +34,7 @@ public class IFrameHtmlPlugin extends AbstractMarkwonPlugin {
         public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps renderProps, @NonNull HtmlTag tag) {
             final ImageSize imageSize = new ImageSize(new ImageSize.Dimension(640, "px"), new ImageSize.Dimension(480, "px"));
             ImageProps.IMAGE_SIZE.set(renderProps, imageSize);
-            ImageProps.DESTINATION.set(renderProps, "https://hey.com/1.png");
+            ImageProps.DESTINATION.set(renderProps, "https://img1.ak.crunchyroll.com/i/spire2/d7b1d6bc7563224388ef5ffc04a967581589950464_full.jpg");
             return configuration.spansFactory().require(Image.class)
                     .getSpans(configuration, renderProps);
         }

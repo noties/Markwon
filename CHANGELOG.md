@@ -1,5 +1,10 @@
 # Changelog
 
+# $nap;
+* `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])
+
+[#235]: https://github.com/noties/Markwon/issues/235
+
 # 4.4.0
 * `TextViewSpan` to obtain `TextView` in which markdown is displayed (applied by `CorePlugin`)
 * `TextLayoutSpan` to obtain `Layout` in which markdown is displayed (applied by `TablePlugin`, more specifically `TableRowSpan` to propagate layout in which cell content is displayed)
