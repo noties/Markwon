@@ -39,6 +39,7 @@ import io.noties.markwon.image.destination.ImageDestinationProcessorRelativeToAb
 import io.noties.markwon.image.file.FileSchemeHandler;
 import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler;
 import io.noties.markwon.image.svg.SvgMediaDecoder;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
 import io.noties.markwon.recycler.table.TableEntry;
@@ -82,7 +83,6 @@ public class RecyclerActivity extends Activity {
     @NonNull
     private static Markwon markwon(@NonNull Context context) {
         return Markwon.builder(context)
-                .usePlugin(CorePlugin.create())
                 .usePlugin(ImagesPlugin.create(plugin -> {
                     plugin
                             .addSchemeHandler(FileSchemeHandler.createWithAssets(context))

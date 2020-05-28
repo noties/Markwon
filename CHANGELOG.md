@@ -1,7 +1,16 @@
 # Changelog
 
 # $nap;
+
+#### Added
+* `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods
+* `core` - `CorePlugin` `hasExplicitMovementMethodPlugin` configuration method to **not** add implicit `LinkMovementMethod` on `afterSetText`
+
+#### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])
+
+#### Deprecated
+* `core` - `MovementMethodPlugin.create()` use explicit `MovementMethodPlugin.link()` instead
 
 [#235]: https://github.com/noties/Markwon/issues/235
 
