@@ -18,6 +18,7 @@ import java.util.Set;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.core.CorePlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
 import io.noties.markwon.sample.MenuOptions;
 import io.noties.markwon.sample.R;
@@ -33,7 +34,10 @@ public class CoreActivity extends ActivityWithMenuOptions {
                 .add("simple", this::simple)
                 .add("toast", this::toast)
                 .add("alreadyParsed", this::alreadyParsed)
-                .add("enabledBlockTypes", this::enabledBlockTypes);
+                .add("enabledBlockTypes", this::enabledBlockTypes)
+                .add("implicitMovementMethod", this::implicitMovementMethod)
+                .add("explicitMovementMethod", this::explicitMovementMethod)
+                .add("explicitMovementMethodPlugin", this::explicitMovementMethodPlugin);
     }
 
     @Override
@@ -159,6 +163,51 @@ public class CoreActivity extends ActivityWithMenuOptions {
                         builder.enabledBlockTypes(blocks);
                     }
                 })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void implicitMovementMethod() {
+        // by default a LinkMovementMethod is applied automatically, so links are clickable
+
+        final String md = "[0 link](#) here";
+
+        final Markwon markwon = Markwon.create(this);
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void explicitMovementMethod() {
+        // NB! as movement method is set from other methods we _explicitly_ clear it
+        textView.setMovementMethod(null);
+
+        // by default Markwon will set a LinkMovementMethod on a TextView if it is missing
+        // to control that `hasExplicitMovementMethodPlugin` can be used
+        final String md = "[1 link](#) here";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configure(@NonNull Registry registry) {
+                        // Markwon **won't** set implicit movement method
+                        //  thus making the link in markdown input not clickable
+                        registry.require(CorePlugin.class)
+                                .hasExplicitMovementMethodPlugin(true);
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private void explicitMovementMethodPlugin() {
+        // additionally special MovementMethodPlugin.none() can be used to control `hasExplicitMovementMethodPlugin`
+
+        final String md = "[2 link](#) here";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(MovementMethodPlugin.none())
                 .build();
 
         markwon.setMarkdown(textView, md);
