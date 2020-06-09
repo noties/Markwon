@@ -9,10 +9,15 @@
 #### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])
 
+#### Fixed
+* `image-glide` cache `RequestManager` in  `GlideImagesPlugin#create(Context)` factory method ([#259])
+
 #### Deprecated
 * `core` - `MovementMethodPlugin.create()` use explicit `MovementMethodPlugin.link()` instead
 
 [#235]: https://github.com/noties/Markwon/issues/235
+[#259]: https://github.com/noties/Markwon/issues/259
+
 
 # 4.4.0
 * `TextViewSpan` to obtain `TextView` in which markdown is displayed (applied by `CorePlugin`)
