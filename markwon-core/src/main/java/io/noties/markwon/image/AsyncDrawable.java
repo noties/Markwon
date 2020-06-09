@@ -71,17 +71,6 @@ public class AsyncDrawable extends Drawable {
     }
 
     /**
-     * @see #hasKnownDimensions()
-     * @since 4.0.0
-     * @deprecated 4.2.1
-     */
-    @SuppressWarnings({"unused", "WeakerAccess"})
-    @Deprecated
-    public boolean hasKnownDimentions() {
-        return canvasWidth > 0;
-    }
-
-    /**
      * @since 4.2.1
      */
     @SuppressWarnings({"unused", "WeakerAccess"})

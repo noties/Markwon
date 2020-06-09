@@ -16,6 +16,9 @@
 #### Deprecated
 * `core` - `MovementMethodPlugin.create()` use explicit `MovementMethodPlugin.link()` instead
 
+#### Removed
+* `image` - `AsyncDrawable#hasKnownDimentions` (deprecated in `4.2.1`)
+
 [#235]: https://github.com/noties/Markwon/issues/235
 [#259]: https://github.com/noties/Markwon/issues/259
 
