@@ -18,6 +18,9 @@ public class AsyncDrawable extends Drawable {
     private final ImageSize imageSize;
     private final ImageSizeResolver imageSizeResolver;
 
+    // @since $nap;
+    private final Drawable placeholder;
+
     private Drawable result;
     private Callback callback;
 
@@ -26,6 +29,10 @@ public class AsyncDrawable extends Drawable {
 
     // @since 2.0.1 for use-cases when image is loaded faster than span is drawn and knows canvas width
     private boolean waitingForDimensions;
+
+    // @since $nap; in case if result is Animatable and this drawable was detached, we
+    //  keep the state to resume when we are going to be attached again (when used in RecyclerView)
+    private boolean wasPlayingBefore = false;
 
     /**
      * @since 1.0.1
@@ -41,7 +48,7 @@ public class AsyncDrawable extends Drawable {
         this.imageSizeResolver = imageSizeResolver;
         this.imageSize = imageSize;
 
-        final Drawable placeholder = loader.placeholder(this);
+        final Drawable placeholder = this.placeholder = loader.placeholder(this);
         if (placeholder != null) {
             setPlaceholderResult(placeholder);
         }
@@ -99,7 +106,6 @@ public class AsyncDrawable extends Drawable {
         return result;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public boolean hasResult() {
         return result != null;
     }
@@ -108,8 +114,6 @@ public class AsyncDrawable extends Drawable {
         return getCallback() != null;
     }
 
-    // yeah
-    @SuppressWarnings("WeakerAccess")
     public void setCallback2(@Nullable Callback cb) {
 
         // @since 4.2.1
@@ -132,7 +136,21 @@ public class AsyncDrawable extends Drawable {
                 result.setCallback(callback);
             }
 
-            loader.load(this);
+            // @since $nap; we trigger loading only if we have no result (and result is not placeholder)
+            final boolean shouldLoad = result == null || result == placeholder;
+
+            if (result != null) {
+                result.setCallback(callback);
+
+                // @since $nap;
+                if (result instanceof Animatable && wasPlayingBefore) {
+                    ((Animatable) result).start();
+                }
+            }
+
+            if (shouldLoad) {
+                loader.load(this);
+            }
         } else {
             if (result != null) {
 
@@ -140,9 +158,14 @@ public class AsyncDrawable extends Drawable {
 
                 // let's additionally stop if it Animatable
                 if (result instanceof Animatable) {
-                    ((Animatable) result).stop();
+                    final Animatable animatable = (Animatable) result;
+                    final boolean isPlaying = wasPlayingBefore = animatable.isRunning();
+                    if (isPlaying) {
+                        animatable.stop();
+                    }
                 }
             }
+
             loader.cancel(this);
         }
     }
@@ -206,6 +229,9 @@ public class AsyncDrawable extends Drawable {
 
     public void setResult(@NonNull Drawable result) {
 
+        // @since $nap; revert this flag when we have new source
+        wasPlayingBefore = false;
+
         // if we have previous one, detach it
         if (this.result != null) {
             this.result.setCallback(null);
@@ -250,6 +276,7 @@ public class AsyncDrawable extends Drawable {
         waitingForDimensions = false;
 
         final Rect bounds = resolveBounds();
+
         result.setBounds(bounds);
         // @since 4.2.1, we set callback after bounds are resolved
         //  to reduce number of invalidations
