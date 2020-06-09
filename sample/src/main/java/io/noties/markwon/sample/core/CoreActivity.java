@@ -2,6 +2,8 @@ package io.noties.markwon.sample.core;
 
 import android.os.Bundle;
 import android.text.Spanned;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,14 +12,20 @@ import androidx.annotation.Nullable;
 
 import org.commonmark.node.Block;
 import org.commonmark.node.BlockQuote;
+import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import java.util.Set;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.LinkResolver;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.core.CorePlugin;
+import io.noties.markwon.core.CoreProps;
+import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.core.spans.LinkSpan;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.sample.ActivityWithMenuOptions;
 import io.noties.markwon.sample.MenuOptions;
@@ -37,7 +45,8 @@ public class CoreActivity extends ActivityWithMenuOptions {
                 .add("enabledBlockTypes", this::enabledBlockTypes)
                 .add("implicitMovementMethod", this::implicitMovementMethod)
                 .add("explicitMovementMethod", this::explicitMovementMethod)
-                .add("explicitMovementMethodPlugin", this::explicitMovementMethodPlugin);
+                .add("explicitMovementMethodPlugin", this::explicitMovementMethodPlugin)
+                .add("linkTitle", this::linkTitle);
     }
 
     @Override
@@ -211,5 +220,60 @@ public class CoreActivity extends ActivityWithMenuOptions {
                 .build();
 
         markwon.setMarkdown(textView, md);
+    }
+
+    private void linkTitle() {
+        final String md = "" +
+                "# Links\n\n" +
+                "[link title](#)";
+
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        builder.setFactory(Link.class, (configuration, props) ->
+                                new ClickSelfSpan(
+                                        configuration.theme(),
+                                        CoreProps.LINK_DESTINATION.require(props),
+                                        configuration.linkResolver()
+                                )
+                        );
+                    }
+                })
+                .build();
+
+        markwon.setMarkdown(textView, md);
+    }
+
+    private static class ClickSelfSpan extends LinkSpan {
+
+        ClickSelfSpan(
+                @NonNull MarkwonTheme theme,
+                @NonNull String link,
+                @NonNull LinkResolver resolver) {
+            super(theme, link, resolver);
+        }
+
+        @Override
+        public void onClick(View widget) {
+            Log.e("CLICK", "title: '" + linkTitle(widget) + "'");
+            super.onClick(widget);
+        }
+
+        @Nullable
+        private CharSequence linkTitle(@NonNull View widget) {
+            if (!(widget instanceof TextView)) {
+                return null;
+            }
+            final Spanned spanned = (Spanned) ((TextView) widget).getText();
+            final int start = spanned.getSpanStart(this);
+            final int end = spanned.getSpanEnd(this);
+
+            if (start < 0 || end < 0) {
+                return null;
+            }
+
+            return spanned.subSequence(start, end);
+        }
     }
 }
