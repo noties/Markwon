@@ -8,6 +8,7 @@
 
 #### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])
+* `inline-parser` -  `BangInlineProcessor` properly returns `null` if no image node is found (possible to define other inline parsers that use `!` as special character)
 
 #### Fixed
 * `image-glide` cache `RequestManager` in  `GlideImagesPlugin#create(Context)` factory method ([#259])
