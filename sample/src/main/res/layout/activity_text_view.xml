@@ -11,10 +11,10 @@
         android:id="@+id/text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000"
         android:textSize="16sp"
-        android:padding="8dip"
         tools:text="whatever" />
 
 </ScrollView>
