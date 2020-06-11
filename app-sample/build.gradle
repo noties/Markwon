@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
+
+    defaultConfig {
+        applicationId 'io.noties.markwon.app'
+        minSdkVersion 23
+        targetSdkVersion config['target-sdk']
+        versionCode 1
+        versionName version
+
+        resConfig 'en'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        // cannot cast GString...
+                        // cannot use `-`
+                        'markwon.samples.file': "\"${projectDir}/samples.json\"".toString()
+                ]
+            }
+        }
+    }
+
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize '5g'
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += '../sample-utils/annotations'
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation 'io.noties:debug:5.1.0'
+    annotationProcessor project(':sample-utils:processor')
+}
