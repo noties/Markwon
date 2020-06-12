@@ -43,6 +43,11 @@ kapt {
 dependencies {
     kapt project(':sample-utils:processor')
 
-    implementation 'io.noties:debug:5.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    deps.with {
+        api it['x-recycler-view']
+        api it['adapt']
+        api it['debug']
+    }
 }

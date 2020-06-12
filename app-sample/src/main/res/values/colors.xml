@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="accent">#5CB85C</color>
+    <color name="accent">#009900</color>
+
+    <color name="gray">#777777</color>
+    <color name="gray_light">#999999</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="window_background">#EEEEEE</color>
+    <color name="red">#FF0000</color>
 </resources>

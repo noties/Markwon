@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/content_padding"
+    android:paddingEnd="@dimen/content_padding"
+    android:paddingBottom="@dimen/content_padding"
+    tools:ignore="RtlSymmetry">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--textView instead of icon, so we align baseline-->
+        <TextView
+            android:layout_width="@dimen/adapt_sample_hash_width"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="#"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="?android:attr/colorSecondary"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            tools:text="Title" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/adapt_sample_hash_width"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="Description goes here" />
+
+    <TextView
+        android:id="@+id/artifacts_and_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/adapt_sample_hash_width"
+        tools:text="recycler-view adapt another" />
+
+</LinearLayout>

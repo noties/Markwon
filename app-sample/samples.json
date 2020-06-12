@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "javaClassName": "io.noties.markwon.app.samples.FirstSample",
+    "id": "202006164150023",
+    "title": "First Sample",
+    "description": "This **is** _the first_ sample",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "test"
+    ]
+  }
+]
