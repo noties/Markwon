@@ -8,5 +8,9 @@ sourceSets {
 }
 
 dependencies {
-    implementation deps['x-annotations']
+    deps.with {
+        implementation it['x-annotations']
+        implementation it['gson']
+        implementation it['commons-io']
+    }
 }

@@ -19,6 +19,9 @@ dependencies {
 
     deps.with {
         api it['commonmark-strikethrough']
+
+        // NB! ix-java dependency to be used in tests
+        testImplementation it['ix-java']
     }
 
     deps.test.with {
@@ -26,7 +29,6 @@ dependencies {
         testImplementation it['junit']
         testImplementation it['mockito']
         testImplementation it['robolectric']
-        testImplementation it['ix-java']
     }
 }
 

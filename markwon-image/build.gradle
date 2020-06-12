@@ -23,15 +23,14 @@ dependencies {
         compileOnly it['okhttp']
     }
 
-    deps['test'].with {
+    testImplementation project(':markwon-test-span')
+    testImplementation deps['commons-io']
 
-        testImplementation project(':markwon-test-span')
+    deps['test'].with {
 
         testImplementation it['junit']
         testImplementation it['robolectric']
         testImplementation it['mockito']
-
-        testImplementation it['commons-io']
     }
 }
 

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface MarkwonSample {
+public @interface MarkwonSampleInfo {
     /**
      * Actual format is not important, but this key must be set in order to persist sample.
      * This key should not change during lifetime of sample

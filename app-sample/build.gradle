@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
 
@@ -13,16 +15,6 @@ android {
         versionName version
 
         resConfig 'en'
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [
-                        // cannot cast GString...
-                        // cannot use `-`
-                        'markwon.samples.file': "\"${projectDir}/samples.json\"".toString()
-                ]
-            }
-        }
     }
 
     dexOptions {
@@ -40,11 +32,17 @@ android {
             java.srcDirs += '../sample-utils/annotations'
         }
     }
+}
 
-
+kapt {
+    arguments {
+        arg('markwon.samples.file', "${projectDir}/samples.json".toString())
+    }
 }
 
 dependencies {
+    kapt project(':sample-utils:processor')
+
     implementation 'io.noties:debug:5.1.0'
-    annotationProcessor project(':sample-utils:processor')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

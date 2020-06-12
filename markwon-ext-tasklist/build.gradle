@@ -17,13 +17,13 @@ dependencies {
 
     api project(':markwon-core')
 
-    deps['test'].with {
+    testImplementation project(':markwon-test-span')
+    testImplementation deps['commons-io']
 
-        testImplementation project(':markwon-test-span')
+    deps['test'].with {
 
         testImplementation it['junit']
         testImplementation it['robolectric']
-        testImplementation it['commons-io']
     }
 }
 
