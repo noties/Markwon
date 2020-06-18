@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppThemeBase" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:colorPrimary">@color/gray_light</item>
         <item name="android:colorPrimaryDark">@color/gray</item>
         <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:windowSplashscreenContent" tools:ignore="NewApi">@drawable/bg_splash</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeBase" />
@@ -21,6 +22,21 @@
         <item name="android:layout_height">@dimen/app_bar_height</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="ArtifactTagText">
+        <item name="android:id">@id/text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingTop">@dimen/content_padding_half</item>
+        <item name="android:paddingStart">@dimen/content_padding</item>
+        <item name="android:paddingEnd">@dimen/content_padding</item>
+        <item name="android:paddingBottom">@dimen/content_padding_half</item>
+        <item name="android:textAppearance">?android:attr/textAppearance</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

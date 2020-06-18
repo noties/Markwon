@@ -6,6 +6,10 @@
     <color name="gray_light">#999999</color>
 
     <color name="white">#FFFFFF</color>
-    <color name="window_background">#EEEEEE</color>
+    <color name="window_background">@color/white</color>
     <color name="red">#FF0000</color>
+
+    <color name="search_bar_background">#eee</color>
+    <color name="search_bar_background_full">#BFFFFFFF</color>
+
 </resources>

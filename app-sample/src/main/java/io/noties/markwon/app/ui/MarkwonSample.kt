@@ -1,4 +1,4 @@
-package io.noties.markwon.app
+package io.noties.markwon.app.ui
 
 abstract class MarkwonSample {
 

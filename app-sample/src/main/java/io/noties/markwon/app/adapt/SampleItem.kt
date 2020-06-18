@@ -1,89 +1,100 @@
 package io.noties.markwon.app.adapt
 
-import android.graphics.Color
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.noties.adapt.Item
-import io.noties.debug.Debug
-import io.noties.markwon.app.MarkwonSampleItem
+import io.noties.markwon.Markwon
 import io.noties.markwon.app.R
+import io.noties.markwon.app.Sample
+import io.noties.markwon.app.base.FlowLayout
+import io.noties.markwon.app.utils.displayName
+import io.noties.markwon.app.utils.hidden
+import io.noties.markwon.app.utils.tagDisplayName
 import io.noties.markwon.sample.annotations.MarkwonArtifact
+import io.noties.markwon.utils.NoCopySpannableFactory
 
-class SampleItem(private val item: MarkwonSampleItem) : Item<SampleItem.Holder>(item.id.hashCode().toLong()) {
+class SampleItem(
+        private val markwon: Markwon,
+        private val sample: Sample,
+        private val onArtifactClick: (MarkwonArtifact) -> Unit,
+        private val onTagClick: (String) -> Unit,
+        private val onSampleClick: (Sample) -> Unit
+) : Item<SampleItem.Holder>(sample.id.hashCode().toLong()) {
 
-    var search: String? = null
+//    var search: String? = null
+
+    private val text: Spanned by lazy(LazyThreadSafetyMode.NONE) {
+        markwon.toMarkdown(sample.description)
+    }
 
     override fun createHolder(inflater: LayoutInflater, parent: ViewGroup): Holder {
-        val holder = Holder(inflater.inflate(R.layout.adapt_sample, parent, false))
-        holder.artifactsAndTags.movementMethod = LinkMovementMethod.getInstance()
-        return holder
+        return Holder(inflater.inflate(R.layout.adapt_sample, parent, false)).apply {
+            description.setSpannableFactory(NoCopySpannableFactory.getInstance())
+        }
     }
 
     override fun render(holder: Holder) {
         holder.apply {
-            title.text = item.title
-            description.text = item.description
-            artifactsAndTags.text = buildArtifactsAndTags
-        }
-    }
+            title.text = sample.title
 
-    private val buildArtifactsAndTags: CharSequence
-        get() {
-            val builder = SpannableStringBuilder()
-
-            item.artifacts
-                    .forEach {
-                        val length = builder.length
-                        builder.append("\u00a0${it.name}\u00a0")
-                        builder.setSpan(ArtifactSpan(it), length, builder.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-
-            if (!builder.isEmpty()) {
-                builder.append("\n")
+            val text = this@SampleItem.text
+            if (text.isEmpty()) {
+                description.text = ""
+                description.hidden = true
+            } else {
+                markwon.setParsedMarkdown(description, text)
+                description.hidden = false
             }
 
-            item.tags
-                    .forEach {
-                        val length = builder.length
-                        builder.append("\u00a0$it\u00a0")
-                        builder.setSpan(TagSpan(it), length, builder.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            // there is no need to display the core artifact (it is implicit),
+            //  hide if empty (removed core)
+            artifacts.ensure(sample.artifacts.size, R.layout.view_artifact)
+                    .zip(sample.artifacts)
+                    .forEach { (view, artifact) ->
+                        (view as TextView).text = artifact.displayName
+                        view.setOnClickListener {
+                            onArtifactClick(artifact)
+                        }
                     }
 
-            return builder
+            tags.ensure(sample.tags.size, R.layout.view_tag)
+                    .zip(sample.tags)
+                    .forEach { (view, tag) ->
+                        (view as TextView).text = tag.tagDisplayName
+                        view.setOnClickListener {
+                            onTagClick(tag)
+                        }
+                    }
+
+            itemView.setOnClickListener {
+                onSampleClick(sample)
+            }
         }
+    }
 
     class Holder(itemView: View) : Item.Holder(itemView) {
         val title: TextView = requireView(R.id.title)
         val description: TextView = requireView(R.id.description)
-        val artifactsAndTags: TextView = requireView(R.id.artifacts_and_tags)
+        val artifacts: FlowLayout = requireView(R.id.artifacts)
+        val tags: FlowLayout = requireView(R.id.tags)
     }
+}
 
-    private class ArtifactSpan(val artifact: MarkwonArtifact) : ClickableSpan() {
-        override fun onClick(widget: View) {
-            Debug.i("clicked artifact: $artifact")
+private fun FlowLayout.ensure(viewsCount: Int, layoutResId: Int): List<View> {
+    if (viewsCount > childCount) {
+        // inflate new views
+        val inflater = LayoutInflater.from(context)
+        for (i in 0 until (viewsCount - childCount)) {
+            addView(inflater.inflate(layoutResId, this, false))
         }
-
-        override fun updateDrawState(ds: TextPaint) {
-            ds.isUnderlineText = false
-            ds.bgColor = Color.GREEN
-        }
-    }
-
-    private class TagSpan(val tag: String) : ClickableSpan() {
-        override fun onClick(widget: View) {
-            Debug.i("clicked tag: $tag")
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            ds.isUnderlineText = false
-            ds.bgColor = Color.BLUE
+    } else {
+        // return requested vies and GONE the rest
+        for (i in viewsCount until childCount) {
+            getChildAt(i).hidden = true
         }
     }
+    return (0 until viewsCount).map { getChildAt(it) }
 }

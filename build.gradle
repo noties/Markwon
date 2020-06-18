@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         // on `3.5.3` tests are not run from CLI
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -69,6 +69,8 @@ ext {
             'x-recycler-view'         : 'androidx.recyclerview:recyclerview:1.0.0',
             'x-core'                  : 'androidx.core:core:1.0.2',
             'x-appcompat'             : 'androidx.appcompat:appcompat:1.1.0',
+            'x-cardview'              : 'androidx.cardview:cardview:1.0.0',
+            'x-fragment'              : 'androidx.fragment:fragment:1.0.0',
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",

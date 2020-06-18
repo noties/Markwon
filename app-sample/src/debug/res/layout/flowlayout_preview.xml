@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/content_padding"
+    tools:ignore="MissingDefaultResource,HardcodedText">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hey!" />
+
+    <io.noties.markwon.app.base.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/content_padding"
+        android:paddingBottom="@dimen/content_padding"
+        app:fl_spacingHorizontal="@dimen/content_padding"
+        app:fl_spacingVertical="4dip">
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="ext-latex" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="another" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="corejksjk sjkdf sdhjf sdjhf sjjksdjkjksd sdjksd hjsd hsdhjhjs shjsdhjhjsdhj sdj dshjs dhjsd sdhj sdjhsd hjsdh sjhd sdhjsd jhsd sdhj sdjhsd hjsd sjdh s" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_artifact"
+            android:text="core" />
+
+    </io.noties.markwon.app.base.FlowLayout>
+
+    <io.noties.markwon.app.base.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/content_padding"
+        android:paddingBottom="@dimen/content_padding"
+        app:fl_spacingHorizontal="@dimen/content_padding"
+        app:fl_spacingVertical="4dip">
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="ext-latex" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="another" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="corejksjk sjkdf sdhjf sdjhf sjjksdjkjksd sdjksd hjsd hsdhjhjs shjsdhjhjsdhj sdj dshjs dhjsd sdhj sdjhsd hjsdh sjhd sdhjsd jhsd sdhj sdjhsd hjsd sjdh s" />
+
+        <TextView
+            style="@style/ArtifactTagText"
+            android:background="@drawable/bg_tag"
+            android:text="core" />
+
+    </io.noties.markwon.app.base.FlowLayout>
+
+</LinearLayout>

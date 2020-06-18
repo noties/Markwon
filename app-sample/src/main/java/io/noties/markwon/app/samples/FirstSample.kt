@@ -1,6 +1,6 @@
 package io.noties.markwon.app.samples
 
-import io.noties.markwon.app.MarkwonSample
+import io.noties.markwon.app.ui.MarkwonSample
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 

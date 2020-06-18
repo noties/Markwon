@@ -7,25 +7,39 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/app_bar"
         style="@style/AppBarContainer"
         android:elevation="4dip"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
+            android:id="@+id/app_bar_icon"
             style="@style/AppBarIcon"
             android:contentDescription="@null"
             android:padding="8dip"
             android:src="@mipmap/ic_launcher" />
 
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/app_bar_height"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:layout_marginEnd="@dimen/app_bar_height">
+
+            <TextView
+                android:id="@+id/app_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingLeft="@dimen/content_padding_double"
+                android:paddingTop="@dimen/content_padding_half"
+                android:paddingRight="@dimen/content_padding_double"
+                android:paddingBottom="@dimen/content_padding_half"
+                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -37,13 +51,18 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:translationY="56dip" />
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="36dip"
+            tools:layout_marginTop="56dip" />
 
         <io.noties.markwon.app.base.SearchBar
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
+            android:background="@color/search_bar_background_full"
             android:padding="@dimen/content_padding" />
 
     </FrameLayout>

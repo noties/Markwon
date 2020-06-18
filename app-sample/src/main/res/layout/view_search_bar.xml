@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:background="#eee"
+    tools:background="#fff"
     tools:gravity="center_vertical"
     tools:layout_height="wrap_content"
     tools:layout_widht="match_parent"
@@ -13,7 +13,8 @@
         android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/white"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/bg_search_bar"
         android:paddingTop="@dimen/content_padding"
         android:paddingBottom="@dimen/content_padding">
 
@@ -31,10 +32,10 @@
         <ImageView
             android:layout_width="@dimen/search_bar_icon_side"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@null"
             android:scaleType="centerInside"
             android:src="@drawable/ic_search_white_24dp"
-            android:layout_gravity="center_vertical"
             android:tint="@color/gray" />
 
         <ImageView

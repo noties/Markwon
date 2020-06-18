@@ -61,12 +61,22 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
 
         clear.setOnClickListener {
             textField.setText("")
+            // ensure that we have focus when clear is clicked
+            if (!textField.hasFocus()) {
+                textField.requestFocus()
+                // additionally ensure keyboard is showing
+                KeyboardUtils.show(textField)
+            }
         }
 
         cancel.setOnClickListener {
             textField.setText("")
             looseFocus()
         }
+    }
+
+    fun search(text: String) {
+        textField.setText(text)
     }
 
     private fun textFieldChanged(text: CharSequence) {
