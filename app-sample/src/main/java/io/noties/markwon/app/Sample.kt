@@ -12,4 +12,11 @@ data class Sample(
         val description: String,
         val artifacts: List<MarkwonArtifact>,
         val tags: List<String>
-) : Parcelable
+) : Parcelable {
+
+    enum class Language {
+        JAVA, KOTLIN
+    }
+
+    data class Code(val language: Language, val sourceCode: String)
+}

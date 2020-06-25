@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/AppBarContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/AppBarIcon"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            tools:ignore="ContentDescription" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/app_bar_height">
+
+            <TextView
+                style="@style/AppBarTitle"
+                tools:text="Sample title with a lot of content, can it fit here?" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <LinearLayout
+        style="@style/TabBarContainer"
+        tools:ignore="DisableBaselineAlignment">
+
+        <LinearLayout
+            android:id="@id/tab_bar_preview"
+            style="@style/TabBarItem"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                style="@style/TabBarItemIcon"
+                android:src="@drawable/ic_remove_red_eye_white_24dp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/TabBarItemText"
+                android:text="@string/tab_bar_preview" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/tab_bar_code"
+            style="@style/TabBarItem"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                style="@style/TabBarItemIcon"
+                android:src="@drawable/ic_code_white_24dp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                style="@style/TabBarItemText"
+                android:text="@string/tab_bar_code" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

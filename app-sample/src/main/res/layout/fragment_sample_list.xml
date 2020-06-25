@@ -7,18 +7,13 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/app_bar"
         style="@style/AppBarContainer"
-        android:elevation="4dip"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
+        android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/app_bar_icon"
             style="@style/AppBarIcon"
-            android:contentDescription="@null"
-            android:padding="8dip"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            tools:ignore="ContentDescription" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -26,18 +21,8 @@
             android:layout_marginEnd="@dimen/app_bar_height">
 
             <TextView
-                android:id="@+id/app_bar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingLeft="@dimen/content_padding_double"
-                android:paddingTop="@dimen/content_padding_half"
-                android:paddingRight="@dimen/content_padding_double"
-                android:paddingBottom="@dimen/content_padding_half"
-                android:text="@string/app_name"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                style="@style/AppBarTitle"
+                android:text="@string/app_name" />
 
         </FrameLayout>
 

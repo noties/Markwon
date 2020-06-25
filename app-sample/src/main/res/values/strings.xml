@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Markwon</string>
+
+    <string name="tab_bar_preview">Preview</string>
+    <string name="tab_bar_code">Code</string>
 </resources>

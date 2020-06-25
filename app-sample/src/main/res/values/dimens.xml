@@ -8,4 +8,7 @@
 
     <dimen name="search_bar_icon_side">36dip</dimen>
     <dimen name="adapt_sample_hash_width">36dip</dimen>
+
+    <dimen name="divider_height">1dip</dimen>
+    <dimen name="tab_bar_height">56dip</dimen>
 </resources>

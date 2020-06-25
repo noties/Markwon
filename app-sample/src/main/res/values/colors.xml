@@ -12,4 +12,7 @@
     <color name="search_bar_background">#eee</color>
     <color name="search_bar_background_full">#BFFFFFFF</color>
 
+    <color name="divider">#eee</color>
+    <color name="tab_bar_background">#fafafa</color>
+
 </resources>

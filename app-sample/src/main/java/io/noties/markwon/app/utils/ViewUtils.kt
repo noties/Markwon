@@ -3,6 +3,7 @@ package io.noties.markwon.app.utils
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 
 var View.hidden: Boolean
@@ -24,3 +25,11 @@ fun View.onPreDraw(action: () -> Unit) {
         }
     })
 }
+
+var View.active: Boolean
+    get() = isActivated
+    set(newValue) {
+        isActivated = newValue
+
+        (this as? ViewGroup)?.children?.forEach { it.active = newValue }
+    }

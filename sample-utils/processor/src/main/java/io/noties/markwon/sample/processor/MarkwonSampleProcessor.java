@@ -20,11 +20,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -33,6 +36,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
+import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 public class MarkwonSampleProcessor extends AbstractProcessor {
@@ -159,6 +163,8 @@ public class MarkwonSampleProcessor extends AbstractProcessor {
         // new items come first (DESC order)
         Collections.sort(samples, (lhs, rhs) -> rhs.id.compareTo(lhs.id));
 
+        // sort each sample artifacts (alphabet) and tags (alphabet)
+
         final String json = new GsonBuilder()
                 .setPrettyPrinting()
                 .create()
@@ -176,13 +182,17 @@ public class MarkwonSampleProcessor extends AbstractProcessor {
 
         final String id = info.id();
 
+        // NB! sorted artifacts (by name) and tags
+        final Set<MarkwonArtifact> artifacts = Stream.of(info.artifacts())
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(MarkwonArtifact::name))));
+
         final MarkwonSample sample = new MarkwonSample(
                 element.getQualifiedName().toString(),
                 id,
                 info.title(),
                 info.description(),
-                new HashSet<>(Arrays.asList(info.artifacts())),
-                new HashSet<>(Arrays.asList(info.tags()))
+                artifacts,
+                new TreeSet<>(Arrays.asList(info.tags()))
         );
 
         try {
