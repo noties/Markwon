@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Hey!" />
 
-    <io.noties.markwon.app.base.FlowLayout
+    <io.noties.markwon.app.widget.FlowLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/content_padding"
@@ -86,9 +86,9 @@
             android:background="@drawable/bg_artifact"
             android:text="core" />
 
-    </io.noties.markwon.app.base.FlowLayout>
+    </io.noties.markwon.app.widget.FlowLayout>
 
-    <io.noties.markwon.app.base.FlowLayout
+    <io.noties.markwon.app.widget.FlowLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/content_padding"
@@ -161,6 +161,6 @@
             android:background="@drawable/bg_tag"
             android:text="core" />
 
-    </io.noties.markwon.app.base.FlowLayout>
+    </io.noties.markwon.app.widget.FlowLayout>
 
 </LinearLayout>

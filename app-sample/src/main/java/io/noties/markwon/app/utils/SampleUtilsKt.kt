@@ -1,10 +1,9 @@
 package io.noties.markwon.app.utils
 
 import android.content.Context
-import io.noties.markwon.app.Sample
+import io.noties.markwon.app.sample.Sample
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import java.io.InputStream
-import java.util.Scanner
 
 val MarkwonArtifact.displayName: String
     get() = "@${artifactName()}"
@@ -22,11 +21,6 @@ fun Sample.readCode(context: Context): Sample.Code {
             .removePrefix(SAMPLE_PREFIX)
             .replace('.', '/')
 
-    // now, we have 2 possibilities -> Kotlin or Java
-    fun read(stream: InputStream): String {
-        return Scanner(stream).useDelimiter("\\A").next()
-    }
-
     fun obtain(path: String): InputStream? {
         return try {
             assets.open(path)
@@ -35,6 +29,7 @@ fun Sample.readCode(context: Context): Sample.Code {
         }
     }
 
+    // now, we have 2 possibilities -> Kotlin or Java
     var language: Sample.Language = Sample.Language.KOTLIN
     var stream = obtain("$path.kt")
     if (stream == null) {
@@ -46,13 +41,12 @@ fun Sample.readCode(context: Context): Sample.Code {
         throw IllegalStateException("Cannot obtain sample file at path: $path")
     }
 
-    val code = read(stream)
-
-    try {
-        stream.close()
-    } catch (t: Throwable) {
-        // ignore
-    }
+    val code = stream.readStringAndClose()
 
     return Sample.Code(language, code)
+}
+
+fun loadReadMe(context: Context): String {
+    val stream = context.assets.open("README.md")
+    return stream.readStringAndClose()
 }

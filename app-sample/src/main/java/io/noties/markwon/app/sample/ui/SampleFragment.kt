@@ -1,4 +1,4 @@
-package io.noties.markwon.app.ui
+package io.noties.markwon.app.sample.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import io.noties.markwon.app.R
-import io.noties.markwon.app.Sample
+import io.noties.markwon.app.sample.Sample
 import io.noties.markwon.app.utils.active
 
 class SampleFragment : Fragment() {

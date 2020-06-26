@@ -51,7 +51,7 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <io.noties.markwon.app.base.TextField
+        <io.noties.markwon.app.widget.TextField
             android:id="@+id/text_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

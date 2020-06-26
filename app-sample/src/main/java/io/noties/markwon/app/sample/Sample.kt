@@ -1,4 +1,4 @@
-package io.noties.markwon.app
+package io.noties.markwon.app.sample
 
 import android.os.Parcelable
 import io.noties.markwon.sample.annotations.MarkwonArtifact

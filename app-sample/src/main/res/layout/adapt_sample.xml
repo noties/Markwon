@@ -54,7 +54,7 @@
             android:textAppearance="?android:attr/textAppearance"
             tools:text="Description goes here" />
 
-        <io.noties.markwon.app.base.FlowLayout
+        <io.noties.markwon.app.widget.FlowLayout
             android:id="@+id/artifacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,9 +66,9 @@
             <!--    we are actually fine with pre-inflating a single view    -->
             <include layout="@layout/view_artifact" />
 
-        </io.noties.markwon.app.base.FlowLayout>
+        </io.noties.markwon.app.widget.FlowLayout>
 
-        <io.noties.markwon.app.base.FlowLayout
+        <io.noties.markwon.app.widget.FlowLayout
             android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 
             <include layout="@layout/view_tag" />
 
-        </io.noties.markwon.app.base.FlowLayout>
+        </io.noties.markwon.app.widget.FlowLayout>
 
     </LinearLayout>
 

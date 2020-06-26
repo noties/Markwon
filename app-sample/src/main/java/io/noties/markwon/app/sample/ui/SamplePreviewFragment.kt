@@ -1,11 +1,11 @@
-package io.noties.markwon.app.ui
+package io.noties.markwon.app.sample.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import io.noties.markwon.app.Sample
+import io.noties.markwon.app.sample.Sample
 
 class SamplePreviewFragment : Fragment() {
 

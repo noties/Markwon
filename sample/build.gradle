@@ -60,6 +60,7 @@ dependencies {
         implementation it['debug']
         implementation it['adapt']
         implementation it['android-svg']
+        implementation it['android-gif']
     }
 
     deps['annotationProcessor'].with {

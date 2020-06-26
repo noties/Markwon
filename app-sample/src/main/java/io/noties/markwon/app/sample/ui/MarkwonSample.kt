@@ -1,4 +1,4 @@
-package io.noties.markwon.app.ui
+package io.noties.markwon.app.sample.ui
 
 import android.view.LayoutInflater
 import android.view.View

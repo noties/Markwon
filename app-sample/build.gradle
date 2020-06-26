@@ -45,19 +45,46 @@ androidExtensions {
     features = ["parcelize"]
 }
 
+configurations.all {
+    exclude group: 'org.jetbrains', module: 'annotations-java5'
+}
+
 dependencies {
     kapt project(':sample-utils:processor')
+    deps['annotationProcessor'].with {
+        kapt it['prism4j-bundler']
+    }
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':markwon-core')
+    implementation project(':markwon-editor')
+    implementation project(':markwon-ext-latex')
+    implementation project(':markwon-ext-strikethrough')
+    implementation project(':markwon-ext-tables')
+    implementation project(':markwon-ext-tasklist')
+    implementation project(':markwon-html')
+    implementation project(':markwon-image')
+    implementation project(':markwon-inline-parser')
+    implementation project(':markwon-linkify')
+    implementation project(':markwon-recycler')
+    implementation project(':markwon-recycler-table')
+    implementation project(':markwon-simple-ext')
+    implementation project(':markwon-syntax-highlight')
+
+    implementation project(':markwon-image-picasso')
+    implementation project(':markwon-image-glide')
 
     deps.with {
         implementation it['x-recycler-view']
         implementation it['x-cardview']
         implementation it['x-fragment']
+        implementation it['okhttp']
+        implementation it['prism4j']
         implementation it['gson']
         implementation it['adapt']
         implementation it['debug']
+        implementation it['android-svg']
+        implementation it['android-gif']
     }
 }

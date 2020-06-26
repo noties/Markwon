@@ -1,4 +1,4 @@
-package io.noties.markwon.app
+package io.noties.markwon.app.sample
 
 import android.content.Context
 import io.noties.markwon.app.utils.Cancellable

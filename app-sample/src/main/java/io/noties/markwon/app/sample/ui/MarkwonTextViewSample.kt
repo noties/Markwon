@@ -1,4 +1,4 @@
-package io.noties.markwon.app.ui
+package io.noties.markwon.app.sample.ui
 
 import android.content.Context
 import android.view.View

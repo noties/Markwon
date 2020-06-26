@@ -1,9 +1,9 @@
-package io.noties.markwon.app
+package io.noties.markwon.app.sample
 
 import android.os.Bundle
 import android.view.Window
 import androidx.fragment.app.FragmentActivity
-import io.noties.markwon.app.ui.SampleListFragment
+import io.noties.markwon.app.sample.ui.SampleListFragment
 
 class MainActivity : FragmentActivity() {
 

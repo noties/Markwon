@@ -1,4 +1,4 @@
-package io.noties.markwon.app.adapt
+package io.noties.markwon.app.sample
 
 import android.text.Spanned
 import android.view.LayoutInflater
@@ -8,8 +8,7 @@ import android.widget.TextView
 import io.noties.adapt.Item
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.R
-import io.noties.markwon.app.Sample
-import io.noties.markwon.app.base.FlowLayout
+import io.noties.markwon.app.widget.FlowLayout
 import io.noties.markwon.app.utils.displayName
 import io.noties.markwon.app.utils.hidden
 import io.noties.markwon.app.utils.tagDisplayName

@@ -11,4 +11,7 @@
 
     <dimen name="divider_height">1dip</dimen>
     <dimen name="tab_bar_height">56dip</dimen>
+
+    <dimen name="progress_bar_side">64dip</dimen>
+
 </resources>

@@ -42,7 +42,7 @@
             android:paddingBottom="36dip"
             tools:layout_marginTop="56dip" />
 
-        <io.noties.markwon.app.base.SearchBar
+        <io.noties.markwon.app.widget.SearchBar
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

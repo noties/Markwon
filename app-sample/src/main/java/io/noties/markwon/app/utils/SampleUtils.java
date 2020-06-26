@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import io.noties.markwon.app.Sample;
+import io.noties.markwon.app.sample.Sample;
 
 public abstract class SampleUtils {
 

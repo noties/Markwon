@@ -1,4 +1,4 @@
-package io.noties.markwon.app.ui
+package io.noties.markwon.app.sample.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -19,11 +19,11 @@ import io.noties.debug.Debug
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.App
 import io.noties.markwon.app.R
-import io.noties.markwon.app.Sample
-import io.noties.markwon.app.SampleManager
-import io.noties.markwon.app.SampleSearch
-import io.noties.markwon.app.adapt.SampleItem
-import io.noties.markwon.app.base.SearchBar
+import io.noties.markwon.app.sample.Sample
+import io.noties.markwon.app.sample.SampleManager
+import io.noties.markwon.app.sample.SampleSearch
+import io.noties.markwon.app.sample.SampleItem
+import io.noties.markwon.app.widget.SearchBar
 import io.noties.markwon.app.utils.Cancellable
 import io.noties.markwon.app.utils.displayName
 import io.noties.markwon.app.utils.onPreDraw
