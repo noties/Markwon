@@ -35,8 +35,12 @@
 
                 <data
                     android:host="github.com"
-                    android:pathPattern=".*\\.md"
                     android:scheme="https" />
+
+                <data android:pathPattern=".*\\.md" />
+                <data android:pathPattern=".*\\..*\\.md" />
+                <data android:pathPattern=".*\\..*\\..*\\.md"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.md"/>
 
             </intent-filter>
         </activity>

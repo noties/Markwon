@@ -4,8 +4,13 @@ import android.net.Uri
 import java.util.regex.Pattern
 
 object ReadMeUtils {
+
     // username, repo, branch, lastPathSegment
-    private val RE = Pattern.compile("^https:\\/\\/github\\.com\\/(\\w+?)\\/(\\w+?)\\/(?:blob|raw)\\/(\\w+?)\\/(.+)")
+    @Suppress("RegExpRedundantEscape")
+    private val RE_FILE = Pattern.compile("^https:\\/\\/github\\.com\\/([\\w-.]+?)\\/([\\w-.]+?)\\/(?:blob|raw)\\/([\\w-.]+?)\\/(.+)\$")
+
+    @Suppress("RegExpRedundantEscape")
+    val RE_REPOSITORY: Pattern = Pattern.compile("^https:\\/\\/github.com\\/([\\w-.]+?)\\/([\\w-.]+?)\\/*\$")
 
     data class GithubInfo(
             val username: String,
@@ -20,7 +25,7 @@ object ReadMeUtils {
             return null
         }
 
-        val matcher = RE.matcher(data.toString())
+        val matcher = RE_FILE.matcher(data.toString())
         if (!matcher.matches()) {
             return null
         }
@@ -38,7 +43,16 @@ object ReadMeUtils {
         return if (info == null) {
             data.toString()
         } else {
-            "https://github.com/${info.username}/${info.repository}/raw/${info.branch}/${info.fileName}"
+            buildRawGithubUrl(info)
         }
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun buildRawGithubUrl(info: GithubInfo): String {
+        return "https://github.com/${info.username}/${info.repository}/raw/${info.branch}/${info.fileName}"
+    }
+
+    fun buildRepositoryReadMeUrl(username: String, repository: String): String {
+        return buildRawGithubUrl(GithubInfo(username, repository, "master", "README.md"))
     }
 }

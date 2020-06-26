@@ -76,7 +76,9 @@ ext {
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",
             'android-svg'             : 'com.caverock:androidsvg:1.4',
+            // we need 2 gif artifacts at long as we have a difference in version used for API compatibility
             'android-gif'             : 'pl.droidsonroids.gif:android-gif-drawable:1.2.15',
+            'android-gif-impl'        : 'pl.droidsonroids.gif:android-gif-drawable:1.2.20',
             'jlatexmath-android'      : 'ru.noties:jlatexmath-android:0.2.0',
             'okhttp'                  : 'com.squareup.okhttp3:okhttp:3.9.0',
             'prism4j'                 : 'io.noties:prism4j:2.0.0',

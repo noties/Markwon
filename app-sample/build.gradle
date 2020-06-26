@@ -85,6 +85,6 @@ dependencies {
         implementation it['adapt']
         implementation it['debug']
         implementation it['android-svg']
-        implementation it['android-gif']
+        implementation it['android-gif-impl']
     }
 }

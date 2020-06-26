@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import io.noties.debug.Debug
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.app.R
 import io.noties.markwon.app.utils.ReadMeUtils
 import io.noties.markwon.app.utils.hidden
 import io.noties.markwon.app.utils.loadReadMe
 import io.noties.markwon.app.utils.textOrHide
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.ImagesPlugin
@@ -27,6 +29,7 @@ import io.noties.markwon.recycler.table.TableEntry
 import io.noties.markwon.recycler.table.TableEntryPlugin
 import io.noties.markwon.syntax.Prism4jThemeDefault
 import io.noties.markwon.syntax.SyntaxHighlightPlugin
+import io.noties.markwon.utils.DumpNodes
 import io.noties.prism4j.Prism4j
 import io.noties.prism4j.annotations.PrismBundle
 import okhttp3.Call
@@ -65,6 +68,7 @@ class ReadMeActivity : Activity() {
                 .usePlugin(TableEntryPlugin.create(this))
                 .usePlugin(SyntaxHighlightPlugin.create(Prism4j(GrammarLocatorDef()), Prism4jThemeDefault.create(0)))
                 .usePlugin(TaskListPlugin.create(this))
+                .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(ReadMeImageDestinationPlugin(intent.data))
                 .usePlugin(object : AbstractMarkwonPlugin() {
                     override fun configureVisitor(builder: MarkwonVisitor.Builder) {
@@ -78,6 +82,10 @@ class ReadMeActivity : Activity() {
                                     .highlight(block.info, block.literal.trim())
                             visitor.builder().append(code)
                         }
+                    }
+
+                    override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                        builder.linkResolver(ReadMeLinkResolver())
                     }
                 })
                 .build()
@@ -120,6 +128,7 @@ class ReadMeActivity : Activity() {
                 is Result.Success -> {
                     val markwon = markwon
                     val node = markwon.parse(result.markdown)
+                    Debug.i(DumpNodes.dump(node))
                     if (window != null) {
                         recyclerView.post {
                             adapter.setParsedMarkdown(markwon, node)
