@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -87,16 +88,22 @@ public class MarkwonSampleProcessor extends AbstractProcessor {
         if (!roundEnvironment.processingOver()) {
             final long begin = System.currentTimeMillis();
             final Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(MarkwonSampleInfo.class);
-            if (elements != null) {
+            // we should not have zero samples
+            if (elements != null && elements.size() > 0) {
 
+                final HashSet<MarkwonSample> markwonSamples = new HashSet<>();
                 for (Element element : elements) {
-                    process(element);
+                    try {
+                        markwonSamples.add(parse((TypeElement) element));
+                    } catch (Throwable t) {
+                        throw new RuntimeException(t);
+                    }
                 }
 
-                if (samplesUpdated) {
+                if (!markwonSamples.equals(new HashSet<>(samples))) {
                     logger.info("samples updated, writing at path: %s", samplesFilePath);
                     try {
-                        writeSamples(samplesFilePath, samples);
+                        writeSamples(samplesFilePath, markwonSamples);
                     } catch (Throwable t) {
                         logger.error(t.getMessage());
                         throw new RuntimeException(t);
@@ -145,7 +152,7 @@ public class MarkwonSampleProcessor extends AbstractProcessor {
         }
     }
 
-    private static void writeSamples(@NonNull String path, @NonNull List<MarkwonSample> samples) throws Throwable {
+    private static void writeSamples(@NonNull String path, @NonNull Set<MarkwonSample> markwonSamples) throws Throwable {
 
         final File file = new File(path);
 
@@ -158,6 +165,8 @@ public class MarkwonSampleProcessor extends AbstractProcessor {
                 throw new Throwable("Cannot create new file at: " + path);
             }
         }
+
+        final List<MarkwonSample> samples = new ArrayList<>(markwonSamples);
 
         // sort based on id (it is date)
         // new items come first (DESC order)

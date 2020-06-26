@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// NB! if class was just removed if won't be removed from samples.json
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface MarkwonSampleInfo {
@@ -22,7 +23,7 @@ public @interface MarkwonSampleInfo {
 
     String title();
 
-    String description();
+    String description() default "";
 
     MarkwonArtifact[] artifacts();
 
