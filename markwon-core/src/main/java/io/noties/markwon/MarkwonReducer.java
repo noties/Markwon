@@ -2,6 +2,7 @@ package io.noties.markwon;
 
 import androidx.annotation.NonNull;
 
+import org.commonmark.node.LinkReferenceDefinition;
 import org.commonmark.node.Node;
 
 import java.util.ArrayList;
@@ -48,7 +49,11 @@ public abstract class MarkwonReducer {
                 Node temp;
 
                 while (node != null) {
-                    list.add(node);
+                    // @since $nap; do not include LinkReferenceDefinition node (would result
+                    //  in empty textView if rendered in recycler-view)
+                    if (!(node instanceof LinkReferenceDefinition)) {
+                        list.add(node);
+                    }
                     temp = node.getNext();
                     node.unlink();
                     node = temp;

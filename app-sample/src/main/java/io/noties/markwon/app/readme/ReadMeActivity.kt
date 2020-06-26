@@ -29,7 +29,6 @@ import io.noties.markwon.recycler.table.TableEntry
 import io.noties.markwon.recycler.table.TableEntryPlugin
 import io.noties.markwon.syntax.Prism4jThemeDefault
 import io.noties.markwon.syntax.SyntaxHighlightPlugin
-import io.noties.markwon.utils.DumpNodes
 import io.noties.prism4j.Prism4j
 import io.noties.prism4j.annotations.PrismBundle
 import okhttp3.Call
@@ -128,7 +127,6 @@ class ReadMeActivity : Activity() {
                 is Result.Success -> {
                     val markwon = markwon
                     val node = markwon.parse(result.markdown)
-                    Debug.i(DumpNodes.dump(node))
                     if (window != null) {
                         recyclerView.post {
                             adapter.setParsedMarkdown(markwon, node)

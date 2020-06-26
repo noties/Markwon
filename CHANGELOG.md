@@ -11,6 +11,7 @@
 * `inline-parser` -  `BangInlineProcessor` properly returns `null` if no image node is found (possible to define other inline parsers that use `!` as special character)
 * `image` - `AsyncDrawable` won't trigger loading if it has result (aim: `RecyclerView` due to multiple attach/detach events of a View)
 * `image` - `AsyncDrawable` will resume result if it is `Animatable` and was playing before detach event (aim: `RecyclerView`) ([#241])
+* `core` - `MarkwonReducer` filter out `LinkReferenceDefinition` nodes
 
 #### Fixed
 * `image-glide` cache `RequestManager` in  `GlideImagesPlugin#create(Context)` factory method ([#259])
