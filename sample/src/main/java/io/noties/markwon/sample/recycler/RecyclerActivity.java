@@ -3,12 +3,14 @@ package io.noties.markwon.sample.recycler;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.UpdateAppearance;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -87,8 +89,11 @@ public class RecyclerActivity extends Activity {
                     plugin
                             .addSchemeHandler(FileSchemeHandler.createWithAssets(context))
                             .addSchemeHandler(OkHttpNetworkSchemeHandler.create())
-                            .addMediaDecoder(SvgMediaDecoder.create())
-                            .placeholderProvider(drawable -> new ColorDrawable(0xFFff0000));
+                            .placeholderProvider(drawable -> {
+                                final Drawable placeholder = new ColorDrawable(0xFFff0000);
+                                placeholder.setBounds(0, 0, 100, 100);
+                                return  placeholder;
+                            });
                 }))
 //                .usePlugin(PicassoImagesPlugin.create(context))
 //                .usePlugin(GlideImagesPlugin.create(context))
@@ -122,6 +127,8 @@ public class RecyclerActivity extends Activity {
                         // `RemoveUnderlineSpan` will be added AFTER original, thus it will remove underline applied by original
                         builder.appendFactory(Link.class, (configuration, props) -> new RemoveUnderlineSpan());
                     }
+
+
                 })
                 .build();
     }

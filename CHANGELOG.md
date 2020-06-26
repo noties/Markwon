@@ -8,11 +8,23 @@
 
 #### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])
+* `inline-parser` -  `BangInlineProcessor` properly returns `null` if no image node is found (possible to define other inline parsers that use `!` as special character)
+* `image` - `AsyncDrawable` won't trigger loading if it has result (aim: `RecyclerView` due to multiple attach/detach events of a View)
+* `image` - `AsyncDrawable` will resume result if it is `Animatable` and was playing before detach event (aim: `RecyclerView`) ([#241])
+
+#### Fixed
+* `image-glide` cache `RequestManager` in  `GlideImagesPlugin#create(Context)` factory method ([#259])
 
 #### Deprecated
 * `core` - `MovementMethodPlugin.create()` use explicit `MovementMethodPlugin.link()` instead
 
+#### Removed
+* `image` - `AsyncDrawable#hasKnownDimentions` (deprecated in `4.2.1`)
+
 [#235]: https://github.com/noties/Markwon/issues/235
+[#241]: https://github.com/noties/Markwon/issues/241
+[#259]: https://github.com/noties/Markwon/issues/259
+
 
 # 4.4.0
 * `TextViewSpan` to obtain `TextView` in which markdown is displayed (applied by `CorePlugin`)

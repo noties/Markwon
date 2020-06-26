@@ -30,6 +30,7 @@ import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.core.spans.LastLineSpacingSpan;
+import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.image.SchemeHandler;
@@ -61,7 +62,8 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
                 .add("allBlocksNoForcedLine", this::allBlocksNoForcedLine)
                 .add("anchor", this::anchor)
                 .add("letterOrderedList", this::letterOrderedList)
-                .add("tableOfContents", this::tableOfContents);
+                .add("tableOfContents", this::tableOfContents)
+                .add("readMore", this::readMore);
     }
 
     @Override
@@ -463,4 +465,16 @@ public class BasicPluginsActivity extends ActivityWithMenuOptions {
 //                .build();
 //        markwon.setMarkdown(textView, md);
 //    }
+
+    private void readMore() {
+        final String md = "" +
+                "Lorem **ipsum** ![dolor](https://avatars2.githubusercontent.com/u/30618885?s=460&v=4) sit amet, consectetur adipiscing elit. Morbi vitae enim ut sem aliquet ultrices. Nunc a accumsan orci. Suspendisse tortor ante, lacinia ac scelerisque sed, dictum eget metus. Morbi ante augue, tristique eget quam in, vestibulum rutrum lacus. Nulla aliquam auctor cursus. Nulla at lacus condimentum, viverra lacus eget, sollicitudin ex. Cras efficitur leo dui, sit amet rutrum tellus venenatis et. Sed in facilisis libero. Etiam ultricies, nulla ut venenatis tincidunt, tortor erat tristique ante, non aliquet massa arcu eget nisl. Etiam gravida erat ante, sit amet lobortis mauris commodo nec. Praesent vitae sodales quam. Vivamus condimentum porta suscipit. Donec posuere id felis ac scelerisque. Vestibulum lacinia et leo id lobortis. Sed vitae dolor nec ligula dapibus finibus vel eu libero. Nam tincidunt maximus elit, sit amet tincidunt lacus laoreet malesuada.\n\n" +
+                "here we ![are](https://avatars2.githubusercontent.com/u/30618885?s=460&v=4)";
+        final Markwon markwon = Markwon.builder(this)
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(TablePlugin.create(this))
+                .usePlugin(new ReadMorePlugin())
+                .build();
+        markwon.setMarkdown(textView, md);
+    }
 }

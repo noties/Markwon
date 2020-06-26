@@ -24,8 +24,9 @@ allprojects {
     version = VERSION_NAME
     group = GROUP
 
+    // do we actually need javadoc any more?
     tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
+        enabled = false
     }
 }
 
