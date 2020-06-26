@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.basics.SimpleWalkthrough",
+    "id": "202006178153426",
+    "title": "Simple with walk-through",
+    "description": "Walk-through for simple use case",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "basics"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.basics.Simple",
     "id": "202006178152255",
     "title": "Simple",
