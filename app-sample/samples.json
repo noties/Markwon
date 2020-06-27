@@ -1,5 +1,100 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.movementmethod.MovementMethodPluginSample",
+    "id": "202006179081631",
+    "title": "MovementMethodPlugin",
+    "description": "Plugin to control movement method",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "movement-method",
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.movementmethod.DisableImplicitMovementMethodSample",
+    "id": "202006179081256",
+    "title": "Disable implicit movement method",
+    "description": "Configure `Markwon` to **not** apply implicit movement method",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "movement-method",
+      "plugin",
+      "recycler-view"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.movementmethod.ExplicitMovementMethodSample",
+    "id": "202006179080007",
+    "title": "Explicit movement method",
+    "description": "When a movement method already applied to a `TextView``Markwon` won\u0027t try to apply own (implicit) one",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "movement-method"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.movementmethod.ImplicitMovementMethodSample",
+    "id": "202006179075524",
+    "title": "Implicit movement method",
+    "description": "By default movement method is applied for links to be clickable",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "movement-method"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.EnabledBlockTypesSample",
+    "id": "202006179075012",
+    "title": "Enabled markdown blocks",
+    "description": "Modify/inspect enabled by `CorePlugin` block types. Disable quotes or other blocks from being parsed",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "block",
+      "parsing",
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.ToastDynamicContentSample",
+    "id": "202006179074017",
+    "title": "Markdown in Toast (with dynamic content)",
+    "description": "Display markdown in a `android.widget.Toast` with dynamic content (image)",
+    "artifacts": [
+      "CORE",
+      "IMAGE"
+    ],
+    "tags": [
+      "hack",
+      "toast"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.ToastSample",
+    "id": "202006179072642",
+    "title": "Markdown in Toast",
+    "description": "Display _static_ markdown content in a `android.widget.Toast`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "toast"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.basics.SimpleWalkthrough",
     "id": "202006178153426",
     "title": "Simple with walk-through",

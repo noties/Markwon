@@ -192,7 +192,7 @@ public class CoreActivity extends ActivityWithMenuOptions {
         textView.setMovementMethod(null);
 
         // by default Markwon will set a LinkMovementMethod on a TextView if it is missing
-        // to control that `hasExplicitMovementMethodPlugin` can be used
+        // to control that `hasExplicitMovementMethod` can be used
         final String md = "[1 link](#) here";
 
         final Markwon markwon = Markwon.builder(this)
@@ -202,7 +202,7 @@ public class CoreActivity extends ActivityWithMenuOptions {
                         // Markwon **won't** set implicit movement method
                         //  thus making the link in markdown input not clickable
                         registry.require(CorePlugin.class)
-                                .hasExplicitMovementMethodPlugin(true);
+                                .hasExplicitMovementMethod(true);
                     }
                 })
                 .build();
@@ -211,7 +211,7 @@ public class CoreActivity extends ActivityWithMenuOptions {
     }
 
     private void explicitMovementMethodPlugin() {
-        // additionally special MovementMethodPlugin.none() can be used to control `hasExplicitMovementMethodPlugin`
+        // additionally special MovementMethodPlugin.none() can be used to control `hasExplicitMovementMethod`
 
         final String md = "[2 link](#) here";
 

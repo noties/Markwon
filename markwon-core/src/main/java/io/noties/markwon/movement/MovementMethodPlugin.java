@@ -68,7 +68,7 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configure(@NonNull Registry registry) {
         registry.require(CorePlugin.class)
-                .hasExplicitMovementMethodPlugin(true);
+                .hasExplicitMovementMethod(true);
     }
 
     @Override

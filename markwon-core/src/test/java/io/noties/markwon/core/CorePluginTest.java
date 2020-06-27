@@ -30,13 +30,8 @@ import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
@@ -44,9 +39,6 @@ import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
-import ix.Ix;
-import ix.IxFunction;
-import ix.IxPredicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -279,7 +271,7 @@ public class CorePluginTest {
     public void explicit_movement_method() {
         final TextView textView = mock(TextView.class);
         final CorePlugin plugin = CorePlugin.create()
-                .hasExplicitMovementMethodPlugin(true);
+                .hasExplicitMovementMethod(true);
         plugin.afterSetText(textView);
         verify(textView, never()).setMovementMethod(any(MovementMethod.class));
     }

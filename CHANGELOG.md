@@ -4,7 +4,7 @@
 
 #### Added
 * `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods
-* `core` - `CorePlugin` `hasExplicitMovementMethodPlugin` configuration method to **not** add implicit `LinkMovementMethod` in `afterSetText`
+* `core` - `CorePlugin` `hasExplicitMovementMethod` configuration method to **not** add implicit `LinkMovementMethod` in `afterSetText`
 
 #### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])

@@ -116,7 +116,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     private final List<OnTextAddedListener> onTextAddedListeners = new ArrayList<>(0);
 
     // @since $nap;
-    private boolean hasExplicitMovementMethodPlugin;
+    private boolean hasExplicitMovementMethod;
 
     protected CorePlugin() {
     }
@@ -126,8 +126,8 @@ public class CorePlugin extends AbstractMarkwonPlugin {
      */
     @SuppressWarnings("UnusedReturnValue")
     @NonNull
-    public CorePlugin hasExplicitMovementMethodPlugin(boolean hasExplicitMovementMethodPlugin) {
-        this.hasExplicitMovementMethodPlugin = hasExplicitMovementMethodPlugin;
+    public CorePlugin hasExplicitMovementMethod(boolean hasExplicitMovementMethod) {
+        this.hasExplicitMovementMethod = hasExplicitMovementMethod;
         return this;
     }
 
@@ -202,7 +202,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         // we do it `afterSetText` so any user-defined movement method won't be
         // replaced (it should be done in `beforeSetText` or manually on a TextView)
         // @since $nap; we additionally check if we should apply _implicit_ movement method
-        if (!hasExplicitMovementMethodPlugin && textView.getMovementMethod() == null) {
+        if (!hasExplicitMovementMethod && textView.getMovementMethod() == null) {
             textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
