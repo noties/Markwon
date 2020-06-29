@@ -20,15 +20,15 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.app.App
 import io.noties.markwon.app.R
 import io.noties.markwon.app.sample.Sample
+import io.noties.markwon.app.sample.SampleItem
 import io.noties.markwon.app.sample.SampleManager
 import io.noties.markwon.app.sample.SampleSearch
-import io.noties.markwon.app.sample.SampleItem
-import io.noties.markwon.app.widget.SearchBar
 import io.noties.markwon.app.utils.Cancellable
 import io.noties.markwon.app.utils.displayName
 import io.noties.markwon.app.utils.onPreDraw
 import io.noties.markwon.app.utils.recyclerView
 import io.noties.markwon.app.utils.tagDisplayName
+import io.noties.markwon.app.widget.SearchBar
 import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import kotlinx.android.parcel.Parcelize
@@ -91,6 +91,9 @@ class SampleListFragment : Fragment() {
                     recyclerView.paddingRight,
                     recyclerView.paddingBottom
             )
+            recyclerView.post {
+                recyclerView.scrollToPosition(0)
+            }
         }
 
         val state: State? = savedInstanceState?.getParcelable(STATE)

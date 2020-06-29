@@ -1,5 +1,402 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.NoParsingSample",
+    "id": "202006181171212",
+    "title": "No parsing",
+    "description": "All commonmark parsing is disabled (both inlines and blocks)",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.InlinePluginNoDefaultsSample",
+    "id": "202006181170857",
+    "title": "Inline parsing without defaults",
+    "description": "Configure inline parser plugin to **not** have any **inline** parsing",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorNewLineContinuationSample",
+    "id": "202006181170348",
+    "title": "Editor new line continuation",
+    "description": "Sample of how new line character can be handled in order to add a _continuation_, for example adding a new bullet list item if current line starts with one",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorMultipleEditSpansSample",
+    "id": "202006181165920",
+    "title": "Multiple edit spans",
+    "description": "Additional multiple edit spans for editor",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorAdditionalPluginSample",
+    "id": "202006181165347",
+    "title": "Additional plugin",
+    "description": "Additional plugin for editor",
+    "artifacts": [
+      "EDITOR",
+      "EXT_STRIKETHROUGH",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorAdditionalEditSpan",
+    "id": "202006181165136",
+    "title": "Additional edit span",
+    "description": "Additional _edit_ span (span that is present in `EditText` along with punctuation",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorCustomPunctuationSample",
+    "id": "202006181164627",
+    "title": "Custom punctuation span",
+    "description": "Custom span for punctuation in editor",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorPreRenderSample",
+    "id": "202006181164422",
+    "title": "Editor with pre-render (async)",
+    "description": "Editor functionality with highlight taking place in another thread",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorSimpleSample",
+    "id": "202006181164227",
+    "title": "Simple editor",
+    "description": "Simple usage of editor with markdown highlight",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.CustomExtensionSample",
+    "id": "202006181163248",
+    "title": "Custom extension",
+    "description": "Custom extension that adds an icon from resources and renders it as image with `@ic-name` syntax",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "extension",
+      "image",
+      "parsing",
+      "plugin",
+      "rendering",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
+    "id": "202006181162024",
+    "title": "User mention and issue (via text)",
+    "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
+    "artifacts": [
+      "CORE",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "parsing",
+      "rendering",
+      "text-added-listener"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "id": "202006181162024",
+    "title": "User mention and issue (via text)",
+    "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing",
+      "rendering",
+      "text-added-listener"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.ReadMorePluginSample",
+    "id": "202006181161505",
+    "title": "Read more plugin",
+    "description": "Plugin that adds expand/collapse (\"show all\"/\"show less\")",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.TableOfContentsSample",
+    "id": "202006181161226",
+    "title": "Table of contents",
+    "description": "Sample plugin that adds a table of contents header",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "plugin",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.LetterOrderedListSample",
+    "id": "202006181130954",
+    "title": "Letter ordered list",
+    "description": "Render bullet list inside an ordered list with letters instead of bullets",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "lists",
+      "plugin",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.AnchorSample",
+    "id": "202006181130728",
+    "title": "Anchor plugin",
+    "description": "HTML-like anchor links plugin, which scrolls to clicked anchor",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "anchor",
+      "links",
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.AllBlocksNoForcedNewLineSample",
+    "id": "202006181130227",
+    "title": "All blocks no padding",
+    "description": "Do not render new lines (padding) after all blocks",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "block",
+      "padding",
+      "rendering",
+      "spacing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.HeadingNoSpaceBlockHandlerSample",
+    "id": "202006181125924",
+    "title": "Heading no padding (block handler)",
+    "description": "Process padding (spacing) after heading with a `BlockHandler`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "block",
+      "heading",
+      "padding",
+      "rendering",
+      "spacing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.HeadingNoSpaceSample",
+    "id": "202006181125622",
+    "title": "Heading no padding",
+    "description": "Do not add a new line after heading node",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "padding",
+      "rendering",
+      "spacing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.AdditionalSpacingSample",
+    "id": "202006181125321",
+    "title": "Additional spacing after block",
+    "description": "Add additional spacing (padding) after last line of a block",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "padding",
+      "spacing",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.SoftBreakAddsNewLineSample",
+    "id": "202006181125040",
+    "title": "Soft break new line",
+    "description": "Add a new line for a markdown soft-break node",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "new-line",
+      "soft-break"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.SoftBreakAddsSpace",
+    "id": "202006181124706",
+    "title": "Soft break adds space",
+    "description": "By default a soft break (`\n`) will add a space character instead of new line",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "defaults",
+      "new-line",
+      "soft-break"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.ImagesCustomSchemeSample",
+    "id": "202006181124201",
+    "title": "Image destination custom scheme",
+    "description": "Example of handling custom scheme (`https`, `ftp`, `whatever`, etc.) for images destination URLs with `ImagesPlugin`",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.LinkWithoutSchemeSample",
+    "id": "202006181124005",
+    "title": "Links without scheme",
+    "description": "Links without scheme are considered to be `https`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "defaults",
+      "links"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.CustomizeThemeSample",
+    "id": "202006181123617",
+    "title": "Customize theme",
+    "description": "Customize `MarkwonTheme` styling",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "plugin",
+      "style",
+      "theme"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.DisableNodeSample",
+    "id": "202006181123308",
+    "title": "Disable node from rendering",
+    "description": "Disable _parsed_ node from being rendered (markdown syntax is still consumed)",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.ParagraphSpanStyle",
+    "id": "202006181122647",
+    "title": "Paragraph style",
+    "description": "Apply a style (via span) to a paragraph",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "paragraph",
+      "span",
+      "style"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.LinkTitleSample",
+    "id": "202006181122230",
+    "title": "Obtain link title",
+    "description": "Obtain title (text) of clicked link, `[title](#destination)`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.movementmethod.DisableImplicitMovementMethodPluginSample",
+    "id": "202006181121803",
+    "title": "Disable implicit movement method via plugin",
+    "description": "Disable implicit movement method via `MovementMethodPlugin`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "movement-method",
+      "recycler-view"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.MovementMethodPluginSample",
     "id": "202006179081631",
     "title": "MovementMethodPlugin",
@@ -17,7 +414,7 @@
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.DisableImplicitMovementMethodSample",
     "id": "202006179081256",
     "title": "Disable implicit movement method",
-    "description": "Configure `Markwon` to **not** apply implicit movement method",
+    "description": "Configure `Markwon` to **not** apply implicit movement method, which consumes touch events when used in a `RecyclerView` even when markdown does not contain links",
     "artifacts": [
       "CORE"
     ],
@@ -50,6 +447,7 @@
       "CORE"
     ],
     "tags": [
+      "defaults",
       "links",
       "movement-method"
     ]

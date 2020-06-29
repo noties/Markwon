@@ -12,7 +12,9 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 @MarkwonSampleInfo(
   id = "202006179081256",
   title = "Disable implicit movement method",
-  description = "Configure `Markwon` to **not** apply implicit movement method",
+  description = "Configure `Markwon` to **not** apply implicit movement method, " +
+    "which consumes touch events when used in a `RecyclerView` even when " +
+    "markdown does not contain links",
   artifacts = [MarkwonArtifact.CORE],
   tags = [Tags.plugin, Tags.movementMethod, Tags.links, Tags.recyclerView]
 )

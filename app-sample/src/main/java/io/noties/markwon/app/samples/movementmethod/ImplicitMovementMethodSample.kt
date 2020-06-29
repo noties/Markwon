@@ -11,7 +11,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo
   title = "Implicit movement method",
   description = "By default movement method is applied for links to be clickable",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.movementMethod, Tags.links]
+  tags = [Tags.movementMethod, Tags.links, Tags.defaults]
 )
 class ImplicitMovementMethodSample : MarkwonTextViewSample() {
   override fun render() {

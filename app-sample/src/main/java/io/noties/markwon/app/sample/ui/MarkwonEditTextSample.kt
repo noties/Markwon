@@ -2,20 +2,20 @@ package io.noties.markwon.app.sample.ui
 
 import android.content.Context
 import android.view.View
-import android.widget.TextView
-
+import android.widget.EditText
 import io.noties.markwon.app.R
 
-abstract class MarkwonTextViewSample : MarkwonSample() {
+abstract class MarkwonEditTextSample: MarkwonSample() {
 
     protected lateinit var context: Context
-    protected lateinit var textView: TextView
+    protected lateinit var editText: EditText
 
-    override val layoutResId: Int = R.layout.sample_text_view
+    override val layoutResId: Int
+        get() = R.layout.activity_edit_text
 
     override fun onViewCreated(view: View) {
         context = view.context
-        textView = view.findViewById(R.id.text_view)
+        editText = view.findViewById(R.id.edit_text)
         render()
     }
 
