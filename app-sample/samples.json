@@ -1,5 +1,186 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.image.ErrorImageSample",
+    "id": "202006182165828",
+    "title": "Image error handler",
+    "description": "",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.image.PlaceholderImageSample",
+    "id": "202006182165504",
+    "title": "Image with placeholder",
+    "description": "",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.image.GifImageSample",
+    "id": "202006182162214",
+    "title": "GIF image",
+    "description": "",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "GIF",
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.image.SvgImageSample",
+    "id": "202006182161952",
+    "title": "SVG image",
+    "description": "",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "SVG",
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.image.ImageSample",
+    "id": "202006182144659",
+    "title": "Markdown image",
+    "description": "",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlDetailsSample",
+    "id": "202006182120752",
+    "title": "Details HTML tag",
+    "description": "Handling of `details` HTML tag",
+    "artifacts": [
+      "HTML",
+      "IMAGE"
+    ],
+    "tags": [
+      "image",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlCenterTagSample",
+    "id": "202006182120101",
+    "title": "Center HTML tag",
+    "description": "Handling of `center` HTML tag",
+    "artifacts": [
+      "HTML",
+      "IMAGE"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlEmptyTagReplacementSample",
+    "id": "202006182115725",
+    "title": "HTML empty tag replacement",
+    "description": "Render custom content when HTML tag contents is empty, in case of self-closed HTML tags or tags without content (closed right after opened)",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlIFrameSample",
+    "id": "202006182115521",
+    "title": "IFrame HTML tag",
+    "description": "Handling of `iframe` HTML tag",
+    "artifacts": [
+      "HTML",
+      "IMAGE"
+    ],
+    "tags": [
+      "image",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlImageSample",
+    "id": "202006182115300",
+    "title": "Html images",
+    "description": "Usage of HTML images",
+    "artifacts": [
+      "HTML",
+      "IMAGE"
+    ],
+    "tags": [
+      "image",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlEnhanceSample",
+    "id": "202006182115103",
+    "title": "Enhance custom HTML tag",
+    "description": "Custom HTML tag implementation that _enhances_ a part of text given start and end indices",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "rendering",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlRandomCharSize",
+    "id": "202006182114923",
+    "title": "Random char size HTML tag",
+    "description": "Implementation of a custom HTML tag handler that assigns each character a random size",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "rendering",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlAlignSample",
+    "id": "202006182114630",
+    "title": "Align HTML tag",
+    "description": "Implement custom HTML tag handling",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "rendering",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.editor.EditorHeadingSample",
+    "id": "202006182113954",
+    "title": "Heading edit handler",
+    "description": "Handling of heading node in editor",
+    "artifacts": [
+      "EDITOR",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "editor"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.NoParsingSample",
     "id": "202006181171212",
     "title": "No parsing",
@@ -136,13 +317,12 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
     "id": "202006181162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE",
-      "INLINE_PARSER"
+      "CORE"
     ],
     "tags": [
       "parsing",
@@ -151,12 +331,13 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
     "id": "202006181162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE"
+      "CORE",
+      "INLINE_PARSER"
     ],
     "tags": [
       "parsing",
@@ -177,7 +358,7 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.TableOfContentsSample",
+    "javaClassName": "io.noties.markwon.app.samples.plugins.TableOfContentsSample",
     "id": "202006181161226",
     "title": "Table of contents",
     "description": "Sample plugin that adds a table of contents header",
@@ -204,7 +385,7 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.AnchorSample",
+    "javaClassName": "io.noties.markwon.app.samples.plugins.AnchorSample",
     "id": "202006181130728",
     "title": "Anchor plugin",
     "description": "HTML-like anchor links plugin, which scrolls to clicked anchor",

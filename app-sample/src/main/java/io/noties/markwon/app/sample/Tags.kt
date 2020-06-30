@@ -27,4 +27,8 @@ object Tags {
     const val textAddedListener = "text-added-listener"
     const val editor = "editor"
     const val span = "span"
+    const val svg = "SVG"
+    const val gif = "GIF"
+    const val inline = "inline"
+    const val html = "HTML"
 }

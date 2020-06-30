@@ -45,5 +45,7 @@ public class AdditionalSpacingSample extends MarkwonTextViewSample {
         }
       })
       .build();
+
+    markwon.setMarkdown(textView, md);
   }
 }

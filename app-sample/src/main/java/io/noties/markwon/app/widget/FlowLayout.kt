@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import io.noties.markwon.app.R
+import io.noties.markwon.app.utils.hidden
 import kotlin.math.max
 
 class FlowLayout(context: Context, attrs: AttributeSet) : ViewGroup(context, attrs) {
@@ -61,6 +62,9 @@ class FlowLayout(context: Context, attrs: AttributeSet) : ViewGroup(context, att
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
+            if (child.hidden) {
+                continue
+            }
 
             // measure
             child.measure(childWidthSpec, childHeightSpec)

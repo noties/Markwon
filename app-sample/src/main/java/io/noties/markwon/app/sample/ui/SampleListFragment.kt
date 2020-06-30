@@ -19,12 +19,14 @@ import io.noties.debug.Debug
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.App
 import io.noties.markwon.app.R
+import io.noties.markwon.app.readme.ReadMeActivity
 import io.noties.markwon.app.sample.Sample
 import io.noties.markwon.app.sample.SampleItem
 import io.noties.markwon.app.sample.SampleManager
 import io.noties.markwon.app.sample.SampleSearch
 import io.noties.markwon.app.utils.Cancellable
 import io.noties.markwon.app.utils.displayName
+import io.noties.markwon.app.utils.hidden
 import io.noties.markwon.app.utils.onPreDraw
 import io.noties.markwon.app.utils.recyclerView
 import io.noties.markwon.app.utils.tagDisplayName
@@ -83,20 +85,21 @@ class SampleListFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapt
 
-        // additional padding for RecyclerView
-        searchBar.onPreDraw {
-            recyclerView.setPadding(
-                    recyclerView.paddingLeft,
-                    recyclerView.paddingTop + searchBar.height,
-                    recyclerView.paddingRight,
-                    recyclerView.paddingBottom
-            )
-            recyclerView.post {
-                recyclerView.scrollToPosition(0)
-            }
-        }
+//        // additional padding for RecyclerView
+        // greatly complicates state restoration (items jump and a lot of times state cannot be
+        //  even restored (layout manager scrolls to top item and that's it)
+//        searchBar.onPreDraw {
+//            recyclerView.setPadding(
+//                    recyclerView.paddingLeft,
+//                    recyclerView.paddingTop + searchBar.height,
+//                    recyclerView.paddingRight,
+//                    recyclerView.paddingBottom
+//            )
+//        }
 
-        val state: State? = savedInstanceState?.getParcelable(STATE)
+        val state: State? = arguments?.getParcelable(STATE)
+        Debug.i(state)
+
         pendingRecyclerScrollPosition = state?.recyclerScrollPosition
         if (state?.search != null) {
             searchBar.search(state.search)
@@ -106,6 +109,14 @@ class SampleListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+
+        val state = State(
+                search,
+                adapt.recyclerView?.scrollPosition
+        )
+        Debug.i(state)
+        arguments?.putParcelable(STATE, state)
+
         val cancellable = this.cancellable
         if (cancellable != null && !cancellable.isCancelled) {
             cancellable.cancel()
@@ -114,24 +125,38 @@ class SampleListFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        val state = State(
-                search,
-                adapt.recyclerView?.scrollPosition
-        )
-        outState.putParcelable(STATE, state)
-    }
+    // not called? yeah, whatever
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//
+//        val state = State(
+//                search,
+//                adapt.recyclerView?.scrollPosition
+//        )
+//        Debug.i(state)
+//        outState.putParcelable(STATE, state)
+//    }
 
     private fun initAppBar(view: View) {
         val appBar = view.findViewById<View>(R.id.app_bar)
 
         val appBarIcon: ImageView = appBar.findViewById(R.id.app_bar_icon)
         val appBarTitle: TextView = appBar.findViewById(R.id.app_bar_title)
+        val appBarIconReadme: ImageView = appBar.findViewById(R.id.app_bar_icon_readme)
+
+        val isInitialScreen = type is Type.All
+
+        appBarIcon.hidden = isInitialScreen
+        appBarIconReadme.hidden = !isInitialScreen
 
         val type = this.type
         if (type is Type.All) {
+            appBarIconReadme.setOnClickListener {
+                context?.let {
+                    val intent = ReadMeActivity.makeIntent(it)
+                    it.startActivity(intent)
+                }
+            }
             return
         }
 
@@ -162,13 +187,22 @@ class SampleListFragment : Fragment() {
         }
         adapt.setItems(items)
 
+        val recyclerView = adapt.recyclerView ?: return
+
         val scrollPosition = pendingRecyclerScrollPosition
+
+        Debug.i(scrollPosition)
+        Debug.trace()
+
         if (scrollPosition != null) {
             pendingRecyclerScrollPosition = null
-            val recyclerView = adapt.recyclerView ?: return
             recyclerView.onPreDraw {
                 (recyclerView.layoutManager as? LinearLayoutManager)
                         ?.scrollToPositionWithOffset(scrollPosition.position, scrollPosition.offset)
+            }
+        } else {
+            recyclerView.onPreDraw {
+                recyclerView.scrollToPosition(0)
             }
         }
     }
@@ -206,6 +240,9 @@ class SampleListFragment : Fragment() {
             is Type.Tag -> SampleSearch.Tag(search, type.tag)
             else -> SampleSearch.All(search)
         }
+
+        Debug.i(sampleSearch)
+        Debug.trace()
 
         // clear current
         cancellable?.let {
@@ -277,11 +314,20 @@ class SampleListFragment : Fragment() {
 
     private val RecyclerView.scrollPosition: RecyclerScrollPosition?
         get() {
-            val holder = findViewHolderForLayoutPosition(0) ?: return null
+            val holder = findFirstVisibleViewHolder() ?: return null
             val position = holder.adapterPosition
             val offset = holder.itemView.top
             return RecyclerScrollPosition(position, offset)
         }
+
+    // because findViewHolderForLayoutPosition doesn't work :'(
+    private fun RecyclerView.findFirstVisibleViewHolder(): RecyclerView.ViewHolder? {
+        if (childCount > 0) {
+            val child = getChildAt(0)
+            return findContainingViewHolder(child)
+        }
+        return null
+    }
 
     private sealed class Type {
         class Artifact(val artifact: MarkwonArtifact) : Type()

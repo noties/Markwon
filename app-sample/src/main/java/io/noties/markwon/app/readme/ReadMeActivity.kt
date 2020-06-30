@@ -2,6 +2,7 @@ package io.noties.markwon.app.readme
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -144,8 +145,12 @@ class ReadMeActivity : Activity() {
         data class Failure(val throwable: Throwable) : Result()
     }
 
-    private companion object {
-        fun load(context: Context, data: Uri?, callback: (Result) -> Unit) = try {
+    companion object {
+        fun makeIntent(context: Context): Intent {
+            return Intent(context, ReadMeActivity::class.java)
+        }
+
+        private fun load(context: Context, data: Uri?, callback: (Result) -> Unit) = try {
 
             if (data == null) {
                 callback.invoke(Result.Success(loadReadMe(context)))

@@ -1,4 +1,4 @@
-package io.noties.markwon.app.samples;
+package io.noties.markwon.app.samples.plugins;
 
 import android.view.View;
 import android.widget.ScrollView;
@@ -21,6 +21,7 @@ import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.app.R;
 import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
+import io.noties.markwon.app.samples.plugins.shared.AnchorHeadingPlugin;
 import io.noties.markwon.core.SimpleBlockNodeVisitor;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;

@@ -10,15 +10,22 @@
         style="@style/AppBarContainer"
         android:orientation="horizontal">
 
-        <ImageView
-            style="@style/AppBarIcon"
-            android:src="@mipmap/ic_launcher"
-            tools:ignore="ContentDescription" />
+        <FrameLayout
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height">
+
+            <ImageView
+                style="@style/AppBarIcon"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
 
         <FrameLayout
-            android:layout_width="match_parent"
+            android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/app_bar_height">
+            android:layout_weight="1">
 
             <TextView
                 style="@style/AppBarTitle"
@@ -26,11 +33,32 @@
 
         </FrameLayout>
 
+        <FrameLayout
+            android:layout_width="@dimen/app_bar_height"
+            android:layout_height="@dimen/app_bar_height">
+
+            <ImageView
+                android:id="@+id/app_bar_icon_readme"
+                style="@style/AppBarIcon"
+                android:src="@mipmap/ic_launcher"
+                android:visibility="visible"
+                tools:ignore="ContentDescription" />
+
+        </FrameLayout>
+
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <io.noties.markwon.app.widget.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:padding="@dimen/content_padding" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -39,17 +67,8 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingBottom="36dip"
-            tools:layout_marginTop="56dip" />
+            android:paddingBottom="36dip" />
 
-        <io.noties.markwon.app.widget.SearchBar
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:background="@color/search_bar_background_full"
-            android:padding="@dimen/content_padding" />
-
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

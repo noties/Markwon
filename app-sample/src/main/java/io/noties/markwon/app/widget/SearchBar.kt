@@ -73,6 +73,9 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
             textField.setText("")
             looseFocus()
         }
+
+        isSaveEnabled = false
+        textField.isSaveEnabled = false
     }
 
     fun search(text: String) {

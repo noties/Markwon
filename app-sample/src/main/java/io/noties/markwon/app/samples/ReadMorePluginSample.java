@@ -61,7 +61,7 @@ class ReadMorePlugin extends AbstractMarkwonPlugin {
     // establish connections with all _dynamic_ content that your markdown supports,
     //  like images, tables, latex, etc
     registry.require(ImagesPlugin.class);
-    registry.require(TablePlugin.class);
+//    registry.require(TablePlugin.class);
   }
 
   @Override

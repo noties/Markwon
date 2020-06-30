@@ -8,10 +8,10 @@ import android.widget.TextView
 import io.noties.adapt.Item
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.R
-import io.noties.markwon.app.widget.FlowLayout
 import io.noties.markwon.app.utils.displayName
 import io.noties.markwon.app.utils.hidden
 import io.noties.markwon.app.utils.tagDisplayName
+import io.noties.markwon.app.widget.FlowLayout
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.utils.NoCopySpannableFactory
 
