@@ -6,6 +6,7 @@
 * `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods
 * `core` - `CorePlugin` `hasExplicitMovementMethod` configuration method to **not** add implicit `LinkMovementMethod` in `afterSetText`
 * `ext-latex` - `JLatexMathTheme.Padding.of(int,int,int,int)` factory method
+* `app-sample` - example application
 
 #### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])
@@ -22,6 +23,7 @@
 
 #### Removed
 * `image` - `AsyncDrawable#hasKnownDimentions` (deprecated in `4.2.1`)
+* `app` and `sample` applications (merged together in a `app-sample` single app)
 
 [#235]: https://github.com/noties/Markwon/issues/235
 [#241]: https://github.com/noties/Markwon/issues/241

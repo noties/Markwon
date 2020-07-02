@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="latex_block_padding_vertical">8dip</dimen>
-    <dimen name="latex_block_padding_horizontal">16dip</dimen>
-</resources>

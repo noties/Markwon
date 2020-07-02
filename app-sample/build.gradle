@@ -16,6 +16,8 @@ android {
         versionName version
 
         resConfig 'en'
+
+        setProperty("archivesBaseName", "markwon-$versionName")
     }
 
     dexOptions {
