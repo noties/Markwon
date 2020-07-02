@@ -28,14 +28,15 @@ public class ErrorImageSample extends MarkwonTextViewSample {
 
     final Markwon markwon = Markwon.builder(context)
       // error handler additionally allows to log/inspect errors during image loading
-      .usePlugin(ImagesPlugin.create(plugin ->
+      .usePlugin(ImagesPlugin.create(plugin -> {
         plugin.errorHandler(new ImagesPlugin.ErrorHandler() {
           @Nullable
           @Override
           public Drawable handleError(@NonNull String url, @NonNull Throwable throwable) {
             return ContextCompat.getDrawable(context, R.drawable.ic_home_black_36dp);
           }
-        })))
+        });
+      }))
       .build();
 
     markwon.setMarkdown(textView, md);

@@ -14,7 +14,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   artifacts = MarkwonArtifact.CORE,
   tags = {Tags.newLine, Tags.softBreak}
 )
-class SoftBreakAddsNewLineSample extends MarkwonTextViewSample {
+public class SoftBreakAddsNewLineSample extends MarkwonTextViewSample {
   @Override
   public void render() {
     final String md = "" +

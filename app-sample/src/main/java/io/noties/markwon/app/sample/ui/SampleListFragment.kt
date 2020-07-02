@@ -54,10 +54,10 @@ class SampleListFragment : Fragment() {
     private val sampleManager: SampleManager
         get() = App.sampleManager
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        context?.also {
+        context.also {
             markwon = markwon(it)
         }
     }

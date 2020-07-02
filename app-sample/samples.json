@@ -1,5 +1,436 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListMutateSample",
+    "id": "202007184140901",
+    "title": "GFM task list mutate",
+    "description": "",
+    "artifacts": [
+      "EXT_TASKLIST"
+    ],
+    "tags": [
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListCustomDrawableSample",
+    "id": "202007184140749",
+    "title": "GFM task list custom drawable",
+    "description": "",
+    "artifacts": [
+      "EXT_TASKLIST"
+    ],
+    "tags": [
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListCustomColorsSample",
+    "id": "202007184140536",
+    "title": "GFM task list custom colors",
+    "description": "Custom colors for task list extension",
+    "artifacts": [
+      "EXT_TASKLIST"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListSample",
+    "id": "202007184140352",
+    "title": "GFM task list",
+    "description": "Github Flavored Markdown (GFM) task list extension",
+    "artifacts": [
+      "EXT_TASKLIST"
+    ],
+    "tags": [
+      "plugin"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.table.TableLatexSample",
+    "id": "202007184140041",
+    "title": "LaTeX inside table",
+    "description": "Usage of LaTeX formulas inside markdown tables",
+    "artifacts": [
+      "EXT_LATEX",
+      "EXT_TABLES",
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.table.TableWithImagesSample",
+    "id": "202007184135932",
+    "title": "Images inside table",
+    "description": "Usage of images inside markdown tables",
+    "artifacts": [
+      "EXT_TABLES",
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.table.TableLinkifySample",
+    "id": "202007184135739",
+    "title": "Linkify table",
+    "description": "Automatically linkify markdown content including content inside tables",
+    "artifacts": [
+      "EXT_TABLES",
+      "LINKIFY"
+    ],
+    "tags": [
+      "links"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.table.TableCustomizeSample",
+    "id": "202007184135621",
+    "title": "Customize table theme",
+    "description": "",
+    "artifacts": [
+      "EXT_TABLES"
+    ],
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.RecyclerSample",
+    "id": "202007184101750",
+    "title": "RecyclerView",
+    "description": "Usage with `RecyclerView`",
+    "artifacts": [
+      "RECYCLER",
+      "RECYCLER_TABLE"
+    ],
+    "tags": [
+      "recycler-view"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.LinkRemoveUnderlineSample",
+    "id": "202007184101224",
+    "title": "Remove link underline",
+    "description": "",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links",
+      "rendering",
+      "span"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.PrecomputedFutureSample",
+    "id": "202007184092446",
+    "title": "PrecomputedFutureTextSetterCompat",
+    "description": "Usage of `PrecomputedFutureTextSetterCompat` inside a `RecyclerView` with appcompat",
+    "artifacts": [
+      "RECYCLER"
+    ],
+    "tags": [
+      "precomputed-text",
+      "recycler-view"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.PrecomputedSample",
+    "id": "202007184091654",
+    "title": "PrecomputedTextSetterCompat",
+    "description": "`TextSetter` to use `PrecomputedTextSetterCompat`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "precomputed-text"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.notification.RemoteViewsSample",
+    "id": "202007184090140",
+    "title": "RemoteViews in notification",
+    "description": "Display markdown with platform (system) spans in notification via `RemoteViews`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "hack"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.notification.NotificationSample",
+    "id": "202007183130729",
+    "title": "Markdown in Notification",
+    "description": "Proof of concept of using `Markwon` with `android.app.Notification`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "hack"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexErrorSample",
+    "id": "202007183122624",
+    "title": "LaTeX error handling",
+    "description": "Log error when parsing LaTeX and display error drawable",
+    "artifacts": [
+      "EXT_LATEX"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexThemeSample",
+    "id": "202007183121528",
+    "title": "LaTeX theme",
+    "description": "Sample of theme customization for LaTeX",
+    "artifacts": [
+      "EXT_LATEX",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexDefaultTextColorSample",
+    "id": "202007183120848",
+    "title": "LaTeX default text color",
+    "description": "LaTeX will use text color of `TextView` by default",
+    "artifacts": [
+      "EXT_LATEX"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexDarkSample",
+    "id": "202007183094225",
+    "title": "LaTeX dark",
+    "description": "LaTeX automatically uses `TextView` text color if not configured explicitly",
+    "artifacts": [
+      "EXT_LATEX"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexDifferentTextSizesSample",
+    "id": "202007183093504",
+    "title": "LaTeX inline/block different text size",
+    "description": "",
+    "artifacts": [
+      "EXT_LATEX",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexOmegaSample",
+    "id": "202007183090618",
+    "title": "LaTeX omega symbol",
+    "description": "Bug rendering omega symbol in LaTeX",
+    "artifacts": [
+      "EXT_LATEX",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "known-bug",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexLegacySample",
+    "id": "202007183090335",
+    "title": "LaTeX blocks in legacy mode",
+    "description": "Sample using _legacy_ LaTeX block parsing (pre `4.3.0` Markwon version)",
+    "artifacts": [
+      "EXT_LATEX"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexInlineSample",
+    "id": "202007183085820",
+    "title": "LaTeX inline",
+    "description": "Display LaTeX inline",
+    "artifacts": [
+      "EXT_LATEX",
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.latex.LatexBlockSample",
+    "id": "202006182200257",
+    "title": "LaTex block",
+    "description": "Render LaTeX block",
+    "artifacts": [
+      "EXT_LATEX"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingTooltipSample",
+    "id": "202006182195409",
+    "title": "Tooltip with inline parser",
+    "description": "",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "parsing",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.SimpleExtensionSample",
+    "id": "202006182194335",
+    "title": "Delimiter processor simple-ext",
+    "description": "Custom delimiter processor implemented with a `SimpleExtPlugin`",
+    "artifacts": [
+      "SIMPLE_EXT"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.DelimiterProcessorSample",
+    "id": "202006182194017",
+    "title": "Custom delimiter processor",
+    "description": "Custom parsing delimiter processor with `?` character",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlDisableSanitizeSample",
+    "id": "202006182171424",
+    "title": "Disable HTML",
+    "description": "Disable HTML via replacing special `\u003c` and `\u003e` symbols",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "HTML",
+      "parsing",
+      "plugin",
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingNoHtmlSample",
+    "id": "202006182171239",
+    "title": "Inline parsing exclude HTML",
+    "description": "",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "block",
+      "inline",
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingNoDefaultsSample",
+    "id": "202006182170823",
+    "title": "Inline parsing no defaults",
+    "description": "Parsing only inline code and disable all the rest",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "inline",
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingWithDefaultsSample",
+    "id": "202006182170723",
+    "title": "Inline parsing with defaults",
+    "description": "Parsing with all defaults except links",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "inline",
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingDisableCodeSample",
+    "id": "202006182170607",
+    "title": "Disable code inline parsing",
+    "description": "",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "inline",
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingLinksOnlySample",
+    "id": "202006182170412",
+    "title": "Links only inline parsing",
+    "description": "",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "inline",
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.image.GlidePlaceholderImageSample",
+    "id": "202006182170241",
+    "title": "Glide image with placeholder",
+    "description": "",
+    "artifacts": [
+      "IMAGE_GLIDE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.image.GlideImageSample",
+    "id": "202006182170112",
+    "title": "Glide image",
+    "description": "",
+    "artifacts": [
+      "IMAGE_GLIDE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.ErrorImageSample",
     "id": "202006182165828",
     "title": "Image error handler",
@@ -71,6 +502,7 @@
       "IMAGE"
     ],
     "tags": [
+      "HTML",
       "image",
       "rendering"
     ]
@@ -85,6 +517,7 @@
       "IMAGE"
     ],
     "tags": [
+      "HTML",
       "rendering"
     ]
   },
@@ -97,6 +530,7 @@
       "HTML"
     ],
     "tags": [
+      "HTML",
       "rendering"
     ]
   },
@@ -110,6 +544,7 @@
       "IMAGE"
     ],
     "tags": [
+      "HTML",
       "image",
       "rendering"
     ]
@@ -124,6 +559,7 @@
       "IMAGE"
     ],
     "tags": [
+      "HTML",
       "image",
       "rendering"
     ]
@@ -137,6 +573,7 @@
       "HTML"
     ],
     "tags": [
+      "HTML",
       "rendering",
       "span"
     ]
@@ -150,6 +587,7 @@
       "HTML"
     ],
     "tags": [
+      "HTML",
       "rendering",
       "span"
     ]
@@ -163,6 +601,7 @@
       "HTML"
     ],
     "tags": [
+      "HTML",
       "rendering",
       "span"
     ]
@@ -485,7 +924,7 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.ImagesCustomSchemeSample",
+    "javaClassName": "io.noties.markwon.app.samples.image.ImagesCustomSchemeSample",
     "id": "202006181124201",
     "title": "Image destination custom scheme",
     "description": "Example of handling custom scheme (`https`, `ftp`, `whatever`, etc.) for images destination URLs with `ImagesPlugin`",

@@ -3,15 +3,11 @@ package io.noties.markwon.app.samples.inlineparsing;
 import androidx.annotation.NonNull;
 
 import org.commonmark.node.Block;
-import org.commonmark.node.BlockQuote;
-import org.commonmark.node.Heading;
-import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.ListBlock;
-import org.commonmark.node.ThematicBreak;
+import org.commonmark.node.FencedCodeBlock;
+import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.parser.InlineParserFactory;
 import org.commonmark.parser.Parser;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +15,7 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
+import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.inlineparser.BackticksInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
@@ -49,16 +46,12 @@ public class InlineParsingDisableCodeSample extends MarkwonTextViewSample {
       .excludeInlineProcessor(BackticksInlineProcessor.class)
       .build();
 
-    // unfortunately there is no _exclude_ method for parser-builder
     final Set<Class<? extends Block>> enabledBlocks = new HashSet<Class<? extends Block>>() {{
       // IndentedCodeBlock.class and FencedCodeBlock.class are missing
-      // this is full list (including above) that can be passed to `enabledBlockTypes` method
-      addAll(Arrays.asList(
-        BlockQuote.class,
-        Heading.class,
-        HtmlBlock.class,
-        ThematicBreak.class,
-        ListBlock.class));
+      addAll(CorePlugin.enabledBlockTypes());
+
+      remove(FencedCodeBlock.class);
+      remove(IndentedCodeBlock.class);
     }};
 
     final Markwon markwon = Markwon.builder(context)

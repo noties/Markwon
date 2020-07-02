@@ -1,4 +1,4 @@
-package io.noties.markwon.app.sample.ui
+package io.noties.markwon.app.samples.editor.shared
 
 import android.content.Context
 import android.text.SpannableStringBuilder
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import io.noties.markwon.app.R
+import io.noties.markwon.app.sample.ui.MarkwonSample
 import io.noties.markwon.core.spans.EmphasisSpan
 import io.noties.markwon.core.spans.StrongEmphasisSpan
 import java.util.ArrayList
@@ -19,7 +20,7 @@ abstract class MarkwonEditTextSample : MarkwonSample() {
     protected lateinit var editText: EditText
 
     override val layoutResId: Int
-        get() = R.layout.activity_edit_text
+        get() = R.layout.sample_edit_text
 
     override fun onViewCreated(view: View) {
         context = view.context

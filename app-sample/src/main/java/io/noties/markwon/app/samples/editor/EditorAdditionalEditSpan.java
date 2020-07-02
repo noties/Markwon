@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.app.sample.Tags;
-import io.noties.markwon.app.sample.ui.MarkwonEditTextSample;
+import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.core.spans.StrongEmphasisSpan;
 import io.noties.markwon.editor.AbstractEditHandler;
 import io.noties.markwon.editor.MarkwonEditor;

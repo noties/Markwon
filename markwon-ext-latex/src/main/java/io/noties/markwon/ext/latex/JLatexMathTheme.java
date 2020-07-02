@@ -81,6 +81,14 @@ public abstract class JLatexMathTheme {
         public static Padding symmetric(int vertical, int horizontal) {
             return new Padding(horizontal, vertical, horizontal, vertical);
         }
+
+        /**
+         * @since $nap;
+         */
+        @NonNull
+        public static Padding of(int left, int top, int right, int bottom) {
+            return new Padding(left, top, right, bottom);
+        }
     }
 
     /**
@@ -175,6 +183,10 @@ public abstract class JLatexMathTheme {
             return this;
         }
 
+        /**
+         * Configure if `LaTeX` formula should take all available widget width.
+         * By default - `true`
+         */
         @NonNull
         public Builder blockFitCanvas(boolean blockFitCanvas) {
             this.blockFitCanvas = blockFitCanvas;

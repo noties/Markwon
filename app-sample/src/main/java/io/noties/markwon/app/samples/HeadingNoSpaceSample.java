@@ -21,7 +21,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   artifacts = MarkwonArtifact.CORE,
   tags = {Tags.spacing, Tags.padding, Tags.spacing, Tags.rendering}
 )
-class HeadingNoSpaceSample extends MarkwonTextViewSample {
+public class HeadingNoSpaceSample extends MarkwonTextViewSample {
   @Override
   public void render() {
     final String md = "" +

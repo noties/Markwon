@@ -5,6 +5,7 @@
 #### Added
 * `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods
 * `core` - `CorePlugin` `hasExplicitMovementMethod` configuration method to **not** add implicit `LinkMovementMethod` in `afterSetText`
+* `ext-latex` - `JLatexMathTheme.Padding.of(int,int,int,int)` factory method
 
 #### Changed
 * `html` - `SimpleTagHandler` visits children tags if supplied tag is block one ([#235])

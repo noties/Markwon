@@ -1,8 +1,5 @@
 package io.noties.markwon.app.samples.plugins;
 
-import android.view.View;
-import android.widget.ScrollView;
-
 import androidx.annotation.NonNull;
 
 import org.commonmark.node.AbstractVisitor;
@@ -13,7 +10,6 @@ import org.commonmark.node.Link;
 import org.commonmark.node.ListItem;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
-import org.jetbrains.annotations.NotNull;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
@@ -34,14 +30,6 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   tags = {Tags.rendering, Tags.plugin}
 )
 public class TableOfContentsSample extends MarkwonTextViewSample {
-
-  private ScrollView scrollView;
-
-  @Override
-  public void onViewCreated(@NotNull View view) {
-    scrollView = view.findViewById(R.id.scroll_view);
-    super.onViewCreated(view);
-  }
 
   @Override
   public void render() {

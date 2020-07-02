@@ -31,4 +31,6 @@ object Tags {
     const val gif = "GIF"
     const val inline = "inline"
     const val html = "HTML"
+    const val knownBug = "known-bug"
+    const val precomputedText = "precomputed-text"
 }

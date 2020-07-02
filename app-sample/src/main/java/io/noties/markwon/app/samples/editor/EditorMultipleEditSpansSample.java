@@ -13,7 +13,7 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
 import io.noties.markwon.app.sample.Tags;
-import io.noties.markwon.app.sample.ui.MarkwonEditTextSample;
+import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.app.samples.editor.shared.BlockQuoteEditHandler;
 import io.noties.markwon.app.samples.editor.shared.CodeEditHandler;
 import io.noties.markwon.app.samples.editor.shared.LinkEditHandler;

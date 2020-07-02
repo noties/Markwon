@@ -76,6 +76,7 @@ dependencies {
     implementation project(':markwon-image-glide')
 
     deps.with {
+//        implementation it['x-appcompat']
         implementation it['x-recycler-view']
         implementation it['x-cardview']
         implementation it['x-fragment']

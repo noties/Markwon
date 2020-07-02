@@ -23,8 +23,9 @@ public class GifImageSample extends MarkwonTextViewSample {
     final Markwon markwon = Markwon.builder(context)
       // GIF is handled by default if library is used in the app
 //      .usePlugin(ImagesPlugin.create())
-      .usePlugin(ImagesPlugin.create(plugin ->
-        plugin.addMediaDecoder(GifMediaDecoder.create())))
+      .usePlugin(ImagesPlugin.create(plugin -> {
+        plugin.addMediaDecoder(GifMediaDecoder.create());
+      }))
       .build();
 
     markwon.setMarkdown(textView, md);

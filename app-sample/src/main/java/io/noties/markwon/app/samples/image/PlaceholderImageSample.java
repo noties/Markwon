@@ -28,7 +28,7 @@ public class PlaceholderImageSample extends MarkwonTextViewSample {
       "![image](https://github.com/dcurtis/markdown-mark/raw/master/png/1664x1024-solid.png)";
 
     final Markwon markwon = Markwon.builder(context)
-      .usePlugin(ImagesPlugin.create(plugin ->
+      .usePlugin(ImagesPlugin.create(plugin -> {
         plugin.placeholderProvider(new ImagesPlugin.PlaceholderProvider() {
           @Nullable
           @Override
@@ -37,7 +37,8 @@ public class PlaceholderImageSample extends MarkwonTextViewSample {
             //  otherwise bounds can be applied explicitly
             return ContextCompat.getDrawable(context, R.drawable.ic_android_black_24dp);
           }
-        })))
+        });
+      }))
       .build();
 
     markwon.setMarkdown(textView, md);

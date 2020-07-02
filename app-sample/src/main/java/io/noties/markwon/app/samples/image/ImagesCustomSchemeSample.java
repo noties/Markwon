@@ -1,4 +1,4 @@
-package io.noties.markwon.app.samples;
+package io.noties.markwon.app.samples.image;
 
 import android.net.Uri;
 

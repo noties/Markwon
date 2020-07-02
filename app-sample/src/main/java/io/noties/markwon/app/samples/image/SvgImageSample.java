@@ -25,11 +25,12 @@ public class SvgImageSample extends MarkwonTextViewSample {
       //  libraries are in path (specified in dependencies block)
 //      .usePlugin(ImagesPlugin.create())
       // let's make it implicit
-      .usePlugin(ImagesPlugin.create(plugin ->
+      .usePlugin(ImagesPlugin.create(plugin -> {
         // there 2 svg media decoders:
         // - regular `SvgMediaDecoder`
         // - special one when SVG doesn't have width and height specified - `SvgPictureMediaDecoder`
-        plugin.addMediaDecoder(SvgPictureMediaDecoder.create())))
+        plugin.addMediaDecoder(SvgPictureMediaDecoder.create());
+      }))
       .build();
 
     markwon.setMarkdown(textView, md);
