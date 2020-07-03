@@ -15,6 +15,10 @@ class SampleManager(
         SampleUtils.readSamples(context)
     }
 
+    fun sample(id: String): Sample? {
+        return samples.firstOrNull { id == it.id }
+    }
+
     fun samples(search: SampleSearch?, callback: (List<Sample>) -> Unit): Cancellable {
 
         var action: ((List<Sample>) -> Unit)? = callback

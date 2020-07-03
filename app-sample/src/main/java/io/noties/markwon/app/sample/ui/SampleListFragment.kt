@@ -98,11 +98,20 @@ class SampleListFragment : Fragment() {
 //        }
 
         val state: State? = arguments?.getParcelable(STATE)
-        Debug.i(state)
+        val initialSearch = arguments?.getString(ARG_SEARCH)
+
+        // clear it anyway
+        arguments?.remove(ARG_SEARCH)
+
+        Debug.i(state, initialSearch)
 
         pendingRecyclerScrollPosition = state?.recyclerScrollPosition
-        if (state?.search != null) {
-            searchBar.search(state.search)
+
+        val search = listOf(state?.search, initialSearch)
+                .firstOrNull { it != null }
+
+        if (search != null) {
+            searchBar.search(search)
         } else {
             fetch()
         }
@@ -144,35 +153,38 @@ class SampleListFragment : Fragment() {
         val appBarTitle: TextView = appBar.findViewById(R.id.app_bar_title)
         val appBarIconReadme: ImageView = appBar.findViewById(R.id.app_bar_icon_readme)
 
-        val isInitialScreen = type is Type.All
+        val isInitialScreen = fragmentManager?.backStackEntryCount == 0
 
         appBarIcon.hidden = isInitialScreen
         appBarIconReadme.hidden = !isInitialScreen
 
         val type = this.type
-        if (type is Type.All) {
+
+        val (text, background) = when (type) {
+            is Type.Artifact -> Pair(type.artifact.displayName, R.drawable.bg_artifact)
+            is Type.Tag -> Pair(type.tag.tagDisplayName, R.drawable.bg_tag)
+            is Type.All -> Pair(resources.getString(R.string.app_name), 0)
+        }
+
+        appBarTitle.text = text
+
+        if (background != 0) {
+            appBarTitle.setBackgroundResource(background)
+        }
+
+        if (isInitialScreen) {
             appBarIconReadme.setOnClickListener {
                 context?.let {
                     val intent = ReadMeActivity.makeIntent(it)
                     it.startActivity(intent)
                 }
             }
-            return
+        } else {
+            appBarIcon.setImageResource(R.drawable.ic_arrow_back_white_24dp)
+            appBarIcon.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
-
-        appBarIcon.setImageResource(R.drawable.ic_arrow_back_white_24dp)
-        appBarIcon.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-
-        val (text, background) = when (type) {
-            is Type.Artifact -> Pair(type.artifact.displayName, R.drawable.bg_artifact)
-            is Type.Tag -> Pair(type.tag.tagDisplayName, R.drawable.bg_tag)
-            else -> error("Unexpected type: $type")
-        }
-
-        appBarTitle.text = text
-        appBarTitle.setBackgroundResource(background)
     }
 
     private fun bindSamples(samples: List<Sample>) {
@@ -192,7 +204,6 @@ class SampleListFragment : Fragment() {
         val scrollPosition = pendingRecyclerScrollPosition
 
         Debug.i(scrollPosition)
-        Debug.trace()
 
         if (scrollPosition != null) {
             pendingRecyclerScrollPosition = null
@@ -242,7 +253,6 @@ class SampleListFragment : Fragment() {
         }
 
         Debug.i(sampleSearch)
-        Debug.trace()
 
         // clear current
         cancellable?.let {
@@ -259,6 +269,7 @@ class SampleListFragment : Fragment() {
     companion object {
         private const val ARG_ARTIFACT = "arg.Artifact"
         private const val ARG_TAG = "arg.Tag"
+        private const val ARG_SEARCH = "arg.Search"
         private const val STATE = "key.State"
 
         fun init(): SampleListFragment {
@@ -279,6 +290,23 @@ class SampleListFragment : Fragment() {
             val fragment = SampleListFragment()
             fragment.arguments = Bundle().apply {
                 putString(ARG_TAG, tag)
+            }
+            return fragment
+        }
+
+        fun init(search: SampleSearch): SampleListFragment {
+            val fragment = SampleListFragment()
+            fragment.arguments = Bundle().apply {
+
+                when (search) {
+                    is SampleSearch.Artifact -> putString(ARG_ARTIFACT, search.artifact.name)
+                    is SampleSearch.Tag -> putString(ARG_TAG, search.tag)
+                }
+
+                val query = search.text
+                if (query != null) {
+                    putString(ARG_SEARCH, query)
+                }
             }
             return fragment
         }

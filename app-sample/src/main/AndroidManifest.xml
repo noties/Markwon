@@ -16,9 +16,19 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity android:name=".sample.MainActivity">
+            <!-- launcher intent -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="${deeplink_scheme}" />
             </intent-filter>
         </activity>
 
@@ -39,8 +49,8 @@
 
                 <data android:pathPattern=".*\\.md" />
                 <data android:pathPattern=".*\\..*\\.md" />
-                <data android:pathPattern=".*\\..*\\..*\\.md"/>
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.md"/>
+                <data android:pathPattern=".*\\..*\\..*\\.md" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.md" />
 
             </intent-filter>
         </activity>

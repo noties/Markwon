@@ -18,6 +18,12 @@ android {
         resConfig 'en'
 
         setProperty("archivesBaseName", "markwon-$versionName")
+
+        final def scheme = 'markwon'
+        buildConfigField 'String', 'DEEPLINK_SCHEME', "\"$scheme\""
+        manifestPlaceholders += [
+                'deeplink_scheme': scheme
+        ]
     }
 
     dexOptions {
