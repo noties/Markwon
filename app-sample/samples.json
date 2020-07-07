@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.CacheMarkwonSample",
+    "id": "202007189102458",
+    "title": "Cache Markwon instance",
+    "description": "A static cache for `Markwon` instance to be associated with a `Context`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "cache"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListMutateSample",
     "id": "202007184140901",
     "title": "GFM task list mutate",
@@ -756,12 +768,13 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
     "id": "202006181162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE"
+      "CORE",
+      "INLINE_PARSER"
     ],
     "tags": [
       "parsing",
@@ -770,13 +783,12 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
     "id": "202006181162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE",
-      "INLINE_PARSER"
+      "CORE"
     ],
     "tags": [
       "parsing",
