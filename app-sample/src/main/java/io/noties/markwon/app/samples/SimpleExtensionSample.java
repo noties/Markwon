@@ -26,7 +26,9 @@ public class SimpleExtensionSample extends MarkwonTextViewSample {
       "# SimpleExt\n" +
       "\n" +
       "+let's start with `+`, ??then we can use this, and finally @@this$$??+";
-    ;
+
+    // NB! we cannot have multiple delimiter processor with the same character
+    //  (even if lengths are different)
 
     final Markwon markwon = Markwon.builder(context)
       .usePlugin(SimpleExtPlugin.create(plugin -> {
@@ -36,7 +38,7 @@ public class SimpleExtensionSample extends MarkwonTextViewSample {
           .addExtension(
             2,
             '@',
-            '?',
+            '$',
             (configuration, props) -> new ForegroundColorSpan(Color.RED)
           );
       }))

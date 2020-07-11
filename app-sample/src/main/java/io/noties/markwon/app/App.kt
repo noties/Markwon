@@ -14,7 +14,8 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @Suppress("unused")
-class App : Application() {
+// `open` is required for tests (to create a spy mockito instance)
+open class App : Application() {
 
     override fun onCreate() {
         super.onCreate()

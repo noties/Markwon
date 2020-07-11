@@ -162,7 +162,7 @@ public class HtmlDetailsSample extends MarkwonSample {
   private TextView appendTextView() {
     final View view = LayoutInflater.from(context)
       .inflate(R.layout.view_html_details_text_view, content, false);
-    final TextView textView = view.findViewById(R.id.text);
+    final TextView textView = view.findViewById(R.id.text_view);
     content.addView(view);
     return textView;
   }

@@ -139,4 +139,10 @@ dependencies {
         implementation it['android-svg']
         implementation it['android-gif-impl']
     }
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
+    }
 }

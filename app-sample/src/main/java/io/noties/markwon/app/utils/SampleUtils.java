@@ -19,17 +19,22 @@ public abstract class SampleUtils {
     @NonNull
     public static List<Sample> readSamples(@NonNull Context context) {
 
-        final Gson gson = new Gson();
-
         try (InputStream inputStream = context.getAssets().open("samples.json")) {
-            return gson.fromJson(
-                    new InputStreamReader(inputStream),
-                    new TypeToken<List<Sample>>() {
-                    }.getType()
-            );
+            return readSamples(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // NB! stream is not closed by this method
+    @NonNull
+    public static List<Sample> readSamples(@NonNull InputStream inputStream) {
+        final Gson gson = new Gson();
+        return gson.fromJson(
+                new InputStreamReader(inputStream),
+                new TypeToken<List<Sample>>() {
+                }.getType()
+        );
     }
 
     private SampleUtils() {
