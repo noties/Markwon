@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import io.noties.markwon.Markwon
+import io.noties.markwon.app.BuildConfig
 import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.image.ImagesPlugin
@@ -23,7 +24,7 @@ class ToastDynamicContentSample : MarkwonTextViewSample() {
     val md = """
       # Head!
       
-      ![alt](https://github.com/noties/Markwon/raw/master/art/markwon_logo.png)
+      ![alt](${BuildConfig.GIT_REPOSITORY}/raw/master/art/markwon_logo.png)
       
       Do you see an image? ☝️
     """.trimIndent()

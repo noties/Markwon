@@ -13,6 +13,7 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.app.BuildConfig;
 import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CorePlugin;
@@ -87,7 +88,7 @@ class GithubLinkifyRegexTextAddedListener implements CorePlugin.OnTextAddedListe
     // issues and pull-requests on github follow the same pattern and we
     // cannot know for sure which one it is, but if we use issues for all types,
     // github will automatically redirect to pull-request if it's the one which is opened
-    return "https://github.com/noties/Markwon/issues/" + number;
+    return BuildConfig.GIT_REPOSITORY + "/issues/" + number;
   }
 
   @NonNull

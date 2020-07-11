@@ -1,6 +1,7 @@
 package io.noties.markwon.app.samples.movementmethod
 
 import io.noties.markwon.Markwon
+import io.noties.markwon.app.BuildConfig
 import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.sample.annotations.MarkwonArtifact
@@ -18,7 +19,7 @@ class ImplicitMovementMethodSample : MarkwonTextViewSample() {
     val md = """
       # Implicit movement method
       By default `Markwon` applies `LinkMovementMethod` if it is missing,
-      so in order for [links](https://github.com/noties/Markwon) to be clickable
+      so in order for [links](${BuildConfig.GIT_REPOSITORY}) to be clickable
       nothing special should be done
     """.trimIndent()
 

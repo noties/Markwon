@@ -1,8 +1,12 @@
 package io.noties.markwon.app.sample.ui
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +19,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.noties.adapt.Adapt
 import io.noties.adapt.DiffUtilDataSetChanged
+import io.noties.adapt.Item
 import io.noties.debug.Debug
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.App
+import io.noties.markwon.app.BuildConfig
 import io.noties.markwon.app.R
 import io.noties.markwon.app.readme.ReadMeActivity
 import io.noties.markwon.app.sample.Sample
-import io.noties.markwon.app.sample.SampleItem
 import io.noties.markwon.app.sample.SampleManager
 import io.noties.markwon.app.sample.SampleSearch
+import io.noties.markwon.app.sample.ui.adapt.CheckForUpdateItem
+import io.noties.markwon.app.sample.ui.adapt.SampleItem
+import io.noties.markwon.app.sample.ui.adapt.VersionItem
 import io.noties.markwon.app.utils.Cancellable
+import io.noties.markwon.app.utils.UpdateUtils
 import io.noties.markwon.app.utils.displayName
 import io.noties.markwon.app.utils.hidden
 import io.noties.markwon.app.utils.onPreDraw
 import io.noties.markwon.app.utils.recyclerView
+import io.noties.markwon.app.utils.stackTraceString
 import io.noties.markwon.app.utils.tagDisplayName
 import io.noties.markwon.app.widget.SearchBar
 import io.noties.markwon.movement.MovementMethodPlugin
@@ -50,6 +60,13 @@ class SampleListFragment : Fragment() {
     private var pendingRecyclerScrollPosition: RecyclerScrollPosition? = null
 
     private var cancellable: Cancellable? = null
+    private var checkForUpdateCancellable: Cancellable? = null
+
+    private lateinit var progressBar: View
+
+    private val versionItem: VersionItem by lazy(LazyThreadSafetyMode.NONE) {
+        VersionItem()
+    }
 
     private val sampleManager: SampleManager
         get() = App.sampleManager
@@ -72,6 +89,8 @@ class SampleListFragment : Fragment() {
         initAppBar(view)
 
         val context = requireContext()
+
+        progressBar = view.findViewById(R.id.progress_bar)
 
         val searchBar: SearchBar = view.findViewById(R.id.search_bar)
         searchBar.onSearchListener = {
@@ -187,16 +206,30 @@ class SampleListFragment : Fragment() {
         }
     }
 
-    private fun bindSamples(samples: List<Sample>) {
-        val items = samples.map {
-            SampleItem(
-                    markwon,
-                    it,
-                    { artifact -> openArtifact(artifact) },
-                    { tag -> openTag(tag) },
-                    { sample -> openSample(sample) }
-            )
-        }
+    private fun bindSamples(samples: List<Sample>, addVersion: Boolean) {
+
+        val items: List<Item<*>> = samples
+                .map {
+                    SampleItem(
+                            markwon,
+                            it,
+                            { artifact -> openArtifact(artifact) },
+                            { tag -> openTag(tag) },
+                            { sample -> openSample(sample) }
+                    )
+                }
+                .let {
+                    if (addVersion) {
+                        val list: List<Item<*>> = it
+                        list.toMutableList().apply {
+                            add(0, CheckForUpdateItem(this@SampleListFragment::checkForUpdate))
+                            add(0, versionItem)
+                        }
+                    } else {
+                        it
+                    }
+                }
+
         adapt.setItems(items)
 
         val recyclerView = adapt.recyclerView ?: return
@@ -216,6 +249,66 @@ class SampleListFragment : Fragment() {
                 recyclerView.scrollToPosition(0)
             }
         }
+    }
+
+    private fun checkForUpdate() {
+        val current = checkForUpdateCancellable
+        if (current != null && !current.isCancelled) {
+            return
+        }
+
+        progressBar.hidden = false
+        checkForUpdateCancellable = UpdateUtils.checkForUpdate { result ->
+            progressBar.post {
+                processUpdateResult(result)
+            }
+        }
+    }
+
+    private fun processUpdateResult(result: UpdateUtils.Result) {
+        val context = context ?: return
+
+        progressBar.hidden = true
+
+        val builder = AlertDialog.Builder(context)
+
+        when (result) {
+            is UpdateUtils.Result.UpdateAvailable -> {
+                val md = """
+                    ## Update available
+                    Would you like to download it?
+                """.trimIndent()
+                builder.setMessage(markwon.toMarkdown(md))
+                builder.setNegativeButton(android.R.string.cancel, null)
+                builder.setPositiveButton("Download") { _, _ ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(result.url))
+                    startActivity(Intent.createChooser(intent, null))
+                }
+            }
+
+            is UpdateUtils.Result.NoUpdate -> {
+                val md = """
+                    ## No update
+                    You are using latest version (${BuildConfig.GIT_SHA})
+                """.trimIndent()
+                builder.setMessage(markwon.toMarkdown(md))
+                builder.setPositiveButton(android.R.string.ok, null)
+            }
+
+            is UpdateUtils.Result.Error -> {
+                // trimIndent is confused by tabs in stack trace
+                val md = """
+## Error
+```
+${result.throwable.stackTraceString()}
+```
+"""
+                builder.setMessage(markwon.toMarkdown(md))
+                builder.setPositiveButton(android.R.string.ok, null)
+            }
+        }
+
+        builder.show()
     }
 
     private fun openArtifact(artifact: MarkwonArtifact) {
@@ -262,7 +355,8 @@ class SampleListFragment : Fragment() {
         }
 
         cancellable = sampleManager.samples(sampleSearch) {
-            bindSamples(it)
+            val addVersion = sampleSearch is SampleSearch.All && TextUtils.isEmpty(sampleSearch.text)
+            bindSamples(it, addVersion)
         }
     }
 

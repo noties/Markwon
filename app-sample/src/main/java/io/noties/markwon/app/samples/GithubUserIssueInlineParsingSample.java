@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.app.BuildConfig;
 import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.inlineparser.InlineProcessor;
@@ -78,7 +79,7 @@ class IssueInlineProcessor extends InlineProcessor {
 
   @NonNull
   private static String createIssueOrPullRequestLinkDestination(@NonNull String id) {
-    return "https://github.com/noties/Markwon/issues/" + id;
+    return BuildConfig.GIT_REPOSITORY + "/issues/" + id;
   }
 }
 

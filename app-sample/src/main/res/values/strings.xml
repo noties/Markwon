@@ -5,6 +5,8 @@
     <string name="tab_bar_preview">Preview</string>
     <string name="tab_bar_code">Code</string>
 
+    <string name="check_for_update">Check for update</string>
+
     <string name="lorem"><![CDATA[
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis rutrum orci at aliquet dapibus. Quisque laoreet fermentum bibendum. Suspendisse euismod nisl vel sapien viverra faucibus. Nulla vel neque volutpat, egestas dui ac, consequat elit. Donec et interdum massa. Quisque porta ornare posuere. Nam at ante a felis facilisis tempus eu et erat. Curabitur auctor mauris eget purus iaculis vulputate.
 

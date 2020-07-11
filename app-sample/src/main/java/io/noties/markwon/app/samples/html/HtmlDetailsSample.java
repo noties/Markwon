@@ -28,6 +28,7 @@ import java.util.List;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SpannableBuilder;
+import io.noties.markwon.app.BuildConfig;
 import io.noties.markwon.app.R;
 import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonSample;
@@ -56,7 +57,7 @@ public class HtmlDetailsSample extends MarkwonSample {
 
   @Override
   protected int getLayoutResId() {
-    return R.layout.activity_html_details;
+    return R.layout.sample_html_details;
   }
 
   @Override
@@ -83,7 +84,8 @@ public class HtmlDetailsSample extends MarkwonSample {
       "* list\n" +
       "* with\n" +
       "\n\n" +
-      "![img](https://raw.githubusercontent.com/noties/Markwon/master/art/markwon_logo.png)\n\n" +
+      "![img](" + BuildConfig.GIT_REPOSITORY + "/raw/master/art/markwon_logo.png)\n\n" +
+      "" +
       " 1. nested\n" +
       " 1. items\n" +
       "\n" +

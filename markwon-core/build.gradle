@@ -29,7 +29,6 @@ dependencies {
     testImplementation deps['commons-io']
 
     deps['test'].with {
-
         testImplementation it['junit']
         testImplementation it['robolectric']
         testImplementation it['mockito']
