@@ -114,7 +114,8 @@ class SampleFragment : Fragment() {
     }
 
     private val sample: Sample by lazy(LazyThreadSafetyMode.NONE) {
-        (arguments!!.getParcelable<Sample>(ARG_SAMPLE))
+        val temp: Sample = (arguments!!.getParcelable(ARG_SAMPLE))!!
+        temp
     }
 
     companion object {

@@ -1,6 +1,7 @@
 package io.noties.markwon.app.utils
 
 import android.net.Uri
+import android.text.TextUtils
 import java.util.regex.Pattern
 
 object ReadMeUtils {
@@ -10,7 +11,7 @@ object ReadMeUtils {
     private val RE_FILE = Pattern.compile("^https:\\/\\/github\\.com\\/([\\w-.]+?)\\/([\\w-.]+?)\\/(?:blob|raw)\\/([\\w-.]+?)\\/(.+)\$")
 
     @Suppress("RegExpRedundantEscape")
-    val RE_REPOSITORY: Pattern = Pattern.compile("^https:\\/\\/github.com\\/([\\w-.]+?)\\/([\\w-.]+?)\\/*\$")
+    private val RE_REPOSITORY: Pattern = Pattern.compile("^https:\\/\\/github.com\\/([\\w-.]+?)\\/([\\w-.]+?)\\/*\$")
 
     data class GithubInfo(
             val username: String,
@@ -18,6 +19,20 @@ object ReadMeUtils {
             val branch: String,
             val fileName: String
     )
+
+    fun parseRepository(url: String): Pair<String, String>? {
+        val matcher = RE_REPOSITORY.matcher(url)
+        val (user, repository) = if (matcher.matches()) {
+            Pair(matcher.group(1), matcher.group(2))
+        } else {
+            Pair(null, null)
+        }
+        return if (TextUtils.isEmpty(user) || TextUtils.isEmpty(repository)) {
+            null
+        } else {
+            Pair(user!!, repository!!)
+        }
+    }
 
     fun parseInfo(data: Uri?): GithubInfo? {
 
@@ -31,10 +46,10 @@ object ReadMeUtils {
         }
 
         return GithubInfo(
-                username = matcher.group(1),
-                repository = matcher.group(2),
-                branch = matcher.group(3),
-                fileName = matcher.group(4)
+                username = matcher.group(1)!!,
+                repository = matcher.group(2)!!,
+                branch = matcher.group(3)!!,
+                fileName = matcher.group(4)!!
         )
     }
 

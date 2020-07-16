@@ -7,9 +7,9 @@ import io.noties.markwon.app.utils.ReadMeUtils
 class ReadMeLinkResolver : LinkResolverDef() {
 
     override fun resolve(view: View, link: String) {
-        val matcher = ReadMeUtils.RE_REPOSITORY.matcher(link)
-        val url = if (matcher.matches()) {
-            ReadMeUtils.buildRepositoryReadMeUrl(matcher.group(1), matcher.group(2))
+        val info = ReadMeUtils.parseRepository(link)
+        val url = if (info != null) {
+            ReadMeUtils.buildRepositoryReadMeUrl(info.first, info.second)
         } else {
             link
         }

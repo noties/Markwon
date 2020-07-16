@@ -5,7 +5,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        // on `3.5.3` tests are not run from CLI
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.28.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -50,9 +49,9 @@ if (hasProperty('local')) {
 ext {
 
     config = [
-            'build-tools'    : '28.0.3',
-            'compile-sdk'    : 28,
-            'target-sdk'     : 28,
+            'build-tools'    : '29.0.3',
+            'compile-sdk'    : 29,
+            'target-sdk'     : 29,
             'min-sdk'        : 16,
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
