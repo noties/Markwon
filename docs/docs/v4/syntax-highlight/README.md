@@ -71,4 +71,5 @@ You can extend `Prism4jThemeBase` which has some helper methods
 ```java
 final Markwon markwon = Markwon.builder(context)
         .usePlugin(SyntaxHighlightPlugin.create(prism4j, prism4jTheme))
+        .build();
 ```

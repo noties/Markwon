@@ -5,14 +5,15 @@
 This module adds `strikethrough` functionality to `Markwon` via `StrikethroughPlugin`:
 
 ```java
-Markwon.builder(context)
+final Markwon markwon = Markwon.builder(context)
     .usePlugin(StrikethroughPlugin.create())
+    .build();
 ```
 
 This plugin registers `SpanFactory` for `Strikethrough` node, so it's possible to customize Strikethrough Span that is used in rendering:
 
 ```java
-Markwon.builder(context)
+final Markwon markwon = Markwon.builder(context)
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(new AbstractMarkwonPlugin() {
             @Override
@@ -26,4 +27,5 @@ Markwon.builder(context)
                 });
             }
         })
+        .build();
 ```

@@ -7,6 +7,7 @@ In order to display images in your markdown `ImagesPlugin` can be used.
 ```java
 final Markwon markwon = Markwon.builder(context)
         .usePlugin(ImagesPlugin.create())
+        .build();
 ```
 
 :::tip
@@ -35,6 +36,7 @@ final Markwon markwon = Markwon.builder(context)
                 });
             }
         })
+        .build();
 ```
 
 ```java
@@ -45,6 +47,7 @@ final Markwon markwon = Markwon.builder(context)
                 plugin.addSchemeHandler(DataUriSchemeHandler.create());
             }
         }))
+        .build();
 ```
 
 `ImagesPlugin` comes with a set of predefined scheme-handlers:
@@ -83,6 +86,7 @@ final Markwon markwon = Markwon.builder(context)
                 plugin.addSchemeHandler(FileSchemeHandler.createWithAssets(context));
             }
         }))
+        .build();
 ```
 
 ### DataUriSchemeHandler
@@ -156,6 +160,7 @@ final Markwon markwon = Markwon.builder(context)
                 });
             }
         }))
+        .build();
 ```
 
 Otherwise `SchemeHandler` must return an `InputStream` with proper `content-type` information
