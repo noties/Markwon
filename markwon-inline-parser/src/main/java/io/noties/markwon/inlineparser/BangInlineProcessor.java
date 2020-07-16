@@ -29,7 +29,7 @@ public class BangInlineProcessor extends InlineProcessor {
 
             return node;
         } else {
-            // @since $nap; return null in case no match (multiple inline
+            // @since $SNAPSHOT; return null in case no match (multiple inline
             //  processors can define `!` as _special_ character, so let them handle it)
             //  NB! do not forget to reset index
             index = startIndex;

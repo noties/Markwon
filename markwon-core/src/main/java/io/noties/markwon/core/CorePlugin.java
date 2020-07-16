@@ -115,14 +115,14 @@ public class CorePlugin extends AbstractMarkwonPlugin {
     // @since 4.0.0
     private final List<OnTextAddedListener> onTextAddedListeners = new ArrayList<>(0);
 
-    // @since $nap;
+    // @since $SNAPSHOT;
     private boolean hasExplicitMovementMethod;
 
     protected CorePlugin() {
     }
 
     /**
-     * @since $nap;
+     * @since $SNAPSHOT;
      */
     @SuppressWarnings("UnusedReturnValue")
     @NonNull
@@ -201,7 +201,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         // let's ensure that there is a movement method applied
         // we do it `afterSetText` so any user-defined movement method won't be
         // replaced (it should be done in `beforeSetText` or manually on a TextView)
-        // @since $nap; we additionally check if we should apply _implicit_ movement method
+        // @since $SNAPSHOT; we additionally check if we should apply _implicit_ movement method
         if (!hasExplicitMovementMethod && textView.getMovementMethod() == null) {
             textView.setMovementMethod(LinkMovementMethod.getInstance());
         }

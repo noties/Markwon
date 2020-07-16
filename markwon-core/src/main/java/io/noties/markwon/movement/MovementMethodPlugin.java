@@ -22,7 +22,7 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
      *
      * @see #create(MovementMethod)
      * @see #link()
-     * @deprecated $nap; use {@link #link()}
+     * @deprecated $SNAPSHOT; use {@link #link()}
      */
     @NonNull
     @Deprecated
@@ -31,7 +31,7 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
     }
 
     /**
-     * @since $nap;
+     * @since $SNAPSHOT;
      */
     @NonNull
     public static MovementMethodPlugin link() {
@@ -42,7 +42,7 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
      * Special {@link MovementMethodPlugin} that is <strong>not</strong> applying a MovementMethod on a TextView
      * implicitly
      *
-     * @since $nap;
+     * @since $SNAPSHOT;
      */
     @NonNull
     public static MovementMethodPlugin none() {
@@ -58,7 +58,7 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
     private final MovementMethod movementMethod;
 
     /**
-     * Since $nap; change to be <em>nullable</em>
+     * Since $SNAPSHOT; change to be <em>nullable</em>
      */
     @SuppressWarnings("WeakerAccess")
     MovementMethodPlugin(@Nullable MovementMethod movementMethod) {
@@ -73,7 +73,7 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-        // @since $nap; check for equality
+        // @since $SNAPSHOT; check for equality
         final MovementMethod current = textView.getMovementMethod();
         if (current != movementMethod) {
             textView.setMovementMethod(movementMethod);

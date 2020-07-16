@@ -83,7 +83,7 @@ public abstract class JLatexMathTheme {
         }
 
         /**
-         * @since $nap;
+         * @since $SNAPSHOT;
          */
         @NonNull
         public static Padding of(int left, int top, int right, int bottom) {

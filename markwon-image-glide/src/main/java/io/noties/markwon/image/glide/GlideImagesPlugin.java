@@ -44,7 +44,7 @@ public class GlideImagesPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static GlideImagesPlugin create(@NonNull final Context context) {
-        // @since $nap; cache RequestManager
+        // @since $SNAPSHOT; cache RequestManager
         //  sometimes `cancel` would be called after activity is destroyed,
         //  so `Glide.with(context)` will throw an exception
         return create(Glide.with(context));

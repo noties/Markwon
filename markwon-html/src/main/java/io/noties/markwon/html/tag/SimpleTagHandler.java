@@ -28,7 +28,7 @@ public abstract class SimpleTagHandler extends TagHandler {
 
     @Override
     public void handle(@NonNull MarkwonVisitor visitor, @NonNull MarkwonHtmlRenderer renderer, @NonNull HtmlTag tag) {
-        // @since $nap; check if tag is block one and visit children
+        // @since $SNAPSHOT; check if tag is block one and visit children
         if (tag.isBlock()) {
             visitChildren(visitor, renderer, tag.getAsBlock());
         }
