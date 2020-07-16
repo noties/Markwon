@@ -57,6 +57,11 @@ android {
     signingConfigs {
         config {
 
+            // skip signing in CI environment
+            if (project.hasProperty('CI')) {
+                return
+            }
+
             final def keystoreFile = project.file('keystore.jks')
             final def keystoreFilePassword = 'MARKWON_KEYSTORE_FILE_PASSWORD'
             final def keystoreAlias = 'MARKWON_KEY_ALIAS'
@@ -82,6 +87,15 @@ android {
 
             keyAlias project[keystoreAlias]
             keyPassword project[keystoreAliasPassword]
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+        }
+        release {
+            signingConfig signingConfigs.config
         }
     }
 }

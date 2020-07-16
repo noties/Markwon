@@ -6,8 +6,8 @@ buildscript {
     }
     dependencies {
         // on `3.5.3` tests are not run from CLI
-        classpath 'com.android.tools.build:gradle:4.0.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.27.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.28.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -35,7 +35,7 @@ task clean(type: Delete) {
 }
 
 wrapper {
-    gradleVersion '5.5.1'
+    gradleVersion '6.1.1'
     distributionType 'all'
 }
 

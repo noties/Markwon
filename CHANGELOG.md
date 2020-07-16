@@ -1,6 +1,6 @@
 # Changelog
 
-# $SNAPSHOT;
+# SNAPSHOT
 
 #### Added
 * `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods
