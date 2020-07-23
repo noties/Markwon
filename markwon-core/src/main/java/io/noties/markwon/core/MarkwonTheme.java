@@ -21,7 +21,7 @@ import io.noties.markwon.utils.Dip;
 /**
  * Class to hold <i>theming</i> information for rending of markdown.
  * <p>
- * Since version 3.0.0 this class should be considered as <em>CoreTheme</em> as it\'s
+ * Since version 3.0.0 this class should be considered as <em>CoreTheme</em> as its
  * information holds data for core features only. But based on this other components can still use it
  * to display markdown consistently.
  * <p>
@@ -117,6 +117,10 @@ public class MarkwonTheme {
 
     protected final int linkColor;
 
+    // specifies whether we underline links, by default is true
+    // @since 4.4.1
+    protected final boolean isLinkedUnderlined;
+
     // used in quote, lists
     protected final int blockMargin;
 
@@ -185,6 +189,7 @@ public class MarkwonTheme {
 
     protected MarkwonTheme(@NonNull Builder builder) {
         this.linkColor = builder.linkColor;
+        this.isLinkedUnderlined = builder.isLinkUnderlined;
         this.blockMargin = builder.blockMargin;
         this.blockQuoteWidth = builder.blockQuoteWidth;
         this.blockQuoteColor = builder.blockQuoteColor;
@@ -212,7 +217,7 @@ public class MarkwonTheme {
      * @since 1.0.5
      */
     public void applyLinkStyle(@NonNull TextPaint paint) {
-        paint.setUnderlineText(true);
+        paint.setUnderlineText(isLinkedUnderlined);
         if (linkColor != 0) {
             paint.setColor(linkColor);
         } else {
@@ -222,7 +227,7 @@ public class MarkwonTheme {
     }
 
     public void applyLinkStyle(@NonNull Paint paint) {
-        paint.setUnderlineText(true);
+        paint.setUnderlineText(isLinkedUnderlined);
         if (linkColor != 0) {
             // by default we will be using text color
             paint.setColor(linkColor);
@@ -457,6 +462,7 @@ public class MarkwonTheme {
     public static class Builder {
 
         private int linkColor;
+        private boolean isLinkUnderlined = true; // @since 4.4.1
         private int blockMargin;
         private int blockQuoteWidth;
         private int blockQuoteColor;
@@ -484,6 +490,7 @@ public class MarkwonTheme {
 
         Builder(@NonNull MarkwonTheme theme) {
             this.linkColor = theme.linkColor;
+            this.isLinkUnderlined = theme.isLinkedUnderlined;
             this.blockMargin = theme.blockMargin;
             this.blockQuoteWidth = theme.blockQuoteWidth;
             this.blockQuoteColor = theme.blockQuoteColor;
@@ -508,6 +515,12 @@ public class MarkwonTheme {
         @NonNull
         public Builder linkColor(@ColorInt int linkColor) {
             this.linkColor = linkColor;
+            return this;
+        }
+
+        @NonNull
+        public Builder isLinkUnderlined(boolean isLinkUnderlined) {
+            this.isLinkUnderlined = isLinkUnderlined;
             return this;
         }
 
