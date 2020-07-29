@@ -14,12 +14,32 @@ sealed class Deeplink {
             Debug.i(data)
             @Suppress("NAME_SHADOWING")
             val data = data ?: return null
-            if (BuildConfig.DEEPLINK_SCHEME != data.scheme) return null
-            return when (data.host) {
-                // markwon://sample/20202827
-                "sample" -> parseSample(data.lastPathSegment)
-                // markwon://search?a=ext-latex&q=text
-                "search" -> parseSearch(data.query)
+            return when (data.scheme) {
+                // local deeplink with custom scheme (`markwon://`)
+                BuildConfig.DEEPLINK_SCHEME -> {
+                    when (data.host) {
+                        "sample" -> parseSample(data.lastPathSegment)
+                        "search" -> parseSearch(data.query)
+                        else -> null
+                    }
+                }
+                // https deeplink, `https://noties.io/Markwon/sample`
+                "https" -> {
+                    // https://noties.io/Markwon/app/sample/ID
+                    // https://noties.io/Markwon/app/search?a=core
+                    val segments = data.pathSegments
+                    if (segments.size == 3
+                            && "Markwon" == segments[0]
+                            && "app" == segments[1]) {
+                        when (segments[2]) {
+                            "sample" -> parseSample(data.lastPathSegment)
+                            "search" -> parseSearch(data.query)
+                            else -> null
+                        }
+                    } else {
+                        null
+                    }
+                }
                 else -> null
             }
         }
@@ -33,6 +53,15 @@ sealed class Deeplink {
             Debug.i("query: '$query'")
 
             val params = query
+                    ?.let {
+                        // `https:.*` has query with `search?a=core`
+                        val index = it.indexOf('?')
+                        if (index > -1) {
+                            it.substring(index + 1)
+                        } else {
+                            it
+                        }
+                    }
                     ?.split("&")
                     ?.map {
                         val (k, v) = it.split("=")
@@ -40,6 +69,8 @@ sealed class Deeplink {
                     }
                     ?.toMap()
                     ?: return null
+
+            Debug.i("params: $params")
 
             val artifact = params["a"]
             val tag = params["t"]

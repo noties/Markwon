@@ -22,6 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- local deeplink (with custom scheme) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -29,6 +30,21 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="${deeplink_scheme}" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="noties.io"
+                    android:scheme="https" />
+
+                <data android:pathPattern="/Markwon/app/sample/.*" />
+                <data android:pathPattern="/Markwon/app/search" />
+
             </intent-filter>
         </activity>
 
