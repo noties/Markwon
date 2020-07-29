@@ -5,6 +5,7 @@
 #### Added
 * `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods
 * `core` - `CorePlugin` `hasExplicitMovementMethod` configuration method to **not** add implicit `LinkMovementMethod` in `afterSetText`
+* `core` - `MarkwonTheme` `isLinkedUnderlined` attribute for links([#270])<br>Thanks to [@dallasgutauckis]
 * `ext-latex` - `JLatexMathTheme.Padding.of(int,int,int,int)` factory method
 * `app-sample` - example application
 
@@ -28,6 +29,9 @@
 [#235]: https://github.com/noties/Markwon/issues/235
 [#241]: https://github.com/noties/Markwon/issues/241
 [#259]: https://github.com/noties/Markwon/issues/259
+[#270]: https://github.com/noties/Markwon/pull/270
+
+[@dallasgutauckis]: https://github.com/dallasgutauckis
 
 
 # 4.4.0
