@@ -42,8 +42,10 @@
                     android:host="noties.io"
                     android:scheme="https" />
 
-                <data android:pathPattern="/Markwon/app/sample/.*" />
-                <data android:pathPattern="/Markwon/app/search" />
+                <data android:pathPrefix="/Markwon/app"/>
+
+                <data android:pathPattern="sample/.*" />
+                <data android:pathPattern="search" />
 
             </intent-filter>
         </activity>
