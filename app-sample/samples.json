@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.BlockHandlerSample",
+    "id": "202007211090524",
+    "title": "Block handler",
+    "description": "Custom block delimiters that control new lines after block nodes",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.CacheMarkwonSample",
     "id": "202007189102458",
     "title": "Cache Markwon instance",
