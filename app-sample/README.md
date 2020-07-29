@@ -50,6 +50,14 @@ symbolic links (the `sample.json` itself and `io.noties.markwon.app.samples.*` d
 ./gradlew :app-s:clean :app-s:asDe
 ```
 
+## Sample id
+
+Sample `id` is generated manually when creating new sample. A `Live Template` can be used
+to simplify generation part (for example `mid` shortcut with a single variable in `Java` and `Kotlin` scopes):
+
+```
+groovyScript("new Date().format('YYYYMMddHHmmss', TimeZone.getTimeZone('UTC'))")
+```
 
 ## Tests
 
