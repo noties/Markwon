@@ -9,7 +9,9 @@
             href="https://github.com/noties/Markwon/raw/sample-store/markwon-debug.apk"
           >sample app</a> and open
           <a :href="currentWindowLocation()" target="_blank">this link</a> again or try local one (if you already have app installed):
-          <a :href="buildLocalDeeplink()">{{ buildLocalDeeplink() }}</a>
+          <a
+            :href="buildLocalDeeplink()"
+          >{{ buildLocalDeeplink() }}</a>
         </span>
       </template>
       <template v-else>
@@ -35,16 +37,17 @@ export default {
       return msgs[Math.floor(Math.random() * msgs.length)];
     },
     isSampleLink() {
-      const path = window.location.href;
-      return /^.*\/app\/(sample|search).*$/.test(path);
+      return /^.*\/app\/(sample|search).*$/.test(this.path());
     },
     currentWindowLocation() {
-      return window.location.href;
+      return window && window.location.href;
     },
     buildLocalDeeplink() {
-      const path = window.location.href;
-      const link = /.*\/app\/((?:sample|search).*)/.exec(path)[1];
+      const link = /.*\/app\/((?:sample|search).*)/.exec(this.path())[1];
       return "markwon://" + link;
+    },
+    path() {
+      return this.$route.fullPath;
     }
   }
 };
