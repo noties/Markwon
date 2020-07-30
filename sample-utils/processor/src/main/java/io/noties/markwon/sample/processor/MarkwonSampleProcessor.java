@@ -43,7 +43,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 public class MarkwonSampleProcessor extends AbstractProcessor {
 
     private static final String KEY_SAMPLES_FILE = "markwon.samples.file";
-    private static final DateFormat ID_DATEFORMAT = new SimpleDateFormat("YYYYMMDDHHmmss", Locale.ROOT);
+    private static final DateFormat ID_DATEFORMAT = new SimpleDateFormat("YYYYMMddHHmmss", Locale.ROOT);
 
     private Logger logger;
     private String samplesFilePath;

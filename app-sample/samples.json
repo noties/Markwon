@@ -1,7 +1,7 @@
 [
   {
     "javaClassName": "io.noties.markwon.app.samples.BlockHandlerSample",
-    "id": "202007211090524",
+    "id": "20200729090524",
     "title": "Block handler",
     "description": "Custom block delimiters that control new lines after block nodes",
     "artifacts": [
@@ -13,7 +13,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.CacheMarkwonSample",
-    "id": "202007189102458",
+    "id": "20200707102458",
     "title": "Cache Markwon instance",
     "description": "A static cache for `Markwon` instance to be associated with a `Context`",
     "artifacts": [
@@ -25,7 +25,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListMutateSample",
-    "id": "202007184140901",
+    "id": "20200702140901",
     "title": "GFM task list mutate",
     "description": "",
     "artifacts": [
@@ -37,7 +37,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListCustomDrawableSample",
-    "id": "202007184140749",
+    "id": "20200702140749",
     "title": "GFM task list custom drawable",
     "description": "",
     "artifacts": [
@@ -49,7 +49,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListCustomColorsSample",
-    "id": "202007184140536",
+    "id": "20200702140536",
     "title": "GFM task list custom colors",
     "description": "Custom colors for task list extension",
     "artifacts": [
@@ -61,7 +61,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListSample",
-    "id": "202007184140352",
+    "id": "20200702140352",
     "title": "GFM task list",
     "description": "Github Flavored Markdown (GFM) task list extension",
     "artifacts": [
@@ -73,7 +73,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.table.TableLatexSample",
-    "id": "202007184140041",
+    "id": "20200702140041",
     "title": "LaTeX inside table",
     "description": "Usage of LaTeX formulas inside markdown tables",
     "artifacts": [
@@ -87,7 +87,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.table.TableWithImagesSample",
-    "id": "202007184135932",
+    "id": "20200702135932",
     "title": "Images inside table",
     "description": "Usage of images inside markdown tables",
     "artifacts": [
@@ -100,7 +100,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.table.TableLinkifySample",
-    "id": "202007184135739",
+    "id": "20200702135739",
     "title": "Linkify table",
     "description": "Automatically linkify markdown content including content inside tables",
     "artifacts": [
@@ -113,7 +113,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.table.TableCustomizeSample",
-    "id": "202007184135621",
+    "id": "20200702135621",
     "title": "Customize table theme",
     "description": "",
     "artifacts": [
@@ -125,7 +125,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.RecyclerSample",
-    "id": "202007184101750",
+    "id": "20200702101750",
     "title": "RecyclerView",
     "description": "Usage with `RecyclerView`",
     "artifacts": [
@@ -138,7 +138,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.LinkRemoveUnderlineSample",
-    "id": "202007184101224",
+    "id": "20200702101224",
     "title": "Remove link underline",
     "description": "",
     "artifacts": [
@@ -152,7 +152,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.PrecomputedFutureSample",
-    "id": "202007184092446",
+    "id": "20200702092446",
     "title": "PrecomputedFutureTextSetterCompat",
     "description": "Usage of `PrecomputedFutureTextSetterCompat` inside a `RecyclerView` with appcompat",
     "artifacts": [
@@ -165,7 +165,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.PrecomputedSample",
-    "id": "202007184091654",
+    "id": "20200702091654",
     "title": "PrecomputedTextSetterCompat",
     "description": "`TextSetter` to use `PrecomputedTextSetterCompat`",
     "artifacts": [
@@ -177,7 +177,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.notification.RemoteViewsSample",
-    "id": "202007184090140",
+    "id": "20200702090140",
     "title": "RemoteViews in notification",
     "description": "Display markdown with platform (system) spans in notification via `RemoteViews`",
     "artifacts": [
@@ -189,7 +189,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.notification.NotificationSample",
-    "id": "202007183130729",
+    "id": "20200701130729",
     "title": "Markdown in Notification",
     "description": "Proof of concept of using `Markwon` with `android.app.Notification`",
     "artifacts": [
@@ -201,7 +201,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexErrorSample",
-    "id": "202007183122624",
+    "id": "20200701122624",
     "title": "LaTeX error handling",
     "description": "Log error when parsing LaTeX and display error drawable",
     "artifacts": [
@@ -213,7 +213,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexThemeSample",
-    "id": "202007183121528",
+    "id": "20200701121528",
     "title": "LaTeX theme",
     "description": "Sample of theme customization for LaTeX",
     "artifacts": [
@@ -226,7 +226,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexDefaultTextColorSample",
-    "id": "202007183120848",
+    "id": "20200701120848",
     "title": "LaTeX default text color",
     "description": "LaTeX will use text color of `TextView` by default",
     "artifacts": [
@@ -238,7 +238,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexDarkSample",
-    "id": "202007183094225",
+    "id": "20200701094225",
     "title": "LaTeX dark",
     "description": "LaTeX automatically uses `TextView` text color if not configured explicitly",
     "artifacts": [
@@ -250,7 +250,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexDifferentTextSizesSample",
-    "id": "202007183093504",
+    "id": "20200701093504",
     "title": "LaTeX inline/block different text size",
     "description": "",
     "artifacts": [
@@ -263,7 +263,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexOmegaSample",
-    "id": "202007183090618",
+    "id": "20200701090618",
     "title": "LaTeX omega symbol",
     "description": "Bug rendering omega symbol in LaTeX",
     "artifacts": [
@@ -277,7 +277,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexLegacySample",
-    "id": "202007183090335",
+    "id": "20200701090335",
     "title": "LaTeX blocks in legacy mode",
     "description": "Sample using _legacy_ LaTeX block parsing (pre `4.3.0` Markwon version)",
     "artifacts": [
@@ -289,7 +289,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexInlineSample",
-    "id": "202007183085820",
+    "id": "20200701085820",
     "title": "LaTeX inline",
     "description": "Display LaTeX inline",
     "artifacts": [
@@ -302,7 +302,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.latex.LatexBlockSample",
-    "id": "202006182200257",
+    "id": "20200630200257",
     "title": "LaTex block",
     "description": "Render LaTeX block",
     "artifacts": [
@@ -314,7 +314,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingTooltipSample",
-    "id": "202006182195409",
+    "id": "20200630195409",
     "title": "Tooltip with inline parser",
     "description": "",
     "artifacts": [
@@ -327,7 +327,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.SimpleExtensionSample",
-    "id": "202006182194335",
+    "id": "20200630194335",
     "title": "Delimiter processor simple-ext",
     "description": "Custom delimiter processor implemented with a `SimpleExtPlugin`",
     "artifacts": [
@@ -339,7 +339,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.DelimiterProcessorSample",
-    "id": "202006182194017",
+    "id": "20200630194017",
     "title": "Custom delimiter processor",
     "description": "Custom parsing delimiter processor with `?` character",
     "artifacts": [
@@ -351,7 +351,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlDisableSanitizeSample",
-    "id": "202006182171424",
+    "id": "20200630171424",
     "title": "Disable HTML",
     "description": "Disable HTML via replacing special `\u003c` and `\u003e` symbols",
     "artifacts": [
@@ -366,7 +366,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingNoHtmlSample",
-    "id": "202006182171239",
+    "id": "20200630171239",
     "title": "Inline parsing exclude HTML",
     "description": "",
     "artifacts": [
@@ -380,7 +380,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingNoDefaultsSample",
-    "id": "202006182170823",
+    "id": "20200630170823",
     "title": "Inline parsing no defaults",
     "description": "Parsing only inline code and disable all the rest",
     "artifacts": [
@@ -393,7 +393,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingWithDefaultsSample",
-    "id": "202006182170723",
+    "id": "20200630170723",
     "title": "Inline parsing with defaults",
     "description": "Parsing with all defaults except links",
     "artifacts": [
@@ -406,7 +406,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingDisableCodeSample",
-    "id": "202006182170607",
+    "id": "20200630170607",
     "title": "Disable code inline parsing",
     "description": "",
     "artifacts": [
@@ -419,7 +419,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingLinksOnlySample",
-    "id": "202006182170412",
+    "id": "20200630170412",
     "title": "Links only inline parsing",
     "description": "",
     "artifacts": [
@@ -432,7 +432,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.GlidePlaceholderImageSample",
-    "id": "202006182170241",
+    "id": "20200630170241",
     "title": "Glide image with placeholder",
     "description": "",
     "artifacts": [
@@ -444,7 +444,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.GlideImageSample",
-    "id": "202006182170112",
+    "id": "20200630170112",
     "title": "Glide image",
     "description": "",
     "artifacts": [
@@ -456,7 +456,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.ErrorImageSample",
-    "id": "202006182165828",
+    "id": "20200630165828",
     "title": "Image error handler",
     "description": "",
     "artifacts": [
@@ -468,7 +468,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.PlaceholderImageSample",
-    "id": "202006182165504",
+    "id": "20200630165504",
     "title": "Image with placeholder",
     "description": "",
     "artifacts": [
@@ -480,7 +480,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.GifImageSample",
-    "id": "202006182162214",
+    "id": "20200630162214",
     "title": "GIF image",
     "description": "",
     "artifacts": [
@@ -493,7 +493,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.SvgImageSample",
-    "id": "202006182161952",
+    "id": "20200630161952",
     "title": "SVG image",
     "description": "",
     "artifacts": [
@@ -506,7 +506,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.ImageSample",
-    "id": "202006182144659",
+    "id": "20200630144659",
     "title": "Markdown image",
     "description": "",
     "artifacts": [
@@ -518,7 +518,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlDetailsSample",
-    "id": "202006182120752",
+    "id": "20200630120752",
     "title": "Details HTML tag",
     "description": "Handling of `details` HTML tag",
     "artifacts": [
@@ -533,7 +533,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlCenterTagSample",
-    "id": "202006182120101",
+    "id": "20200630120101",
     "title": "Center HTML tag",
     "description": "Handling of `center` HTML tag",
     "artifacts": [
@@ -547,7 +547,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlEmptyTagReplacementSample",
-    "id": "202006182115725",
+    "id": "20200630115725",
     "title": "HTML empty tag replacement",
     "description": "Render custom content when HTML tag contents is empty, in case of self-closed HTML tags or tags without content (closed right after opened)",
     "artifacts": [
@@ -560,7 +560,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlIFrameSample",
-    "id": "202006182115521",
+    "id": "20200630115521",
     "title": "IFrame HTML tag",
     "description": "Handling of `iframe` HTML tag",
     "artifacts": [
@@ -575,7 +575,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlImageSample",
-    "id": "202006182115300",
+    "id": "20200630115300",
     "title": "Html images",
     "description": "Usage of HTML images",
     "artifacts": [
@@ -590,7 +590,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlEnhanceSample",
-    "id": "202006182115103",
+    "id": "20200630115103",
     "title": "Enhance custom HTML tag",
     "description": "Custom HTML tag implementation that _enhances_ a part of text given start and end indices",
     "artifacts": [
@@ -604,7 +604,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlRandomCharSize",
-    "id": "202006182114923",
+    "id": "20200630114923",
     "title": "Random char size HTML tag",
     "description": "Implementation of a custom HTML tag handler that assigns each character a random size",
     "artifacts": [
@@ -618,7 +618,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlAlignSample",
-    "id": "202006182114630",
+    "id": "20200630114630",
     "title": "Align HTML tag",
     "description": "Implement custom HTML tag handling",
     "artifacts": [
@@ -632,7 +632,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorHeadingSample",
-    "id": "202006182113954",
+    "id": "20200630113954",
     "title": "Heading edit handler",
     "description": "Handling of heading node in editor",
     "artifacts": [
@@ -645,7 +645,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.NoParsingSample",
-    "id": "202006181171212",
+    "id": "20200629171212",
     "title": "No parsing",
     "description": "All commonmark parsing is disabled (both inlines and blocks)",
     "artifacts": [
@@ -658,7 +658,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.InlinePluginNoDefaultsSample",
-    "id": "202006181170857",
+    "id": "20200629170857",
     "title": "Inline parsing without defaults",
     "description": "Configure inline parser plugin to **not** have any **inline** parsing",
     "artifacts": [
@@ -670,7 +670,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorNewLineContinuationSample",
-    "id": "202006181170348",
+    "id": "20200629170348",
     "title": "Editor new line continuation",
     "description": "Sample of how new line character can be handled in order to add a _continuation_, for example adding a new bullet list item if current line starts with one",
     "artifacts": [
@@ -683,7 +683,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorMultipleEditSpansSample",
-    "id": "202006181165920",
+    "id": "20200629165920",
     "title": "Multiple edit spans",
     "description": "Additional multiple edit spans for editor",
     "artifacts": [
@@ -696,7 +696,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorAdditionalPluginSample",
-    "id": "202006181165347",
+    "id": "20200629165347",
     "title": "Additional plugin",
     "description": "Additional plugin for editor",
     "artifacts": [
@@ -710,7 +710,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorAdditionalEditSpan",
-    "id": "202006181165136",
+    "id": "20200629165136",
     "title": "Additional edit span",
     "description": "Additional _edit_ span (span that is present in `EditText` along with punctuation",
     "artifacts": [
@@ -724,7 +724,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorCustomPunctuationSample",
-    "id": "202006181164627",
+    "id": "20200629164627",
     "title": "Custom punctuation span",
     "description": "Custom span for punctuation in editor",
     "artifacts": [
@@ -738,7 +738,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorPreRenderSample",
-    "id": "202006181164422",
+    "id": "20200629164422",
     "title": "Editor with pre-render (async)",
     "description": "Editor functionality with highlight taking place in another thread",
     "artifacts": [
@@ -751,7 +751,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorSimpleSample",
-    "id": "202006181164227",
+    "id": "20200629164227",
     "title": "Simple editor",
     "description": "Simple usage of editor with markdown highlight",
     "artifacts": [
@@ -764,7 +764,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.CustomExtensionSample",
-    "id": "202006181163248",
+    "id": "20200629163248",
     "title": "Custom extension",
     "description": "Custom extension that adds an icon from resources and renders it as image with `@ic-name` syntax",
     "artifacts": [
@@ -780,8 +780,22 @@
     ]
   },
   {
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "id": "20200629162024",
+    "title": "User mention and issue (via text)",
+    "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing",
+      "rendering",
+      "text-added-listener"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
-    "id": "202006181162024",
+    "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
@@ -795,22 +809,8 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
-    "id": "202006181162024",
-    "title": "User mention and issue (via text)",
-    "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
-    "artifacts": [
-      "CORE"
-    ],
-    "tags": [
-      "parsing",
-      "rendering",
-      "text-added-listener"
-    ]
-  },
-  {
     "javaClassName": "io.noties.markwon.app.samples.ReadMorePluginSample",
-    "id": "202006181161505",
+    "id": "20200629161505",
     "title": "Read more plugin",
     "description": "Plugin that adds expand/collapse (\"show all\"/\"show less\")",
     "artifacts": [
@@ -822,7 +822,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.plugins.TableOfContentsSample",
-    "id": "202006181161226",
+    "id": "20200629161226",
     "title": "Table of contents",
     "description": "Sample plugin that adds a table of contents header",
     "artifacts": [
@@ -835,7 +835,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.LetterOrderedListSample",
-    "id": "202006181130954",
+    "id": "20200629130954",
     "title": "Letter ordered list",
     "description": "Render bullet list inside an ordered list with letters instead of bullets",
     "artifacts": [
@@ -849,7 +849,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.plugins.AnchorSample",
-    "id": "202006181130728",
+    "id": "20200629130728",
     "title": "Anchor plugin",
     "description": "HTML-like anchor links plugin, which scrolls to clicked anchor",
     "artifacts": [
@@ -863,7 +863,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.AllBlocksNoForcedNewLineSample",
-    "id": "202006181130227",
+    "id": "20200629130227",
     "title": "All blocks no padding",
     "description": "Do not render new lines (padding) after all blocks",
     "artifacts": [
@@ -878,7 +878,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.HeadingNoSpaceBlockHandlerSample",
-    "id": "202006181125924",
+    "id": "20200629125924",
     "title": "Heading no padding (block handler)",
     "description": "Process padding (spacing) after heading with a `BlockHandler`",
     "artifacts": [
@@ -894,7 +894,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.HeadingNoSpaceSample",
-    "id": "202006181125622",
+    "id": "20200629125622",
     "title": "Heading no padding",
     "description": "Do not add a new line after heading node",
     "artifacts": [
@@ -908,7 +908,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.AdditionalSpacingSample",
-    "id": "202006181125321",
+    "id": "20200629125321",
     "title": "Additional spacing after block",
     "description": "Add additional spacing (padding) after last line of a block",
     "artifacts": [
@@ -922,7 +922,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.SoftBreakAddsNewLineSample",
-    "id": "202006181125040",
+    "id": "20200629125040",
     "title": "Soft break new line",
     "description": "Add a new line for a markdown soft-break node",
     "artifacts": [
@@ -935,7 +935,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.SoftBreakAddsSpace",
-    "id": "202006181124706",
+    "id": "20200629124706",
     "title": "Soft break adds space",
     "description": "By default a soft break (`\n`) will add a space character instead of new line",
     "artifacts": [
@@ -949,7 +949,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.image.ImagesCustomSchemeSample",
-    "id": "202006181124201",
+    "id": "20200629124201",
     "title": "Image destination custom scheme",
     "description": "Example of handling custom scheme (`https`, `ftp`, `whatever`, etc.) for images destination URLs with `ImagesPlugin`",
     "artifacts": [
@@ -961,7 +961,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.LinkWithoutSchemeSample",
-    "id": "202006181124005",
+    "id": "20200629124005",
     "title": "Links without scheme",
     "description": "Links without scheme are considered to be `https`",
     "artifacts": [
@@ -974,7 +974,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.CustomizeThemeSample",
-    "id": "202006181123617",
+    "id": "20200629123617",
     "title": "Customize theme",
     "description": "Customize `MarkwonTheme` styling",
     "artifacts": [
@@ -988,7 +988,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.DisableNodeSample",
-    "id": "202006181123308",
+    "id": "20200629123308",
     "title": "Disable node from rendering",
     "description": "Disable _parsed_ node from being rendered (markdown syntax is still consumed)",
     "artifacts": [
@@ -1001,7 +1001,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.ParagraphSpanStyle",
-    "id": "202006181122647",
+    "id": "20200629122647",
     "title": "Paragraph style",
     "description": "Apply a style (via span) to a paragraph",
     "artifacts": [
@@ -1015,7 +1015,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.LinkTitleSample",
-    "id": "202006181122230",
+    "id": "20200629122230",
     "title": "Obtain link title",
     "description": "Obtain title (text) of clicked link, `[title](#destination)`",
     "artifacts": [
@@ -1028,7 +1028,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.DisableImplicitMovementMethodPluginSample",
-    "id": "202006181121803",
+    "id": "20200629121803",
     "title": "Disable implicit movement method via plugin",
     "description": "Disable implicit movement method via `MovementMethodPlugin`",
     "artifacts": [
@@ -1042,7 +1042,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.MovementMethodPluginSample",
-    "id": "202006179081631",
+    "id": "20200627081631",
     "title": "MovementMethodPlugin",
     "description": "Plugin to control movement method",
     "artifacts": [
@@ -1056,7 +1056,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.DisableImplicitMovementMethodSample",
-    "id": "202006179081256",
+    "id": "20200627081256",
     "title": "Disable implicit movement method",
     "description": "Configure `Markwon` to **not** apply implicit movement method, which consumes touch events when used in a `RecyclerView` even when markdown does not contain links",
     "artifacts": [
@@ -1071,7 +1071,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.ExplicitMovementMethodSample",
-    "id": "202006179080007",
+    "id": "20200627080007",
     "title": "Explicit movement method",
     "description": "When a movement method already applied to a `TextView``Markwon` won\u0027t try to apply own (implicit) one",
     "artifacts": [
@@ -1084,7 +1084,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.movementmethod.ImplicitMovementMethodSample",
-    "id": "202006179075524",
+    "id": "20200627075524",
     "title": "Implicit movement method",
     "description": "By default movement method is applied for links to be clickable",
     "artifacts": [
@@ -1098,7 +1098,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.EnabledBlockTypesSample",
-    "id": "202006179075012",
+    "id": "20200627075012",
     "title": "Enabled markdown blocks",
     "description": "Modify/inspect enabled by `CorePlugin` block types. Disable quotes or other blocks from being parsed",
     "artifacts": [
@@ -1112,7 +1112,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.ToastDynamicContentSample",
-    "id": "202006179074017",
+    "id": "20200627074017",
     "title": "Markdown in Toast (with dynamic content)",
     "description": "Display markdown in a `android.widget.Toast` with dynamic content (image)",
     "artifacts": [
@@ -1126,7 +1126,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.ToastSample",
-    "id": "202006179072642",
+    "id": "20200627072642",
     "title": "Markdown in Toast",
     "description": "Display _static_ markdown content in a `android.widget.Toast`",
     "artifacts": [
@@ -1138,7 +1138,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.basics.SimpleWalkthrough",
-    "id": "202006178153426",
+    "id": "20200626153426",
     "title": "Simple with walk-through",
     "description": "Walk-through for simple use case",
     "artifacts": [
@@ -1150,7 +1150,7 @@
   },
   {
     "javaClassName": "io.noties.markwon.app.samples.basics.Simple",
-    "id": "202006178152255",
+    "id": "20200626152255",
     "title": "Simple",
     "description": "The most primitive and simple way to apply markdown to a `TextView`",
     "artifacts": [
