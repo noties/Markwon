@@ -17,7 +17,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184101224",
+  id = "20200702101224",
   title = "Remove link underline",
   artifacts = MarkwonArtifact.CORE,
   tags = {Tags.links, Tags.rendering, Tags.span}

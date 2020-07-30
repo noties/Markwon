@@ -17,7 +17,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182194017",
+  id = "20200630194017",
   title = "Custom delimiter processor",
   description = "Custom parsing delimiter processor with `?` character",
   artifacts = MarkwonArtifact.CORE,

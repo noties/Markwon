@@ -12,7 +12,7 @@ import java.util.Collections
 import java.util.WeakHashMap
 
 @MarkwonSampleInfo(
-  id = "202007189102458",
+  id = "20200707102458",
   title = "Cache Markwon instance",
   description = "A static cache for `Markwon` instance " +
     "to be associated with a `Context`",

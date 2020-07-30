@@ -27,7 +27,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184101750",
+  id = "20200702101750",
   title = "RecyclerView",
   description = "Usage with `RecyclerView`",
   artifacts = {MarkwonArtifact.RECYCLER, MarkwonArtifact.RECYCLER_TABLE},

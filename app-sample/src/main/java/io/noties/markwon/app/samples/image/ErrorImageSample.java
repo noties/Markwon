@@ -15,7 +15,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182165828",
+  id = "20200630165828",
   title = "Image error handler",
   artifacts = MarkwonArtifact.IMAGE,
   tags = Tags.image

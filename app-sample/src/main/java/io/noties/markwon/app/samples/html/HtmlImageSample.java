@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182115300",
+  id = "20200630115300",
   title = "Html images",
   description = "Usage of HTML images",
   artifacts = {MarkwonArtifact.HTML, MarkwonArtifact.IMAGE},

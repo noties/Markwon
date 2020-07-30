@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184135932",
+  id = "20200702135932",
   title = "Images inside table",
   description = "Usage of images inside markdown tables",
   artifacts = {MarkwonArtifact.EXT_TABLES, MarkwonArtifact.IMAGE},

@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import static io.noties.markwon.app.samples.tasklist.shared.TaskListHolder.MD;
 
 @MarkwonSampleInfo(
-  id = "202007184140352",
+  id = "20200702140352",
   title = "GFM task list",
   description = "Github Flavored Markdown (GFM) task list extension",
   artifacts = MarkwonArtifact.EXT_TASKLIST,

@@ -34,7 +34,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184090140",
+  id = "20200702090140",
   title = "RemoteViews in notification",
   description = "Display markdown with platform (system) spans in notification via `RemoteViews`",
   artifacts = MarkwonArtifact.CORE,

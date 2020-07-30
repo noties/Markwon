@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 
 @MarkwonSampleInfo(
-  id = "202006179080007",
+  id = "20200627080007",
   title = "Explicit movement method",
   description = "When a movement method already applied to a `TextView`" +
     "`Markwon` won't try to apply own (implicit) one",

@@ -14,7 +14,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183121528",
+  id = "20200701121528",
   title = "LaTeX theme",
   description = "Sample of theme customization for LaTeX",
   artifacts = {MarkwonArtifact.EXT_LATEX, MarkwonArtifact.INLINE_PARSER},

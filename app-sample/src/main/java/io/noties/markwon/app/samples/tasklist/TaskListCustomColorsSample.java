@@ -12,7 +12,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import static io.noties.markwon.app.samples.tasklist.shared.TaskListHolder.MD;
 
 @MarkwonSampleInfo(
-  id = "202007184140536",
+  id = "20200702140536",
   title = "GFM task list custom colors",
   description = "Custom colors for task list extension",
   artifacts = MarkwonArtifact.EXT_TASKLIST,

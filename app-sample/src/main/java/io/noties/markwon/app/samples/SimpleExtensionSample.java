@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 
 @MarkwonSampleInfo(
-  id = "202006182194335",
+  id = "20200630194335",
   title = "Delimiter processor simple-ext",
   description = "Custom delimiter processor implemented with a `SimpleExtPlugin`",
   artifacts = MarkwonArtifact.SIMPLE_EXT,

@@ -16,7 +16,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182165504",
+  id = "20200630165504",
   title = "Image with placeholder",
   artifacts = MarkwonArtifact.IMAGE,
   tags = Tags.image

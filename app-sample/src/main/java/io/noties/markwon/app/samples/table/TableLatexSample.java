@@ -11,7 +11,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184140041",
+  id = "20200702140041",
   title = "LaTeX inside table",
   description = "Usage of LaTeX formulas inside markdown tables",
   artifacts = {MarkwonArtifact.EXT_LATEX, MarkwonArtifact.EXT_TABLES, MarkwonArtifact.IMAGE},

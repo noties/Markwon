@@ -24,7 +24,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181130954",
+  id = "20200629130954",
   title = "Letter ordered list",
   description = "Render bullet list inside an ordered list with letters instead of bullets",
   artifacts = MarkwonArtifact.CORE,

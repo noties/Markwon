@@ -16,7 +16,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182170412",
+  id = "20200630170412",
   title = "Links only inline parsing",
   artifacts = MarkwonArtifact.INLINE_PARSER,
   tags = {Tags.parsing, Tags.inline}

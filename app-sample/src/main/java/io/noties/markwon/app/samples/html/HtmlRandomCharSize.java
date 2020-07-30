@@ -22,7 +22,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182114923",
+  id = "20200630114923",
   title = "Random char size HTML tag",
   description = "Implementation of a custom HTML tag handler " +
     "that assigns each character a random size",

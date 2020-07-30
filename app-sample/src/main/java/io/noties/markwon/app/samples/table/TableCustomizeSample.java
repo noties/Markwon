@@ -12,7 +12,7 @@ import io.noties.markwon.utils.ColorUtils;
 import io.noties.markwon.utils.Dip;
 
 @MarkwonSampleInfo(
-  id = "202007184135621",
+  id = "20200702135621",
   title = "Customize table theme",
   artifacts = MarkwonArtifact.EXT_TABLES,
   tags = {Tags.theme}

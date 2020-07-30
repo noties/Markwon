@@ -36,7 +36,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181163248",
+  id = "20200629163248",
   title = "Custom extension",
   description = "Custom extension that adds an " +
     "icon from resources and renders it as image with " +

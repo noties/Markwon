@@ -12,7 +12,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182170723",
+  id = "20200630170723",
   title = "Inline parsing with defaults",
   description = "Parsing with all defaults except links",
   artifacts = MarkwonArtifact.INLINE_PARSER,

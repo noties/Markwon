@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 
 @MarkwonSampleInfo(
-  id = "202006181121803",
+  id = "20200629121803",
   title = "Disable implicit movement method via plugin",
   description = "Disable implicit movement method via `MovementMethodPlugin`",
   artifacts = [MarkwonArtifact.CORE],

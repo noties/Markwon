@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182170112",
+  id = "20200630170112",
   title = "Glide image",
   artifacts = MarkwonArtifact.IMAGE_GLIDE,
   tags = Tags.image

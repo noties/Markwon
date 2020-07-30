@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181170348",
+  id = "20200629170348",
   title = "Editor new line continuation",
   description = "Sample of how new line character can be handled " +
     "in order to add a _continuation_, for example adding a new " +

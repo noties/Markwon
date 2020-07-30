@@ -11,7 +11,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181164422",
+  id = "20200629164422",
   title = "Editor with pre-render (async)",
   description = "Editor functionality with highlight " +
     "taking place in another thread",

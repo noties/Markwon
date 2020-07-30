@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181161505",
+  id = "20200629161505",
   title = "Read more plugin",
   description = "Plugin that adds expand/collapse (\"show all\"/\"show less\")",
   artifacts = MarkwonArtifact.CORE,

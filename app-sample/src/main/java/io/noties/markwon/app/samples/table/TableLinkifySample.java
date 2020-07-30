@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184135739",
+  id = "20200702135739",
   title = "Linkify table",
   description = "Automatically linkify markdown content " +
     "including content inside tables",

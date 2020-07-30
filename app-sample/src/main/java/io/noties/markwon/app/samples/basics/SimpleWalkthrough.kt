@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 import org.commonmark.node.Node
 
 @MarkwonSampleInfo(
-  id = "202006178153426",
+  id = "20200626153426",
   title = "Simple with walk-through",
   description = "Walk-through for simple use case",
   artifacts = [MarkwonArtifact.CORE],

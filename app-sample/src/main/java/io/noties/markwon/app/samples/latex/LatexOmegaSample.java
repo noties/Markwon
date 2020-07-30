@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183090618",
+  id = "20200701090618",
   title = "LaTeX omega symbol",
   description = "Bug rendering omega symbol in LaTeX",
   artifacts = {MarkwonArtifact.EXT_LATEX, MarkwonArtifact.INLINE_PARSER},

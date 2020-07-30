@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181165347",
+  id = "20200629165347",
   title = "Additional plugin",
   description = "Additional plugin for editor",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER, MarkwonArtifact.EXT_STRIKETHROUGH},

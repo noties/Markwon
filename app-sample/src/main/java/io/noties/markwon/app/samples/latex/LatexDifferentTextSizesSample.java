@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183093504",
+  id = "20200701093504",
   title = "LaTeX inline/block different text size",
   artifacts = {MarkwonArtifact.EXT_LATEX, MarkwonArtifact.INLINE_PARSER},
   tags = {Tags.rendering}

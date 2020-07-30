@@ -7,7 +7,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181124005",
+  id = "20200629124005",
   title = "Links without scheme",
   description = "Links without scheme are considered to be `https`",
   artifacts = {MarkwonArtifact.CORE},

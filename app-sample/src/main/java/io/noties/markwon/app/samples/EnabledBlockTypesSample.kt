@@ -11,7 +11,7 @@ import org.commonmark.node.BlockQuote
 import org.commonmark.parser.Parser
 
 @MarkwonSampleInfo(
-  id = "202006179075012",
+  id = "20200627075012",
   title = "Enabled markdown blocks",
   description = "Modify/inspect enabled by `CorePlugin` block types. " +
     "Disable quotes or other blocks from being parsed",

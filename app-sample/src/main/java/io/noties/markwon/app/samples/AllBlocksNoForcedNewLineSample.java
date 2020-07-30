@@ -14,7 +14,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181130227",
+  id = "20200629130227",
   title = "All blocks no padding",
   description = "Do not render new lines (padding) after all blocks",
   artifacts = MarkwonArtifact.CORE,

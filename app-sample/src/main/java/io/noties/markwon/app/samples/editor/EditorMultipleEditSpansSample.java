@@ -32,7 +32,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181165920",
+  id = "20200629165920",
   title = "Multiple edit spans",
   description = "Additional multiple edit spans for editor",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER},

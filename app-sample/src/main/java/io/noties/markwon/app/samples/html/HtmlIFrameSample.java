@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182115521",
+  id = "20200630115521",
   title = "IFrame HTML tag",
   description = "Handling of `iframe` HTML tag",
   artifacts = {MarkwonArtifact.HTML, MarkwonArtifact.IMAGE},

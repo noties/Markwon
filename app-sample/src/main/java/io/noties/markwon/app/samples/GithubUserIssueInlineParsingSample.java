@@ -20,7 +20,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181162024",
+  id = "20200629162024",
   title = "User mention and issue (via text)",
   description = "Github-like user mention and issue " +
     "rendering via `CorePlugin.OnTextAddedListener`",

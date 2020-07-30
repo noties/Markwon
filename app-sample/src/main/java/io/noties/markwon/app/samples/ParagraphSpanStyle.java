@@ -16,7 +16,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181122647",
+  id = "20200629122647",
   title = "Paragraph style",
   description = "Apply a style (via span) to a paragraph",
   artifacts = {MarkwonArtifact.CORE},

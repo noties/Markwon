@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182115725",
+  id = "20200630115725",
   title = "HTML empty tag replacement",
   description = "Render custom content when HTML tag contents is empty, " +
     "in case of self-closed HTML tags or tags without content (closed " +

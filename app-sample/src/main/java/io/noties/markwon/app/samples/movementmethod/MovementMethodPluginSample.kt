@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 
 @MarkwonSampleInfo(
-  id = "202006179081631",
+  id = "20200627081631",
   title = "MovementMethodPlugin",
   description = "Plugin to control movement method",
   artifacts = [MarkwonArtifact.CORE],

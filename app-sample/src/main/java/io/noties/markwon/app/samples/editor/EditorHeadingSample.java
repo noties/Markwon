@@ -12,7 +12,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182113954",
+  id = "20200630113954",
   title = "Heading edit handler",
   description = "Handling of heading node in editor",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER},

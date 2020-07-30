@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181130728",
+  id = "20200629130728",
   title = "Anchor plugin",
   description = "HTML-like anchor links plugin, which scrolls to clicked anchor",
   artifacts = MarkwonArtifact.CORE,

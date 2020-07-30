@@ -23,7 +23,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181161226",
+  id = "20200629161226",
   title = "Table of contents",
   description = "Sample plugin that adds a table of contents header",
   artifacts = MarkwonArtifact.CORE,

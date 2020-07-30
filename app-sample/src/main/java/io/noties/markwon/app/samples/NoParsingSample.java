@@ -16,7 +16,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181171212",
+  id = "20200629171212",
   title = "No parsing",
   description = "All commonmark parsing is disabled (both inlines and blocks)",
   artifacts = MarkwonArtifact.CORE,

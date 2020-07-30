@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182161952",
+  id = "20200630161952",
   title = "SVG image",
   artifacts = MarkwonArtifact.IMAGE,
   tags = {Tags.image, Tags.svg}

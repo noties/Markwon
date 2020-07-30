@@ -15,7 +15,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181125924",
+  id = "20200629125924",
   title = "Heading no padding (block handler)",
   description = "Process padding (spacing) after heading with a " +
     "`BlockHandler`",

@@ -25,7 +25,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181122230",
+  id = "20200629122230",
   title = "Obtain link title",
   description = "Obtain title (text) of clicked link, `[title](#destination)`",
   artifacts = {MarkwonArtifact.CORE},

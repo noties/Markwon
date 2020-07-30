@@ -15,7 +15,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181125622",
+  id = "20200629125622",
   title = "Heading no padding",
   description = "Do not add a new line after heading node",
   artifacts = MarkwonArtifact.CORE,

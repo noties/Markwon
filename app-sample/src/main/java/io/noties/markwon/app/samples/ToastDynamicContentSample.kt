@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 
 @MarkwonSampleInfo(
-  id = "202006179074017",
+  id = "20200627074017",
   title = "Markdown in Toast (with dynamic content)",
   description = "Display markdown in a `android.widget.Toast` with dynamic content (image)",
   artifacts = [MarkwonArtifact.CORE, MarkwonArtifact.IMAGE],

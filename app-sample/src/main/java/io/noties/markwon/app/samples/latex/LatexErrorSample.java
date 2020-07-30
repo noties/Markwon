@@ -17,7 +17,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183122624",
+  id = "20200701122624",
   title = "LaTeX error handling",
   description = "Log error when parsing LaTeX and display error drawable",
   artifacts = MarkwonArtifact.EXT_LATEX,

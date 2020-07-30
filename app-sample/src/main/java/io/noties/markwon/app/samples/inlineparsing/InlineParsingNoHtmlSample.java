@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182171239",
+  id = "20200630171239",
   title = "Inline parsing exclude HTML",
   artifacts = MarkwonArtifact.INLINE_PARSER,
   tags = {Tags.parsing, Tags.inline, Tags.block}

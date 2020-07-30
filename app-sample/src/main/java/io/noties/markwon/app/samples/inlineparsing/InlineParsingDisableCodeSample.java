@@ -22,7 +22,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182170607",
+  id = "20200630170607",
   title = "Disable code inline parsing",
   artifacts = MarkwonArtifact.INLINE_PARSER,
   tags = {Tags.inline, Tags.parsing}

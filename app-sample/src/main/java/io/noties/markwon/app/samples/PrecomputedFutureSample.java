@@ -21,7 +21,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184092446",
+  id = "20200702092446",
   title = "PrecomputedFutureTextSetterCompat",
   description = "Usage of `PrecomputedFutureTextSetterCompat` " +
     "inside a `RecyclerView` with appcompat",

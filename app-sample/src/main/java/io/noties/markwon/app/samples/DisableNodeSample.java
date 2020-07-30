@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181123308",
+  id = "20200629123308",
   title = "Disable node from rendering",
   description = "Disable _parsed_ node from being rendered (markdown syntax is still consumed)",
   artifacts = {MarkwonArtifact.CORE},

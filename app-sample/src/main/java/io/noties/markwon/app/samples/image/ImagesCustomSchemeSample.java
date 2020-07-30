@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181124201",
+  id = "20200629124201",
   title = "Image destination custom scheme",
   description = "Example of handling custom scheme " +
     "(`https`, `ftp`, `whatever`, etc.) for images destination URLs " +

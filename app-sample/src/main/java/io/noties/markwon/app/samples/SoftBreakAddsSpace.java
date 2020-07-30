@@ -7,7 +7,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181124706",
+  id = "20200629124706",
   title = "Soft break adds space",
   description = "By default a soft break (`\n`) will " +
     "add a space character instead of new line",

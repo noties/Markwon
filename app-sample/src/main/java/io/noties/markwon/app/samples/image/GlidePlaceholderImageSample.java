@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182170241",
+  id = "20200630170241",
   title = "Glide image with placeholder",
   artifacts = MarkwonArtifact.IMAGE_GLIDE,
   tags = Tags.image

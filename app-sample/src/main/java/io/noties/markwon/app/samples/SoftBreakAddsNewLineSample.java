@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181125040",
+  id = "20200629125040",
   title = "Soft break new line",
   description = "Add a new line for a markdown soft-break node",
   artifacts = MarkwonArtifact.CORE,

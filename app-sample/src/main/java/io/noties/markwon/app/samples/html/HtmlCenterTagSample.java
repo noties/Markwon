@@ -24,7 +24,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182120101",
+  id = "20200630120101",
   title = "Center HTML tag",
   description = "Handling of `center` HTML tag",
   artifacts = {MarkwonArtifact.HTML, MarkwonArtifact.IMAGE},

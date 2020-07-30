@@ -44,7 +44,7 @@ import io.noties.markwon.utils.LeadingMarginUtils;
 import io.noties.markwon.utils.NoCopySpannableFactory;
 
 @MarkwonSampleInfo(
-  id = "202006182120752",
+  id = "20200630120752",
   title = "Details HTML tag",
   description = "Handling of `details` HTML tag",
   artifacts = {MarkwonArtifact.HTML, MarkwonArtifact.IMAGE},

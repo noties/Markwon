@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181170857",
+  id = "20200629170857",
   title = "Inline parsing without defaults",
   description = "Configure inline parser plugin to **not** have any **inline** parsing",
   artifacts = {MarkwonArtifact.INLINE_PARSER},

@@ -7,7 +7,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 
 @MarkwonSampleInfo(
-  id = "202006178152255",
+  id = "20200626152255",
   title = "Simple",
   description = "The most primitive and simple way to apply markdown to a `TextView`",
   artifacts = [MarkwonArtifact.CORE],

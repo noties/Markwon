@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181123617",
+  id = "20200629123617",
   title = "Customize theme",
   description = "Customize `MarkwonTheme` styling",
   artifacts = MarkwonArtifact.CORE,

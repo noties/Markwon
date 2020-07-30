@@ -22,7 +22,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182114630",
+  id = "20200630114630",
   title = "Align HTML tag",
   description = "Implement custom HTML tag handling",
   artifacts = MarkwonArtifact.HTML,

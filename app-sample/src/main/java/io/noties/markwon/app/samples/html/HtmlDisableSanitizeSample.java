@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182171424",
+  id = "20200630171424",
   title = "Disable HTML",
   description = "Disable HTML via replacing special `<` and `>` symbols",
   artifacts = MarkwonArtifact.CORE,

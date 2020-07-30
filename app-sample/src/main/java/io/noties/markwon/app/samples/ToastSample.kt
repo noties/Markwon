@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 
 @MarkwonSampleInfo(
-  id = "202006179072642",
+  id = "20200627072642",
   title = "Markdown in Toast",
   description = "Display _static_ markdown content in a `android.widget.Toast`",
   artifacts = [MarkwonArtifact.CORE],

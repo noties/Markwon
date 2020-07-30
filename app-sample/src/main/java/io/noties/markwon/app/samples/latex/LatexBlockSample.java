@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182200257",
+  id = "20200630200257",
   title = "LaTex block",
   description = "Render LaTeX block",
   artifacts = MarkwonArtifact.EXT_LATEX,

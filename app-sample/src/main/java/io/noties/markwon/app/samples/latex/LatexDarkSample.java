@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183094225",
+  id = "20200701094225",
   title = "LaTeX dark",
   description = "LaTeX automatically uses `TextView` text color " +
     "if not configured explicitly",

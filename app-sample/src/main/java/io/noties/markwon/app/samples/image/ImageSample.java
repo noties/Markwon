@@ -8,7 +8,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182144659",
+  id = "20200630144659",
   title = "Markdown image",
   artifacts = MarkwonArtifact.IMAGE,
   tags = Tags.image

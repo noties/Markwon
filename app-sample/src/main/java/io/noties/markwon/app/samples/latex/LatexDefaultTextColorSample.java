@@ -11,7 +11,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183120848",
+  id = "20200701120848",
   title = "LaTeX default text color",
   description = "LaTeX will use text color of `TextView` by default",
   artifacts = MarkwonArtifact.EXT_LATEX,

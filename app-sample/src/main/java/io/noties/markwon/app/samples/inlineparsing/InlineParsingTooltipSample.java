@@ -32,7 +32,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182195409",
+  id = "20200630195409",
   title = "Tooltip with inline parser",
   artifacts = MarkwonArtifact.INLINE_PARSER,
   tags = {Tags.parsing, Tags.rendering}

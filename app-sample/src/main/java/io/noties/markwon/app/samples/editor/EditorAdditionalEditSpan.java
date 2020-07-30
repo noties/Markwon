@@ -20,7 +20,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006181165136",
+  id = "20200629165136",
   title = "Additional edit span",
   description = "Additional _edit_ span (span that is present in " +
     "`EditText` along with punctuation",

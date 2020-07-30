@@ -9,7 +9,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183090335",
+  id = "20200701090335",
   title = "LaTeX blocks in legacy mode",
   description = "Sample using _legacy_ LaTeX block parsing (pre `4.3.0` Markwon version)",
   artifacts = MarkwonArtifact.EXT_LATEX,

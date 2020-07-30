@@ -23,7 +23,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202006182115103",
+  id = "20200630115103",
   title = "Enhance custom HTML tag",
   description = "Custom HTML tag implementation " +
     "that _enhances_ a part of text given start and end indices",

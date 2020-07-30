@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007211090524",
+  id = "20200729090524",
   title = "Block handler",
   description = "Custom block delimiters that control new lines after block nodes",
   artifacts = MarkwonArtifact.CORE,

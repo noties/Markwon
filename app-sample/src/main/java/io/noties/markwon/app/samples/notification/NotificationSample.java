@@ -29,7 +29,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007183130729",
+  id = "20200701130729",
   title = "Markdown in Notification",
   description = "Proof of concept of using `Markwon` with `android.app.Notification`",
   artifacts = MarkwonArtifact.CORE,

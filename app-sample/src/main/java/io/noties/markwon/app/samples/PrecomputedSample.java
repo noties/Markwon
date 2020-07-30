@@ -10,7 +10,7 @@ import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 
 @MarkwonSampleInfo(
-  id = "202007184091654",
+  id = "20200702091654",
   title = "PrecomputedTextSetterCompat",
   description = "`TextSetter` to use `PrecomputedTextSetterCompat`",
   artifacts = MarkwonArtifact.CORE,
