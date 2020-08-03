@@ -68,7 +68,8 @@ class CoilRecyclerViewSample : MarkwonRecyclerViewSample() {
         },
         ImageLoader.Builder(context)
           .okHttpClient(OkHttpClient())
-          .placeholder(R.drawable.ic_image_gray_24dp)
+          // this line of code makes unit tests fail
+//          .placeholder(R.drawable.ic_image_gray_24dp)
           .build()))
       .build()
 
