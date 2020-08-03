@@ -8,6 +8,7 @@ This extension adds support for GFM tables.
 final Markwon markwon = Markwon.builder(context)
         // create default instance of TablePlugin
         .usePlugin(TablePlugin.create(context))
+        .build();
 ```
 
 ```java
@@ -22,10 +23,11 @@ final TableTheme tableTheme = TableTheme.builder()
 
 final Markwon markwon = Markwon.builder(context)
         .usePlugin(TablePlugin.create(tableTheme))
+        .build();
 ```
 
 ```java
-Markwon.builder(context)
+final Markwon markwon = Markwon.builder(context)
         .usePlugin(TablePlugin.create(builder ->
                 builder
                         .tableBorderColor(Color.RED)
@@ -34,6 +36,7 @@ Markwon.builder(context)
                         .tableHeaderRowBackgroundColor(Color.BLACK)
                         .tableEvenRowBackgroundColor(Color.GREEN)
                         .tableOddRowBackgroundColor(Color.YELLOW)
+        .build();
 ))
 ```
 

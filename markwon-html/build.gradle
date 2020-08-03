@@ -23,12 +23,13 @@ dependencies {
         // it to be consistent with markdown (please note that we do not use markwon plugin
         // for that in case if different implementation is used)
         compileOnly it['commonmark-strikethrough']
+
+        testImplementation it['ix-java']
     }
 
     deps.test.with {
         testImplementation it['junit']
         testImplementation it['robolectric']
-        testImplementation it['ix-java']
     }
 }
 

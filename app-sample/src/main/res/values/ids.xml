@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="text" type="id" />
+
+    <item name="app_bar" type="id" />
+    <item name="app_bar_icon" type="id" />
+    <item name="app_bar_title" type="id" />
+
+    <item name="tab_bar" type="id" />
+    <item name="tab_bar_preview" type="id" />
+    <item name="tab_bar_code" type="id" />
+</resources>

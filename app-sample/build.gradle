@@ -1,0 +1,164 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+def gitSha = { ->
+    def output = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = output
+    }
+    return output.toString().trim()
+}.memoize()
+
+android {
+
+    compileSdkVersion config['compile-sdk']
+    buildToolsVersion config['build-tools']
+
+    defaultConfig {
+        applicationId 'io.noties.markwon.app'
+        minSdkVersion 23
+        targetSdkVersion config['target-sdk']
+        versionCode 1
+        versionName version
+
+        resConfig 'en'
+
+        setProperty("archivesBaseName", "markwon")
+
+        buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
+        buildConfigField 'String', 'GIT_REPOSITORY', '"https://github.com/noties/Markwon"'
+
+        final def scheme = 'markwon'
+        buildConfigField 'String', 'DEEPLINK_SCHEME', "\"$scheme\""
+        manifestPlaceholders += [
+                'deeplink_scheme': scheme
+        ]
+    }
+
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize '5g'
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += '../sample-utils/annotations'
+        }
+    }
+
+    // do not sign in CI
+    if (!project.hasProperty('CI')) {
+        signingConfigs {
+            config {
+
+                final def keystoreFile = project.file('keystore.jks')
+                final def keystoreFilePassword = 'MARKWON_KEYSTORE_FILE_PASSWORD'
+                final def keystoreAlias = 'MARKWON_KEY_ALIAS'
+                final def keystoreAliasPassword = 'MARKWON_KEY_ALIAS_PASSWORD'
+
+                final def properties = [
+                        keystoreFilePassword,
+                        keystoreAlias,
+                        keystoreAliasPassword
+                ]
+
+                if (!keystoreFile.exists()) {
+                    throw new IllegalStateException("No '${keystoreFile.name}' file is found.")
+                }
+
+                final def missingProperties = properties.findAll { !project.hasProperty(it) }
+                if (!missingProperties.isEmpty()) {
+                    throw new IllegalStateException("Missing required signing properties: $missingProperties")
+                }
+
+                storeFile keystoreFile
+                storePassword project[keystoreFilePassword]
+
+                keyAlias project[keystoreAlias]
+                keyPassword project[keystoreAliasPassword]
+            }
+        }
+
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.config
+            }
+            release {
+                signingConfig signingConfigs.config
+            }
+        }
+    } else {
+        // it seems to be a bug in NDK handling, github fail to build the project with the:
+        // `com.android.builder.errors.EvalIssueException: No version of NDK matched the requested version 21.0.6113669. Versions available locally: 21.3.6528147`
+        ndkVersion '21.3.6528147'
+    }
+}
+
+kapt {
+    arguments {
+        arg('markwon.samples.file', "${projectDir}/samples.json".toString())
+    }
+}
+
+androidExtensions {
+    features = ["parcelize"]
+}
+
+configurations.all {
+    exclude group: 'org.jetbrains', module: 'annotations-java5'
+}
+
+dependencies {
+    kapt project(':sample-utils:processor')
+    deps['annotationProcessor'].with {
+        kapt it['prism4j-bundler']
+    }
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation project(':markwon-core')
+    implementation project(':markwon-editor')
+    implementation project(':markwon-ext-latex')
+    implementation project(':markwon-ext-strikethrough')
+    implementation project(':markwon-ext-tables')
+    implementation project(':markwon-ext-tasklist')
+    implementation project(':markwon-html')
+    implementation project(':markwon-image')
+    implementation project(':markwon-inline-parser')
+    implementation project(':markwon-linkify')
+    implementation project(':markwon-recycler')
+    implementation project(':markwon-recycler-table')
+    implementation project(':markwon-simple-ext')
+    implementation project(':markwon-syntax-highlight')
+
+    implementation project(':markwon-image-picasso')
+    implementation project(':markwon-image-glide')
+
+    deps.with {
+//        implementation it['x-appcompat']
+        implementation it['x-recycler-view']
+        implementation it['x-cardview']
+        implementation it['x-fragment']
+        implementation it['okhttp']
+        implementation it['prism4j']
+        implementation it['gson']
+        implementation it['adapt']
+        implementation it['debug']
+        implementation it['android-svg']
+        implementation it['android-gif-impl']
+    }
+
+    deps['test'].with {
+        testImplementation it['junit']
+        testImplementation it['robolectric']
+        testImplementation it['mockito']
+    }
+}

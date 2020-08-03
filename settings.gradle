@@ -1,6 +1,5 @@
 rootProject.name = 'MarkwonProject'
-include ':app', ':sample',
-        ':markwon-core',
+include ':markwon-core',
         ':markwon-editor',
         ':markwon-ext-latex',
         ':markwon-ext-strikethrough',
@@ -18,3 +17,6 @@ include ':app', ':sample',
         ':markwon-simple-ext',
         ':markwon-syntax-highlight',
         ':markwon-test-span'
+
+include ':app-sample'
+include ':sample-utils:processor'

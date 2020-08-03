@@ -44,20 +44,10 @@ public class GlideImagesPlugin extends AbstractMarkwonPlugin {
 
     @NonNull
     public static GlideImagesPlugin create(@NonNull final Context context) {
-        return create(new GlideStore() {
-            @NonNull
-            @Override
-            public RequestBuilder<Drawable> load(@NonNull AsyncDrawable drawable) {
-                return Glide.with(context)
-                        .load(drawable.getDestination());
-            }
-
-            @Override
-            public void cancel(@NonNull Target<?> target) {
-                Glide.with(context)
-                        .clear(target);
-            }
-        });
+        // @since $SNAPSHOT; cache RequestManager
+        //  sometimes `cancel` would be called after activity is destroyed,
+        //  so `Glide.with(context)` will throw an exception
+        return create(Glide.with(context));
     }
 
     @NonNull

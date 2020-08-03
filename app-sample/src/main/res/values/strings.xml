@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Markwon</string>
+
+    <string name="tab_bar_preview">Preview</string>
+    <string name="tab_bar_code">Code</string>
+
+    <string name="check_for_update">Check for update</string>
+
+    <string name="lorem"><![CDATA[
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis rutrum orci at aliquet dapibus. Quisque laoreet fermentum bibendum. Suspendisse euismod nisl vel sapien viverra faucibus. Nulla vel neque volutpat, egestas dui ac, consequat elit. Donec et interdum massa. Quisque porta ornare posuere. Nam at ante a felis facilisis tempus eu et erat. Curabitur auctor mauris eget purus iaculis vulputate.
+
+Sed eu enim neque. Maecenas dictum faucibus ullamcorper. In ullamcorper orci in neque varius, nec rutrum nisl eleifend. Vestibulum tincidunt, ipsum at porta suscipit, est nibh commodo ex, et ultrices eros lacus vel neque. Praesent nulla velit, hendrerit sed sodales at, feugiat non lectus. Vivamus vel ultricies mi. Ut finibus commodo feugiat. Sed tempor lorem tortor, tempor sodales leo varius id. Curabitur rutrum sem at euismod rhoncus. Ut iaculis sem pharetra neque accumsan vestibulum. Nunc ultrices pharetra massa, at luctus nulla maximus et. Donec rhoncus in nisi eu pellentesque.
+
+Sed consequat convallis massa quis bibendum. Phasellus vel suscipit velit. Pellentesque vel nisi at nisi facilisis condimentum. Cras feugiat magna ex, ut ultricies eros porttitor id. Quisque iaculis rutrum arcu eget placerat. Vestibulum pellentesque, urna eget consectetur commodo, est metus gravida nisl, id lacinia ligula ipsum porta nulla. Etiam aliquam convallis sollicitudin. Etiam sit amet mi aliquet purus faucibus hendrerit pharetra eu quam. Cras ut ornare sapien. Nam sapien diam, porttitor eu sagittis nec, vehicula nec mi. In fringilla turpis nec nisi fringilla, a facilisis eros ultrices. Proin eget arcu velit.
+
+Sed gravida auctor malesuada. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus non justo sem. Donec dictum a elit quis pretium. Fusce accumsan sodales ornare. Nunc facilisis ligula eu ultrices faucibus. Proin vel molestie augue, ut convallis enim. Curabitur efficitur eget urna quis tempor. In non arcu non ex vulputate pulvinar. In laoreet aliquam mauris. Suspendisse vulputate magna at lorem bibendum, quis dapibus sapien malesuada. Curabitur at leo sit amet est egestas vestibulum. Sed hendrerit mi vel massa vestibulum, non semper nisl iaculis. Pellentesque feugiat at dolor a viverra. Sed ut consectetur tellus. Maecenas venenatis nunc a arcu convallis, at semper nulla cursus.
+
+Curabitur placerat neque a congue pulvinar. Nulla non commodo est. Aenean nec gravida odio. Cras tincidunt accumsan pulvinar. Vestibulum non imperdiet velit. Sed ut mollis velit, vel ornare metus. Morbi consequat mi quis dui consectetur, sed condimentum lacus pulvinar.
+    ]]></string>
+
+</resources>

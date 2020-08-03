@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_bar_height">56dip</dimen>
+
+    <dimen name="content_padding">8dip</dimen>
+    <dimen name="content_padding_double">16dip</dimen>
+    <dimen name="content_padding_half">4dip</dimen>
+
+    <dimen name="search_bar_icon_side">36dip</dimen>
+    <dimen name="adapt_sample_hash_width">36dip</dimen>
+
+    <dimen name="divider_height">1dip</dimen>
+    <dimen name="tab_bar_height">56dip</dimen>
+
+    <dimen name="progress_bar_side">64dip</dimen>
+
+</resources>

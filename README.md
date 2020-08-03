@@ -19,15 +19,15 @@ features listed in [commonmark-spec] are supported
 (including support for **inlined/block HTML code**, **markdown tables**,
 **images** and **syntax highlight**).
 
+`Markwon` comes with a [sample application](./app-sample/). It is a
+collection of library usages that comes with search and source code for
+each code sample.
+
 Since version **4.2.0** **Markwon** comes with an [editor](./markwon-editor/) to _highlight_ markdown input
 as user types (for example in **EditText**).
 
 [commonmark-spec]: https://spec.commonmark.org/0.28/
 [commonmark-java]: https://github.com/atlassian/commonmark-java/blob/master/README.md
-
-<sup>*</sup>*This file is displayed by default in the [sample-apk] (`markwon-sample-{latest-version}-debug.apk`) application. Which is a generic markdown viewer with support to display markdown via `http`, `https` & `file` schemes and 2 themes included: Light & Dark*
-
-[sample-apk]: https://github.com/noties/Markwon/releases
 
 ## Installation
 

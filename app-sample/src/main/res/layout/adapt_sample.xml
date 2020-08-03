@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/content_padding"
+    android:layout_marginTop="4dip"
+    android:layout_marginEnd="@dimen/content_padding"
+    android:layout_marginBottom="4dip"
+    tools:ignore="RtlSymmetry">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/content_padding_half"
+        android:paddingEnd="@dimen/content_padding"
+        android:paddingBottom="@dimen/content_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--textView instead of icon, so we align baseline-->
+            <TextView
+                android:layout_width="@dimen/adapt_sample_hash_width"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:gravity="center"
+                android:text="#"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold"
+                tools:text="Title" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/adapt_sample_hash_width"
+            android:breakStrategy="simple"
+            android:hyphenationFrequency="none"
+            android:textAppearance="?android:attr/textAppearance"
+            tools:text="Description goes here" />
+
+        <io.noties.markwon.app.widget.FlowLayout
+            android:id="@+id/artifacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/adapt_sample_hash_width"
+            android:layout_marginTop="4dip"
+            app:fl_spacing="@dimen/content_padding"
+            app:fl_spacingVertical="2dip">
+
+            <!--    we are actually fine with pre-inflating a single view    -->
+            <include layout="@layout/view_artifact" />
+
+        </io.noties.markwon.app.widget.FlowLayout>
+
+        <io.noties.markwon.app.widget.FlowLayout
+            android:id="@+id/tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/adapt_sample_hash_width"
+            android:layout_marginTop="4dip"
+            android:layout_marginBottom="4dip"
+            app:fl_spacing="@dimen/content_padding"
+            app:fl_spacingVertical="2dip">
+
+            <include layout="@layout/view_tag" />
+
+        </io.noties.markwon.app.widget.FlowLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

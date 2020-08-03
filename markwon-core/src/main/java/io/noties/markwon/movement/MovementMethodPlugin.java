@@ -6,8 +6,10 @@ import android.text.method.MovementMethod;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.core.CorePlugin;
 
 /**
  * @since 3.0.0
@@ -19,10 +21,32 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
      * Uses Android system LinkMovementMethod as default
      *
      * @see #create(MovementMethod)
+     * @see #link()
+     * @deprecated $SNAPSHOT; use {@link #link()}
      */
     @NonNull
+    @Deprecated
     public static MovementMethodPlugin create() {
         return create(LinkMovementMethod.getInstance());
+    }
+
+    /**
+     * @since $SNAPSHOT;
+     */
+    @NonNull
+    public static MovementMethodPlugin link() {
+        return create(LinkMovementMethod.getInstance());
+    }
+
+    /**
+     * Special {@link MovementMethodPlugin} that is <strong>not</strong> applying a MovementMethod on a TextView
+     * implicitly
+     *
+     * @since $SNAPSHOT;
+     */
+    @NonNull
+    public static MovementMethodPlugin none() {
+        return new MovementMethodPlugin(null);
     }
 
     @NonNull
@@ -30,15 +54,29 @@ public class MovementMethodPlugin extends AbstractMarkwonPlugin {
         return new MovementMethodPlugin(movementMethod);
     }
 
+    @Nullable
     private final MovementMethod movementMethod;
 
+    /**
+     * Since $SNAPSHOT; change to be <em>nullable</em>
+     */
     @SuppressWarnings("WeakerAccess")
-    MovementMethodPlugin(@NonNull MovementMethod movementMethod) {
+    MovementMethodPlugin(@Nullable MovementMethod movementMethod) {
         this.movementMethod = movementMethod;
     }
 
     @Override
+    public void configure(@NonNull Registry registry) {
+        registry.require(CorePlugin.class)
+                .hasExplicitMovementMethod(true);
+    }
+
+    @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-        textView.setMovementMethod(movementMethod);
+        // @since $SNAPSHOT; check for equality
+        final MovementMethod current = textView.getMovementMethod();
+        if (current != movementMethod) {
+            textView.setMovementMethod(movementMethod);
+        }
     }
 }

@@ -30,13 +30,8 @@ import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonSpansFactory;
@@ -44,9 +39,6 @@ import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.SpannableBuilder;
-import ix.Ix;
-import ix.IxFunction;
-import ix.IxPredicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -56,6 +48,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -214,52 +207,6 @@ public class CorePluginTest {
     }
 
     @Test
-    public void plugin_methods() {
-        // checks that only expected plugin methods are overridden
-
-        // these represent actual methods that are present (we expect them to be present)
-        final Set<String> usedMethods = new HashSet<String>() {{
-            add("configureVisitor");
-            add("configureSpansFactory");
-            add("beforeSetText");
-            add("afterSetText");
-            add("priority");
-            add("addOnTextAddedListener");
-        }};
-
-        // we will use declaredMethods because it won't return inherited ones
-        final Method[] declaredMethods = CorePlugin.class.getDeclaredMethods();
-        assertNotNull(declaredMethods);
-        assertTrue(declaredMethods.length > 0);
-
-        final List<String> methods = Ix.fromArray(declaredMethods)
-                .filter(new IxPredicate<Method>() {
-                    @Override
-                    public boolean test(Method method) {
-                        // ignore private, static
-                        final int modifiers = method.getModifiers();
-                        return !Modifier.isStatic(modifiers)
-                                && !Modifier.isPrivate(modifiers);
-                    }
-                })
-                .map(new IxFunction<Method, String>() {
-                    @Override
-                    public String apply(Method method) {
-                        return method.getName();
-                    }
-                })
-                .filter(new IxPredicate<String>() {
-                    @Override
-                    public boolean test(String s) {
-                        return !usedMethods.contains(s);
-                    }
-                })
-                .toList();
-
-        assertEquals(methods.toString(), 0, methods.size());
-    }
-
-    @Test
     public void softbreak() {
 
         final CorePlugin plugin = CorePlugin.create();
@@ -318,6 +265,15 @@ public class CorePluginTest {
         plugin.afterSetText(textView);
 
         verify(textView, times(0)).setMovementMethod(any(MovementMethod.class));
+    }
+
+    @Test
+    public void explicit_movement_method() {
+        final TextView textView = mock(TextView.class);
+        final CorePlugin plugin = CorePlugin.create()
+                .hasExplicitMovementMethod(true);
+        plugin.afterSetText(textView);
+        verify(textView, never()).setMovementMethod(any(MovementMethod.class));
     }
 
     @Test

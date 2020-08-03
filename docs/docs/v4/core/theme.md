@@ -27,6 +27,10 @@ Controls the color of a [link](#)
 
 <sup>*</sup> `TextPaint#linkColor` will be used to determine linkColor of a context
 
+## Link underline <Badge text="4.5.0" />
+
+<ThemeProperty name="isLinkUnderlined" type="Boolean" defaults="true" />
+
 ## Block margin
 
 Starting margin before text content for the:

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="#fff"
+    tools:gravity="center_vertical"
+    tools:layout_height="wrap_content"
+    tools:layout_widht="match_parent"
+    tools:orientation="horizontal"
+    tools:padding="@dimen/content_padding"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <FrameLayout
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/bg_search_bar"
+        android:paddingTop="@dimen/content_padding"
+        android:paddingBottom="@dimen/content_padding">
+
+        <View
+            android:id="@+id/focus"
+            android:layout_width="1px"
+            android:layout_height="1px"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <requestFocus />
+
+        </View>
+
+        <ImageView
+            android:layout_width="@dimen/search_bar_icon_side"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_search_white_24dp"
+            android:tint="@color/gray" />
+
+        <ImageView
+            android:id="@+id/clear"
+            android:layout_width="@dimen/search_bar_icon_side"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close_white_24dp"
+            android:tint="@color/gray"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <io.noties.markwon.app.widget.TextField
+            android:id="@+id/text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/search_bar_icon_side"
+            android:layout_marginEnd="@dimen/search_bar_icon_side"
+            android:autofillHints="@null"
+            android:background="@null"
+            android:hint="@android:string/search_go"
+            android:inputType="textVisiblePassword"
+            android:lines="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:ignore="UnusedAttribute" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/content_padding"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/content_padding"
+        android:text="@android:string/cancel"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/accent"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</merge>

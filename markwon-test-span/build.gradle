@@ -16,9 +16,9 @@ android {
 dependencies {
 
     api deps['x-annotations']
+    api deps['ix-java']
 
     deps['test'].with {
         api it['junit']
-        api it['ix-java']
     }
 }

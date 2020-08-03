@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppThemeBase" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:colorPrimary">@color/gray_light</item>
+        <item name="android:colorPrimaryDark">@color/gray</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:windowSplashscreenContent" tools:ignore="NewApi">@drawable/bg_splash
+        </item>
+    </style>
+
+    <style name="AppTheme" parent="AppThemeBase" />
+
+    <style name="AppBarContainer">
+        <item name="android:id">@id/app_bar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/app_bar_height</item>
+        <item name="android:background">@color/gray_light</item>
+        <item name="android:elevation">4dip</item>
+    </style>
+
+    <style name="AppBarIcon">
+        <item name="android:id">@id/app_bar_icon</item>
+        <item name="android:layout_width">@dimen/app_bar_height</item>
+        <item name="android:layout_height">@dimen/app_bar_height</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:contentDescription">@null</item>
+        <item name="android:padding">8dip</item>
+    </style>
+
+    <style name="AppBarTitle">
+        <item name="android:id">@id/app_bar_title</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingLeft">@dimen/content_padding_double</item>
+        <item name="android:paddingRight">@dimen/content_padding_double</item>
+        <item name="android:paddingTop">@dimen/content_padding_half</item>
+        <item name="android:paddingBottom">@dimen/content_padding_half</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ArtifactTagText">
+        <item name="android:id">@id/text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingTop">@dimen/content_padding_half</item>
+        <item name="android:paddingStart">@dimen/content_padding</item>
+        <item name="android:paddingEnd">@dimen/content_padding</item>
+        <item name="android:paddingBottom">@dimen/content_padding_half</item>
+        <item name="android:textAppearance">?android:attr/textAppearance</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TabBarContainer">
+        <item name="android:id">@id/tab_bar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/tab_bar_height</item>
+        <item name="android:background">@color/tab_bar_background</item>
+        <item name="android:baselineAligned">false</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="TabBarItem">
+        <item name="android:layout_width">0px</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="TabBarItemIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">@color/tab_bar_item</item>
+    </style>
+
+    <style name="TabBarItemText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textColor">@color/tab_bar_item</item>
+    </style>
+
+</resources>
