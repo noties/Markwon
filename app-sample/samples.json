@@ -1,5 +1,20 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.image.CoilRecyclerViewSample",
+    "id": "20200803132053",
+    "title": "Coil inside RecyclerView",
+    "description": "Display images via Coil plugin in `RecyclerView`",
+    "artifacts": [
+      "IMAGE_COIL",
+      "RECYCLER"
+    ],
+    "tags": [
+      "image",
+      "recycler-view",
+      "rendering"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.NativeAndHtmlImageSample",
     "id": "20200803115847",
     "title": "Native and HTML image",
@@ -795,13 +810,12 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE",
-      "INLINE_PARSER"
+      "CORE"
     ],
     "tags": [
       "parsing",
@@ -810,12 +824,13 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE"
+      "CORE",
+      "INLINE_PARSER"
     ],
     "tags": [
       "parsing",

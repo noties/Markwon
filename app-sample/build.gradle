@@ -48,6 +48,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     sourceSets {
         main {
             java.srcDirs += '../sample-utils/annotations'
@@ -141,6 +145,7 @@ dependencies {
 
     implementation project(':markwon-image-picasso')
     implementation project(':markwon-image-glide')
+    implementation project(':markwon-image-coil')
 
     deps.with {
 //        implementation it['x-appcompat']
