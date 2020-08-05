@@ -1,6 +1,6 @@
 # Changelog
 
-# SNAPSHOT
+# 4.5.0
 
 #### Added
 * `core` - `MovementMethodPlugin.none()`, `MovementMethodPlugin.link()` factory methods

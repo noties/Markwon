@@ -18,7 +18,7 @@ public class AsyncDrawable extends Drawable {
     private final ImageSize imageSize;
     private final ImageSizeResolver imageSizeResolver;
 
-    // @since $SNAPSHOT;
+    // @since 4.5.0
     private final Drawable placeholder;
 
     private Drawable result;
@@ -30,7 +30,7 @@ public class AsyncDrawable extends Drawable {
     // @since 2.0.1 for use-cases when image is loaded faster than span is drawn and knows canvas width
     private boolean waitingForDimensions;
 
-    // @since $SNAPSHOT; in case if result is Animatable and this drawable was detached, we
+    // @since 4.5.0 in case if result is Animatable and this drawable was detached, we
     //  keep the state to resume when we are going to be attached again (when used in RecyclerView)
     private boolean wasPlayingBefore = false;
 
@@ -136,13 +136,13 @@ public class AsyncDrawable extends Drawable {
                 result.setCallback(callback);
             }
 
-            // @since $SNAPSHOT; we trigger loading only if we have no result (and result is not placeholder)
+            // @since 4.5.0 we trigger loading only if we have no result (and result is not placeholder)
             final boolean shouldLoad = result == null || result == placeholder;
 
             if (result != null) {
                 result.setCallback(callback);
 
-                // @since $SNAPSHOT;
+                // @since 4.5.0
                 if (result instanceof Animatable && wasPlayingBefore) {
                     ((Animatable) result).start();
                 }
@@ -229,7 +229,7 @@ public class AsyncDrawable extends Drawable {
 
     public void setResult(@NonNull Drawable result) {
 
-        // @since $SNAPSHOT; revert this flag when we have new source
+        // @since 4.5.0 revert this flag when we have new source
         wasPlayingBefore = false;
 
         // if we have previous one, detach it

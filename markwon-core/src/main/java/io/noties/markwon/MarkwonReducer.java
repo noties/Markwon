@@ -49,7 +49,7 @@ public abstract class MarkwonReducer {
                 Node temp;
 
                 while (node != null) {
-                    // @since $SNAPSHOT; do not include LinkReferenceDefinition node (would result
+                    // @since 4.5.0 do not include LinkReferenceDefinition node (would result
                     //  in empty textView if rendered in recycler-view)
                     if (!(node instanceof LinkReferenceDefinition)) {
                         list.add(node);

@@ -118,7 +118,7 @@ public class MarkwonTheme {
     protected final int linkColor;
 
     // specifies whether we underline links, by default is true
-    // @since $SNAPSHOT;
+    // @since 4.5.0
     protected final boolean isLinkedUnderlined;
 
     // used in quote, lists
@@ -462,7 +462,7 @@ public class MarkwonTheme {
     public static class Builder {
 
         private int linkColor;
-        private boolean isLinkUnderlined = true; // @since $SNAPSHOT;
+        private boolean isLinkUnderlined = true; // @since 4.5.0
         private int blockMargin;
         private int blockQuoteWidth;
         private int blockQuoteColor;
