@@ -170,7 +170,7 @@ public class TableRowSpan extends ReplacementSpan {
 
         final int size = layouts.size();
 
-        final int w = width / size;
+        final int w = (int) (1F * width / size + 0.5F);
 
         // @since 1.1.1
         // draw backgrounds

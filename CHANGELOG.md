@@ -4,6 +4,7 @@
 
 #### Fixed
 * `image-coil` - deliver image result if it loaded before request disposable is created ([#272])
+* `ext-tables` - fix column width rounding issue
 
 [#272]: https://github.com/noties/Markwon/issues/272 
 
