@@ -1,6 +1,7 @@
 package io.noties.markwon.app.samples.image
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.Coil
 import coil.ImageLoader
 import coil.request.LoadRequest
 import coil.request.RequestDisposable
@@ -66,11 +67,7 @@ class CoilRecyclerViewSample : MarkwonRecyclerViewSample() {
             disposable.dispose()
           }
         },
-        ImageLoader.Builder(context)
-          .okHttpClient(OkHttpClient())
-          // this line of code makes unit tests fail
-//          .placeholder(R.drawable.ic_image_gray_24dp)
-          .build()))
+        Coil.imageLoader(context)))
       .build()
 
     val adapter = MarkwonAdapter.createTextViewIsRoot(R.layout.adapter_node)
