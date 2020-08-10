@@ -12,6 +12,7 @@ import org.commonmark.node.Image;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import coil.Coil;
 import coil.ImageLoader;
@@ -124,12 +125,21 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
 
         @Override
         public void load(@NonNull AsyncDrawable drawable) {
-            final Target target = new AsyncDrawableTarget(drawable);
-            LoadRequest request = coilStore.load(drawable).newBuilder()
+            final AtomicBoolean loaded = new AtomicBoolean(false);
+            final Target target = new AsyncDrawableTarget(drawable, loaded);
+            final LoadRequest request = coilStore.load(drawable).newBuilder()
                     .target(target)
                     .build();
-            RequestDisposable disposable = imageLoader.execute(request);
-            cache.put(drawable, disposable);
+            // @since $SNAPSHOT; execute can return result _before_ disposable is created,
+            //  thus `execute` would finish before we put disposable in cache (and thus result is
+            //  not delivered)
+            final RequestDisposable disposable = imageLoader.execute(request);
+            // if flag was not set, then job is running (else - finished before we got here)
+            if (!loaded.get()) {
+                // mark flag
+                loaded.set(true);
+                cache.put(drawable, disposable);
+            }
         }
 
         @Override
@@ -149,14 +159,20 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
         private class AsyncDrawableTarget implements Target {
 
             private final AsyncDrawable drawable;
+            private final AtomicBoolean loaded;
 
-            AsyncDrawableTarget(@NonNull AsyncDrawable drawable) {
+            private AsyncDrawableTarget(@NonNull AsyncDrawable drawable, @NonNull AtomicBoolean loaded) {
                 this.drawable = drawable;
+                this.loaded = loaded;
             }
 
             @Override
             public void onSuccess(@NonNull Drawable loadedDrawable) {
-                if (cache.remove(drawable) != null) {
+                // @since $SNAPSHOT; check finished flag (result can be delivered _before_ disposable is created)
+                if (cache.remove(drawable) != null
+                        || !loaded.get()) {
+                    // mark
+                    loaded.set(true);
                     if (drawable.isAttached()) {
                         DrawableUtils.applyIntrinsicBoundsIfEmpty(loadedDrawable);
                         drawable.setResult(loadedDrawable);

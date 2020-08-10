@@ -2,7 +2,6 @@ package io.noties.markwon.app.samples.image
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
-import coil.ImageLoader
 import coil.request.LoadRequest
 import coil.request.RequestDisposable
 import coil.transform.RoundedCornersTransformation
@@ -15,7 +14,6 @@ import io.noties.markwon.image.coil.CoilImagesPlugin
 import io.noties.markwon.recycler.MarkwonAdapter
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
-import okhttp3.OkHttpClient
 
 @MarkwonSampleInfo(
   id = "20200803132053",

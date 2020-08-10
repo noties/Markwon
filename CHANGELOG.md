@@ -1,5 +1,12 @@
 # Changelog
 
+# SNAPSHOT
+
+#### Fixed
+* `image-coil` - deliver image result if it loaded before request disposable is created ([#272])
+
+[#272]: https://github.com/noties/Markwon/issues/272 
+
 # 4.5.0
 
 #### Added
