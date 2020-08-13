@@ -58,6 +58,7 @@ ext {
 
     final def commonMarkVersion = '0.13.0'
     final def daggerVersion = '2.10'
+    final def coilVersion = '0.10.1'
 
     // please note that `pl.droidsonroids.gif:android-gif-drawable:1.2.15` is used due to the minimum
     // api level mismatch that Markwon supports (16) and later versions of AndroidGifDrawable (17).
@@ -86,7 +87,8 @@ ext {
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
             'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
             'glide'                   : 'com.github.bumptech.glide:glide:4.9.0',
-            'coil'                    : 'io.coil-kt:coil:0.10.1',
+            'coil'                    : "io.coil-kt:coil:$coilVersion",
+            'coil-base'               : "io.coil-kt:coil-base:$coilVersion",
             'ix-java'                 : 'com.github.akarnokd:ixjava:1.0.0',
             'gson'                    : 'com.google.code.gson:gson:2.8.6',
             'commons-io'              : 'commons-io:commons-io:2.6'

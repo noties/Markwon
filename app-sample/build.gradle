@@ -159,6 +159,7 @@ dependencies {
         implementation it['debug']
         implementation it['android-svg']
         implementation it['android-gif-impl']
+        implementation it['coil']
     }
 
     deps['test'].with {

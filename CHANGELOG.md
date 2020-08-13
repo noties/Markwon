@@ -2,6 +2,9 @@
 
 # SNAPSHOT
 
+#### Changed
+* `image-coil` - use `coil-base` as `api` dependency (would require explicit `coil` dependency)
+
 #### Fixed
 * `image-coil` - deliver image result if it loaded before request disposable is created ([#272])
 * `ext-tables` - fix column width rounding issue

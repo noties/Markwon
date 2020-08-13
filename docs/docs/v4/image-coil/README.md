@@ -2,7 +2,7 @@
 
 <MavenBadge4 :artifact="'image-coil'" />
 
-Image loading based on `Coil` library
+Image loading based on `Coil` library.
 
 ```kotlin
 val markwon = Markwon.builder(context)
@@ -33,3 +33,8 @@ val markwon = Markwon.builder(context)
         }, customImageLoader))
         .build()
 ```
+
+:::warning
+In order to use the `CoilImagesPlugin.create(Context)` factory method your
+app must have **explicit** dependency on `coil` library
+:::
