@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.RedditSpoilerSample",
+    "id": "20200813145316",
+    "title": "Reddit spoiler",
+    "description": "An attempt to implement Reddit spoiler syntax `\u003e! !\u003c`",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.CoilRecyclerViewSample",
     "id": "20200803132053",
     "title": "Coil inside RecyclerView",

@@ -84,7 +84,7 @@ and [3.x.x](https://github.com/noties/Markwon/tree/3.x.x) branches
 
 ## Screenshots
 
-Taken with default configuration (except for image loading):
+Taken with default configuration (except for image loading) in [sample app](./app-sample/):
 
 <a href="./art/mw_light_01.png"><img src="./art/mw_light_01.png" width="30%" /></a>
 <a href="./art/mw_light_02.png"><img src="./art/mw_light_02.png" width="30%" /></a>
