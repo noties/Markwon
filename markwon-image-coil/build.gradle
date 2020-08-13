@@ -16,7 +16,7 @@ android {
 dependencies {
     api project(':markwon-core')
 
-    // @since $SNAPSHOT; declare `coil-base` as api dependency (would require users
+    // @since 4.5.1 declare `coil-base` as api dependency (would require users
     //  to have explicit coil dependency)
     api deps['coil-base']
     compileOnly deps['coil']

@@ -130,7 +130,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
             final LoadRequest request = coilStore.load(drawable).newBuilder()
                     .target(target)
                     .build();
-            // @since $SNAPSHOT; execute can return result _before_ disposable is created,
+            // @since 4.5.1 execute can return result _before_ disposable is created,
             //  thus `execute` would finish before we put disposable in cache (and thus result is
             //  not delivered)
             final RequestDisposable disposable = imageLoader.execute(request);
@@ -168,7 +168,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
 
             @Override
             public void onSuccess(@NonNull Drawable loadedDrawable) {
-                // @since $SNAPSHOT; check finished flag (result can be delivered _before_ disposable is created)
+                // @since 4.5.1 check finished flag (result can be delivered _before_ disposable is created)
                 if (cache.remove(drawable) != null
                         || !loaded.get()) {
                     // mark

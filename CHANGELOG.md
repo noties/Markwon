@@ -1,15 +1,17 @@
 # Changelog
 
-# SNAPSHOT
+# 4.5.1
 
 #### Changed
-* `image-coil` - use `coil-base` as `api` dependency (would require explicit `coil` dependency)
+* `image-coil` - use `coil-base` as `api` dependency (would require explicit `coil` dependency) ([#274])
 
 #### Fixed
 * `image-coil` - deliver image result if it loaded before request disposable is created ([#272])
 * `ext-tables` - fix column width rounding issue
 
-[#272]: https://github.com/noties/Markwon/issues/272 
+[#272]: https://github.com/noties/Markwon/issues/272
+[#274]: https://github.com/noties/Markwon/issues/274 
+
 
 # 4.5.0
 
