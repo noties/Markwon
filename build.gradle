@@ -86,7 +86,7 @@ ext {
             'adapt'                   : 'io.noties:adapt:2.2.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
             'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
-            'glide'                   : 'com.github.bumptech.glide:glide:4.9.0',
+            'glide'                   : 'com.github.bumptech.glide:glide:4.11.0',
             'coil'                    : "io.coil-kt:coil:$coilVersion",
             'coil-base'               : "io.coil-kt:coil-base:$coilVersion",
             'ix-java'                 : 'com.github.akarnokd:ixjava:1.0.0',

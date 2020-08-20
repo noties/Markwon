@@ -1,5 +1,10 @@
 # Changelog
 
+# SNAPSHOT
+
+#### Changed
+* `image-glide`: update to `4.11.0` version
+
 # 4.5.1
 
 #### Changed

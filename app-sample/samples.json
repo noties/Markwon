@@ -1,5 +1,29 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.image.GlideGifImageSample",
+    "id": "20200820071942",
+    "title": "Glide GIF",
+    "description": "",
+    "artifacts": [
+      "IMAGE_GLIDE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.inlineparsing.InlineParsingSquareBracketsSample",
+    "id": "20200819071751",
+    "title": "Inline Parsing of square brackets",
+    "description": "Disable OpenBracketInlineParser in order to parse own markdown syntax based on `[` character(s). This would disable native markdown [links](#) but not images ![image-alt](#)",
+    "artifacts": [
+      "INLINE_PARSER"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.ThematicBreakBottomMarginSample",
     "id": "20200813154415",
     "title": "Thematic break bottom margin",
