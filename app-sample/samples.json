@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.DeeplinksSample",
+    "id": "20200826122247",
+    "title": "Deeplinks",
+    "description": "Handling of deeplinks (app handles https scheme to deep link into content)",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "links"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.CoilImageSample",
     "id": "20200826101209",
     "title": "Coil image",
