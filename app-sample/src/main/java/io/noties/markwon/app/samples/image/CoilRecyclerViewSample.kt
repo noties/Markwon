@@ -2,8 +2,8 @@ package io.noties.markwon.app.samples.image
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
-import coil.request.LoadRequest
-import coil.request.RequestDisposable
+import coil.request.Disposable
+import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.R
@@ -51,8 +51,8 @@ class CoilRecyclerViewSample : MarkwonRecyclerViewSample() {
     val markwon = Markwon.builder(context)
       .usePlugin(CoilImagesPlugin.create(
         object : CoilImagesPlugin.CoilStore {
-          override fun load(drawable: AsyncDrawable): LoadRequest {
-            return LoadRequest.Builder(context)
+          override fun load(drawable: AsyncDrawable): ImageRequest {
+            return ImageRequest.Builder(context)
               .transformations(
                 RoundedCornersTransformation(14F)
               )
@@ -61,7 +61,7 @@ class CoilRecyclerViewSample : MarkwonRecyclerViewSample() {
               .build()
           }
 
-          override fun cancel(disposable: RequestDisposable) {
+          override fun cancel(disposable: Disposable) {
             disposable.dispose()
           }
         },
