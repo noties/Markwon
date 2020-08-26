@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.JustifyModeSample",
+    "id": "20200826084338",
+    "title": "Justify text",
+    "description": "Justify text with `justificationMode` argument on Oreo (\u003e\u003d 26)",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.GlideGifImageSample",
     "id": "20200820071942",
     "title": "Glide GIF",
@@ -858,13 +870,12 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE",
-      "INLINE_PARSER"
+      "CORE"
     ],
     "tags": [
       "parsing",
@@ -873,12 +884,13 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE"
+      "CORE",
+      "INLINE_PARSER"
     ],
     "tags": [
       "parsing",
