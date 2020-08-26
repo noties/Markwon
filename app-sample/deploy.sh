@@ -12,7 +12,7 @@ cd ./build/outputs/apk/debug/
 
 revision=$(git rev-parse --short HEAD)
 
-echo "output.json" > ./.gitignore
+echo "output-metadata.json" > ./.gitignore
 echo "$revision" > ./version
 
 git init
