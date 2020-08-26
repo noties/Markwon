@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import coil.Coil;
 import coil.ImageLoader;
-import coil.request.LoadRequest;
-import coil.request.RequestDisposable;
+import coil.request.ImageRequest;
+import coil.request.Disposable;
 import coil.target.Target;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
@@ -37,9 +37,9 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
     public interface CoilStore {
 
         @NonNull
-        LoadRequest load(@NonNull AsyncDrawable drawable);
+        ImageRequest load(@NonNull AsyncDrawable drawable);
 
-        void cancel(@NonNull RequestDisposable disposable);
+        void cancel(@NonNull Disposable disposable);
     }
 
     @NonNull
@@ -47,14 +47,14 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
         return create(new CoilStore() {
             @NonNull
             @Override
-            public LoadRequest load(@NonNull AsyncDrawable drawable) {
-                return LoadRequest.builder(context)
+            public ImageRequest load(@NonNull AsyncDrawable drawable) {
+                return new ImageRequest.Builder(context)
                         .data(drawable.getDestination())
                         .build();
             }
 
             @Override
-            public void cancel(@NonNull RequestDisposable disposable) {
+            public void cancel(@NonNull Disposable disposable) {
                 disposable.dispose();
             }
         }, Coil.imageLoader(context));
@@ -66,14 +66,14 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
         return create(new CoilStore() {
             @NonNull
             @Override
-            public LoadRequest load(@NonNull AsyncDrawable drawable) {
-                return LoadRequest.builder(context)
+            public ImageRequest load(@NonNull AsyncDrawable drawable) {
+                return new ImageRequest.Builder(context)
                         .data(drawable.getDestination())
                         .build();
             }
 
             @Override
-            public void cancel(@NonNull RequestDisposable disposable) {
+            public void cancel(@NonNull Disposable disposable) {
                 disposable.dispose();
             }
         }, imageLoader);
@@ -116,7 +116,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
 
         private final CoilStore coilStore;
         private final ImageLoader imageLoader;
-        private final Map<AsyncDrawable, RequestDisposable> cache = new HashMap<>(2);
+        private final Map<AsyncDrawable, Disposable> cache = new HashMap<>(2);
 
         CoilAsyncDrawableLoader(@NonNull CoilStore coilStore, @NonNull ImageLoader imageLoader) {
             this.coilStore = coilStore;
@@ -127,13 +127,13 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
         public void load(@NonNull AsyncDrawable drawable) {
             final AtomicBoolean loaded = new AtomicBoolean(false);
             final Target target = new AsyncDrawableTarget(drawable, loaded);
-            final LoadRequest request = coilStore.load(drawable).newBuilder()
+            final ImageRequest request = coilStore.load(drawable).newBuilder()
                     .target(target)
                     .build();
             // @since 4.5.1 execute can return result _before_ disposable is created,
             //  thus `execute` would finish before we put disposable in cache (and thus result is
             //  not delivered)
-            final RequestDisposable disposable = imageLoader.execute(request);
+            final Disposable disposable = imageLoader.enqueue(request);
             // if flag was not set, then job is running (else - finished before we got here)
             if (!loaded.get()) {
                 // mark flag
@@ -144,7 +144,7 @@ public class CoilImagesPlugin extends AbstractMarkwonPlugin {
 
         @Override
         public void cancel(@NonNull AsyncDrawable drawable) {
-            final RequestDisposable disposable = cache.remove(drawable);
+            final Disposable disposable = cache.remove(drawable);
             if (disposable != null) {
                 coilStore.cancel(disposable);
             }
