@@ -1,5 +1,6 @@
 package io.noties.markwon.app.samples;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.text.Layout;
 import android.text.Spanned;
@@ -21,10 +22,17 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   tags = Tags.rendering
 )
 public class JustifyModeSample extends MarkwonTextViewSample {
+  @SuppressLint("WrongConstant")
   @Override
   public void render() {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      /*
+      nice, API 29 though
+      ```
+      Error: Must be one of: LineBreaker.JUSTIFICATION_MODE_NONE, LineBreaker.JUSTIFICATION_MODE_INTER_WORD [WrongConstant]
+      ```
+       */
       textView.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
     }
 
