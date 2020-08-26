@@ -4,6 +4,7 @@
 
 #### Changed
 * `image-glide`: update to `4.11.0` version
+* `inline-parser`: revert parsing index when `InlineProcessor` returns `null` as result
 
 # 4.5.1
 

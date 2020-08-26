@@ -26,6 +26,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
+import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.inlineparser.InlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
@@ -56,7 +57,7 @@ public class InlineParsingTooltipSample extends MarkwonTextViewSample {
       "# Hello tooltip!\n\n" +
       "This is the !{tooltip label}(and actual content comes here)\n\n" +
       "what if it is !{here}(The contents can be blocks, limited though) instead?\n\n" +
-      "![image](#) anyway";
+      "![image](https://github.com/dcurtis/markdown-mark/raw/master/png/208x128-solid.png) anyway";
 
     final Markwon markwon = Markwon.builder(context)
       .usePlugin(MarkwonInlineParserPlugin.create(factoryBuilder ->
@@ -71,6 +72,7 @@ public class InlineParsingTooltipSample extends MarkwonTextViewSample {
           });
         }
       })
+      .usePlugin(ImagesPlugin.create())
       .build();
 
     markwon.setMarkdown(textView, md);
