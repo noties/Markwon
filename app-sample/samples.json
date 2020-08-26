@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.image.CoilImageSample",
+    "id": "20200826101209",
+    "title": "Coil image",
+    "description": "",
+    "artifacts": [
+      "IMAGE_COIL"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.JustifyModeSample",
     "id": "20200826084338",
     "title": "Justify text",
