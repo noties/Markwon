@@ -2,12 +2,16 @@
 
 # SNAPSHOT
 
+#### Added
+* `ext-tables` - `TableAwareMovementMethod` a special movement method to handle clicks inside tables ([#289])
+
 #### Changed
 * `image-glide` - update to `4.11.0` version
 * `inline-parser` - revert parsing index when `InlineProcessor` returns `null` as result
 * `image-coil` - update `Coil` to `0.12.0` ([Coil changelog](https://coil-kt.github.io/coil/changelog/)) ([#284])<br>Thanks [@magnusvs] 
 
 [#284]: https://github.com/noties/Markwon/pull/284
+[#289]: https://github.com/noties/Markwon/issues/289
 
 [@magnusvs]: https://github.com/magnusvs
 

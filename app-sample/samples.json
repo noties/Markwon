@@ -216,7 +216,7 @@
     "javaClassName": "io.noties.markwon.app.samples.table.TableLinkifySample",
     "id": "20200702135739",
     "title": "Linkify table",
-    "description": "Automatically linkify markdown content including content inside tables",
+    "description": "Automatically linkify markdown content including content inside tables, handle clicks inside tables",
     "artifacts": [
       "EXT_TABLES",
       "LINKIFY"
@@ -894,12 +894,13 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE"
+      "CORE",
+      "INLINE_PARSER"
     ],
     "tags": [
       "parsing",
@@ -908,13 +909,12 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
+    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
-      "CORE",
-      "INLINE_PARSER"
+      "CORE"
     ],
     "tags": [
       "parsing",

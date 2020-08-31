@@ -63,6 +63,7 @@ public class TableRowSpan extends ReplacementSpan {
             return text;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Cell{" +
@@ -170,7 +171,10 @@ public class TableRowSpan extends ReplacementSpan {
 
         final int size = layouts.size();
 
-        final int w = (int) (1F * width / size + 0.5F);
+        final int w = cellWidth(size);
+
+        // @since $SNAPSHOT; roundingDiff to offset last vertical border
+        final int roundingDiff = w - (width / size);
 
         // @since 1.1.1
         // draw backgrounds
@@ -264,7 +268,13 @@ public class TableRowSpan extends ReplacementSpan {
                     canvas.drawRect(rect, paint);
 
                     if (i == (size - 1)) {
-                        rect.set(w - borderWidth, borderTop, w, borderBottom);
+                        // @since $SNAPSHOT; subtract rounding offset for the last vertical divider
+                        rect.set(
+                                w - borderWidth - roundingDiff,
+                                borderTop,
+                                w - roundingDiff,
+                                borderBottom
+                        );
                         canvas.drawRect(rect, paint);
                     }
                 }
@@ -298,7 +308,7 @@ public class TableRowSpan extends ReplacementSpan {
 
         final int columns = cells.size();
         final int padding = theme.tableCellPadding() * 2;
-        final int w = (width / columns) - padding;
+        final int w = cellWidth(columns) - padding;
 
         this.layouts.clear();
 
@@ -372,6 +382,34 @@ public class TableRowSpan extends ReplacementSpan {
                 });
             }
         }
+    }
+
+    /**
+     * Obtain Layout given horizontal offset. Primary usage target - MovementMethod
+     *
+     * @since $SNAPSHOT;
+     */
+    @Nullable
+    public Layout findLayoutForHorizontalOffset(int x) {
+        final int size = layouts.size();
+        final int w = cellWidth(size);
+        final int i = x / w;
+        if (i >= size) {
+            return null;
+        }
+        return layouts.get(i);
+    }
+
+    /**
+     * @since $SNAPSHOT;
+     */
+    public int cellWidth() {
+        return cellWidth(layouts.size());
+    }
+
+    // @since $SNAPSHOT;
+    protected int cellWidth(int size) {
+        return (int) (1F * width / size + 0.5F);
     }
 
     @SuppressLint("SwitchIntDef")

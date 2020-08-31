@@ -40,12 +40,25 @@ final Markwon markwon = Markwon.builder(context)
 ))
 ```
 
-Please note, that _by default_ tables have limitations. For example, there is no support
-for images inside table cells. And table contents won't be copied to clipboard if a TextView
+Please note, that _by default_ tables have limitations. For example, table contents won't be copied to clipboard if a TextView
 has such functionality. Table will always take full width of a TextView in which it is displayed.
 All columns will always be of the same width. So, _default_ implementation provides basic
 functionality which can answer some needs. These all come from the limited nature of the TextView
 to display such content.
+
+:::warning
+If table contains links a special `MovementMethod` must be used on a `TextView` widget - `TableAwareMovementMethod`,
+for example with `MovementMethodPlugin`:
+```java
+final Markwon markwon = Markwon.builder(context)
+  .usePlugin(LinkifyPlugin.create())
+  .usePlugin(TablePlugin.create(context))
+  // use TableAwareLinkMovementMethod to handle clicks inside tables,
+  // wraps LinkMovementMethod internally
+  .usePlugin(MovementMethodPlugin.create(TableAwareMovementMethod.create()))
+  .build();
+```
+:::
 
 In order to provide full-fledged experience, tables must be displayed in a special widget.
 Since version `3.0.0` Markwon provides a special artifact `markwon-recycler` that allows
