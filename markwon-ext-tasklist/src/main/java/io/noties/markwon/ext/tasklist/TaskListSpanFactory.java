@@ -23,7 +23,6 @@ public class TaskListSpanFactory implements SpanFactory {
         return new TaskListSpan(
                 configuration.theme(),
                 drawable,
-                TaskListProps.BLOCK_INDENT.get(props, 0),
                 TaskListProps.DONE.get(props, false)
         );
     }

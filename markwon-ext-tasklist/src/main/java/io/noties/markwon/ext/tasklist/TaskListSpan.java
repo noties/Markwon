@@ -22,16 +22,13 @@ public class TaskListSpan implements LeadingMarginSpan {
 
     private final MarkwonTheme theme;
     private final Drawable drawable;
-    private final int blockIndent;
 
     // @since 2.0.1 field is NOT final (to allow mutation)
     private boolean isDone;
 
-
-    public TaskListSpan(@NonNull MarkwonTheme theme, @NonNull Drawable drawable, int blockIndent, boolean isDone) {
+    public TaskListSpan(@NonNull MarkwonTheme theme, @NonNull Drawable drawable, boolean isDone) {
         this.theme = theme;
         this.drawable = drawable;
-        this.blockIndent = blockIndent;
         this.isDone = isDone;
     }
 
@@ -54,7 +51,7 @@ public class TaskListSpan implements LeadingMarginSpan {
 
     @Override
     public int getLeadingMargin(boolean first) {
-        return theme.getBlockMargin() * blockIndent;
+        return theme.getBlockMargin();
     }
 
     @Override
@@ -65,11 +62,14 @@ public class TaskListSpan implements LeadingMarginSpan {
             return;
         }
 
+        final float descent = p.descent();
+        final float ascent = p.ascent();
+
         final int save = c.save();
         try {
 
             final int width = theme.getBlockMargin();
-            final int height = bottom - top;
+            final int height = (int) (descent - ascent + 0.5F);
 
             final int w = (int) (width * .75F + .5F);
             final int h = (int) (height * .75F + .5F);
@@ -88,12 +88,12 @@ public class TaskListSpan implements LeadingMarginSpan {
 
             final int l;
             if (dir > 0) {
-                l = x + (width * (blockIndent - 1)) + ((width - w) / 2);
+                l = x + ((width - w) / 2);
             } else {
-                l = x - (width * blockIndent) + ((width - w) / 2);
+                l = x - ((width - w) / 2) - w;
             }
 
-            final int t = top + ((height - h) / 2);
+            final int t = (int) (baseline + ascent + 0.5F) + ((height - h) / 2);
 
             c.translate(l, t);
             drawable.draw(c);

@@ -1,31 +1,30 @@
 package io.noties.markwon.ext.tasklist;
 
-import org.commonmark.node.CustomNode;
+import androidx.annotation.NonNull;
+
+import org.commonmark.node.CustomBlock;
 
 /**
  * @since 1.0.1
  */
 @SuppressWarnings("WeakerAccess")
-public class TaskListItem extends CustomNode {
+public class TaskListItem extends CustomBlock {
 
-    private boolean done;
-    private int indent;
+    private final boolean isDone;
 
-    public boolean done() {
-        return done;
+    public TaskListItem(boolean isDone) {
+        this.isDone = isDone;
     }
 
-    public TaskListItem done(boolean done) {
-        this.done = done;
-        return this;
+    public boolean isDone() {
+        return isDone;
     }
 
-    public int indent() {
-        return indent;
-    }
-
-    public TaskListItem indent(int indent) {
-        this.indent = indent;
-        return this;
+    @Override
+    @NonNull
+    public String toString() {
+        return "TaskListItem{" +
+                "isDone=" + isDone +
+                '}';
     }
 }

@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.tasklist.ListTaskListSample",
+    "id": "20200902174132",
+    "title": "Task list items with other lists",
+    "description": "Mix of task list items with other lists (bullet and ordered)",
+    "artifacts": [
+      "EXT_TASKLIST"
+    ],
+    "tags": [
+      "lists"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.DeeplinksSample",
     "id": "20200826122247",
     "title": "Deeplinks",

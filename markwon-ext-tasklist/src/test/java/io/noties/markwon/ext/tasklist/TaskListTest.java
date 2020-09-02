@@ -21,8 +21,6 @@ import io.noties.markwon.SpanFactory;
 import io.noties.markwon.test.TestSpan;
 import io.noties.markwon.test.TestSpanMatcher;
 
-import static io.noties.markwon.test.TestSpan.span;
-
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
 public class TaskListTest {
@@ -33,6 +31,9 @@ public class TaskListTest {
     @Test
     public void test() {
 
+        // NB! different markers lead to different types of lists,
+        //  that's why there are 2 new lines after each type
+
         final TestSpan.Document document = TestSpan.document(
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, false), TestSpan.text("First")),
                 newLine(),
@@ -40,11 +41,13 @@ public class TaskListTest {
                 newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, true), TestSpan.text("Third")),
                 newLine(),
+                newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, false), TestSpan.text("First star")),
                 newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, true), TestSpan.text("Second star")),
                 newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, true), TestSpan.text("Third star")),
+                newLine(),
                 newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, false), TestSpan.text("First plus")),
                 newLine(),
@@ -52,7 +55,9 @@ public class TaskListTest {
                 newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, true), TestSpan.text("Third plus")),
                 newLine(),
+                newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, true), TestSpan.text("Number with dot")),
+                newLine(),
                 newLine(),
                 TestSpan.span(SPAN, TestSpan.args(IS_DONE, false), TestSpan.text("Number"))
         );

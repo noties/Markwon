@@ -9,13 +9,11 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.RenderProps;
 import io.noties.markwon.core.SimpleBlockNodeVisitor;
 
 /**
@@ -66,7 +64,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-        builder.customBlockParserFactory(new TaskListBlockParser.Factory());
+        builder.postProcessor(new TaskListPostProcessor());
     }
 
     @Override
@@ -77,7 +75,6 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder
-                .on(TaskListBlock.class, new SimpleBlockNodeVisitor())
                 .on(TaskListItem.class, new MarkwonVisitor.NodeVisitor<TaskListItem>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull TaskListItem taskListItem) {
@@ -86,10 +83,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
                         visitor.visitChildren(taskListItem);
 
-                        final RenderProps context = visitor.renderProps();
-
-                        TaskListProps.BLOCK_INDENT.set(context, indent(taskListItem) + taskListItem.indent());
-                        TaskListProps.DONE.set(context, taskListItem.done());
+                        TaskListProps.DONE.set(visitor.renderProps(), taskListItem.isDone());
 
                         visitor.setSpansForNode(taskListItem, length);
 
@@ -109,18 +103,5 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
         } finally {
             typedArray.recycle();
         }
-    }
-
-    private static int indent(@NonNull Node node) {
-        int indent = 0;
-        Node parent = node.getParent();
-        if (parent != null) {
-            parent = parent.getParent();
-            while (parent != null) {
-                indent += 1;
-                parent = parent.getParent();
-            }
-        }
-        return indent;
     }
 }

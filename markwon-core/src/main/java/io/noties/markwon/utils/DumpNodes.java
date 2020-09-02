@@ -1,9 +1,9 @@
 package io.noties.markwon.utils;
 
+import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Block;
 import org.commonmark.node.Node;
 import org.commonmark.node.Visitor;
 
@@ -15,17 +15,22 @@ import java.lang.reflect.Proxy;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class DumpNodes {
 
+    /**
+     * Creates String representation of a node which will be used in output
+     */
     public interface NodeProcessor {
         @NonNull
         String process(@NonNull Node node);
     }
 
     @NonNull
+    @CheckResult
     public static String dump(@NonNull Node node) {
         return dump(node, null);
     }
 
     @NonNull
+    @CheckResult
     public static String dump(@NonNull Node node, @Nullable NodeProcessor nodeProcessor) {
 
         final NodeProcessor processor = nodeProcessor != null
@@ -49,7 +54,9 @@ public abstract class DumpNodes {
                         // node info
                         builder.append(processor.process(argument));
 
-                        if (argument instanceof Block) {
+                        // @since $SNAPSHOT; check for first child instead of casting to Block
+                        //  (regular nodes can contain other nodes, for example Text)
+                        if (argument.getFirstChild() != null) {
                             builder.append(" [\n");
                             indent.increment();
                             visitChildren((Visitor) proxy, argument);
@@ -57,8 +64,9 @@ public abstract class DumpNodes {
                             indent.appendTo(builder);
                             builder.append("]\n");
                         } else {
-                            builder.append('\n');
+                            builder.append("\n");
                         }
+
                         return null;
                     }
                 });

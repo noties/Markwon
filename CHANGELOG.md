@@ -6,12 +6,16 @@
 * `ext-tables` - `TableAwareMovementMethod` a special movement method to handle clicks inside tables ([#289])
 
 #### Changed
+* `ext-tasklist` - changed implementation to be in line with GFM (Github flavored markdown), 
+  task list item is a regular list item (BulletList and OrderedList can contain it). 
+  Internal implementation changed from block parsing to node post processing ([#291])
 * `image-glide` - update to `4.11.0` version
 * `inline-parser` - revert parsing index when `InlineProcessor` returns `null` as result
 * `image-coil` - update `Coil` to `0.12.0` ([Coil changelog](https://coil-kt.github.io/coil/changelog/)) ([#284])<br>Thanks [@magnusvs] 
 
 [#284]: https://github.com/noties/Markwon/pull/284
 [#289]: https://github.com/noties/Markwon/issues/289
+[#291]: https://github.com/noties/Markwon/issues/291
 
 [@magnusvs]: https://github.com/magnusvs
 

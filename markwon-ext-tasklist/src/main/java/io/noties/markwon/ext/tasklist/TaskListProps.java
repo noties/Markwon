@@ -7,8 +7,6 @@ import io.noties.markwon.Prop;
  */
 public abstract class TaskListProps {
 
-    public static final Prop<Integer> BLOCK_INDENT = Prop.of("task-list-block-indent");
-
     public static final Prop<Boolean> DONE = Prop.of("task-list-done");
 
     private TaskListProps() {
