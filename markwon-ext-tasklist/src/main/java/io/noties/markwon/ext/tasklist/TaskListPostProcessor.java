@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import io.noties.markwon.utils.ParserUtils;
 
-// @since $SNAPSHOT;
+// @since 4.6.0
 // Hint taken from commonmark-ext-task-list-items artifact
 class TaskListPostProcessor implements PostProcessor {
 

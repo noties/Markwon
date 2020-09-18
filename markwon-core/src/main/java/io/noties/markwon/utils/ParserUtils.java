@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import org.commonmark.node.Node;
 
 /**
- * @since $SNAPSHOT;
+ * @since 4.6.0
  */
 public abstract class ParserUtils {
 

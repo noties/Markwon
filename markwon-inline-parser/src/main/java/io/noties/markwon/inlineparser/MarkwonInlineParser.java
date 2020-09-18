@@ -266,7 +266,7 @@ public class MarkwonInlineParser implements InlineParser, MarkwonInlineParserCon
         final List<InlineProcessor> inlines = this.inlineProcessors.get(c);
 
         if (inlines != null) {
-            // @since $SNAPSHOT; index must not be advanced if inline-processor returned null
+            // @since 4.6.0 index must not be advanced if inline-processor returned null
             //  so, further processors can be called at the _same_ position (and thus char)
             final int startIndex = index;
 

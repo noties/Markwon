@@ -1,6 +1,6 @@
 # Changelog
 
-# SNAPSHOT
+# 4.6.0
 
 #### Added
 * `ext-tables` - `TableAwareMovementMethod` a special movement method to handle clicks inside tables ([#289])

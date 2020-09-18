@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 /**
- * @since $SNAPSHOT;
+ * @since 4.6.0
  */
 public class TableAwareMovementMethod implements MovementMethod {
 

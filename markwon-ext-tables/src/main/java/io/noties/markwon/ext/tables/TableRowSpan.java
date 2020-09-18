@@ -173,7 +173,7 @@ public class TableRowSpan extends ReplacementSpan {
 
         final int w = cellWidth(size);
 
-        // @since $SNAPSHOT; roundingDiff to offset last vertical border
+        // @since 4.6.0 roundingDiff to offset last vertical border
         final int roundingDiff = w - (width / size);
 
         // @since 1.1.1
@@ -268,7 +268,7 @@ public class TableRowSpan extends ReplacementSpan {
                     canvas.drawRect(rect, paint);
 
                     if (i == (size - 1)) {
-                        // @since $SNAPSHOT; subtract rounding offset for the last vertical divider
+                        // @since 4.6.0 subtract rounding offset for the last vertical divider
                         rect.set(
                                 w - borderWidth - roundingDiff,
                                 borderTop,
@@ -387,7 +387,7 @@ public class TableRowSpan extends ReplacementSpan {
     /**
      * Obtain Layout given horizontal offset. Primary usage target - MovementMethod
      *
-     * @since $SNAPSHOT;
+     * @since 4.6.0
      */
     @Nullable
     public Layout findLayoutForHorizontalOffset(int x) {
@@ -401,13 +401,13 @@ public class TableRowSpan extends ReplacementSpan {
     }
 
     /**
-     * @since $SNAPSHOT;
+     * @since 4.6.0
      */
     public int cellWidth() {
         return cellWidth(layouts.size());
     }
 
-    // @since $SNAPSHOT;
+    // @since 4.6.0
     protected int cellWidth(int size) {
         return (int) (1F * width / size + 0.5F);
     }

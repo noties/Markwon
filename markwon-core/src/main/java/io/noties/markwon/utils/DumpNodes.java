@@ -54,7 +54,7 @@ public abstract class DumpNodes {
                         // node info
                         builder.append(processor.process(argument));
 
-                        // @since $SNAPSHOT; check for first child instead of casting to Block
+                        // @since 4.6.0 check for first child instead of casting to Block
                         //  (regular nodes can contain other nodes, for example Text)
                         if (argument.getFirstChild() != null) {
                             builder.append(" [\n");
