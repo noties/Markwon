@@ -1,5 +1,6 @@
 package io.noties.markwon.core.spans;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
@@ -34,11 +35,22 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
     }
 
     @Override
-    public void updateDrawState(TextPaint tp) {
+    public void updateDrawState(@NonNull TextPaint tp) {
         updatePaint(tp);
     }
 
     private void updatePaint(@NonNull TextPaint paint) {
-        paint.setTypeface(typeface);
+        final Typeface old = paint.getTypeface();
+        final int oldStyle;
+        if (old == null) {
+            oldStyle = Typeface.NORMAL;
+        } else {
+            oldStyle = old.getStyle();
+        }
+
+        @SuppressLint("WrongConstant") final int want = oldStyle | typeface.getStyle();
+        final Typeface styledTypeface = Typeface.create(typeface, want);
+
+        paint.setTypeface(styledTypeface);
     }
 }
