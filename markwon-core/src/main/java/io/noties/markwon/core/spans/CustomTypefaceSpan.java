@@ -23,34 +23,48 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
         return new CustomTypefaceSpan(typeface);
     }
 
+    @NonNull
+    public static CustomTypefaceSpan create(@NonNull Typeface typeface, boolean mergeStyles) {
+        return new CustomTypefaceSpan(typeface, mergeStyles);
+    }
+
     private final Typeface typeface;
 
+    private final boolean mergeStyles;
+
     public CustomTypefaceSpan(@NonNull Typeface typeface) {
+        this(typeface, false);
+    }
+
+    public CustomTypefaceSpan(@NonNull Typeface typeface, boolean mergeStyles) {
         this.typeface = typeface;
+        this.mergeStyles = mergeStyles;
+    }
+
+
+    @Override
+    public void updateMeasureState(@NonNull TextPaint paint) {
+        updatePaint(paint);
     }
 
     @Override
-    public void updateMeasureState(@NonNull TextPaint p) {
-        updatePaint(p);
-    }
-
-    @Override
-    public void updateDrawState(@NonNull TextPaint tp) {
-        updatePaint(tp);
+    public void updateDrawState(@NonNull TextPaint paint) {
+        updatePaint(paint);
     }
 
     private void updatePaint(@NonNull TextPaint paint) {
-        final Typeface old = paint.getTypeface();
-        final int oldStyle;
-        if (old == null) {
-            oldStyle = Typeface.NORMAL;
+        final Typeface oldTypeface = paint.getTypeface();
+        if (!mergeStyles ||
+                oldTypeface == null ||
+                oldTypeface.getStyle() == Typeface.NORMAL) {
+            paint.setTypeface(typeface);
         } else {
-            oldStyle = old.getStyle();
+            final int oldStyle = oldTypeface.getStyle();
+
+            @SuppressLint("WrongConstant") final int want = oldStyle | typeface.getStyle();
+            final Typeface styledTypeface = Typeface.create(typeface, want);
+
+            paint.setTypeface(styledTypeface);
         }
-
-        @SuppressLint("WrongConstant") final int want = oldStyle | typeface.getStyle();
-        final Typeface styledTypeface = Typeface.create(typeface, want);
-
-        paint.setTypeface(styledTypeface);
     }
 }
