@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
  * not used directly by the library, it\'s helpful for customizations.
  * <p>
  * Please note that this implementation does not validate current paint state
- * and won\'t be updating/modifying supplied Typeface.
+ * and won\'t be updating/modifying supplied Typeface unless {@code mergeStyles} is specified
  *
  * @since 3.0.0
  */
@@ -20,9 +20,19 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
 
     @NonNull
     public static CustomTypefaceSpan create(@NonNull Typeface typeface) {
-        return new CustomTypefaceSpan(typeface);
+        return create(typeface, false);
     }
 
+    /**
+     * <strong>NB!</strong> in order to <em>merge</em> typeface styles, supplied typeface must be
+     * able to be created via {@code Typeface.create(Typeface, int)} method. This would mean that bundled fonts
+     * inside {@code assets} folder would be able to display styles properly.
+     *
+     * @param mergeStyles control if typeface styles must be merged, for example, if
+     *                    this span (bold) is contained by other span (italic),
+     *                    {@code mergeStyles=true} would result in bold-italic
+     * @since $SNAPSHOT;
+     */
     @NonNull
     public static CustomTypefaceSpan create(@NonNull Typeface typeface, boolean mergeStyles) {
         return new CustomTypefaceSpan(typeface, mergeStyles);
@@ -32,11 +42,17 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
 
     private final boolean mergeStyles;
 
+    /**
+     * @deprecated $SNAPSHOT; use {{@link #create(Typeface)}}
+     * or {@link #create(Typeface, boolean)} factory method
+     */
+    @Deprecated
     public CustomTypefaceSpan(@NonNull Typeface typeface) {
         this(typeface, false);
     }
 
-    public CustomTypefaceSpan(@NonNull Typeface typeface, boolean mergeStyles) {
+    // @since $SNAPSHOT;
+    CustomTypefaceSpan(@NonNull Typeface typeface, boolean mergeStyles) {
         this.typeface = typeface;
         this.mergeStyles = mergeStyles;
     }

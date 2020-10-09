@@ -1,5 +1,20 @@
 # Changelog
 
+# $SNAPSHOT;
+
+#### Changed
+* `core` - `CustomTypefaceSpan` new `mergeStyles` functionality and new factory method([#298])<br>Thanks [@c-b-h]
+
+#### Deprecated
+* `code` - `CustomTypefaceSpan(Typeface)` constructor, use `CustomTypefaceSpan.create(Typeface)` 
+  or `CustomTypefaceSpan.create(Typeface, boolean)` factory methods instead
+
+
+[#298]: https://github.com/noties/Markwon/pull/298
+
+[@c-b-h]: https://github.com/c-b-h
+
+
 # 4.6.0
 
 #### Added
