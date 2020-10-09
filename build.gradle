@@ -58,7 +58,7 @@ ext {
 
     final def commonMarkVersion = '0.13.0'
     final def daggerVersion = '2.10'
-    final def coilVersion = '0.12.0'
+    final def coilVersion = '0.13.0'
 
     // please note that `pl.droidsonroids.gif:android-gif-drawable:1.2.15` is used due to the minimum
     // api level mismatch that Markwon supports (16) and later versions of AndroidGifDrawable (17).
