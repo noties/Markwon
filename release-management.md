@@ -1,3 +1,10 @@
+# Release checklist
+- [ ] CHANGELOG.md has proper version for released changes
+- [ ] Code occurrences of `@since $SNAPSHOT;` are replaced with proper version (`@deprecated` also)
+- [ ] `gradle.properties` has proper version (NOT SNAPSHOT)
+- [ ] documentation web site is published (if has changes)
+
+
 # Release management
 
 Development happens in the `master` branch. Although CI (via Github workflows) is triggered
