@@ -4,6 +4,7 @@
 
 #### Changed
 * `core` - `CustomTypefaceSpan` new `mergeStyles` functionality and new factory method([#298])<br>Thanks [@c-b-h]
+* `image-coil` - update `Coil` to `0.13.0` ([#303])<br>Thanks [@ubuntudroid]
 
 #### Deprecated
 * `code` - `CustomTypefaceSpan(Typeface)` constructor, use `CustomTypefaceSpan.create(Typeface)` 
@@ -11,8 +12,10 @@
 
 
 [#298]: https://github.com/noties/Markwon/pull/298
+[#303]: https://github.com/noties/Markwon/pull/303
 
 [@c-b-h]: https://github.com/c-b-h
+[@ubuntudroid]: https://github.com/ubuntudroid
 
 
 # 4.6.0
