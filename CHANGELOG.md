@@ -7,7 +7,7 @@
 * `image-coil` - update `Coil` to `0.13.0` ([#303])<br>Thanks [@ubuntudroid]
 
 #### Deprecated
-* `code` - `CustomTypefaceSpan(Typeface)` constructor, use `CustomTypefaceSpan.create(Typeface)` 
+* `core` - `CustomTypefaceSpan(Typeface)` constructor, use `CustomTypefaceSpan.create(Typeface)` 
   or `CustomTypefaceSpan.create(Typeface, boolean)` factory methods instead
 
 
