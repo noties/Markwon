@@ -1,5 +1,30 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.ExcludeFromParsingSample",
+    "id": "20201111221945",
+    "title": "Exclude part of input from parsing",
+    "description": "Exclude part of input from parsing by splitting input with delimiters",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "parsing"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.parser.CustomHeadingParserSample",
+    "id": "20201111221207",
+    "title": "Custom heading parser",
+    "description": "Custom heading block parser. Actual parser is not implemented",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "heading",
+      "parsing"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.editor.WYSIWYGEditorSample",
     "id": "20200908133515",
     "title": "WYSIWG editor",
