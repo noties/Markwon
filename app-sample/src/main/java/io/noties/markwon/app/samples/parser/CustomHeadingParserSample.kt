@@ -39,9 +39,9 @@ class CustomHeadingParserSample : MarkwonTextViewSample() {
   }
 
   object MyHeadingBlockParserFactory : BlockParserFactory {
-    override fun tryStart(state: ParserState, matchedBlockParser: MatchedBlockParser): BlockStart {
+    override fun tryStart(state: ParserState, matchedBlockParser: MatchedBlockParser): BlockStart? {
       // TODO("Not yet implemented")
-      return BlockStart.none()
+      return null
     }
   }
 }
