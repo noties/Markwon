@@ -2,7 +2,7 @@
   <div class="awesome-group">
     <div v-for="app in apps" class="awesome-app">
       <a :href="app.link" class="awesome-app-name" target="_blank" rel="noopener noreferrer">{{app.name}}&nbsp;<OutboundLink/></a>
-      <img class="awesome-app-image" :src="app.image">
+      <img class="awesome-app-image" :src="$withBase(app.image)">
       <span v-if="app.description" class="awesome-app-description">{{ app.description }}</span>
     </div>
   </div>
