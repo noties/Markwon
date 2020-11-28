@@ -76,6 +76,7 @@ public class EditorMultipleEditSpansSample extends MarkwonEditTextSample {
       .useEditHandler(new EmphasisEditHandler())
       .useEditHandler(new StrongEmphasisEditHandler())
       .useEditHandler(new StrikethroughEditHandler())
+      .useEditHandler(new CodeBlockEditHandler())
       .useEditHandler(new CodeEditHandler())
       .useEditHandler(new BlockQuoteEditHandler())
       .useEditHandler(new LinkEditHandler(onClick))
