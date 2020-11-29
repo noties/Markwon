@@ -23,12 +23,12 @@ public class HeadingEditHandler implements EditHandler<HeadingSpan> {
 
   @Override
   public void configurePersistedSpans(@NonNull PersistedSpans.Builder builder) {
-    builder.persistSpan(Heading1Span.class, new Runnable() { new Heading1Span(theme)});
-    builder.persistSpan(Heading2Span.class, new Runnable() { new Heading2Span(theme)});
-    builder.persistSpan(Heading3Span.class, new Runnable() { new Heading3Span(theme)});
-    builder.persistSpan(Heading4Span.class, new Runnable() { new Heading4Span(theme)});
-    builder.persistSpan(Heading5Span.class, new Runnable() { new Heading5Span(theme)});
-    builder.persistSpan(Heading6Span.class, new Runnable() { new Heading6Span(theme)});
+    builder.persistSpan(Heading1Span.class, new Runnable() { new Heading1Span(theme);});
+    builder.persistSpan(Heading2Span.class, new Runnable() { new Heading2Span(theme);});
+    builder.persistSpan(Heading3Span.class, new Runnable() { new Heading3Span(theme);});
+    builder.persistSpan(Heading4Span.class, new Runnable() { new Heading4Span(theme);});
+    builder.persistSpan(Heading5Span.class, new Runnable() { new Heading5Span(theme);});
+    builder.persistSpan(Heading6Span.class, new Runnable() { new Heading6Span(theme);});
   }
 
   @Override
