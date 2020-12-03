@@ -1,5 +1,29 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.HeadingColorSample",
+    "id": "20201203224611",
+    "title": "Color of heading",
+    "description": "",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.OrderedListNumbersSample",
+    "id": "20201203221806",
+    "title": "Ordered list numbers",
+    "description": "",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.ExcludeFromParsingSample",
     "id": "20201111221945",
     "title": "Exclude part of input from parsing",
