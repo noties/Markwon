@@ -34,4 +34,5 @@ object Tags {
     const val knownBug = "known-bug"
     const val precomputedText = "precomputed-text"
     const val cache = "cache"
+    const val spanFactory = "span-factory"
 }
