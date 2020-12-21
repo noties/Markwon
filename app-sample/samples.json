@@ -1,5 +1,18 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.image.ClickImageSample",
+    "id": "20201221130230",
+    "title": "Click images",
+    "description": "Make _all_ images clickable (to open in a gallery, etc)",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "image",
+      "rendering"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.ChangeBulletSpanSample",
     "id": "20201208150530",
     "title": "Change bullet span",
