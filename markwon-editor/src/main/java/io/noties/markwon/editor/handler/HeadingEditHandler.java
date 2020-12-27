@@ -1,4 +1,4 @@
-package it.niedermann.android.markdown.markwon.handler;
+package io.noties.markwon.editor.handler;
 
 import android.text.Editable;
 import android.text.Spanned;
@@ -13,7 +13,6 @@ import io.noties.markwon.editor.PersistedSpans;
 
 public class HeadingEditHandler implements EditHandler<HeadingSpan> {
 
-
   private MarkwonTheme theme;
 
   @Override
@@ -23,12 +22,12 @@ public class HeadingEditHandler implements EditHandler<HeadingSpan> {
 
   @Override
   public void configurePersistedSpans(@NonNull PersistedSpans.Builder builder) {
-    builder.persistSpan(Heading1Span.class, new Runnable() { new Heading1Span(theme);});
-    builder.persistSpan(Heading2Span.class, new Runnable() { new Heading2Span(theme);});
-    builder.persistSpan(Heading3Span.class, new Runnable() { new Heading3Span(theme);});
-    builder.persistSpan(Heading4Span.class, new Runnable() { new Heading4Span(theme);});
-    builder.persistSpan(Heading5Span.class, new Runnable() { new Heading5Span(theme);});
-    builder.persistSpan(Heading6Span.class, new Runnable() { new Heading6Span(theme);});
+    builder.persistSpan(Heading1Span.class, () -> new Heading1Span(theme));
+    builder.persistSpan(Heading2Span.class, () -> new Heading2Span(theme));
+    builder.persistSpan(Heading3Span.class, () -> new Heading3Span(theme));
+    builder.persistSpan(Heading4Span.class, () -> new Heading4Span(theme));
+    builder.persistSpan(Heading5Span.class, () -> new Heading5Span(theme));
+    builder.persistSpan(Heading6Span.class, () -> new Heading6Span(theme));
   }
 
   @Override
@@ -39,7 +38,7 @@ public class HeadingEditHandler implements EditHandler<HeadingSpan> {
           @NonNull HeadingSpan span,
           int spanStart,
           int spanTextLength) {
-    HeadingSpan newSpan;
+    final HeadingSpan newSpan;
 
     switch (span.getLevel()) {
       case 1:
@@ -64,8 +63,8 @@ public class HeadingEditHandler implements EditHandler<HeadingSpan> {
         return;
 
     }
-    int newStart = getNewSpanStart(input, spanStart);
-    int newEnd = findEnd(input, newStart, newSpan.getLevel());
+    final int newStart = getNewSpanStart(input, spanStart);
+    final int newEnd = findEnd(input, newStart, newSpan.getLevel());
 
     editable.setSpan(
             newSpan,
@@ -77,24 +76,24 @@ public class HeadingEditHandler implements EditHandler<HeadingSpan> {
 
   private int findEnd(String input, int searchFrom, int spanLevel) {
     int end = searchFrom + spanLevel;
-    int strLength = input.length();
-    while (end < strLength-1) {
+    final int strLength = input.length();
+    while (end < strLength - 1) {
       end++;
       if (input.charAt(end) == '\n') {
         break;
       }
     }
-    return end+1;
+    return end + 1;
   }
 
   private int getNewSpanStart(String input, int spanStart) {
-
     int start = spanStart;
 
     while (start >= 0 && input.charAt(start) != '\n') {
       start--;
     }
     start += 1;
+
     return start;
   }
 
