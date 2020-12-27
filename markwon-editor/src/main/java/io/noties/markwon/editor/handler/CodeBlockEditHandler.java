@@ -1,4 +1,4 @@
-package it.niedermann.android.markdown.markwon.handler;
+package io.noties.markwon.editor.handler;
 
 import android.text.Editable;
 import android.text.Spanned;
