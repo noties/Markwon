@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListMutateNestedSample",
+    "id": "20211228120444",
+    "title": "Task list mutate nested",
+    "description": "Task list mutation with nested items",
+    "artifacts": [
+      "EXT_TASKLIST"
+    ],
+    "tags": [
+      "plugin"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.ClickImageSample",
     "id": "20201221130230",
     "title": "Click images",

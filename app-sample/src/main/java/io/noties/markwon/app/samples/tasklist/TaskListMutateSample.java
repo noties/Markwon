@@ -32,6 +32,10 @@ import static io.noties.markwon.app.samples.tasklist.shared.TaskListHolder.MD;
 public class TaskListMutateSample extends MarkwonTextViewSample {
   @Override
   public void render() {
+
+    // NB! this sample works for a single level task list,
+    //  if you have multiple levels, then see the `TaskListMutateNestedSample`
+
     final Markwon markwon = Markwon.builder(context)
       .usePlugin(TaskListPlugin.create(context))
       .usePlugin(new AbstractMarkwonPlugin() {
@@ -63,39 +67,39 @@ public class TaskListMutateSample extends MarkwonTextViewSample {
 
     markwon.setMarkdown(textView, MD);
   }
-}
 
-class TaskListToggleSpan extends ClickableSpan {
+  static class TaskListToggleSpan extends ClickableSpan {
 
-  private final TaskListSpan span;
+    private final TaskListSpan span;
 
-  TaskListToggleSpan(@NonNull TaskListSpan span) {
-    this.span = span;
-  }
+    TaskListToggleSpan(@NonNull TaskListSpan span) {
+      this.span = span;
+    }
 
-  @Override
-  public void onClick(@NonNull View widget) {
-    // toggle span (this is a mere visual change)
-    span.setDone(!span.isDone());
-    // request visual update
-    widget.invalidate();
+    @Override
+    public void onClick(@NonNull View widget) {
+      // toggle span (this is a mere visual change)
+      span.setDone(!span.isDone());
+      // request visual update
+      widget.invalidate();
 
-    // it must be a TextView
-    final TextView textView = (TextView) widget;
-    // it must be spanned
-    final Spanned spanned = (Spanned) textView.getText();
+      // it must be a TextView
+      final TextView textView = (TextView) widget;
+      // it must be spanned
+      final Spanned spanned = (Spanned) textView.getText();
 
-    // actual text of the span (this can be used along with the  `span`)
-    final CharSequence task = spanned.subSequence(
-      spanned.getSpanStart(this),
-      spanned.getSpanEnd(this)
-    );
+      // actual text of the span (this can be used along with the  `span`)
+      final CharSequence task = spanned.subSequence(
+        spanned.getSpanStart(this),
+        spanned.getSpanEnd(this)
+      );
 
-    Debug.i("task done: %s, '%s'", span.isDone(), task);
-  }
+      Debug.i("task done: %s, '%s'", span.isDone(), task);
+    }
 
-  @Override
-  public void updateDrawState(@NonNull TextPaint ds) {
-    // no op, so text is not rendered as a link
+    @Override
+    public void updateDrawState(@NonNull TextPaint ds) {
+      // no op, so text is not rendered as a link
+    }
   }
 }
