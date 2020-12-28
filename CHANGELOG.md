@@ -1,6 +1,6 @@
 # Changelog
 
-# 4.6.1-SNAPSHOT
+# 4.6.1
 
 #### Changed
 * `core` - `CustomTypefaceSpan` new `mergeStyles` functionality and new factory method([#298])<br>Thanks [@c-b-h]

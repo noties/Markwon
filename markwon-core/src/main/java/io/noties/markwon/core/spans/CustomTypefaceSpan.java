@@ -31,7 +31,7 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
      * @param mergeStyles control if typeface styles must be merged, for example, if
      *                    this span (bold) is contained by other span (italic),
      *                    {@code mergeStyles=true} would result in bold-italic
-     * @since $SNAPSHOT;
+     * @since 4.6.1
      */
     @NonNull
     public static CustomTypefaceSpan create(@NonNull Typeface typeface, boolean mergeStyles) {
@@ -43,7 +43,7 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
     private final boolean mergeStyles;
 
     /**
-     * @deprecated $SNAPSHOT; use {{@link #create(Typeface)}}
+     * @deprecated 4.6.1 use {{@link #create(Typeface)}}
      * or {@link #create(Typeface, boolean)} factory method
      */
     @Deprecated
@@ -51,7 +51,7 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
         this(typeface, false);
     }
 
-    // @since $SNAPSHOT;
+    // @since 4.6.1
     CustomTypefaceSpan(@NonNull Typeface typeface, boolean mergeStyles) {
         this.typeface = typeface;
         this.mergeStyles = mergeStyles;
