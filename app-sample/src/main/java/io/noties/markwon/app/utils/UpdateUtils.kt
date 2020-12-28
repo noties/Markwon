@@ -12,7 +12,7 @@ import java.io.IOException
 object UpdateUtils {
 
     sealed class Result {
-        class UpdateAvailable(val url: String) : Result()
+        class UpdateAvailable(val revision: String, val url: String) : Result()
         object NoUpdate : Result()
         class Error(val throwable: Throwable) : Result()
     }
@@ -34,10 +34,11 @@ object UpdateUtils {
 
                         override fun onResponse(call: Call, response: Response) {
                             try {
-                                val revision = response.body()?.string()
+                                val revision = response.body()?.string()?.trim()
                                 val hasUpdate = revision != null && BuildConfig.GIT_SHA != revision
                                 if (hasUpdate) {
-                                    action?.invoke(Result.UpdateAvailable(apkUrl))
+                                    // revision is guarded by `hasUpdate` (includes null check)
+                                    action?.invoke(Result.UpdateAvailable(revision!!, apkUrl))
                                 } else {
                                     action?.invoke(Result.NoUpdate)
                                 }

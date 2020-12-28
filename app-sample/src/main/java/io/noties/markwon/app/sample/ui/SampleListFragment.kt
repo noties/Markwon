@@ -276,6 +276,9 @@ class SampleListFragment : Fragment() {
             is UpdateUtils.Result.UpdateAvailable -> {
                 val md = """
                     ## Update available
+                    
+                    ${BuildConfig.GIT_SHA} -&gt; **${result.revision}**
+                    
                     Would you like to download it?
                 """.trimIndent()
                 builder.setMessage(markwon.toMarkdown(md))
@@ -289,7 +292,7 @@ class SampleListFragment : Fragment() {
             is UpdateUtils.Result.NoUpdate -> {
                 val md = """
                     ## No update
-                    You are using latest version (${BuildConfig.GIT_SHA})
+                    You are using latest version (**${BuildConfig.GIT_SHA}**)
                 """.trimIndent()
                 builder.setMessage(markwon.toMarkdown(md))
                 builder.setPositiveButton(android.R.string.ok, null)
