@@ -71,12 +71,7 @@ as user types (for example in **EditText**).
 <img :src="$withBase('/art/mw_dark_01.png')" alt="screenshot dark #2" width="30%">
 
 By default configuration uses TextView textColor for styling, so changing textColor changes style
-
-:::tip Sample application
-Screenshots are taken from sample application. It is a generic markdown viewer 
-with support to display markdown content via `http`, `https` &amp; `file` schemes 
-and 2 themes included: Light &amp; Dark. It can be downloaded from [releases](https://github.com/noties/Markwon/releases)
-:::
+<br /><br /><br />
 
 
 <style>
