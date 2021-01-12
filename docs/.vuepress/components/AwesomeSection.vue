@@ -49,6 +49,12 @@ export default {
           description:
             "An Android app for browsing Stack Overflow and other Stack Exchange sites",
         },
+        {
+          name: "Infinity for Reddit",
+          image: "/assets/apps/infinity.webp",
+          link: "https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit",
+          description: " kjskjs dhfj ",
+        },
       ];
     },
   },
