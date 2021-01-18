@@ -1,7 +1,31 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlCssStyleParserSample",
+    "id": "20210118155530",
+    "title": "CSS attributes in HTML",
+    "description": "Parse CSS attributes of HTML tags with `CssInlineStyleParser`",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "HTML"
+    ]
+  },
+  {
+    "javaClassName": "io.noties.markwon.app.samples.basics.OneLineNoMarkdownSample",
+    "id": "20210118154116",
+    "title": "One line text",
+    "description": "Single line text without markdown markup",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "rendering"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.tasklist.TaskListMutateNestedSample",
-    "id": "20211228120444",
+    "id": "20201228120444",
     "title": "Task list mutate nested",
     "description": "Task list mutation with nested items",
     "artifacts": [
