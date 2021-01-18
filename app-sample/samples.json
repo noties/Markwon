@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.image.HugeImageSample",
+    "id": "20210118165230",
+    "title": "Huge image downscaling",
+    "description": "Downscale displayed images with `BitmapOptions` 2 step rendering (measure, downscale), use `DefaultDownScalingMediaDecoder`",
+    "artifacts": [
+      "IMAGE"
+    ],
+    "tags": [
+      "image"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlCssStyleParserSample",
     "id": "20210118155530",
     "title": "CSS attributes in HTML",

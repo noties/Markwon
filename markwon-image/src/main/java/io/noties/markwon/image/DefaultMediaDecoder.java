@@ -17,6 +17,10 @@ import java.util.Collections;
  * This class can be used as the last {@link MediaDecoder} to _try_ to handle all rest cases.
  * Here we just assume that supplied InputStream is of image type and try to decode it.
  *
+ * <strong>NB</strong> if you are dealing with big images that require down scaling see {@link DefaultDownScalingMediaDecoder}
+ * which additionally down scales displayed images.
+ *
+ * @see DefaultDownScalingMediaDecoder
  * @since 1.1.0
  */
 public class DefaultMediaDecoder extends MediaDecoder {

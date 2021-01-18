@@ -1,5 +1,13 @@
 # Changelog
 
+# Snapshot
+
+#### Added
+* `image` - `DefaultDownScalingMediaDecoder` which scales displayed images down ([#329])
+
+[#329]: https://github.com/noties/Markwon/issues/329
+
+
 # 4.6.1
 
 #### Changed
