@@ -101,6 +101,11 @@ Please visit [documentation] web-site for reference
 
 [documentation]: https://noties.github.io/Markwon
 
+
+## Consulting
+Paid consulting is available. Please Reach me out at [markwon+consulting[at]noties.io](mailto:markwon+consulting@noties.io)
+to discuss your idea or a project
+
 ---
 
 # Demo
