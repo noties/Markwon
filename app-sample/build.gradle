@@ -99,10 +99,6 @@ android {
                 signingConfig signingConfigs.config
             }
         }
-    } else {
-        // it seems to be a bug in NDK handling, github fail to build the project with the:
-        // `com.android.builder.errors.EvalIssueException: No version of NDK matched the requested version 21.0.6113669. Versions available locally: 21.3.6528147`
-        ndkVersion '22.0.7026061'
     }
 }
 
