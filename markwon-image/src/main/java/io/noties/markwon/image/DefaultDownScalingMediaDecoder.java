@@ -33,141 +33,156 @@ import java.util.Collections;
  */
 public class DefaultDownScalingMediaDecoder extends MediaDecoder {
 
-  /**
-   * Values {@code <= 0} are ignored, a dimension is considered to be not restrained any limit in such case
-   */
-  @NonNull
-  public static DefaultDownScalingMediaDecoder create(int maxWidth, int maxHeight) {
-    return create(Resources.getSystem(), maxWidth, maxHeight);
-  }
-
-  @NonNull
-  public static DefaultDownScalingMediaDecoder create(
-    @NonNull Resources resources,
-    int maxWidth,
-    int maxHeight
-  ) {
-    return new DefaultDownScalingMediaDecoder(resources, maxWidth, maxHeight);
-  }
-
-  private final Resources resources;
-  private final int maxWidth;
-  private final int maxHeight;
-
-  private DefaultDownScalingMediaDecoder(@NonNull Resources resources, int maxWidth, int maxHeight) {
-    this.resources = resources;
-    this.maxWidth = maxWidth;
-    this.maxHeight = maxHeight;
-  }
-
-  // https://android.jlelse.eu/loading-large-bitmaps-efficiently-in-android-66826cd4ad53
-  @NonNull
-  @Override
-  public Drawable decode(@Nullable String contentType, @NonNull InputStream inputStream) {
-
-    final File file = writeToTempFile(inputStream);
-    try {
-
-      final BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inJustDecodeBounds = true;
-
-      BitmapFactory
-        .decodeStream(readFile(file), null, options);
-
-      options.inSampleSize = calculateInSampleSize(options, maxWidth, maxHeight);
-      options.inJustDecodeBounds = false;
-
-      final Bitmap bitmap = BitmapFactory
-        .decodeStream(readFile(file), null, options);
-
-      return new BitmapDrawable(resources, bitmap);
-    } finally {
-      // we no longer need the temporary file
-      //noinspection ResultOfMethodCallIgnored
-      file.delete();
-    }
-  }
-
-  @NonNull
-  private static File writeToTempFile(@NonNull InputStream inputStream) {
-    final File file;
-    try {
-      file = File.createTempFile("markwon", null);
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
+    /**
+     * Values {@code <= 0} are ignored, a dimension is considered to be not restrained any limit in such case
+     */
+    @NonNull
+    public static DefaultDownScalingMediaDecoder create(int maxWidth, int maxHeight) {
+        return create(Resources.getSystem(), maxWidth, maxHeight);
     }
 
-    final OutputStream outputStream;
-    try {
-      outputStream = new BufferedOutputStream(new FileOutputStream(file, false));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException(e);
+    @NonNull
+    public static DefaultDownScalingMediaDecoder create(
+            @NonNull Resources resources,
+            int maxWidth,
+            int maxHeight
+    ) {
+        return new DefaultDownScalingMediaDecoder(resources, maxWidth, maxHeight);
     }
 
-    final byte[] buffer = new byte[1024 * 8];
-    int length;
-    try {
-      while ((length = inputStream.read(buffer)) > 0) {
-        outputStream.write(buffer, 0, length);
-      }
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
-    } finally {
-      try {
-        outputStream.close();
-      } catch (IOException e) {
-        // ignored
-      }
+    private final Resources resources;
+    private final int maxWidth;
+    private final int maxHeight;
+
+    private DefaultDownScalingMediaDecoder(@NonNull Resources resources, int maxWidth, int maxHeight) {
+        this.resources = resources;
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
     }
 
-    return file;
-  }
+    // https://android.jlelse.eu/loading-large-bitmaps-efficiently-in-android-66826cd4ad53
+    @NonNull
+    @Override
+    public Drawable decode(@Nullable String contentType, @NonNull InputStream inputStream) {
 
-  @NonNull
-  private static InputStream readFile(@NonNull File file) {
-    try {
-      return new BufferedInputStream(new FileInputStream(file));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException(e);
-    }
-  }
+        final File file = writeToTempFile(inputStream);
+        try {
 
-  // see: https://developer.android.com/topic/performance/graphics/load-bitmap.html#load-bitmap
-  private static int calculateInSampleSize(@NonNull BitmapFactory.Options options, int maxWidth, int maxHeight) {
-    final int w = options.outWidth;
-    final int h = options.outHeight;
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
 
-    final boolean hasMaxWidth = maxWidth > 0;
-    final boolean hasMaxHeight = maxHeight > 0;
+            // initial result when obtaining bounds is discarded
+            decode(file, options);
 
-    final int inSampleSize;
-    if (hasMaxWidth && hasMaxHeight) {
-      // minimum of both
-      inSampleSize = Math.min(calculateInSampleSize(w, maxWidth), calculateInSampleSize(h, maxHeight));
-    } else if (hasMaxWidth) {
-      inSampleSize = calculateInSampleSize(w, maxWidth);
-    } else if (hasMaxHeight) {
-      inSampleSize = calculateInSampleSize(h, maxHeight);
-    } else {
-      // else no sampling, as we have no dimensions to base our calculations on
-      inSampleSize = 1;
+            options.inSampleSize = calculateInSampleSize(options, maxWidth, maxHeight);
+            options.inJustDecodeBounds = false;
+
+            final Bitmap bitmap = decode(file, options);
+
+            return new BitmapDrawable(resources, bitmap);
+        } finally {
+            // we no longer need the temporary file
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
     }
 
-    return inSampleSize;
-  }
+    @NonNull
+    private static File writeToTempFile(@NonNull InputStream inputStream) {
+        final File file;
+        try {
+            file = File.createTempFile("markwon", null);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
 
-  private static int calculateInSampleSize(int actual, int max) {
-    int inSampleSize = 1;
-    final int half = actual / 2;
-    while ((half / inSampleSize) > max) {
-      inSampleSize *= 2;
+        final OutputStream outputStream;
+        try {
+            outputStream = new BufferedOutputStream(new FileOutputStream(file, false));
+        } catch (FileNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+
+        final byte[] buffer = new byte[1024 * 8];
+        int length;
+        try {
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                // ignored
+            }
+        }
+
+        return file;
     }
-    return inSampleSize;
-  }
 
-  @NonNull
-  @Override
-  public Collection<String> supportedTypes() {
-    return Collections.emptySet();
-  }
+    @Nullable
+    private static Bitmap decode(@NonNull File file, @NonNull BitmapFactory.Options options) {
+        final InputStream is = readFile(file);
+        // not yet, still min SDK is 16
+        try {
+            return BitmapFactory.decodeStream(is, null, options);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                // ignored
+            }
+        }
+    }
+
+
+    @NonNull
+    private static InputStream readFile(@NonNull File file) {
+        try {
+            return new BufferedInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    // see: https://developer.android.com/topic/performance/graphics/load-bitmap.html#load-bitmap
+    private static int calculateInSampleSize(@NonNull BitmapFactory.Options options, int maxWidth, int maxHeight) {
+        final int w = options.outWidth;
+        final int h = options.outHeight;
+
+        final boolean hasMaxWidth = maxWidth > 0;
+        final boolean hasMaxHeight = maxHeight > 0;
+
+        final int inSampleSize;
+        if (hasMaxWidth && hasMaxHeight) {
+            // minimum of both
+            inSampleSize = Math.min(calculateInSampleSize(w, maxWidth), calculateInSampleSize(h, maxHeight));
+        } else if (hasMaxWidth) {
+            inSampleSize = calculateInSampleSize(w, maxWidth);
+        } else if (hasMaxHeight) {
+            inSampleSize = calculateInSampleSize(h, maxHeight);
+        } else {
+            // else no sampling, as we have no dimensions to base our calculations on
+            inSampleSize = 1;
+        }
+
+        return inSampleSize;
+    }
+
+    private static int calculateInSampleSize(int actual, int max) {
+        int inSampleSize = 1;
+        final int half = actual / 2;
+        while ((half / inSampleSize) > max) {
+            inSampleSize *= 2;
+        }
+        return inSampleSize;
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> supportedTypes() {
+        return Collections.emptySet();
+    }
 }

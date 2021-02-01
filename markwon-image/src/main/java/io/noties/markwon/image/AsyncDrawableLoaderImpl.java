@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -77,12 +78,6 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
     @NonNull
     private Future<?> execute(@NonNull final AsyncDrawable asyncDrawable) {
-
-        // todo: more efficient DefaultMediaDecoder... BitmapFactory.decodeStream is a bit not optimal
-        //      for big images for sure. We _could_ introduce internal Drawable that will check for
-        //      image bounds (but we will need to cache inputStream in order to inspect and optimize
-        //      input image...)
-
         return executorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -113,17 +108,26 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
                             final ImageItem.WithDecodingNeeded withDecodingNeeded = imageItem.getAsWithDecodingNeeded();
 
-                            MediaDecoder mediaDecoder = mediaDecoders.get(withDecodingNeeded.contentType());
+                            // @since $SNAPSHOT; close input stream
+                            try {
+                                MediaDecoder mediaDecoder = mediaDecoders.get(withDecodingNeeded.contentType());
 
-                            if (mediaDecoder == null) {
-                                mediaDecoder = defaultMediaDecoder;
-                            }
+                                if (mediaDecoder == null) {
+                                    mediaDecoder = defaultMediaDecoder;
+                                }
 
-                            if (mediaDecoder != null) {
-                                drawable = mediaDecoder.decode(withDecodingNeeded.contentType(), withDecodingNeeded.inputStream());
-                            } else {
-                                // throw that no media decoder is found
-                                throw new IllegalStateException("No media-decoder is found: " + destination);
+                                if (mediaDecoder != null) {
+                                    drawable = mediaDecoder.decode(withDecodingNeeded.contentType(), withDecodingNeeded.inputStream());
+                                } else {
+                                    // throw that no media decoder is found
+                                    throw new IllegalStateException("No media-decoder is found: " + destination);
+                                }
+                            } finally {
+                                try {
+                                    withDecodingNeeded.inputStream().close();
+                                } catch (IOException e) {
+                                    Log.e("MARKWON-IMAGE", "Error closing inputStream", e);
+                                }
                             }
                         } else {
                             drawable = imageItem.getAsWithResult().result();

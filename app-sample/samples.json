@@ -1,5 +1,17 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.html.InspectHtmlTextSample",
+    "id": "20210201140501",
+    "title": "Inspect text",
+    "description": "Inspect text content of a `HTML` node",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "HTML"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.HugeImageSample",
     "id": "20210118165230",
     "title": "Huge image downscaling",

@@ -94,6 +94,28 @@ public class MarkwonEditorUtilsTest {
         assertMatched(input, strike, "~~", 3, 11);
     }
 
+    @Test
+    public void delimited_triple_asterisks() {
+        final String input = "***italic bold bold***";
+
+        final Match bold = findDelimited(input, 0, "**", "__");
+        final Match em = findDelimited(input, 0, "*", "_");
+
+        assertMatched(input, bold, "**", 0, input.length());
+        assertMatched(input, em, "*", 0, input.length());
+    }
+
+    @Test
+    public void delimited_triple_asterisks_2() {
+        final String input = "***italic bold* bold**";
+
+        final Match bold = findDelimited(input, 0, "**", "__");
+        final Match em = findDelimited(input, 0, "*", "_");
+
+        assertMatched(input, bold, "**", 0, input.length());
+        assertMatched(input, em, "*", 0, 15);
+    }
+
     private static void assertMatched(
             @NonNull String input,
             @Nullable Match match,
