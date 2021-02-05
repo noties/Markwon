@@ -28,7 +28,7 @@ sealed class Deeplink {
                     // https://noties.io/Markwon/app/sample/ID
                     // https://noties.io/Markwon/app/search?a=core
                     val segments = data.pathSegments
-                    if (segments.size == 3
+                    if (segments.size >= 3
                             && "Markwon" == segments[0]
                             && "app" == segments[1]) {
                         when (segments[2]) {
@@ -41,6 +41,8 @@ sealed class Deeplink {
                     }
                 }
                 else -> null
+            }.also {
+                Debug.i("parsed: $it")
             }
         }
 

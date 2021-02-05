@@ -103,7 +103,7 @@ Please visit [documentation] web-site for reference
 
 
 ## Consulting
-Paid consulting is available. Please Reach me out at [markwon+consulting[at]noties.io](mailto:markwon+consulting@noties.io)
+Paid consulting is available. Please reach me out at [markwon+consulting[at]noties.io](mailto:markwon+consulting@noties.io)
 to discuss your idea or a project
 
 ---
