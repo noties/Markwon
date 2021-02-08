@@ -108,7 +108,7 @@ class AsyncDrawableLoaderImpl extends AsyncDrawableLoader {
 
                             final ImageItem.WithDecodingNeeded withDecodingNeeded = imageItem.getAsWithDecodingNeeded();
 
-                            // @since $SNAPSHOT; close input stream
+                            // @since 4.6.2 close input stream
                             try {
                                 MediaDecoder mediaDecoder = mediaDecoders.get(withDecodingNeeded.contentType());
 

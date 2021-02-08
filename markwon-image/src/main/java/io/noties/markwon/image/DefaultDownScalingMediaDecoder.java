@@ -29,7 +29,7 @@ import java.util.Collections;
  * <strong>NB</strong> this media decoder will create a temporary file for each incoming media resource,
  * which can have a performance penalty (IO)
  *
- * @since $SNAPSHOT;
+ * @since 4.6.2
  */
 public class DefaultDownScalingMediaDecoder extends MediaDecoder {
 

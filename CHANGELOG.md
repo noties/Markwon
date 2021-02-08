@@ -1,6 +1,6 @@
 # Changelog
 
-# Snapshot
+# 4.6.2
 
 #### Added
 * `image` - `DefaultDownScalingMediaDecoder` which scales displayed images down ([#329])
