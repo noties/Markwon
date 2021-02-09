@@ -22,6 +22,7 @@ import io.noties.markwon.editor.MarkwonEditor;
 import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 import io.noties.markwon.editor.handler.EmphasisEditHandler;
 import io.noties.markwon.editor.handler.StrongEmphasisEditHandler;
+import io.noties.markwon.editor.handler.CodeBlockEditHandler;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.EntityInlineProcessor;
@@ -76,6 +77,7 @@ public class EditorMultipleEditSpansSample extends MarkwonEditTextSample {
       .useEditHandler(new EmphasisEditHandler())
       .useEditHandler(new StrongEmphasisEditHandler())
       .useEditHandler(new StrikethroughEditHandler())
+      .useEditHandler(new CodeBlockEditHandler())
       .useEditHandler(new CodeEditHandler())
       .useEditHandler(new BlockQuoteEditHandler())
       .useEditHandler(new LinkEditHandler(onClick))
