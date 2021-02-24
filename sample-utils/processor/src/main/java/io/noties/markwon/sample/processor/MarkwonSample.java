@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.Set;
 
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
+import io.noties.markwon.sample.annotations.Tag;
 
 @SuppressWarnings("WeakerAccess")
 public class MarkwonSample {
@@ -15,7 +16,7 @@ public class MarkwonSample {
     final String title;
     final String description;
     final Set<MarkwonArtifact> artifacts;
-    final Set<String> tags;
+    final Set<Tag> tags;
 
     public MarkwonSample(
             @NonNull String javaClassName,
@@ -23,7 +24,7 @@ public class MarkwonSample {
             @NonNull String title,
             @NonNull String description,
             @NonNull Set<MarkwonArtifact> artifacts,
-            @NonNull Set<String> tags
+            @NonNull Set<Tag> tags
     ) {
         this.javaClassName = javaClassName;
         this.id = id;

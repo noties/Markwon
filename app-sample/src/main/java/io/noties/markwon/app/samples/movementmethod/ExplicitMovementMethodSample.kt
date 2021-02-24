@@ -3,10 +3,10 @@ package io.noties.markwon.app.samples.movementmethod
 import android.text.method.ScrollingMovementMethod
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.BuildConfig
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20200627080007",
@@ -14,7 +14,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo
   description = "When a movement method already applied to a `TextView`" +
     "`Markwon` won't try to apply own (implicit) one",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.movementMethod, Tags.links]
+  tags = [Tag.movementMethod, Tag.links]
 )
 class ExplicitMovementMethodSample : MarkwonTextViewSample() {
   override fun render() {

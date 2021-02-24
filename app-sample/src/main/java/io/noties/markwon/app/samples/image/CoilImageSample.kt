@@ -5,18 +5,18 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import io.noties.markwon.Markwon
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.coil.CoilImagesPlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20200826101209",
   title = "Coil image",
   artifacts = [MarkwonArtifact.IMAGE_COIL],
-  tags = [Tags.image]
+  tags = [Tag.image]
 )
 class CoilImageSample : MarkwonTextViewSample() {
   override fun render() {

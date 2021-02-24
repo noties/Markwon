@@ -7,17 +7,17 @@ import org.commonmark.node.Heading;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629123308",
   title = "Disable node from rendering",
   description = "Disable _parsed_ node from being rendered (markdown syntax is still consumed)",
   artifacts = {MarkwonArtifact.CORE},
-  tags = {Tags.parsing, Tags.rendering}
+  tags = {Tag.parsing, Tag.rendering}
 )
 public class DisableNodeSample extends MarkwonTextViewSample {
   @Override

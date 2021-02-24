@@ -3,11 +3,11 @@ package io.noties.markwon.app.samples.table;
 import android.graphics.Color;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 import io.noties.markwon.utils.ColorUtils;
 import io.noties.markwon.utils.Dip;
 
@@ -15,7 +15,7 @@ import io.noties.markwon.utils.Dip;
   id = "20200702135621",
   title = "Customize table theme",
   artifacts = MarkwonArtifact.EXT_TABLES,
-  tags = {Tags.theme}
+  tags = {Tag.theme}
 )
 public class TableCustomizeSample extends MarkwonTextViewSample {
   @Override

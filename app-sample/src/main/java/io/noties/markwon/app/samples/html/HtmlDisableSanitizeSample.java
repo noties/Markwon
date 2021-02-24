@@ -4,17 +4,17 @@ import androidx.annotation.NonNull;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630171424",
   title = "Disable HTML",
   description = "Disable HTML via replacing special `<` and `>` symbols",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.html, Tags.rendering, Tags.parsing, Tags.plugin}
+  tags = {Tag.html, Tag.rendering, Tag.parsing, Tag.plugin}
 )
 public class HtmlDisableSanitizeSample extends MarkwonTextViewSample {
   @Override

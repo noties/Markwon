@@ -11,17 +11,17 @@ import org.commonmark.parser.delimiter.DelimiterRun;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630194017",
   title = "Custom delimiter processor",
   description = "Custom parsing delimiter processor with `?` character",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.parsing
+  tags = Tag.parsing
 )
 public class DelimiterProcessorSample extends MarkwonTextViewSample {
   @Override

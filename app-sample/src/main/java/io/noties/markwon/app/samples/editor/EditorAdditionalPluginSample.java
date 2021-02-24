@@ -1,20 +1,20 @@
 package io.noties.markwon.app.samples.editor;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.editor.MarkwonEditor;
 import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629165347",
   title = "Additional plugin",
   description = "Additional plugin for editor",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER, MarkwonArtifact.EXT_STRIKETHROUGH},
-  tags = {Tags.editor}
+  tags = {Tag.editor}
 )
 public class EditorAdditionalPluginSample extends MarkwonEditTextSample {
   @Override

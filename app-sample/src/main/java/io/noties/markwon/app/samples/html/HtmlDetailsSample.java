@@ -30,7 +30,6 @@ import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SpannableBuilder;
 import io.noties.markwon.app.BuildConfig;
 import io.noties.markwon.app.R;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonSample;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.html.HtmlPlugin;
@@ -40,6 +39,7 @@ import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 import io.noties.markwon.utils.LeadingMarginUtils;
 import io.noties.markwon.utils.NoCopySpannableFactory;
 
@@ -48,7 +48,7 @@ import io.noties.markwon.utils.NoCopySpannableFactory;
   title = "Details HTML tag",
   description = "Handling of `details` HTML tag",
   artifacts = {MarkwonArtifact.HTML, MarkwonArtifact.IMAGE},
-  tags = {Tags.image, Tags.rendering, Tags.html}
+  tags = {Tag.image, Tag.rendering, Tag.html}
 )
 public class HtmlDetailsSample extends MarkwonSample {
 

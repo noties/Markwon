@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.app.samples.latex.shared.LatexHolder;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
@@ -12,13 +11,14 @@ import io.noties.markwon.ext.latex.JLatexMathTheme;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200701121528",
   title = "LaTeX theme",
   description = "Sample of theme customization for LaTeX",
   artifacts = {MarkwonArtifact.EXT_LATEX, MarkwonArtifact.INLINE_PARSER},
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class LatexThemeSample extends MarkwonTextViewSample {
   @Override

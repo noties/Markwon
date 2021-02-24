@@ -7,19 +7,19 @@ import android.text.Spanned;
 import android.widget.TextView;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200826084338",
   title = "Justify text",
   description = "Justify text with `justificationMode` argument on Oreo (>= 26)",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class JustifyModeSample extends MarkwonTextViewSample {
   @SuppressLint("WrongConstant")

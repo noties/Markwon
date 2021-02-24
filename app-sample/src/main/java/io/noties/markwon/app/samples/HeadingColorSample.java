@@ -10,17 +10,17 @@ import org.commonmark.node.Heading;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20201203224611",
   title = "Color of heading",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class HeadingColorSample extends MarkwonTextViewSample {
   @Override

@@ -9,7 +9,6 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.PrecomputedFutureTextSetterCompat;
 import io.noties.markwon.app.R;
 import io.noties.markwon.app.readme.GithubImageDestinationProcessor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonRecyclerViewSample;
 import io.noties.markwon.app.utils.SampleUtilsKtKt;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
@@ -19,6 +18,7 @@ import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200702092446",
@@ -26,7 +26,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "Usage of `PrecomputedFutureTextSetterCompat` " +
     "inside a `RecyclerView` with appcompat",
   artifacts = {MarkwonArtifact.RECYCLER},
-  tags = {Tags.recyclerView, Tags.precomputedText}
+  tags = {Tag.recyclerView, Tag.precomputedText}
 )
 public class PrecomputedFutureSample extends MarkwonRecyclerViewSample {
   @Override

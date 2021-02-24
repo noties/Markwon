@@ -16,13 +16,13 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.inlineparser.InlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.inlineparser.OpenBracketInlineProcessor;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200819071751",
@@ -31,7 +31,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
     "to parse own markdown syntax based on `[` character(s). This would disable native " +
     "markdown [links](#) but not images ![image-alt](#)",
   artifacts = MarkwonArtifact.INLINE_PARSER,
-  tags = {Tags.parsing}
+  tags = {Tag.parsing}
 )
 public class InlineParsingSquareBracketsSample extends MarkwonTextViewSample {
   @Override

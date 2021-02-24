@@ -1,11 +1,11 @@
 package io.noties.markwon.app.samples.latex;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200701094225",
@@ -13,7 +13,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "LaTeX automatically uses `TextView` text color " +
     "if not configured explicitly",
   artifacts = MarkwonArtifact.EXT_LATEX,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class LatexDarkSample extends MarkwonTextViewSample {
   @Override

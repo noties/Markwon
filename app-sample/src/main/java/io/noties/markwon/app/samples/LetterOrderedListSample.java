@@ -15,20 +15,20 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.Prop;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.spans.BulletListItemSpan;
 import io.noties.markwon.core.spans.OrderedListItemSpan;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629130954",
   title = "Letter ordered list",
   description = "Render bullet list inside an ordered list with letters instead of bullets",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.rendering, Tags.plugin, Tags.lists}
+  tags = {Tag.rendering, Tag.plugin, Tag.lists}
 )
 public class LetterOrderedListSample extends MarkwonTextViewSample {
   @Override

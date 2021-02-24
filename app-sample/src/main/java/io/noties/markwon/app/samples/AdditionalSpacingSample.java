@@ -7,19 +7,19 @@ import org.commonmark.node.Heading;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.core.spans.LastLineSpacingSpan;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629125321",
   title = "Additional spacing after block",
   description = "Add additional spacing (padding) after last line of a block",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.spacing, Tags.padding, Tags.span}
+  tags = {Tag.spacing, Tag.padding, Tag.span}
 )
 public class AdditionalSpacingSample extends MarkwonTextViewSample {
   @Override

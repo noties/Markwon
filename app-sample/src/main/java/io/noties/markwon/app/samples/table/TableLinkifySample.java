@@ -1,7 +1,6 @@
 package io.noties.markwon.app.samples.table;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.tables.TableAwareMovementMethod;
 import io.noties.markwon.ext.tables.TablePlugin;
@@ -9,6 +8,7 @@ import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200702135739",
@@ -16,7 +16,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "Automatically linkify markdown content " +
     "including content inside tables, handle clicks inside tables",
   artifacts = {MarkwonArtifact.EXT_TABLES, MarkwonArtifact.LINKIFY},
-  tags = {Tags.links}
+  tags = {Tag.links}
 )
 public class TableLinkifySample extends MarkwonTextViewSample {
   @Override

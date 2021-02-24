@@ -2,11 +2,11 @@ package io.noties.markwon.app.samples.parser
 
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 import org.commonmark.node.Heading
 import org.commonmark.parser.Parser
 import org.commonmark.parser.block.BlockParserFactory
@@ -19,7 +19,7 @@ import org.commonmark.parser.block.ParserState
   title = "Custom heading parser",
   description = "Custom heading block parser. Actual parser is not implemented",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.parsing, Tags.heading]
+  tags = [Tag.parsing, Tag.heading]
 )
 class CustomHeadingParserSample : MarkwonTextViewSample() {
   override fun render() {

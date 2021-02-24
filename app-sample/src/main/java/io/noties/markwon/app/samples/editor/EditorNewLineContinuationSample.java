@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
 
 import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.editor.MarkwonEditor;
 import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629170348",
@@ -25,7 +25,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
     "in order to add a _continuation_, for example adding a new " +
     "bullet list item if current line starts with one",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER},
-  tags = {Tags.editor}
+  tags = {Tag.editor}
 )
 public class EditorNewLineContinuationSample extends MarkwonEditTextSample {
   @Override

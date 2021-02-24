@@ -11,16 +11,16 @@ import org.commonmark.node.Link;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200702101224",
   title = "Remove link underline",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.links, Tags.rendering, Tags.span}
+  tags = {Tag.links, Tag.rendering, Tag.span}
 )
 public class LinkRemoveUnderlineSample extends MarkwonTextViewSample {
   @Override

@@ -20,7 +20,7 @@
       "HTML"
     ],
     "tags": [
-      "HTML"
+      "html"
     ]
   },
   {
@@ -44,7 +44,7 @@
       "HTML"
     ],
     "tags": [
-      "HTML"
+      "html"
     ]
   },
   {
@@ -80,8 +80,8 @@
       "IMAGE"
     ],
     "tags": [
-      "image",
-      "rendering"
+      "rendering",
+      "image"
     ]
   },
   {
@@ -95,7 +95,7 @@
     "tags": [
       "rendering",
       "span",
-      "span-factory"
+      "spanFactory"
     ]
   },
   {
@@ -143,8 +143,8 @@
       "CORE"
     ],
     "tags": [
-      "heading",
-      "parsing"
+      "parsing",
+      "heading"
     ]
   },
   {
@@ -265,9 +265,9 @@
       "RECYCLER"
     ],
     "tags": [
-      "image",
-      "recycler-view",
-      "rendering"
+      "recyclerView",
+      "rendering",
+      "image"
     ]
   },
   {
@@ -280,9 +280,9 @@
       "IMAGE"
     ],
     "tags": [
-      "HTML",
+      "rendering",
       "image",
-      "rendering"
+      "html"
     ]
   },
   {
@@ -419,7 +419,7 @@
       "RECYCLER_TABLE"
     ],
     "tags": [
-      "recycler-view"
+      "recyclerView"
     ]
   },
   {
@@ -445,8 +445,8 @@
       "RECYCLER"
     ],
     "tags": [
-      "precomputed-text",
-      "recycler-view"
+      "recyclerView",
+      "precomputedText"
     ]
   },
   {
@@ -458,7 +458,7 @@
       "CORE"
     ],
     "tags": [
-      "precomputed-text"
+      "precomputedText"
     ]
   },
   {
@@ -557,8 +557,8 @@
       "INLINE_PARSER"
     ],
     "tags": [
-      "known-bug",
-      "rendering"
+      "rendering",
+      "knownBug"
     ]
   },
   {
@@ -644,10 +644,10 @@
       "CORE"
     ],
     "tags": [
-      "HTML",
       "parsing",
       "plugin",
-      "rendering"
+      "rendering",
+      "html"
     ]
   },
   {
@@ -659,9 +659,9 @@
       "INLINE_PARSER"
     ],
     "tags": [
+      "parsing",
       "block",
-      "inline",
-      "parsing"
+      "inline"
     ]
   },
   {
@@ -673,8 +673,8 @@
       "INLINE_PARSER"
     ],
     "tags": [
-      "inline",
-      "parsing"
+      "parsing",
+      "inline"
     ]
   },
   {
@@ -686,8 +686,8 @@
       "INLINE_PARSER"
     ],
     "tags": [
-      "inline",
-      "parsing"
+      "parsing",
+      "inline"
     ]
   },
   {
@@ -699,8 +699,8 @@
       "INLINE_PARSER"
     ],
     "tags": [
-      "inline",
-      "parsing"
+      "parsing",
+      "inline"
     ]
   },
   {
@@ -712,8 +712,8 @@
       "INLINE_PARSER"
     ],
     "tags": [
-      "inline",
-      "parsing"
+      "parsing",
+      "inline"
     ]
   },
   {
@@ -773,8 +773,8 @@
       "IMAGE"
     ],
     "tags": [
-      "GIF",
-      "image"
+      "image",
+      "gif"
     ]
   },
   {
@@ -786,8 +786,8 @@
       "IMAGE"
     ],
     "tags": [
-      "SVG",
-      "image"
+      "image",
+      "svg"
     ]
   },
   {
@@ -812,9 +812,9 @@
       "IMAGE"
     ],
     "tags": [
-      "HTML",
+      "rendering",
       "image",
-      "rendering"
+      "html"
     ]
   },
   {
@@ -827,8 +827,8 @@
       "IMAGE"
     ],
     "tags": [
-      "HTML",
-      "rendering"
+      "rendering",
+      "html"
     ]
   },
   {
@@ -840,8 +840,8 @@
       "HTML"
     ],
     "tags": [
-      "HTML",
-      "rendering"
+      "rendering",
+      "html"
     ]
   },
   {
@@ -854,9 +854,9 @@
       "IMAGE"
     ],
     "tags": [
-      "HTML",
+      "rendering",
       "image",
-      "rendering"
+      "html"
     ]
   },
   {
@@ -869,9 +869,9 @@
       "IMAGE"
     ],
     "tags": [
-      "HTML",
+      "rendering",
       "image",
-      "rendering"
+      "html"
     ]
   },
   {
@@ -883,9 +883,9 @@
       "HTML"
     ],
     "tags": [
-      "HTML",
       "rendering",
-      "span"
+      "span",
+      "html"
     ]
   },
   {
@@ -897,9 +897,9 @@
       "HTML"
     ],
     "tags": [
-      "HTML",
       "rendering",
-      "span"
+      "span",
+      "html"
     ]
   },
   {
@@ -911,9 +911,9 @@
       "HTML"
     ],
     "tags": [
-      "HTML",
       "rendering",
-      "span"
+      "span",
+      "html"
     ]
   },
   {
@@ -1057,11 +1057,11 @@
       "CORE"
     ],
     "tags": [
-      "extension",
-      "image",
       "parsing",
       "plugin",
       "rendering",
+      "image",
+      "extension",
       "span"
     ]
   },
@@ -1076,7 +1076,7 @@
     "tags": [
       "parsing",
       "rendering",
-      "text-added-listener"
+      "textAddedListener"
     ]
   },
   {
@@ -1091,7 +1091,7 @@
     "tags": [
       "parsing",
       "rendering",
-      "text-added-listener"
+      "textAddedListener"
     ]
   },
   {
@@ -1128,9 +1128,9 @@
       "CORE"
     ],
     "tags": [
-      "lists",
       "plugin",
-      "rendering"
+      "rendering",
+      "lists"
     ]
   },
   {
@@ -1142,9 +1142,9 @@
       "CORE"
     ],
     "tags": [
-      "anchor",
       "links",
-      "plugin"
+      "plugin",
+      "anchor"
     ]
   },
   {
@@ -1157,9 +1157,9 @@
     ],
     "tags": [
       "block",
-      "padding",
       "rendering",
-      "spacing"
+      "spacing",
+      "padding"
     ]
   },
   {
@@ -1172,10 +1172,10 @@
     ],
     "tags": [
       "block",
-      "heading",
-      "padding",
       "rendering",
-      "spacing"
+      "spacing",
+      "padding",
+      "heading"
     ]
   },
   {
@@ -1187,9 +1187,9 @@
       "CORE"
     ],
     "tags": [
-      "padding",
       "rendering",
-      "spacing"
+      "spacing",
+      "padding"
     ]
   },
   {
@@ -1201,8 +1201,8 @@
       "CORE"
     ],
     "tags": [
-      "padding",
       "spacing",
+      "padding",
       "span"
     ]
   },
@@ -1215,8 +1215,8 @@
       "CORE"
     ],
     "tags": [
-      "new-line",
-      "soft-break"
+      "newLine",
+      "softBreak"
     ]
   },
   {
@@ -1228,9 +1228,9 @@
       "CORE"
     ],
     "tags": [
-      "defaults",
-      "new-line",
-      "soft-break"
+      "newLine",
+      "softBreak",
+      "defaults"
     ]
   },
   {
@@ -1254,8 +1254,8 @@
       "CORE"
     ],
     "tags": [
-      "defaults",
-      "links"
+      "links",
+      "defaults"
     ]
   },
   {
@@ -1295,8 +1295,8 @@
     ],
     "tags": [
       "paragraph",
-      "span",
-      "style"
+      "style",
+      "span"
     ]
   },
   {
@@ -1321,9 +1321,9 @@
       "CORE"
     ],
     "tags": [
+      "movementMethod",
       "links",
-      "movement-method",
-      "recycler-view"
+      "recyclerView"
     ]
   },
   {
@@ -1335,8 +1335,8 @@
       "CORE"
     ],
     "tags": [
+      "movementMethod",
       "links",
-      "movement-method",
       "plugin"
     ]
   },
@@ -1349,10 +1349,10 @@
       "CORE"
     ],
     "tags": [
+      "movementMethod",
       "links",
-      "movement-method",
       "plugin",
-      "recycler-view"
+      "recyclerView"
     ]
   },
   {
@@ -1364,8 +1364,8 @@
       "CORE"
     ],
     "tags": [
-      "links",
-      "movement-method"
+      "movementMethod",
+      "links"
     ]
   },
   {
@@ -1377,9 +1377,9 @@
       "CORE"
     ],
     "tags": [
-      "defaults",
+      "movementMethod",
       "links",
-      "movement-method"
+      "defaults"
     ]
   },
   {
@@ -1391,8 +1391,8 @@
       "CORE"
     ],
     "tags": [
-      "block",
       "parsing",
+      "block",
       "plugin"
     ]
   },
@@ -1406,8 +1406,8 @@
       "IMAGE"
     ],
     "tags": [
-      "hack",
-      "toast"
+      "toast",
+      "hack"
     ]
   },
   {

@@ -30,10 +30,10 @@ import java.util.regex.Pattern;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629163248",
@@ -42,7 +42,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
     "icon from resources and renders it as image with " +
     "`@ic-name` syntax",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.parsing, Tags.rendering, Tags.plugin, Tags.image, Tags.extension, Tags.span}
+  tags = {Tag.parsing, Tag.rendering, Tag.plugin, Tag.image, Tag.extension, Tag.span}
 )
 public class CustomExtensionSample extends MarkwonTextViewSample {
   @Override

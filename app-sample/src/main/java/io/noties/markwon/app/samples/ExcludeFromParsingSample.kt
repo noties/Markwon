@@ -3,10 +3,10 @@ package io.noties.markwon.app.samples
 import android.text.SpannableStringBuilder
 import io.noties.debug.Debug
 import io.noties.markwon.Markwon
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 import java.util.regex.Pattern
 
 @MarkwonSampleInfo(
@@ -14,7 +14,7 @@ import java.util.regex.Pattern
   title = "Exclude part of input from parsing",
   description = "Exclude part of input from parsing by splitting input with delimiters",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.parsing]
+  tags = [Tag.parsing]
 )
 class ExcludeFromParsingSample : MarkwonTextViewSample() {
   override fun render() {

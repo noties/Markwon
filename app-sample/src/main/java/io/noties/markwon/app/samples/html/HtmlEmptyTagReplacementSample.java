@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.html.HtmlEmptyTagReplacement;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630115725",
@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
     "in case of self-closed HTML tags or tags without content (closed " +
     "right after opened)",
   artifacts = MarkwonArtifact.HTML,
-  tags = {Tags.rendering, Tags.html}
+  tags = {Tag.rendering, Tag.html}
 )
 public class HtmlEmptyTagReplacementSample extends MarkwonTextViewSample {
   @Override

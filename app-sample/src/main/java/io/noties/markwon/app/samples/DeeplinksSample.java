@@ -1,17 +1,17 @@
 package io.noties.markwon.app.samples;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200826122247",
   title = "Deeplinks",
   description = "Handling of deeplinks (app handles https scheme to deep link into content)",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.links
+  tags = Tag.links
 )
 public class DeeplinksSample extends MarkwonTextViewSample {
   @Override

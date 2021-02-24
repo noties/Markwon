@@ -1,10 +1,10 @@
 package io.noties.markwon.app.samples;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629124706",
@@ -12,7 +12,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "By default a soft break (`\n`) will " +
     "add a space character instead of new line",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.newLine, Tags.softBreak, Tags.defaults}
+  tags = {Tag.newLine, Tag.softBreak, Tag.defaults}
 )
 public class SoftBreakAddsSpace extends MarkwonTextViewSample {
   @Override

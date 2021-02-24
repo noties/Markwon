@@ -1,17 +1,17 @@
 package io.noties.markwon.app.samples.image;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630170112",
   title = "Glide image",
   artifacts = MarkwonArtifact.IMAGE_GLIDE,
-  tags = Tags.image
+  tags = Tag.image
 )
 public class GlideImageSample extends MarkwonTextViewSample {
   @Override

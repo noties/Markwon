@@ -21,19 +21,19 @@ import org.commonmark.node.StrongEmphasis;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.app.samples.notification.shared.NotificationUtils;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200701130729",
   title = "Markdown in Notification",
   description = "Proof of concept of using `Markwon` with `android.app.Notification`",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.hack
+  tags = Tag.hack
 )
 public class NotificationSample extends MarkwonTextViewSample {
   @Override

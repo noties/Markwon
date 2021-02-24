@@ -7,19 +7,19 @@ import org.commonmark.node.Heading;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629125622",
   title = "Heading no padding",
   description = "Do not add a new line after heading node",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.spacing, Tags.padding, Tags.spacing, Tags.rendering}
+  tags = {Tag.spacing, Tag.padding, Tag.spacing, Tag.rendering}
 )
 public class HeadingNoSpaceSample extends MarkwonTextViewSample {
   @Override

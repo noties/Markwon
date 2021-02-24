@@ -16,10 +16,10 @@ import java.util.regex.Pattern;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 import io.noties.markwon.utils.ColorUtils;
 
 @MarkwonSampleInfo(
@@ -27,7 +27,7 @@ import io.noties.markwon.utils.ColorUtils;
   title = "Reddit spoiler",
   description = "An attempt to implement Reddit spoiler syntax `>! !<`",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.parsing
+  tags = Tag.parsing
 )
 public class RedditSpoilerSample extends MarkwonTextViewSample {
   @Override

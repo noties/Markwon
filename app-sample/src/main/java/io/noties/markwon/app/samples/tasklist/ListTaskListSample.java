@@ -1,18 +1,18 @@
 package io.noties.markwon.app.samples.tasklist;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200902174132",
   title = "Task list items with other lists",
   description = "Mix of task list items with other lists (bullet and ordered)",
   artifacts = MarkwonArtifact.EXT_TASKLIST,
-  tags = Tags.lists
+  tags = Tag.lists
 )
 public class ListTaskListSample extends MarkwonTextViewSample {
   @Override

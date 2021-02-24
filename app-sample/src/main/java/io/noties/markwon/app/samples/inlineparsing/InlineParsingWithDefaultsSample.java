@@ -4,19 +4,19 @@ import androidx.annotation.NonNull;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.inlineparser.OpenBracketInlineProcessor;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630170723",
   title = "Inline parsing with defaults",
   description = "Parsing with all defaults except links",
   artifacts = MarkwonArtifact.INLINE_PARSER,
-  tags = {Tags.inline, Tags.parsing}
+  tags = {Tag.inline, Tag.parsing}
 )
 public class InlineParsingWithDefaultsSample extends MarkwonTextViewSample {
   @Override

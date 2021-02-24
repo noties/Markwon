@@ -7,19 +7,19 @@ import org.commonmark.parser.Parser;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.inlineparser.CloseBracketInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.inlineparser.OpenBracketInlineProcessor;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630170412",
   title = "Links only inline parsing",
   artifacts = MarkwonArtifact.INLINE_PARSER,
-  tags = {Tags.parsing, Tags.inline}
+  tags = {Tag.parsing, Tag.inline}
 )
 public class InlineParsingLinksOnlySample extends MarkwonTextViewSample {
   @Override

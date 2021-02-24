@@ -3,11 +3,11 @@ package io.noties.markwon.app.samples
 import android.content.Context
 import io.noties.debug.Debug
 import io.noties.markwon.Markwon
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 import java.util.Collections
 import java.util.WeakHashMap
 
@@ -17,7 +17,7 @@ import java.util.WeakHashMap
   description = "A static cache for `Markwon` instance " +
     "to be associated with a `Context`",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.cache]
+  tags = [Tag.cache]
 )
 class CacheMarkwonSample : MarkwonTextViewSample() {
   override fun render() {

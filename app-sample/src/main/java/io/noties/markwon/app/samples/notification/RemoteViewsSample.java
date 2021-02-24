@@ -25,20 +25,20 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.app.R;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.app.samples.notification.shared.NotificationUtils;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200702090140",
   title = "RemoteViews in notification",
   description = "Display markdown with platform (system) spans in notification via `RemoteViews`",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.hack
+  tags = Tag.hack
 )
 public class RemoteViewsSample extends MarkwonTextViewSample {
   @Override

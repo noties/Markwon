@@ -2,11 +2,11 @@ package io.noties.markwon.app.samples.basics
 
 import android.text.Spanned
 import io.noties.markwon.Markwon
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 import org.commonmark.node.Node
 
 @MarkwonSampleInfo(
@@ -14,7 +14,7 @@ import org.commonmark.node.Node
   title = "Simple with walk-through",
   description = "Walk-through for simple use case",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.basics]
+  tags = [Tag.basics]
 )
 class SimpleWalkthrough : MarkwonTextViewSample() {
   override fun render() {

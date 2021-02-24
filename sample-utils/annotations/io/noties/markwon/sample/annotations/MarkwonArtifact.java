@@ -25,6 +25,6 @@ public enum MarkwonArtifact {
 
     @NonNull
     public String artifactName() {
-        return name().toLowerCase(Locale.US).replace('_', '-');
+        return name().toLowerCase(Locale.ROOT).replace('_', '-');
     }
 }

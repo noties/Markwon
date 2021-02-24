@@ -6,18 +6,18 @@ import android.widget.TextView
 import android.widget.Toast
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.BuildConfig
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20200627074017",
   title = "Markdown in Toast (with dynamic content)",
   description = "Display markdown in a `android.widget.Toast` with dynamic content (image)",
   artifacts = [MarkwonArtifact.CORE, MarkwonArtifact.IMAGE],
-  tags = [Tags.toast, Tags.hack]
+  tags = [Tag.toast, Tag.hack]
 )
 class ToastDynamicContentSample : MarkwonTextViewSample() {
   override fun render() {

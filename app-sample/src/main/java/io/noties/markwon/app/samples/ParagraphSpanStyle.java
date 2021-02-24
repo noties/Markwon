@@ -10,17 +10,17 @@ import org.commonmark.node.Paragraph;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629122647",
   title = "Paragraph style",
   description = "Apply a style (via span) to a paragraph",
   artifacts = {MarkwonArtifact.CORE},
-  tags = {Tags.paragraph, Tags.style, Tags.span}
+  tags = {Tag.paragraph, Tag.style, Tag.span}
 )
 public class ParagraphSpanStyle extends MarkwonTextViewSample {
   @Override

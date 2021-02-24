@@ -7,7 +7,6 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.app.readme.GithubImageDestinationProcessor
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.app.utils.loadReadMe
 import io.noties.markwon.core.spans.LinkSpan
@@ -15,6 +14,7 @@ import io.noties.markwon.image.ImageProps
 import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 import org.commonmark.node.Image
 
 @MarkwonSampleInfo(
@@ -22,7 +22,7 @@ import org.commonmark.node.Image
   title = "Click images",
   description = "Make _all_ images clickable (to open in a gallery, etc)",
   artifacts = [MarkwonArtifact.IMAGE],
-  tags = [Tags.rendering, Tags.image]
+  tags = [Tag.rendering, Tag.image]
 )
 class ClickImageSample : MarkwonTextViewSample() {
   override fun render() {

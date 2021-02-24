@@ -8,7 +8,6 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import io.noties.markwon.SpannableBuilder
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.ext.tasklist.TaskListItem
 import io.noties.markwon.ext.tasklist.TaskListPlugin
@@ -16,6 +15,7 @@ import io.noties.markwon.ext.tasklist.TaskListProps
 import io.noties.markwon.ext.tasklist.TaskListSpan
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.Block
 import org.commonmark.node.HardLineBreak
@@ -29,7 +29,7 @@ import org.commonmark.node.Text
   title = "Task list mutate nested",
   description = "Task list mutation with nested items",
   artifacts = [MarkwonArtifact.EXT_TASKLIST],
-  tags = [Tags.plugin]
+  tags = [Tag.plugin]
 )
 class TaskListMutateNestedSample : MarkwonTextViewSample() {
   override fun render() {

@@ -3,7 +3,6 @@ package io.noties.markwon.app.samples.html
 import android.text.style.URLSpan
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonVisitor
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.html.HtmlTag
@@ -11,13 +10,14 @@ import io.noties.markwon.html.MarkwonHtmlRenderer
 import io.noties.markwon.html.TagHandler
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20210201140501",
   title = "Inspect text",
   description = "Inspect text content of a `HTML` node",
   artifacts = [MarkwonArtifact.HTML],
-  tags = [Tags.html]
+  tags = [Tag.html]
 )
 class InspectHtmlTextSample : MarkwonTextViewSample() {
   override fun render() {

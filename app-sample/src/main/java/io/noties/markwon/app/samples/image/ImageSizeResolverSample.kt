@@ -4,7 +4,6 @@ import android.content.res.Resources
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.ImageSize
@@ -12,6 +11,7 @@ import io.noties.markwon.image.ImageSizeResolverDef
 import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20210201165512",
@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo
   description = "Custom `ImageSizeResolver` that treats dimension values " +
     "as density-based (like `dp`, `dip` in resources)",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.image]
+  tags = [Tag.image]
 )
 class ImageSizeResolverSample : MarkwonTextViewSample() {
   override fun render() {

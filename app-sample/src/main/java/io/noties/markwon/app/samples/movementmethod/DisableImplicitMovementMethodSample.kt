@@ -3,11 +3,11 @@ package io.noties.markwon.app.samples.movementmethod
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20200627081256",
@@ -16,7 +16,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo
     "which consumes touch events when used in a `RecyclerView` even when " +
     "markdown does not contain links",
   artifacts = [MarkwonArtifact.CORE],
-  tags = [Tags.plugin, Tags.movementMethod, Tags.links, Tags.recyclerView]
+  tags = [Tag.plugin, Tag.movementMethod, Tag.links, Tag.recyclerView]
 )
 class DisableImplicitMovementMethodSample : MarkwonTextViewSample() {
   override fun render() {

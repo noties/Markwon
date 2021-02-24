@@ -13,7 +13,6 @@ import java.util.Collections;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.html.HtmlTag;
@@ -21,6 +20,7 @@ import io.noties.markwon.html.MarkwonHtmlRenderer;
 import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630115103",
@@ -28,7 +28,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "Custom HTML tag implementation " +
     "that _enhances_ a part of text given start and end indices",
   artifacts = MarkwonArtifact.HTML,
-  tags = {Tags.rendering, Tags.span, Tags.html}
+  tags = {Tag.rendering, Tag.span, Tag.html}
 )
 public class HtmlEnhanceSample extends MarkwonTextViewSample {
   @Override

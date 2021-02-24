@@ -9,19 +9,19 @@ import androidx.core.content.ContextCompat;
 import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.app.R;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200701122624",
   title = "LaTeX error handling",
   description = "Log error when parsing LaTeX and display error drawable",
   artifacts = MarkwonArtifact.EXT_LATEX,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class LatexErrorSample extends MarkwonTextViewSample {
   @Override

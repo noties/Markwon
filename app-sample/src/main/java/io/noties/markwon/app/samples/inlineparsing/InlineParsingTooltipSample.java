@@ -24,19 +24,19 @@ import java.util.regex.Pattern;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.inlineparser.InlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630195409",
   title = "Tooltip with inline parser",
   artifacts = MarkwonArtifact.INLINE_PARSER,
-  tags = {Tags.parsing, Tags.rendering}
+  tags = {Tag.parsing, Tag.rendering}
 )
 public class InlineParsingTooltipSample extends MarkwonTextViewSample {
   @Override

@@ -12,7 +12,6 @@ import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.SpannableBuilder;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.app.samples.html.shared.IFrameHtmlPlugin;
 import io.noties.markwon.html.HtmlPlugin;
@@ -22,13 +21,14 @@ import io.noties.markwon.html.TagHandler;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630120101",
   title = "Center HTML tag",
   description = "Handling of `center` HTML tag",
   artifacts = {MarkwonArtifact.HTML, MarkwonArtifact.IMAGE},
-  tags = {Tags.rendering, Tags.html}
+  tags = {Tag.rendering, Tag.html}
 )
 public class HtmlCenterTagSample extends MarkwonTextViewSample {
   @Override

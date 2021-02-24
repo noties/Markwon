@@ -12,12 +12,12 @@ import java.util.regex.Pattern;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.app.BuildConfig;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.inlineparser.InlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629162023",
@@ -25,7 +25,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "Github-like user mention and issue " +
     "rendering via `CorePlugin.OnTextAddedListener`",
   artifacts = {MarkwonArtifact.CORE, MarkwonArtifact.INLINE_PARSER},
-  tags = {Tags.parsing, Tags.textAddedListener, Tags.rendering}
+  tags = {Tag.parsing, Tag.textAddedListener, Tag.rendering}
 )
 public class GithubUserIssueInlineParsingSample extends MarkwonTextViewSample {
   @Override

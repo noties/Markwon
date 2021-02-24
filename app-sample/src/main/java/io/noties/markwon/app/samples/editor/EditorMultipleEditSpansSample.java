@@ -12,11 +12,10 @@ import java.util.concurrent.Executors;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
-import io.noties.markwon.app.sample.Tags;
-import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.app.samples.editor.shared.BlockQuoteEditHandler;
 import io.noties.markwon.app.samples.editor.shared.CodeEditHandler;
 import io.noties.markwon.app.samples.editor.shared.LinkEditHandler;
+import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.app.samples.editor.shared.StrikethroughEditHandler;
 import io.noties.markwon.editor.MarkwonEditor;
 import io.noties.markwon.editor.MarkwonEditorTextWatcher;
@@ -30,13 +29,14 @@ import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629165920",
   title = "Multiple edit spans",
   description = "Additional multiple edit spans for editor",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER},
-  tags = {Tags.editor}
+  tags = {Tag.editor}
 )
 public class EditorMultipleEditSpansSample extends MarkwonEditTextSample {
   @Override

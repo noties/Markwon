@@ -12,7 +12,6 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.app.R;
 import io.noties.markwon.app.readme.GithubImageDestinationProcessor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonRecyclerViewSample;
 import io.noties.markwon.app.utils.SampleUtilsKtKt;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
@@ -25,13 +24,14 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200702101750",
   title = "RecyclerView",
   description = "Usage with `RecyclerView`",
   artifacts = {MarkwonArtifact.RECYCLER, MarkwonArtifact.RECYCLER_TABLE},
-  tags = Tags.recyclerView
+  tags = Tag.recyclerView
 )
 public class RecyclerSample extends MarkwonRecyclerViewSample {
   @Override

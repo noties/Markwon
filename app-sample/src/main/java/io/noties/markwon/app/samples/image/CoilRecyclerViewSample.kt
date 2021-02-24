@@ -7,20 +7,20 @@ import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.R
-import io.noties.markwon.app.sample.Tags
 import io.noties.markwon.app.sample.ui.MarkwonRecyclerViewSample
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.coil.CoilImagesPlugin
 import io.noties.markwon.recycler.MarkwonAdapter
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
+import io.noties.markwon.sample.annotations.Tag
 
 @MarkwonSampleInfo(
   id = "20200803132053",
   title = "Coil inside RecyclerView",
   description = "Display images via Coil plugin in `RecyclerView`",
   artifacts = [MarkwonArtifact.IMAGE_COIL, MarkwonArtifact.RECYCLER],
-  tags = [Tags.rendering, Tags.recyclerView, Tags.image]
+  tags = [Tag.rendering, Tag.recyclerView, Tag.image]
 )
 class CoilRecyclerViewSample : MarkwonRecyclerViewSample() {
   override fun render() {

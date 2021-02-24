@@ -15,19 +15,19 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.app.R;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.app.samples.plugins.shared.AnchorHeadingPlugin;
 import io.noties.markwon.core.SimpleBlockNodeVisitor;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629161226",
   title = "Table of contents",
   description = "Sample plugin that adds a table of contents header",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.rendering, Tags.plugin}
+  tags = {Tag.rendering, Tag.plugin}
 )
 public class TableOfContentsSample extends MarkwonTextViewSample {
 

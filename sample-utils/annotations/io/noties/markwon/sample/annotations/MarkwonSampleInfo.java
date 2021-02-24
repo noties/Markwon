@@ -27,5 +27,5 @@ public @interface MarkwonSampleInfo {
 
     MarkwonArtifact[] artifacts();
 
-    String[] tags();
+    Tag[] tags();
 }

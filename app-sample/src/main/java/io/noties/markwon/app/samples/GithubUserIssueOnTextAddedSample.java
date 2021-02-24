@@ -14,12 +14,12 @@ import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpannableBuilder;
 import io.noties.markwon.app.BuildConfig;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629162024",
@@ -27,7 +27,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "Github-like user mention and issue " +
     "rendering via `CorePlugin.OnTextAddedListener`",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.parsing, Tags.textAddedListener, Tags.rendering}
+  tags = {Tag.parsing, Tag.textAddedListener, Tag.rendering}
 )
 public class GithubUserIssueOnTextAddedSample extends MarkwonTextViewSample {
   @Override

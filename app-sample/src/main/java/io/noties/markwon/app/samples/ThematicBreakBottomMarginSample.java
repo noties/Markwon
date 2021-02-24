@@ -9,17 +9,17 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.BlockHandlerDef;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200813154415",
   title = "Thematic break bottom margin",
   description = "Do not add a new line after thematic break (with the `BlockHandler`)",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class ThematicBreakBottomMarginSample extends MarkwonTextViewSample {
   @Override

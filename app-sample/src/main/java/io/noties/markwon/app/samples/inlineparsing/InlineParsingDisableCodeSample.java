@@ -13,19 +13,19 @@ import java.util.Set;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.inlineparser.BackticksInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200630170607",
   title = "Disable code inline parsing",
   artifacts = MarkwonArtifact.INLINE_PARSER,
-  tags = {Tags.inline, Tags.parsing}
+  tags = {Tag.inline, Tag.parsing}
 )
 public class InlineParsingDisableCodeSample extends MarkwonTextViewSample {
   @Override

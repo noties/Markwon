@@ -11,19 +11,19 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.SpanFactory;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20201208150530",
   title = "Change bullet span",
   description = "Use a different span implementation to render bullet lists",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.rendering, Tags.spanFactory, Tags.span}
+  tags = {Tag.rendering, Tag.spanFactory, Tag.span}
 )
 public class ChangeBulletSpanSample extends MarkwonTextViewSample {
   @Override

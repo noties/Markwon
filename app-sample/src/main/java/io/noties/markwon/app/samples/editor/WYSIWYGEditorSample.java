@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import io.noties.debug.Debug;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.SoftBreakAddsNewLinePlugin;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.samples.editor.shared.BlockQuoteEditHandler;
 import io.noties.markwon.app.samples.editor.shared.CodeEditHandler;
 import io.noties.markwon.app.samples.editor.shared.HeadingEditHandler;
@@ -26,13 +25,14 @@ import io.noties.markwon.editor.handler.EmphasisEditHandler;
 import io.noties.markwon.editor.handler.StrongEmphasisEditHandler;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200908133515",
   title = "WYSIWG editor",
   description = "A possible direction to implement what-you-see-is-what-you-get editor",
   artifacts = MarkwonArtifact.EDITOR,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class WYSIWYGEditorSample extends MarkwonEditTextSample {
   @Override

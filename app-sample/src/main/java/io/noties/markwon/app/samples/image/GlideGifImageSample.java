@@ -15,18 +15,18 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200820071942",
   title = "Glide GIF",
   artifacts = MarkwonArtifact.IMAGE_GLIDE,
-  tags = Tags.image
+  tags = Tag.image
 )
 public class GlideGifImageSample extends MarkwonTextViewSample {
   @Override

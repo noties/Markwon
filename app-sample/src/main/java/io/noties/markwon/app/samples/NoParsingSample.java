@@ -8,19 +8,19 @@ import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.inlineparser.MarkwonInlineParser;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629171212",
   title = "No parsing",
   description = "All commonmark parsing is disabled (both inlines and blocks)",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.parsing, Tags.rendering}
+  tags = {Tag.parsing, Tag.rendering}
 )
 public class NoParsingSample extends MarkwonTextViewSample {
   @Override

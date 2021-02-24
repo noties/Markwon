@@ -8,7 +8,6 @@ import android.text.style.MetricAffectingSpan;
 import androidx.annotation.NonNull;
 
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.samples.editor.shared.MarkwonEditTextSample;
 import io.noties.markwon.core.spans.StrongEmphasisSpan;
 import io.noties.markwon.editor.AbstractEditHandler;
@@ -18,6 +17,7 @@ import io.noties.markwon.editor.MarkwonEditorUtils;
 import io.noties.markwon.editor.PersistedSpans;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629165136",
@@ -25,7 +25,7 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
   description = "Additional _edit_ span (span that is present in " +
     "`EditText` along with punctuation",
   artifacts = {MarkwonArtifact.EDITOR, MarkwonArtifact.INLINE_PARSER},
-  tags = {Tags.editor, Tags.span}
+  tags = {Tag.editor, Tag.span}
 )
 public class EditorAdditionalEditSpan extends MarkwonEditTextSample {
   @Override

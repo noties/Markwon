@@ -11,19 +11,18 @@ import androidx.annotation.NonNull;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
-import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200629161505",
   title = "Read more plugin",
   description = "Plugin that adds expand/collapse (\"show all\"/\"show less\")",
   artifacts = MarkwonArtifact.CORE,
-  tags = {Tags.plugin}
+  tags = {Tag.plugin}
 )
 public class ReadMorePluginSample extends MarkwonTextViewSample {
   @Override

@@ -7,17 +7,17 @@ import org.commonmark.node.Node;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.app.sample.Tags;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
+import io.noties.markwon.sample.annotations.Tag;
 
 @MarkwonSampleInfo(
   id = "20200729090524",
   title = "Block handler",
   description = "Custom block delimiters that control new lines after block nodes",
   artifacts = MarkwonArtifact.CORE,
-  tags = Tags.rendering
+  tags = Tag.rendering
 )
 public class BlockHandlerSample extends MarkwonTextViewSample {
   @Override
