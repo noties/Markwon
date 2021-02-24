@@ -1,5 +1,18 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.parser.RedditSuperscriptSample",
+    "id": "20210224091506",
+    "title": "Reddit superscript",
+    "description": "",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "html",
+      "reddit"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.image.ImageSizeResolverSample",
     "id": "20210201165512",
     "title": "ImageSizeResolver",

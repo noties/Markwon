@@ -35,4 +35,5 @@ public enum Tag {
     precomputedText,
     cache,
     spanFactory,
+    reddit
 }
