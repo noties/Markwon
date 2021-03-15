@@ -36,7 +36,7 @@ public class GithubUserIssueOnTextAddedSample extends MarkwonTextViewSample {
       "# Custom Extension 2\n" +
       "\n" +
       "This is an issue #1\n" +
-      "Done by @noties";
+      "Done by @noties and other @dude";
 
     final Markwon markwon = Markwon.builder(context)
       .usePlugin(new AbstractMarkwonPlugin() {

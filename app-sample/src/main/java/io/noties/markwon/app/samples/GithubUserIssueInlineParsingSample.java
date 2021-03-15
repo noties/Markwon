@@ -34,7 +34,7 @@ public class GithubUserIssueInlineParsingSample extends MarkwonTextViewSample {
       "# Custom Extension 2\n" +
       "\n" +
       "This is an issue #1\n" +
-      "Done by @noties";
+      "Done by @noties and other @dude";
 
     final InlineParserFactory inlineParserFactory = MarkwonInlineParser.factoryBuilder()
       // include all current defaults (otherwise will be empty - contain only our inline-processors)

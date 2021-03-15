@@ -1,5 +1,20 @@
 [
   {
+    "javaClassName": "io.noties.markwon.app.samples.CopyCodeBlockSample",
+    "id": "20210315112847",
+    "title": "Copy code block",
+    "description": "Copy contents of fenced code blocks",
+    "artifacts": [
+      "CORE"
+    ],
+    "tags": [
+      "block",
+      "rendering",
+      "span",
+      "spanFactory"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.parser.RedditSuperscriptSample",
     "id": "20210224091506",
     "title": "Reddit superscript",
