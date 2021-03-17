@@ -139,6 +139,9 @@ public class MarkwonTheme {
     // width of bullet, by default min(blockMargin, height) / 2
     protected final int bulletWidth;
 
+    // whether ordered lists show the number part in bold
+    protected final boolean boldListItemNumber;
+
     // by default - main text color
     protected final int codeTextColor;
 
@@ -196,6 +199,7 @@ public class MarkwonTheme {
         this.listItemColor = builder.listItemColor;
         this.bulletListItemStrokeWidth = builder.bulletListItemStrokeWidth;
         this.bulletWidth = builder.bulletWidth;
+        this.boldListItemNumber = builder.boldListItemNumber;
         this.codeTextColor = builder.codeTextColor;
         this.codeBlockTextColor = builder.codeBlockTextColor;
         this.codeBackgroundColor = builder.codeBackgroundColor;
@@ -277,6 +281,10 @@ public class MarkwonTheme {
 
         if (bulletListItemStrokeWidth != 0) {
             paint.setStrokeWidth(bulletListItemStrokeWidth);
+        }
+
+        if (boldListItemNumber) {
+            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         }
     }
 
@@ -469,6 +477,7 @@ public class MarkwonTheme {
         private int listItemColor;
         private int bulletListItemStrokeWidth;
         private int bulletWidth;
+        private boolean boldListItemNumber;
         private int codeTextColor;
         private int codeBlockTextColor; // @since 1.0.5
         private int codeBackgroundColor;
@@ -497,6 +506,7 @@ public class MarkwonTheme {
             this.listItemColor = theme.listItemColor;
             this.bulletListItemStrokeWidth = theme.bulletListItemStrokeWidth;
             this.bulletWidth = theme.bulletWidth;
+            this.boldListItemNumber = theme.boldListItemNumber;
             this.codeTextColor = theme.codeTextColor;
             this.codeBlockTextColor = theme.codeBlockTextColor;
             this.codeBackgroundColor = theme.codeBackgroundColor;
@@ -558,6 +568,12 @@ public class MarkwonTheme {
         @NonNull
         public Builder bulletWidth(@Px int bulletWidth) {
             this.bulletWidth = bulletWidth;
+            return this;
+        }
+
+        @NonNull
+        public Builder boldListItemNumber(boolean boldListItemNumber) {
+            this.boldListItemNumber = boldListItemNumber;
             return this;
         }
 
