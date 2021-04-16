@@ -48,7 +48,7 @@ public class TableTheme {
     protected final int tableOddRowBackgroundColor;
 
     // by default TABLE_ODD_ROW_DEF_ALPHA
-    protected int tableOddRowBackgroundColorOpacity;
+    protected int tableOddRowBackgroundColorAlpha;
 
     // @since 1.1.1
     // by default no background
@@ -66,10 +66,10 @@ public class TableTheme {
         this.tableEvenRowBackgroundColor = builder.tableEvenRowBackgroundColor;
         this.tableHeaderRowBackgroundColor = builder.tableHeaderRowBackgroundColor;
 
-        if(builder.tableOddRowBackgroundColorOpacity == -1) {
-            this.tableOddRowBackgroundColorOpacity = TABLE_ODD_ROW_DEF_ALPHA;
+        if(builder.tableOddRowBackgroundColorAlpha == -1) {
+            this.tableOddRowBackgroundColorAlpha = TABLE_ODD_ROW_DEF_ALPHA;
         } else {
-            this.tableOddRowBackgroundColorOpacity = builder.tableOddRowBackgroundColorOpacity;
+            this.tableOddRowBackgroundColorAlpha = builder.tableOddRowBackgroundColorAlpha;
         }
     }
 
@@ -119,7 +119,7 @@ public class TableTheme {
         final int color;
         if (tableOddRowBackgroundColor == 0) {
 
-            color = ColorUtils.applyAlpha(paint.getColor(), tableOddRowBackgroundColorOpacity);
+            color = ColorUtils.applyAlpha(paint.getColor(), tableOddRowBackgroundColorAlpha);
         } else {
             color = tableOddRowBackgroundColor;
         }
@@ -150,7 +150,7 @@ public class TableTheme {
         private int tableBorderColor;
         private int tableBorderWidth = -1;
         private int tableOddRowBackgroundColor;
-        private int tableOddRowBackgroundColorOpacity = -1;
+        private int tableOddRowBackgroundColorAlpha = -1;
         private int tableEvenRowBackgroundColor; // @since 1.1.1
         private int tableHeaderRowBackgroundColor; // @since 1.1.1
 
@@ -179,8 +179,8 @@ public class TableTheme {
         }
 
         @NonNull
-        public Builder tableOddRowBackgroundColorOpacity(int tableOddRowBackgroundColorOpacity) {
-            this.tableOddRowBackgroundColorOpacity = tableOddRowBackgroundColorOpacity;
+        public Builder tableOddRowBackgroundColorAlpha(int tableOddRowBackgroundColorAlpha) {
+            this.tableOddRowBackgroundColorAlpha = tableOddRowBackgroundColorAlpha;
             return this;
         }
 
