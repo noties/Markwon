@@ -52,7 +52,7 @@ public class TableEntryTheme extends TableTheme {
     @ColorInt
     public int tableOddRowBackgroundColor(@NonNull Paint paint) {
         return tableOddRowBackgroundColor == 0
-                ? ColorUtils.applyAlpha(paint.getColor(), TABLE_ODD_ROW_DEF_ALPHA)
+                ? ColorUtils.applyAlpha(paint.getColor(), tableOddRowBackgroundColorOpacity)
                 : tableOddRowBackgroundColor;
     }
 
