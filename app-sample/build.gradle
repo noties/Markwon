@@ -60,7 +60,7 @@ android {
 
     // do not sign in CI
     if (!project.hasProperty('CI')) {
-        signingConfigs {
+        /*signingConfigs {
             config {
 
                 final def keystoreFile = project.file('keystore.jks')
@@ -89,14 +89,14 @@ android {
                 keyAlias project[keystoreAlias]
                 keyPassword project[keystoreAliasPassword]
             }
-        }
+        }*/
 
         buildTypes {
             debug {
-                signingConfig signingConfigs.config
+//                signingConfig signingConfigs.config
             }
             release {
-                signingConfig signingConfigs.config
+//                signingConfig signingConfigs.config
             }
         }
     }

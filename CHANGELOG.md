@@ -1,5 +1,11 @@
 # Changelog
 
+# 4.6.3
+#### Added
+* `ext-tables` - `TableTheme.tableOddRowBackgroundColorAplha` which gives ability to change 
+  alpha channel of table odd rows 
+
+
 # 4.6.2
 
 #### Added
