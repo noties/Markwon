@@ -25,7 +25,9 @@ public class LinkResolverDef implements LinkResolver {
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            Log.w("LinkResolverDef", "Actvity was not found for the link: '" + link + "'");
+            Log.w("LinkResolverDef", "Activity was not found for the link: '" + link + "'");
+        } catch (Exception e) {
+            Log.w("LinkResolverDef", e.getMessage(), e);
         }
     }
 
