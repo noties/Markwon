@@ -13,7 +13,7 @@ def gitSha = { ->
 }.memoize()
 
 android {
-
+    ndkVersion config['ndk-version']
     compileSdkVersion config['compile-sdk']
     buildToolsVersion config['build-tools']
 
@@ -59,47 +59,47 @@ android {
     }
 
     // do not sign in CI
-    if (!project.hasProperty('CI')) {
-        signingConfigs {
-            config {
-
-                final def keystoreFile = project.file('keystore.jks')
-                final def keystoreFilePassword = 'MARKWON_KEYSTORE_FILE_PASSWORD'
-                final def keystoreAlias = 'MARKWON_KEY_ALIAS'
-                final def keystoreAliasPassword = 'MARKWON_KEY_ALIAS_PASSWORD'
-
-                final def properties = [
-                        keystoreFilePassword,
-                        keystoreAlias,
-                        keystoreAliasPassword
-                ]
-
-                if (!keystoreFile.exists()) {
-                    throw new IllegalStateException("No '${keystoreFile.name}' file is found.")
-                }
-
-                final def missingProperties = properties.findAll { !project.hasProperty(it) }
-                if (!missingProperties.isEmpty()) {
-                    throw new IllegalStateException("Missing required signing properties: $missingProperties")
-                }
-
-                storeFile keystoreFile
-                storePassword project[keystoreFilePassword]
-
-                keyAlias project[keystoreAlias]
-                keyPassword project[keystoreAliasPassword]
-            }
-        }
-
-        buildTypes {
-            debug {
-                signingConfig signingConfigs.config
-            }
-            release {
-                signingConfig signingConfigs.config
-            }
-        }
-    }
+//    if (!project.hasProperty('CI')) {
+//        signingConfigs {
+//            config {
+//
+//                final def keystoreFile = project.file('keystore.jks')
+//                final def keystoreFilePassword = 'MARKWON_KEYSTORE_FILE_PASSWORD'
+//                final def keystoreAlias = 'MARKWON_KEY_ALIAS'
+//                final def keystoreAliasPassword = 'MARKWON_KEY_ALIAS_PASSWORD'
+//
+//                final def properties = [
+//                        keystoreFilePassword,
+//                        keystoreAlias,
+//                        keystoreAliasPassword
+//                ]
+//
+//                if (!keystoreFile.exists()) {
+//                    throw new IllegalStateException("No '${keystoreFile.name}' file is found.")
+//                }
+//
+//                final def missingProperties = properties.findAll { !project.hasProperty(it) }
+//                if (!missingProperties.isEmpty()) {
+//                    throw new IllegalStateException("Missing required signing properties: $missingProperties")
+//                }
+//
+//                storeFile keystoreFile
+//                storePassword project[keystoreFilePassword]
+//
+//                keyAlias project[keystoreAlias]
+//                keyPassword project[keystoreAliasPassword]
+//            }
+//        }
+//
+//        buildTypes {
+//            debug {
+//                signingConfig signingConfigs.config
+//            }
+//            release {
+//                signingConfig signingConfigs.config
+//            }
+//        }
+//    }
 }
 
 kapt {

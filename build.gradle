@@ -53,6 +53,7 @@ ext {
             'compile-sdk'    : 29,
             'target-sdk'     : 29,
             'min-sdk'        : 16,
+            'ndk-version'    : '21.4.7075529',
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
