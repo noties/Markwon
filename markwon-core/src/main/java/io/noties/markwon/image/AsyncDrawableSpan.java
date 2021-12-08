@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.style.ReplacementSpan;
+import android.util.Log;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
@@ -65,11 +66,20 @@ public class AsyncDrawableSpan extends ReplacementSpan {
             final Rect rect = drawable.getBounds();
 
             if (fm != null) {
-                fm.ascent = -rect.bottom;
-                fm.descent = 0;
+//                fm.ascent = -rect.bottom;
+//                fm.descent = 0;
+//
+//                fm.top = fm.ascent;
+//                fm.bottom = 0;
+                Paint.FontMetricsInt fmPaint = paint.getFontMetricsInt();
+                int fontHeight = fmPaint.descent - fmPaint.ascent;
+                int drHeight = rect.bottom - rect.top;
+                int centerY = fmPaint.ascent + fontHeight / 2;
 
+                fm.ascent = centerY - drHeight / 2;
                 fm.top = fm.ascent;
-                fm.bottom = 0;
+                fm.bottom = centerY + drHeight / 2;
+                fm.descent = fm.bottom;
             }
 
             size = rect.right;
@@ -124,6 +134,8 @@ public class AsyncDrawableSpan extends ReplacementSpan {
                 }
                 canvas.translate(x, translationY);
                 drawable.draw(canvas);
+            } catch (Exception e){
+                Log.e("UseRecycleBitmap", e.toString());
             } finally {
                 canvas.restoreToCount(save);
             }

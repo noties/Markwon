@@ -38,17 +38,13 @@ public class ImageSizeResolverDef extends ImageSizeResolver {
             //      must be applied only if imageSize is null
             final Rect rect;
             final int w = imageBounds.width();
-            if (w > canvasWidth) {
-                final float reduceRatio = (float) w / canvasWidth;
-                rect = new Rect(
-                        0,
-                        0,
-                        canvasWidth,
-                        (int) (imageBounds.height() / reduceRatio + .5F)
-                );
-            } else {
-                rect = imageBounds;
-            }
+            final float reduceRatio = (float) canvasWidth / w;
+            rect = new Rect(
+                    0,
+                    0,
+                    canvasWidth,
+                    (int) (imageBounds.height() * reduceRatio + .5F)
+            );
             return rect;
         }
 
@@ -60,40 +56,40 @@ public class ImageSizeResolverDef extends ImageSizeResolver {
         final int imageWidth = imageBounds.width();
         final int imageHeight = imageBounds.height();
 
-        final float ratio = (float) imageWidth / imageHeight;
+        final float ratio = (float) imageHeight / imageWidth;
+        final int w = canvasWidth;
+        final int h = canvasWidth * (int)ratio;
 
-        if (width != null) {
+        rect = new Rect(0, 0, w, h);
 
-            final int w;
-            final int h;
-
-            if (UNIT_PERCENT.equals(width.unit)) {
-                w = (int) (canvasWidth * (width.value / 100.F) + .5F);
-            } else {
-                w = resolveAbsolute(width, imageWidth, textSize);
-            }
-
-            if (height == null
-                    || UNIT_PERCENT.equals(height.unit)) {
-                h = (int) (w / ratio + .5F);
-            } else {
-                h = resolveAbsolute(height, imageHeight, textSize);
-            }
-
-            rect = new Rect(0, 0, w, h);
-
-        } else if (height != null) {
-
-            if (!UNIT_PERCENT.equals(height.unit)) {
-                final int h = resolveAbsolute(height, imageHeight, textSize);
-                final int w = (int) (h * ratio + .5F);
-                rect = new Rect(0, 0, w, h);
-            } else {
-                rect = imageBounds;
-            }
-        } else {
-            rect = imageBounds;
-        }
+//        if (width != null) {
+//
+////
+////            if (UNIT_PERCENT.equals(width.unit)) {
+////                w = (int) (canvasWidth * (width.value / 100.F) + .5F);
+////            } else {
+////                w = resolveAbsolute(width, imageWidth, textSize);
+////            }
+//
+////            if (height == null
+////                    || UNIT_PERCENT.equals(height.unit)) {
+////                h = (int) (w / ratio + .5F);
+////            } else {
+////                h = resolveAbsolute(height, imageHeight, textSize);
+////            }
+//
+//        } else if (height != null) {
+//
+//            if (!UNIT_PERCENT.equals(height.unit)) {
+//                final int h = resolveAbsolute(height, imageHeight, textSize);
+//                final int w = (int) (h * ratio + .5F);
+//                rect = new Rect(0, 0, w, h);
+//            } else {
+//                rect = imageBounds;
+//            }
+//        } else {
+//            rect = imageBounds;
+//        }
 
         return rect;
     }

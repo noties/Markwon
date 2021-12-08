@@ -49,33 +49,33 @@ public class HeadingSpan extends MetricAffectingSpan implements LeadingMarginSpa
     @Override
     public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
 
-        if ((level == 1 || level == 2)
-                && LeadingMarginUtils.selfEnd(end, text, this)) {
+        // if ((level == 1 || level == 2)
+        //         && LeadingMarginUtils.selfEnd(end, text, this)) {
 
-            paint.set(p);
+        //     paint.set(p);
 
-            theme.applyHeadingBreakStyle(paint);
+        //     theme.applyHeadingBreakStyle(paint);
 
-            final float height = paint.getStrokeWidth();
+        //     final float height = paint.getStrokeWidth();
 
-            if (height > .0F) {
+        //     if (height > .0F) {
 
-                final int b = (int) (bottom - height + .5F);
+        //         final int b = (int) (bottom - height + .5F);
 
-                final int left;
-                final int right;
-                if (dir > 0) {
-                    left = x;
-                    right = c.getWidth();
-                } else {
-                    left = x - c.getWidth();
-                    right = x;
-                }
+        //         final int left;
+        //         final int right;
+        //         if (dir > 0) {
+        //             left = x;
+        //             right = c.getWidth();
+        //         } else {
+        //             left = x - c.getWidth();
+        //             right = x;
+        //         }
 
-                rect.set(left, b, right, bottom);
-                c.drawRect(rect, paint);
-            }
-        }
+        //         rect.set(left, b, right, bottom);
+        //         c.drawRect(rect, paint);
+        //     }
+        // }
     }
 
     /**

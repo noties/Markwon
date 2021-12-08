@@ -3,6 +3,8 @@ package io.noties.markwon.core;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +57,7 @@ import io.noties.markwon.core.factory.StrongEmphasisSpanFactory;
 import io.noties.markwon.core.factory.ThematicBreakSpanFactory;
 import io.noties.markwon.core.spans.OrderedListItemSpan;
 import io.noties.markwon.core.spans.TextViewSpan;
+import io.noties.markwon.image.ImageClickResolver;
 import io.noties.markwon.image.ImageProps;
 
 /**
@@ -114,11 +117,17 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
     // @since 4.0.0
     private final List<OnTextAddedListener> onTextAddedListeners = new ArrayList<>(0);
-
+    private static ImageClickResolver imageClickResolver = null;
     // @since 4.5.0
     private boolean hasExplicitMovementMethod;
 
     protected CorePlugin() {
+    }
+
+    @NonNull
+    public CorePlugin addImageClickResolver(@NonNull ImageClickResolver clickResolver){
+        imageClickResolver = clickResolver;
+        return this;
     }
 
     /**
@@ -323,6 +332,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 visitor.visitChildren(image);
 
+                
                 // we must check if anything _was_ added, as we need at least one char to render
                 if (length == visitor.length()) {
                     visitor.builder().append('\uFFFC');
@@ -345,8 +355,13 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 ImageProps.DESTINATION.set(props, destination);
                 ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
                 ImageProps.IMAGE_SIZE.set(props, null);
-
                 visitor.setSpans(length, spanFactory.getSpans(configuration, props));
+                visitor.setSpans(length, new ClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View widget) {
+                        imageClickResolver.clickResolve(widget, destination);
+                    }
+                });
             }
         });
     }

@@ -1,5 +1,6 @@
 package io.noties.markwon.core.spans;
 
+import android.graphics.Paint;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
@@ -26,10 +27,14 @@ public class CodeSpan extends MetricAffectingSpan {
     @Override
     public void updateDrawState(TextPaint ds) {
         apply(ds);
-        ds.bgColor = theme.getCodeBackgroundColor(ds);
+//        ds.bgColor = theme.getCodeBackgroundColor(ds);
     }
 
     private void apply(TextPaint p) {
         theme.applyCodeTextStyle(p);
+    }
+
+    private int getTagWidth(CharSequence text, int start, int end, Paint paint) {
+        return Math.round(paint.measureText(text.subSequence(start, end).toString()));
     }
 }

@@ -110,7 +110,7 @@ public class MarkwonTheme {
     // taken from html spec (most browsers render headings like that)
     // is not exposed via protected modifier in order to disallow modification
     private static final float[] HEADING_SIZES = {
-            2.F, 1.5F, 1.17F, 1.F, .83F, .67F,
+            2.F, 1.75F, 1.514F, 1.388F, 1.135F, 0.946F,
     };
 
     protected static final int THEMATIC_BREAK_DEF_ALPHA = 25;
@@ -391,6 +391,10 @@ public class MarkwonTheme {
             color = ColorUtils.applyAlpha(paint.getColor(), CODE_DEF_BACKGROUND_COLOR_ALPHA);
         }
         return color;
+    }
+
+    public int getLinkColor() {
+        return linkColor;
     }
 
     /**
