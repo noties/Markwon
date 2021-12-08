@@ -138,6 +138,12 @@ dependencies {
     implementation project(':markwon-recycler-table')
     implementation project(':markwon-simple-ext')
     implementation project(':markwon-syntax-highlight')
+    implementation project(':markwon-round-textview')
+    implementation project(':markwon-iframe-ext')
+    implementation project(':markwon-ext-inline')
+    implementation project(':markwon-ext-inline-latex')
+    implementation project(':markwon-emoji')
+    implementation project(':markwon-span-ext')
 
     implementation project(':markwon-image-picasso')
     implementation project(':markwon-image-glide')

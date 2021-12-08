@@ -284,21 +284,6 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.image.CoilRecyclerViewSample",
-    "id": "20200803132053",
-    "title": "Coil inside RecyclerView",
-    "description": "Display images via Coil plugin in `RecyclerView`",
-    "artifacts": [
-      "IMAGE_COIL",
-      "RECYCLER"
-    ],
-    "tags": [
-      "recyclerView",
-      "rendering",
-      "image"
-    ]
-  },
-  {
     "javaClassName": "io.noties.markwon.app.samples.image.NativeAndHtmlImageSample",
     "id": "20200803115847",
     "title": "Native and HTML image",

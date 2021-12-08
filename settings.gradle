@@ -20,3 +20,9 @@ include ':markwon-core',
 
 include ':app-sample'
 include ':sample-utils:processor'
+include ':markwon-iframe-ext'
+include ':markwon-emoji'
+include ':markwon-span-ext'
+include ':markwon-ext-inline-latex'
+include ':markwon-ext-inline'
+include ':markwon-round-textview'

@@ -1,5 +1,7 @@
 package io.noties.markwon.app.samples;
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -67,7 +69,7 @@ public class RecyclerSample extends MarkwonRecyclerViewSample {
       .build();
 
     final MarkwonAdapter adapter = MarkwonAdapter.builderTextViewIsRoot(R.layout.adapter_node)
-      .include(FencedCodeBlock.class, SimpleEntry.create(R.layout.adapter_node_code_block, R.id.text_view))
+      .include(FencedCodeBlock.class, SimpleEntry.create(R.layout.adapter_node_code_block, R.id.text_view, Color.BLACK, "light"))
       .include(TableBlock.class, TableEntry.create(builder -> {
         builder
           .tableLayout(R.layout.adapter_node_table_block, R.id.table_layout)

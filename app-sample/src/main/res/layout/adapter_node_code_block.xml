@@ -9,11 +9,10 @@
     android:paddingRight="16dip"
     android:scrollbarStyle="outsideInset">
 
-    <TextView
+    <io.noties.markdown.boundarytext.RoundedBgTextView
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#0f000000"
         android:fontFamily="monospace"
         android:lineSpacingExtra="2dip"
         android:paddingLeft="16dip"

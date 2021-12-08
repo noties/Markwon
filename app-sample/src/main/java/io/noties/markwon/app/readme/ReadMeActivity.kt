@@ -3,10 +3,12 @@ package io.noties.markwon.app.readme
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,10 +22,14 @@ import io.noties.markwon.app.utils.ReadMeUtils
 import io.noties.markwon.app.utils.hidden
 import io.noties.markwon.app.utils.loadReadMe
 import io.noties.markwon.app.utils.textOrHide
+import io.noties.markwon.ext.inlinelatex.InLineLatexPlugIn
+import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.iframe.ext.IFramePlugIn
 import io.noties.markwon.image.ImagesPlugin
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
 import io.noties.markwon.recycler.MarkwonAdapter
 import io.noties.markwon.recycler.SimpleEntry
 import io.noties.markwon.recycler.table.TableEntry
@@ -70,6 +76,10 @@ class ReadMeActivity : Activity() {
                 .usePlugin(TaskListPlugin.create(this))
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(ReadMeImageDestinationPlugin(intent.data))
+                .usePlugin(IFramePlugIn.create())
+                .usePlugin(InLineLatexPlugIn.create(16.0f, 1080))
+                .usePlugin(MarkwonInlineParserPlugin.create())
+                .usePlugin(JLatexMathPlugin.create(16.0f))
                 .usePlugin(object : AbstractMarkwonPlugin() {
                     override fun configureVisitor(builder: MarkwonVisitor.Builder) {
                         builder.on(FencedCodeBlock::class.java) { visitor, block ->
@@ -106,8 +116,8 @@ class ReadMeActivity : Activity() {
 
     private fun initRecyclerView(data: Uri?) {
 
-        val adapter = MarkwonAdapter.builder(R.layout.adapter_node, R.id.text_view)
-                .include(FencedCodeBlock::class.java, SimpleEntry.create(R.layout.adapter_node_code_block, R.id.text_view))
+        val adapter = MarkwonAdapter.builder(R.layout.adapter_node, R.id.text_view, "TEXT", Color.BLACK, "light")
+                .include(FencedCodeBlock::class.java, SimpleEntry.create(R.layout.adapter_node_code_block, R.id.text_view, Color.BLACK, "light"))
                 .include(TableBlock::class.java, TableEntry.create {
                     it
                             .tableLayout(R.layout.adapter_node_table_block, R.id.table_layout)
