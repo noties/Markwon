@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="codeTextColor">#EE6A6C</color>
+    <color name="codeBackgroundColor">#F1F2F3</color>
+    <color name="codeBackgroundDarkColor">#252627</color>
+</resources>

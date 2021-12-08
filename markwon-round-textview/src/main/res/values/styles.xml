@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.RoundedBackground" parent="android:Widget"/>
+    <style name="Widget.RoundedBackground.SampleTextView">
+        <item name="roundedTextHorizontalPadding">0dp</item>
+        <item name="roundedTextVerticalPadding">1dp</item>
+    </style>
+
+    <style name="Widget.RoundedBackground.Divider">
+        <item name="android:background">#CCC</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="RoundedBgTextView" parent="@android:style/Widget.TextView">
+        <item name="roundedTextHorizontalPadding">0dp</item>
+        <item name="roundedTextVerticalPadding">1dp</item>
+        <item name="roundedTextDrawable">@drawable/rounded_text_bg</item>
+        <item name="roundedTextDrawableLeft">@drawable/rounded_text_bg_left</item>
+        <item name="roundedTextDrawableMid">@drawable/rounded_text_bg_mid</item>
+        <item name="roundedTextDrawableRight">@drawable/rounded_text_bg_right</item>
+    </style>
+
+    <style name="RoundedBgTextDarkView" parent="@android:style/Widget.TextView">
+        <item name="roundedTextHorizontalPadding">0dp</item>
+        <item name="roundedTextVerticalPadding">1dp</item>
+        <item name="roundedTextDrawable">@drawable/rounded_text_bg_dark</item>
+        <item name="roundedTextDrawableLeft">@drawable/rounded_text_bg_left_dark</item>
+        <item name="roundedTextDrawableMid">@drawable/rounded_text_bg_mid_dark</item>
+        <item name="roundedTextDrawableRight">@drawable/rounded_text_bg_right_dark</item>
+    </style>
+</resources>

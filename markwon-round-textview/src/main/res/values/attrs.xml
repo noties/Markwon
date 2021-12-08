@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextRoundedBgHelper">
+        <attr name="roundedTextHorizontalPadding" format="dimension"/>
+        <attr name="roundedTextVerticalPadding" format="dimension"/>
+        <attr name="roundedTextDrawable" format="reference"/>
+        <attr name="roundedTextDrawableLeft" format="reference"/>
+        <attr name="roundedTextDrawableMid" format="reference"/>
+        <attr name="roundedTextDrawableRight" format="reference"/>
+    </declare-styleable>
+</resources>

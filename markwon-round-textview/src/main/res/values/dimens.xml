@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="roundedBorderRadius">6dp</dimen>
+    <dimen name="roundedBorderWidth">2dp</dimen>
+
+    <dimen name="roundedTextBorderRadius">4dp</dimen>
+    <dimen name="roundedTextBorderWidth">1dp</dimen>
+</resources>
