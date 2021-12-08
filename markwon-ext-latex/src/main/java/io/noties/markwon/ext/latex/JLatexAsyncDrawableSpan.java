@@ -27,7 +27,7 @@ public class JLatexAsyncDrawableSpan extends AsyncDrawableSpan {
             @NonNull MarkwonTheme theme,
             @NonNull JLatextAsyncDrawable drawable,
             @ColorInt int color) {
-        super(theme, drawable, ALIGN_CENTER, false);
+        super(theme, drawable, ALIGN_BOTTOM, false);
         this.drawable = drawable;
         this.color = color;
         // if color is not 0 -> then no need to apply text color
