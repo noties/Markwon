@@ -1,5 +1,6 @@
 package io.noties.markwon.recycler;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,9 @@ import io.noties.markwon.MarkwonReducer;
  * ability to customize rendering of blocks. For example display certain blocks in a horizontal
  * scrolling container or display tables in a specific widget designed for it ({@link Builder#include(Class, Entry)}).
  *
- * @see #builder(int, int)
+ * @see #builder(int, int, String, int, String)
  * @see #builder(Entry)
- * @see #create(int, int)
+ * @see #create(int, int, String, String)
  * @see #create(Entry)
  * @see #setMarkdown(Markwon, String)
  * @see #setParsedMarkdown(Markwon, Node)
@@ -34,22 +35,31 @@ import io.noties.markwon.MarkwonReducer;
  */
 public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter.Holder> {
 
-    @NonNull
-    public static Builder builderTextViewIsRoot(@LayoutRes int defaultEntryLayoutResId) {
-        return builder(SimpleEntry.createTextViewIsRoot(defaultEntryLayoutResId));
-    }
-
     /**
      * Factory method to obtain {@link Builder} instance.
      *
      * @see Builder
      */
     @NonNull
+    public static Builder builderTextViewIsRoot(@LayoutRes int defaultEntryLayoutResId) {
+        return builder(SimpleEntry.createTextViewIsRoot(defaultEntryLayoutResId));
+    }
+
+    private static String ENTRY_TYPE_IFRAME = "IFRAME";
+    private static String ENTRY_TYPE_TEXT = "TEXT";
+    @NonNull
     public static Builder builder(
             @LayoutRes int defaultEntryLayoutResId,
-            @IdRes int defaultEntryTextViewResId
+            @IdRes int defaultEntryTextViewResId,
+            @NonNull String type,
+            @NonNull int textColor,
+            @NonNull String theme
     ) {
-        return builder(SimpleEntry.create(defaultEntryLayoutResId, defaultEntryTextViewResId));
+        if (type.equalsIgnoreCase(ENTRY_TYPE_IFRAME)) {
+            return builder(SimpleEntryWebView.create(defaultEntryLayoutResId, defaultEntryTextViewResId));
+        } else {
+            return builder(SimpleEntry.create(defaultEntryLayoutResId, defaultEntryTextViewResId, textColor, theme));
+        }
     }
 
     @NonNull
@@ -70,15 +80,17 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
      * be specified explicitly.
      *
      * @see #create(Entry)
-     * @see #builder(int, int)
+     * @see #builder(int, int, String, int, String)
      * @see SimpleEntry
      */
     @NonNull
     public static MarkwonAdapter create(
             @LayoutRes int defaultEntryLayoutResId,
-            @IdRes int defaultEntryTextViewResId
+            @IdRes int defaultEntryTextViewResId,
+            @NonNull String type,
+            @NonNull String theme
     ) {
-        return builder(defaultEntryLayoutResId, defaultEntryTextViewResId).build();
+        return builder(defaultEntryLayoutResId, defaultEntryTextViewResId, type, Color.BLACK, theme).build();
     }
 
     /**
@@ -144,7 +156,7 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
         @NonNull
         public abstract H createHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
 
-        public abstract void bindHolder(@NonNull Markwon markwon, @NonNull H holder, @NonNull N node);
+        public abstract void bindHolder(@NonNull Markwon markwon, @NonNull H holder, @NonNull N node, int depth);
 
         /**
          * Will be called when new content is available (clear internal cache if any)
@@ -164,11 +176,13 @@ public abstract class MarkwonAdapter extends RecyclerView.Adapter<MarkwonAdapter
 
     public abstract void setMarkdown(@NonNull Markwon markwon, @NonNull String markdown);
 
+    public abstract void setMarkdown(@NonNull Markwon markwon, @NonNull String markdown, int depth);
+
     public abstract void setParsedMarkdown(@NonNull Markwon markwon, @NonNull Node document);
 
     public abstract void setParsedMarkdown(@NonNull Markwon markwon, @NonNull List<Node> nodes);
 
-    public abstract int getNodeViewType(@NonNull Class<? extends Node> node);
+    public abstract int getNodeViewType(Node node);
 
     @SuppressWarnings("WeakerAccess")
     public static class Holder extends RecyclerView.ViewHolder {

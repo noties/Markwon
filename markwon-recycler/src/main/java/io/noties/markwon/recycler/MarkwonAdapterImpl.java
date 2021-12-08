@@ -1,5 +1,6 @@
 package io.noties.markwon.recycler;
 
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonReducer;
+import io.noties.markwon.iframe.ext.IFrameNode;
 
 class MarkwonAdapterImpl extends MarkwonAdapter {
 
@@ -24,6 +26,7 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
     private Markwon markwon;
     private List<Node> nodes;
+    private int depth = 0;
 
     @SuppressWarnings("WeakerAccess")
     MarkwonAdapterImpl(
@@ -43,6 +46,12 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     }
 
     @Override
+    public void setMarkdown(@NonNull Markwon markwon, @NonNull String markdown, int depth) {
+        this.depth = depth;
+        setParsedMarkdown(markwon, markwon.parse(markdown));
+    }
+
+    @Override
     public void setParsedMarkdown(@NonNull Markwon markwon, @NonNull Node document) {
         setParsedMarkdown(markwon, reducer.reduce(document));
     }
@@ -50,15 +59,16 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
     @Override
     public void setParsedMarkdown(@NonNull Markwon markwon, @NonNull List<Node> nodes) {
         // clear all entries before applying
-
-        defaultEntry.clear();
-
-        for (int i = 0, size = entries.size(); i < size; i++) {
-            entries.valueAt(i).clear();
+        try {
+            defaultEntry.clear();
+            for (int i = 0, size = entries.size(); i < size; i++) {
+                entries.valueAt(i).clear();
+            }
+            this.markwon = markwon;
+            this.nodes = nodes;
+        } catch (Exception e) {
+            Log.e("Markdown issue", nodes.toString());
         }
-
-        this.markwon = markwon;
-        this.nodes = nodes;
     }
 
     @NonNull
@@ -68,21 +78,22 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
-
         final Entry<Node, Holder> entry = getEntry(viewType);
-
         return entry.createHolder(layoutInflater, parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-
         final Node node = nodes.get(position);
-        final int viewType = getNodeViewType(node.getClass());
-
+        int viewType = getNodeViewType(node);
         final Entry<Node, Holder> entry = getEntry(viewType);
-
-        entry.bindHolder(markwon, holder, node);
+        if (isIFrameTypeType(node)) {
+            if(node.getFirstChild() != null) {
+                entry.bindHolder(markwon, holder, node.getFirstChild().getFirstChild(), this.depth);
+            }
+        } else {
+            entry.bindHolder(markwon, holder, node, this.depth);
+        }
     }
 
     @Override
@@ -110,22 +121,37 @@ class MarkwonAdapterImpl extends MarkwonAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return getNodeViewType(nodes.get(position).getClass());
+        final Node node = nodes.get(position);
+        return getNodeViewType(node);
     }
 
     @Override
     public long getItemId(int position) {
         final Node node = nodes.get(position);
-        final int type = getNodeViewType(node.getClass());
+        int type = getNodeViewType(node);
         final Entry<Node, Holder> entry = getEntry(type);
         return entry.id(node);
     }
 
+    private boolean isIFrameTypeType(Node node) {
+        if (node.getFirstChild() != null) {
+            if (node.getFirstChild().toString().contains("IFrameGroupNode") &&
+                    node.getFirstChild().toString().contains("IFrameGroupNode")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
-    public int getNodeViewType(@NonNull Class<? extends Node> node) {
+    public int getNodeViewType(@NonNull Node node) {
         // if has registered -> then return it, else 0
-        final int hash = node.hashCode();
+        if (isIFrameTypeType(node)) {
+            return IFrameNode.class.hashCode();
+        }
+        final int hash = node.getClass().hashCode();
         if (entries.indexOfKey(hash) > -1) {
+            Log.d("NodeType1", String.valueOf(hash));
             return hash;
         }
         return 0;

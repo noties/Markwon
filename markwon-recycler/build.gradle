@@ -16,6 +16,8 @@ android {
 dependencies {
 
     api project(':markwon-core')
+    implementation project(path: ':markwon-round-textview')
+    implementation project(path: ':markwon-iframe-ext')
 
     deps.with {
         api it['x-recycler-view']

@@ -138,8 +138,7 @@ public class TableEntry extends MarkwonAdapter.Entry<TableBlock, TableEntry.Hold
     }
 
     @Override
-    public void bindHolder(@NonNull Markwon markwon, @NonNull Holder holder, @NonNull TableBlock node) {
-
+    public void bindHolder(@NonNull Markwon markwon, @NonNull Holder holder, @NonNull TableBlock node, int depth) {
         Table table = map.get(node);
         if (table == null) {
             table = Table.parse(markwon, node);
