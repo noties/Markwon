@@ -77,9 +77,9 @@ class ReadMeActivity : Activity() {
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(ReadMeImageDestinationPlugin(intent.data))
                 .usePlugin(IFramePlugIn.create())
-                .usePlugin(InLineLatexPlugIn.create(16.0f, 1080))
+                .usePlugin(InLineLatexPlugIn.create(46.0f, 1080))
                 .usePlugin(MarkwonInlineParserPlugin.create())
-                .usePlugin(JLatexMathPlugin.create(16.0f))
+                .usePlugin(JLatexMathPlugin.create(46.0f))
                 .usePlugin(object : AbstractMarkwonPlugin() {
                     override fun configureVisitor(builder: MarkwonVisitor.Builder) {
                         builder.on(FencedCodeBlock::class.java) { visitor, block ->

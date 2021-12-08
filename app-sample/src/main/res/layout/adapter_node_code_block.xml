@@ -13,6 +13,7 @@
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_fence"
         android:fontFamily="monospace"
         android:lineSpacingExtra="2dip"
         android:paddingLeft="16dip"
