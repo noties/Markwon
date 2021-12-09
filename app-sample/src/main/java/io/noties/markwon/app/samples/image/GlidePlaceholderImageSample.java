@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.Target;
 
 import io.noties.markwon.Markwon;
@@ -43,6 +44,11 @@ public class GlidePlaceholderImageSample extends MarkwonTextViewSample {
 //            .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_home_black_36dp));
 //            .placeholder(placeholder);
             .placeholder(R.drawable.ic_home_black_36dp);
+        }
+
+        @Override
+        public RequestBuilder<GifDrawable> loadGif(@NonNull AsyncDrawable drawable) {
+          return null;
         }
 
         @Override

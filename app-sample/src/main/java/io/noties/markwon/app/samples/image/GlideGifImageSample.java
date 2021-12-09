@@ -11,6 +11,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
@@ -74,6 +75,11 @@ public class GlideGifImageSample extends MarkwonTextViewSample {
           }
         })
         .load(destination);
+    }
+
+    @Override
+    public RequestBuilder<GifDrawable> loadGif(@NonNull AsyncDrawable drawable) {
+      return null;
     }
 
     @Override
