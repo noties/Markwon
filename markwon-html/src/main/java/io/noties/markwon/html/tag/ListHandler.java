@@ -19,6 +19,8 @@ import io.noties.markwon.html.TagHandler;
 
 public class ListHandler extends TagHandler {
 
+    private static final String START_KEY = "start";
+
     @Override
     public void handle(
             @NonNull MarkwonVisitor visitor,
@@ -41,7 +43,7 @@ public class ListHandler extends TagHandler {
         final RenderProps renderProps = visitor.renderProps();
         final SpanFactory spanFactory = configuration.spansFactory().get(ListItem.class);
 
-        int number = 1;
+        int number = Integer.parseInt(block.attributes().containsKey(START_KEY) ? block.attributes().get(START_KEY) : "1");
         final int bulletLevel = currentBulletListLevel(block);
 
         for (HtmlTag.Block child : block.children()) {
