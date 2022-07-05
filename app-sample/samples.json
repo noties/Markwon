@@ -40,6 +40,19 @@
     ]
   },
   {
+    "javaClassName": "io.noties.markwon.app.samples.html.HtmlOrderedListNumbersSample",
+    "id": "20210201140502",
+    "title": "HTML Ordered list numbers",
+    "description": "",
+    "artifacts": [
+      "HTML"
+    ],
+    "tags": [
+      "rendering",
+      "html"
+    ]
+  },
+  {
     "javaClassName": "io.noties.markwon.app.samples.html.InspectHtmlTextSample",
     "id": "20210201140501",
     "title": "Inspect text",
