@@ -85,7 +85,7 @@ ext {
             'debug'                   : 'io.noties:debug:5.1.0',
             'adapt'                   : 'io.noties:adapt:2.2.0',
             'dagger'                  : "com.google.dagger:dagger:$daggerVersion",
-            'picasso'                 : 'com.squareup.picasso:picasso:2.71828',
+            'picasso'                 : 'com.squareup.picasso:picasso:2.8',
             'glide'                   : 'com.github.bumptech.glide:glide:4.11.0',
             'coil'                    : "io.coil-kt:coil:$coilVersion",
             'coil-base'               : "io.coil-kt:coil-base:$coilVersion",
