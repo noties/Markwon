@@ -11,15 +11,16 @@ android {
         versionCode 1
         versionName version
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
 }
 
 dependencies {
 
     api project(':markwon-core')
-
-    deps.with {
-        api it['commonmark-table']
-    }
 }
 
 registerArtifact(this)
+apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

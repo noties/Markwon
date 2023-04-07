@@ -2,8 +2,8 @@ package io.noties.markwon;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.LinkReferenceDefinition;
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.ast.Reference;
+import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +51,7 @@ public abstract class MarkwonReducer {
                 while (node != null) {
                     // @since 4.5.0 do not include LinkReferenceDefinition node (would result
                     //  in empty textView if rendered in recycler-view)
-                    if (!(node instanceof LinkReferenceDefinition)) {
+                    if (!(node instanceof Reference)) {
                         list.add(node);
                     }
                     temp = node.getNext();

@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.List;
 

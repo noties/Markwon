@@ -14,8 +14,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-
-import org.commonmark.node.Image;
+import com.vladsch.flexmark.ast.Image;
 
 import java.util.HashMap;
 import java.util.Map;

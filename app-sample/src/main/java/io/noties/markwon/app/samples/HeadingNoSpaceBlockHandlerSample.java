@@ -2,8 +2,8 @@ package io.noties.markwon.app.samples;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Heading;
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.ast.Heading;
+import com.vladsch.flexmark.util.ast.Node;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.BlockHandlerDef;

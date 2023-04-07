@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.parser.Parser;
+import com.vladsch.flexmark.parser.Parser;
 
 import java.util.ArrayList;
 import java.util.Collections;

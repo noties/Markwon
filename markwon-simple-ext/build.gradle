@@ -25,3 +25,4 @@ dependencies {
 }
 
 registerArtifact(this)
+apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

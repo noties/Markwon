@@ -44,12 +44,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_11
     }
 
     sourceSets {
@@ -58,48 +54,6 @@ android {
         }
     }
 
-    // do not sign in CI
-    if (!project.hasProperty('CI')) {
-        signingConfigs {
-            config {
-
-                final def keystoreFile = project.file('keystore.jks')
-                final def keystoreFilePassword = 'MARKWON_KEYSTORE_FILE_PASSWORD'
-                final def keystoreAlias = 'MARKWON_KEY_ALIAS'
-                final def keystoreAliasPassword = 'MARKWON_KEY_ALIAS_PASSWORD'
-
-                final def properties = [
-                        keystoreFilePassword,
-                        keystoreAlias,
-                        keystoreAliasPassword
-                ]
-
-                if (!keystoreFile.exists()) {
-                    throw new IllegalStateException("No '${keystoreFile.name}' file is found.")
-                }
-
-                final def missingProperties = properties.findAll { !project.hasProperty(it) }
-                if (!missingProperties.isEmpty()) {
-                    throw new IllegalStateException("Missing required signing properties: $missingProperties")
-                }
-
-                storeFile keystoreFile
-                storePassword project[keystoreFilePassword]
-
-                keyAlias project[keystoreAlias]
-                keyPassword project[keystoreAliasPassword]
-            }
-        }
-
-        buildTypes {
-            debug {
-                signingConfig signingConfigs.config
-            }
-            release {
-                signingConfig signingConfigs.config
-            }
-        }
-    }
 }
 
 kapt {
@@ -122,7 +76,7 @@ dependencies {
         kapt it['prism4j-bundler']
     }
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation project(':markwon-core')
     implementation project(':markwon-editor')
@@ -132,7 +86,6 @@ dependencies {
     implementation project(':markwon-ext-tasklist')
     implementation project(':markwon-html')
     implementation project(':markwon-image')
-    implementation project(':markwon-inline-parser')
     implementation project(':markwon-linkify')
     implementation project(':markwon-recycler')
     implementation project(':markwon-recycler-table')

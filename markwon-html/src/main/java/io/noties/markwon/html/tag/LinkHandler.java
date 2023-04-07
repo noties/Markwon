@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Link;
+import com.vladsch.flexmark.ast.Link;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -1,13 +1,14 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.7.20'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
+        classpath 'com.android.tools.build:gradle:7.4.0'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.28.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     }
 }
 
@@ -27,16 +28,23 @@ allprojects {
     tasks.withType(Javadoc) {
         enabled = false
     }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            // Treat all Kotlin warnings as errors
+            // allWarningsAsErrors = true
+
+            freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
+            // Set JVM target to 11
+            jvmTarget = JavaVersion.VERSION_11
+        }
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-wrapper {
-    gradleVersion '6.1.1'
-    distributionType 'all'
-}
 
 if (hasProperty('local')) {
     if (!hasProperty('LOCAL_MAVEN_URL')) {
@@ -49,10 +57,10 @@ if (hasProperty('local')) {
 ext {
 
     config = [
-            'build-tools'    : '29.0.3',
-            'compile-sdk'    : 29,
-            'target-sdk'     : 29,
-            'min-sdk'        : 16,
+            'build-tools'    : '33.0.1',
+            'compile-sdk'    : 33,
+            'target-sdk'     : 33,
+            'min-sdk'        : 21,
             'push-aar-gradle': 'https://raw.githubusercontent.com/noties/gradle-mvn-push/master/gradle-mvn-push-aar.gradle'
     ]
 
@@ -72,6 +80,7 @@ ext {
             'x-appcompat'             : 'androidx.appcompat:appcompat:1.1.0',
             'x-cardview'              : 'androidx.cardview:cardview:1.0.0',
             'x-fragment'              : 'androidx.fragment:fragment:1.0.0',
+            'flexmark'                : 'com.vladsch.flexmark:flexmark-all:0.64.0',
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",

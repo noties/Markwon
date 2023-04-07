@@ -3,7 +3,6 @@ package io.noties.markwon.app.samples.latex;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import io.noties.markwon.sample.annotations.Tag;
@@ -27,7 +26,6 @@ public class LatexOmegaSample extends MarkwonTextViewSample {
       "$$\\Omega$$";
 
     final Markwon markwon = Markwon.builder(context)
-      .usePlugin(MarkwonInlineParserPlugin.create())
       .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
         builder.inlinesEnabled(true);
       }))

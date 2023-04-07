@@ -2,10 +2,11 @@ package io.noties.markwon.simple.ext;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Node;
-import org.commonmark.node.Text;
-import org.commonmark.parser.delimiter.DelimiterProcessor;
-import org.commonmark.parser.delimiter.DelimiterRun;
+import com.vladsch.flexmark.parser.InlineParser;
+import com.vladsch.flexmark.parser.core.delimiter.Delimiter;
+import com.vladsch.flexmark.parser.delimiter.DelimiterProcessor;
+import com.vladsch.flexmark.parser.delimiter.DelimiterRun;
+import com.vladsch.flexmark.util.ast.Node;
 
 import io.noties.markwon.SpanFactory;
 
@@ -52,19 +53,37 @@ class SimpleExtDelimiterProcessor implements DelimiterProcessor {
     }
 
     @Override
-    public void process(Text opener, Text closer, int delimiterUse) {
-
+    public void process(Delimiter opener, Delimiter closer, int delimitersUsed) {
         final Node node = new SimpleExtNode(spanFactory);
-
-        Node tmp = opener.getNext();
-        Node next;
+        Delimiter tmp = opener.getNext();
+        Delimiter next;
 
         while (tmp != null && tmp != closer) {
             next = tmp.getNext();
-            node.appendChild(tmp);
+            node.appendChild(tmp.getNode());
             tmp = next;
         }
 
-        opener.insertAfter(node);
+        opener.getNode().insertAfter(node);
+    }
+
+    @Override
+    public Node unmatchedDelimiterNode(InlineParser inlineParser, DelimiterRun delimiter) {
+        return null;
+    }
+
+    @Override
+    public boolean canBeOpener(String before, String after, boolean leftFlanking, boolean rightFlanking, boolean beforeIsPunctuation, boolean afterIsPunctuation, boolean beforeIsWhitespace, boolean afterIsWhiteSpace) {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCloser(String before, String after, boolean leftFlanking, boolean rightFlanking, boolean beforeIsPunctuation, boolean afterIsPunctuation, boolean beforeIsWhitespace, boolean afterIsWhiteSpace) {
+        return false;
+    }
+
+    @Override
+    public boolean skipNonOpenerCloser() {
+        return false;
     }
 }

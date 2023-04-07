@@ -2,13 +2,15 @@ package io.noties.markwon.simple.ext;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.CustomNode;
-import org.commonmark.node.Visitor;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.sequence.BasedSequence;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.noties.markwon.SpanFactory;
 
 // @since 4.0.0
-class SimpleExtNode extends CustomNode {
+class SimpleExtNode extends Node {
 
     private final SpanFactory spanFactory;
 
@@ -16,13 +18,14 @@ class SimpleExtNode extends CustomNode {
         this.spanFactory = spanFactory;
     }
 
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
-    }
-
     @NonNull
     SpanFactory spanFactory() {
         return spanFactory;
+    }
+
+    @NonNull
+    @Override
+    public @NotNull BasedSequence[] getSegments() {
+        return BasedSequence.EMPTY_SEGMENTS;
     }
 }

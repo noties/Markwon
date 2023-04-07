@@ -3,7 +3,7 @@ package io.noties.markwon.html.tag;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Emphasis;
+import com.vladsch.flexmark.ast.Emphasis;
 
 import java.util.Arrays;
 import java.util.Collection;

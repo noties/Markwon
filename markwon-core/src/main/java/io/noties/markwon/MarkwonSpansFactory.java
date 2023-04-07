@@ -3,7 +3,7 @@ package io.noties.markwon;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.util.ast.Node;
 
 /**
  * Class that controls what spans are used for certain Nodes.

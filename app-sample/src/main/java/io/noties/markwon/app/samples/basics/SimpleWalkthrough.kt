@@ -1,13 +1,13 @@
 package io.noties.markwon.app.samples.basics
 
 import android.text.Spanned
+import com.vladsch.flexmark.util.ast.Node
 import io.noties.markwon.Markwon
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample
 import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.sample.annotations.MarkwonArtifact
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo
 import io.noties.markwon.sample.annotations.Tag
-import org.commonmark.node.Node
 
 @MarkwonSampleInfo(
   id = "20200626153426",

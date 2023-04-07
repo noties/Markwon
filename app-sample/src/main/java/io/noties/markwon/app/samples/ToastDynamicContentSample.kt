@@ -19,7 +19,7 @@ import io.noties.markwon.sample.annotations.Tag
   artifacts = [MarkwonArtifact.CORE, MarkwonArtifact.IMAGE],
   tags = [Tag.toast, Tag.hack]
 )
-class ToastDynamicContentSample : MarkwonTextViewSample() {
+public class ToastDynamicContentSample : MarkwonTextViewSample() {
   override fun render() {
     val md = """
       # Head!

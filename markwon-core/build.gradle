@@ -17,7 +17,7 @@ dependencies {
 
     deps.with {
         api it['x-annotations']
-        api it['commonmark']
+        api it['flexmark']
 
         // @since 4.1.0 to allow PrecomputedTextSetterCompat
         // note that this dependency must be added on a client side explicitly
@@ -36,3 +36,5 @@ dependencies {
 }
 
 registerArtifact(this)
+
+apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

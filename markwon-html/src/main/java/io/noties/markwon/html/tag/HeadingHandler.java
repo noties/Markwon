@@ -3,7 +3,7 @@ package io.noties.markwon.html.tag;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Heading;
+import com.vladsch.flexmark.ast.Heading;
 
 import java.util.Arrays;
 import java.util.Collection;

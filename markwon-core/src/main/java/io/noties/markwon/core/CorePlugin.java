@@ -9,27 +9,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import org.commonmark.node.Block;
-import org.commonmark.node.BlockQuote;
-import org.commonmark.node.BulletList;
-import org.commonmark.node.Code;
-import org.commonmark.node.Emphasis;
-import org.commonmark.node.FencedCodeBlock;
-import org.commonmark.node.HardLineBreak;
-import org.commonmark.node.Heading;
-import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.Image;
-import org.commonmark.node.IndentedCodeBlock;
-import org.commonmark.node.Link;
-import org.commonmark.node.ListBlock;
-import org.commonmark.node.ListItem;
-import org.commonmark.node.Node;
-import org.commonmark.node.OrderedList;
-import org.commonmark.node.Paragraph;
-import org.commonmark.node.SoftLineBreak;
-import org.commonmark.node.StrongEmphasis;
-import org.commonmark.node.Text;
-import org.commonmark.node.ThematicBreak;
+import com.vladsch.flexmark.ast.BlockQuote;
+import com.vladsch.flexmark.ast.BulletList;
+import com.vladsch.flexmark.ast.Code;
+import com.vladsch.flexmark.ast.Emphasis;
+import com.vladsch.flexmark.ast.FencedCodeBlock;
+import com.vladsch.flexmark.ast.HardLineBreak;
+import com.vladsch.flexmark.ast.Heading;
+import com.vladsch.flexmark.ast.HtmlBlock;
+import com.vladsch.flexmark.ast.Image;
+import com.vladsch.flexmark.ast.IndentedCodeBlock;
+import com.vladsch.flexmark.ast.Link;
+import com.vladsch.flexmark.ast.ListBlock;
+import com.vladsch.flexmark.ast.ListItem;
+import com.vladsch.flexmark.ast.OrderedList;
+import com.vladsch.flexmark.ast.Paragraph;
+import com.vladsch.flexmark.ast.SoftLineBreak;
+import com.vladsch.flexmark.ast.StrongEmphasis;
+import com.vladsch.flexmark.ast.Text;
+import com.vladsch.flexmark.ast.ThematicBreak;
+import com.vladsch.flexmark.util.ast.Block;
+import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -212,8 +212,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Text text) {
 
-                final String literal = text.getLiteral();
-
+                String literal = text.toAstString(true);
                 visitor.builder().append(literal);
 
                 // @since 4.0.0
@@ -278,7 +277,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 // unfortunately we cannot use this for multiline code as we cannot control where a new line break will be inserted
                 visitor.builder()
                         .append('\u00a0')
-                        .append(code.getLiteral())
+                        .append(code.toAstString(true))
                         .append('\u00a0');
 
                 visitor.setSpansForNodeOptional(code, length);
@@ -290,7 +289,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(FencedCodeBlock.class, new MarkwonVisitor.NodeVisitor<FencedCodeBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull FencedCodeBlock fencedCodeBlock) {
-                visitCodeBlock(visitor, fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral(), fencedCodeBlock);
+                visitCodeBlock(visitor, fencedCodeBlock.getInfo().unescape(), fencedCodeBlock.toAstString(true), fencedCodeBlock);
             }
         });
     }
@@ -299,7 +298,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(IndentedCodeBlock.class, new MarkwonVisitor.NodeVisitor<IndentedCodeBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull IndentedCodeBlock indentedCodeBlock) {
-                visitCodeBlock(visitor, null, indentedCodeBlock.getLiteral(), indentedCodeBlock);
+                visitCodeBlock(visitor, null, indentedCodeBlock.toAstString(true), indentedCodeBlock);
             }
         });
     }
@@ -335,7 +334,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 final String destination = configuration
                         .imageDestinationProcessor()
-                        .process(image.getDestination());
+                        .process(image.getUrl().unescape());
 
                 final RenderProps props = visitor.renderProps();
 
@@ -538,7 +537,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
                 visitor.visitChildren(link);
 
-                final String destination = link.getDestination();
+                final String destination = link.getUrl().unescape();
 
                 CoreProps.LINK_DESTINATION.set(visitor.renderProps(), destination);
 

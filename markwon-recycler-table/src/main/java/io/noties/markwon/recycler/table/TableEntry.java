@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
+import com.vladsch.flexmark.ext.tables.TableBlock;
 
 import java.util.HashMap;
 import java.util.List;

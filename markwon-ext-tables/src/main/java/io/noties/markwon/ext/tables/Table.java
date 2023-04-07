@@ -5,12 +5,16 @@ import android.text.Spanned;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-import org.commonmark.ext.gfm.tables.TableCell;
-import org.commonmark.ext.gfm.tables.TableHead;
-import org.commonmark.ext.gfm.tables.TableRow;
-import org.commonmark.node.AbstractVisitor;
-import org.commonmark.node.CustomNode;
+import com.vladsch.flexmark.ast.BlockQuote;
+import com.vladsch.flexmark.ast.util.BlockVisitorExt;
+import com.vladsch.flexmark.ast.util.InlineVisitorExt;
+import com.vladsch.flexmark.ext.tables.TableBlock;
+import com.vladsch.flexmark.ext.tables.TableCell;
+import com.vladsch.flexmark.ext.tables.TableHead;
+import com.vladsch.flexmark.ext.tables.TableRow;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.ast.NodeVisitor;
+import com.vladsch.flexmark.util.ast.VisitHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +44,8 @@ public class Table {
         final Table table;
 
         final ParseVisitor visitor = new ParseVisitor(markwon);
-        tableBlock.accept(visitor);
+        visitor.visit(tableBlock);
+
         final List<Row> rows = visitor.rows();
 
         if (rows == null) {
@@ -135,7 +140,7 @@ public class Table {
                 '}';
     }
 
-    static class ParseVisitor extends AbstractVisitor {
+    static class ParseVisitor extends NodeVisitor implements TableVisitor{
 
         private final Markwon markwon;
 
@@ -146,6 +151,7 @@ public class Table {
 
         ParseVisitor(@NonNull Markwon markwon) {
             this.markwon = markwon;
+            addHandlers(TableVisitor.VISIT_HANDLERS(this));
         }
 
         @Nullable
@@ -154,44 +160,47 @@ public class Table {
         }
 
         @Override
-        public void visit(CustomNode customNode) {
-
-            if (customNode instanceof TableCell) {
-
-                final TableCell cell = (TableCell) customNode;
-
-                if (pendingRow == null) {
-                    pendingRow = new ArrayList<>(2);
-                }
-
-                pendingRow.add(new Table.Column(alignment(cell.getAlignment()), markwon.render(cell)));
-                pendingRowIsHeader = cell.isHeader();
-
-                return;
+        public void visit(TableCell cell) {
+            if (pendingRow == null) {
+                pendingRow = new ArrayList<>(2);
             }
 
-            if (customNode instanceof TableHead
-                    || customNode instanceof TableRow) {
+            pendingRow.add(new Table.Column(alignment(cell.getAlignment()), markwon.render(cell)));
+            pendingRowIsHeader = cell.isHeader();
+        }
 
-                visitChildren(customNode);
+        @Override
+        public void visit(TableHead head) {
+            visitChildren(head);
 
-                // this can happen, ignore such row
-                if (pendingRow != null && pendingRow.size() > 0) {
-
-                    if (rows == null) {
-                        rows = new ArrayList<>(2);
-                    }
-
-                    rows.add(new Table.Row(pendingRowIsHeader, pendingRow));
+            // this can happen, ignore such row
+            if (pendingRow != null && pendingRow.size() > 0) {
+                if (rows == null) {
+                    rows = new ArrayList<>(2);
                 }
 
-                pendingRow = null;
-                pendingRowIsHeader = false;
-
-                return;
+                rows.add(new Table.Row(pendingRowIsHeader, pendingRow));
             }
 
-            visitChildren(customNode);
+            pendingRow = null;
+            pendingRowIsHeader = false;
+        }
+
+        @Override
+        public void visit(TableRow row) {
+            visitChildren(row);
+
+            // this can happen, ignore such row
+            if (pendingRow != null && pendingRow.size() > 0) {
+                if (rows == null) {
+                    rows = new ArrayList<>(2);
+                }
+
+                rows.add(new Table.Row(pendingRowIsHeader, pendingRow));
+            }
+
+            pendingRow = null;
+            pendingRowIsHeader = false;
         }
 
         @NonNull
@@ -206,5 +215,6 @@ public class Table {
             }
             return out;
         }
+
     }
 }

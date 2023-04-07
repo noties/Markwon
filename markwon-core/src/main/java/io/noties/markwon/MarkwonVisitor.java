@@ -3,8 +3,12 @@ package io.noties.markwon;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Node;
-import org.commonmark.node.Visitor;
+import com.vladsch.flexmark.ast.Heading;
+import com.vladsch.flexmark.ast.util.BlockVisitor;
+import com.vladsch.flexmark.ast.util.InlineVisitor;
+import com.vladsch.flexmark.util.ast.Node;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Configurable visitor of parsed markdown. Allows visiting certain (registered) nodes without
@@ -14,7 +18,7 @@ import org.commonmark.node.Visitor;
  * @see MarkwonPlugin#configureVisitor(Builder)
  * @since 3.0.0
  */
-public interface MarkwonVisitor extends Visitor {
+public interface MarkwonVisitor extends BlockVisitor, InlineVisitor {
 
     /**
      * @see Builder#on(Class, NodeVisitor)
@@ -68,13 +72,6 @@ public interface MarkwonVisitor extends Visitor {
 
     @NonNull
     SpannableBuilder builder();
-
-    /**
-     * Visits all children of supplied node.
-     *
-     * @param node to visit
-     */
-    void visitChildren(@NonNull Node node);
 
     /**
      * Executes a check if there is further content available.
@@ -166,4 +163,8 @@ public interface MarkwonVisitor extends Visitor {
      * @since 4.3.0
      */
     void blockEnd(@NonNull Node node);
+
+    void visit(@NotNull Node node);
+
+    void visitChildren(Node node);
 }

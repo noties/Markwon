@@ -2,8 +2,8 @@ package io.noties.markwon.simple.ext;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.parser.Parser;
-import org.commonmark.parser.delimiter.DelimiterProcessor;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.delimiter.DelimiterProcessor;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonVisitor;

@@ -3,8 +3,8 @@ package io.noties.markwon.app.samples;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-import org.commonmark.node.FencedCodeBlock;
+import com.vladsch.flexmark.ast.FencedCodeBlock;
+import com.vladsch.flexmark.ext.tables.TableBlock;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
@@ -59,7 +59,7 @@ public class RecyclerSample extends MarkwonRecyclerViewSample {
             // NB the `trim` operation on literal (as code will have a new line at the end)
             final CharSequence code = visitor.configuration()
               .syntaxHighlight()
-              .highlight(fencedCodeBlock.getInfo(), fencedCodeBlock.getLiteral().trim());
+              .highlight(fencedCodeBlock.getInfo().unescape(), fencedCodeBlock.toAstString(false).trim());
             visitor.builder().append(code);
           });
         }

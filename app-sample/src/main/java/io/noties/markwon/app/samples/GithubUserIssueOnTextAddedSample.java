@@ -2,7 +2,7 @@ package io.noties.markwon.app.samples;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Link;
+import com.vladsch.flexmark.ast.Link;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

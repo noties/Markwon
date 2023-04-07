@@ -2,7 +2,7 @@ package io.noties.markwon;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.SoftLineBreak;
+import com.vladsch.flexmark.ast.SoftLineBreak;
 
 /**
  * @since 4.3.0

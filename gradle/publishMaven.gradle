@@ -1,0 +1,240 @@
+/*
+ * Copyright 2021 Cpacm
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ * Based on: https://github.com/mcxiaoke/gradle-mvn-push/blob/master/gradle-mvn-push.gradle.
+ *
+ * To install in a local maven repo:
+ * 1. In the project you want to test, add mavenLocal() to the repositories list.
+ * 2. In Project, run: ./gradlew publishToMavenLocal
+ *
+ * For faster runs add: -x check when building.
+ */
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+version = VERSION_NAME
+group = GROUP
+
+
+
+@SuppressWarnings("GrMethodMayBeStatic")
+def isReleaseBuild() {
+    return !version.contains("SNAPSHOT")
+}
+
+def getReleaseRepositoryUrl() {
+    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+}
+
+def getSnapshotRepositoryUrl() {
+    return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+            : 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+}
+
+def getRepositoryUsername() {
+    return hasProperty('USERNAME') ? USERNAME : (hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : '')
+}
+
+def getRepositoryPassword() {
+    return hasProperty('PASSWORD') ? PASSWORD : (hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : '')
+}
+
+def configurePom(pom) {
+    pom.name = POM_NAME
+    pom.packaging = POM_PACKAGING
+    pom.description = POM_DESCRIPTION
+    pom.url = POM_URL
+
+    pom.scm {
+        url = POM_SCM_URL
+        connection = POM_SCM_CONNECTION
+        developerConnection = POM_SCM_DEV_CONNECTION
+    }
+
+    pom.licenses {
+        license {
+            name = POM_LICENCE_NAME
+            url = POM_LICENCE_URL
+            distribution = POM_LICENCE_DIST
+        }
+    }
+
+    pom.issueManagement {
+        system = 'GitHub Issues'
+        url = POM_SCM_ISSUES
+    }
+
+    pom.developers {
+        developer {
+            id = POM_DEVELOPER_ID
+            name = POM_DEVELOPER_NAME
+            email = POM_DEVELOPER_EMAIL
+        }
+    }
+}
+
+afterEvaluate { project ->
+    def isAndroidProject = project.plugins.hasPlugin('com.android.application') || project.plugins.hasPlugin('com.android.library')
+    publishing {
+        repositories {
+            maven {
+                def releasesRepoUrl = getReleaseRepositoryUrl()
+                def snapshotsRepoUrl = getSnapshotRepositoryUrl()
+                url = isReleaseBuild() ? releasesRepoUrl : snapshotsRepoUrl
+                credentials(PasswordCredentials) {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+    }
+
+    if (isAndroidProject) {
+        task androidJavadocs(type: Javadoc, dependsOn: assembleDebug) {
+            source = android.sourceSets.main.java.source
+            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+            // include generated file
+            classpath += project.files("${buildDir}/generated/source/buildConfig/debug")
+            classpath += project.files("${buildDir}/generated/ap_generated_sources/debug/out")
+            excludes = ['**/*.kt']
+        }
+
+        task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+            classifier = 'javadoc'
+            from androidJavadocs.destinationDir
+        }
+
+        task androidSourcesJar(type: Jar) {
+            classifier = 'sources'
+            from android.sourceSets.main.java.source
+        }
+
+        android.libraryVariants.all { variant ->
+            tasks.androidJavadocs.doFirst {
+                classpath += files(variant.javaCompileProvider.get().classpath.files.join(File.pathSeparator))
+            }
+        }
+    } else {
+
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
+
+        task javadocsJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+
+        artifacts {
+            archives sourcesJar
+            archives javadocsJar
+        }
+    }
+
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
+    }
+
+    if (JavaVersion.current().isJava9Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addBooleanOption('html5', true)
+            }
+        }
+    }
+
+    artifacts {
+        if (isAndroidProject) {
+            archives androidSourcesJar
+            archives androidJavadocsJar
+
+            archives project.tasks.bundleDebugAar
+        }
+    }
+
+    publishing {
+        publications {
+            mavenAgent(MavenPublication) {
+                groupId GROUP
+                artifactId POM_ARTIFACT_ID
+                version version
+                configurePom(pom)
+
+                if (isAndroidProject) {
+                    artifact bundleReleaseAar
+                    artifact androidSourcesJar
+
+                    pom.withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        project.configurations.all { configuration ->
+                            def name = configuration.name
+                            // api will duplicate with implementation
+                            if (name == 'releaseImplementation' || name == 'implementation') {
+                                configuration.allDependencies.each {
+                                    if (it.name != "unspecified" && it.version != "unspecified") {
+                                        def groupId = it.group
+                                        def artifactId = it.name
+                                        if (it instanceof ProjectDependency) {
+                                            // skip eg:implementation project(:module)
+                                            // def properties = it.getDependencyProject().getProperties()
+                                            // groupId = properties.get("GROUP")
+                                            // artifactId = properties.get("POM_ARTIFACT_ID")
+                                            // if (!artifactId.equals("annotation")) {return}
+                                            return
+                                        }
+                                        println "dependencies:" + groupId + ":" + artifactId + ":" + it.version
+                                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                                        dependencyNode.appendNode('groupId', groupId)
+                                        dependencyNode.appendNode('artifactId', artifactId)
+                                        dependencyNode.appendNode('version', it.version)
+                                        dependencyNode.appendNode('scope', 'compile')
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    from components.java
+                    artifact sourcesJar
+                    artifact javadocsJar
+                }
+            }
+
+            if (project.plugins.hasPlugin('java-gradle-plugin')) {
+                pluginMaven(MavenPublication) {
+                    groupId GROUP
+                    artifactId POM_ARTIFACT_ID
+                    version version
+                    configurePom(pom)
+                }
+            }
+        }
+    }
+}
+
+signing {
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("publish") }
+    publishing.publications.all { publication ->
+        sign publication
+    }
+}

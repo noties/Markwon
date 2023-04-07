@@ -652,18 +652,6 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.DelimiterProcessorSample",
-    "id": "20200630194017",
-    "title": "Custom delimiter processor",
-    "description": "Custom parsing delimiter processor with `?` character",
-    "artifacts": [
-      "CORE"
-    ],
-    "tags": [
-      "parsing"
-    ]
-  },
-  {
     "javaClassName": "io.noties.markwon.app.samples.html.HtmlDisableSanitizeSample",
     "id": "20200630171424",
     "title": "Disable HTML",
@@ -958,31 +946,6 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.NoParsingSample",
-    "id": "20200629171212",
-    "title": "No parsing",
-    "description": "All commonmark parsing is disabled (both inlines and blocks)",
-    "artifacts": [
-      "CORE"
-    ],
-    "tags": [
-      "parsing",
-      "rendering"
-    ]
-  },
-  {
-    "javaClassName": "io.noties.markwon.app.samples.InlinePluginNoDefaultsSample",
-    "id": "20200629170857",
-    "title": "Inline parsing without defaults",
-    "description": "Configure inline parser plugin to **not** have any **inline** parsing",
-    "artifacts": [
-      "INLINE_PARSER"
-    ],
-    "tags": [
-      "parsing"
-    ]
-  },
-  {
     "javaClassName": "io.noties.markwon.app.samples.editor.EditorNewLineContinuationSample",
     "id": "20200629170348",
     "title": "Editor new line continuation",
@@ -1077,44 +1040,12 @@
     ]
   },
   {
-    "javaClassName": "io.noties.markwon.app.samples.CustomExtensionSample",
-    "id": "20200629163248",
-    "title": "Custom extension",
-    "description": "Custom extension that adds an icon from resources and renders it as image with `@ic-name` syntax",
-    "artifacts": [
-      "CORE"
-    ],
-    "tags": [
-      "parsing",
-      "plugin",
-      "rendering",
-      "image",
-      "extension",
-      "span"
-    ]
-  },
-  {
     "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueOnTextAddedSample",
     "id": "20200629162024",
     "title": "User mention and issue (via text)",
     "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
     "artifacts": [
       "CORE"
-    ],
-    "tags": [
-      "parsing",
-      "rendering",
-      "textAddedListener"
-    ]
-  },
-  {
-    "javaClassName": "io.noties.markwon.app.samples.GithubUserIssueInlineParsingSample",
-    "id": "20200629162023",
-    "title": "User mention and issue (via text)",
-    "description": "Github-like user mention and issue rendering via `CorePlugin.OnTextAddedListener`",
-    "artifacts": [
-      "CORE",
-      "INLINE_PARSER"
     ],
     "tags": [
       "parsing",
@@ -1408,20 +1339,6 @@
       "movementMethod",
       "links",
       "defaults"
-    ]
-  },
-  {
-    "javaClassName": "io.noties.markwon.app.samples.EnabledBlockTypesSample",
-    "id": "20200627075012",
-    "title": "Enabled markdown blocks",
-    "description": "Modify/inspect enabled by `CorePlugin` block types. Disable quotes or other blocks from being parsed",
-    "artifacts": [
-      "CORE"
-    ],
-    "tags": [
-      "parsing",
-      "block",
-      "plugin"
     ]
   },
   {

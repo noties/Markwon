@@ -2,7 +2,7 @@ package io.noties.markwon.html.tag;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.ListItem;
+import com.vladsch.flexmark.ast.ListItem;
 
 import java.util.Arrays;
 import java.util.Collection;

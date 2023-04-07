@@ -4,9 +4,9 @@ import android.text.style.StrikethroughSpan;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.ext.gfm.strikethrough.Strikethrough;
-import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
-import org.commonmark.parser.Parser;
+import com.vladsch.flexmark.ext.gfm.strikethrough.Strikethrough;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.parser.Parser;
 
 import java.util.Collections;
 
@@ -18,8 +18,8 @@ import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
 
 /**
- * Plugin to add strikethrough markdown feature. This plugin will extend commonmark-java.Parser
- * with strikethrough extension, add SpanFactory and register commonmark-java.Strikethrough node
+ * Plugin to add strikethrough markdown feature. This plugin will extend flexmark.Parser
+ * with strikethrough extension, add SpanFactory and register flexmark.Strikethrough node
  * visitor
  *
  * @see #create()

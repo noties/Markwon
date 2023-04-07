@@ -5,6 +5,8 @@ import android.text.style.StrikethroughSpan;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.vladsch.flexmark.ext.gfm.strikethrough.Strikethrough;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -63,7 +65,7 @@ public class StrikeHandler extends TagHandler {
     private static Object getMarkdownSpans(@NonNull MarkwonVisitor visitor) {
         final MarkwonConfiguration configuration = visitor.configuration();
         final SpanFactory spanFactory = configuration.spansFactory()
-                .get(org.commonmark.ext.gfm.strikethrough.Strikethrough.class);
+                .get(Strikethrough.class);
         if (spanFactory == null) {
             return null;
         }

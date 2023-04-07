@@ -22,7 +22,6 @@ dependencies {
         // we will try to obtain a SpanFactory for a Strikethrough node and use
         // it to be consistent with markdown (please note that we do not use markwon plugin
         // for that in case if different implementation is used)
-        compileOnly it['commonmark-strikethrough']
 
         testImplementation it['ix-java']
     }
@@ -34,3 +33,4 @@ dependencies {
 }
 
 registerArtifact(this)
+apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

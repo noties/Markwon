@@ -8,8 +8,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
+
+import com.vladsch.flexmark.ast.Code;
+import com.vladsch.flexmark.ast.Text;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Document;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.ast.NodeVisitor;
+import com.vladsch.flexmark.util.ast.VisitHandler;
 
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +80,7 @@ class MarkwonImpl extends Markwon {
         // @since 4.1.1 obtain visitor via factory
         final MarkwonVisitor visitor = visitorFactory.create();
 
-        node.accept(visitor);
+        visitor.visit(node);
 
         for (MarkwonPlugin plugin : plugins) {
             plugin.afterRender(node, visitor);

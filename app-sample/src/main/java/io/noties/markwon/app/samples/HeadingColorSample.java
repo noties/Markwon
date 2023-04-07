@@ -5,7 +5,7 @@ import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Heading;
+import com.vladsch.flexmark.ast.Heading;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;

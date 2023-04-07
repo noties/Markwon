@@ -6,7 +6,7 @@ import android.text.style.UpdateAppearance;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Link;
+import com.vladsch.flexmark.ast.Link;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;

@@ -5,8 +5,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.core.MarkwonTheme;

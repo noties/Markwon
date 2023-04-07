@@ -10,7 +10,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.HashMap;
 import java.util.Map;

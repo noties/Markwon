@@ -3,9 +3,9 @@ package io.noties.markwon.html;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.HtmlInline;
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.ast.HtmlBlock;
+import com.vladsch.flexmark.ast.HtmlInline;
+import com.vladsch.flexmark.util.ast.Node;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
@@ -161,13 +161,13 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
                 .on(HtmlBlock.class, new MarkwonVisitor.NodeVisitor<HtmlBlock>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull HtmlBlock htmlBlock) {
-                        visitHtml(visitor, htmlBlock.getLiteral());
+                        visitHtml(visitor, htmlBlock.toAstString(false));
                     }
                 })
                 .on(HtmlInline.class, new MarkwonVisitor.NodeVisitor<HtmlInline>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull HtmlInline htmlInline) {
-                        visitHtml(visitor, htmlInline.getLiteral());
+                        visitHtml(visitor, htmlInline.toAstString(false));
                     }
                 });
     }

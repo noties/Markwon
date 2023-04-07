@@ -16,7 +16,7 @@ import java.util.regex.Pattern
   artifacts = [MarkwonArtifact.CORE],
   tags = [Tag.parsing]
 )
-class ExcludeFromParsingSample : MarkwonTextViewSample() {
+public class ExcludeFromParsingSample : MarkwonTextViewSample() {
   override fun render() {
 
     // cannot have continuous markdown between parts (so a node started in one part and ended in other)

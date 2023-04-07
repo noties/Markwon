@@ -14,7 +14,6 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.SpanFactory;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
-import io.noties.markwon.ext.tasklist.TaskListItem;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.ext.tasklist.TaskListSpan;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
@@ -22,6 +21,8 @@ import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import io.noties.markwon.sample.annotations.Tag;
 
 import static io.noties.markwon.app.samples.tasklist.shared.TaskListHolder.MD;
+
+import com.vladsch.flexmark.ext.gfm.tasklist.TaskListItem;
 
 @MarkwonSampleInfo(
   id = "20200702140901",

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Image;
+import com.vladsch.flexmark.ast.Image;
 
 import java.util.HashMap;
 import java.util.Map;

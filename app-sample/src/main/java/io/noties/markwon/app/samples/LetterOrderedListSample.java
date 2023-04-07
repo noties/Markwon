@@ -5,10 +5,10 @@ import android.util.SparseIntArray;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.BulletList;
-import org.commonmark.node.ListItem;
-import org.commonmark.node.Node;
-import org.commonmark.node.OrderedList;
+import com.vladsch.flexmark.ast.BulletList;
+import com.vladsch.flexmark.ast.ListItem;
+import com.vladsch.flexmark.ast.OrderedList;
+import com.vladsch.flexmark.util.ast.Node;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import org.commonmark.node.Image;
+import com.vladsch.flexmark.ast.Image;
 
 import java.util.concurrent.ExecutorService;
 

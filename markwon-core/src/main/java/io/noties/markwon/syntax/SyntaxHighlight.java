@@ -3,6 +3,7 @@ package io.noties.markwon.syntax;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+
 @SuppressWarnings("WeakerAccess")
 public interface SyntaxHighlight {
 

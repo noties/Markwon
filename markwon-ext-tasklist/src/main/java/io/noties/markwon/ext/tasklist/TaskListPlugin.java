@@ -9,12 +9,15 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
-import org.commonmark.parser.Parser;
+import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension;
+import com.vladsch.flexmark.ext.gfm.tasklist.TaskListItem;
+import com.vladsch.flexmark.parser.Parser;
+
+import java.util.Collections;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
-import io.noties.markwon.core.SimpleBlockNodeVisitor;
 
 /**
  * @since 3.0.0
@@ -63,19 +66,18 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
-    public void configureParser(@NonNull Parser.Builder builder) {
-        builder.postProcessor(new TaskListPostProcessor());
-    }
-
-    @Override
     public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
         builder.setFactory(TaskListItem.class, new TaskListSpanFactory(drawable));
     }
 
     @Override
+    public void configureParser(@NonNull Parser.Builder builder) {
+        builder.extensions(Collections.singleton(TaskListExtension.create()));
+    }
+
+    @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        builder
-                .on(TaskListItem.class, new MarkwonVisitor.NodeVisitor<TaskListItem>() {
+        builder.on(TaskListItem.class, new MarkwonVisitor.NodeVisitor<TaskListItem>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull TaskListItem taskListItem) {
 
@@ -83,7 +85,7 @@ public class TaskListPlugin extends AbstractMarkwonPlugin {
 
                         visitor.visitChildren(taskListItem);
 
-                        TaskListProps.DONE.set(visitor.renderProps(), taskListItem.isDone());
+                        TaskListProps.DONE.set(visitor.renderProps(), taskListItem.isItemDoneMarker());
 
                         visitor.setSpansForNode(taskListItem, length);
 

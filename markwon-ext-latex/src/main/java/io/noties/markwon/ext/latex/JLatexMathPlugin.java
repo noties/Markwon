@@ -14,8 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 
-import org.commonmark.parser.Parser;
+import com.vladsch.flexmark.ext.gitlab.GitLabExtension;
+import com.vladsch.flexmark.ext.gitlab.GitLabInlineMath;
+import com.vladsch.flexmark.parser.Parser;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -31,7 +34,6 @@ import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageSizeResolver;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
 /**
@@ -117,8 +119,6 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         // @since 4.3.0
         final boolean blocksEnabled;
-        final boolean blocksLegacy;
-        final boolean inlinesEnabled;
 
         // @since 4.3.0
         final ErrorHandler errorHandler;
@@ -128,8 +128,6 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         Config(@NonNull Builder builder) {
             this.theme = builder.theme.build();
             this.blocksEnabled = builder.blocksEnabled;
-            this.blocksLegacy = builder.blocksLegacy;
-            this.inlinesEnabled = builder.inlinesEnabled;
             this.errorHandler = builder.errorHandler;
             // @since 4.0.0
             ExecutorService executorService = builder.executorService;
@@ -156,58 +154,33 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
-    public void configure(@NonNull Registry registry) {
-        if (config.inlinesEnabled) {
-            registry.require(MarkwonInlineParserPlugin.class)
-                    .factoryBuilder()
-                    .addInlineProcessor(new JLatexMathInlineProcessor());
-        }
-    }
-
-    @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-        // @since 4.3.0
+        builder.extensions(Collections.singleton(GitLabExtension.create()));
         if (config.blocksEnabled) {
-            if (config.blocksLegacy) {
-                builder.customBlockParserFactory(new JLatexMathBlockParserLegacy.Factory());
-            } else {
-                builder.customBlockParserFactory(new JLatexMathBlockParser.Factory());
-            }
+            builder.set(GitLabExtension.RENDER_BLOCK_MATH, true);
         }
     }
 
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        addBlockVisitor(builder);
-        addInlineVisitor(builder);
-    }
-
-    private void addBlockVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        if (!config.blocksEnabled) {
-            return;
-        }
-
-        builder.on(JLatexMathBlock.class, new MarkwonVisitor.NodeVisitor<JLatexMathBlock>() {
+        builder.on(GitLabInlineMath.class, new MarkwonVisitor.NodeVisitor<GitLabInlineMath>() {
             @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathBlock jLatexMathBlock) {
-
-                visitor.blockStart(jLatexMathBlock);
-
-                final String latex = jLatexMathBlock.latex();
-
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull GitLabInlineMath gitLabInlineMath) {
+                if (config.blocksEnabled) visitor.blockStart(gitLabInlineMath);
+                final String tex = gitLabInlineMath.getText().unescape();
                 final int length = visitor.length();
 
                 // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
                 // because Android will draw formula for each line of text, thus
                 // leading to formula duplicated (drawn on each line of text)
-                visitor.builder().append(prepareLatexTextPlaceholder(latex));
+                visitor.builder().append(prepareLatexTextPlaceholder(tex));
 
                 final MarkwonConfiguration configuration = visitor.configuration();
 
                 final AsyncDrawableSpan span = new JLatexAsyncDrawableSpan(
                         configuration.theme(),
                         new JLatextAsyncDrawable(
-                                latex,
+                                tex,
                                 jLatextAsyncDrawableLoader,
                                 jLatexBlockImageSizeResolver,
                                 null,
@@ -217,43 +190,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 visitor.setSpans(length, span);
 
-                visitor.blockEnd(jLatexMathBlock);
-            }
-        });
-    }
-
-    private void addInlineVisitor(@NonNull MarkwonVisitor.Builder builder) {
-
-        if (!config.inlinesEnabled) {
-            return;
-        }
-
-        builder.on(JLatexMathNode.class, new MarkwonVisitor.NodeVisitor<JLatexMathNode>() {
-            @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathNode jLatexMathNode) {
-                final String latex = jLatexMathNode.latex();
-
-                final int length = visitor.length();
-
-                // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
-                // because Android will draw formula for each line of text, thus
-                // leading to formula duplicated (drawn on each line of text)
-                visitor.builder().append(prepareLatexTextPlaceholder(latex));
-
-                final MarkwonConfiguration configuration = visitor.configuration();
-
-                final AsyncDrawableSpan span = new JLatexInlineAsyncDrawableSpan(
-                        configuration.theme(),
-                        new JLatextAsyncDrawable(
-                                latex,
-                                jLatextAsyncDrawableLoader,
-                                inlineImageSizeResolver,
-                                null,
-                                false),
-                        config.theme.inlineTextColor()
-                );
-
-                visitor.setSpans(length, span);
+                if (config.blocksEnabled) visitor.blockEnd(gitLabInlineMath);
             }
         });
     }
@@ -307,16 +244,6 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @NonNull
         public Builder blocksEnabled(boolean blocksEnabled) {
             this.blocksEnabled = blocksEnabled;
-            return this;
-        }
-
-        /**
-         * @param blocksLegacy indicates if blocks should be handled in legacy mode ({@code pre 4.3.0})
-         * @since 4.3.0
-         */
-        @NonNull
-        public Builder blocksLegacy(boolean blocksLegacy) {
-            this.blocksLegacy = blocksLegacy;
             return this;
         }
 

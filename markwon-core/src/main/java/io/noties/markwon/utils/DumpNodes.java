@@ -4,8 +4,8 @@ import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.Node;
-import org.commonmark.node.Visitor;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.ast.Visitor;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -70,7 +70,8 @@ public abstract class DumpNodes {
                         return null;
                     }
                 });
-        node.accept(visitor);
+        visitor.visit(node);
+        //node.accept(visitor);
         return builder.toString();
     }
 
@@ -104,7 +105,7 @@ public abstract class DumpNodes {
             // A subclass of this visitor might modify the node, resulting in getNext returning a different node or no
             // node after visiting it. So get the next node before visiting.
             Node next = node.getNext();
-            node.accept(visitor);
+            visitor.visit(node);
             node = next;
         }
     }

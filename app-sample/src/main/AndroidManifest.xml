@@ -15,7 +15,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".sample.MainActivity">
+        <activity
+            android:name=".sample.MainActivity"
+            android:exported="true">
             <!-- launcher intent -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +44,7 @@
                     android:host="noties.io"
                     android:scheme="https" />
 
-                <data android:pathPrefix="/Markwon/app"/>
+                <data android:pathPrefix="/Markwon/app" />
 
                 <data android:pathPattern="sample/.*" />
                 <data android:pathPattern="search" />

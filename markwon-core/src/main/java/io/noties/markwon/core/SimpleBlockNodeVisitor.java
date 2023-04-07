@@ -2,7 +2,7 @@ package io.noties.markwon.core;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.util.ast.Node;
 
 import io.noties.markwon.MarkwonVisitor;
 

@@ -2,7 +2,7 @@ package io.noties.markwon.html.jsoup.nodes;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.internal.util.Html5Entities;
+import com.vladsch.flexmark.util.sequence.Html5Entities;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

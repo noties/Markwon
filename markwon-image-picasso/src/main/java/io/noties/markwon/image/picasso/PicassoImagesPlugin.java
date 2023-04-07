@@ -14,8 +14,7 @@ import androidx.annotation.Nullable;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
-
-import org.commonmark.node.Image;
+import com.vladsch.flexmark.ast.Image;
 
 import java.util.HashMap;
 import java.util.Map;

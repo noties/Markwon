@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.commonmark.node.Node;
+import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.List;
 

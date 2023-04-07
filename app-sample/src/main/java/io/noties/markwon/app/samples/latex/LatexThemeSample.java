@@ -8,7 +8,6 @@ import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.app.samples.latex.shared.LatexHolder;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.ext.latex.JLatexMathTheme;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import io.noties.markwon.sample.annotations.Tag;
@@ -35,7 +34,6 @@ public class LatexThemeSample extends MarkwonTextViewSample {
     final int blockPadding = (int) (16 * context.getResources().getDisplayMetrics().density + 0.5F);
 
     final Markwon markwon = Markwon.builder(context)
-      .usePlugin(MarkwonInlineParserPlugin.create())
       .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> {
         builder.inlinesEnabled(true);
         builder.theme()

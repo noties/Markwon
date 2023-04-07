@@ -13,13 +13,13 @@ import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.ext.gfm.strikethrough.Strikethrough;
-import org.commonmark.node.BlockQuote;
-import org.commonmark.node.Code;
-import org.commonmark.node.Emphasis;
-import org.commonmark.node.Heading;
-import org.commonmark.node.ListItem;
-import org.commonmark.node.StrongEmphasis;
+import com.vladsch.flexmark.ast.BlockQuote;
+import com.vladsch.flexmark.ast.Code;
+import com.vladsch.flexmark.ast.Emphasis;
+import com.vladsch.flexmark.ast.Heading;
+import com.vladsch.flexmark.ast.ListItem;
+import com.vladsch.flexmark.ast.StrongEmphasis;
+import com.vladsch.flexmark.ext.gfm.strikethrough.Strikethrough;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;

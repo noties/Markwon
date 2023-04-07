@@ -2,7 +2,7 @@ package io.noties.markwon.html.tag;
 
 import androidx.annotation.NonNull;
 
-import org.commonmark.node.BlockQuote;
+import com.vladsch.flexmark.ast.BlockQuote;
 
 import java.util.Collection;
 import java.util.Collections;

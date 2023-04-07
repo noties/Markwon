@@ -16,7 +16,6 @@ android {
 dependencies {
 
     api project(':markwon-core')
-    api project(':markwon-inline-parser')
 
     api deps['jlatexmath-android']
 
@@ -28,3 +27,4 @@ dependencies {
 }
 
 registerArtifact(this)
+apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

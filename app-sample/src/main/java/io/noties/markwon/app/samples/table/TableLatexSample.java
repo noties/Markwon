@@ -5,7 +5,6 @@ import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.ext.latex.JLatexMathPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.image.ImagesPlugin;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import io.noties.markwon.sample.annotations.Tag;
@@ -34,7 +33,6 @@ public class TableLatexSample extends MarkwonTextViewSample {
       "\n";
 
     final Markwon markwon = Markwon.builder(context)
-      .usePlugin(MarkwonInlineParserPlugin.create())
       .usePlugin(ImagesPlugin.create())
       .usePlugin(JLatexMathPlugin.create(textView.getTextSize(), builder -> builder.inlinesEnabled(true)))
       .usePlugin(TablePlugin.create(context))

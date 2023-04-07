@@ -15,8 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.commonmark.node.CustomNode;
-import org.commonmark.node.Node;
+
+import com.vladsch.flexmark.parser.InlineParser;
+import com.vladsch.flexmark.parser.internal.InlineParserImpl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,8 +27,6 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.app.sample.ui.MarkwonTextViewSample;
 import io.noties.markwon.image.ImagesPlugin;
-import io.noties.markwon.inlineparser.InlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.sample.annotations.MarkwonArtifact;
 import io.noties.markwon.sample.annotations.MarkwonSampleInfo;
 import io.noties.markwon.sample.annotations.Tag;
@@ -79,7 +78,7 @@ public class InlineParsingTooltipSample extends MarkwonTextViewSample {
   }
 }
 
-class TooltipInlineProcessor extends InlineProcessor {
+class TooltipInlineProcessor extends InlineParserImpl {
 
   // NB! without bang
   // `\\{` is required (although marked as redundant), without it - runtime crash

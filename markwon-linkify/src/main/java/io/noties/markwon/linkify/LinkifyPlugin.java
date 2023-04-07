@@ -9,7 +9,7 @@ import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.core.text.util.LinkifyCompat;
 
-import org.commonmark.node.Link;
+import com.vladsch.flexmark.ast.Link;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
