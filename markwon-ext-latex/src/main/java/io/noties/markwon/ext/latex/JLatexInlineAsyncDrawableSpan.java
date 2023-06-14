@@ -40,12 +40,13 @@ class JLatexInlineAsyncDrawableSpan extends JLatexAsyncDrawableSpan {
             final Rect rect = drawable.getBounds();
 
             if (fm != null) {
-                final int half = rect.bottom / 2;
-                fm.ascent = -half;
-                fm.descent = half;
+                Paint.FontMetricsInt originFont = paint.getFontMetricsInt();
+                int diff = rect.height() - (originFont.descent - originFont.ascent);
 
+                fm.descent = originFont.descent + diff / 2;
+                fm.ascent = fm.descent - rect.height();
                 fm.top = fm.ascent;
-                fm.bottom = 0;
+                fm.bottom = fm.descent;
             }
 
             size = rect.right;
