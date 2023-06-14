@@ -119,6 +119,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         final boolean blocksEnabled;
         final boolean blocksLegacy;
         final boolean inlinesEnabled;
+        final boolean allowInlineSingle$;
 
         // @since 4.3.0
         final ErrorHandler errorHandler;
@@ -130,6 +131,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             this.blocksEnabled = builder.blocksEnabled;
             this.blocksLegacy = builder.blocksLegacy;
             this.inlinesEnabled = builder.inlinesEnabled;
+            this.allowInlineSingle$ = builder.allowInlineSingle$;
             this.errorHandler = builder.errorHandler;
             // @since 4.0.0
             ExecutorService executorService = builder.executorService;
@@ -160,7 +162,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         if (config.inlinesEnabled) {
             registry.require(MarkwonInlineParserPlugin.class)
                     .factoryBuilder()
-                    .addInlineProcessor(new JLatexMathInlineProcessor());
+                    .addInlineProcessor(new JLatexMathInlineProcessor(config.allowInlineSingle$));
         }
     }
 
@@ -285,6 +287,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         private boolean blocksEnabled = true;
         private boolean blocksLegacy;
         private boolean inlinesEnabled;
+        private boolean allowInlineSingle$;
 
         // @since 4.3.0
         private ErrorHandler errorHandler;
@@ -328,6 +331,16 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         @NonNull
         public Builder inlinesEnabled(boolean inlinesEnabled) {
             this.inlinesEnabled = inlinesEnabled;
+            return this;
+        }
+
+        /**
+         * @param inlineSingleDollar indicates if $xxx$ is valid.
+         * @since 4.7.0
+         */
+        @NonNull
+        public Builder allowInlinesSingleDollar(boolean inlineSingleDollar){
+            this.allowInlineSingle$ = inlineSingleDollar;
             return this;
         }
 
