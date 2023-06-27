@@ -193,7 +193,10 @@ public class MarkwonHtmlParserImpl extends MarkwonHtmlParser {
                 }
             }
 
-            action.apply(Collections.unmodifiableList((List<? extends HtmlTag.Inline>) inlineTags));
+            List<HtmlTag.Inline> reverseOrder =
+                new ArrayList<>((List<? extends HtmlTag.Inline>) inlineTags);
+            Collections.reverse(reverseOrder);
+            action.apply(reverseOrder);
             inlineTags.clear();
         } else {
             action.apply(Collections.<HtmlTag.Inline>emptyList());
