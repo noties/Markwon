@@ -40,7 +40,8 @@ public class HtmlCssStyleParserSample extends MarkwonTextViewSample {
 
     final String md = "# CSS\n\n" +
       "<span style=\"background-color: #ff0000;\">this has red background</span> and then\n\n" +
-      "this <span style=\"color: #00ff00;\">is green</span>";
+      "this <span style=\"color: #00ff00;\">is green</span>\n\n" +
+      "<span style=\"color: red;\">A <span style=\"color: blue;\">blue</span> inside the red</span>";
 
     final Markwon markwon = Markwon.builder(context)
       .usePlugin(HtmlPlugin.create(plugin -> plugin.addHandler(new SpanTagHandler())))
@@ -68,7 +69,7 @@ public class HtmlCssStyleParserSample extends MarkwonTextViewSample {
           case "color":
             color = Color.parseColor(property.value());
             break;
-
+          case "background":
           case "background-color":
             backgroundColor = Color.parseColor(property.value());
             break;
