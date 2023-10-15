@@ -56,7 +56,7 @@ public class StrikeHandler extends TagHandler {
     @NonNull
     @Override
     public Collection<String> supportedTags() {
-        return Arrays.asList("s", "del");
+        return Arrays.asList("s", "del", "strike");
     }
 
     @Nullable
