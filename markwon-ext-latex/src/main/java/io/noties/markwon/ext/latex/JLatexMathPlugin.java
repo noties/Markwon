@@ -125,12 +125,19 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
         final ExecutorService executorService;
 
+        final boolean cacheEnabled;
+        final int cacheSize;
+        final boolean syncRendering;
+
         Config(@NonNull Builder builder) {
             this.theme = builder.theme.build();
             this.blocksEnabled = builder.blocksEnabled;
             this.blocksLegacy = builder.blocksLegacy;
             this.inlinesEnabled = builder.inlinesEnabled;
             this.errorHandler = builder.errorHandler;
+            this.cacheEnabled = builder.cacheEnabled;
+            this.cacheSize = builder.cacheSize;
+            this.syncRendering = builder.syncRendering;
             // @since 4.0.0
             ExecutorService executorService = builder.executorService;
             if (executorService == null) {
@@ -285,6 +292,9 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         private boolean blocksEnabled = true;
         private boolean blocksLegacy;
         private boolean inlinesEnabled;
+        private boolean cacheEnabled = true;
+        private int cacheSize = 256;
+        private boolean syncRendering = false;
 
         // @since 4.3.0
         private ErrorHandler errorHandler;
@@ -347,6 +357,43 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             return this;
         }
 
+        /**
+         * Enable or disable the LaTeX drawable cache
+         *
+         * @param cacheEnabled whether the cache is enabled
+         * @return this builder
+         */
+        @NonNull
+        public Builder cacheEnabled(boolean cacheEnabled) {
+            this.cacheEnabled = cacheEnabled;
+            return this;
+        }
+
+        /**
+         * Set the maximum size of the LaTeX drawable cache
+         *
+         * @param cacheSize maximum number of entries in the cache
+         * @return this builder
+         */
+        @NonNull
+        public Builder cacheSize(int cacheSize) {
+            this.cacheSize = cacheSize;
+            return this;
+        }
+
+        /**
+         * Enable or disable synchronous rendering
+         * When enabled, LaTeX formulas will be rendered on the main thread
+         *
+         * @param syncRendering whether to render synchronously
+         * @return this builder
+         */
+        @NonNull
+        public Builder syncRendering(boolean syncRendering) {
+            this.syncRendering = syncRendering;
+            return this;
+        }
+
         @NonNull
         public Config build() {
             return new Config(this);
@@ -359,15 +406,62 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
         private final Config config;
         private final Handler handler = new Handler(Looper.getMainLooper());
         private final Map<AsyncDrawable, Future<?>> cache = new HashMap<>(3);
+        private final JLatexMathDrawableCache drawableCache;
 
         JLatextAsyncDrawableLoader(@NonNull Config config) {
             this.config = config;
+            this.drawableCache = config.cacheEnabled
+                    ? new JLatexMathDrawableCache(config.cacheSize, true)
+                    : new JLatexMathDrawableCache(0, false);
         }
 
         @Override
         public void load(@NonNull final AsyncDrawable drawable) {
-
             // this method must be called from main-thread only (thus synchronization can be skipped)
+
+            if (!(drawable instanceof JLatextAsyncDrawable)) {
+                Log.e("JLatexMathPlugin", "Expected JLatextAsyncDrawable but got: " + drawable.getClass().getName());
+                return;
+            }
+
+            final JLatextAsyncDrawable jLatextAsyncDrawable = (JLatextAsyncDrawable) drawable;
+            final String latex = drawable.getDestination();
+            final boolean isBlock = jLatextAsyncDrawable.isBlock();
+
+            // Create a cache key that distinguishes between block and inline formulas
+            final String cacheKey = createCacheKey(latex, isBlock);
+
+            // Check the cache first
+            final Drawable cachedDrawable = drawableCache.get(cacheKey);
+            if (cachedDrawable != null) {
+                // Use cached drawable immediately
+                drawable.setResult(cachedDrawable);
+                return;
+            }
+
+            // If synchronous rendering is enabled, render immediately on the main thread
+            if (config.syncRendering) {
+                try {
+                    final JLatexMathDrawable result;
+                    final JLatexMathDrawable.Builder builder;
+
+                    if (isBlock) {
+                        builder = createBlockDrawableBuilder(latex);
+                    } else {
+                        builder = createInlineDrawableBuilder(latex);
+                    }
+                    result = builder.build();
+
+                    // Cache the result with builder
+                    drawableCache.put(cacheKey, result, builder);
+
+                    // Set the result immediately
+                    drawable.setResult(result);
+                } catch (Throwable t) {
+                    handleRenderingError(drawable, t);
+                }
+                return;
+            }
 
             // check for currently running tasks associated with provided drawable
             final Future<?> future = cache.get(drawable);
@@ -376,51 +470,112 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
             // as asyncDrawable is immutable, it won't have destination changed (so there is no need
             // to cancel any started tasks)
             if (future == null) {
-
                 cache.put(drawable, config.executorService.submit(new Runnable() {
                     @Override
                     public void run() {
                         // @since 4.0.1 wrap in try-catch block and add error logging
                         try {
-                            execute();
-                        } catch (Throwable t) {
-                            // @since 4.3.0 add error handling
-                            final ErrorHandler errorHandler = config.errorHandler;
-                            if (errorHandler == null) {
-                                // as before
-                                Log.e(
-                                        "JLatexMathPlugin",
-                                        "Error displaying latex: `" + drawable.getDestination() + "`",
-                                        t);
+                            final boolean isBlock = jLatextAsyncDrawable.isBlock();
+                            final JLatexMathDrawable.Builder builder;
+                            final JLatexMathDrawable result;
+
+                            if (isBlock) {
+                                builder = createBlockDrawableBuilder(latex);
+                                result = builder.build();
                             } else {
-                                // just call `getDestination` without casts and checks
-                                final Drawable errorDrawable = errorHandler.handleError(
-                                        drawable.getDestination(),
-                                        t
-                                );
-                                if (errorDrawable != null) {
-                                    DrawableUtils.applyIntrinsicBoundsIfEmpty(errorDrawable);
-                                    setResult(drawable, errorDrawable);
-                                }
+                                builder = createInlineDrawableBuilder(latex);
+                                result = builder.build();
                             }
+
+                            // Cache the result with builder
+                            drawableCache.put(cacheKey, result, builder);
+
+                            setResult(drawable, result);
+                        } catch (Throwable t) {
+                            handleRenderingError(drawable, t);
                         }
-                    }
-
-                    private void execute() {
-
-                        final JLatexMathDrawable jLatexMathDrawable;
-
-                        final JLatextAsyncDrawable jLatextAsyncDrawable = (JLatextAsyncDrawable) drawable;
-
-                        if (jLatextAsyncDrawable.isBlock()) {
-                            jLatexMathDrawable = createBlockDrawable(jLatextAsyncDrawable);
-                        } else {
-                            jLatexMathDrawable = createInlineDrawable(jLatextAsyncDrawable);
-                        }
-
-                        setResult(drawable, jLatexMathDrawable);
                     }
                 }));
+            }
+        }
+
+        @NonNull
+        private JLatexMathDrawable.Builder createBlockDrawableBuilder(@NonNull String latex) {
+            final JLatexMathTheme theme = config.theme;
+
+            final JLatexMathTheme.BackgroundProvider backgroundProvider = theme.blockBackgroundProvider();
+            final JLatexMathTheme.Padding padding = theme.blockPadding();
+            final int color = theme.blockTextColor();
+
+            final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
+                    .textSize(theme.blockTextSize())
+                    .align(theme.blockHorizontalAlignment());
+
+            if (backgroundProvider != null) {
+                builder.background(backgroundProvider.provide());
+            }
+
+            if (padding != null) {
+                builder.padding(padding.left, padding.top, padding.right, padding.bottom);
+            }
+
+            if (color != 0) {
+                builder.color(color);
+            }
+
+            return builder;
+        }
+
+        @NonNull
+        private JLatexMathDrawable.Builder createInlineDrawableBuilder(@NonNull String latex) {
+            final JLatexMathTheme theme = config.theme;
+
+            final JLatexMathTheme.BackgroundProvider backgroundProvider = theme.inlineBackgroundProvider();
+            final JLatexMathTheme.Padding padding = theme.inlinePadding();
+            final int color = theme.inlineTextColor();
+
+            final JLatexMathDrawable.Builder builder = JLatexMathDrawable.builder(latex)
+                    .textSize(theme.inlineTextSize());
+
+            if (backgroundProvider != null) {
+                builder.background(backgroundProvider.provide());
+            }
+
+            if (padding != null) {
+                builder.padding(padding.left, padding.top, padding.right, padding.bottom);
+            }
+
+            if (color != 0) {
+                builder.color(color);
+            }
+
+            return builder;
+        }
+
+        @NonNull
+        private String createCacheKey(@NonNull String latex, boolean isBlock) {
+            return latex + "#" + (isBlock ? "block" : "inline");
+        }
+
+        private void handleRenderingError(@NonNull AsyncDrawable drawable, @NonNull Throwable t) {
+            // @since 4.3.0 add error handling
+            final ErrorHandler errorHandler = config.errorHandler;
+            if (errorHandler == null) {
+                // as before
+                Log.e(
+                        "JLatexMathPlugin",
+                        "Error displaying latex: `" + drawable.getDestination() + "`",
+                        t);
+            } else {
+                // just call `getDestination` without casts and checks
+                final Drawable errorDrawable = errorHandler.handleError(
+                        drawable.getDestination(),
+                        t
+                );
+                if (errorDrawable != null) {
+                    DrawableUtils.applyIntrinsicBoundsIfEmpty(errorDrawable);
+                    setResult(drawable, errorDrawable);
+                }
             }
         }
 
